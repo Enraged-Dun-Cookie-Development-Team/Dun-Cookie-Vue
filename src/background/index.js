@@ -164,7 +164,6 @@ let getAndProcessWeiboData = {
                                 detail: []
                             };
                         }).sort((x, y) => y.judgment - x.judgment);
-                    console.log(this.cardlist[opt.dataName]);
                     Kaze.JudgmentNew(Kaze.cardlistdm[opt.dataName], this.cardlist[opt.dataName], opt.title, opt.source);
                     Kaze.cardlistdm[opt.dataName] = this.cardlist[opt.dataName];
                     if (typeof opt.success == 'function') {

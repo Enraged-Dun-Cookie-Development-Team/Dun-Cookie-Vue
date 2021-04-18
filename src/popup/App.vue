@@ -72,7 +72,6 @@
       >
         <!-- 0 b服 1微博 2通讯组 3朝陇山 4一拾山 -->
         <el-card class="card">
-          <!-- 微博源 B站 -->
           <div>
             <el-button
               class="to-url-btn"
@@ -155,7 +154,6 @@ export default {
       } = this.getBackgroundPage.Kaze.cardlistdm;
       this.cardlist = [...weibo, ...cho3, ...yj, ...bili, ...ys3]
         .map((x) => {
-          x.showAllImg = false;
           //展示头像
           switch (x.source) {
             case 0:

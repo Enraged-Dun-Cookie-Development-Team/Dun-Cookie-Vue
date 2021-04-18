@@ -11,7 +11,7 @@
           已为你蹲饼<span style="color: #23ade5">{{ dunIndex }}</span
           >次
         </div>
-        <div class="info-time">上次蹲饼时间：{{ timespanToDay(dunTime) }}</div>
+        <div class="info-time">本次蹲饼时间：{{ timespanToDay(dunTime) }}</div>
         <div class="info-time">
           下次蹲饼时间：{{ timespanToDay(nextdunTime) }}
         </div>
