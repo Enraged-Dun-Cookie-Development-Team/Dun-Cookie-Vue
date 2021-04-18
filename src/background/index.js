@@ -1,5 +1,15 @@
-function a() {
-    console.log('object');
+
+//数据下来后都定位固定格式 没有不用管
+var date = {
+    time: '时间',
+    judgment: '判定字段 微博B站用时间 鹰角用id',
+    dynamicInfo: '处理后内容 用于展示',
+    html: '处理前内容 原始字段',
+    image: '获取到的图片',
+    type: '当前条目的类型',
+    source: '条目来源',
+    url: '跳转后连接',
+    detail: '详情列表，以后进入二级页面使用'
 }
 
 var Kaze = {
@@ -20,15 +30,13 @@ var Kaze = {
     },
     //判断是否为最新
     JudgmentNew(oldList, newList, title, source) {
-        //判断方法 取每条的第一个判断时间  如果新的时间不等于旧的且大于旧的 判定为新条目
-        if (oldList && (oldList.length > 0 && oldList[0].time != newList[0].time && newList[0].time > oldList[0].time)) {
-            let dynamicInfo = newList[0];
+        //判断方法 取每条的第一个判定字段  如果新的字段不等于旧的且大于旧的 判定为新条目
+        if (oldList && (oldList.length > 0 && oldList[0].judgment != newList[0].judgment && newList[0].judgment > oldList[0].judgment)) {
+            let newInfo = newList[0];
             let timeNow = new Date()
-            let notice = (source == 1 || source == 3 || source == 4) ? dynamicInfo.text.replace(/\n/g, "") : dynamicInfo.dynamicInfo.replace(/\n/g, "");
+            let notice = newInfo.dynamicInfo.replace(/\n/g, "");
             console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth + 1()}-${timeNow.getDay()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, dynamicInfo, oldList[0]);
             Kaze.SendNotice(`【${title}】喂公子吃饼!`, notice, dynamicInfo.image, dynamicInfo.time)
-        } else {
-            oldList = newList;
         }
     },
     // 发送推送核心方法
@@ -43,7 +51,7 @@ var Kaze = {
             });
         } else {
             chrome.notifications.create(time + '_', {
-                iconUrl: '../image/icon.png',
+                iconUrl: '../assets/image/icon.png',
                 message: message,
                 title: title,
                 type: "basic"
@@ -53,8 +61,9 @@ var Kaze = {
     // 蹲饼入口
     GetData() {
         this.dunIndex++;
-        this.setting.source.includes(0) ? getWeibo.Getdynamic() : Kaze.cardlistdm.weibo = [];
-        this.setting.source.includes(1) ? getBili.Getdynamic() : Kaze.cardlistdm.bili = [];
+        this.dunTime = new Date();
+        this.setting.source.includes(0) ? getBili.Getdynamic() : Kaze.cardlistdm.bili = [];
+        this.setting.source.includes(1) ? getWeibo.Getdynamic() : Kaze.cardlistdm.weibo = [];
         this.setting.source.includes(2) ? getYj.Getdynamic() : Kaze.cardlistdm.yj = [];
         this.setting.source.includes(3) ? getCho3.Getdynamic() : Kaze.cardlistdm.cho3 = [];
         this.setting.source.includes(4) ? getYs3.Getdynamic() : Kaze.cardlistdm.ys3 = [];
@@ -80,7 +89,7 @@ var Kaze = {
         this.setIntervalindex = setInterval(() => {
             this.dunTime = new Date();
             this.GetData();
-        }, parseInt(time));
+        }, parseInt(time) * 1000);
     },
 
     // 初始化
@@ -96,8 +105,7 @@ var Kaze = {
                 this.setting = result.setting;
             }
             this.GetData();
-            console.log(this.setting.time);
-            this.SetInterval(this.setting.time * 1000);
+            this.SetInterval(this.setting.time);
         });
 
         // 监听标签
@@ -138,24 +146,26 @@ let getAndProcessWeiboData = {
             try {
                 let data = JSON.parse(responseText);
                 if (data.ok == 1 && data.data != null && data.data.cards != null && data.data.cards.length > 0) {
-                    data.data.cards.map(x => {
-                        if (x.hasOwnProperty('mblog') && !x.mblog.hasOwnProperty('title') && !x.mblog.hasOwnProperty('retweeted_status')) {
+                    this.cardlist[opt.dataName] = data.data.cards
+                        .filter(x => x.hasOwnProperty('mblog') && !x.mblog.hasOwnProperty('title') && !x.mblog.hasOwnProperty('retweeted_status'))
+                        .map(x => {
                             let dynamicInfo = x.mblog;
                             let weiboId = data.data.cardlistInfo.containerid;
-                            this.cardlist[opt.dataName].push({
-                                time: Math.floor(new Date(dynamicInfo.created_at).getTime() / 1000),
-                                dynamicInfo: dynamicInfo.text,
-                                html: this.regexp(dynamicInfo.text),
+                            let time = Math.floor(new Date(dynamicInfo.created_at).getTime() / 1000);
+                            return {
+                                time: time,
+                                judgment: time,
+                                dynamicInfo: this.regexp(dynamicInfo.text),
+                                html: dynamicInfo.text,
                                 image: dynamicInfo.bmiddle_pic || dynamicInfo.original_pic,
                                 type: this.getdynamicType(dynamicInfo),
                                 source: opt.source,
                                 url: "https://weibo.com/" + weiboId.substring((weiboId.length - 10), weiboId.length) + "/" + x.mblog.bid,
-                            });
-                        }
-                    });
-                    // 判定是否是新的
-                    this.cardlist[opt.dataName].sort((x, y) => y.time - x.time);
-                    let hasNew = this.judgmentNew(this.cardlist[opt.dataName], opt);
+                                detail: []
+                            };
+                        }).sort((x, y) => y.judgment - x.judgment);
+                    console.log(this.cardlist[opt.dataName]);
+                    Kaze.JudgmentNew(Kaze.cardlistdm[opt.dataName], this.cardlist[opt.dataName], opt.title, opt.source);
                     Kaze.cardlistdm[opt.dataName] = this.cardlist[opt.dataName];
                     if (typeof opt.success == 'function') {
                         opt.success(hasNew, this.cardlist[opt.dataName]);
@@ -177,11 +187,6 @@ let getAndProcessWeiboData = {
         }
         return type;
     },
-
-    judgmentNew(newList, opt) {
-        let oldList = Kaze.cardlistdm[opt.dataName];
-        Kaze.JudgmentNew(oldList, newList, opt.title, opt.source);
-    },
     regexp(text) {
         return text.replace(
             /<\a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<\img.*?>|全文|网页链接/g,
@@ -201,47 +206,45 @@ let getBili = {
         Kaze.Get(this.url + `&kaze=${Math.random().toFixed(3)}`, (responseText) => {
             let data = JSON.parse(responseText);
             if (data.code == 0 && data.data != null && data.data.cards != null && data.data.cards.length > 0) {
-                data.data.cards.map(x => {
-                    let dynamicInfo = JSON.parse(x.card);
-                    let card = {
-                        source: 0,
-                        time: x.desc.timestamp,
-                        type: x.desc.type
-                    };
-                    //  desc.type  8 是视频 64是专栏 2是动态 4是无图片动态
-                    if (x.desc.type == 2) {
-                        card.image = (dynamicInfo.item.pictures && dynamicInfo.item.pictures.length > 0) ? dynamicInfo.item.pictures[0].img_src : null;
-                        card.dynamicInfo = dynamicInfo.item.description;
-                        card.url = `https://t.bilibili.com/${x.desc.dynamic_id_str}`
-                    } else if (x.desc.type == 4) {
-                        card.dynamicInfo = dynamicInfo.item.content;
-                        card.url = `https://t.bilibili.com/${x.desc.dynamic_id_str}`
-                    } else if (x.desc.type == 8) {
-                        card.image = dynamicInfo.pic;
-                        card.dynamicInfo = dynamicInfo.dynamic;
-                        card.url = `https://t.bilibili.com/${x.desc.dynamic_id_str}`
-                    } else if (x.desc.type == 64) {
-                        card.image = (dynamicInfo.image_urls && dynamicInfo.image_urls.length > 0) ? dynamicInfo.image_urls[0] : null;
-                        card.dynamicInfo = dynamicInfo.summary;
-                        card.url = `https://t.bilibili.com/${x.desc.dynamic_id_str}`
-                    }
-                    if (x.desc.type == 2 || x.desc.type == 4 || x.desc.type == 8 || x.desc.type == 64) {
-                        this.cardlist.push(card);
-                    }
-                });
-                this.cardlist.sort((x, y) => y.time - x.time);
+                this.cardlist = data.data.cards
+                    .filter(x => (x.desc.type == 2 || x.desc.type == 4 || x.desc.type == 8 || x.desc.type == 64))
+                    .map(x => {
+                        let dynamicInfo = JSON.parse(x.card);
+                        let card = {
+                            time: x.desc.timestamp,
+                            judgment: x.desc.timestamp,
+                            source: 0,
+                        };
+                        //  desc.type  8 是视频 64是专栏 2是动态 4是无图片动态
+                        if (x.desc.type == 2) {
+                            card.image = (dynamicInfo.item.pictures && dynamicInfo.item.pictures.length > 0) ? dynamicInfo.item.pictures[0].img_src : null;
+                            card.dynamicInfo = dynamicInfo.item.description;
+                            card.type = 2;
+                            card.url = `https://t.bilibili.com/${x.desc.dynamic_id_str}`
+                        } else if (x.desc.type == 4) {
+                            card.dynamicInfo = dynamicInfo.item.content;
+                            card.url = `https://t.bilibili.com/${x.desc.dynamic_id_str}`
+                            card.type = 4;
+                        } else if (x.desc.type == 8) {
+                            card.image = dynamicInfo.pic;
+                            card.dynamicInfo = dynamicInfo.dynamic;
+                            card.url = `https://t.bilibili.com/${x.desc.dynamic_id_str}`
+                            card.type = 8;
+                        } else if (x.desc.type == 64) {
+                            card.image = (dynamicInfo.image_urls && dynamicInfo.image_urls.length > 0) ? dynamicInfo.image_urls[0] : null;
+                            card.dynamicInfo = dynamicInfo.summary;
+                            card.url = `https://t.bilibili.com/${x.desc.dynamic_id_str}`
+                            card.type = 64;
+                        }
+                        return card;
+                    }).sort((x, y) => y.judgment - x.judgment);
                 console.log(this.cardlist);
-                this.JudgmentNew(this.cardlist);
+                Kaze.JudgmentNew(Kaze.cardlistdm.bili, this.cardlist, 'B站', 0);
                 Kaze.cardlistdm.bili = this.cardlist;
-                console.log(Kaze.cardlistdm);
             }
 
         });
     },
-    JudgmentNew(newList) {
-        let oldList = Kaze.cardlistdm.bili;
-        Kaze.JudgmentNew(oldList, newList, 'B站', 0);
-    }
 }
 
 let getWeibo = {
@@ -263,42 +266,31 @@ let getYj = {
     cardlist: [],
     // 通讯录
     Getdynamic() {
-        let that = this;
-        that.cardlist = [];
-        Kaze.Get(that.url, (responseText) => {
+        this.cardlist = [];
+        Kaze.Get(this.url, (responseText) => {
             try {
                 let data = JSON.parse(responseText);
-                data.announceList.forEach(x => {
-                    // 屏蔽几个条目 先用ID 看有没有问题
-                    if (!(x.announceId == 94 || x.announceId == 98 || x.announceId == 192 || x.announceId == 95 || x.announceId == 97)) {
-                        that.cardlist.push({
+                this.cardlist = data.announceList
+                    .filter(x => !(x.announceId == 94 || x.announceId == 98 || x.announceId == 192 || x.announceId == 95 || x.announceId == 97))
+                    .map(x => {
+                        // 屏蔽几个条目 先用ID 看有没有问题
+                        return {
                             time: Math.floor(new Date(`${(new Date().getFullYear())}/${x.month}/${x.day} 23:59:59`).getTime() / 1000),
-                            text: `${x.title}`,
-                            announceId: x.announceId,
+                            judgment: x.announceId,
+                            dynamicInfo: x.title,
                             source: 2,
-                            url: x.webUrl
-                        });
-                    }
-                });
-                that.cardlist.sort((x, y) => {
-                    return y.announceId - x.announceId;
-                });
-                // 判定是否是新的
-                that.JudgmentNew(that.cardlist);
-                Kaze.cardlistdm.yj = that.cardlist;
+                            url: x.webUrl,
+                        };
+                    }).sort((x, y) => {
+                        return y.judgment - x.judgment;
+                    });
+                Kaze.JudgmentNew(Kaze.cardlistdm.yj, this.cardlist, '通讯组', 2);
+                Kaze.cardlistdm.yj = this.cardlist;
             } catch (error) {
                 console.log(error);
             }
 
         });
-    },
-    JudgmentNew(dynamiclist) {
-        let oldcardlist = Kaze.cardlistdm.yj;
-        if (oldcardlist.length > 0 && oldcardlist[0].announceId != dynamiclist[0].announceId &&
-            dynamiclist[0].announceId > oldcardlist[0].announceId) {
-            console.log('通讯组', new Date(), dynamiclist[0], oldcardlist[0]);
-            Kaze.SendNotice("【制作组通讯】喂公子吃饼！", dynamiclist[0].text, null, dynamiclist[0].time);
-        }
     }
 }
 

@@ -8,9 +8,10 @@
       <el-divider></el-divider>
       <div class="info">
         <div class="info-title">
-          已为你蹲饼<span style="color: #23ade5">{{ dunIndex }}</span>次
+          已为你蹲饼<span style="color: #23ade5">{{ dunIndex }}</span
+          >次
         </div>
-        <div class="info-time">最近一次时间</div>
+        <div class="info-time">最近一次时间{{ dunTime }}</div>
       </div>
       <el-divider></el-divider>
       <el-form ref="form" :model="setting" label-width="100px">
@@ -55,8 +56,8 @@
             >添加群【蹲饼测试群】</a
           >或<a href="Mailto:kaze.liu@qq.com.com">给我发邮件</a>反馈<br />
           也可以去github上查看<a
-            href="https://github.com/Enraged-Dun-Cookie-Development-Team/vue-dun-cookies/releases"
-            >vue-dun-cookies</a
+            href="https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue"
+            >Dun-Cookie-Vue</a
           >最新安装包<br />
           也可以去Chrome应用商店查看更新，但是因为审核机制，更新速度会慢于QQ群和github
           <br />
@@ -82,6 +83,7 @@ export default {
       getBackgroundPage: chrome.extension.getBackgroundPage(),
       version: "蹲饼",
       dunIndex: 0,
+      dunTime:new Date(),
       setting: {
         time: 3,
         fontsize: 0,
@@ -94,10 +96,31 @@ export default {
   methods: {
     init() {
       this.dunIndex = this.getBackgroundPage.Kaze.dunIndex;
+      this.dunTime = this.getBackgroundPage.Kaze.dunTime;
       this.version = this.getBackgroundPage.Kaze.version;
+      chrome.storage.local.get(["setting"], (result) => {
+        this.setting = result.setting;
+      });
     },
     save() {
-      console.log(this.setting);
+      chrome.storage.local.set(
+        {
+          setting: this.setting,
+        },
+        () => {
+          this.getBackgroundPage.clearInterval(
+            this.getBackgroundPage.Kaze.setIntervalindex
+          );
+          this.getBackgroundPage.Kaze.SetInterval(this.setting.time);
+          this.getBackgroundPage.Kaze.setting = this.setting;
+          this.getBackgroundPage.Kaze.GetData();
+          this.$message({
+            center: true,
+            message: "保存成功",
+            type: "success",
+          });
+        }
+      );
     },
   },
 };

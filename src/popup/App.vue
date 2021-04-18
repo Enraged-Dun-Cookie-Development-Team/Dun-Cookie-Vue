@@ -70,8 +70,8 @@
       >
         <!-- 0 b服 1微博 2通讯组 3朝陇山 4一拾山 -->
         <el-card class="card">
-          <!-- B站源 -->
-          <div v-if="item.source == 0">
+          <!-- 微博源 B站 -->
+          <div>
             <el-button
               class="to-url-btn"
               size="small"
@@ -88,58 +88,14 @@
             <el-row class="margintb">
               <div v-html="item.dynamicInfo"></div>
             </el-row>
-            <el-row class="margintb">
-              <el-image
-                class="img"
-                v-if="item.image"
-                :src="item.image"
-                fit="contain"
-              ></el-image>
-            </el-row>
-          </div>
-
-          <!-- 微博源 -->
-          <div v-if="item.source == 1 || item.source == 3 || item.source == 4">
-            <el-button
-              class="to-url-btn"
-              size="small"
-              @click="openUrl(item.url)"
-              ><i class="el-icon-right"></i
-            ></el-button>
-            <el-row
-              type="flex"
-              justify="space-between"
-              align="middle"
-              class="margintb"
-            >
-            </el-row>
-            <el-row class="margintb">
-              <div v-html="item.html"></div>
-            </el-row>
-            <el-row class="margintb">
-              <el-image
-                class="img"
-                v-if="item.image"
-                :src="item.image"
-                fit="contain"
-              ></el-image>
-            </el-row>
-          </div>
-
-          <div v-if="item.source == 2">
-            <el-button
-              class="to-url-btn"
-              size="small"
-              @click="openUrl(item.url)"
-              ><i class="el-icon-right"></i
-            ></el-button>
-            <el-row
-              type="flex"
-              justify="space-between"
-              align="middle"
-              class="margintb"
-            >
-              <el-col>{{ item.text }}</el-col>
+            <el-row class="margintb" v-if="setting.imgshow && item.image">
+              <div
+                class="img-area"
+                @click="changeShowAllImage(item.image)"
+                :class="showAllImage.includes(item.image) ? 'show-all' : ''"
+              >
+                <img :src="item.image" class="img" />
+              </div>
             </el-row>
           </div>
         </el-card>
@@ -163,6 +119,8 @@ export default {
       setting: {},
       drawer: false, //打开菜单
       isReload: false, //是否正在刷新
+      showImage: true,
+      showAllImage: [],
     };
   },
   computed: {},
@@ -170,12 +128,20 @@ export default {
     init() {
       this.version = `蹲饼 V${this.getBackgroundPage.Kaze.version}`;
       this.getbackgroundData();
-      chrome.storage.local.get(["setting"], (result) => {
-        this.setting = result.setting;
-        setInterval(() => {
-          this.getbackgroundData();
-        }, this.setting.time / 2);
-      });
+      this.setting = this.getBackgroundPage.Kaze.setting;
+      setInterval(() => {
+        this.getbackgroundData();
+      }, this.setting.time * 500);
+    },
+    changeShowAllImage(img) {
+      if (this.showAllImage.includes(img)) {
+        this.showAllImage.splice(
+          this.showAllImage.findIndex((x) => x == img),
+          1
+        );
+      } else {
+        this.showAllImage.push(img);
+      }
     },
     getbackgroundData() {
       let {
@@ -185,8 +151,11 @@ export default {
         bili = [],
         ys3 = [],
       } = this.getBackgroundPage.Kaze.cardlistdm;
+      console.log(this.getBackgroundPage.Kaze.cardlistdm);
       this.cardlist = [...weibo, ...cho3, ...yj, ...bili, ...ys3]
         .map((x) => {
+          x.showAllImg = false;
+          //展示头像
           switch (x.source) {
             case 0:
               x.headImg = `./assets/image/bili.ico`;
@@ -207,7 +176,6 @@ export default {
           return x;
         })
         .sort((x, y) => y.time - x.time);
-      console.log(this.cardlist);
     },
     reload() {
       this.getBackgroundPage.Kaze.GetData();
@@ -292,11 +260,31 @@ export default {
   .margintb {
     margin: 10px 0;
   }
-  .img {
-    img {
-      margin: auto;
+  .img-area {
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    .img {
+      width: 100%;
+    }
+    &::before {
+      content: " ";
+      position: absolute;
+      bottom: 0;
+      height: 30px;
+      width: 100%;
+      background: linear-gradient(0, #fff, transparent);
+    }
+    &.show-all {
+      height: 100%;
+      &::before {
+        height: 0;
+      }
     }
   }
+
   .time {
     margin-left: 10px;
     color: #23ade5;
