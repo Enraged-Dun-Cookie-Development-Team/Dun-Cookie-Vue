@@ -55,7 +55,9 @@
       class="more-btn"
       @click.stop="drawer = true"
     ></el-button>
-    <div class="version">{{ version }}</div>
+    <div class="version">{{ version }} 
+      <span v-if="cardlist.length == 0" style="color:red">【无内容，请检查网络】</span>
+      </div>
     <el-timeline>
       <el-timeline-item
         v-for="(item, index) in cardlist"
@@ -151,7 +153,6 @@ export default {
         bili = [],
         ys3 = [],
       } = this.getBackgroundPage.Kaze.cardlistdm;
-      console.log(this.getBackgroundPage.Kaze.cardlistdm);
       this.cardlist = [...weibo, ...cho3, ...yj, ...bili, ...ys3]
         .map((x) => {
           x.showAllImg = false;
@@ -176,6 +177,7 @@ export default {
           return x;
         })
         .sort((x, y) => y.time - x.time);
+      console.log(this.cardlist);
     },
     reload() {
       this.getBackgroundPage.Kaze.GetData();
@@ -224,6 +226,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+#app {
+  min-width: 600px;
+}
 ::-webkit-scrollbar {
   width: 0 !important;
 }

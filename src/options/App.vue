@@ -11,7 +11,10 @@
           已为你蹲饼<span style="color: #23ade5">{{ dunIndex }}</span
           >次
         </div>
-        <div class="info-time">最近一次时间{{ dunTime }}</div>
+        <div class="info-time">上次蹲饼时间：{{ timespanToDay(dunTime) }}</div>
+        <div class="info-time">
+          下次蹲饼时间：{{ timespanToDay(nextdunTime) }}
+        </div>
       </div>
       <el-divider></el-divider>
       <el-form ref="form" :model="setting" label-width="100px">
@@ -24,12 +27,12 @@
             :max="3600"
           ></el-input-number>
         </el-form-item>
-        <el-form-item label="字体大小">
-          <el-radio-group v-model="setting.fontsize">
-            <el-radio :label="-1">小</el-radio>
-            <el-radio :label="0">正常</el-radio>
-            <el-radio :label="1">大</el-radio>
-            <el-radio :label="2">特别大</el-radio>
+        <el-form-item label="字体大小" title="功能未实现" >
+          <el-radio-group v-model="setting.fontsize" >
+            <el-radio disabled :label="-1">小</el-radio>
+            <el-radio disabled :label="0">正常</el-radio>
+            <el-radio disabled :label="1">大</el-radio>
+            <el-radio disabled :label="2">特别大</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="饼来源">
@@ -83,12 +86,13 @@ export default {
       getBackgroundPage: chrome.extension.getBackgroundPage(),
       version: "蹲饼",
       dunIndex: 0,
-      dunTime:new Date(),
+      dunTime: new Date(),
+      nextdunTime: "计算中",
       setting: {
-        time: 3,
+        time: 15,
+        source: [0, 1, 2, 3, 4],
         fontsize: 0,
         imgshow: true,
-        source: [0, 1, 2, 3, 4],
       },
     };
   },
@@ -96,11 +100,18 @@ export default {
   methods: {
     init() {
       this.dunIndex = this.getBackgroundPage.Kaze.dunIndex;
-      this.dunTime = this.getBackgroundPage.Kaze.dunTime;
       this.version = this.getBackgroundPage.Kaze.version;
+      this.dunTime = this.getBackgroundPage.Kaze.dunTime;
       chrome.storage.local.get(["setting"], (result) => {
         this.setting = result.setting;
       });
+      setInterval(() => {
+        this.dunTime = this.getBackgroundPage.Kaze.dunTime;
+        this.dunIndex = this.getBackgroundPage.Kaze.dunIndex;
+        this.nextdunTime = new Date(
+          (Date.parse(this.dunTime) / 1000 + this.setting.time) * 1000
+        );
+      }, this.setting.time);
     },
     save() {
       chrome.storage.local.set(
@@ -121,6 +132,23 @@ export default {
           });
         }
       );
+    },
+    timespanToDay(date) {
+      if (date == "计算中") {
+        return date;
+      }
+      let Y = date.getFullYear();
+      let M = date.getMonth() + 1;
+      let D = date.getDate();
+      let h = date.getHours();
+      let m = date.getMinutes();
+      let s = date.getSeconds();
+      return `${Y}-${this.addZero(M)}-${this.addZero(D)} ${this.addZero(
+        h
+      )}:${this.addZero(m)}:${this.addZero(s)}`;
+    },
+    addZero(m) {
+      return m < 10 ? "0" + m : m;
     },
   },
 };
