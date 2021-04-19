@@ -231,6 +231,7 @@ let getBili = {
                             time: x.desc.timestamp,
                             id: x.desc.timestamp,
                             judgment: x.desc.timestamp,
+                            imageList: dynamicInfo.item.pictures && dynamicInfo.item.pictures.map(x => x.img_src),
                             source: 0,
                         };
                         //  desc.type  8 是视频 64是专栏 2是动态 4是无图片动态
