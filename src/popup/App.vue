@@ -55,9 +55,12 @@
       class="more-btn"
       @click.stop="drawer = true"
     ></el-button>
-    <div class="version">{{ version }} 
-      <span v-if="cardlist.length == 0" style="color:red">【无内容，请检查网络】</span>
-      </div>
+    <div class="version">
+      {{ version }}
+      <span v-if="cardlist.length == 0" style="color: red"
+        >【无内容，请检查网络】</span
+      >
+    </div>
     <el-timeline>
       <el-timeline-item
         v-for="(item, index) in cardlist"
@@ -71,7 +74,7 @@
         :icon="'headImg' + item.source"
       >
         <!-- 0 b服 1微博 2通讯组 3朝陇山 4一拾山 -->
-        <el-card class="card">
+        <el-card class="card" :class="'font-size-' + fontSizeClass">
           <div>
             <el-button
               class="to-url-btn"
@@ -130,6 +133,7 @@ export default {
       this.version = `蹲饼 V${this.getBackgroundPage.Kaze.version}`;
       this.getbackgroundData();
       this.setting = this.getBackgroundPage.Kaze.setting;
+      this.fontSizeClass = this.setting.fontsize;
       setInterval(() => {
         this.getbackgroundData();
       }, this.setting.time * 500);
@@ -154,6 +158,7 @@ export default {
       } = this.getBackgroundPage.Kaze.cardlistdm;
       this.cardlist = [...weibo, ...cho3, ...yj, ...bili, ...ys3]
         .map((x) => {
+          x.dynamicInfo=x.dynamicInfo.replace(/\n/g,'<br/>')
           //展示头像
           switch (x.source) {
             case 0:
@@ -175,7 +180,6 @@ export default {
           return x;
         })
         .sort((x, y) => y.time - x.time);
-      console.log(this.cardlist);
     },
     reload() {
       this.getBackgroundPage.Kaze.GetData();
@@ -259,6 +263,11 @@ export default {
 .card {
   width: 600px;
   margin: 10px 0;
+
+  &.font-size--1{font-size: 0.7rem;}
+  &.font-size-0{font-size: 1rem;}
+  &.font-size-1{font-size: 1.2rem;}
+  &.font-size-2{font-size: 1.5rem;}
 
   .margintb {
     margin: 10px 0;

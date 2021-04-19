@@ -3,7 +3,7 @@
 var date = {
     time: '时间',
     judgment: '判定字段 微博B站用时间 鹰角用id',
-    dynamicInfo: '处理后内容 用于展示',
+    dynamicInfo: '处理后内容 用于展示 微博把<br / >替换成 /r/n 后期统一处理',
     html: '处理前内容 原始字段',
     image: '获取到的图片',
     type: '当前条目的类型',
@@ -13,15 +13,17 @@ var date = {
 }
 
 var Kaze = {
-    cardlistdm: {},
-    version: '2.0.0 Repair',
     isTest: false,
+    testIntervalTime: 1,
+    cardlistdm: {},
+    version: '2.0.0 Beta',
     //请求次数
     dunIndex: 0,
     dunTime: new Date(),
+    dunFristTime: new Date(),
     // 循环的标识
     setIntervalindex: 0,
-    source: ['bili', 'weibo', 'yj', 'cho3', 'ys3'],
+    source: ['bili', 'weibo', 'yj', 'cho3', 'ys3', 'sr', 'gw'],//哔哩哔哩 微博 通讯组 朝陇山 一拾山 任塞 官网
     setting: {
         time: 15,
         source: [0, 1, 2, 3, 4],
@@ -35,8 +37,8 @@ var Kaze = {
             let newInfo = newList[0];
             let timeNow = new Date()
             let notice = newInfo.dynamicInfo.replace(/\n/g, "");
-            console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth + 1()}-${timeNow.getDay()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, dynamicInfo, oldList[0]);
-            Kaze.SendNotice(`【${title}】喂公子吃饼!`, notice, dynamicInfo.image, dynamicInfo.time)
+            console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
+            Kaze.SendNotice(`【${title}】喂公子吃饼!`, notice, newInfo.dynamicInfo.image, newInfo.dynamicInfo.time)
         }
     },
     // 发送推送核心方法
@@ -67,6 +69,8 @@ var Kaze = {
         this.setting.source.includes(2) ? getYj.Getdynamic() : Kaze.cardlistdm.yj = [];
         this.setting.source.includes(3) ? getCho3.Getdynamic() : Kaze.cardlistdm.cho3 = [];
         this.setting.source.includes(4) ? getYs3.Getdynamic() : Kaze.cardlistdm.ys3 = [];
+        // this.setting.source.includes(5) ? getSr.Getdynamic() : Kaze.cardlistdm.sr = [];
+        // this.setting.source.includes(6) ? getGw.Getdynamic() : Kaze.cardlistdm.gw = [];
     },
     // 获取数据
     Get(url, success) {
@@ -120,6 +124,12 @@ var Kaze = {
             }
         });
         if (this.isTest) {
+            clearInterval(
+                this.setIntervalindex
+            );
+            this.SetInterval(this.testIntervalTime);
+            this.setting.time = this.testIntervalTime;
+            this.version = `${this.version}【已启用调试模式】 蹲饼刷新时间临时调整为${this.testIntervalTime}秒`;
             getBili.url = `test/bJson.json?host_uid=161775300`;
             getWeibo.opt.url = `test/wJson.json?type=uid&value=6279793937&containerid=1076036279793937`;
             getYj.url = `test/yJson.json`;
@@ -133,7 +143,6 @@ let getAndProcessWeiboData = {
     cardlist: {},
     defopt: {
         url: '',//网址
-        dturl: '',//连接网址
         title: '',//弹窗标题
         dataName: '',//数据源对象名称
         success: {},//回调方法
@@ -147,7 +156,10 @@ let getAndProcessWeiboData = {
                 let data = JSON.parse(responseText);
                 if (data.ok == 1 && data.data != null && data.data.cards != null && data.data.cards.length > 0) {
                     this.cardlist[opt.dataName] = data.data.cards
-                        .filter(x => x.hasOwnProperty('mblog') && !x.mblog.hasOwnProperty('title') && !x.mblog.hasOwnProperty('retweeted_status'))
+                        .filter(x => x.hasOwnProperty('mblog') 
+                        && !x.mblog.hasOwnProperty('title') 
+                        && !x.mblog.hasOwnProperty('retweeted_status')
+                        && !x.mblog.hasOwnProperty('isTop'))
                         .map(x => {
                             let dynamicInfo = x.mblog;
                             let weiboId = data.data.cardlistInfo.containerid;
@@ -155,7 +167,7 @@ let getAndProcessWeiboData = {
                             return {
                                 time: time,
                                 judgment: time,
-                                dynamicInfo: this.regexp(dynamicInfo.text),
+                                dynamicInfo: this.weiboRegexp(dynamicInfo.text),
                                 html: dynamicInfo.text,
                                 image: dynamicInfo.bmiddle_pic || dynamicInfo.original_pic,
                                 type: this.getdynamicType(dynamicInfo),
@@ -186,17 +198,15 @@ let getAndProcessWeiboData = {
         }
         return type;
     },
-    regexp(text) {
-        return text.replace(
-            /<\a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<\img.*?>|全文|网页链接/g,
-            '')
+    //微博数据处理 把<br />替换为 /r/n
+    weiboRegexp(text) {
+        return text.replace(/<\a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<\img.*?>|全文|网页链接/g,'').replace(/<br \/>/g,'\n')
     },
 }
 
 let getBili = {
 
     url: `https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=161775300&offset_dynamic_id=0&need_top=0&platform=web`,
-    dturl: `https://space.bilibili.com/161775300/dynamic`,
     // B站：动态列表
     cardlist: [],
     // bilibili版本
@@ -237,7 +247,6 @@ let getBili = {
                         }
                         return card;
                     }).sort((x, y) => y.judgment - x.judgment);
-                console.log(this.cardlist);
                 Kaze.JudgmentNew(Kaze.cardlistdm.bili, this.cardlist, 'B站', 0);
                 Kaze.cardlistdm.bili = this.cardlist;
             }
@@ -249,7 +258,6 @@ let getBili = {
 let getWeibo = {
     opt: {
         url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=6279793937&containerid=1076036279793937',
-        dturl: 'https://weibo.com/arknights',
         title: '官方微博',
         dataName: 'weibo',
         source: 1,
@@ -296,7 +304,6 @@ let getYj = {
 let getCho3 = {
     opt: {
         url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=6441489862&containerid=1076036441489862',
-        dturl: 'https://weibo.com/u/6441489862',
         title: '朝陇山',
         dataName: 'cho3',
         source: 3,
@@ -309,7 +316,6 @@ let getCho3 = {
 let getYs3 = {
     opt: {
         url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=7506039414&containerid=1076037506039414',
-        dturl: 'https://weibo.com/u/7506039414',
         title: '一拾山',
         dataName: 'ys3',
         source: 4,

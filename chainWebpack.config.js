@@ -17,6 +17,7 @@ const chainWebpack = config => {
     config.plugin('CopyWebpackPlugin').use(CopyWebpackPlugin, [[
         { from: 'src/assets', to: 'assets' },
         { from: 'src/manifest.json', to: 'manifest.json', flatten: true },
+        { from: 'src/test', to: 'test' },
     ]]);
 
     if (isDevMode) {

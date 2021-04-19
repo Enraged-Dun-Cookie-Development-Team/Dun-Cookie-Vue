@@ -7,6 +7,9 @@
       </el-row>
       <el-divider></el-divider>
       <div class="info">
+        <div class="info-time">
+          开始蹲饼时间：{{ timespanToDay(dunFristTime) }}
+        </div>
         <div class="info-title">
           已为你蹲饼<span style="color: #23ade5">{{ dunIndex }}</span
           >次
@@ -27,16 +30,16 @@
             :max="3600"
           ></el-input-number>
         </el-form-item>
-        <el-form-item label="字体大小" title="功能未实现" >
-          <el-radio-group v-model="setting.fontsize" >
-            <el-radio disabled :label="-1">小</el-radio>
-            <el-radio disabled :label="0">正常</el-radio>
-            <el-radio disabled :label="1">大</el-radio>
-            <el-radio disabled :label="2">特别大</el-radio>
+        <el-form-item label="字体大小">
+          <el-radio-group v-model="setting.fontsize">
+            <el-radio :label="-1">小</el-radio>
+            <el-radio :label="0">正常</el-radio>
+            <el-radio :label="1">大</el-radio>
+            <el-radio :label="2">特别大</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="饼来源">
-          <el-checkbox-group v-model="setting.source">
+          <el-checkbox-group v-model="setting.source" :min="1">
             <el-checkbox :label="0">B站</el-checkbox>
             <el-checkbox :label="1">微博</el-checkbox>
             <el-checkbox :label="2">通讯组</el-checkbox>
@@ -87,6 +90,7 @@ export default {
       version: "蹲饼",
       dunIndex: 0,
       dunTime: new Date(),
+      dunFristTime: new Date(),
       nextdunTime: "计算中",
       setting: {
         time: 15,
@@ -102,6 +106,8 @@ export default {
       this.dunIndex = this.getBackgroundPage.Kaze.dunIndex;
       this.version = this.getBackgroundPage.Kaze.version;
       this.dunTime = this.getBackgroundPage.Kaze.dunTime;
+      this.dunFristTime = this.getBackgroundPage.Kaze.dunFristTime;
+
       chrome.storage.local.get(["setting"], (result) => {
         this.setting = result.setting;
       });
@@ -172,7 +178,7 @@ export default {
     .info-time {
       font-size: 0.8rem;
       color: #aaa;
-      margin-top: 10px;
+      margin: 10px 0;
     }
   }
   .btn-area {

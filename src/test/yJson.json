@@ -1,0 +1,117 @@
+{
+    "focusAnnounceId": "596",
+    "announceList": [
+        {
+            "announceId": "597",
+            "title": "进攻、防守、战术交汇寻访开启",
+            "isWebUrl": true,
+            "webUrl": "https://ak-fs.hypergryph.com/announce/IOS/announcement/596.html",
+            "day": 9,
+            "month": 3,
+            "group": "ACTIVITY"
+        },
+        {
+            "announceId": "595",
+            "title": "【源石尘行动】\n新装限时上架",
+            "isWebUrl": true,
+            "webUrl": "https://ak-fs.hypergryph.com/announce/IOS/announcement/595.html",
+            "day": 9,
+            "month": 3,
+            "group": "ACTIVITY"
+        },
+        {
+            "announceId": "594",
+            "title": "【源石尘行动】\n限时活动开启",
+            "isWebUrl": true,
+            "webUrl": "https://ak-fs.hypergryph.com/announce/IOS/announcement/594.html",
+            "day": 9,
+            "month": 3,
+            "group": "ACTIVITY"
+        },
+        {
+            "announceId": "593",
+            "title": "罗德岛防御协议\n限时开启",
+            "isWebUrl": true,
+            "webUrl": "https://ak-fs.hypergryph.com/announce/IOS/announcement/593.html",
+            "day": 9,
+            "month": 3,
+            "group": "ACTIVITY"
+        },
+        {
+            "announceId": "592",
+            "title": "【精英战术专家寻访】说明",
+            "isWebUrl": true,
+            "webUrl": "https://ak-fs.hypergryph.com/announce/IOS/announcement/592.html",
+            "day": 9,
+            "month": 3,
+            "group": "ACTIVITY"
+        },
+        {
+            "announceId": "590",
+            "title": "特定干员\n限时出率上升",
+            "isWebUrl": true,
+            "webUrl": "https://ak-fs.hypergryph.com/announce/IOS/announcement/590.html",
+            "day": 4,
+            "month": 3,
+            "group": "ACTIVITY"
+        },
+        {
+            "announceId": "585",
+            "title": "「制作组通讯」\n#9期",
+            "isWebUrl": true,
+            "webUrl": "https://ak-fs.hypergryph.com/announce/IOS/announcement/585.html",
+            "day": 23,
+            "month": 2,
+            "group": "SYSTEM"
+        },
+        {
+            "announceId": "97",
+            "title": "新人寻访特惠\n必得六星干员",
+            "isWebUrl": true,
+            "webUrl": "https://ak-fs.hypergryph.com/announce/IOS/announcement/97.html",
+            "day": 30,
+            "month": 4,
+            "group": "ACTIVITY"
+        },
+        {
+            "announceId": "95",
+            "title": "通关特定关卡\n赠送专属时装",
+            "isWebUrl": true,
+            "webUrl": "https://ak-fs.hypergryph.com/announce/IOS/announcement/95.html",
+            "day": 30,
+            "month": 4,
+            "group": "ACTIVITY"
+        },
+        {
+            "announceId": "192",
+            "title": "《明日方舟》\n公测开启说明",
+            "isWebUrl": true,
+            "webUrl": "https://ak-fs.hypergryph.com/announce/IOS/announcement/192.html",
+            "day": 30,
+            "month": 4,
+            "group": "SYSTEM"
+        },
+        {
+            "announceId": "98",
+            "title": "《明日方舟》\n公平运营申明",
+            "isWebUrl": true,
+            "webUrl": "https://ak-fs.hypergryph.com/announce/IOS/announcement/98.html",
+            "day": 30,
+            "month": 4,
+            "group": "SYSTEM"
+        },
+        {
+            "announceId": "94",
+            "title": "常驻活动介绍",
+            "isWebUrl": true,
+            "webUrl": "https://ak-fs.hypergryph.com/announce/IOS/announcement/94.html",
+            "day": 30,
+            "month": 4,
+            "group": "ACTIVITY"
+        }
+    ],
+    "extra": {
+        "enable": false,
+        "name": "额外活动"
+    }
+}
