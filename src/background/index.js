@@ -167,7 +167,7 @@ let getAndProcessWeiboData = {
                             let dynamicInfo = x.mblog;
                             let weiboId = data.data.cardlistInfo.containerid;
                             let time = Math.floor(new Date(dynamicInfo.created_at).getTime() / 1000);
-                            let imageList = dynamicInfo.pic_ids.map(x => `https://wx1.sinaimg.cn/large/${x}`)
+                            let imageList = dynamicInfo.pic_ids && dynamicInfo.pic_ids.map(x => `https://wx1.sinaimg.cn/large/${x}`)
                             return {
                                 time: time,
                                 id: time,
