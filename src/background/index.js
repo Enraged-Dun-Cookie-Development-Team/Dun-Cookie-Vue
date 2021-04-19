@@ -1,15 +1,18 @@
 
 //数据下来后都定位固定格式 没有不用管
 var date = {
-    time: '时间',
-    judgment: '判定字段 微博B站用时间 鹰角用id',
-    dynamicInfo: '处理后内容 用于展示 微博把<br / >替换成 /r/n 后期统一处理',
+    time: '时间 【必填】',
+    id: '弹窗id 微博B站用时间戳，其他的内容用他们自己的ID 【必填】',
+    judgment: '判定字段 微博B站用时间 鹰角用id 【必填】',
+    dynamicInfo: '处理后内容 用于展示 微博把<br / >替换成 /r/n 后期统一处理 【必填】',
     html: '处理前内容 原始字段',
     image: '获取到的图片',
+    imagelist: '获取到的图片list',
     type: '当前条目的类型',
-    source: '条目来源',
-    url: '跳转后连接',
-    detail: '详情列表，以后进入二级页面使用'
+    source: '条目来源 【必填】',
+    url: '跳转后连接 【必填】',
+    detail: '详情列表，以后进入二级页面使用',
+    isTop: '在列表中是否为置顶内容 仅限微博'
 }
 
 var Kaze = {
@@ -26,25 +29,26 @@ var Kaze = {
     source: ['bili', 'weibo', 'yj', 'cho3', 'ys3', 'sr', 'gw'],//哔哩哔哩 微博 通讯组 朝陇山 一拾山 任塞 官网
     setting: {
         time: 15,
-        source: [0, 1, 2, 3, 4],
+        source: [0, 1, 2, 3, 4, 5],
         fontsize: 0,
-        imgshow: true
+        imgshow: true,
+        isTop: true
     },
     //判断是否为最新
-    JudgmentNew(oldList, newList, title, source) {
+    JudgmentNew(oldList, newList, title) {
         //判断方法 取每条的第一个判定字段  如果新的字段不等于旧的且大于旧的 判定为新条目
         if (oldList && (oldList.length > 0 && oldList[0].judgment != newList[0].judgment && newList[0].judgment > oldList[0].judgment)) {
             let newInfo = newList[0];
             let timeNow = new Date()
             let notice = newInfo.dynamicInfo.replace(/\n/g, "");
             console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
-            Kaze.SendNotice(`【${title}】喂公子吃饼!`, notice, newInfo.dynamicInfo.image, newInfo.dynamicInfo.time)
+            Kaze.SendNotice(`【${title}】喂公子吃饼!`, notice, newInfo.dynamicInfo.image, newInfo.id)
         }
     },
     // 发送推送核心方法
-    SendNotice(title, message, imageUrl, time) {
+    SendNotice(title, message, imageUrl, id) {
         if (imageUrl) {
-            chrome.notifications.create(time + '_', {
+            chrome.notifications.create(id + '_', {
                 iconUrl: '../image/icon.png',
                 message: message,
                 title: title,
@@ -52,7 +56,7 @@ var Kaze = {
                 type: "image"
             });
         } else {
-            chrome.notifications.create(time + '_', {
+            chrome.notifications.create(id + '_', {
                 iconUrl: '../assets/image/icon.png',
                 message: message,
                 title: title,
@@ -69,7 +73,7 @@ var Kaze = {
         this.setting.source.includes(2) ? getYj.Getdynamic() : Kaze.cardlistdm.yj = [];
         this.setting.source.includes(3) ? getCho3.Getdynamic() : Kaze.cardlistdm.cho3 = [];
         this.setting.source.includes(4) ? getYs3.Getdynamic() : Kaze.cardlistdm.ys3 = [];
-        // this.setting.source.includes(5) ? getSr.Getdynamic() : Kaze.cardlistdm.sr = [];
+        this.setting.source.includes(5) ? getSr.Getdynamic() : Kaze.cardlistdm.sr = [];
         // this.setting.source.includes(6) ? getGw.Getdynamic() : Kaze.cardlistdm.gw = [];
     },
     // 获取数据
@@ -114,13 +118,13 @@ var Kaze = {
 
         // 监听标签
         chrome.notifications.onClicked.addListener(id => {
-            let { weibo = [], cho3 = [], yj = [], bili = [] } = Kaze.cardlistdm;
-            let cardlist = [...weibo, ...cho3, ...yj, ...bili];
-            let todynamic = cardlist.filter(x => x.time + "_" == id);
+            let { weibo = [], cho3 = [], yj = [], bili = [], sr = [] } = Kaze.cardlistdm;
+            let cardlist = [...weibo, ...cho3, ...yj, ...bili, ...sr];
+            let todynamic = cardlist.filter(x => x.id + "_" == id);
             if (todynamic != null && todynamic.length > 0) {
                 chrome.tabs.create({ url: todynamic[0].url });
             } else {
-                alert('最近列表内没有找到该标签');
+                alert('o(╥﹏╥)o 时间过于久远...最近列表内没有找到该网站');
             }
         });
         if (this.isTest) {
@@ -129,12 +133,13 @@ var Kaze = {
             );
             this.SetInterval(this.testIntervalTime);
             this.setting.time = this.testIntervalTime;
-            this.version = `${this.version}【已启用调试模式】 蹲饼刷新时间临时调整为${this.testIntervalTime}秒`;
+            this.version = `${this.version}【已启用调试模式】 刷新时间临时调整为${this.testIntervalTime}秒`;
             getBili.url = `test/bJson.json?host_uid=161775300`;
             getWeibo.opt.url = `test/wJson.json?type=uid&value=6279793937&containerid=1076036279793937`;
             getYj.url = `test/yJson.json`;
             getCho3.opt.url = `test/cJson.json?type=uid&value=6441489862&containerid=1076036441489862`;
             getYs3.opt.url = `test/ysJson.json?type=uid&value=6441489862&containerid=1076036441489862`;
+            getSr.url = `test/srJson.json`;
         }
     }
 }
@@ -156,20 +161,22 @@ let getAndProcessWeiboData = {
                 let data = JSON.parse(responseText);
                 if (data.ok == 1 && data.data != null && data.data.cards != null && data.data.cards.length > 0) {
                     this.cardlist[opt.dataName] = data.data.cards
-                        .filter(x => x.hasOwnProperty('mblog') 
-                        && !x.mblog.hasOwnProperty('title') 
-                        && !x.mblog.hasOwnProperty('retweeted_status')
-                        && !x.mblog.hasOwnProperty('isTop'))
+                        .filter(x => x.hasOwnProperty('mblog')
+                            && !x.mblog.hasOwnProperty('retweeted_status'))
                         .map(x => {
                             let dynamicInfo = x.mblog;
                             let weiboId = data.data.cardlistInfo.containerid;
                             let time = Math.floor(new Date(dynamicInfo.created_at).getTime() / 1000);
+                            let imageList = dynamicInfo.pic_ids.map(x => `https://wx1.sinaimg.cn/large/${x}`)
                             return {
                                 time: time,
+                                id: time,
+                                isTop: x.mblog.hasOwnProperty('isTop') && x.mblog.isTop == 1,
                                 judgment: time,
                                 dynamicInfo: this.weiboRegexp(dynamicInfo.text),
                                 html: dynamicInfo.text,
                                 image: dynamicInfo.bmiddle_pic || dynamicInfo.original_pic,
+                                imageList: imageList,
                                 type: this.getdynamicType(dynamicInfo),
                                 source: opt.source,
                                 url: "https://weibo.com/" + weiboId.substring((weiboId.length - 10), weiboId.length) + "/" + x.mblog.bid,
@@ -200,7 +207,7 @@ let getAndProcessWeiboData = {
     },
     //微博数据处理 把<br />替换为 /r/n
     weiboRegexp(text) {
-        return text.replace(/<\a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<\img.*?>|全文|网页链接/g,'').replace(/<br \/>/g,'\n')
+        return text.replace(/<\a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<\img.*?>|全文|网页链接/g, '').replace(/<br \/>/g, '\n')
     },
 }
 
@@ -219,8 +226,10 @@ let getBili = {
                     .filter(x => (x.desc.type == 2 || x.desc.type == 4 || x.desc.type == 8 || x.desc.type == 64))
                     .map(x => {
                         let dynamicInfo = JSON.parse(x.card);
+
                         let card = {
                             time: x.desc.timestamp,
+                            id: x.desc.timestamp,
                             judgment: x.desc.timestamp,
                             source: 0,
                         };
@@ -278,12 +287,14 @@ let getYj = {
             try {
                 let data = JSON.parse(responseText);
                 this.cardlist = data.announceList
+                    // 屏蔽几个条目 先用ID 看有没有问题
                     .filter(x => !(x.announceId == 94 || x.announceId == 98 || x.announceId == 192 || x.announceId == 95 || x.announceId == 97))
                     .map(x => {
-                        // 屏蔽几个条目 先用ID 看有没有问题
+                        let time = `${new Date().getFullYear()}/${x.month}/${x.day} ${Kaze.setting.isTop ? '23:59:59' : '00:00:00'}`;
                         return {
-                            time: Math.floor(new Date(`${(new Date().getFullYear())}/${x.month}/${x.day} 23:59:59`).getTime() / 1000),
+                            time: Math.floor(new Date(time).getTime() / 1000),
                             judgment: x.announceId,
+                            id: x.announceId,
                             dynamicInfo: x.title,
                             source: 2,
                             url: x.webUrl,
@@ -323,6 +334,32 @@ let getYs3 = {
     Getdynamic() {
         getAndProcessWeiboData.getdynamic(this.opt);
     }
+}
+
+let getSr = {
+    url: `https://monster-siren.hypergryph.com/api/news`,
+    cardlist: [],
+    Getdynamic() {
+        this.cardlist = [];
+        Kaze.Get(this.url, (responseText) => {
+            let data = JSON.parse(responseText);
+            if (data && data.data && data.data.list) {
+                this.cardlist = data.data.list.map(item => {
+                    let time = Math.floor(new Date(`${item.date} ${Kaze.setting.isTop ? '23:59:59' : '00:00:00'}`).getTime() / 1000);
+                    return {
+                        time: time,
+                        id: item.cid,
+                        judgment: time,
+                        dynamicInfo: item.title,
+                        source: 5,
+                        url: `https://monster-siren.hypergryph.com/info/${item.cid}`,
+                    }
+                }).sort((x, y) => y.judgment - x.judgment);
+                Kaze.JudgmentNew(Kaze.cardlistdm.sr, this.cardlist, '塞壬唱片', 5);
+                Kaze.cardlistdm.sr = this.cardlist;
+            }
+        });
+    },
 }
 
 Kaze.Init();

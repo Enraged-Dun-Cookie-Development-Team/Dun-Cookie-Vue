@@ -32,6 +32,12 @@
           @click="openUrl('https://weibo.com/u/7506039414')"
           >一拾山微博</el-button
         >
+        <el-button
+          size="medium"
+          type="primary"
+          @click="openUrl('https://monster-siren.hypergryph.com/')"
+          >塞壬官网</el-button
+        >
       </el-row>
       <el-divider content-position="left">调整蹲饼器</el-divider>
       <el-row type="flex" justify="center">
@@ -60,20 +66,21 @@
       <span v-if="cardlist.length == 0" style="color: red"
         >【无内容，请检查网络】</span
       >
+      <span v-else>【已蹲饼{{ dunIndex }}次】</span>
     </div>
     <el-timeline>
       <el-timeline-item
         v-for="(item, index) in cardlist"
         :key="index"
         :timestamp="
-          item.source == 2
+          item.source == 2 || item.source == 5
             ? timespanToDay(item.time, 2)
             : timespanToDay(item.time)
         "
         placement="top"
         :icon="'headImg' + item.source"
       >
-        <!-- 0 b服 1微博 2通讯组 3朝陇山 4一拾山 -->
+        <!-- 0 b服 1微博 2通讯组 3朝陇山 4一拾山 5塞壬唱片 -->
         <el-card class="card" :class="'font-size-' + fontSizeClass">
           <div>
             <el-button
@@ -82,6 +89,11 @@
               @click="openUrl(item.url)"
               ><i class="el-icon-right"></i
             ></el-button>
+            <span class="is-top-info" v-if="item.isTop">
+              <span class="color-blue"
+                >【当前条目在微博的时间线内为置顶状态】</span
+              >
+            </span>
             <el-row
               type="flex"
               justify="space-between"
@@ -98,7 +110,20 @@
                 @click="changeShowAllImage(item.image)"
                 :class="showAllImage.includes(item.image) ? 'show-all' : ''"
               >
-                <img :src="item.image" class="img" />
+                <div
+                  v-if="
+                    item.imageList != undefined && item.imageList.length > 1
+                  "
+                >
+                  <el-row :gutter="5">
+                    <el-col v-for="img in item.imageList" :key="img" :span="8"
+                      ><img :src="img" class="img" />
+                    </el-col>
+                  </el-row>
+                </div>
+                <div v-else>
+                  <img :src="item.image" class="img" />
+                </div>
               </div>
             </el-row>
           </div>
@@ -120,6 +145,7 @@ export default {
       getBackgroundPage: chrome.extension.getBackgroundPage(),
       cardlist: [],
       version: "蹲饼",
+      dunIndex: 0,
       setting: {},
       drawer: false, //打开菜单
       isReload: false, //是否正在刷新
@@ -131,11 +157,13 @@ export default {
   methods: {
     init() {
       this.version = `蹲饼 V${this.getBackgroundPage.Kaze.version}`;
+      this.dunIndex = this.getBackgroundPage.Kaze.dunIndex;
       this.getbackgroundData();
       this.setting = this.getBackgroundPage.Kaze.setting;
       this.fontSizeClass = this.setting.fontsize;
       setInterval(() => {
         this.getbackgroundData();
+        this.dunIndex = this.getBackgroundPage.Kaze.dunIndex;
       }, this.setting.time * 500);
     },
     changeShowAllImage(img) {
@@ -155,31 +183,16 @@ export default {
         yj = [],
         bili = [],
         ys3 = [],
+        sr = [],
       } = this.getBackgroundPage.Kaze.cardlistdm;
-      this.cardlist = [...weibo, ...cho3, ...yj, ...bili, ...ys3]
+      this.cardlist = [...weibo, ...cho3, ...yj, ...bili, ...ys3, ...sr]
         .map((x) => {
-          x.dynamicInfo=x.dynamicInfo.replace(/\n/g,'<br/>')
-          //展示头像
-          switch (x.source) {
-            case 0:
-              x.headImg = `./assets/image/bili.ico`;
-              break;
-            case 1:
-              x.headImg = `./assets/image/weibo.ico`;
-              break;
-            case 2:
-              x.headImg = `./assets/image/mrfz.ico`;
-              break;
-            case 3:
-              x.headImg = `./assets/image/cho3.jpg`;
-              break;
-            case 4:
-              x.headImg = `./assets/image/ys3.jpg`;
-              break;
-          }
+          x.dynamicInfo = x.dynamicInfo.replace(/\n/g, "<br/>");
           return x;
         })
         .sort((x, y) => y.time - x.time);
+
+      console.log(this.cardlist);
     },
     reload() {
       this.getBackgroundPage.Kaze.GetData();
@@ -228,6 +241,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.color-blue {
+  color: #23ade5;
+}
 #app {
   min-width: 600px;
 }
@@ -264,13 +280,21 @@ export default {
   width: 600px;
   margin: 10px 0;
 
-  &.font-size--1{font-size: 0.7rem;}
-  &.font-size-0{font-size: 1rem;}
-  &.font-size-1{font-size: 1.2rem;}
-  &.font-size-2{font-size: 1.5rem;}
+  &.font-size--1 {
+    font-size: 0.7rem;
+  }
+  &.font-size-0 {
+    font-size: 1rem;
+  }
+  &.font-size-1 {
+    font-size: 1.2rem;
+  }
+  &.font-size-2 {
+    font-size: 1.5rem;
+  }
 
   .margintb {
-    margin: 10px 0;
+    margin: 0 0 10px 0;
   }
   .img-area {
     width: 100%;
@@ -308,6 +332,11 @@ export default {
     position: absolute;
     top: -8px;
     right: 0;
+  }
+  .is-top-info {
+    position: absolute;
+    top: 0px;
+    left: 220px;
   }
 }
 
@@ -357,6 +386,10 @@ export default {
       }
       &.headImg4::before {
         background: url("/assets/image/ys3.jpg") no-repeat center, #fff;
+        background-size: cover;
+      }
+      &.headImg5::before {
+        background: url("/assets/image/sr.ico") no-repeat center, #fff;
         background-size: cover;
       }
     }

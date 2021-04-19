@@ -40,15 +40,50 @@
         </el-form-item>
         <el-form-item label="饼来源">
           <el-checkbox-group v-model="setting.source" :min="1">
-            <el-checkbox :label="0">B站</el-checkbox>
-            <el-checkbox :label="1">微博</el-checkbox>
-            <el-checkbox :label="2">通讯组</el-checkbox>
-            <el-checkbox :label="3">朝陇山</el-checkbox>
-            <el-checkbox :label="4">一拾山</el-checkbox>
+            <el-checkbox :label="0">
+              <span class="checkbox-area">
+                <img class="iconimg" src="/assets/image/bili.ico" />B站</span
+              >
+            </el-checkbox>
+            <el-checkbox :label="1">
+              <span class="checkbox-area">
+                <img class="iconimg" src="/assets/image/weibo.ico" />微博</span
+              ></el-checkbox
+            >
+            <el-checkbox :label="2">
+              <span class="checkbox-area">
+                <img class="iconimg" src="/assets/image/mrfz.ico" />通讯组</span
+              ></el-checkbox
+            >
+            <el-checkbox :label="3">
+              <span class="checkbox-area">
+                <img class="iconimg" src="/assets/image/cho3.jpg" />朝陇山</span
+              ></el-checkbox
+            >
+            <el-checkbox :label="4">
+              <span class="checkbox-area">
+                <img class="iconimg" src="/assets/image/ys3.jpg" />一拾山</span
+              ></el-checkbox
+            >
+            <el-checkbox :label="5">
+              <span class="checkbox-area">
+                <img class="iconimg" src="/assets/image/sr.ico" />塞壬唱片</span
+              ></el-checkbox
+            >
           </el-checkbox-group>
         </el-form-item>
         <el-form-item label="展示图片">
           <el-switch v-model="setting.imgshow"></el-switch>
+        </el-form-item>
+        <el-form-item
+          label="无时间位置 ?"
+          title="有些数据比如通讯组是只有日期没有时间的，在数据列表内无法排序，所以在此统一这些卡片在当天信息流内是置顶还是置底。
+          保存的时候可能会因为数据排序改变而发送错误的推送，请忽略！"
+        >
+          <el-radio-group v-model="setting.isTop" @change="test">
+            <el-radio :label="true">当天内容顶部</el-radio>
+            <el-radio :label="false">当天内容底部</el-radio>
+          </el-radio-group>
         </el-form-item>
         <div class="btn-area">
           <el-button type="primary" @click="save">保存</el-button>
@@ -97,11 +132,13 @@ export default {
         source: [0, 1, 2, 3, 4],
         fontsize: 0,
         imgshow: true,
+        isTop: true,
       },
     };
   },
   computed: {},
   methods: {
+    test(value){debugger;},
     init() {
       this.dunIndex = this.getBackgroundPage.Kaze.dunIndex;
       this.version = this.getBackgroundPage.Kaze.version;
@@ -184,6 +221,15 @@ export default {
   .btn-area {
     width: 100%;
     text-align: right;
+  }
+
+  .checkbox-area {
+    display: flex;
+    align-items: center;
+    .iconimg {
+      margin-right: 5px;
+      width: 16px;
+    }
   }
 }
 </style>
