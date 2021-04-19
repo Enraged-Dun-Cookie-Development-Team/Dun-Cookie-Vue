@@ -127,6 +127,18 @@ var Kaze = {
                 alert('o(╥﹏╥)o 时间过于久远...最近列表内没有找到该网站');
             }
         });
+
+        chrome.runtime.onInstalled.addListener(details => {
+            if (details.reason === 'install') {
+                var urlToOpen = chrome.extension.getURL("welcome.html");
+                chrome.tabs.create({
+                  url: urlToOpen,
+                });
+            }
+            if (details.reason === 'update') {
+                // 更新
+            }
+        });
         if (this.isTest) {
             clearInterval(
                 this.setIntervalindex

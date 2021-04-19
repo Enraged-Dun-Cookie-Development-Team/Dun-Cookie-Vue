@@ -15,7 +15,7 @@ const config = {
             entry: 'src/options/index.js',
             template: 'public/index.html',
             filename: 'options.html',
-            title: 'Options',
+            title: '设置蹲饼器',
             chunks: ['chunk-vendors', 'chunk-common', 'options'],
         },
         popup: {
@@ -24,6 +24,13 @@ const config = {
             filename: 'popup.html',
             title: 'Popup',
             chunks: ['chunk-vendors', 'chunk-common', 'popup'],
+        },
+        welcome: {
+            entry: 'src/welcome/index.js',
+            template: 'public/index.html',
+            filename: 'welcome.html',
+            title: '欢迎使用蹲饼',
+            chunks: ['chunk-vendors', 'chunk-common', 'welcome'],
         },
     },
     css: {
