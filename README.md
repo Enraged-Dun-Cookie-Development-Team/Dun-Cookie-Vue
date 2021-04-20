@@ -105,7 +105,13 @@
 
 ## Edge安装方法
 
-    正在写
+    正在想办法注册Edge开发者
+
+> 1. 先解压到任意文件夹
+> 2. 地址栏输入 edge://extensions/ ，回车
+> 3. 点击已安装的扩展右边的第一个图标“加载解压缩的扩展”![avatar](https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/edge-load.jpg)
+> 4. 选择解压后的整个插件文件夹完成安装
+
 
 
 
@@ -115,7 +121,7 @@
 
     因为编写和测试都是在Chrome上进行的，兼容性问题可能无法照顾到全部浏览器
 
-> - 火狐在当前Beta版本中有致命错误，错误呈现方式为第二次及以后加载列表会出现无数据的情况，正在查找原因。<font color=red>火狐用户请先使用V1.3.9版本</font>
+> - 火狐在当前Beta版本中有致命错误，错误呈现方式为第二次及以后加载列表会出现无数据的情况，正在查找原因。<font color=red>火狐用户请先使用[V1.3.9版本](https://github.com/LiuZiYang1/Dun-Cookie/releases/tag/V1.3.9)</font>
 
 > - Edge会有难看的滚动条，正在想办法去除
 
