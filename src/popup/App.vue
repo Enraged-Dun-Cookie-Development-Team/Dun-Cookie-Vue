@@ -4,7 +4,7 @@
       :visible.sync="drawer"
       :show-close="false"
       direction="ttb"
-      size="40%"
+      size="330px"
     >
       <el-divider content-position="left">饼的发源地</el-divider>
       <el-row type="flex" justify="center">
@@ -37,6 +37,41 @@
           type="primary"
           @click="openUrl('https://monster-siren.hypergryph.com/')"
           >塞壬官网</el-button
+        >
+      </el-row>
+      <el-divider content-position="left">快捷链接</el-divider>
+      <el-row type="flex" justify="center">
+        <el-button
+          size="medium"
+          type="primary"
+          @click="openUrl('http://prts.wiki/')"
+          >PRTS Wiki</el-button
+        >
+        <el-button
+          size="medium"
+          type="primary"
+          @click="openUrl('https://map.ark-nights.com/')"
+           title="by Houdou"
+          >PRTS.Map</el-button
+        >
+        <el-button
+          size="medium"
+          type="primary"
+          @click="openUrl('https://penguin-stats.io/')"
+          >企鹅物流</el-button
+        >
+        <el-button
+          size="medium"
+          type="primary"
+          @click="openUrl('https://www.bigfun.cn/tools/aktools/')"
+          title="by 一只灰喵"
+          >明日方舟工具箱</el-button
+        >
+         <el-button
+          size="medium"
+          type="primary"
+          @click="openUrl('https://opssr.net/')"
+          >源石作战室</el-button
         >
       </el-row>
       <el-divider content-position="left">调整蹲饼器</el-divider>
@@ -201,7 +236,6 @@ export default {
           return x;
         })
         .sort((x, y) => y.time - x.time);
-
     },
     reload() {
       this.getBackgroundPage.Kaze.GetData();
