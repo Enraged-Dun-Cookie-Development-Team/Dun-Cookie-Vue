@@ -50,14 +50,14 @@
         <el-button
           size="medium"
           type="primary"
-          @click="openUrl('https://map.ark-nights.com/')"
+          @click="openUrl('https://mapcn.ark-nights.com')"
            title="by Houdou"
           >PRTS.Map</el-button
         >
         <el-button
           size="medium"
           type="primary"
-          @click="openUrl('https://penguin-stats.io/')"
+          @click="openUrl('https://penguin-stats.cn/')"
           >企鹅物流</el-button
         >
         <el-button
