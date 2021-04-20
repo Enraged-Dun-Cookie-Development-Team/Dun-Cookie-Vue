@@ -3,13 +3,30 @@
 ## 用于实时抓取兔兔发的动态
 一起监视自由的兔兔。明日方舟兔兔发布动态发布时间越来越奇怪了，我每天下午4点刷都刷不出来，怎么办呢？写一个蹲饼器盯着兔兔看！
 
-![avatar](https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/tutu.gif)
+<img src="https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/tutu.gif" height = "200" alt="图片名称" align="center" />
 
     兔兔你的饼还没发完，现在还不能休息哦
 
-# 软件界面
+## 2.0对比与1.0功能的升级
 
-    图片收起与展开
+    以下升级内容未排序，想到啥说啥的那种
+
+> - 新版的界面采用了elementUI，UI统一更好看了
+> - 现在使用的底层是Vue，在添加功能和绑数据方面比V1版本更加方便了
+> - 列表改成了时间线样式，比以前更加直观
+> - 现在微博的置顶也拿出来了(以前的版本置顶是抹掉的)，并且标注在微博内为置顶
+> - 现在的内容也能一键复制了
+> - 现在的图片可以进行伸缩打开了，每次的大版本更新，那个图片，辣么长，现在可以展开和收起了
+> - 现在的菜单做成了抽屉，点击右下角的更多按钮展开，腾出了几行显示文字的地方
+> - 设置页面样子更新了，看起来比以前不知道高端到什么地方去了
+> - 设置页面也添加了蹲饼本次蹲饼时间和下次蹲饼时间，蹲饼更精准
+> - 安装的时候添加了欢迎页面，可以引导大家去设置里面进行个性化调整
+> - 在没经过网站所有者允许的情况下添加了部分我觉得很有用的链接
+> - 预留了很多接口，包括文本自动翻译，国际化，更新提示 微信推送（待定）
+
+<details>
+  <summary>知道我们的更新内容后，现在可以点击这里来看看我们的界面了</summary>
+  图片收起与展开
 
 ![avatar](https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/1.jpg)
 ![avatar](https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/2.jpg)
@@ -31,22 +48,7 @@
 
 ![avatar](https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/3.jpg)
 
-## 2.0对比与1.0功能的升级
-
-    以下升级内容未排序，想到啥说啥的那种
-
-> - 新版的界面采用了elementUI，UI统一更好看了
-> - 现在使用的底层是Vue，在添加功能和绑数据方面比V1版本更加方便了
-> - 列表改成了时间线样式，比以前更加直观
-> - 现在微博的置顶也拿出来了(以前的版本置顶是抹掉的)，并且标注在微博内为置顶
-> - 现在的内容也能一键复制了
-> - 现在的图片可以进行伸缩打开了，每次的大版本更新，那个图片，辣么长，现在可以展开和收起了
-> - 现在的菜单做成了抽屉，点击右下角的更多按钮展开，腾出了几行显示文字的地方
-> - 设置页面样子更新了，看起来比以前不知道高端到什么地方去了
-> - 设置页面也添加了蹲饼本次蹲饼时间和下次蹲饼时间，蹲饼更精准
-> - 安装的时候添加了欢迎页面，可以引导大家去设置里面进行个性化调整
-> - 在没经过网站所有者允许的情况下添加了部分我觉得很有用的链接
-> - 预留了很多接口，包括文本自动翻译，国际化，更新提示 微信推送（待定）
+</details>
 
 # 更新内容
 
@@ -107,7 +109,7 @@
 # 鸣谢
 
 > - [我自己](https://github.com/LiuZiYang1) —— 震惊！我竟然能3天内肝完V2版本主要功能
-> - [@lwt-414](https://github.com/lwt-414) —— 测试很细心，正则很牛逼，我写代码很放心。还能解决我的燃眉之急（指在2021年4月18号帮我通关WD-8，能让我能安心写代码）
+> - [@lwt-414](https://github.com/lwt-414) —— 测试很细心，正则很牛逼，我写代码很放心。还能解决我的燃眉之急（指在2021年4月18号帮我通关WD-8，能让我没有后顾之忧）
 > - [@Houdou](https://github.com/Houdou) —— 帮我解决了疑难杂症
 > - 蹲饼测试组成员 
 > - [HYPERGRYPH](https://www.hypergryph.com/#/)
