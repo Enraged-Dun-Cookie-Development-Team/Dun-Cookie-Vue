@@ -157,3 +157,14 @@
 > - 蹲饼测试组成员 
 > - [HYPERGRYPH](https://www.hypergryph.com/#/)
 > - 脚手架支持 —— [chrome-extension-cli](https://github.com/SlowSoulWen/chrome-extension-cli)
+
+
+<br/>
+
+# “特别”鸣谢 
+
+    傻嗨，感谢你在百忙之中到我这讨骂。
+
+![avatar](https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/7.jpg)
+
+
