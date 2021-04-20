@@ -26,7 +26,8 @@
 
 <details>
   <summary>知道我们的更新内容后，现在可以点击这里来看看我们的界面了</summary>
-  图片收起与展开
+
+    图片收起与展开
 
 ![avatar](https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/1.jpg)
 ![avatar](https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/2.jpg)
