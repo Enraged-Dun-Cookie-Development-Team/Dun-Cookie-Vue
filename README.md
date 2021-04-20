@@ -7,6 +7,7 @@
 
     兔兔你的饼还没发完，现在还不能休息哦
 
+<font color=23ade5>欢迎Star！</font>
 
 <br/>
 
