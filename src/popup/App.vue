@@ -233,7 +233,9 @@ export default {
           `
 `
         )}    
-${item.url}`
+${item.url}
+
+数据由 ${this.version} 收集`
       ).then(
         (e) => {
           this.$message({
@@ -345,9 +347,10 @@ ${item.url}`
       content: " ";
       position: absolute;
       bottom: 0;
-      height: 30px;
+      height: 50px;
       width: 100%;
       background: linear-gradient(0, #fff, transparent);
+      z-index: 1;
     }
     &.show-all {
       height: 100%;

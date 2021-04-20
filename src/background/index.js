@@ -19,7 +19,7 @@ var Kaze = {
     isTest: false,
     testIntervalTime: 1,
     cardlistdm: {},
-    version: '2.0.0 内测版',
+    version: '2.0.14 内测版',
     feedbackInfo: '',
     //请求次数
     dunIndex: 0,
@@ -43,14 +43,14 @@ var Kaze = {
             let timeNow = new Date()
             let notice = newInfo.dynamicInfo.replace(/\n/g, "");
             console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
-            Kaze.SendNotice(`【${title}】喂公子吃饼!`, notice, newInfo.dynamicInfo.image, newInfo.id)
+            Kaze.SendNotice(`【${title}】喂公子吃饼!`, notice, newInfo.image, newInfo.id)
         }
     },
     // 发送推送核心方法
     SendNotice(title, message, imageUrl, id) {
         if (imageUrl) {
             chrome.notifications.create(id + '_', {
-                iconUrl: '../image/icon.png',
+                iconUrl: '../assets/image/icon.png',
                 message: message,
                 title: title,
                 imageUrl: imageUrl,
