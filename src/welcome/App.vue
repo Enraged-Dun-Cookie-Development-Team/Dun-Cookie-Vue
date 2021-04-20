@@ -11,6 +11,8 @@
         <div class="info-title">让我们一起守护自由的兔兔吧！</div>
       </div>
       <el-divider></el-divider>
+      <div>这是一个内测版本，我们准备在周年庆前夕放出正式版。 如果有意见或建议或想法请在群内反馈</div>
+      <el-divider></el-divider>
       <div>你可以点击图标查看蹲饼列表</div>
       <el-divider></el-divider>
       <el-collapse v-model="activeNames" @change="handleChange">
@@ -20,12 +22,12 @@
         >
           <div class="blue">点击展开全部插件列表</div>
           <img src="../assets/welcome/1.jpg" />
-          <br/>
-           <div class="blue">将置顶按钮激活</div>
+          <br />
+          <div class="blue">将置顶按钮激活</div>
           <img src="../assets/welcome/2.jpg" />
           <img src="../assets/welcome/3.jpg" />
-          <br/>
-           <div class="blue">开始看饼</div>
+          <br />
+          <div class="blue">开始看饼</div>
           <img src="../assets/welcome/4.jpg" />
         </el-collapse-item>
       </el-collapse>
@@ -41,24 +43,7 @@
         >查看项目源码。<span style="color: #23ade5">欢迎点star哦</span>
       </div>
       <el-divider></el-divider>
-      <div>
-        <span>
-          如果有意见或建议或者是反馈问题，可以<a
-            href="https://jq.qq.com/?_wv=1027&k=Vod1uO13"
-            >添加群【蹲饼测试群】</a
-          >或<a href="Mailto:kaze.liu@qq.com.com">给我发邮件</a>反馈<br />
-          也可以去github上查看<a
-            href="https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue"
-            >Dun-Cookie-Vue</a
-          >最新安装包<br />
-          也可以去Chrome应用商店查看更新，但是因为审核机制，更新速度会慢于QQ群和github
-          <br />
-          <br />
-          <div style="color: #aaa">
-            获取更新机制因为没钱买服务器，现在正在想办法
-          </div>
-        </span>
-      </div>
+      <div v-html="feedbackInfo"></div>
     </el-card>
   </div>
 </template>
@@ -74,6 +59,7 @@ export default {
     return {
       getBackgroundPage: chrome.extension.getBackgroundPage(),
       version: "蹲饼",
+      feedbackInfo: "",
       dunIndex: 0,
       dunTime: new Date(),
       dunFristTime: new Date(),
@@ -95,7 +81,7 @@ export default {
       this.version = this.getBackgroundPage.Kaze.version;
       this.dunTime = this.getBackgroundPage.Kaze.dunTime;
       this.dunFristTime = this.getBackgroundPage.Kaze.dunFristTime;
-
+      this.feedbackInfo = this.getBackgroundPage.Kaze.feedbackInfo;
       chrome.storage.local.get(["setting"], (result) => {
         this.setting = result.setting;
       });
@@ -133,7 +119,7 @@ export default {
     width: 50px;
   }
   .blue {
-    color:#23ade5;
+    color: #23ade5;
     font-size: 1.2rem;
   }
   .version {

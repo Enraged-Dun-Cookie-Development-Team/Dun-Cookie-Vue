@@ -32,6 +32,13 @@ const config = {
             title: '欢迎使用蹲饼',
             chunks: ['chunk-vendors', 'chunk-common', 'welcome'],
         },
+        update: {
+            entry: 'src/update/index.js',
+            template: 'public/index.html',
+            filename: 'update.html',
+            title: '蹲饼这次更新了什么？',
+            chunks: ['chunk-vendors', 'chunk-common', 'update'],
+        },
     },
     css: {
         extract: true,

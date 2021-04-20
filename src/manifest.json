@@ -19,6 +19,7 @@
 		"persistent": true
 	},
 	"permissions": [
+		"clipboardWrite",
 		"background",
 		"webRequest",
 		"storage",

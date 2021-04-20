@@ -19,7 +19,8 @@ var Kaze = {
     isTest: false,
     testIntervalTime: 1,
     cardlistdm: {},
-    version: '2.0.0 Beta',
+    version: '2.0.0 内测版',
+    feedbackInfo: '',
     //请求次数
     dunIndex: 0,
     dunTime: new Date(),
@@ -99,11 +100,18 @@ var Kaze = {
             this.GetData();
         }, parseInt(time) * 1000);
     },
+    // 检查一次更新
+    getUpdateInfo() {
+        Kaze.Get(opt.url + `&kaze=${Math.random().toFixed(3)}`, (responseText) => {
+
+        })
+    },
 
     // 初始化
     Init() {
-        chrome.browserAction.setBadgeText({ text: 'Vue' });
+        chrome.browserAction.setBadgeText({ text: 'Beta' });
         chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
+        //第一次安装更新
         chrome.storage.local.get(['setting'], result => {
             if (result.setting == undefined) {
                 chrome.storage.local.set({
@@ -115,7 +123,6 @@ var Kaze = {
             this.GetData();
             this.SetInterval(this.setting.time);
         });
-
         // 监听标签
         chrome.notifications.onClicked.addListener(id => {
             let { weibo = [], cho3 = [], yj = [], bili = [], sr = [] } = Kaze.cardlistdm;
@@ -132,13 +139,33 @@ var Kaze = {
             if (details.reason === 'install') {
                 var urlToOpen = chrome.extension.getURL("welcome.html");
                 chrome.tabs.create({
-                  url: urlToOpen,
+                    url: urlToOpen,
                 });
             }
             if (details.reason === 'update') {
                 // 更新
             }
         });
+
+        this.feedbackInfo = `<div>
+        <span>
+          如果有意见或建议或者是反馈问题或者是发现程序出现bug，可以添加<a
+            href="https://jq.qq.com/?_wv=1027&k=Vod1uO13"
+            >【蹲饼测试群】</a
+          >反馈或<a href="Mailto:kaze.liu@qq.com.com">给我发邮件</a>反馈<br />
+          也可以去github上查看<a
+            href="https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue"
+            >Dun-Cookie-Vue</a
+          ><br />
+          也可以去Chrome应用商店查看更新，但是因为审核机制，更新速度会慢于QQ群和github
+          <br />
+          <br />
+          <div style="color: #aaa">
+            获取更新机制因为没钱买服务器，现在正在想办法
+          </div>
+        </span>
+      </div>`;
+
         if (this.isTest) {
             clearInterval(
                 this.setIntervalindex
@@ -224,7 +251,6 @@ let getAndProcessWeiboData = {
 }
 
 let getBili = {
-
     url: `https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=161775300&offset_dynamic_id=0&need_top=0&platform=web`,
     // B站：动态列表
     cardlist: [],

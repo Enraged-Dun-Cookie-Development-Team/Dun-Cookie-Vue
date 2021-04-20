@@ -84,8 +84,16 @@
         <el-card class="card" :class="'font-size-' + fontSizeClass">
           <div>
             <el-button
+              class="to-copy-btn"
+              size="small"
+              @click="copyData(item)"
+              title="复制该条内容及链接"
+              ><i class="el-icon-document-copy"></i
+            ></el-button>
+            <el-button
               class="to-url-btn"
               size="small"
+              title="前往饼之发源地"
               @click="openUrl(item.url)"
               ><i class="el-icon-right"></i
             ></el-button>
@@ -101,31 +109,33 @@
               class="margintb"
             >
             </el-row>
-            <el-row class="margintb">
-              <div v-html="item.dynamicInfo"></div>
-            </el-row>
-            <el-row class="margintb" v-if="setting.imgshow && item.image">
-              <div
-                class="img-area"
-                @click="changeShowAllImage(item.image)"
-                :class="showAllImage.includes(item.image) ? 'show-all' : ''"
-              >
+            <div :ref="'index_' + index">
+              <el-row class="margintb">
+                <div v-html="item.dynamicInfo"></div>
+              </el-row>
+              <el-row class="margintb" v-if="setting.imgshow && item.image">
                 <div
-                  v-if="
-                    item.imageList != undefined && item.imageList.length > 1
-                  "
+                  class="img-area"
+                  @click="changeShowAllImage(item.image)"
+                  :class="showAllImage.includes(item.image) ? 'show-all' : ''"
                 >
-                  <el-row :gutter="5">
-                    <el-col v-for="img in item.imageList" :key="img" :span="8"
-                      ><img :src="img" class="img" />
-                    </el-col>
-                  </el-row>
+                  <div
+                    v-if="
+                      item.imageList != undefined && item.imageList.length > 1
+                    "
+                  >
+                    <el-row :gutter="5">
+                      <el-col v-for="img in item.imageList" :key="img" :span="8"
+                        ><img :src="img" class="img" />
+                      </el-col>
+                    </el-row>
+                  </div>
+                  <div v-else>
+                    <img :src="item.image" class="img" />
+                  </div>
                 </div>
-                <div v-else>
-                  <img :src="item.image" class="img" />
-                </div>
-              </div>
-            </el-row>
+              </el-row>
+            </div>
           </div>
         </el-card>
       </el-timeline-item>
@@ -192,7 +202,6 @@ export default {
         })
         .sort((x, y) => y.time - x.time);
 
-      console.log(this.cardlist);
     },
     reload() {
       this.getBackgroundPage.Kaze.GetData();
@@ -216,6 +225,33 @@ export default {
       chrome.tabs.create({
         url: urlToOpen,
       });
+    },
+    copyData(item) {
+      this.$copyText(
+        `${item.dynamicInfo.replace(
+          /<br\/>/g,
+          `
+`
+        )}    
+${item.url}`
+      ).then(
+        (e) => {
+          this.$message({
+            offset: 50,
+            center: true,
+            message: "复制成功",
+            type: "success",
+          });
+        },
+        (e) => {
+          this.$message({
+            offset: 50,
+            center: true,
+            message: "复制失败",
+            type: "error",
+          });
+        }
+      );
     },
     // 以下为数据处理方法
     timespanToDay(date, type = 1) {
@@ -332,6 +368,11 @@ export default {
     position: absolute;
     top: -8px;
     right: 0;
+  }
+  .to-copy-btn {
+    position: absolute;
+    top: -8px;
+    right: 50px;
   }
   .is-top-info {
     position: absolute;

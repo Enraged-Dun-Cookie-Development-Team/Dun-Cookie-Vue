@@ -90,23 +90,8 @@
         </div>
       </el-form>
       <el-divider></el-divider>
-      <div>
-        <span>
-          如果有意见或建议或者是反馈问题，可以<a
-            href="https://jq.qq.com/?_wv=1027&k=Vod1uO13"
-            >添加群【蹲饼测试群】</a
-          >或<a href="Mailto:kaze.liu@qq.com.com">给我发邮件</a>反馈<br />
-          也可以去github上查看<a
-            href="https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue"
-            >Dun-Cookie-Vue</a
-          >最新安装包<br />
-          也可以去Chrome应用商店查看更新，但是因为审核机制，更新速度会慢于QQ群和github
-          <br />
-          <br />
-          <div style="color: #aaa">
-            获取更新机制因为没钱买服务器，现在正在想办法
-          </div>
-        </span>
+      <div v-html="feedbackInfo">
+        
       </div>
     </el-card>
   </div>
@@ -123,6 +108,7 @@ export default {
     return {
       getBackgroundPage: chrome.extension.getBackgroundPage(),
       version: "蹲饼",
+      feedbackInfo:'',
       dunIndex: 0,
       dunTime: new Date(),
       dunFristTime: new Date(),
@@ -142,6 +128,7 @@ export default {
     init() {
       this.dunIndex = this.getBackgroundPage.Kaze.dunIndex;
       this.version = this.getBackgroundPage.Kaze.version;
+      this.feedbackInfo = this.getBackgroundPage.Kaze.feedbackInfo;
       this.dunTime = this.getBackgroundPage.Kaze.dunTime;
       this.dunFristTime = this.getBackgroundPage.Kaze.dunFristTime;
 
