@@ -3,9 +3,33 @@
 ## 用于实时抓取兔兔发的动态
 一起监视自由的兔兔。明日方舟兔兔发布动态发布时间越来越奇怪了，我每天下午4点刷都刷不出来，怎么办呢？写一个蹲饼器盯着兔兔看！
 
+![avatar](https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/tutu.gif)
+
     兔兔你的饼还没发完，现在还不能休息哦
 
 # 软件界面
+
+    图片收起与展开
+
+![avatar](https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/1.jpg)
+![avatar](https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/2.jpg)
+
+    图片九宫格
+
+![avatar](https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/5.jpg)
+
+
+    内容快捷复制
+
+![avatar](https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/6.jpg)
+
+    菜单界面
+
+![avatar](https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/4.jpg)
+
+    设置界面
+
+![avatar](https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/3.jpg)
 
 ## 2.0对比与1.0功能的升级
 
