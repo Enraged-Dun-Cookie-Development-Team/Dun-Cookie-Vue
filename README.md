@@ -94,27 +94,41 @@
 > - 推荐 Chrome应用商店 【尚未发布】
 > - 下载crx安装
 > - 下载zip通过开发者模式加载已解压的扩展程序
+> 
+> PS: 可以通过地址栏输入`chrome://settings/?search=后台`找到“关闭 Google Chrome 后继续运行后台应用”，选择运行后台扩展程序的使用
 
-## Firefox安装方法
-
-    正在想办法注册火狐开发者
-
-> 1. 先解压到任意文件夹
-> 2. 地址栏输入 about:debugging ，回车
-> 3. 点击“此Firefox”->临时载入扩展
-> 4. 随便在解压后的插件文件夹里面点开任意文件即可加载
 
 ## Edge安装方法
 
     正在想办法注册Edge开发者
 
 > 1. 先解压到任意文件夹
-> 2. 地址栏输入 edge://extensions/ ，回车
+> 2. 地址栏输入`edge://extensions/`，回车
 > 3. 点击已安装的扩展右边的第一个图标“加载解压缩的扩展”![avatar](https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/edge-load.jpg)
 > 4. 选择解压后的整个插件文件夹完成安装
+>
+> PS: 可以通过地址栏输入`edge://settings/?search=后台`找到“关闭 Microsoft Edge 后继续运行后台应用关闭”，选择运行后台扩展程序的使用
 
+## Firefox安装方法
 
+    正在想办法注册火狐开发者
 
+> 1. 先解压到任意文件夹
+> 2. 地址栏输入`about:debugging`，回车
+> 3. 点击“此Firefox”->临时载入扩展
+> 4. 随便在解压后的插件文件夹里面点开任意文件即可加载
+> 
+> PS: 此为临时安装，每次打开浏览器都要重新安装，建议使用edge或者chrome，因为支持后台运行，所以不需要特地打开浏览器
+
+## 360安全浏览器安装方法
+
+    没有实际测试过，遇到问题请联系我们
+
+> 1. 先解压到任意文件夹
+> 2. 地址栏输入`se://extensions`，回车
+> 3. 打开开发者模式
+> 3. 点击“加载已解压的扩展程序”
+> 4. 选择解压后的整个插件文件夹完成安装
 
 <br/>
 
