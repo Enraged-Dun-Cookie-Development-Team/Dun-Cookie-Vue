@@ -78,6 +78,10 @@
     1.修复推送图片偶尔不显示的问题
     2.优化细节
 
+## V2.0.28
+
+    1.通过实际蹲饼测试，发布正式版
+
 
 
 <br/>
@@ -91,7 +95,7 @@
 ## Chrome安装方法
 
     Chrome用户相当建议使用应用商店下载，因为更新方便
-> - 推荐 Chrome应用商店 【尚未发布】
+> - 推荐 [Chrome应用商店](https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC/gblmdllhbodefkmimbcjpflhjneagkkd)
 > - 下载crx安装
 > - 下载zip通过开发者模式加载已解压的扩展程序
 > 
@@ -137,8 +141,8 @@
     因为编写和测试都是在Chrome上进行的，兼容性问题可能无法照顾到全部浏览器
 
 > - 火狐在当前Beta版本中有致命错误，错误呈现方式为第二次及以后加载列表会出现无数据的情况，正在查找原因。<font color=red>火狐用户请先使用[V1.3.9版本](https://github.com/LiuZiYang1/Dun-Cookie/releases/tag/V1.3.9)</font>
-
 > - Edge会有难看的滚动条，正在想办法去除
+> - 首次打开浏览器后，打开插件需要较长时间的加载，后续想办法优化
 
 
 
