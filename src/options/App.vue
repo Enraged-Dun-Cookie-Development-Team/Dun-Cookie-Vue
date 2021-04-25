@@ -70,6 +70,11 @@
                 <img class="iconimg" src="/assets/image/sr.ico" />塞壬唱片</span
               ></el-checkbox
             >
+            <el-checkbox :label="6">
+              <span class="checkbox-area">
+                <img class="iconimg" src="/assets/image/tl.jpg" />泰拉记事社</span
+              ></el-checkbox
+            >
           </el-checkbox-group>
         </el-form-item>
         <el-form-item label="展示图片">
@@ -115,7 +120,7 @@ export default {
       nextdunTime: "计算中",
       setting: {
         time: 15,
-        source: [0, 1, 2, 3, 4],
+        source: [0, 1, 2, 3, 4, 5, 6],
         fontsize: 0,
         imgshow: true,
         isTop: true,

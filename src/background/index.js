@@ -27,10 +27,10 @@ var Kaze = {
     dunFristTime: new Date(),
     // 循环的标识
     setIntervalindex: 0,
-    source: ['bili', 'weibo', 'yj', 'cho3', 'ys3', 'sr', 'gw'],//哔哩哔哩 微博 通讯组 朝陇山 一拾山 任塞 官网
+    source: ['bili', 'weibo', 'yj', 'cho3', 'ys3', 'sr', 'tl', 'gw'],//哔哩哔哩 微博 通讯组 朝陇山 一拾山 任塞 泰拉记事社 官网
     setting: {
         time: 15,
-        source: [0, 1, 2, 3, 4, 5],
+        source: [0, 1, 2, 3, 4, 5, 6],
         fontsize: 0,
         imgshow: true,
         isTop: true
@@ -75,7 +75,8 @@ var Kaze = {
         this.setting.source.includes(3) ? getCho3.Getdynamic() : Kaze.cardlistdm.cho3 = [];
         this.setting.source.includes(4) ? getYs3.Getdynamic() : Kaze.cardlistdm.ys3 = [];
         this.setting.source.includes(5) ? getSr.Getdynamic() : Kaze.cardlistdm.sr = [];
-        // this.setting.source.includes(6) ? getGw.Getdynamic() : Kaze.cardlistdm.gw = [];
+        this.setting.source.includes(6) ? getTl.Getdynamic() : Kaze.cardlistdm.tl = [];
+        // this.setting.source.includes(7) ? getGw.Getdynamic() : Kaze.cardlistdm.gw = [];
     },
     // 获取数据
     Get(url, success) {
@@ -109,8 +110,8 @@ var Kaze = {
 
     // 初始化
     Init() {
-        chrome.browserAction.setBadgeText({ text: 'Beta' });
-        chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
+        // chrome.browserAction.setBadgeText({ text: 'Beta' });
+        // chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
         //第一次安装更新
         chrome.storage.local.get(['setting'], result => {
             if (result.setting == undefined) {
@@ -125,8 +126,8 @@ var Kaze = {
         });
         // 监听标签
         chrome.notifications.onClicked.addListener(id => {
-            let { weibo = [], cho3 = [], yj = [], bili = [], sr = [] } = Kaze.cardlistdm;
-            let cardlist = [...weibo, ...cho3, ...yj, ...bili, ...sr];
+            let { weibo = [], cho3 = [], yj = [], bili = [], sr = [], tl = [] } = Kaze.cardlistdm;
+            let cardlist = [...weibo, ...cho3, ...yj, ...bili, ...sr, ...tl];
             let todynamic = cardlist.filter(x => x.id + "_" == id);
             if (todynamic != null && todynamic.length > 0) {
                 chrome.tabs.create({ url: todynamic[0].url });
@@ -179,6 +180,7 @@ var Kaze = {
             getCho3.opt.url = `test/cJson.json?type=uid&value=6441489862&containerid=1076036441489862`;
             getYs3.opt.url = `test/ysJson.json?type=uid&value=6441489862&containerid=1076036441489862`;
             getSr.url = `test/srJson.json`;
+            getYs3.opt.url = `test/tlJson.json?type=uid&value=6441489862&containerid=1076037499841383`;
         }
     }
 }
@@ -399,6 +401,18 @@ let getSr = {
             }
         });
     },
+}
+
+let getTl = {
+    opt: {
+        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=7499841383&containerid=1076037499841383',
+        title: '泰拉记事社',
+        dataName: 'tl',
+        source: 6,
+    },
+    Getdynamic() {
+        getAndProcessWeiboData.getdynamic(this.opt);
+    }
 }
 
 Kaze.Init();

@@ -4,7 +4,7 @@
       :visible.sync="drawer"
       :show-close="false"
       direction="ttb"
-      size="330px"
+      size="370px"
     >
       <el-divider content-position="left">饼的发源地</el-divider>
       <el-row type="flex" justify="center">
@@ -26,6 +26,8 @@
           @click="openUrl('https://weibo.com/u/6441489862')"
           >朝陇山微博</el-button
         >
+      </el-row>
+      <el-row type="flex" justify="center" style="margin-top:10px">
         <el-button
           size="medium"
           type="primary"
@@ -37,6 +39,12 @@
           type="primary"
           @click="openUrl('https://monster-siren.hypergryph.com/')"
           >塞壬官网</el-button
+        >
+        <el-button
+          size="medium"
+          type="primary"
+          @click="openUrl('https://weibo.com/u/7499841383')"
+          >泰拉记事社微博</el-button
         >
       </el-row>
       <el-divider content-position="left">快捷链接</el-divider>
@@ -229,8 +237,9 @@ export default {
         bili = [],
         ys3 = [],
         sr = [],
+        tl = [],
       } = this.getBackgroundPage.Kaze.cardlistdm;
-      this.cardlist = [...weibo, ...cho3, ...yj, ...bili, ...ys3, ...sr]
+      this.cardlist = [...weibo, ...cho3, ...yj, ...bili, ...ys3, ...sr, ...tl]
         .map((x) => {
           x.dynamicInfo = x.dynamicInfo.replace(/\n/g, "<br/>");
           return x;
@@ -468,6 +477,10 @@ ${item.url}
       }
       &.headImg5::before {
         background: url("/assets/image/sr.ico") no-repeat center, #fff;
+        background-size: cover;
+      }
+      &.headImg6::before {
+        background: url("/assets/image/tl.jpg") no-repeat center, #fff;
         background-size: cover;
       }
     }
