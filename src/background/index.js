@@ -19,7 +19,7 @@ var Kaze = {
     isTest: false,
     testIntervalTime: 1,
     cardlistdm: {},
-    version: '2.0.28',
+    version: '2.0.30',
     feedbackInfo: '',
     //请求次数
     dunIndex: 0,
