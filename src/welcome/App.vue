@@ -11,7 +11,7 @@
         <div class="info-title">让我们一起守护自由的兔兔吧！</div>
       </div>
       <el-divider></el-divider>
-      <div>这是一个内测版本，我们准备在周年庆前夕放出正式版。 如果有意见或建议或想法请在群内反馈</div>
+      <div>如果有意见或建议或想法请在群内反馈</div>
       <el-divider></el-divider>
       <div>你可以点击图标查看蹲饼列表</div>
       <el-divider></el-divider>

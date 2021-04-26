@@ -19,7 +19,7 @@ var Kaze = {
     isTest: false,
     testIntervalTime: 1,
     cardlistdm: {},
-    version: '2.0.30',
+    version: '2.0.32',
     feedbackInfo: '',
     //请求次数
     dunIndex: 0,
@@ -33,7 +33,8 @@ var Kaze = {
         source: [0, 1, 2, 3, 4, 5, 6],
         fontsize: 0,
         imgshow: true,
-        isTop: true
+        isTop: true,
+        isPush: true
     },
     //判断是否为最新
     JudgmentNew(oldList, newList, title) {
@@ -43,7 +44,9 @@ var Kaze = {
             let timeNow = new Date()
             let notice = newInfo.dynamicInfo.replace(/\n/g, "");
             console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
-            Kaze.SendNotice(`【${title}】喂公子吃饼!`, notice, newInfo.image, newInfo.id)
+            if (this.setting.isPush == true) {
+                Kaze.SendNotice(`【${title}】喂公子吃饼!`, notice, newInfo.image, newInfo.id)
+            }
         }
     },
     // 发送推送核心方法
@@ -178,9 +181,9 @@ var Kaze = {
             getWeibo.opt.url = `test/wJson.json?type=uid&value=6279793937&containerid=1076036279793937`;
             getYj.url = `test/yJson.json`;
             getCho3.opt.url = `test/cJson.json?type=uid&value=6441489862&containerid=1076036441489862`;
-            getYs3.opt.url = `test/ysJson.json?type=uid&value=6441489862&containerid=1076036441489862`;
+            getYs3.opt.url = `test/ysJson.json?type=uid&value=7506039414&containerid=1076037506039414`;
             getSr.url = `test/srJson.json`;
-            getYs3.opt.url = `test/tlJson.json?type=uid&value=6441489862&containerid=1076037499841383`;
+            getTl.opt.url = `test/tlJson.json?type=uid&value=6441489862&containerid=1076037499841383`;
         }
     }
 }

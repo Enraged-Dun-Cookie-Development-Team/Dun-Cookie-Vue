@@ -80,6 +80,12 @@
         <el-form-item label="展示图片">
           <el-switch v-model="setting.imgshow"></el-switch>
         </el-form-item>
+        <el-form-item 
+          label="推送信息 ?"
+          title="关闭后仅可以查看列表，无法再电脑右下角和通知栏收到推送！"
+        >
+          <el-switch v-model="setting.isPush"></el-switch>
+        </el-form-item>
         <el-form-item
           label="无时间位置 ?"
           title="有些数据比如通讯组是只有日期没有时间的，在数据列表内无法排序，所以在此统一这些卡片在当天信息流内是置顶还是置底。
@@ -124,6 +130,7 @@ export default {
         fontsize: 0,
         imgshow: true,
         isTop: true,
+        isPush: true,
       },
     };
   },
