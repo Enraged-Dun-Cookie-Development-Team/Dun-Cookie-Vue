@@ -51,7 +51,7 @@
           size="medium"
           type="primary"
           @click="openUrl('https://mapcn.ark-nights.com')"
-           title="by Houdou"
+          title="by Houdou"
           >PRTS.Map</el-button
         >
         <el-button
@@ -67,7 +67,7 @@
           title="by 一只灰喵"
           >明日方舟工具箱</el-button
         >
-         <el-button
+        <el-button
           size="medium"
           type="primary"
           @click="openUrl('https://opssr.net/')"
@@ -148,7 +148,10 @@
               <el-row class="margintb">
                 <div v-html="item.dynamicInfo"></div>
               </el-row>
-              <el-row class="margintb" v-if="setting.imgshow && item.image">
+              <el-row
+                class="margintb"
+                v-if="imgShow && setting.imgshow && item.image"
+              >
                 <div
                   class="img-area"
                   @click="changeShowAllImage(item.image)"
@@ -196,6 +199,7 @@ export default {
       isReload: false, //是否正在刷新
       showImage: true,
       showAllImage: [],
+      imgShow: false, //延迟展示图片
     };
   },
   computed: {},
@@ -210,6 +214,9 @@ export default {
         this.getbackgroundData();
         this.dunIndex = this.getBackgroundPage.Kaze.dunIndex;
       }, this.setting.time * 500);
+      setTimeout(() => {
+        this.imgShow = true;
+      },100);
     },
     changeShowAllImage(img) {
       if (this.showAllImage.includes(img)) {
