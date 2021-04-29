@@ -27,7 +27,7 @@
           >朝陇山微博</el-button
         >
       </el-row>
-      <el-row type="flex" justify="center" style="margin-top:10px">
+      <el-row type="flex" justify="center" style="margin-top: 10px">
         <el-button
           size="medium"
           type="primary"
@@ -156,31 +156,37 @@
               <el-row class="margintb">
                 <div v-html="item.dynamicInfo"></div>
               </el-row>
-              <el-row
-                class="margintb"
-                v-if="imgShow && setting.imgshow && item.image"
-              >
-                <div
-                  class="img-area"
-                  @click="changeShowAllImage(item.image)"
-                  :class="showAllImage.includes(item.image) ? 'show-all' : ''"
+
+              <transition name="el-fade-in-linear">
+                <el-row
+                  class="margintb"
+                  v-if="imgShow && setting.imgshow && item.image"
                 >
                   <div
-                    v-if="
-                      item.imageList != undefined && item.imageList.length > 1
-                    "
+                    class="img-area"
+                    @click="changeShowAllImage(item.image)"
+                    :class="showAllImage.includes(item.image) ? 'show-all' : ''"
                   >
-                    <el-row :gutter="5">
-                      <el-col v-for="img in item.imageList" :key="img" :span="8"
-                        ><img :src="img" class="img" />
-                      </el-col>
-                    </el-row>
+                    <div
+                      v-if="
+                        item.imageList != undefined && item.imageList.length > 1
+                      "
+                    >
+                      <el-row :gutter="5">
+                        <el-col
+                          v-for="img in item.imageList"
+                          :key="img"
+                          :span="8"
+                          ><img :src="img" class="img" />
+                        </el-col>
+                      </el-row>
+                    </div>
+                    <div v-else>
+                      <img :src="item.image" class="img" />
+                    </div>
                   </div>
-                  <div v-else>
-                    <img :src="item.image" class="img" />
-                  </div>
-                </div>
-              </el-row>
+                </el-row>
+              </transition>
             </div>
           </div>
         </el-card>
@@ -224,7 +230,7 @@ export default {
       }, this.setting.time * 500);
       setTimeout(() => {
         this.imgShow = true;
-      },100);
+      }, 500);
     },
     changeShowAllImage(img) {
       if (this.showAllImage.includes(img)) {
