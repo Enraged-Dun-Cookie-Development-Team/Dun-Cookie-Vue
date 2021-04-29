@@ -70,10 +70,21 @@
                 <img class="iconimg" src="/assets/image/sr.ico" />塞壬唱片</span
               ></el-checkbox
             >
+            <el-checkbox :label="6">
+              <span class="checkbox-area">
+                <img class="iconimg" src="/assets/image/tl.jpg" />泰拉记事社</span
+              ></el-checkbox
+            >
           </el-checkbox-group>
         </el-form-item>
         <el-form-item label="展示图片">
           <el-switch v-model="setting.imgshow"></el-switch>
+        </el-form-item>
+        <el-form-item 
+          label="推送信息 ?"
+          title="关闭后仅可以查看列表，无法再电脑右下角和通知栏收到推送！"
+        >
+          <el-switch v-model="setting.isPush"></el-switch>
         </el-form-item>
         <el-form-item
           label="无时间位置 ?"
@@ -115,10 +126,11 @@ export default {
       nextdunTime: "计算中",
       setting: {
         time: 15,
-        source: [0, 1, 2, 3, 4],
+        source: [0, 1, 2, 3, 4, 5, 6],
         fontsize: 0,
         imgshow: true,
         isTop: true,
+        isPush: true,
       },
     };
   },
