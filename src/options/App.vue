@@ -3,21 +3,21 @@
     <el-card class="box-card">
       <el-row type="flex" align="middle" justify="space-around">
         <el-image class="img" src="../assets/image/icon.png"></el-image>
-        <div class="version">V{{ version }}</div>
+        <div class="version">V{{ saveInfo.version }}</div>
       </el-row>
       <el-divider></el-divider>
       <div class="info">
         <div class="info-time">
-          开始蹲饼时间：{{ timespanToDay(dunFristTime) }}
+          开始蹲饼时间：{{ timespanToDay(dunInfo.dunFristTime) }}
         </div>
         <div class="info-title">
-          已为你蹲饼<span style="color: #23ade5">{{ dunIndex }}</span
+          已为你蹲饼<span style="color: #23ade5">{{ dunInfo.dunIndex }}</span
           >次
         </div>
-        <div class="info-time">本次蹲饼时间：{{ timespanToDay(dunTime) }}</div>
         <div class="info-time">
-          下次蹲饼时间：{{ timespanToDay(nextdunTime) }}
+          本次蹲饼时间：{{ timespanToDay(dunInfo.dunTime) }}
         </div>
+        <div class="info-time">下次蹲饼时间：{{ nextdunTime }}</div>
       </div>
       <el-divider></el-divider>
       <el-form ref="form" :model="setting" label-width="100px">
@@ -72,7 +72,10 @@
             >
             <el-checkbox :label="6">
               <span class="checkbox-area">
-                <img class="iconimg" src="/assets/image/tl.jpg" />泰拉记事社</span
+                <img
+                  class="iconimg"
+                  src="/assets/image/tl.jpg"
+                />泰拉记事社</span
               ></el-checkbox
             >
           </el-checkbox-group>
@@ -80,9 +83,9 @@
         <el-form-item label="展示图片">
           <el-switch v-model="setting.imgshow"></el-switch>
         </el-form-item>
-        <el-form-item 
+        <el-form-item
           label="推送信息 ?"
-          title="关闭后仅可以查看列表，无法再电脑右下角和通知栏收到推送！"
+          title="关闭后仅可以查看列表，无法在电脑右下角和通知栏收到推送！"
         >
           <el-switch v-model="setting.isPush"></el-switch>
         </el-form-item>
@@ -91,19 +94,17 @@
           title="有些数据比如通讯组是只有日期没有时间的，在数据列表内无法排序，所以在此统一这些卡片在当天信息流内是置顶还是置底。
           保存的时候可能会因为数据排序改变而发送错误的推送，请忽略！"
         >
-          <el-radio-group v-model="setting.isTop" @change="test">
+          <el-radio-group v-model="setting.isTop">
             <el-radio :label="true">当天内容顶部</el-radio>
             <el-radio :label="false">当天内容底部</el-radio>
           </el-radio-group>
         </el-form-item>
         <div class="btn-area">
-          <el-button type="primary" @click="save">保存</el-button>
+          <el-button type="primary" @click="saveSetting">保存</el-button>
         </div>
       </el-form>
       <el-divider></el-divider>
-      <div v-html="feedbackInfo">
-        
-      </div>
+      <div v-html="saveInfo.feedbackInfo"></div>
     </el-card>
   </div>
 </template>
@@ -114,16 +115,15 @@ export default {
   mounted() {
     this.init();
   },
-
   data() {
     return {
-      getBackgroundPage: chrome.extension.getBackgroundPage(),
-      version: "蹲饼",
-      feedbackInfo:'',
-      dunIndex: 0,
-      dunTime: new Date(),
-      dunFristTime: new Date(),
-      nextdunTime: "计算中",
+      cardlist: [],
+      saveInfo: { version: "?.?.??" },
+      dunInfo: {
+        dunIndex: 0,
+        dunTime: new Date().getTime(),
+        dunFristTime: new Date().getTime(),
+      },
       setting: {
         time: 15,
         source: [0, 1, 2, 3, 4, 5, 6],
@@ -134,51 +134,88 @@ export default {
       },
     };
   },
-  computed: {},
-  methods: {
-    test(value){debugger;},
-    init() {
-      this.dunIndex = this.getBackgroundPage.Kaze.dunIndex;
-      this.version = this.getBackgroundPage.Kaze.version;
-      this.feedbackInfo = this.getBackgroundPage.Kaze.feedbackInfo;
-      this.dunTime = this.getBackgroundPage.Kaze.dunTime;
-      this.dunFristTime = this.getBackgroundPage.Kaze.dunFristTime;
-
-      chrome.storage.local.get(["setting"], (result) => {
-        this.setting = result.setting;
-      });
-      setInterval(() => {
-        this.dunTime = this.getBackgroundPage.Kaze.dunTime;
-        this.dunIndex = this.getBackgroundPage.Kaze.dunIndex;
-        this.nextdunTime = new Date(
-          (Date.parse(this.dunTime) / 1000 + this.setting.time) * 1000
-        );
-      }, this.setting.time);
-    },
-    save() {
-      chrome.storage.local.set(
-        {
-          setting: this.setting,
-        },
-        () => {
-          this.getBackgroundPage.clearInterval(
-            this.getBackgroundPage.Kaze.setIntervalindex
-          );
-          this.getBackgroundPage.Kaze.SetInterval(this.setting.time);
-          this.getBackgroundPage.Kaze.setting = this.setting;
-          this.getBackgroundPage.Kaze.GetData();
-          this.$message({
-            center: true,
-            message: "保存成功",
-            type: "success",
-          });
-        }
+  computed: {
+    nextdunTime() {
+      return this.timespanToDay(
+        (this.dunInfo.dunTime / 1000 + this.setting.time) * 1000
       );
     },
+  },
+  methods: {
+    init() {
+      this.getSaveInfo();
+      this.getDunInfo();
+      this.getSetting();
+    },
+
+    // 死数据
+    getSaveInfo() {
+      this.getLocalStorage("saveInfo").then((data) => {
+        debugger;
+        if (data != null) {
+          this.saveInfo = data;
+        }
+      });
+    },
+
+    // 蹲饼数据
+    getDunInfo() {
+      this.getLocalStorage("dunInfo").then((data) => {
+        if (data != null) {
+          this.dunInfo = data;
+        }
+      });
+    },
+
+    // 设置数据
+    getSetting() {
+      this.getLocalStorage("setting").then((data) => {
+        if (data != null) {
+          this.setting = data;
+          setInterval(() => {
+            this.getDunInfo();
+          }, data.time * 500);
+        }
+      });
+    },
+
+    saveSetting() {
+      this.saveLocalStorage("setting", this.setting).then(() => {
+        this.getLocalStorage("setting").then((data) => {
+          console.log(data);
+        });
+        chrome.runtime.sendMessage({ info: "setting" });
+        this.$message({
+          center: true,
+          message: "保存成功",
+          type: "success",
+        });
+      });
+    },
+
+    // 保存
+    saveLocalStorage(name, data) {
+      return new Promise((resolve, reject) => {
+        chrome.storage.local.set({ [name]: data }, () => {
+          resolve(true);
+        });
+      });
+    },
+    // 读取
+    getLocalStorage(name) {
+      return new Promise((resolve, reject) => {
+        chrome.storage.local.get([name], (result) => {
+          if (Object.keys(result).length != 0) {
+            resolve(result[name]);
+            return;
+          }
+          resolve(null);
+        });
+      });
+    },
+
     timespanToDay(date) {
-      if (date == "计算中") {
-        return date;
-      }
+      date = new Date(date);
       let Y = date.getFullYear();
       let M = date.getMonth() + 1;
       let D = date.getDate();
@@ -189,6 +226,7 @@ export default {
         h
       )}:${this.addZero(m)}:${this.addZero(s)}`;
     },
+
     addZero(m) {
       return m < 10 ? "0" + m : m;
     },

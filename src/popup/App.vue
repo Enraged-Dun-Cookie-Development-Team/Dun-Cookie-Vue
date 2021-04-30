@@ -87,7 +87,7 @@
         <el-button
           size="medium"
           type="success"
-          :disabled="isReload"
+          :loading="isReload"
           @click="reload"
           >{{ isReload ? "找饼中……" : "强制刷新" }}</el-button
         >
@@ -105,11 +105,11 @@
       @click.stop="drawer = true"
     ></el-button>
     <div class="version">
-      {{ version }}
+      {{ `蹲饼 V${saveInfo.version}` }}
       <span v-if="cardlist.length == 0" style="color: red"
         >【无内容，请检查网络】</span
       >
-      <span v-else>【已蹲饼{{ dunIndex }}次】</span>
+      <span v-else>【已蹲饼{{ dunInfo.dunIndex }}次】</span>
     </div>
     <el-timeline>
       <el-timeline-item
@@ -124,7 +124,7 @@
         :icon="'headImg' + item.source"
       >
         <!-- 0 b服 1微博 2通讯组 3朝陇山 4一拾山 5塞壬唱片 -->
-        <el-card class="card" :class="'font-size-' + fontSizeClass">
+        <el-card class="card" :class="'font-size-' + setting.fontsize">
           <div>
             <el-button
               class="to-copy-btn"
@@ -204,11 +204,20 @@ export default {
 
   data() {
     return {
-      getBackgroundPage: chrome.extension.getBackgroundPage(),
+      // getBackgroundPage: chrome.extension.getBackgroundPage(),
       cardlist: [],
-      version: "蹲饼",
-      dunIndex: 0,
-      setting: {},
+      saveInfo: { setIntervalindex: 0, version: "?.?.??" },
+      dunInfo: {
+        dunIndex: 0,
+      },
+      setting: {
+        time: 15,
+        source: [0, 1, 2, 3, 4, 5, 6],
+        fontsize: 0,
+        imgshow: true,
+        isTop: true,
+        isPush: true,
+      },
       drawer: false, //打开菜单
       isReload: false, //是否正在刷新
       showImage: true,
@@ -219,19 +228,30 @@ export default {
   computed: {},
   methods: {
     init() {
-      this.version = `蹲饼 V${this.getBackgroundPage.Kaze.version}`;
-      this.dunIndex = this.getBackgroundPage.Kaze.dunIndex;
-      this.getbackgroundData();
-      this.setting = this.getBackgroundPage.Kaze.setting;
-      this.fontSizeClass = this.setting.fontsize;
-      setInterval(() => {
-        this.getbackgroundData();
-        this.dunIndex = this.getBackgroundPage.Kaze.dunIndex;
-      }, this.setting.time * 500);
+      this.getCardlist();
+      this.getSaveInfo();
+      this.getSetting();
+      this.getDunInfo();
+      // 图片卡 先加载dom后加载图片内容
       setTimeout(() => {
         this.imgShow = true;
       }, 500);
     },
+
+    // 获取后台数据
+    getLocalStorage(name) {
+      return new Promise((resolve, reject) => {
+        chrome.storage.local.get([name], (result) => {
+          if (result) {
+            resolve(result[name]);
+            return;
+          }
+          resolve(null);
+        });
+      });
+    },
+
+    // 图片收起展示
     changeShowAllImage(img) {
       if (this.showAllImage.includes(img)) {
         this.showAllImage.splice(
@@ -242,27 +262,50 @@ export default {
         this.showAllImage.push(img);
       }
     },
-    getbackgroundData() {
-      let {
-        weibo = [],
-        cho3 = [],
-        yj = [],
-        bili = [],
-        ys3 = [],
-        sr = [],
-        tl = [],
-      } = this.getBackgroundPage.Kaze.cardlistdm;
-      this.cardlist = [...weibo, ...cho3, ...yj, ...bili, ...ys3, ...sr, ...tl]
-        .map((x) => {
-          x.dynamicInfo = x.dynamicInfo.replace(/\n/g, "<br/>");
-          return x;
-        })
-        .sort((x, y) => y.time - x.time);
+    // 死数据
+    getSaveInfo() {
+      this.getLocalStorage("saveInfo").then((data) => {
+        if (data != null) {
+          this.saveInfo = data;
+        }
+      });
     },
+    // 蹲饼数据
+    getDunInfo() {
+      this.getLocalStorage("dunInfo").then((data) => {
+        if (data != null) {
+          this.dunInfo = data;
+        }
+      });
+    },
+    // 设置数据
+    getSetting() {
+      this.getLocalStorage("setting").then((data) => {
+        if (data != null) {
+          this.setting = data;
+          setInterval(() => {
+            this.getCardlist();
+            this.getDunInfo();
+          }, data.time * 500);
+        }
+      });
+    },
+    getCardlist() {
+      this.getLocalStorage("cardlistdm").then((data) => {
+        console.log(data);
+        this.cardlist = Object.values(data)
+          .reduce((acc, cur) => [...acc, ...cur], [])
+          .sort((x, y) => y.time - x.time)
+          .map((x) => {
+            x.dynamicInfo = x.dynamicInfo.replace(/\n/g, "<br/>");
+            return x;
+          });
+      });
+    },
+
     reload() {
-      this.getBackgroundPage.Kaze.GetData();
       this.isReload = true;
-      this.drawer = false;
+      chrome.runtime.sendMessage({ info: "reload" });
       this.$message({
         offset: 50,
         center: true,
@@ -270,18 +313,22 @@ export default {
         type: "warning",
       });
       setTimeout(() => {
+        this.drawer = false;
         this.isReload = false;
       }, 5000);
     },
+
     openUrl(url) {
       chrome.tabs.create({ url: url });
     },
+
     openSetting() {
       var urlToOpen = chrome.extension.getURL("options.html");
       chrome.tabs.create({
         url: urlToOpen,
       });
     },
+
     copyData(item) {
       this.$copyText(
         `${item.dynamicInfo.replace(
