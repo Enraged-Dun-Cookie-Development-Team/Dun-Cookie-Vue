@@ -159,7 +159,7 @@ let kazeSourceProcess = {
             let isNew = kazeFun.JudgmentNew(oldCardList, newCardList, opt.title);
             if (isNew) {
                 kazeLocalData.cardlistdm[opt.dataName] = newCardList;
-                kazeFun.ReloadSaveCardList();
+                kazeFun.saveLocalStorage(`cardlistdm`, kazeLocalData.cardlistdm);
             }
         });
     },
@@ -381,12 +381,6 @@ let kazeFun = {
         }, parseInt(time) * 1000);
     },
 
-    // 将内存内的数据重新写入存储
-    ReloadSaveCardList() {
-        kazeFun.saveLocalStorage(`cardlistdm`, kazeLocalData.cardlistdm);
-        console.log(new Date(), kazeLocalData.cardlistdm);
-    },
-
     // 检查一次更新
     getUpdateInfo() {
         Kaze.Get(opt.url + `&kaze=${Math.random().toFixed(3)}`, (responseText) => {
@@ -426,9 +420,10 @@ let kazeFun = {
             else if (request.info == "setting") {
                 // 重启定时器
                 kazeFun.getLocalStorage('setting').then(data => {
-                    kazeLocalData.cardlistdm = [];
+                    kazeLocalData.cardlistdm = {};
                     kazeLocalData.setting = data;
                     kazeSourceProcess.GetData();
+                    kazeFun.intervalGetData();
                 })
             }
         })

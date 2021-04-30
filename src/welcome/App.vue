@@ -3,7 +3,7 @@
     <el-card class="box-card">
       <el-row type="flex" align="middle" justify="space-around">
         <el-image class="img" src="../assets/image/icon.png"></el-image>
-        <div class="version">欢迎使用蹲饼 V{{ version }}</div>
+        <div class="version">欢迎使用蹲饼 V{{ saveInfo.version }}</div>
       </el-row>
       <el-divider></el-divider>
       <div class="info">
@@ -57,41 +57,31 @@ export default {
 
   data() {
     return {
-      getBackgroundPage: chrome.extension.getBackgroundPage(),
-      version: "蹲饼",
-      feedbackInfo: "",
-      dunIndex: 0,
-      dunTime: new Date(),
-      dunFristTime: new Date(),
-      nextdunTime: "计算中",
-      activeNames: [1],
-      setting: {
-        time: 15,
-        source: [0, 1, 2, 3, 4],
-        fontsize: 0,
-        imgshow: true,
-        isTop: true,
-      },
+      saveInfo: { version: "?.?.??" },
     };
   },
   computed: {},
   methods: {
     init() {
-      this.dunIndex = this.getBackgroundPage.Kaze.dunIndex;
-      this.version = this.getBackgroundPage.Kaze.version;
-      this.dunTime = this.getBackgroundPage.Kaze.dunTime;
-      this.dunFristTime = this.getBackgroundPage.Kaze.dunFristTime;
-      this.feedbackInfo = this.getBackgroundPage.Kaze.feedbackInfo;
-      chrome.storage.local.get(["setting"], (result) => {
-        this.setting = result.setting;
+      this.getSaveInfo();
+    },
+    getSaveInfo() {
+      this.getLocalStorage("saveInfo").then((data) => {
+        if (data != null) {
+          this.saveInfo = data;
+        }
       });
-      setInterval(() => {
-        this.dunTime = this.getBackgroundPage.Kaze.dunTime;
-        this.dunIndex = this.getBackgroundPage.Kaze.dunIndex;
-        this.nextdunTime = new Date(
-          (Date.parse(this.dunTime) / 1000 + this.setting.time) * 1000
-        );
-      }, this.setting.time);
+    },
+    getLocalStorage(name) {
+      return new Promise((resolve, reject) => {
+        chrome.storage.local.get([name], (result) => {
+          if (result) {
+            resolve(result[name]);
+            return;
+          }
+          resolve(null);
+        });
+      });
     },
     toSetting() {
       chrome.tabs.create({
