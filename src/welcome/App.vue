@@ -15,7 +15,7 @@
       <el-divider></el-divider>
       <div>你可以点击图标查看蹲饼列表</div>
       <el-divider></el-divider>
-      <el-collapse v-model="activeNames" @change="handleChange">
+      <el-collapse v-model="activeNames">
         <el-collapse-item
           title="可以点击这里查看把蹲饼置顶在浏览器上的方法~"
           name="1"
@@ -58,6 +58,7 @@ export default {
   data() {
     return {
       saveInfo: { version: "?.?.??" },
+      activeNames: [1],
     };
   },
   computed: {},
