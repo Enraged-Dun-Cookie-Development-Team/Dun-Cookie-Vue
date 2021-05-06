@@ -30,7 +30,7 @@ let kazeLocalData = {
     saveInfo: {
         // 循环的标识
         setIntervalindex: 0,
-        version: '2.0.37',
+        version: '2.0.38',
         feedbackInfo: `<div>
         <span>
           如果有意见或建议或者是反馈问题或者是发现程序出现bug，可以添加<a

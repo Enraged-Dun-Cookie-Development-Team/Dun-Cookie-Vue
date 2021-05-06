@@ -70,9 +70,7 @@
       <el-divider content-position="left">快捷链接</el-divider>
       <el-row type="flex" justify="center" class="drawer-btn-area">
         <el-tooltip content="PRTS.Wiki" placement="top">
-          <el-button
-            size="small"
-            @click="openUrl('http://prts.wiki/')"
+          <el-button size="small" @click="openUrl('http://prts.wiki/')"
             ><img class="btn-icon radius" src="/assets/image/akwiki.png"
           /></el-button>
         </el-tooltip>
@@ -86,9 +84,7 @@
         </el-tooltip>
 
         <el-tooltip content="企鹅物流" placement="top">
-          <el-button
-            size="small"
-            @click="openUrl('https://penguin-stats.cn/')"
+          <el-button size="small" @click="openUrl('https://penguin-stats.cn/')"
             ><img
               class="btn-icon radius"
               src="/assets/image/penguin_stats_logo.webp"
@@ -104,9 +100,7 @@
         </el-tooltip>
 
         <el-tooltip content="源石作战室" placement="top">
-          <el-button
-            size="small"
-            @click="openUrl('https://opssr.net/')"
+          <el-button size="small" @click="openUrl('https://opssr.net/')"
             ><img class="btn-icon radius" src="/assets/image/yszzs.png"
           /></el-button>
         </el-tooltip>
@@ -159,7 +153,7 @@
         v-for="(item, index) in cardlist"
         :key="index"
         :timestamp="
-          item.source == 2 || item.source == 5
+          item.source == 2 || item.source == 5 || item.source == 7
             ? timespanToDay(item.time, 2)
             : timespanToDay(item.time)
         "
