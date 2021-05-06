@@ -110,6 +110,12 @@ let kazeSource = {
         title: '泰拉记事社',
         dataName: 'tl',
         source: 6,
+    },
+    gw: {
+        url: 'https://ak.hypergryph.com/',
+        title: '官网',
+        dataName: 'gw',
+        source: 7,
     }
 }
 
@@ -125,7 +131,7 @@ let kazeSourceProcess = {
         kazeLocalData.setting.source.includes(4) ? this.GetAndProcessData(kazeSource['ys3']) : kazeLocalData.cardlistdm.ys3 = [];
         kazeLocalData.setting.source.includes(5) ? this.GetAndProcessData(kazeSource['sr']) : kazeLocalData.cardlistdm.sr = [];
         kazeLocalData.setting.source.includes(6) ? this.GetAndProcessData(kazeSource['tl']) : kazeLocalData.cardlistdm.tl = [];
-        // kazeData.setting.source.includes(7) ? getGw.Getdynamic() : Kaze.cardlistdm.gw = [];
+        kazeLocalData.setting.source.includes(7) ? this.GetAndProcessData(kazeSource['gw']) : kazeLocalData.cardlistdm.gw = [];
     },
 
     //请求 处理 回调 保存
@@ -153,6 +159,9 @@ let kazeSourceProcess = {
             }
             else if (opt.source == 5) {
                 newCardList = this.processSr(opt)
+            }
+            else if (opt.source == 7) {
+                newCardList = this.processGw(opt)
             }
 
             let oldCardList = kazeLocalData.cardlistdm[opt.dataName];
@@ -265,7 +274,7 @@ let kazeSourceProcess = {
         let data = JSON.parse(opt.responseText);
         data.announceList.forEach(x => {
             if (x.announceId != 94 && x.announceId != 98 && x.announceId != 192 && x.announceId != 95 && x.announceId != 97) {
-                let time = `${new Date().getFullYear()}/${x.month}/${x.day} ${kazeData.setting.isTop ? '23:59:59' : '00:00:00'}`;
+                let time = `${new Date().getFullYear()}/${x.month}/${x.day} ${kazeLocalData.setting.isTop ? '23:59:59' : '00:00:00'}`;
                 list.push({
                     time: Math.floor(new Date(time).getTime() / 1000),
                     judgment: x.announceId,
@@ -285,7 +294,7 @@ let kazeSourceProcess = {
         let data = JSON.parse(opt.responseText);
         if (data && data.data && data.data.list) {
             data.data.list.forEach(x => {
-                let time = Math.floor(new Date(`${x.date} ${kazeData.setting.isTop ? '23:59:59' : '00:00:00'}`).getTime() / 1000);
+                let time = Math.floor(new Date(`${x.date} ${kazeLocalData.setting.isTop ? '23:59:59' : '00:00:00'}`).getTime() / 1000);
                 list.push({
                     time: time,
                     id: x.cid,
@@ -298,6 +307,34 @@ let kazeSourceProcess = {
             return list.sort((x, y) => y.judgment - x.judgment);
         }
     },
+
+    // 官网
+    processGw(opt) {
+        let list = [];
+        let str = opt.responseText;
+        let gw = document.createElement('div');
+        gw.innerHTML = str;
+        let articleItem = gw.querySelectorAll(".articleList[data-category-key='ANNOUNCEMENT'] .articleItem,.articleList[data-category-key='ACTIVITY'] .articleItem,.articleList[data-category-key='NEWS'] .articleItem");
+        articleItem.forEach((item, index) => {
+            try {
+                let date = item.getElementsByClassName('articleItemDate')[0].innerHTML
+                let title = item.getElementsByClassName('articleItemTitle')[0].innerHTML
+                let url = item.getElementsByClassName('articleItemLink')[0].pathname;
+                let time = Math.floor(new Date(`${date} ${kazeLocalData.setting.isTop ? '23:59:59' : '00:00:00'}`).getTime() / 1000);
+                list.push({
+                    time: time,
+                    id: index,
+                    judgment: title,
+                    dynamicInfo: title,
+                    source: opt.source,
+                    url: `https://ak.hypergryph.com${url}`,
+                });
+            } catch (error) {
+                console.error('解析官网数据失败', item);
+            }
+        });
+        return list.sort((x, y) => y.time - x.time);
+    }
 }
 
 // 通用方法
@@ -329,16 +366,19 @@ let kazeFun = {
         if (oldList
             && oldList.length > 0
             && oldList[0].judgment != newList[0].judgment
-            && newList[0].judgment > oldList[0].judgment) {
-            let newInfo = newList[0];
-            let timeNow = new Date()
-            let notice = newInfo.dynamicInfo.replace(/\n/g, "");
-            console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
-            // 是否推送
-            if (kazeLocalData.setting.isPush == true) {
-                this.SendNotice(`【${title}】喂公子吃饼!`, notice, newInfo.image, newInfo.id)
+        ) {
+            // 如果judgment是数字 判定大小  如果是文字 直接推送
+            if (typeof newList[0].judgment == 'string' || (typeof newList[0].judgment == 'number' && newList[0].judgment > oldList[0].judgment)) {
+                let newInfo = newList[0];
+                let timeNow = new Date()
+                let notice = newInfo.dynamicInfo.replace(/\n/g, "");
+                console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
+                // 是否推送
+                if (kazeLocalData.setting.isPush == true) {
+                    this.SendNotice(`【${title}】喂公子吃饼!`, notice, newInfo.image, newInfo.id)
+                }
+                return true;
             }
-            return true;
         }
         else if (!oldList) {
             return true;
@@ -494,10 +534,10 @@ let kazeFun = {
             kazeSource.ys3.url = `test/ysJson.json?type=uid&value=7506039414&containerid=1076037506039414`;
             kazeSource.sr.url = `test/srJson.json`;
             kazeSource.tl.url = `test/tlJson.json?type=uid&value=6441489862&containerid=1076037499841383`;
+            kazeSource.gw.url = `test/gw.html`;
         }
     }
 }
 
-kazeFun.getUpdateInfo();
-kazeFun.Init();
 // kazeFun.getUpdateInfo();
+kazeFun.Init();

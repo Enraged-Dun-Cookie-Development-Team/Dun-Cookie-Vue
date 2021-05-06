@@ -52,7 +52,7 @@
             >
             <el-checkbox :label="2">
               <span class="checkbox-area">
-                <img class="iconimg" src="/assets/image/mrfz.ico" />通讯组</span
+                <img class="iconimg" src="/assets/image/txz.jpg" />通讯组</span
               ></el-checkbox
             >
             <el-checkbox :label="3">
@@ -76,6 +76,14 @@
                   class="iconimg"
                   src="/assets/image/tl.jpg"
                 />泰拉记事社</span
+              ></el-checkbox
+            >
+             <el-checkbox :label="6">
+              <span class="checkbox-area">
+                <img
+                  class="iconimg"
+                  src="/assets/image/mrfz.ico"
+                />官网网站</span
               ></el-checkbox
             >
           </el-checkbox-group>

@@ -8,6 +8,13 @@
     >
       <el-divider content-position="left">饼的发源地</el-divider>
       <el-row type="flex" class="drawer-btn-area" justify="center">
+          <el-button
+          size="small"
+          title="官方网站"
+          @click="openUrl('https://ak.hypergryph.com/#information')"
+        >
+          <img class="btn-icon" src="/assets/image/mrfz.ico" />
+        </el-button>
         <el-button
           size="small"
           title="官方哔哩哔哩"
@@ -346,15 +353,17 @@ export default {
     },
 
     copyData(item) {
+      debugger;
       this.$copyText(
         `${item.dynamicInfo.replace(
           /<br\/>/g,
           `
 `
-        )}    
+        )}   
+
 ${item.url}
 
-数据由 ${this.version} 收集`
+数据由 蹲饼${this.saveInfo.version} 收集`
       ).then(
         (e) => {
           this.$message({
@@ -441,7 +450,7 @@ ${item.url}
   .btn-icon {
     width: 30px;
     &.radius {
-      border-radius: 50%;
+      border-radius: 10px;
     }
   }
 }
@@ -553,14 +562,17 @@ ${item.url}
         background-size: cover;
       }
       &.headImg2::before {
-        background: url("/assets/image/mrfz.ico") no-repeat center, #fff;
+        border-radius: 10px;
+        background: url("/assets/image/txz.jpg") no-repeat center, #fff;
         background-size: cover;
       }
       &.headImg3::before {
+        border-radius: 10px;
         background: url("/assets/image/cho3.jpg") no-repeat center, #fff;
         background-size: cover;
       }
       &.headImg4::before {
+        border-radius: 10px;
         background: url("/assets/image/ys3.jpg") no-repeat center, #fff;
         background-size: cover;
       }
@@ -569,7 +581,13 @@ ${item.url}
         background-size: cover;
       }
       &.headImg6::before {
+        border-radius: 10px;
         background: url("/assets/image/tl.jpg") no-repeat center, #fff;
+        background-size: cover;
+      }
+      &.headImg7::before {
+        border-radius: 10px;
+        background: url("/assets/image/mrfz.ico") no-repeat center, #fff;
         background-size: cover;
       }
     }
