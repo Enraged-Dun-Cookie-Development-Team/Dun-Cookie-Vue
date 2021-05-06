@@ -20,8 +20,9 @@ let kazeData = {
     isTest: false,
     testIntervalTime: 1,
     setting: {},
-    //哔哩哔哩 微博 通讯组 朝陇山 一拾山 任塞 泰拉记事社 官网
-    source: ['bili', 'weibo', 'yj', 'cho3', 'ys3', 'sr', 'tl', 'gw'],
+    // 哔哩哔哩 微博 通讯组 朝陇山 一拾山 任塞 泰拉记事社 官网
+    // source: ['bili', 'weibo', 'yj', 'cho3', 'ys3', 'sr', 'tl', 'gw'],
+    Allsource: [0, 1, 2, 3, 4, 5, 6, 7]
 }
 
 // 软件存储数据 数据互通使用
@@ -124,6 +125,11 @@ let kazeSourceProcess = {
     // 蹲饼入口
     GetData() {
         kazeLocalData.dunInfo.dunTime = new Date().getTime();
+
+        // kazeData.Allsource.map(x => {
+        //     this.GetAndProcessData(Object.values(kazeSource).filter(y => y.source == x)[0]);
+        // });
+
         kazeLocalData.setting.source.includes(0) ? this.GetAndProcessData(kazeSource['bili']) : kazeLocalData.cardlistdm.bili = [];
         kazeLocalData.setting.source.includes(1) ? this.GetAndProcessData(kazeSource['weibo']) : kazeLocalData.cardlistdm.weibo = [];
         kazeLocalData.setting.source.includes(2) ? this.GetAndProcessData(kazeSource['yj']) : kazeLocalData.cardlistdm.yj = [];
@@ -174,8 +180,10 @@ let kazeSourceProcess = {
     },
 
     // 获取数据
-    Get(url) {
-        kazeLocalData.dunInfo.dunIndex++;
+    Get(url, isDun = true) {
+        if (isDun) {
+            kazeLocalData.dunInfo.dunIndex++;
+        }
         try {
             return new Promise((resolve, reject) => {
                 let xhr = new XMLHttpRequest();
@@ -423,7 +431,7 @@ let kazeFun = {
 
     // 检查一次更新
     getUpdateInfo(isAlert) {
-        kazeSourceProcess.Get(`http://cdn.liuziyang.vip/Dun-Cookies-Vue-json.json`).then(responseText => {
+        kazeSourceProcess.Get(`http://cdn.liuziyang.vip/Dun-Cookies-Vue-json.json`, false).then(responseText => {
             let data = JSON.parse(responseText)
             if (kazeLocalData.saveInfo.version != data.v) {
                 // 更新
@@ -441,6 +449,9 @@ let kazeFun = {
 
     // 初始化
     Init() {
+        if (!kazeData.isTest) {
+            kazeFun.getUpdateInfo();
+        }
         chrome.browserAction.setBadgeText({ text: 'Beta' });
         chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
         // 初始化
@@ -539,5 +550,4 @@ let kazeFun = {
     }
 }
 
-kazeFun.getUpdateInfo();
 kazeFun.Init();
