@@ -277,6 +277,24 @@ export default {
             img: "/assets/image/yszzs.png",
             radius: true,
           },
+          {
+            url: "https://kokodayo.fun/",
+            name: "Kokodayo",
+            img: "/assets/image/kkdy.png",
+            radius: true,
+          },
+          {
+            url: "https://aog.wiki/",
+            name: "刷素材一图流",
+            img: "/assets/image/akgraph.ico",
+            radius: true,
+          },
+          {
+            url: "https://ak.hypergryph.com/activity/preparation?source=game",
+            name: "庆典筹备计划",
+            img: "/assets/image/cake.png",
+            radius: true,
+          },
         ],
       },
     };
