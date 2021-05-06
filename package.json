@@ -11,7 +11,8 @@
     "core-js": "^3.6.5",
     "element-ui": "^2.15.1",
     "vue": "^2.6.11",
-    "vue-clipboard2": "^0.3.1"
+    "vue-clipboard2": "^0.3.1",
+    "vue-count-to": "^1.0.13"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

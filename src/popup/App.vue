@@ -146,7 +146,16 @@
       <span v-if="cardlist.length == 0" style="color: red"
         >【无内容，请检查网络】</span
       >
-      <span v-else>【已蹲饼{{ dunInfo.dunIndex }}次】</span>
+      <!-- <span v-else>【已蹲饼{{ dunInfo.dunIndex }}次】</span> -->
+      <span v-else
+        >【已蹲饼
+        <countTo
+          :startVal="0"
+          :endVal="dunInfo.dunIndex"
+          :duration="3000"
+        ></countTo
+        >次】</span
+      >
     </div>
     <el-timeline>
       <el-timeline-item
@@ -233,8 +242,10 @@
 </template>
 
 <script>
+import countTo from "vue-count-to";
 export default {
   name: "app",
+  components: { countTo },
   mounted() {
     this.init();
   },

@@ -11,7 +11,14 @@
           开始蹲饼时间：{{ timespanToDay(dunInfo.dunFristTime) }}
         </div>
         <div class="info-title">
-          已为你蹲饼<span style="color: #23ade5">{{ dunInfo.dunIndex }}</span
+          <!-- 已为你蹲饼<span style="color: #23ade5">{{ dunInfo.dunIndex }}</span
+          >次 -->
+          已为你蹲饼<span style="color: #23ade5"
+            ><countTo
+              :startVal="0"
+              :endVal="dunInfo.dunIndex"
+              :duration="3000"
+            ></countTo></span
           >次
         </div>
         <div class="info-time">
@@ -124,8 +131,10 @@
 </template>
 
 <script>
+import countTo from "vue-count-to";
 export default {
   name: "app",
+  components: { countTo },
   mounted() {
     this.init();
   },
