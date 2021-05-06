@@ -78,7 +78,7 @@
                 />泰拉记事社</span
               ></el-checkbox
             >
-             <el-checkbox :label="6">
+            <el-checkbox :label="7">
               <span class="checkbox-area">
                 <img
                   class="iconimg"
@@ -140,7 +140,7 @@ export default {
       },
       setting: {
         time: 15,
-        source: [0, 1, 2, 3, 4, 5, 6],
+        source: [0, 1, 2, 3, 4, 5, 6, 7],
         fontsize: 0,
         imgshow: true,
         isTop: true,
@@ -205,7 +205,6 @@ export default {
         });
       });
     },
-
 
     // 保存
     saveLocalStorage(name, data) {

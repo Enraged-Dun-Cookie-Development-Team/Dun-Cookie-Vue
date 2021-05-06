@@ -30,7 +30,7 @@ let kazeLocalData = {
     saveInfo: {
         // 循环的标识
         setIntervalindex: 0,
-        version: '2.0.38',
+        version: '2.0.37',
         feedbackInfo: `<div>
         <span>
           如果有意见或建议或者是反馈问题或者是发现程序出现bug，可以添加<a
@@ -59,7 +59,7 @@ let kazeLocalData = {
     },
     setting: {
         time: 15,
-        source: [0, 1, 2, 3, 4, 5, 6],
+        source: [0, 1, 2, 3, 4, 5, 6, 7],
         fontsize: 0,
         imgshow: true,
         isTop: true,
@@ -539,5 +539,5 @@ let kazeFun = {
     }
 }
 
-// kazeFun.getUpdateInfo();
+kazeFun.getUpdateInfo();
 kazeFun.Init();

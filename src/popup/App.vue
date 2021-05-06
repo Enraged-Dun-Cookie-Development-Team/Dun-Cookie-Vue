@@ -8,109 +8,135 @@
     >
       <el-divider content-position="left">饼的发源地</el-divider>
       <el-row type="flex" class="drawer-btn-area" justify="center">
+        <el-tooltip content="官方网站" placement="top">
           <el-button
-          size="small"
-          title="官方网站"
-          @click="openUrl('https://ak.hypergryph.com/#information')"
-        >
-          <img class="btn-icon" src="/assets/image/mrfz.ico" />
-        </el-button>
-        <el-button
-          size="small"
-          title="官方哔哩哔哩"
-          @click="openUrl('https://space.bilibili.com/161775300/dynamic')"
-        >
-          <img class="btn-icon" src="/assets/image/bili.ico" />
-        </el-button>
-        <el-button
-          size="small"
-          title="官方微博"
-          @click="openUrl('https://weibo.com/arknights')"
-        >
-          <img class="btn-icon" src="/assets/image/weibo.ico"
-        /></el-button>
-        <el-button
-          size="small"
-          title="朝陇山微博"
-          @click="openUrl('https://weibo.com/u/6441489862')"
-          ><img class="btn-icon radius" src="/assets/image/cho3.jpg"
-        /></el-button>
-        <el-button
-          size="small"
-          title="一拾山微博"
-          @click="openUrl('https://weibo.com/u/7506039414')"
-          ><img class="btn-icon radius" src="/assets/image/ys3.jpg"
-        /></el-button>
-        <el-button
-          size="small"
-          title="塞壬官网"
-          @click="openUrl('https://monster-siren.hypergryph.com/')"
-          ><img class="btn-icon" src="/assets/image/sr.ico"
-        /></el-button>
-        <el-button
-          size="small"
-          title="泰拉记事社微博"
-          @click="openUrl('https://weibo.com/u/7499841383')"
-          ><img class="btn-icon radius" src="/assets/image/tl.jpg"
-        /></el-button>
+            size="small"
+            @click="openUrl('https://ak.hypergryph.com/#information')"
+          >
+            <img class="btn-icon" src="/assets/image/mrfz.ico" />
+          </el-button>
+        </el-tooltip>
+
+        <el-tooltip content="官方哔哩哔哩" placement="top">
+          <el-button
+            size="small"
+            @click="openUrl('https://space.bilibili.com/161775300/dynamic')"
+          >
+            <img class="btn-icon" src="/assets/image/bili.ico" />
+          </el-button>
+        </el-tooltip>
+
+        <el-tooltip content="官方微博" placement="top">
+          <el-button
+            size="small"
+            @click="openUrl('https://weibo.com/arknights')"
+          >
+            <img class="btn-icon" src="/assets/image/weibo.ico"
+          /></el-button>
+        </el-tooltip>
+
+        <el-tooltip content="朝陇山微博" placement="top">
+          <el-button
+            size="small"
+            @click="openUrl('https://weibo.com/u/6441489862')"
+            ><img class="btn-icon radius" src="/assets/image/cho3.jpg"
+          /></el-button>
+        </el-tooltip>
+
+        <el-tooltip content="一拾山微博" placement="top">
+          <el-button
+            size="small"
+            @click="openUrl('https://weibo.com/u/7506039414')"
+            ><img class="btn-icon radius" src="/assets/image/ys3.jpg"
+          /></el-button>
+        </el-tooltip>
+
+        <el-tooltip content="塞壬官网" placement="top">
+          <el-button
+            size="small"
+            @click="openUrl('https://monster-siren.hypergryph.com/')"
+            ><img class="btn-icon" src="/assets/image/sr.ico"
+          /></el-button>
+        </el-tooltip>
+
+        <el-tooltip content="泰拉记事社微博" placement="top">
+          <el-button
+            size="small"
+            @click="openUrl('https://weibo.com/u/7499841383')"
+            ><img class="btn-icon radius" src="/assets/image/tl.jpg"
+          /></el-button>
+        </el-tooltip>
       </el-row>
       <el-divider content-position="left">快捷链接</el-divider>
-      <el-row type="flex" justify="center"  class="drawer-btn-area">
-        <el-button
-          size="small"
-          title="PRTS.Wiki"
-          @click="openUrl('http://prts.wiki/')"
-          ><img class="btn-icon radius" src="/assets/image/akwiki.png"
-        /></el-button>
-        <el-button
-          size="small"
-          @click="openUrl('https://mapcn.ark-nights.com')"
-          title="PRTS.Map"
-          ><img class="btn-icon radius" src="/assets/image/akmap.ico"
-        /></el-button>
-        <el-button
-          size="small"
-          title="企鹅物流"
-          @click="openUrl('https://penguin-stats.cn/')"
-          ><img
-            class="btn-icon radius"
-            src="/assets/image/penguin_stats_logo.webp"
-        /></el-button>
-        <el-button
-          size="small"
-          @click="openUrl('https://www.bigfun.cn/tools/aktools/')"
-          title="明日方舟工具箱"
-          ><img class="btn-icon radius" src="/assets/image/mrgzjjx.png"
-        /></el-button>
-        <el-button
-          size="small"
-          title="源石作战室"
-          @click="openUrl('https://opssr.net/')"
-          ><img class="btn-icon radius" src="/assets/image/yszzs.png"
-        /></el-button
-        >
+      <el-row type="flex" justify="center" class="drawer-btn-area">
+        <el-tooltip content="PRTS.Wiki" placement="top">
+          <el-button
+            size="small"
+            @click="openUrl('http://prts.wiki/')"
+            ><img class="btn-icon radius" src="/assets/image/akwiki.png"
+          /></el-button>
+        </el-tooltip>
+
+        <el-tooltip content="PRTS.Map" placement="top">
+          <el-button
+            size="small"
+            @click="openUrl('https://mapcn.ark-nights.com')"
+            ><img class="btn-icon radius" src="/assets/image/akmap.ico"
+          /></el-button>
+        </el-tooltip>
+
+        <el-tooltip content="企鹅物流" placement="top">
+          <el-button
+            size="small"
+            @click="openUrl('https://penguin-stats.cn/')"
+            ><img
+              class="btn-icon radius"
+              src="/assets/image/penguin_stats_logo.webp"
+          /></el-button>
+        </el-tooltip>
+
+        <el-tooltip content="明日方舟工具箱" placement="top">
+          <el-button
+            size="small"
+            @click="openUrl('https://www.bigfun.cn/tools/aktools/')"
+            ><img class="btn-icon radius" src="/assets/image/mrgzjjx.png"
+          /></el-button>
+        </el-tooltip>
+
+        <el-tooltip content="源石作战室" placement="top">
+          <el-button
+            size="small"
+            @click="openUrl('https://opssr.net/')"
+            ><img class="btn-icon radius" src="/assets/image/yszzs.png"
+          /></el-button>
+        </el-tooltip>
       </el-row>
       <el-divider content-position="left">调整蹲饼器</el-divider>
       <el-row type="flex" justify="center">
-        <el-button
-          type="info"
-          :loading="isReload"
-          @click="reload"
-          icon="el-icon-refresh"
-          title="刷新"
-        ></el-button>
-        <el-button
-          type="info"
-          @click="getUpdateInfo"
-          icon="el-icon-upload2"
-          title="检测更新"
-        ></el-button>
-        <el-button
-          icon="el-icon-setting"
-          title="设置"
-          type="info"
-          @click="openSetting"
-        ></el-button>
+        <el-tooltip content="刷新" placement="top">
+          <el-button
+            type="primary"
+            :loading="isReload"
+            @click="reload"
+            icon="el-icon-refresh"
+          ></el-button>
+        </el-tooltip>
+
+        <el-tooltip content="检测更新" placement="top">
+          <el-button
+            type="primary"
+            @click="getUpdateInfo"
+            icon="el-icon-upload2"
+          ></el-button>
+        </el-tooltip>
+
+        <el-tooltip content="设置" placement="top">
+          <el-button
+            type="primary"
+            icon="el-icon-setting"
+            @click="openSetting"
+          ></el-button>
+        </el-tooltip>
       </el-row>
     </el-drawer>
     <el-button
