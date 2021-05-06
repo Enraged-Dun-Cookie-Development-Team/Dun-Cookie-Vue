@@ -50,7 +50,7 @@
 
 <script>
 export default {
-  name: "app",
+  name: "welcome",
   mounted() {
     this.init();
   },

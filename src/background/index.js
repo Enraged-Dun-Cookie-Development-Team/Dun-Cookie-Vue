@@ -30,7 +30,7 @@ let kazeLocalData = {
     saveInfo: {
         // 循环的标识
         setIntervalindex: 0,
-        version: '2.0.35',
+        version: '2.0.38',
         feedbackInfo: `<div>
         <span>
           如果有意见或建议或者是反馈问题或者是发现程序出现bug，可以添加<a
@@ -336,7 +336,7 @@ let kazeFun = {
             console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
             // 是否推送
             if (kazeLocalData.setting.isPush == true) {
-                Kaze.SendNotice(`【${title}】喂公子吃饼!`, notice, newInfo.image, newInfo.id)
+                this.SendNotice(`【${title}】喂公子吃饼!`, notice, newInfo.image, newInfo.id)
             }
             return true;
         }
@@ -382,17 +382,29 @@ let kazeFun = {
     },
 
     // 检查一次更新
-    getUpdateInfo() {
-        Kaze.Get(opt.url + `&kaze=${Math.random().toFixed(3)}`, (responseText) => {
-
-        })
+    getUpdateInfo(isAlert) {
+        kazeSourceProcess.Get(`http://cdn.liuziyang.vip/Dun-Cookies-Vue-json.json`).then(responseText => {
+            let data = JSON.parse(responseText)
+            if (kazeLocalData.saveInfo.version != data.v) {
+                // 更新
+                var urlToOpen = chrome.extension.getURL("update.html");
+                chrome.tabs.create({
+                    url: urlToOpen,
+                });
+            } else {
+                if (isAlert) {
+                    alert('当前版本为最新版本')
+                }
+            }
+        });
     },
 
     // 初始化
     Init() {
         chrome.browserAction.setBadgeText({ text: 'Beta' });
         chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
-
+        // 初始化
+        kazeFun.saveLocalStorage('dunInfo', kazeLocalData.dunInfo);
         kazeFun.saveLocalStorage('saveInfo', kazeLocalData.saveInfo);
         // 默认设置
         kazeFun.getLocalStorage('setting').then(data => {
@@ -426,6 +438,12 @@ let kazeFun = {
                     kazeFun.intervalGetData();
                 })
             }
+            else if (request.info == "getUpdateInfo") {
+                // 重启定时器
+                kazeFun.getUpdateInfo('alert');
+            }
+
+
         })
 
         // 监听标签
@@ -448,25 +466,38 @@ let kazeFun = {
                     url: urlToOpen,
                 });
             }
-            if (details.reason === 'update') {
-                // 更新
-            }
+            // if (details.reason === 'update') {
+            //     // 更新
+            //     var urlToOpen = chrome.extension.getURL("update.html");
+            //     chrome.tabs.create({
+            //         url: urlToOpen,
+            //     });
+            // }
         });
 
 
         if (kazeData.isTest) {
-            kazeData.intervalGetData(kazeData.testIntervalTime);
-            kazeData.setting.time = kazeData.testIntervalTime;
-            kazeData.version = `${kazeData.version}【已启用调试模式】 刷新时间临时调整为${kazeData.testIntervalTime}秒`;
-            getBili.url = `test/bJson.json?host_uid=161775300`;
-            getWeibo.opt.url = `test/wJson.json?type=uid&value=6279793937&containerid=1076036279793937`;
-            getYj.url = `test/yJson.json`;
-            getCho3.opt.url = `test/cJson.json?type=uid&value=6441489862&containerid=1076036441489862`;
-            getYs3.opt.url = `test/ysJson.json?type=uid&value=7506039414&containerid=1076037506039414`;
-            getSr.url = `test/srJson.json`;
-            getTl.opt.url = `test/tlJson.json?type=uid&value=6441489862&containerid=1076037499841383`;
+            // 默认设置
+            kazeFun.getLocalStorage('setting').then(data => {
+                kazeLocalData.setting = data;
+                kazeLocalData.setting.time = kazeData.testIntervalTime;
+                kazeFun.saveLocalStorage('setting', kazeLocalData.setting);
+                this.intervalGetData()
+            });
+            kazeLocalData.saveInfo.version = `【调试模式】 刷新时间临时调整为${kazeData.testIntervalTime}秒`;
+            kazeFun.saveLocalStorage('saveInfo', kazeLocalData.saveInfo);
+
+            kazeSource.bili.url = `test/bJson.json?host_uid=161775300`;
+            kazeSource.weibo.url = `test/wJson.json?type=uid&value=6279793937&containerid=1076036279793937`;
+            kazeSource.yj.url = `test/yJson.json`;
+            kazeSource.cho3.url = `test/cJson.json?type=uid&value=6441489862&containerid=1076036441489862`;
+            kazeSource.ys3.url = `test/ysJson.json?type=uid&value=7506039414&containerid=1076037506039414`;
+            kazeSource.sr.url = `test/srJson.json`;
+            kazeSource.tl.url = `test/tlJson.json?type=uid&value=6441489862&containerid=1076037499841383`;
         }
     }
 }
 
+kazeFun.getUpdateInfo();
 kazeFun.Init();
+// kazeFun.getUpdateInfo();

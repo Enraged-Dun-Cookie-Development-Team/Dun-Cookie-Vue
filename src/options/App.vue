@@ -103,6 +103,12 @@
           <el-button type="primary" @click="saveSetting">保存</el-button>
         </div>
       </el-form>
+      <!-- <el-divider></el-divider>
+      <div style="text-align: center">
+        <el-button @click="getUpdateInfo" size="mini"
+          >检查更新</el-button
+        >
+      </div> -->
       <el-divider></el-divider>
       <div v-html="saveInfo.feedbackInfo"></div>
     </el-card>
@@ -151,7 +157,6 @@ export default {
     // 死数据
     getSaveInfo() {
       this.getLocalStorage("saveInfo").then((data) => {
-        debugger;
         if (data != null) {
           this.saveInfo = data;
         }
@@ -192,6 +197,7 @@ export default {
         });
       });
     },
+
 
     // 保存
     saveLocalStorage(name, data) {
@@ -242,7 +248,7 @@ export default {
     width: 50px;
   }
   .version {
-    font-size: 1rem;
+    font-size: 1.5rem;
   }
   .info {
     text-align: center;
