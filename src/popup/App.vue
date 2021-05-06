@@ -8,100 +8,33 @@
     >
       <el-divider content-position="left">饼的发源地</el-divider>
       <el-row type="flex" class="drawer-btn-area" justify="center">
-        <el-tooltip content="官方网站" placement="top">
-          <el-button
-            size="small"
-            @click="openUrl('https://ak.hypergryph.com/#information')"
-          >
-            <img class="btn-icon" src="/assets/image/mrfz.ico" />
-          </el-button>
-        </el-tooltip>
-
-        <el-tooltip content="官方哔哩哔哩" placement="top">
-          <el-button
-            size="small"
-            @click="openUrl('https://space.bilibili.com/161775300/dynamic')"
-          >
-            <img class="btn-icon" src="/assets/image/bili.ico" />
-          </el-button>
-        </el-tooltip>
-
-        <el-tooltip content="官方微博" placement="top">
-          <el-button
-            size="small"
-            @click="openUrl('https://weibo.com/arknights')"
-          >
-            <img class="btn-icon" src="/assets/image/weibo.ico"
-          /></el-button>
-        </el-tooltip>
-
-        <el-tooltip content="朝陇山微博" placement="top">
-          <el-button
-            size="small"
-            @click="openUrl('https://weibo.com/u/6441489862')"
-            ><img class="btn-icon radius" src="/assets/image/cho3.jpg"
-          /></el-button>
-        </el-tooltip>
-
-        <el-tooltip content="一拾山微博" placement="top">
-          <el-button
-            size="small"
-            @click="openUrl('https://weibo.com/u/7506039414')"
-            ><img class="btn-icon radius" src="/assets/image/ys3.jpg"
-          /></el-button>
-        </el-tooltip>
-
-        <el-tooltip content="塞壬官网" placement="top">
-          <el-button
-            size="small"
-            @click="openUrl('https://monster-siren.hypergryph.com/')"
-            ><img class="btn-icon" src="/assets/image/sr.ico"
-          /></el-button>
-        </el-tooltip>
-
-        <el-tooltip content="泰拉记事社微博" placement="top">
-          <el-button
-            size="small"
-            @click="openUrl('https://weibo.com/u/7499841383')"
-            ><img class="btn-icon radius" src="/assets/image/tl.jpg"
+        <el-tooltip
+          :key="item.img"
+          v-for="item in quickJump.soure"
+          :content="item.name"
+          placement="top"
+        >
+          <el-button size="small" @click="openUrl(item.url)"
+            ><img
+              class="btn-icon"
+              :class="item.radius ? 'radius' : ''"
+              :src="item.img"
           /></el-button>
         </el-tooltip>
       </el-row>
       <el-divider content-position="left">快捷链接</el-divider>
       <el-row type="flex" justify="center" class="drawer-btn-area">
-        <el-tooltip content="PRTS.Wiki" placement="top">
-          <el-button size="small" @click="openUrl('http://prts.wiki/')"
-            ><img class="btn-icon radius" src="/assets/image/akwiki.png"
-          /></el-button>
-        </el-tooltip>
-
-        <el-tooltip content="PRTS.Map" placement="top">
-          <el-button
-            size="small"
-            @click="openUrl('https://mapcn.ark-nights.com')"
-            ><img class="btn-icon radius" src="/assets/image/akmap.ico"
-          /></el-button>
-        </el-tooltip>
-
-        <el-tooltip content="企鹅物流" placement="top">
-          <el-button size="small" @click="openUrl('https://penguin-stats.cn/')"
+        <el-tooltip
+          :key="item.img"
+          v-for="item in quickJump.tool"
+          :content="item.name"
+          placement="top"
+        >
+          <el-button size="small" @click="openUrl(item.url)"
             ><img
-              class="btn-icon radius"
-              src="/assets/image/penguin_stats_logo.webp"
-          /></el-button>
-        </el-tooltip>
-
-        <el-tooltip content="明日方舟工具箱" placement="top">
-          <el-button
-            size="small"
-            @click="openUrl('https://www.bigfun.cn/tools/aktools/')"
-            ><img class="btn-icon radius" src="/assets/image/mrgzjjx.png"
-          /></el-button>
-        </el-tooltip>
-
-        <el-tooltip content="源石作战室" placement="top">
-          <el-button size="small" @click="openUrl('https://opssr.net/')"
-            ><img class="btn-icon radius" src="/assets/image/yszzs.png"
+              class="btn-icon"
+              :class="item.radius ? 'radius' : ''"
+              :src="item.img"
           /></el-button>
         </el-tooltip>
       </el-row>
@@ -272,6 +205,80 @@ export default {
       showImage: true,
       showAllImage: [],
       imgShow: false, //延迟展示图片
+      quickJump: {
+        soure: [
+          {
+            url: "https://ak.hypergryph.com/#information",
+            name: "官方网站",
+            img: "/assets/image/mrfz.ico",
+          },
+          {
+            url: "https://space.bilibili.com/161775300/dynamic",
+            name: "官方哔哩哔哩",
+            img: "/assets/image/bili.ico",
+          },
+          {
+            url: "https://weibo.com/arknights",
+            name: "官方微博",
+            img: "/assets/image/weibo.ico",
+          },
+          {
+            url: "https://weibo.com/u/6441489862",
+            name: "朝陇山微博",
+            img: "/assets/image/cho3.jpg",
+            radius: true,
+          },
+          {
+            url: "https://weibo.com/u/7506039414",
+            name: "一拾山微博",
+            img: "/assets/image/ys3.jpg",
+            radius: true,
+          },
+          {
+            url: "https://monster-siren.hypergryph.com/",
+            name: "塞壬官网",
+            img: "/assets/image/sr.ico",
+          },
+          {
+            url: "https://weibo.com/u/7499841383",
+            name: "泰拉记事社微博",
+            img: "/assets/image/tl.jpg",
+            radius: true,
+          },
+        ],
+        tool: [
+          {
+            url: "http://prts.wiki/",
+            name: "PRTS.Wiki",
+            img: "/assets/image/akwiki.png",
+            radius: true,
+          },
+          {
+            url: "https://mapcn.ark-nights.com",
+            name: "PRTS.Map",
+            img: "/assets/image/akmap.ico",
+            radius: true,
+          },
+          {
+            url: "https://penguin-stats.cn/",
+            name: "企鹅物流",
+            img: "/assets/image/penguin_stats_logo.webp",
+            radius: true,
+          },
+          {
+            url: "https://www.bigfun.cn/tools/aktools/",
+            name: "明日方舟工具箱",
+            img: "/assets/image/mrgzjjx.png",
+            radius: true,
+          },
+          {
+            url: "https://opssr.net/",
+            name: "源石作战室",
+            img: "/assets/image/yszzs.png",
+            radius: true,
+          },
+        ],
+      },
     };
   },
   computed: {},
