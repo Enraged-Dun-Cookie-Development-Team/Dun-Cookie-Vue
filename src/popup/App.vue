@@ -152,7 +152,7 @@
         <countTo
           :startVal="oldDunIndex"
           :endVal="dunInfo.dunIndex"
-          :duration="1000"
+          :duration="3000"
         ></countTo
         >次】</span
       >
