@@ -15,9 +15,9 @@
           >次 -->
           已为你蹲饼<span style="color: #23ade5"
             ><countTo
-              :startVal="0"
+              :startVal="oldDunIndex"
               :endVal="dunInfo.dunIndex"
-              :duration="3000"
+              :duration="1000"
             ></countTo></span
           >次
         </div>
@@ -142,6 +142,7 @@ export default {
     return {
       cardlist: [],
       saveInfo: { version: "?.?.??" },
+      oldDunIndex: 0,
       dunInfo: {
         dunIndex: 0,
         dunTime: new Date().getTime(),
@@ -184,6 +185,7 @@ export default {
     getDunInfo() {
       this.getLocalStorage("dunInfo").then((data) => {
         if (data != null) {
+          this.oldDunIndex = this.dunInfo.dunIndex;
           this.dunInfo = data;
         }
       });
@@ -203,9 +205,9 @@ export default {
 
     saveSetting() {
       this.saveLocalStorage("setting", this.setting).then(() => {
-        this.getLocalStorage("setting").then((data) => {
-          console.log(data);
-        });
+        // this.getLocalStorage("setting").then((data) => {
+        //   console.log(data);
+        // });
         chrome.runtime.sendMessage({ info: "setting" });
         this.$message({
           center: true,

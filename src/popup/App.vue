@@ -150,9 +150,9 @@
       <span v-else
         >【已蹲饼
         <countTo
-          :startVal="0"
+          :startVal="oldDunIndex"
           :endVal="dunInfo.dunIndex"
-          :duration="3000"
+          :duration="1000"
         ></countTo
         >次】</span
       >
@@ -255,6 +255,7 @@ export default {
       // getBackgroundPage: chrome.extension.getBackgroundPage(),
       cardlist: [],
       saveInfo: { setIntervalindex: 0, version: "?.?.??" },
+      oldDunIndex: 0,
       dunInfo: {
         dunIndex: 0,
       },
@@ -328,6 +329,7 @@ export default {
     getDunInfo() {
       this.getLocalStorage("dunInfo").then((data) => {
         if (data != null) {
+          this.oldDunIndex = this.dunInfo.dunIndex;
           this.dunInfo = data;
         }
       });
@@ -346,7 +348,7 @@ export default {
     },
     getCardlist() {
       this.getLocalStorage("cardlistdm").then((data) => {
-        console.log(data);
+        // console.log(data);
         this.cardlist = Object.values(data)
           .reduce((acc, cur) => [...acc, ...cur], [])
           .sort((x, y) => y.time - x.time)
