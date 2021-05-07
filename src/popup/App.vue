@@ -90,87 +90,97 @@
         >次】</span
       >
     </div>
-    <el-timeline>
-      <el-timeline-item
-        v-for="(item, index) in cardlist"
-        :key="index"
-        :timestamp="
-          item.source == 2 || item.source == 5 || item.source == 7
-            ? timespanToDay(item.time, 2)
-            : timespanToDay(item.time)
-        "
-        placement="top"
-        :icon="'headImg' + item.source"
-      >
-        <!-- 0 b服 1微博 2通讯组 3朝陇山 4一拾山 5塞壬唱片 -->
-        <el-card class="card" :class="'font-size-' + setting.fontsize">
-          <div>
-            <el-button
-              class="to-copy-btn"
-              size="small"
-              @click="copyData(item)"
-              title="复制该条内容及链接"
-              ><i class="el-icon-document-copy"></i
-            ></el-button>
-            <el-button
-              class="to-url-btn"
-              size="small"
-              title="前往饼之发源地"
-              @click="openUrl(item.url)"
-              ><i class="el-icon-right"></i
-            ></el-button>
-            <span class="is-top-info" v-if="item.isTop">
-              <span class="color-blue"
-                >【当前条目在微博的时间线内为置顶状态】</span
-              >
-            </span>
-            <el-row
-              type="flex"
-              justify="space-between"
-              align="middle"
-              class="margintb"
-            >
-            </el-row>
-            <div :ref="'index_' + index">
-              <el-row class="margintb">
-                <div v-html="item.dynamicInfo"></div>
-              </el-row>
-
-              <transition name="el-fade-in-linear">
-                <el-row
-                  class="margintb"
-                  v-if="imgShow && setting.imgshow && item.image"
+    <div id="content">
+      <el-card shadow="always" class="info-card">
+        这是软件开发者给大家的话，从线上获取<br/>
+        能换行
+        <div style="color:red">能加HTML码</div>
+      </el-card>
+      <el-timeline>
+        <el-timeline-item
+          v-for="(item, index) in cardlist"
+          :key="index"
+          :timestamp="
+            item.source == 2 || item.source == 5 || item.source == 7
+              ? timespanToDay(item.time, 2)
+              : timespanToDay(item.time)
+          "
+          placement="top"
+          :icon="'headImg' + item.source"
+        >
+          <!-- 0 b服 1微博 2通讯组 3朝陇山 4一拾山 5塞壬唱片 -->
+          <el-card class="card" :class="'font-size-' + setting.fontsize">
+            <div>
+              <el-button
+                class="to-copy-btn"
+                size="small"
+                @click="copyData(item)"
+                title="复制该条内容及链接"
+                ><i class="el-icon-document-copy"></i
+              ></el-button>
+              <el-button
+                class="to-url-btn"
+                size="small"
+                title="前往饼之发源地"
+                @click="openUrl(item.url)"
+                ><i class="el-icon-right"></i
+              ></el-button>
+              <span class="is-top-info" v-if="item.isTop">
+                <span class="color-blue"
+                  >【当前条目在微博的时间线内为置顶状态】</span
                 >
-                  <div
-                    class="img-area"
-                    @click="changeShowAllImage(item.image)"
-                    :class="showAllImage.includes(item.image) ? 'show-all' : ''"
+              </span>
+              <el-row
+                type="flex"
+                justify="space-between"
+                align="middle"
+                class="margintb"
+              >
+              </el-row>
+              <div :ref="'index_' + index">
+                <el-row class="margintb">
+                  <div v-html="item.dynamicInfo"></div>
+                </el-row>
+
+                <transition name="el-fade-in-linear">
+                  <el-row
+                    class="margintb"
+                    v-if="imgShow && setting.imgshow && item.image"
                   >
                     <div
-                      v-if="
-                        item.imageList != undefined && item.imageList.length > 1
+                      class="img-area"
+                      @click="changeShowAllImage(item.image)"
+                      :class="
+                        showAllImage.includes(item.image) ? 'show-all' : ''
                       "
                     >
-                      <el-row :gutter="5">
-                        <el-col
-                          v-for="img in item.imageList"
-                          :key="img"
-                          :span="8"
-                          ><img :src="img" class="img" />
-                        </el-col>
-                      </el-row>
+                      <div
+                        v-if="
+                          item.imageList != undefined &&
+                          item.imageList.length > 1
+                        "
+                      >
+                        <el-row :gutter="5">
+                          <el-col
+                            v-for="img in item.imageList"
+                            :key="img"
+                            :span="8"
+                            ><img :src="img" class="img" />
+                          </el-col>
+                        </el-row>
+                      </div>
+                      <div v-else>
+                        <img :src="item.image" class="img" />
+                      </div>
                     </div>
-                    <div v-else>
-                      <img :src="item.image" class="img" />
-                    </div>
-                  </div>
-                </el-row>
-              </transition>
+                  </el-row>
+                </transition>
+              </div>
             </div>
-          </div>
-        </el-card>
-      </el-timeline-item>
-    </el-timeline>
+          </el-card>
+        </el-timeline-item>
+      </el-timeline>
+    </div>
   </div>
 </template>
 
@@ -291,7 +301,7 @@ export default {
       // 图片卡 先加载dom后加载图片内容
       setTimeout(() => {
         this.imgShow = true;
-      }, 500);
+      }, 1000);
     },
 
     // 获取后台数据
@@ -452,6 +462,8 @@ ${item.url}
 }
 #app {
   min-width: 600px;
+  height: 580px;
+  overflow: auto;
 }
 ::-webkit-scrollbar {
   width: 0 !important;
@@ -569,10 +581,16 @@ ${item.url}
   padding: 0 20px;
 }
 
-/deep/ .el-timeline {
+#content {
   margin-top: 50px;
+  .info-card {
+    padding: 3px;
+    margin: 0px 20px;
+  }
+}
+
+/deep/ .el-timeline {
   padding-left: 25px;
-  height: 520px;
   overflow: auto;
   padding-top: 20px;
   padding-right: 20px;
