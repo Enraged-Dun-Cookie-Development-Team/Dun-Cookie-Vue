@@ -1,0 +1,15 @@
+{
+    "list": [{
+        "html": "<div style='display: flex; align-items: center;'><img style='height:30px;margin-right:10px;border-radius: 5px;' src='http://cdn.liuziyang.vip/cake.png'> <div style='display: flex;flex-flow: column;'> <div>博士，庆典筹备计划将于<span style='color:#23ade5'>5月18日03:59</span>结束，今天没有获取调色奶油袋的博士请尽快领取。</div> <div>可在快捷连接中直达活动地址</div> </div> </div>",
+        "starTime": "2021-4-24 22:00:00",
+        "overTime": "2021-5-18 04:00:00"
+    }],
+    "btnList":[{
+        "starTime": "2021-4-24 22:00:00",
+        "overTime": "2021-5-18 04:00:00",
+        "url": "https://ak.hypergryph.com/activity/preparation?source=game",
+        "name": "庆典筹备计划",
+        "img": "http://cdn.liuziyang.vip/cake.png",
+        "radius": true
+    }]
+}

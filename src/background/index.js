@@ -306,7 +306,7 @@ let kazeSourceProcess = {
                 list.push({
                     time: time,
                     id: x.cid,
-                    judgment: time,
+                    judgment: parseInt(x.cid) || time,
                     dynamicInfo: x.title,
                     source: opt.source,
                     url: `https://monster-siren.hypergryph.com/info/${x.cid}`,
@@ -329,10 +329,11 @@ let kazeSourceProcess = {
                 let title = item.getElementsByClassName('articleItemTitle')[0].innerHTML
                 let url = item.getElementsByClassName('articleItemLink')[0].pathname;
                 let time = Math.floor(new Date(`${date} ${kazeLocalData.setting.isTop ? '23:59:59' : '00:00:00'}`).getTime() / 1000);
+                let judgment = url.match(/\d+/g);
                 list.push({
                     time: time,
                     id: index,
-                    judgment: title,
+                    judgment: judgment.length > 0 ? parseInt(judgment[0]) : time,
                     dynamicInfo: title,
                     source: opt.source,
                     url: `https://ak.hypergryph.com${url}`,
@@ -341,7 +342,7 @@ let kazeSourceProcess = {
                 console.error('解析官网数据失败', item);
             }
         });
-        return list.sort((x, y) => y.time - x.time);
+        return list.sort((x, y) => y.judgment - x.judgment);
     }
 }
 

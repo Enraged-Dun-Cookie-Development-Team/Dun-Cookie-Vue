@@ -205,9 +205,6 @@ export default {
 
     saveSetting() {
       this.saveLocalStorage("setting", this.setting).then(() => {
-        // this.getLocalStorage("setting").then((data) => {
-        //   console.log(data);
-        // });
         chrome.runtime.sendMessage({ info: "setting" });
         this.$message({
           center: true,

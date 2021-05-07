@@ -91,10 +91,12 @@
       >
     </div>
     <div id="content">
-      <el-card shadow="always" class="info-card">
-        这是软件开发者给大家的话，从线上获取<br/>
-        能换行
-        <div style="color:red">能加HTML码</div>
+      <el-card
+        v-if="onlineSpeak && onlineSpeak != ''"
+        shadow="always"
+        class="info-card"
+      >
+        <div v-html="onlineSpeak"></div>
       </el-card>
       <el-timeline>
         <el-timeline-item
@@ -195,9 +197,9 @@ export default {
 
   data() {
     return {
-      // getBackgroundPage: chrome.extension.getBackgroundPage(),
       cardlist: [],
       saveInfo: { setIntervalindex: 0, version: "?.?.??" },
+      onlineSpeak: "",
       oldDunIndex: 0,
       dunInfo: {
         dunIndex: 0,
@@ -298,13 +300,7 @@ export default {
             name: "刷素材一图流",
             img: "/assets/image/akgraph.ico",
             radius: true,
-          },
-          {
-            url: "https://ak.hypergryph.com/activity/preparation?source=game",
-            name: "庆典筹备计划",
-            img: "/assets/image/cake.png",
-            radius: true,
-          },
+          }
         ],
       },
     };
@@ -316,10 +312,11 @@ export default {
       this.getSaveInfo();
       this.getSetting();
       this.getDunInfo();
+      this.getOnlineSpeak();
       // 图片卡 先加载dom后加载图片内容
       setTimeout(() => {
         this.imgShow = true;
-      }, 1000);
+      }, 2000);
     },
 
     // 获取后台数据
@@ -352,6 +349,53 @@ export default {
       chrome.runtime.sendMessage({ info: "getUpdateInfo" });
     },
 
+    // 获取在线信息
+    getOnlineSpeak() {
+      this.Get("http://cdn.liuziyang.vip/Dun-Cookies-Info.json").then((result) => {
+        // 头部公告
+        let data = JSON.parse(result);
+        let filterList = data.list.filter(
+          (x) =>
+            new Date(x.starTime) <= new Date() &&
+            new Date(x.overTime) >= new Date()
+        );
+        if (filterList.length > 0) {
+          this.onlineSpeak = filterList[0].html;
+        }
+        // 快捷连接
+        let btnList = data.btnList.filter(
+          (x) =>
+            new Date(x.starTime) <= new Date() &&
+            new Date(x.overTime) >= new Date()
+        );
+        if (btnList.length > 0) {
+          this.quickJump.tool.push(...btnList);
+        }
+      });
+    },
+
+    // 获取数据
+    Get(url) {
+      try {
+        return new Promise((resolve, reject) => {
+          let xhr = new XMLHttpRequest();
+          xhr.open("GET", url, true);
+          xhr.onreadystatechange = () => {
+            if (
+              xhr.readyState == 4 &&
+              xhr.status == 200 &&
+              xhr.responseText != ""
+            ) {
+              resolve(xhr.responseText);
+            }
+          };
+          xhr.send();
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
     // 死数据
     getSaveInfo() {
       this.getLocalStorage("saveInfo").then((data) => {
@@ -381,6 +425,8 @@ export default {
         }
       });
     },
+
+    // 获取数据
     getCardlist() {
       this.getLocalStorage("cardlistdm").then((data) => {
         // console.log(data);
@@ -394,6 +440,7 @@ export default {
       });
     },
 
+    // 强刷
     reload() {
       this.isReload = true;
       chrome.runtime.sendMessage({ info: "reload" });
@@ -421,7 +468,6 @@ export default {
     },
 
     copyData(item) {
-      debugger;
       this.$copyText(
         `${item.dynamicInfo.replace(
           /<br\/>/g,
@@ -451,6 +497,7 @@ ${item.url}
         }
       );
     },
+
     // 以下为数据处理方法
     timespanToDay(date, type = 1) {
       date = new Date(date * 1000);
