@@ -49,13 +49,13 @@
           ></el-button>
         </el-tooltip>
 
-        <el-tooltip content="检测更新" placement="top">
+        <!-- <el-tooltip content="检测更新" placement="top">
           <el-button
             type="primary"
             @click="getUpdateInfo"
             icon="el-icon-upload2"
           ></el-button>
-        </el-tooltip>
+        </el-tooltip> -->
 
         <el-tooltip content="设置" placement="top">
           <el-button

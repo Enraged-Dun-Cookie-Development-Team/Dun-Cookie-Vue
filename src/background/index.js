@@ -22,7 +22,7 @@ let kazeData = {
     setting: {},
     // 哔哩哔哩 微博 通讯组 朝陇山 一拾山 任塞 泰拉记事社 官网
     // source: ['bili', 'weibo', 'yj', 'cho3', 'ys3', 'sr', 'tl', 'gw'],
-    Allsource: [0, 1, 2, 3, 4, 5, 6, 7]
+    // Allsource: [0, 1, 2, 3, 4, 5, 6, 7]
 }
 
 // 软件存储数据 数据互通使用
@@ -31,7 +31,7 @@ let kazeLocalData = {
     saveInfo: {
         // 循环的标识
         setIntervalindex: 0,
-        version: '2.0.38',
+        version: '2.0.54',
         feedbackInfo: `<div>
         <span>
           如果有意见或建议或者是反馈问题或者是发现程序出现bug，可以添加<a
@@ -312,7 +312,7 @@ let kazeSourceProcess = {
                     url: `https://monster-siren.hypergryph.com/info/${x.cid}`,
                 })
             });
-            return list.sort((x, y) => y.judgment - x.judgment);
+            return list.sort((x, y) => y.time - x.time);
         }
     },
 
@@ -332,7 +332,7 @@ let kazeSourceProcess = {
                 let judgment = url.match(/\d+/g);
                 list.push({
                     time: time,
-                    id: index,
+                    id: judgment.length > 0 ? parseInt(judgment[0]) : index,
                     judgment: judgment.length > 0 ? parseInt(judgment[0]) : time,
                     dynamicInfo: title,
                     source: opt.source,
@@ -342,7 +342,7 @@ let kazeSourceProcess = {
                 console.error('解析官网数据失败', item);
             }
         });
-        return list.sort((x, y) => y.judgment - x.judgment);
+        return list.sort((x, y) => y.time - x.time);
     }
 }
 
@@ -376,18 +376,15 @@ let kazeFun = {
             && oldList.length > 0
             && oldList[0].judgment != newList[0].judgment
         ) {
-            // 如果judgment是数字 判定大小  如果是文字 直接推送
-            if (typeof newList[0].judgment == 'string' || (typeof newList[0].judgment == 'number' && newList[0].judgment > oldList[0].judgment)) {
-                let newInfo = newList[0];
-                let timeNow = new Date()
-                let notice = newInfo.dynamicInfo.replace(/\n/g, "");
-                console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
-                // 是否推送
-                if (kazeLocalData.setting.isPush == true) {
-                    this.SendNotice(`【${title}】喂公子吃饼!`, notice, newInfo.image, newInfo.id)
-                }
-                return true;
+            let newInfo = newList[0];
+            let timeNow = new Date()
+            let notice = newInfo.dynamicInfo.replace(/\n/g, "");
+            console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
+            // 是否推送
+            if (kazeLocalData.setting.isPush == true) {
+                this.SendNotice(`【${title}】喂公子吃饼!`, notice, newInfo.image, newInfo.id)
             }
+            return true;
         }
         else if (!oldList) {
             return true;
