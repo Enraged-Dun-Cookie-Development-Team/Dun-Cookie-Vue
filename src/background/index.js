@@ -450,9 +450,9 @@ let kazeFun = {
 
     // 初始化
     Init() {
-        if (!kazeData.isTest) {
-            kazeFun.getUpdateInfo();
-        }
+        // if (!kazeData.isTest) {
+        //     kazeFun.getUpdateInfo();
+        // }
         chrome.browserAction.setBadgeText({ text: 'Beta' });
         chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
         // 初始化
