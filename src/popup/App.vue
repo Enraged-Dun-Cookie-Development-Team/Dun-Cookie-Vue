@@ -4,96 +4,66 @@
       :visible.sync="drawer"
       :show-close="false"
       direction="ttb"
-      size="370px"
+      size="350px"
     >
       <el-divider content-position="left">饼的发源地</el-divider>
-      <el-row type="flex" justify="center">
-        <el-button
-          size="medium"
-          type="primary"
-          @click="openUrl('https://space.bilibili.com/161775300/dynamic')"
-          >去B站吃饼</el-button
+      <el-row type="flex" class="drawer-btn-area" justify="center">
+        <el-tooltip
+          :key="item.img"
+          v-for="item in quickJump.soure"
+          :content="item.name"
+          placement="top"
         >
-        <el-button
-          size="medium"
-          type="primary"
-          @click="openUrl('https://weibo.com/arknights')"
-          >去微博吃饼</el-button
-        >
-        <el-button
-          size="medium"
-          type="primary"
-          @click="openUrl('https://weibo.com/u/6441489862')"
-          >朝陇山微博</el-button
-        >
-      </el-row>
-      <el-row type="flex" justify="center" style="margin-top: 10px">
-        <el-button
-          size="medium"
-          type="primary"
-          @click="openUrl('https://weibo.com/u/7506039414')"
-          >一拾山微博</el-button
-        >
-        <el-button
-          size="medium"
-          type="primary"
-          @click="openUrl('https://monster-siren.hypergryph.com/')"
-          >塞壬官网</el-button
-        >
-        <el-button
-          size="medium"
-          type="primary"
-          @click="openUrl('https://weibo.com/u/7499841383')"
-          >泰拉记事社微博</el-button
-        >
+          <el-button size="small" @click="openUrl(item.url)"
+            ><img
+              class="btn-icon"
+              :class="item.radius ? 'radius' : ''"
+              :src="item.img"
+          /></el-button>
+        </el-tooltip>
       </el-row>
       <el-divider content-position="left">快捷链接</el-divider>
-      <el-row type="flex" justify="center">
-        <el-button
-          size="medium"
-          type="primary"
-          @click="openUrl('http://prts.wiki/')"
-          >PRTS Wiki</el-button
+      <el-row type="flex" justify="center" class="drawer-btn-area">
+        <el-tooltip
+          :key="item.img"
+          v-for="item in quickJump.tool"
+          :content="item.name"
+          placement="top"
         >
-        <el-button
-          size="medium"
-          type="primary"
-          @click="openUrl('https://mapcn.ark-nights.com')"
-          title="by Houdou"
-          >PRTS.Map</el-button
-        >
-        <el-button
-          size="medium"
-          type="primary"
-          @click="openUrl('https://penguin-stats.cn/')"
-          >企鹅物流</el-button
-        >
-        <el-button
-          size="medium"
-          type="primary"
-          @click="openUrl('https://www.bigfun.cn/tools/aktools/')"
-          title="by 一只灰喵"
-          >明日方舟工具箱</el-button
-        >
-        <el-button
-          size="medium"
-          type="primary"
-          @click="openUrl('https://opssr.net/')"
-          >源石作战室</el-button
-        >
+          <el-button size="small" @click="openUrl(item.url)"
+            ><img
+              class="btn-icon"
+              :class="item.radius ? 'radius' : ''"
+              :src="item.img"
+          /></el-button>
+        </el-tooltip>
       </el-row>
       <el-divider content-position="left">调整蹲饼器</el-divider>
       <el-row type="flex" justify="center">
-        <el-button
-          size="medium"
-          type="success"
-          :disabled="isReload"
-          @click="reload"
-          >{{ isReload ? "找饼中……" : "强制刷新" }}</el-button
-        >
-        <el-button size="medium" type="warning" @click="openSetting"
-          >设置</el-button
-        >
+        <el-tooltip content="刷新" placement="top">
+          <el-button
+            type="primary"
+            :loading="isReload"
+            @click="reload"
+            icon="el-icon-refresh"
+          ></el-button>
+        </el-tooltip>
+
+        <!-- <el-tooltip content="检测更新" placement="top">
+          <el-button
+            type="primary"
+            @click="getUpdateInfo"
+            icon="el-icon-upload2"
+          ></el-button>
+        </el-tooltip> -->
+
+        <el-tooltip content="设置" placement="top">
+          <el-button
+            type="primary"
+            icon="el-icon-setting"
+            @click="openSetting"
+          ></el-button>
+        </el-tooltip>
       </el-row>
     </el-drawer>
     <el-button
@@ -105,133 +75,264 @@
       @click.stop="drawer = true"
     ></el-button>
     <div class="version">
-      {{ version }}
+      {{ `蹲饼 V${saveInfo.version}` }}
       <span v-if="cardlist.length == 0" style="color: red"
         >【无内容，请检查网络】</span
       >
-      <span v-else>【已蹲饼{{ dunIndex }}次】</span>
-    </div>
-    <el-timeline>
-      <el-timeline-item
-        v-for="(item, index) in cardlist"
-        :key="index"
-        :timestamp="
-          item.source == 2 || item.source == 5
-            ? timespanToDay(item.time, 2)
-            : timespanToDay(item.time)
-        "
-        placement="top"
-        :icon="'headImg' + item.source"
+      <!-- <span v-else>【已蹲饼{{ dunInfo.dunIndex }}次】</span> -->
+      <span v-else
+        >【已蹲饼
+        <countTo
+          :startVal="oldDunIndex"
+          :endVal="dunInfo.dunIndex"
+          :duration="3000"
+        ></countTo
+        >次】</span
       >
-        <!-- 0 b服 1微博 2通讯组 3朝陇山 4一拾山 5塞壬唱片 -->
-        <el-card class="card" :class="'font-size-' + fontSizeClass">
-          <div>
-            <el-button
-              class="to-copy-btn"
-              size="small"
-              @click="copyData(item)"
-              title="复制该条内容及链接"
-              ><i class="el-icon-document-copy"></i
-            ></el-button>
-            <el-button
-              class="to-url-btn"
-              size="small"
-              title="前往饼之发源地"
-              @click="openUrl(item.url)"
-              ><i class="el-icon-right"></i
-            ></el-button>
-            <span class="is-top-info" v-if="item.isTop">
-              <span class="color-blue"
-                >【当前条目在微博的时间线内为置顶状态】</span
-              >
-            </span>
-            <el-row
-              type="flex"
-              justify="space-between"
-              align="middle"
-              class="margintb"
-            >
-            </el-row>
-            <div :ref="'index_' + index">
-              <el-row class="margintb">
-                <div v-html="item.dynamicInfo"></div>
-              </el-row>
-
-              <transition name="el-fade-in-linear">
-                <el-row
-                  class="margintb"
-                  v-if="imgShow && setting.imgshow && item.image"
+    </div>
+    <div id="content">
+      <el-card
+        v-if="onlineSpeak && onlineSpeak != ''"
+        shadow="always"
+        class="info-card"
+      >
+        <div v-html="onlineSpeak"></div>
+      </el-card>
+      <el-timeline>
+        <el-timeline-item
+          v-for="(item, index) in cardlist"
+          :key="index"
+          :timestamp="
+            item.source == 2 || item.source == 5 || item.source == 7
+              ? timespanToDay(item.time, 2)
+              : timespanToDay(item.time)
+          "
+          placement="top"
+          :icon="'headImg' + item.source"
+        >
+          <!-- 0 b服 1微博 2通讯组 3朝陇山 4一拾山 5塞壬唱片 -->
+          <el-card class="card" :class="'font-size-' + setting.fontsize">
+            <div>
+              <el-button
+                class="to-copy-btn"
+                size="small"
+                @click="copyData(item)"
+                title="复制该条内容及链接"
+                ><i class="el-icon-document-copy"></i
+              ></el-button>
+              <el-button
+                class="to-url-btn"
+                size="small"
+                title="前往饼之发源地"
+                @click="openUrl(item.url)"
+                ><i class="el-icon-right"></i
+              ></el-button>
+              <span class="is-top-info" v-if="item.isTop">
+                <span class="color-blue"
+                  >【当前条目在微博的时间线内为置顶状态】</span
                 >
-                  <div
-                    class="img-area"
-                    @click="changeShowAllImage(item.image)"
-                    :class="showAllImage.includes(item.image) ? 'show-all' : ''"
+              </span>
+              <el-row
+                type="flex"
+                justify="space-between"
+                align="middle"
+                class="margintb"
+              >
+              </el-row>
+              <div :ref="'index_' + index">
+                <el-row class="margintb">
+                  <div v-html="item.dynamicInfo"></div>
+                </el-row>
+
+                <transition name="el-fade-in-linear">
+                  <el-row
+                    class="margintb"
+                    v-if="imgShow && setting.imgshow && item.image"
                   >
                     <div
-                      v-if="
-                        item.imageList != undefined && item.imageList.length > 1
+                      class="img-area"
+                      @click="changeShowAllImage(item.image)"
+                      :class="
+                        showAllImage.includes(item.image) ? 'show-all' : ''
                       "
                     >
-                      <el-row :gutter="5">
-                        <el-col
-                          v-for="img in item.imageList"
-                          :key="img"
-                          :span="8"
-                          ><img :src="img" class="img" />
-                        </el-col>
-                      </el-row>
+                      <div
+                        v-if="
+                          item.imageList != undefined &&
+                          item.imageList.length > 1
+                        "
+                      >
+                        <el-row :gutter="5">
+                          <el-col
+                            v-for="img in item.imageList"
+                            :key="img"
+                            :span="8"
+                            ><img :src="img" class="img" />
+                          </el-col>
+                        </el-row>
+                      </div>
+                      <div v-else>
+                        <img :src="item.image" class="img" />
+                      </div>
                     </div>
-                    <div v-else>
-                      <img :src="item.image" class="img" />
-                    </div>
-                  </div>
-                </el-row>
-              </transition>
+                  </el-row>
+                </transition>
+              </div>
             </div>
-          </div>
-        </el-card>
-      </el-timeline-item>
-    </el-timeline>
+          </el-card>
+        </el-timeline-item>
+      </el-timeline>
+    </div>
   </div>
 </template>
 
 <script>
+import countTo from "vue-count-to";
 export default {
   name: "app",
+  components: { countTo },
   mounted() {
     this.init();
   },
 
   data() {
     return {
-      getBackgroundPage: chrome.extension.getBackgroundPage(),
       cardlist: [],
-      version: "蹲饼",
-      dunIndex: 0,
-      setting: {},
+      saveInfo: { setIntervalindex: 0, version: "?.?.??" },
+      onlineSpeak: "",
+      oldDunIndex: 0,
+      dunInfo: {
+        dunIndex: 0,
+      },
+      setting: {
+        time: 15,
+        source: [0, 1, 2, 3, 4, 5, 6],
+        fontsize: 0,
+        imgshow: true,
+        isTop: true,
+        isPush: true,
+      },
       drawer: false, //打开菜单
       isReload: false, //是否正在刷新
       showImage: true,
       showAllImage: [],
       imgShow: false, //延迟展示图片
+      quickJump: {
+        soure: [
+          {
+            url: "https://ak.hypergryph.com/#information",
+            name: "官方网站",
+            img: "/assets/image/mrfz.ico",
+          },
+          {
+            url: "https://space.bilibili.com/161775300/dynamic",
+            name: "官方哔哩哔哩",
+            img: "/assets/image/bili.ico",
+          },
+          {
+            url: "https://weibo.com/arknights",
+            name: "官方微博",
+            img: "/assets/image/weibo.ico",
+          },
+          {
+            url: "https://weibo.com/u/6441489862",
+            name: "朝陇山微博",
+            img: "/assets/image/cho3.jpg",
+            radius: true,
+          },
+          {
+            url: "https://weibo.com/u/7506039414",
+            name: "一拾山微博",
+            img: "/assets/image/ys3.jpg",
+            radius: true,
+          },
+          {
+            url: "https://monster-siren.hypergryph.com/",
+            name: "塞壬官网",
+            img: "/assets/image/sr.ico",
+          },
+          {
+            url: "https://weibo.com/u/7499841383",
+            name: "泰拉记事社微博",
+            img: "/assets/image/tl.jpg",
+            radius: true,
+          },
+        ],
+        tool: [
+          {
+            url: "http://prts.wiki/",
+            name: "PRTS.Wiki",
+            img: "/assets/image/akwiki.png",
+            radius: true,
+          },
+          {
+            url: "https://mapcn.ark-nights.com",
+            name: "PRTS.Map",
+            img: "/assets/image/akmap.ico",
+            radius: true,
+          },
+          {
+            url: "https://penguin-stats.cn/",
+            name: "企鹅物流",
+            img: "/assets/image/penguin_stats_logo.webp",
+            radius: true,
+          },
+          {
+            url: "https://www.bigfun.cn/tools/aktools/",
+            name: "明日方舟工具箱",
+            img: "/assets/image/mrgzjjx.png",
+            radius: true,
+          },
+          {
+            url: "https://opssr.net/",
+            name: "源石作战室",
+            img: "/assets/image/yszzs.png",
+            radius: true,
+          },
+          {
+            url: "https://kokodayo.fun/",
+            name: "Kokodayo",
+            img: "/assets/image/kkdy.png",
+            radius: true,
+          },
+          {
+            url: "https://aog.wiki/",
+            name: "刷素材一图流",
+            img: "/assets/image/akgraph.ico",
+            radius: true,
+          }
+        ],
+      },
     };
   },
   computed: {},
   methods: {
     init() {
-      this.version = `蹲饼 V${this.getBackgroundPage.Kaze.version}`;
-      this.dunIndex = this.getBackgroundPage.Kaze.dunIndex;
-      this.getbackgroundData();
-      this.setting = this.getBackgroundPage.Kaze.setting;
-      this.fontSizeClass = this.setting.fontsize;
-      setInterval(() => {
-        this.getbackgroundData();
-        this.dunIndex = this.getBackgroundPage.Kaze.dunIndex;
-      }, this.setting.time * 500);
+      this.getCardlist();
+      this.getSaveInfo();
+      this.getSetting();
+      this.getDunInfo();
+      this.getOnlineSpeak();
+      // 图片卡 先加载dom后加载图片内容
       setTimeout(() => {
         this.imgShow = true;
-      }, 500);
+      }, 2000);
     },
+
+    // 获取后台数据
+    getLocalStorage(name) {
+      return new Promise((resolve, reject) => {
+        chrome.storage.local.get([name], (result) => {
+          if (result) {
+            resolve(result[name]);
+            return;
+          }
+          resolve(null);
+        });
+      });
+    },
+
+    // 图片收起展示
     changeShowAllImage(img) {
       if (this.showAllImage.includes(img)) {
         this.showAllImage.splice(
@@ -242,27 +343,107 @@ export default {
         this.showAllImage.push(img);
       }
     },
-    getbackgroundData() {
-      let {
-        weibo = [],
-        cho3 = [],
-        yj = [],
-        bili = [],
-        ys3 = [],
-        sr = [],
-        tl = [],
-      } = this.getBackgroundPage.Kaze.cardlistdm;
-      this.cardlist = [...weibo, ...cho3, ...yj, ...bili, ...ys3, ...sr, ...tl]
-        .map((x) => {
-          x.dynamicInfo = x.dynamicInfo.replace(/\n/g, "<br/>");
-          return x;
-        })
-        .sort((x, y) => y.time - x.time);
+
+    // 检测更新
+    getUpdateInfo() {
+      chrome.runtime.sendMessage({ info: "getUpdateInfo" });
     },
+
+    // 获取在线信息
+    getOnlineSpeak() {
+      this.Get("http://cdn.liuziyang.vip/Dun-Cookies-Info.json").then((result) => {
+        // 头部公告
+        let data = JSON.parse(result);
+        let filterList = data.list.filter(
+          (x) =>
+            new Date(x.starTime) <= new Date() &&
+            new Date(x.overTime) >= new Date()
+        );
+        if (filterList.length > 0) {
+          this.onlineSpeak = filterList[0].html;
+        }
+        // 快捷连接
+        let btnList = data.btnList.filter(
+          (x) =>
+            new Date(x.starTime) <= new Date() &&
+            new Date(x.overTime) >= new Date()
+        );
+        if (btnList.length > 0) {
+          this.quickJump.tool.push(...btnList);
+        }
+      });
+    },
+
+    // 获取数据
+    Get(url) {
+      try {
+        return new Promise((resolve, reject) => {
+          let xhr = new XMLHttpRequest();
+          xhr.open("GET", url, true);
+          xhr.onreadystatechange = () => {
+            if (
+              xhr.readyState == 4 &&
+              xhr.status == 200 &&
+              xhr.responseText != ""
+            ) {
+              resolve(xhr.responseText);
+            }
+          };
+          xhr.send();
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    // 死数据
+    getSaveInfo() {
+      this.getLocalStorage("saveInfo").then((data) => {
+        if (data != null) {
+          this.saveInfo = data;
+        }
+      });
+    },
+    // 蹲饼数据
+    getDunInfo() {
+      this.getLocalStorage("dunInfo").then((data) => {
+        if (data != null) {
+          this.oldDunIndex = this.dunInfo.dunIndex;
+          this.dunInfo = data;
+        }
+      });
+    },
+    // 设置数据
+    getSetting() {
+      this.getLocalStorage("setting").then((data) => {
+        if (data != null) {
+          this.setting = data;
+          setInterval(() => {
+            this.getCardlist();
+            this.getDunInfo();
+          }, data.time * 500);
+        }
+      });
+    },
+
+    // 获取数据
+    getCardlist() {
+      this.getLocalStorage("cardlistdm").then((data) => {
+        // console.log(data);
+        this.cardlist = Object.values(data)
+          .reduce((acc, cur) => [...acc, ...cur], [])
+          .sort((x, y) => y.time - x.time)
+          .map((x) => {
+            x.dynamicInfo = x.dynamicInfo.replace(/\n/g, "<br/>");
+            return x;
+          });
+      });
+    },
+
+    // 强刷
     reload() {
-      this.getBackgroundPage.Kaze.GetData();
       this.isReload = true;
-      this.drawer = false;
+      chrome.runtime.sendMessage({ info: "reload" });
       this.$message({
         offset: 50,
         center: true,
@@ -270,28 +451,33 @@ export default {
         type: "warning",
       });
       setTimeout(() => {
+        this.drawer = false;
         this.isReload = false;
       }, 5000);
     },
+
     openUrl(url) {
       chrome.tabs.create({ url: url });
     },
+
     openSetting() {
       var urlToOpen = chrome.extension.getURL("options.html");
       chrome.tabs.create({
         url: urlToOpen,
       });
     },
+
     copyData(item) {
       this.$copyText(
         `${item.dynamicInfo.replace(
           /<br\/>/g,
           `
 `
-        )}    
+        )}   
+
 ${item.url}
 
-数据由 ${this.version} 收集`
+数据由 蹲饼${this.saveInfo.version} 收集`
       ).then(
         (e) => {
           this.$message({
@@ -311,6 +497,7 @@ ${item.url}
         }
       );
     },
+
     // 以下为数据处理方法
     timespanToDay(date, type = 1) {
       date = new Date(date * 1000);
@@ -340,6 +527,8 @@ ${item.url}
 }
 #app {
   min-width: 600px;
+  height: 580px;
+  overflow: auto;
 }
 ::-webkit-scrollbar {
   width: 0 !important;
@@ -370,6 +559,19 @@ ${item.url}
     opacity: 1;
   }
 }
+
+.drawer-btn-area {
+  .el-button {
+    padding: 5px;
+  }
+  .btn-icon {
+    width: 30px;
+    &.radius {
+      border-radius: 10px;
+    }
+  }
+}
+
 .card {
   width: 600px;
   margin: 10px 0;
@@ -444,10 +646,16 @@ ${item.url}
   padding: 0 20px;
 }
 
-/deep/ .el-timeline {
+#content {
   margin-top: 50px;
+  .info-card {
+    padding: 3px;
+    margin: 0px 20px;
+  }
+}
+
+/deep/ .el-timeline {
   padding-left: 25px;
-  height: 520px;
   overflow: auto;
   padding-top: 20px;
   padding-right: 20px;
@@ -477,14 +685,17 @@ ${item.url}
         background-size: cover;
       }
       &.headImg2::before {
-        background: url("/assets/image/mrfz.ico") no-repeat center, #fff;
+        border-radius: 10px;
+        background: url("/assets/image/txz.jpg") no-repeat center, #fff;
         background-size: cover;
       }
       &.headImg3::before {
+        border-radius: 10px;
         background: url("/assets/image/cho3.jpg") no-repeat center, #fff;
         background-size: cover;
       }
       &.headImg4::before {
+        border-radius: 10px;
         background: url("/assets/image/ys3.jpg") no-repeat center, #fff;
         background-size: cover;
       }
@@ -493,7 +704,13 @@ ${item.url}
         background-size: cover;
       }
       &.headImg6::before {
+        border-radius: 10px;
         background: url("/assets/image/tl.jpg") no-repeat center, #fff;
+        background-size: cover;
+      }
+      &.headImg7::before {
+        border-radius: 10px;
+        background: url("/assets/image/mrfz.ico") no-repeat center, #fff;
         background-size: cover;
       }
     }

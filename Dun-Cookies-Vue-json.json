@@ -1,0 +1,7 @@
+{
+    "v": "2.0.38",
+    "title":"检测到新版本-2.0.38",
+    "description":"1.添加官方网站的数据源 <br/> 2.可以获取更新信息了 <br/> 3.界面继续进行了调整 <br/> 4.修复打开后要卡很久才能看到界面的问题 <br/> 5.修复若干BUG",
+    "downCrx":"http://cdn.liuziyang.vip/dist.crx",
+    "downZip":"http://cdn.liuziyang.vip/dist.zip"
+}
