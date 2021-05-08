@@ -498,7 +498,7 @@ let kazeFun = {
 
         // 监听标签
         chrome.notifications.onClicked.addListener(id => {
-            let cardlist = Object.values(store.state.cardListDM)
+            let cardlist = Object.values(kazeLocalData.cardlistdm)
                 .reduce((acc, cur) => [...acc, ...cur], [])
                 .filter(x => x.id + "_" == id);
             if (cardlist != null && cardlist.length > 0) {
