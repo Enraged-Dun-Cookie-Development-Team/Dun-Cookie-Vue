@@ -32,7 +32,7 @@ let kazeLocalData = {
         // 循环的标识
         setIntervalindex: 0,
         version: '2.0.54',
-        feedbackInfo: `<div>
+        feedbackInfo: `<div class="footer">
         <span>
           如果有意见或建议或者是反馈问题或者是发现程序出现bug，可以添加<a
             href="https://jq.qq.com/?_wv=1027&k=Vod1uO13"
@@ -45,7 +45,7 @@ let kazeLocalData = {
           也可以去Chrome应用商店查看更新，但是因为审核机制，更新速度会慢于QQ群和github
           <br />
           <br />
-          <div style="color: #aaa">
+          <div class="ps">
             获取更新机制因为没钱买服务器，现在正在想办法
           </div>
         </span>
@@ -65,6 +65,7 @@ let kazeLocalData = {
         imgshow: true,
         isTop: true,
         isPush: true,
+        darkshow: 0,
     },
 }
 
@@ -450,8 +451,8 @@ let kazeFun = {
         // if (!kazeData.isTest) {
         //     kazeFun.getUpdateInfo();
         // }
-        chrome.browserAction.setBadgeText({ text: 'Beta' });
-        chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
+        // chrome.browserAction.setBadgeText({ text: 'Beta' });
+        // chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
         // 初始化
         kazeFun.saveLocalStorage('dunInfo', kazeLocalData.dunInfo);
         kazeFun.saveLocalStorage('saveInfo', kazeLocalData.saveInfo);

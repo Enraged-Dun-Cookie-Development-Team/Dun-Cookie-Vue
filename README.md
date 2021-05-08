@@ -3,7 +3,7 @@
 ## 用于实时抓取兔兔发的动态
 一起监视自由的兔兔。明日方舟兔兔发布动态发布时间越来越奇怪了，我每天下午4点刷都刷不出来，怎么办呢？写一个蹲饼器盯着兔兔看！
 
-<img src="https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/tutu.gif" height = "200" alt="图片名称" align="center" />
+<img src="http://github-image.liuziyang.vip/tutu.gif" height = "200" alt="图片名称" align="center" />
 
     兔兔你的饼还没发完，现在还不能休息哦
 
@@ -11,15 +11,21 @@
 
 <br/>
 
+# 注意事项
+
+> 为了兼容火狐，本次代码改动较大，请下载最新代码包安装
+
+<br/>
+
 # 主要功能
 > - 监视兔兔在各地方发饼:
->       - 官方B站
->       - 官方微博
->       - 通讯组
->       - 朝陇山微博 
->       - 一拾山微博 
->       - 塞壬官网 
->       - 泰拉记事社微博
+>     - 官方B站
+>     - 官方微博
+>     - 通讯组
+>     - 朝陇山微博 
+>     - 一拾山微博 
+>     - 塞壬官网 
+>     - 泰拉记事社微博
 > - 一键跳转以上网站
 > - 一键跳转详细内容界面
 > - 一键复制饼内容文本
@@ -49,25 +55,25 @@
 
     图片收起与展开
 
-![avatar](https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/1.jpg)
-![avatar](https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/2.jpg)
+![avatar](http://github-image.liuziyang.vip/1.webp)
+![avatar](http://github-image.liuziyang.vip/2.webp)
 
     图片九宫格
 
-![avatar](https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/5.jpg)
+![avatar](http://github-image.liuziyang.vip/5.webp)
 
 
     内容快捷复制
 
-![avatar](https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/6.jpg)
+![avatar](http://github-image.liuziyang.vip/6.webp)
 
     菜单界面
 
-![avatar](https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/4.jpg)
+![avatar](http://github-image.liuziyang.vip/4.webp)
 
     设置界面
 
-![avatar](https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/3.jpg)
+![avatar](http://github-image.liuziyang.vip/3.webp)
 
 </details>
 
@@ -126,6 +132,11 @@
 > - 推荐 [Chrome应用商店](https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC/gblmdllhbodefkmimbcjpflhjneagkkd)
 > - 下载crx安装
 > - 下载zip通过开发者模式加载已解压的扩展程序
+>   1. 先解压到任意文件夹
+>   2. 地址栏输入`chrome://extensions/`，回车
+>   3. 右上角打开开发者模式
+>   3. 点击“加载已解压的扩展程序”
+>   4. 选择解压后的整个插件文件夹完成安装
 > 
 > PS: 可以通过地址栏输入`chrome://settings/?search=后台`找到“关闭 Google Chrome 后继续运行后台应用”，选择运行后台扩展程序的使用
 
@@ -136,7 +147,7 @@
 
 > 1. 先解压到任意文件夹
 > 2. 地址栏输入`edge://extensions/`，回车
-> 3. 点击已安装的扩展右边的第一个图标“加载解压缩的扩展”![avatar](https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/edge-load.jpg)
+> 3. 点击已安装的扩展右边的第一个图标“加载解压缩的扩展”![avatar](http://github-image.liuziyang.vip/edge-load.webp)
 > 4. 选择解压后的整个插件文件夹完成安装
 >
 > PS: 可以通过地址栏输入`edge://settings/?search=后台`找到“关闭 Microsoft Edge 后继续运行后台应用关闭”，选择运行后台扩展程序的使用
@@ -151,6 +162,14 @@
 > 4. 随便在解压后的插件文件夹里面点开任意文件即可加载
 > 
 > PS: 此为临时安装，每次打开浏览器都要重新安装，建议使用edge或者chrome，因为支持后台运行，所以不需要特地打开浏览器
+
+## QQ浏览器安装方法
+
+> 1. 先解压到任意文件夹
+> 2. 地址栏输入`qqbrowser://extensions/manage`，回车
+> 3. 右上角打开开发者模式
+> 3. 点击“加载已解压的扩展程序”
+> 4. 选择解压后的整个插件文件夹完成安装
 
 ## 360安全浏览器安装方法
 
@@ -209,6 +228,6 @@
 
     傻嗨，感谢你在百忙之中到我这讨骂。
 
-![avatar](https://raw.githubusercontent.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/master/readmeImage/7.jpg)
+![avatar](http://github-image.liuziyang.vip/7.webp)
 
 
