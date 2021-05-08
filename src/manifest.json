@@ -18,7 +18,6 @@
 		],
 		"persistent": true
 	},
-	"update_url": "http://cdn.liuziyang.vip/updates.xml",
 	"permissions": [
 		"clipboardWrite",
 		"background",
