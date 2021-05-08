@@ -306,6 +306,12 @@ export default {
             img: "/assets/image/akgraph.ico",
             radius: true,
           },
+          {
+            url: "https://viktorlab.cn/akdata/",
+            name: "Arknight DPS",
+            img: "/assets/image/dps.ico",
+            radius: true,
+          },
         ],
       },
     };
