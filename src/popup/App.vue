@@ -1,5 +1,5 @@
 <template>
-  <div id="outside" :class="outsideClass">
+  <div :class="outsideClass">
     <div id="app">
       <el-drawer
         :visible.sync="drawer"
@@ -547,10 +547,6 @@ ${item.url}
 
 <style lang="less" scoped>
 @import "../theme/theme.less";
-
-body {
-  margin: 0 !important;
-}
 
 .styleChange(@theme) {
   @bgColor: "bgColor-@{theme}"; // 背景颜色
