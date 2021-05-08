@@ -104,6 +104,13 @@
         >
           <el-switch v-model="setting.isPush"></el-switch>
         </el-form-item>
+        <el-form-item label="主题切换">
+          <el-radio-group v-model="setting.darkshow">
+            <el-radio :label="0">日常模式</el-radio>
+            <el-radio :label="1">夜间模式</el-radio>
+            <el-radio :label="-1">日出日落模式</el-radio>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item
           label="无时间位置 ?"
           title="有些数据比如通讯组是只有日期没有时间的，在数据列表内无法排序，所以在此统一这些卡片在当天信息流内是置顶还是置底。
@@ -155,6 +162,7 @@ export default {
         imgshow: true,
         isTop: true,
         isPush: true,
+        darkshow: 0,
       },
     };
   },
@@ -204,6 +212,7 @@ export default {
     },
 
     saveSetting() {
+      console.log( this.setting)
       this.saveLocalStorage("setting", this.setting).then(() => {
         chrome.runtime.sendMessage({ info: "setting" });
         this.$message({

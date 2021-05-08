@@ -65,6 +65,7 @@ let kazeLocalData = {
         imgshow: true,
         isTop: true,
         isPush: true,
+        darkshow: 0,
     },
 }
 
