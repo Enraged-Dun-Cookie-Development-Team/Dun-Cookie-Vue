@@ -552,14 +552,11 @@ ${item.url}
   @bgColor: "bgColor-@{theme}"; // 背景颜色
   @content: "content-@{theme}"; // 文本颜色
   @timeline: "timeline-@{theme}"; // 时间线颜色和时间线border颜色
-  @markedness: "markedness-@{theme}"; // 醒目蓝色
   @subTitle: "subTitle-@{theme}"; // 小标题颜色
   @btnBorder: "btnBorder-@{theme}"; // 按钮边框颜色和一些小线条
   @setBtnBorder: "setBtnBorder-@{theme}";
   @btnBg: "btnBg-@{theme}"; // 按钮内部颜色
   @setLarge: "setLarge-@{theme}"; // 设置标题颜色
-  @setSmall: "setSmall-@{theme}"; // 设置文本颜色
-  @ps: "ps-@{theme}"; // 提示文本颜色
   @shadow: "shadow-@{theme}"; // 卡片的阴影
   @hover: "hover-@{theme}"; // 按钮hover颜色
 

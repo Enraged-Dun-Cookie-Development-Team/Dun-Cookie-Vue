@@ -44,10 +44,6 @@ let kazeLocalData = {
           ><br />
           也可以去Chrome应用商店查看更新，但是因为审核机制，更新速度会慢于QQ群和github
           <br />
-          <br />
-          <div class="ps">
-            获取更新机制因为没钱买服务器，现在正在想办法
-          </div>
         </span>
       </div>`
     },
