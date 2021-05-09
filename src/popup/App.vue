@@ -50,13 +50,13 @@
             ></el-button>
           </el-tooltip>
 
-          <!-- <el-tooltip content="检测更新" placement="top">
+          <el-tooltip v-if="isNew" content="检测更新" placement="top">
             <el-button
               type="primary"
               @click="getUpdateInfo"
               icon="el-icon-upload2"
             ></el-button>
-          </el-tooltip> -->
+          </el-tooltip>
 
           <el-tooltip content="设置" placement="top">
             <el-button
@@ -199,6 +199,7 @@ export default {
 
   data() {
     return {
+      isNew: false,
       outsideClass: "light",
       cardlist: [],
       saveInfo: { setIntervalindex: 0, version: "?.?.??" },
@@ -383,6 +384,8 @@ export default {
           if (btnList.length > 0) {
             this.quickJump.tool.push(...btnList);
           }
+          // 是否最新
+          this.isNew = data.version != this.saveInfo.version;
         }
       );
     },
