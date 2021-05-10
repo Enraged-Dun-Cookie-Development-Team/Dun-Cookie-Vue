@@ -1,4 +1,5 @@
 
+import { common, Get } from "../assets/JS/common";
 //数据下来后都定位固定格式 没有不用管
 var date = {
     time: '时间 【必填】',
@@ -28,41 +29,11 @@ let kazeData = {
 // 软件存储数据 数据互通使用
 let kazeLocalData = {
     // 仅仅只是保存
-    saveInfo: {
-        // 循环的标识
-        setIntervalindex: 0,
-        version: '2.0.54',
-        feedbackInfo: `<div class="footer">
-        <span>
-          如果有意见或建议或者是反馈问题或者是发现程序出现bug，可以添加<a
-            href="https://jq.qq.com/?_wv=1027&k=Vod1uO13"
-            >【蹲饼测试群】</a
-          >反馈或<a href="Mailto:kaze.liu@qq.com.com">给我发邮件</a>反馈<br />
-          也可以去github上查看<a
-            href="https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue"
-            >Dun-Cookie-Vue</a
-          ><br />
-          也可以去Chrome应用商店查看更新，但是因为审核机制，更新速度会慢于QQ群和github
-          <br />
-        </span>
-      </div>`
-    },
+    saveInfo: common.saveInfo,
     cardlistdm: {},
     //请求次数
-    dunInfo: {
-        dunIndex: 0,
-        dunTime: new Date().getTime(),
-        dunFristTime: new Date().getTime(),
-    },
-    setting: {
-        time: 15,
-        source: [0, 1, 2, 3, 4, 5, 6, 7],
-        fontsize: 0,
-        imgshow: true,
-        isTop: true,
-        isPush: true,
-        darkshow: 0,
-    },
+    dunInfo: common.dunInfo,
+    setting: common.setting,
 }
 
 // 数据来源
@@ -411,16 +382,33 @@ let kazeFun = {
 
     //蹲饼间隔时间 自带第一次请求 自带清除当前循环 秒
     intervalGetData(time) {
+        // 如果没有传time 获取setting时间
         if (!time) {
             time = kazeLocalData.setting.time;
         }
+        // 获取循环标识 删除该标识
         if (kazeLocalData.saveInfo.setIntervalindex) {
             clearInterval(kazeLocalData.saveInfo.setIntervalindex);
         }
+        // 先请求一次数据
         kazeSourceProcess.GetData();
+        kazeFun.saveLocalStorage('dunInfo', kazeLocalData.dunInfo);
+        // 添加循环
         kazeLocalData.saveInfo.setIntervalindex = setInterval(() => {
             kazeFun.saveLocalStorage('dunInfo', kazeLocalData.dunInfo);
             kazeSourceProcess.GetData();
+            
+            // let hour = new Date().getHours();
+            // // 判断当前时间是否是启用页面模式的时间
+            // let darkShow = kazeLocalData.setting.darkshow;
+            // kazeLocalData.setting.outsideClass =
+            //     (darkShow == -1 && (hour >= 18 || hour < 6)) || darkShow == 1
+            //         ? "dark"
+            //         : "light";
+            
+            // 判断当前时间是否是启用低频模式的时间
+            
+
         }, parseInt(time) * 1000);
     },
 
@@ -447,15 +435,16 @@ let kazeFun = {
         // if (!kazeData.isTest) {
         //     kazeFun.getUpdateInfo();
         // }
-        // chrome.browserAction.setBadgeText({ text: 'Beta' });
-        // chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
+        chrome.browserAction.setBadgeText({ text: 'Beta' });
+        chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
         // 初始化
         kazeFun.saveLocalStorage('dunInfo', kazeLocalData.dunInfo);
         kazeFun.saveLocalStorage('saveInfo', kazeLocalData.saveInfo);
         // 默认设置
         kazeFun.getLocalStorage('setting').then(data => {
             if (data) {
-                kazeLocalData.setting = data;
+                kazeLocalData.setting = Object.assign({}, kazeLocalData.setting, data);
+                kazeFun.saveLocalStorage('setting', kazeLocalData.setting);
             } else {
                 kazeFun.saveLocalStorage('setting', kazeLocalData.setting);
             }

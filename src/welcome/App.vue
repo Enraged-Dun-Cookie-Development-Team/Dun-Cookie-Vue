@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import { common } from "../assets/JS/common";
 export default {
   name: "welcome",
   mounted() {
@@ -57,7 +58,7 @@ export default {
 
   data() {
     return {
-      saveInfo: { version: "?.?.??" },
+      saveInfo: common.saveInfo,
       activeNames: [1],
     };
   },

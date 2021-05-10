@@ -19,7 +19,7 @@
         <div v-html="updateInfo.description"></div>
       </el-card>
       <el-divider></el-divider>
-      <div style="text-align:center">
+      <div style="text-align: center">
         <el-button @click="toLink(updateInfo.downCrx)" size="mini"
           >下载Crx</el-button
         >
@@ -36,13 +36,14 @@
           >Chrome应用商店</el-button
         >
       </div>
-         <el-divider></el-divider>
+      <el-divider></el-divider>
       <div v-html="saveInfo.feedbackInfo"></div>
     </el-card>
   </div>
 </template>
 
 <script>
+import { common,Get } from "../assets/JS/common";
 export default {
   name: "update",
   mounted() {
@@ -51,7 +52,7 @@ export default {
 
   data() {
     return {
-      saveInfo: { version: "?.?.??" },
+      saveInfo: common.saveInfo,
       activeNames: [1],
       feedbackInfo: "",
       updateInfo: {},
@@ -59,6 +60,7 @@ export default {
   },
   computed: {},
   methods: {
+    Get,
     init() {
       this.getSaveInfo();
       this.getUpdateInfo();
@@ -69,26 +71,26 @@ export default {
       });
     },
     // 获取数据
-    Get(url) {
-      try {
-        return new Promise((resolve, reject) => {
-          let xhr = new XMLHttpRequest();
-          xhr.open("GET", url, true);
-          xhr.onreadystatechange = () => {
-            if (
-              xhr.readyState == 4 &&
-              xhr.status == 200 &&
-              xhr.responseText != ""
-            ) {
-              resolve(xhr.responseText);
-            }
-          };
-          xhr.send();
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    },
+    // Get(url) {
+    //   try {
+    //     return new Promise((resolve, reject) => {
+    //       let xhr = new XMLHttpRequest();
+    //       xhr.open("GET", url, true);
+    //       xhr.onreadystatechange = () => {
+    //         if (
+    //           xhr.readyState == 4 &&
+    //           xhr.status == 200 &&
+    //           xhr.responseText != ""
+    //         ) {
+    //           resolve(xhr.responseText);
+    //         }
+    //       };
+    //       xhr.send();
+    //     });
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
     // 检查一次更新
     getUpdateInfo() {
       this.Get(`http://cdn.liuziyang.vip/Dun-Cookies-Vue-json.json`).then(

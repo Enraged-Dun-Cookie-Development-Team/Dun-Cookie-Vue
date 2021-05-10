@@ -4,7 +4,7 @@
       <el-card class="box-card">
         <el-row type="flex" align="middle" justify="space-around">
           <el-image class="img" src="../assets/image/icon.png"></el-image>
-          <div class="version">V{{ saveInfo.version }}</div>
+          <div class="version">蹲饼 V{{ saveInfo.version }}</div>
         </el-row>
         <el-divider></el-divider>
         <div class="info">
@@ -12,8 +12,6 @@
             开始蹲饼时间：{{ timespanToDay(dunInfo.dunFristTime) }}
           </div>
           <div class="info-title">
-            <!-- 已为你蹲饼<span style="color: #23ade5">{{ dunInfo.dunIndex }}</span
-            >次 -->
             已为你蹲饼<span style="color: #23ade5"
               ><countTo
                 :startVal="oldDunIndex"
@@ -29,114 +27,164 @@
         </div>
         <el-divider></el-divider>
         <el-form ref="form" :model="setting" label-width="100px">
-          <el-form-item label="蹲饼频率(秒)">
-            <el-input-number
-              controls-position="right"
-              size="small"
-              v-model="setting.time"
-              :min="3"
-              :max="3600"
-            ></el-input-number>
-          </el-form-item>
-          <el-form-item label="字体大小">
-            <el-radio-group v-model="setting.fontsize">
-              <el-radio :label="-1">小</el-radio>
-              <el-radio :label="0">正常</el-radio>
-              <el-radio :label="1">大</el-radio>
-              <el-radio :label="2">特别大</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="饼来源">
-            <el-checkbox-group v-model="setting.source" :min="1">
-              <el-checkbox :label="0">
-                <span class="checkbox-area">
-                  <img class="iconimg" src="/assets/image/bili.ico" />B站</span
-                >
-              </el-checkbox>
-              <el-checkbox :label="1">
-                <span class="checkbox-area">
-                  <img
-                    class="iconimg"
-                    src="/assets/image/weibo.ico"
-                  />微博</span
-                ></el-checkbox
+          <el-tabs v-model="activeTab" type="border-card">
+            <el-tab-pane label="核心设置" name="0">
+              <el-form-item label="饼来源">
+                <el-checkbox-group v-model="setting.source" :min="1">
+                  <el-checkbox :label="0">
+                    <span class="checkbox-area">
+                      <img
+                        class="iconimg"
+                        src="/assets/image/bili.ico"
+                      />B站</span
+                    >
+                  </el-checkbox>
+                  <el-checkbox :label="1">
+                    <span class="checkbox-area">
+                      <img
+                        class="iconimg"
+                        src="/assets/image/weibo.ico"
+                      />微博</span
+                    ></el-checkbox
+                  >
+                  <el-checkbox :label="2">
+                    <span class="checkbox-area">
+                      <img
+                        class="iconimg"
+                        src="/assets/image/txz.jpg"
+                      />通讯组</span
+                    ></el-checkbox
+                  >
+                  <el-checkbox :label="3">
+                    <span class="checkbox-area">
+                      <img
+                        class="iconimg"
+                        src="/assets/image/cho3.jpg"
+                      />朝陇山</span
+                    ></el-checkbox
+                  >
+                  <el-checkbox :label="4">
+                    <span class="checkbox-area">
+                      <img
+                        class="iconimg"
+                        src="/assets/image/ys3.jpg"
+                      />一拾山</span
+                    ></el-checkbox
+                  >
+                  <el-checkbox :label="5">
+                    <span class="checkbox-area">
+                      <img
+                        class="iconimg white"
+                        src="/assets/image/sr.ico"
+                      />塞壬唱片</span
+                    ></el-checkbox
+                  >
+                  <el-checkbox :label="6">
+                    <span class="checkbox-area">
+                      <img
+                        class="iconimg"
+                        src="/assets/image/tl.jpg"
+                      />泰拉记事社</span
+                    ></el-checkbox
+                  >
+                  <el-checkbox :label="7">
+                    <span class="checkbox-area">
+                      <img
+                        class="iconimg"
+                        src="/assets/image/mrfz.ico"
+                      />官网网站</span
+                    ></el-checkbox
+                  >
+                </el-checkbox-group>
+              </el-form-item>
+              <el-form-item label="蹲饼频率(秒)">
+                <el-input-number
+                  controls-position="right"
+                  size="small"
+                  v-model="setting.time"
+                  :min="3"
+                  :max="3600"
+                ></el-input-number>
+              </el-form-item>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="关闭后仅可以查看列表，无法在电脑右下角和通知栏收到推送！"
+                placement="left"
               >
-              <el-checkbox :label="2">
-                <span class="checkbox-area">
-                  <img
-                    class="iconimg"
-                    src="/assets/image/txz.jpg"
-                  />通讯组</span
-                ></el-checkbox
+                <el-form-item label="推送">
+                  <el-switch v-model="setting.isPush"></el-switch>
+                </el-form-item>
+              </el-tooltip>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="时间段内蹲饼的攻速降低75%，用来节省流量和性能"
+                placement="left"
               >
-              <el-checkbox :label="3">
-                <span class="checkbox-area">
-                  <img
-                    class="iconimg"
-                    src="/assets/image/cho3.jpg"
-                  />朝陇山</span
-                ></el-checkbox
-              >
-              <el-checkbox :label="4">
-                <span class="checkbox-area">
-                  <img
-                    class="iconimg"
-                    src="/assets/image/ys3.jpg"
-                  />一拾山</span
-                ></el-checkbox
-              >
-              <el-checkbox :label="5">
-                <span class="checkbox-area">
-                  <img
-                    class="iconimg white"
-                    src="/assets/image/sr.ico"
-                  />塞壬唱片</span
-                ></el-checkbox
-              >
-              <el-checkbox :label="6">
-                <span class="checkbox-area">
-                  <img
-                    class="iconimg"
-                    src="/assets/image/tl.jpg"
-                  />泰拉记事社</span
-                ></el-checkbox
-              >
-              <el-checkbox :label="7">
-                <span class="checkbox-area">
-                  <img
-                    class="iconimg"
-                    src="/assets/image/mrfz.ico"
-                  />官网网站</span
-                ></el-checkbox
-              >
-            </el-checkbox-group>
-          </el-form-item>
-          <el-form-item label="展示图片">
-            <el-switch v-model="setting.imgshow"></el-switch>
-          </el-form-item>
-          <el-form-item
-            label="推送信息 ?"
-            title="关闭后仅可以查看列表，无法在电脑右下角和通知栏收到推送！"
-          >
-            <el-switch v-model="setting.isPush"></el-switch>
-          </el-form-item>
-          <el-form-item label="主题切换">
-            <el-radio-group v-model="setting.darkshow">
-              <el-radio :label="0">日常模式</el-radio>
-              <el-radio :label="1">夜间模式</el-radio>
-              <el-radio :label="-1" title="18点到06点为夜间模式">自动模式</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item
-            label="无时间位置 ?"
-            title="有些数据比如通讯组是只有日期没有时间的，在数据列表内无法排序，所以在此统一这些卡片在当天信息流内是置顶还是置底。
-            保存的时候可能会因为数据排序改变而发送错误的推送，请忽略！"
-          >
-            <el-radio-group v-model="setting.isTop">
-              <el-radio :label="true">当天内容顶部</el-radio>
-              <el-radio :label="false">当天内容底部</el-radio>
-            </el-radio-group>
-          </el-form-item>
+                <el-form-item label="低频模式">
+                  <el-row>
+                    <el-col :span="3">
+                      <el-switch v-model="setting.lowfrequency"></el-switch
+                    ></el-col>
+                    <el-col
+                      v-show="setting.lowfrequency"
+                      :span="20"
+                      :offset="1"
+                    >
+                      <el-slider
+                        v-model="setting.lowfrequencyTime"
+                        show-stops
+                        :max="24"
+                        :marks="marks"
+                        :format-tooltip="lowfrequencyTimeTooltip"
+                        range
+                      >
+                      </el-slider>
+                    </el-col>
+                  </el-row>
+                </el-form-item>
+              </el-tooltip>
+
+              <el-tooltip class="item" effect="dark" placement="left">
+                <div slot="content">
+                  有些数据比如通讯组是只有日期没有时间的，在数据列表内无法排序，所以在此统一这些卡片在当天信息流内是置顶还是置底。<br />
+                  保存的时候可能会因为数据排序改变而发送错误的推送，请忽略！
+                </div>
+                <el-form-item label="无时间排序">
+                  <el-radio-group v-model="setting.isTop">
+                    <el-radio :label="true">当天内容顶部</el-radio>
+                    <el-radio :label="false">当天内容底部</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+              </el-tooltip>
+            </el-tab-pane>
+            <el-tab-pane label="界面设置" name="1">
+              <el-form-item label="字体大小">
+                <el-radio-group v-model="setting.fontsize">
+                  <el-radio :label="-1">小</el-radio>
+                  <el-radio :label="0">正常</el-radio>
+                  <el-radio :label="1">大</el-radio>
+                  <el-radio :label="2">特别大</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="展示图片">
+                <el-switch v-model="setting.imgshow"></el-switch>
+              </el-form-item>
+              <el-form-item label="主题切换">
+                <el-radio-group v-model="setting.darkshow">
+                  <el-radio :label="0">日常模式</el-radio>
+                  <el-radio :label="1">夜间模式</el-radio>
+                  <el-radio :label="-1" title="18点到06点为夜间模式"
+                    >自动模式</el-radio
+                  >
+                </el-radio-group>
+              </el-form-item>
+            </el-tab-pane>
+            <el-tab-pane label="反馈通道" name="2">
+              <div v-html="saveInfo.feedbackInfo"></div>
+            </el-tab-pane>
+          </el-tabs>
           <div class="btn-area">
             <el-button type="primary" @click="saveSetting">保存</el-button>
           </div>
@@ -147,8 +195,6 @@
             >检查更新</el-button
           >
         </div> -->
-        <el-divider></el-divider>
-        <div v-html="saveInfo.feedbackInfo"></div>
       </el-card>
     </div>
   </div>
@@ -156,6 +202,8 @@
 
 <script>
 import countTo from "vue-count-to";
+
+import {common,timespanToDay} from "../assets/JS/common";
 export default {
   name: "app",
   components: { countTo },
@@ -166,32 +214,27 @@ export default {
     return {
       outsideClass: "light",
       cardlist: [],
-      saveInfo: { version: "?.?.??" },
+      saveInfo: common.saveInfo,
       oldDunIndex: 0,
-      dunInfo: {
-        dunIndex: 0,
-        dunTime: new Date().getTime(),
-        dunFristTime: new Date().getTime(),
+      dunInfo: common.dunInfo,
+      setting: common.setting,
+      marks: {
+        7: "20点",
+        12: "当天凌晨",
+        20: "8点",
       },
-      setting: {
-        time: 15,
-        source: [0, 1, 2, 3, 4, 5, 6, 7],
-        fontsize: 0,
-        imgshow: true,
-        isTop: true,
-        isPush: true,
-        darkshow: 0,
-      },
+      activeTab: "0",
     };
   },
   computed: {
     nextdunTime() {
-      return this.timespanToDay(
+      return timespanToDay(
         (this.dunInfo.dunTime / 1000 + this.setting.time) * 1000
       );
     },
   },
   methods: {
+    timespanToDay,
     init() {
       this.getSaveInfo();
       this.getDunInfo();
@@ -232,7 +275,7 @@ export default {
 
     saveSetting() {
       this.saveLocalStorage("setting", this.setting).then(() => {
-        console.log(this.setting);
+        // console.log(this.setting);
         this.lightOrDark();
         chrome.runtime.sendMessage({ info: "setting" });
         this.$message({
@@ -264,23 +307,6 @@ export default {
       });
     },
 
-    timespanToDay(date) {
-      date = new Date(date);
-      let Y = date.getFullYear();
-      let M = date.getMonth() + 1;
-      let D = date.getDate();
-      let h = date.getHours();
-      let m = date.getMinutes();
-      let s = date.getSeconds();
-      return `${Y}-${this.addZero(M)}-${this.addZero(D)} ${this.addZero(
-        h
-      )}:${this.addZero(m)}:${this.addZero(s)}`;
-    },
-
-    addZero(m) {
-      return m < 10 ? "0" + m : m;
-    },
-
     // 判断早晚更新界面
     lightOrDark() {
       let darkShow = this.setting.darkshow;
@@ -289,6 +315,17 @@ export default {
         (darkShow == -1 && (hour >= 18 || hour < 6)) || darkShow == 1
           ? "dark"
           : "light";
+    },
+
+    // 低频时间选择
+    lowfrequencyTimeTooltip(val) {
+      if (val == 12) {
+        return "当天凌晨";
+      } else if (val < 12) {
+        return `上一天${val + 12}点整`;
+      } else if (val > 12) {
+        return `当天${val - 12}点整`;
+      }
     },
   },
 };
@@ -312,7 +349,8 @@ export default {
       color: @@content!important;
     }
 
-    max-width: 600px;
+    width: 600px;
+    min-width: 600px;
     margin: auto;
     .is-always-shadow {
       box-shadow: 0 2px 12px 0 @@shadow;
@@ -372,12 +410,16 @@ export default {
       /deep/.el-checkbox {
         color: @@setSmall;
       }
+      .lowfrequency-time-picker {
+        width: 100%;
+      }
       .el-radio__input.is-checked + .el-radio__label {
         color: #409eff;
       }
       .btn-area {
         width: 100%;
         text-align: right;
+        margin-top: 10px;
       }
 
       .checkbox-area {

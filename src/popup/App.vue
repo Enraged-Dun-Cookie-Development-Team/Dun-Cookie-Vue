@@ -58,6 +58,14 @@
             ></el-button>
           </el-tooltip>
 
+          <el-tooltip v-if="isNew" content="点个star" placement="top">
+            <el-button
+              type="primary"
+              @click="openGithub"
+              icon="el-icon-star-off"
+            ></el-button>
+          </el-tooltip>
+
           <el-tooltip content="设置" placement="top">
             <el-button
               type="primary"
@@ -66,6 +74,9 @@
             ></el-button>
           </el-tooltip>
         </el-row>
+        <div style="text-align: right; margin-right: 10px">
+          Power By 蓝芷怡 & lwt
+        </div>
       </el-drawer>
       <el-button
         v-show="!drawer"
@@ -190,6 +201,7 @@
 
 <script>
 import countTo from "vue-count-to";
+import { common, timespanToDay, Get } from "../assets/JS/common";
 export default {
   name: "app",
   components: { countTo },
@@ -202,21 +214,11 @@ export default {
       isNew: false,
       outsideClass: "light",
       cardlist: [],
-      saveInfo: { setIntervalindex: 0, version: "?.?.??" },
+      saveInfo: common.saveInfo,
       onlineSpeak: "",
       oldDunIndex: 0,
-      dunInfo: {
-        dunIndex: 0,
-      },
-      setting: {
-        time: 15,
-        source: [0, 1, 2, 3, 4, 5, 6],
-        fontsize: 0,
-        imgshow: true,
-        isTop: true,
-        isPush: true,
-        darkshow: 0,
-      },
+      dunInfo: common.dunInfo,
+      setting: common.setting,
       drawer: false, //打开菜单
       isReload: false, //是否正在刷新
       showImage: true,
@@ -319,6 +321,8 @@ export default {
   },
   computed: {},
   methods: {
+    timespanToDay,
+    Get,
     init() {
       this.getCardlist();
       this.getSaveInfo();
@@ -391,26 +395,26 @@ export default {
     },
 
     // 获取数据
-    Get(url) {
-      try {
-        return new Promise((resolve, reject) => {
-          let xhr = new XMLHttpRequest();
-          xhr.open("GET", url, true);
-          xhr.onreadystatechange = () => {
-            if (
-              xhr.readyState == 4 &&
-              xhr.status == 200 &&
-              xhr.responseText != ""
-            ) {
-              resolve(xhr.responseText);
-            }
-          };
-          xhr.send();
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    },
+    // Get(url) {
+    //   try {
+    //     return new Promise((resolve, reject) => {
+    //       let xhr = new XMLHttpRequest();
+    //       xhr.open("GET", url, true);
+    //       xhr.onreadystatechange = () => {
+    //         if (
+    //           xhr.readyState == 4 &&
+    //           xhr.status == 200 &&
+    //           xhr.responseText != ""
+    //         ) {
+    //           resolve(xhr.responseText);
+    //         }
+    //       };
+    //       xhr.send();
+    //     });
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
 
     // 死数据
     getSaveInfo() {
@@ -446,6 +450,9 @@ export default {
     // 获取数据
     getCardlist() {
       this.getLocalStorage("cardlistdm").then((data) => {
+        if (!data) {
+          return;
+        }
         // console.log(data);
         this.cardlist = Object.values(data)
           .reduce((acc, cur) => [...acc, ...cur], [])
@@ -484,6 +491,12 @@ export default {
       });
     },
 
+    openGithub() {
+      chrome.tabs.create({
+        url: "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue",
+      });
+    },
+
     copyData(item) {
       this.$copyText(
         `${item.dynamicInfo.replace(
@@ -515,22 +528,6 @@ ${item.url}
       );
     },
 
-    // 以下为数据处理方法
-    timespanToDay(date, type = 1) {
-      date = new Date(date * 1000);
-      let Y = date.getFullYear();
-      let M = date.getMonth() + 1;
-      let D = date.getDate();
-      let h = date.getHours();
-      let m = date.getMinutes();
-      let s = date.getSeconds();
-      if (type == 2) {
-        return `${Y}-${this.addZero(M)}-${this.addZero(D)}`;
-      }
-      return `${Y}-${this.addZero(M)}-${this.addZero(D)} ${this.addZero(
-        h
-      )}:${this.addZero(m)}:${this.addZero(s)}`;
-    },
     addZero(m) {
       return m < 10 ? "0" + m : m;
     },
