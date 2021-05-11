@@ -341,7 +341,9 @@ let kazeFun = {
     JudgmentNew(oldList, newList, title) {
         //判断方法 取每条的第一个判定字段  如果新的字段不等于旧的且大于旧的 判定为新条目
         if (oldList
+            && newList
             && oldList.length > 0
+            && newList.length > 0
             && oldList[0].judgment != newList[0].judgment
         ) {
             let newInfo = newList[0];
@@ -382,7 +384,6 @@ let kazeFun = {
 
     //蹲饼间隔时间 自带第一次请求 自带清除当前循环 秒
     intervalGetData(time) {
-        debugger;
         // 如果没有传time 获取setting时间
         if (!time) {
             time = kazeLocalData.setting.time;
@@ -448,7 +449,7 @@ let kazeFun = {
         let newislowfrequency = (lowfrequency && (hour >= starHour || hour < endHour));
 
         if (oldislowfrequency != newislowfrequency) {
-            console.log(`低频模式于${new Date()}切换为${newislowfrequency?'启动':'关闭'}模式`);
+            console.log(`低频模式于${new Date()}切换为${newislowfrequency ? '启动' : '关闭'}模式`);
             kazeLocalData.setting.islowfrequency = newislowfrequency;
             kazeFun.saveLocalStorage('setting', kazeLocalData.setting);
             this.intervalGetData();
