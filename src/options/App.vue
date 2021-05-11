@@ -385,6 +385,7 @@ export default {
       }
       .el-tabs--border-card {
         border: @@btnBorder 1px solid;
+        box-shadow: 0 2px 4px 0 @@shadow, 0 0 6px 0 @@shadow;
 
         /deep/.el-tabs__header {
           background-color: @@numberInput;
