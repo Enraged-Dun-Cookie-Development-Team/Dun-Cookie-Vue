@@ -1,7 +1,0 @@
-{
-    "v": "2.0.54",
-    "title":"检测到新版本-2.0.54",
-    "description":"1.添加夜间模式切换 <br/> 2.修复点击推送不跳转链接的BUG <br/> 3.添加判断是否为最新版从而出现更新按钮",
-    "downCrx":"http://cdn.liuziyang.vip/dist.crx",
-    "downZip":"http://cdn.liuziyang.vip/dist.zip"
-}

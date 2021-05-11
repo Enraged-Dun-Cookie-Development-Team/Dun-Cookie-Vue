@@ -50,15 +50,15 @@
             ></el-button>
           </el-tooltip>
 
-          <el-tooltip v-if="isNew" content="检测更新" placement="top">
+          <!-- <el-tooltip v-if="isNew" content="检测更新" placement="top">
             <el-button
               type="primary"
               @click="getUpdateInfo"
               icon="el-icon-upload2"
             ></el-button>
-          </el-tooltip>
+          </el-tooltip> -->
 
-          <el-tooltip v-if="isNew" content="点个star" placement="top">
+          <el-tooltip content="点个star" placement="top">
             <el-button
               type="primary"
               @click="openGithub"
@@ -93,29 +93,46 @@
         >
         <!-- <span v-else>【已蹲饼{{ dunInfo.dunIndex }}次】</span> -->
         <span v-else>
-          <span 
-          >【已蹲饼
-          <countTo
-            :startVal="oldDunIndex"
-            :endVal="dunInfo.dunIndex"
-            :duration="3000"
-          ></countTo
-          >次】</span
-        >
-        <span v-if="setting.islowfrequency">
-          【低频蹲饼时段】
+          <span
+            >【已蹲饼
+            <countTo
+              :startVal="oldDunIndex"
+              :endVal="dunInfo.dunIndex"
+              :duration="3000"
+            ></countTo
+            >次】</span
+          >
+          <span v-if="setting.islowfrequency"> 【低频蹲饼时段】 </span>
         </span>
-        </span>
-        
       </div>
       <div id="content">
+        <el-card v-if="isNew" class="info-card isnew">
+          <div @click="getUpdateInfo">
+            <i class="el-icon-upload2"></i>检测到了新版本，点击这里进入更新页面
+          </div>
+        </el-card>
+
         <el-card
-          v-if="onlineSpeak && onlineSpeak != ''"
+          v-if="onlineSpeakList && onlineSpeakList.length > 0"
           shadow="always"
           class="info-card"
         >
-          <div v-html="onlineSpeak"></div>
+          <el-carousel
+            arrow="never"
+            height="100px"
+            direction="vertical"
+            :interval="10000"
+            :autoplay="true"
+          >
+            <el-carousel-item
+              v-for="(item, index) in onlineSpeakList"
+              :key="index"
+            >
+              <div v-html="item.html"></div>
+            </el-carousel-item>
+          </el-carousel>
         </el-card>
+
         <el-timeline>
           <el-timeline-item
             v-for="(item, index) in cardlist"
@@ -220,7 +237,7 @@ export default {
       isNew: false,
       cardlist: [],
       saveInfo: common.saveInfo,
-      onlineSpeak: "",
+      onlineSpeakList: [],
       oldDunIndex: 0,
       dunInfo: common.dunInfo,
       setting: common.setting,
@@ -381,9 +398,9 @@ export default {
               new Date(x.starTime) <= new Date() &&
               new Date(x.overTime) >= new Date()
           );
-          if (filterList.length > 0) {
-            this.onlineSpeak = filterList[0].html;
-          }
+
+          this.onlineSpeakList.push(...filterList);
+
           // 快捷连接
           let btnList = data.btnList.filter(
             (x) =>
@@ -393,8 +410,9 @@ export default {
           if (btnList.length > 0) {
             this.quickJump.tool.push(...btnList);
           }
+
           // 是否最新
-          this.isNew = data.version != this.saveInfo.version;
+          this.isNew = data.upgrade.v != this.saveInfo.version;
         }
       );
     },
@@ -476,7 +494,8 @@ export default {
 
     openGithub() {
       chrome.tabs.create({
-        url: "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue",
+        url:
+          "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue",
       });
     },
 
@@ -690,6 +709,14 @@ ${item.url}
       background-color: @@bgColor;
       border: @@timeline solid 1px;
       color: @@content;
+      &.isnew {
+        margin-bottom: 10px;
+        cursor: pointer;
+        text-align: center;
+      }
+      /deep/ .el-carousel__button {
+        background-color: #23ade5;
+      }
     }
     // 更改卡片阴影
     .is-always-shadow {
@@ -802,5 +829,23 @@ ${item.url}
 
 .light {
   .styleChange(light);
+}
+</style>
+
+<style  lang="less">
+.online-area {
+  display: flex;
+  align-items: center;
+  margin-right: 30px;
+  .online-title-img {
+    height: 100px;
+    margin-right: 10px;
+    &.radius {
+      border-radius: 5px;
+    }
+  }
+  .blue {
+    color: #23ade5;
+  }
 }
 </style>

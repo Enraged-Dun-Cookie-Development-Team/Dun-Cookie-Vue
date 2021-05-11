@@ -409,9 +409,9 @@ let kazeFun = {
 
     // 检查一次更新
     getUpdateInfo(isAlert) {
-        kazeSourceProcess.Get(`http://cdn.liuziyang.vip/Dun-Cookies-Vue-json.json`, false).then(responseText => {
+        kazeSourceProcess.Get(`http://cdn.liuziyang.vip/Dun-Cookies-Info.json`, false).then(responseText => {
             let data = JSON.parse(responseText)
-            if (kazeLocalData.saveInfo.version != data.v) {
+            if (kazeLocalData.saveInfo.version != data.upgrade.v) {
                 // 更新
                 var urlToOpen = chrome.extension.getURL("update.html");
                 chrome.tabs.create({

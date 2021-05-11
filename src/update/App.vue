@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { common,Get } from "../assets/JS/common";
+import { common, Get } from "../assets/JS/common";
 export default {
   name: "update",
   mounted() {
@@ -70,32 +70,11 @@ export default {
         url: url,
       });
     },
-    // 获取数据
-    // Get(url) {
-    //   try {
-    //     return new Promise((resolve, reject) => {
-    //       let xhr = new XMLHttpRequest();
-    //       xhr.open("GET", url, true);
-    //       xhr.onreadystatechange = () => {
-    //         if (
-    //           xhr.readyState == 4 &&
-    //           xhr.status == 200 &&
-    //           xhr.responseText != ""
-    //         ) {
-    //           resolve(xhr.responseText);
-    //         }
-    //       };
-    //       xhr.send();
-    //     });
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // },
     // 检查一次更新
     getUpdateInfo() {
-      this.Get(`http://cdn.liuziyang.vip/Dun-Cookies-Vue-json.json`).then(
+      this.Get(`http://cdn.liuziyang.vip/Dun-Cookies-Info.json`).then(
         (responseText) => {
-          this.updateInfo = JSON.parse(responseText);
+          this.updateInfo = JSON.parse(responseText).upgrade;
         }
       );
     },

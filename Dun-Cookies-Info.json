@@ -1,16 +1,53 @@
 {
     "list": [{
-        "html": "<div style='display: flex; align-items: center;'><img style='height:30px;margin-right:10px;border-radius: 5px;' src='http://cdn.liuziyang.vip/cake.png'> <div style='display: flex;flex-flow: column;'> <div>博士，庆典筹备计划将于<span style='color:#23ade5'>5月18日03:59</span>结束，今天没有获取调色奶油袋的博士请尽快领取。</div> <div>可在快捷连接中直达活动地址</div> </div> </div>",
-        "starTime": "2021-4-24 22:00:00",
-        "overTime": "2021-5-18 04:00:00"
-    }],
-    "btnList":[{
-        "starTime": "2021-4-24 22:00:00",
-        "overTime": "2021-5-18 04:00:00",
-        "url": "https://ak.hypergryph.com/activity/preparation?source=game",
-        "name": "庆典筹备计划",
-        "img": "http://cdn.liuziyang.vip/cake.png",
-        "radius": true
-    }],
-    "version": "2.0.54"
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='http://cdn.liuziyang.vip/cake.png'> <div> <div>博士，庆典筹备计划将于<span class='online-blue'>5月18日03:59</span>结束，今天没有获取调色奶油袋的博士请尽快领取。</div> <div>可在快捷连接中直达活动地址</div> </div> </div>",
+            "starTime": "2021-4-24 22:00:00",
+            "overTime": "2021-5-18 04:00:00"
+        },
+        {
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://img.nga.178.com/attachments/mon_202104/24/-klbw3Q8h1d-huriZ1hT3cS17c-dw.jpg'> <div> <div>博士，危机合约即将于<span class='online-blue'>5月15日03:59</span>开始</div> <div>可在快捷连接中直达视频地址</div> </div> </div>",
+            "starTime": "2021-4-11 12:00:00",
+            "overTime": "2021-5-29 04:00:00"
+        }
+    ],
+    "btnList": [{
+            "starTime": "2021-4-24 22:00:00",
+            "overTime": "2021-5-18 04:00:00",
+            "url": "https://ak.hypergryph.com/activity/preparation?source=game",
+            "name": "庆典筹备计划",
+            "img": "http://cdn.liuziyang.vip/cake.png",
+            "radius": true
+        },
+        {
+            "starTime": "2020-08-09 00:00:00",
+            "overTime": "2021-12-31 23:59:59",
+            "url": "https://www.bilibili.com/video/BV1cD4y1S7Yx",
+            "name": "damedane",
+            "img": "https://img.nga.178.com/attachments/mon_202008/15/-klbw3Q5-4qw4X12ZakT1kS40-40.gif",
+            "radius": true
+        },
+        {
+            "starTime": "2020-08-09 00:00:00",
+            "overTime": "2021-12-31 23:59:59",
+            "url": "https://www.bilibili.com/video/BV1cf4y1W771?p=2",
+            "name": "圣经",
+            "img": "https://img.nga.178.com/attachments/mon_202105/07/-klbw3Qq0ox-jw4xZbT1kSdw-dw.jpg",
+            "radius": true
+        },
+        {
+            "starTime": "2021-4-11 12:00:00",
+            "overTime": "2021-5-29 04:00:00",
+            "url": "https://www.bilibili.com/video/BV1Ry4y1p7f6",
+            "name": "【明日方舟·光谱行动】合约技能专精推荐榜 敌人分析机制预测",
+            "img": "https://i1.hdslb.com/bfs/archive/397a5d8517f82e00ffe74173e03a3826acd68eb9.jpg@160w_100h_1c.webp",
+            "radius": true
+        }
+    ],
+    "upgrade": {
+        "v": "2.0.70",
+        "title": "检测到新版本-2.0.70",
+        "description": "1.添加夜间模式切换 <br/> 2.修复点击推送不跳转链接的BUG <br/> 3.添加判断是否为最新版从而出现更新按钮",
+        "downCrx": "http://cdn.liuziyang.vip/Dun-Cookie.crx",
+        "downZip": "http://cdn.liuziyang.vip/Dun-Cookie.zip"
+    }
 }
