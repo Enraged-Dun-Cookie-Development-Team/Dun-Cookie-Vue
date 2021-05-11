@@ -337,6 +337,8 @@ export default {
 .styleChange(@theme) {
   @bgColor: "bgColor-@{theme}"; // 背景颜色
   @content: "content-@{theme}"; // 文本颜色
+  @timeline: "timeline-@{theme}";    // 时间线颜色和时间线border颜色
+  @subTitle: "subTitle-@{theme}";   // 小标题颜色
   @btnBorder: "btnBorder-@{theme}"; // 按钮边框颜色和一些小线条
   @setLarge: "setLarge-@{theme}"; // 设置标题颜色
   @setSmall: "setSmall-@{theme}"; // 设置文本颜色
@@ -381,6 +383,26 @@ export default {
           margin: 10px 0;
         }
       }
+      .el-tabs--border-card {
+        border: @@btnBorder 1px solid;
+
+        /deep/.el-tabs__header {
+          background-color: @@numberInput;
+          border-bottom: 1px solid @@btnBorder;
+        }
+        /deep/.el-tabs__item {
+          color: @@subTitle;
+        }
+        /deep/.el-tabs__item.is-active {
+          background-color: @@bgColor;
+          border-right-color: @@btnBorder;
+          border-left-color: @@btnBorder;
+        }
+        /deep/.el-tabs__content {
+          background-color: @@bgColor;
+        }
+      }
+      
       /deep/.el-input-number.is-controls-right .el-input-number__increase {
         border-bottom: 1px solid @@btnBorder;
       }
