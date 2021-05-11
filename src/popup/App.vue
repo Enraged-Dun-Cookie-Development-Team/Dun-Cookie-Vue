@@ -844,7 +844,7 @@ ${item.url}
       border-radius: 5px;
     }
   }
-  .blue {
+  .online-blue {
     color: #23ade5;
   }
 }
