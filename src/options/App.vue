@@ -476,6 +476,7 @@ export default {
 .background {
   transition: background 0.5s;
   height: calc(100vh - 16px);
+  overflow: auto;
 }
 
 .dark {
