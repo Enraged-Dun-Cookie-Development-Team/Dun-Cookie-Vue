@@ -382,9 +382,14 @@ let kazeFun = {
 
     //蹲饼间隔时间 自带第一次请求 自带清除当前循环 秒
     intervalGetData(time) {
+        debugger;
         // 如果没有传time 获取setting时间
         if (!time) {
             time = kazeLocalData.setting.time;
+            // 低频模式
+            if (kazeLocalData.setting.islowfrequency) {
+                time = (time * 1.75);
+            }
         }
         // 获取循环标识 删除该标识
         if (kazeLocalData.saveInfo.setIntervalindex) {
@@ -392,23 +397,13 @@ let kazeFun = {
         }
         // 先请求一次数据
         kazeSourceProcess.GetData();
+        this.checkDarkModelAndLowfrequencyModel();
         kazeFun.saveLocalStorage('dunInfo', kazeLocalData.dunInfo);
         // 添加循环
         kazeLocalData.saveInfo.setIntervalindex = setInterval(() => {
-            kazeFun.saveLocalStorage('dunInfo', kazeLocalData.dunInfo);
             kazeSourceProcess.GetData();
-            
-            // let hour = new Date().getHours();
-            // // 判断当前时间是否是启用页面模式的时间
-            // let darkShow = kazeLocalData.setting.darkshow;
-            // kazeLocalData.setting.outsideClass =
-            //     (darkShow == -1 && (hour >= 18 || hour < 6)) || darkShow == 1
-            //         ? "dark"
-            //         : "light";
-            
-            // 判断当前时间是否是启用低频模式的时间
-            
-
+            this.checkDarkModelAndLowfrequencyModel();
+            kazeFun.saveLocalStorage('dunInfo', kazeLocalData.dunInfo);
         }, parseInt(time) * 1000);
     },
 
@@ -428,6 +423,36 @@ let kazeFun = {
                 }
             }
         });
+    },
+
+    checkDarkModelAndLowfrequencyModel() {
+        let hour = new Date().getHours();
+        // 判断当前时间是否是启用页面模式的时间
+        let darkShow = kazeLocalData.setting.darkshow;
+        let oldOutsideClass = kazeLocalData.setting.outsideClass;
+        let newOutsideClass = (darkShow == -1 && (hour >= 18 || hour < 6)) || darkShow == 1
+            ? "dark"
+            : "light";
+
+        if (oldOutsideClass != newOutsideClass) {
+            kazeLocalData.setting.outsideClass = newOutsideClass;
+            kazeFun.saveLocalStorage('setting', kazeLocalData.setting);
+        }
+
+        // 判断当前时间是否是启用低频模式的时间
+        let lowfrequency = kazeLocalData.setting.lowfrequency;
+        let lowfrequencyTime = kazeLocalData.setting.lowfrequencyTime;
+        let oldislowfrequency = kazeLocalData.setting.islowfrequency;
+        let starHour = lowfrequencyTime[0] < 12 ? lowfrequencyTime[0] + 12 : lowfrequencyTime[0] - 12;
+        let endHour = lowfrequencyTime[1] < 12 ? lowfrequencyTime[1] + 12 : lowfrequencyTime[1] - 12;
+        let newislowfrequency = (lowfrequency && (hour >= starHour || hour < endHour));
+
+        if (oldislowfrequency != newislowfrequency) {
+            console.log(`低频模式于${new Date()}切换为${newislowfrequency?'启动':'关闭'}模式`);
+            kazeLocalData.setting.islowfrequency = newislowfrequency;
+            kazeFun.saveLocalStorage('setting', kazeLocalData.setting);
+            this.intervalGetData();
+        }
     },
 
     // 初始化

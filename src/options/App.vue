@@ -1,5 +1,5 @@
 <template>
-  <div class="background" :class="outsideClass">
+  <div class="background" :class="setting.outsideClass">
     <div id="app">
       <el-card class="box-card">
         <el-row type="flex" align="middle" justify="space-around">
@@ -9,7 +9,7 @@
         <el-divider></el-divider>
         <div class="info">
           <div class="info-time">
-            开始蹲饼时间：{{ timespanToDay(dunInfo.dunFristTime) }}
+            开始蹲饼时间：{{ timespanToDay(dunInfo.dunFristTime / 1000) }}
           </div>
           <div class="info-title">
             已为你蹲饼<span style="color: #23ade5"
@@ -21,7 +21,7 @@
             >次
           </div>
           <div class="info-time">
-            本次蹲饼时间：{{ timespanToDay(dunInfo.dunTime) }}
+            本次蹲饼时间：{{ timespanToDay(dunInfo.dunTime / 1000) }}
           </div>
           <div class="info-time">下次蹲饼时间：{{ nextdunTime }}</div>
         </div>
@@ -105,6 +105,7 @@
                   :min="3"
                   :max="3600"
                 ></el-input-number>
+                <span style="margin-left:10px" v-if="setting.lowfrequency">低频模式下为{{ setting.time * 1.75 }}秒</span>
               </el-form-item>
               <el-tooltip
                 class="item"
@@ -146,7 +147,7 @@
                 </el-form-item>
               </el-tooltip>
 
-              <el-tooltip class="item" effect="dark" placement="left">
+              <el-tooltip class="item" effect="dark" placement="bottom">
                 <div slot="content">
                   有些数据比如通讯组是只有日期没有时间的，在数据列表内无法排序，所以在此统一这些卡片在当天信息流内是置顶还是置底。<br />
                   保存的时候可能会因为数据排序改变而发送错误的推送，请忽略！
@@ -203,23 +204,37 @@
 <script>
 import countTo from "vue-count-to";
 
-import {common,timespanToDay} from "../assets/JS/common";
+import { common, timespanToDay } from "../assets/JS/common";
 export default {
   name: "app",
   components: { countTo },
   mounted() {
     this.init();
   },
+  watch: {
+    setting: {
+      handler(newobj) {
+        let hour = new Date().getHours();
+        this.setting.outsideClass =
+          (newobj.darkshow == -1 && (hour >= 18 || hour < 6)) ||
+          newobj.darkshow == 1
+            ? "dark"
+            : "light";
+        // this.saveSetting();
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
   data() {
     return {
-      outsideClass: "light",
       cardlist: [],
       saveInfo: common.saveInfo,
       oldDunIndex: 0,
       dunInfo: common.dunInfo,
       setting: common.setting,
       marks: {
-        7: "20点",
+        8: "20点",
         12: "当天凌晨",
         20: "8点",
       },
@@ -228,9 +243,7 @@ export default {
   },
   computed: {
     nextdunTime() {
-      return timespanToDay(
-        (this.dunInfo.dunTime / 1000 + this.setting.time) * 1000
-      );
+      return timespanToDay(this.dunInfo.dunTime / 1000 + this.setting.time);
     },
   },
   methods: {
@@ -265,7 +278,6 @@ export default {
       this.getLocalStorage("setting").then((data) => {
         if (data != null) {
           this.setting = data;
-          this.lightOrDark();
           setInterval(() => {
             this.getDunInfo();
           }, data.time * 500);
@@ -275,8 +287,6 @@ export default {
 
     saveSetting() {
       this.saveLocalStorage("setting", this.setting).then(() => {
-        // console.log(this.setting);
-        this.lightOrDark();
         chrome.runtime.sendMessage({ info: "setting" });
         this.$message({
           center: true,
@@ -305,16 +315,6 @@ export default {
           resolve(null);
         });
       });
-    },
-
-    // 判断早晚更新界面
-    lightOrDark() {
-      let darkShow = this.setting.darkshow;
-      let hour = new Date().getHours();
-      this.outsideClass =
-        (darkShow == -1 && (hour >= 18 || hour < 6)) || darkShow == 1
-          ? "dark"
-          : "light";
     },
 
     // 低频时间选择
@@ -418,7 +418,7 @@ export default {
       }
       .btn-area {
         width: 100%;
-        text-align: right;
+        text-align: center;
         margin-top: 10px;
       }
 

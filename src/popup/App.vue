@@ -1,5 +1,5 @@
 <template>
-  <div :class="outsideClass">
+  <div :class="setting.outsideClass">
     <div id="app">
       <el-drawer
         :visible.sync="drawer"
@@ -92,7 +92,8 @@
           >【无内容，请检查网络】</span
         >
         <!-- <span v-else>【已蹲饼{{ dunInfo.dunIndex }}次】</span> -->
-        <span v-else
+        <span v-else>
+          <span 
           >【已蹲饼
           <countTo
             :startVal="oldDunIndex"
@@ -101,6 +102,11 @@
           ></countTo
           >次】</span
         >
+        <span v-if="setting.islowfrequency">
+          【低频蹲饼时段】
+        </span>
+        </span>
+        
       </div>
       <div id="content">
         <el-card
@@ -212,7 +218,6 @@ export default {
   data() {
     return {
       isNew: false,
-      outsideClass: "light",
       cardlist: [],
       saveInfo: common.saveInfo,
       onlineSpeak: "",
@@ -394,28 +399,6 @@ export default {
       );
     },
 
-    // 获取数据
-    // Get(url) {
-    //   try {
-    //     return new Promise((resolve, reject) => {
-    //       let xhr = new XMLHttpRequest();
-    //       xhr.open("GET", url, true);
-    //       xhr.onreadystatechange = () => {
-    //         if (
-    //           xhr.readyState == 4 &&
-    //           xhr.status == 200 &&
-    //           xhr.responseText != ""
-    //         ) {
-    //           resolve(xhr.responseText);
-    //         }
-    //       };
-    //       xhr.send();
-    //     });
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // },
-
     // 死数据
     getSaveInfo() {
       this.getLocalStorage("saveInfo").then((data) => {
@@ -438,7 +421,7 @@ export default {
       this.getLocalStorage("setting").then((data) => {
         if (data != null) {
           this.setting = data;
-          this.lightOrDark();
+          console.log(this.setting);
           setInterval(() => {
             this.getCardlist();
             this.getDunInfo();
@@ -530,16 +513,6 @@ ${item.url}
 
     addZero(m) {
       return m < 10 ? "0" + m : m;
-    },
-
-    // 判断早晚更新界面
-    lightOrDark() {
-      let darkShow = this.setting.darkshow;
-      let hour = new Date().getHours();
-      this.outsideClass =
-        (darkShow == -1 && (hour >= 18 || hour < 6)) || darkShow == 1
-          ? "dark"
-          : "light";
     },
   },
 };

@@ -6,10 +6,11 @@ let common = {
         imgshow: true,
         isTop: true,
         isPush: true,
-        darkshow: 0,
-        lowfrequency: false,
-        lowfrequencyTime: [8, 20],
-        islowfrequency: false,
+        darkshow: 0,// 黑暗模式按钮
+        outsideClass: "light",// 默认白天
+        lowfrequency: false,// 低频模式按钮
+        lowfrequencyTime: [8, 20],// 低频模式时段 需要转换
+        islowfrequency: false, // 是否正处于低频模式状态下
     },
     dunInfo: {
         dunIndex: 0,
@@ -38,6 +39,7 @@ let common = {
 }
 
 function timespanToDay(date, type) {
+    date = date * 1000;
     date = new Date(date);
     let Y = date.getFullYear();
     let M = date.getMonth() + 1;
