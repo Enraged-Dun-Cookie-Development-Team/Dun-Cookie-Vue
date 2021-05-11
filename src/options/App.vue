@@ -105,7 +105,9 @@
                   :min="3"
                   :max="3600"
                 ></el-input-number>
-                <span style="margin-left:10px" v-if="setting.lowfrequency">低频模式下为{{ setting.time * 1.75 }}秒</span>
+                <span style="margin-left: 10px" v-if="setting.lowfrequency"
+                  >低频模式下为{{ setting.time * 1.75 }}秒</span
+                >
               </el-form-item>
               <el-tooltip
                 class="item"
@@ -172,15 +174,23 @@
               <el-form-item label="展示图片">
                 <el-switch v-model="setting.imgshow"></el-switch>
               </el-form-item>
-              <el-form-item label="主题切换">
-                <el-radio-group v-model="setting.darkshow">
-                  <el-radio :label="0">日常模式</el-radio>
-                  <el-radio :label="1">夜间模式</el-radio>
-                  <el-radio :label="-1" title="18点到06点为夜间模式"
-                    >自动模式</el-radio
-                  >
-                </el-radio-group>
-              </el-form-item>
+
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="模式切换仅为预览，需点击保存存储设置"
+                placement="left"
+              >
+                <el-form-item label="主题切换">
+                  <el-radio-group v-model="setting.darkshow">
+                    <el-radio :label="0">日常模式</el-radio>
+                    <el-radio :label="1">夜间模式</el-radio>
+                    <el-radio :label="-1" title="18点到06点为夜间模式"
+                      >自动模式</el-radio
+                    >
+                  </el-radio-group>
+                </el-form-item>
+              </el-tooltip>
             </el-tab-pane>
             <el-tab-pane label="反馈通道" name="2">
               <div v-html="saveInfo.feedbackInfo"></div>
@@ -337,8 +347,8 @@ export default {
 .styleChange(@theme) {
   @bgColor: "bgColor-@{theme}"; // 背景颜色
   @content: "content-@{theme}"; // 文本颜色
-  @timeline: "timeline-@{theme}";    // 时间线颜色和时间线border颜色
-  @subTitle: "subTitle-@{theme}";   // 小标题颜色
+  @timeline: "timeline-@{theme}"; // 时间线颜色和时间线border颜色
+  @subTitle: "subTitle-@{theme}"; // 小标题颜色
   @btnBorder: "btnBorder-@{theme}"; // 按钮边框颜色和一些小线条
   @setLarge: "setLarge-@{theme}"; // 设置标题颜色
   @setSmall: "setSmall-@{theme}"; // 设置文本颜色
@@ -403,7 +413,7 @@ export default {
           background-color: @@bgColor;
         }
       }
-      
+
       /deep/.el-input-number.is-controls-right .el-input-number__increase {
         border-bottom: 1px solid @@btnBorder;
       }
@@ -465,6 +475,7 @@ export default {
 
 .background {
   transition: background 0.5s;
+  height: calc(100vh - 16px);
 }
 
 .dark {
