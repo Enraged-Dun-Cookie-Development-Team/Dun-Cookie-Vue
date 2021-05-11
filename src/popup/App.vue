@@ -121,7 +121,7 @@
             arrow="never"
             height="100px"
             direction="vertical"
-            :interval="10000"
+            :interval="5000"
             :autoplay="true"
           >
             <el-carousel-item
