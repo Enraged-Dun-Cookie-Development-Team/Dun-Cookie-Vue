@@ -656,6 +656,10 @@ ${item.url}
   @hover: "hover-@{theme}"; // 按钮hover颜色
 
   #app {
+    /deep/ a {
+      color: @@content!important;
+    }
+
     // 抵消body的margin：8px
     margin: -8px;
     background-color: @@bgColor;
@@ -710,6 +714,17 @@ ${item.url}
       }
     }
   }
+
+  /deep/.el-tabs__nav-wrap::after {
+    background-color: @@timeline;
+  }
+  /deep/.el-tabs__item {
+    color: @@setLarge;
+  }
+  /deep/.el-tabs__item:hover {
+    color: #409EFF;
+  }
+  
 
   .card {
     width: 600px;
