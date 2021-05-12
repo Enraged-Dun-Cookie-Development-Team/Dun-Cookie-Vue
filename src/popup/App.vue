@@ -492,7 +492,7 @@ export default {
 
     // 获取在线信息
     getOnlineSpeak() {
-      this.Get("http://cdn.liuziyang.vip/Dun-Cookies-Info.json").then(
+      this.Get("http://cdn.liuziyang.vip/Dun-Cookies-Info.json?t="+new Date().getTime()).then(
         (result) => {
           // 头部公告
           let data = JSON.parse(result);
