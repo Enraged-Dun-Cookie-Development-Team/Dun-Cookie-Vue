@@ -3,7 +3,7 @@
 ## 用于实时抓取兔兔发的动态
 一起监视自由的兔兔。明日方舟兔兔发布动态发布时间越来越奇怪了，我每天下午4点刷都刷不出来，怎么办呢？写一个蹲饼器盯着兔兔看！
 
-<img src="http://github-image.liuziyang.vip/tutu.gif" height = "200" alt="图片名称" align="center" />
+<img src="https://img.nga.178.com/attachments/mon_202105/11/-klbw3Q16x-h4z5ZbT1kSdw-ci.gif" height = "200" alt="图片名称" align="center" />
 
     兔兔你的饼还没发完，现在还不能休息哦
 
@@ -55,25 +55,30 @@
 
     图片收起与展开
 
-![avatar](http://github-image.liuziyang.vip/1.webp)
-![avatar](http://github-image.liuziyang.vip/2.webp)
+![avatar](https://img.nga.178.com/attachments/mon_202105/11/-klbw3Q16x-3md4K2gT3cSjg-gw.jpg)
+![avatar](https://img.nga.178.com/attachments/mon_202105/11/-klbw3Q16x-76geK2hT3cSji-gv.jpg)
 
     图片九宫格
 
-![avatar](http://github-image.liuziyang.vip/5.webp)
+![avatar](https://img.nga.178.com/attachments/mon_202105/11/-klbw3Q16x-brq6ZdT3cSjj-gw.jpg)
 
 
     内容快捷复制
 
-![avatar](http://github-image.liuziyang.vip/6.webp)
+![avatar](https://img.nga.178.com/attachments/mon_202105/11/-klbw3Q16x-k29uK1xT3cSxs-8k.jpg)
 
     菜单界面
 
-![avatar](http://github-image.liuziyang.vip/4.webp)
+![avatar](https://img.nga.178.com/attachments/mon_202105/11/-klbw3Q16x-2yupK1zT3cSji-gx.jpg)
 
     设置界面
 
-![avatar](http://github-image.liuziyang.vip/3.webp)
+![avatar](https://img.nga.178.com/attachments/mon_202105/11/-klbw3Q16x-fxrkK1sT1kSh0-n5.jpg)
+
+    夜间模式
+
+![avatar](https://img.nga.178.com/attachments/mon_202105/11/-klbw3Q16x-6urzK2eT3cSje-gq.jpg)
+![avatar](https://img.nga.178.com/attachments/mon_202105/11/-klbw3Q16x-gdr9K2aT1kShc-nh.jpg) 
 
 </details>
 
@@ -124,6 +129,7 @@
     3.终于把检测更新的逻辑调整完了
     4.公告区域添加滚动，可以显示更多的消息
     5.设置页面也更新了
+    6.修复点击推送不跳转链接的BUG
 
 我们准备降低软件更新的频率了，因为大部分我们能想到的功能都已经完成。现在主要是做bug维护
 

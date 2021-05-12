@@ -46,7 +46,7 @@
     "upgrade": {
         "v": "2.0.78",
         "title": "检测到新版本-2.0.78",
-        "description": "1.添加夜间模式切换 <br/> 2.修复点击推送不跳转链接的BUG <br/> 3.添加判断是否为最新版从而出现更新按钮",
+        "description": "1.添加夜间模式 <br/> 2.添加了低频模式，在时间段内降低蹲饼频率以减少流量性能消耗 <br/> 3.终于把检测更新的逻辑调整完了 <br/> 4.公告区域添加滚动，可以显示更多的消息 <br/> 5.设置页面也更新了 <br/> 6.修复点击推送不跳转链接的BUG",
         "downCrx": "http://cdn.liuziyang.vip/Dun-Cookie.crx",
         "downZip": "http://cdn.liuziyang.vip/Dun-Cookie.zip"
     }
