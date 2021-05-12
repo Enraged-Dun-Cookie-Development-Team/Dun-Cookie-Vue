@@ -133,7 +133,7 @@
           </el-carousel>
         </el-card>
 
-        <el-timeline>
+        <el-timeline v-if="!setting.isTag">
           <el-timeline-item
             v-for="(item, index) in cardlist"
             :key="index"
@@ -217,6 +217,102 @@
             </el-card>
           </el-timeline-item>
         </el-timeline>
+
+        <el-tabs v-model="setting.tagActiveName" :stretch="true">
+          <el-tab-pane
+            v-for="item in Object.keys(cardlistdm)"
+            :key="item"
+            :label="numberOrEnNameToName(item)"
+            :name="numberOrEnNameToName(item)"
+          >
+            <el-timeline>
+              <el-timeline-item
+                v-for="(item, index) in cardlistdm[item]"
+                :key="index"
+                :timestamp="
+                  item.source == 2 || item.source == 5 || item.source == 7
+                    ? timespanToDay(item.time, 2)
+                    : timespanToDay(item.time)
+                "
+                placement="top"
+                :icon="'headImg' + item.source"
+              >
+                <!-- 0 b服 1微博 2通讯组 3朝陇山 4一拾山 5塞壬唱片 -->
+                <el-card class="card" :class="'font-size-' + setting.fontsize">
+                  <div>
+                    <el-button
+                      class="to-copy-btn"
+                      size="small"
+                      @click="copyData(item)"
+                      title="复制该条内容及链接"
+                      ><i class="el-icon-document-copy"></i
+                    ></el-button>
+                    <el-button
+                      class="to-url-btn"
+                      size="small"
+                      title="前往饼之发源地"
+                      @click="openUrl(item.url)"
+                      ><i class="el-icon-right"></i
+                    ></el-button>
+                    <span class="is-top-info" v-if="item.isTop">
+                      <span class="color-blue"
+                        >【当前条目在微博的时间线内为置顶状态】</span
+                      >
+                    </span>
+                    <el-row
+                      type="flex"
+                      justify="space-between"
+                      align="middle"
+                      class="margintb"
+                    >
+                    </el-row>
+                    <div :ref="'index_' + index">
+                      <el-row class="margintb">
+                        <div v-html="item.dynamicInfo"></div>
+                      </el-row>
+
+                      <transition name="el-fade-in-linear">
+                        <el-row
+                          class="margintb"
+                          v-if="imgShow && setting.imgshow && item.image"
+                        >
+                          <div
+                            class="img-area"
+                            @click="changeShowAllImage(item.image)"
+                            :class="
+                              showAllImage.includes(item.image)
+                                ? 'show-all'
+                                : ''
+                            "
+                          >
+                            <div
+                              v-if="
+                                item.imageList != undefined &&
+                                item.imageList.length > 1
+                              "
+                            >
+                              <el-row :gutter="5">
+                                <el-col
+                                  v-for="img in item.imageList"
+                                  :key="img"
+                                  :span="8"
+                                  ><img :src="img" class="img" />
+                                </el-col>
+                              </el-row>
+                            </div>
+                            <div v-else>
+                              <img :src="item.image" class="img" />
+                            </div>
+                          </div>
+                        </el-row>
+                      </transition>
+                    </div>
+                  </div>
+                </el-card>
+              </el-timeline-item>
+            </el-timeline>
+          </el-tab-pane>
+        </el-tabs>
       </div>
     </div>
   </div>
@@ -224,7 +320,12 @@
 
 <script>
 import countTo from "vue-count-to";
-import { common, timespanToDay, Get } from "../assets/JS/common";
+import {
+  common,
+  timespanToDay,
+  Get,
+  numberOrEnNameToName,
+} from "../assets/JS/common";
 export default {
   name: "app",
   components: { countTo },
@@ -236,6 +337,7 @@ export default {
     return {
       isNew: false,
       cardlist: [],
+      cardlistdm: {},
       saveInfo: common.saveInfo,
       onlineSpeakList: [],
       oldDunIndex: 0,
@@ -343,6 +445,7 @@ export default {
   },
   computed: {},
   methods: {
+    numberOrEnNameToName,
     timespanToDay,
     Get,
     init() {
@@ -439,7 +542,7 @@ export default {
       this.getLocalStorage("setting").then((data) => {
         if (data != null) {
           this.setting = data;
-          console.log(this.setting);
+          // console.log(this.setting);
           setInterval(() => {
             this.getCardlist();
             this.getDunInfo();
@@ -454,7 +557,6 @@ export default {
         if (!data) {
           return;
         }
-        // console.log(data);
         this.cardlist = Object.values(data)
           .reduce((acc, cur) => [...acc, ...cur], [])
           .sort((x, y) => y.time - x.time)
@@ -462,6 +564,7 @@ export default {
             x.dynamicInfo = x.dynamicInfo.replace(/\n/g, "<br/>");
             return x;
           });
+        this.cardlistdm = data;
       });
     },
 

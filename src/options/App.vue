@@ -26,7 +26,7 @@
           <!-- <div class="info-time">下次蹲饼时间：{{ nextdunTime }}</div> -->
         </div>
         <el-divider></el-divider>
-        <el-form ref="form" :model="setting" label-width="100px">
+        <el-form  :rules="rules" ref="form" :model="setting" label-width="100px">
           <el-tabs v-model="activeTab" type="border-card">
             <el-tab-pane label="核心设置" name="0">
               <el-form-item label="饼来源">
@@ -174,7 +174,36 @@
               <el-form-item label="展示图片">
                 <el-switch v-model="setting.imgshow"></el-switch>
               </el-form-item>
-
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="用标签栏分类或者直接全部展示"
+                placement="left"
+              >
+                <el-form-item label="分类显示">
+                  <el-row>
+                    <el-col :span="3"
+                      ><el-switch v-model="setting.isTag"></el-switch
+                    ></el-col>
+                    <el-col v-show="setting.isTag" :span="20" :offset="1">
+                      <el-form-item prop="tagActiveName">
+                        <el-select
+                          v-model="setting.tagActiveName"
+                          placeholder="选择默认标签"
+                        >
+                          <el-option
+                            v-for="item in setting.source"
+                            :key="item"
+                            :label="numberOrEnNameToName(item)"
+                            :value="numberOrEnNameToName(item)"
+                          >
+                          </el-option>
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-form-item>
+              </el-tooltip>
               <el-tooltip
                 class="item"
                 effect="dark"
@@ -197,7 +226,7 @@
             </el-tab-pane>
           </el-tabs>
           <div class="btn-area">
-            <el-button type="primary" @click="saveSetting">保存</el-button>
+            <el-button type="primary" @click="saveSetting('form')">保存</el-button>
           </div>
         </el-form>
         <!-- <el-divider></el-divider>
@@ -214,7 +243,11 @@
 <script>
 import countTo from "vue-count-to";
 
-import { common, timespanToDay } from "../assets/JS/common";
+import {
+  common,
+  timespanToDay,
+  numberOrEnNameToName,
+} from "../assets/JS/common";
 export default {
   name: "app",
   components: { countTo },
@@ -249,6 +282,11 @@ export default {
         20: "8点",
       },
       activeTab: "0",
+      rules: {
+        tagActiveName: [
+          { required: true, message: "请选择默认标签", trigger: "blur" },
+        ],
+      },
     };
   },
   computed: {
@@ -263,6 +301,7 @@ export default {
     // },
   },
   methods: {
+    numberOrEnNameToName,
     timespanToDay,
     init() {
       this.getSaveInfo();
@@ -301,14 +340,21 @@ export default {
       });
     },
 
-    saveSetting() {
-      this.saveLocalStorage("setting", this.setting).then(() => {
-        chrome.runtime.sendMessage({ info: "setting" });
-        this.$message({
-          center: true,
-          message: "保存成功",
-          type: "success",
-        });
+    saveSetting(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.saveLocalStorage("setting", this.setting).then(() => {
+            chrome.runtime.sendMessage({ info: "setting" });
+            this.$message({
+              center: true,
+              message: "保存成功",
+              type: "success",
+            });
+          });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
       });
     },
 

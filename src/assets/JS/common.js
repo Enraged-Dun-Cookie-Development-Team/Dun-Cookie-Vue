@@ -4,6 +4,8 @@ let common = {
         source: [0, 1, 2, 3, 4, 5, 6, 7],
         fontsize: 0,
         imgshow: true,
+        isTag: false,
+        tagActiveName: null,
         isTop: true,
         isPush: true,
         darkshow: 0,// 黑暗模式按钮
@@ -80,8 +82,47 @@ function Get(url) {
     }
 };
 
+function numberOrEnNameToName(int) {
+    console.log(int);
+    switch (int) {
+        case 0:
+        case "bili":
+            return "哔哩哔哩"
+            break;
+        case 1:
+        case "weibo":
+            return "微博"
+            break;
+        case 2:
+        case "yj":
+            return "通讯组"
+            break;
+        case 3:
+        case "cho3":
+            return "朝陇山"
+            break;
+        case 4:
+        case "ys3":
+            return "一拾山"
+            break;
+        case 5:
+        case "sr":
+            return "塞壬唱片"
+            break;
+        case 6:
+        case "tl":
+            return "泰拉记事社"
+            break;
+        case 7:
+        case "gw":
+            return "官网网站"
+            break;
+    }
+}
+
 export {
     common,
     timespanToDay,
-    Get
+    Get,
+    numberOrEnNameToName
 }
