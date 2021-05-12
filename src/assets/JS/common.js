@@ -51,10 +51,12 @@ function timespanToDay(date, type) {
     let s = date.getSeconds();
     if (type == 0) {
         return `${addZero(h)}:${addZero(m)}:${addZero(s)}`;
+    } else if (type == 1) {
+        return `${Y}-${addZero(M)}-${addZero(D)}`;
+    } else {
+        return `${Y}-${addZero(M)}-${addZero(D)} ${addZero(h)}:${addZero(m)}:${addZero(s)}`;
     }
-    return `${Y}-${addZero(M)}-${addZero(D)} ${addZero(
-        h
-    )}:${addZero(m)}:${addZero(s)}`;
+
 };
 
 function addZero(m) {
@@ -83,7 +85,6 @@ function Get(url) {
 };
 
 function numberOrEnNameToName(int) {
-    console.log(int);
     switch (int) {
         case 0:
         case "bili":

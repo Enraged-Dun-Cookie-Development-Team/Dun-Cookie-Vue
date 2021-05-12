@@ -98,7 +98,7 @@
             <countTo
               :startVal="oldDunIndex"
               :endVal="dunInfo.dunIndex"
-              :duration="3000"
+              :duration="1000"
             ></countTo
             >次】</span
           >
@@ -139,7 +139,7 @@
             :key="index"
             :timestamp="
               item.source == 2 || item.source == 5 || item.source == 7
-                ? timespanToDay(item.time, 2)
+                ? timespanToDay(item.time, 1)
                 : timespanToDay(item.time)
             "
             placement="top"
@@ -231,7 +231,7 @@
                 :key="index"
                 :timestamp="
                   item.source == 2 || item.source == 5 || item.source == 7
-                    ? timespanToDay(item.time, 2)
+                    ? timespanToDay(item.time, 1)
                     : timespanToDay(item.time)
                 "
                 placement="top"

@@ -16,7 +16,7 @@
               ><countTo
                 :startVal="oldDunIndex"
                 :endVal="dunInfo.dunIndex"
-                :duration="3000"
+                :duration="1000"
               ></countTo></span
             >次
           </div>
@@ -26,7 +26,7 @@
           <!-- <div class="info-time">下次蹲饼时间：{{ nextdunTime }}</div> -->
         </div>
         <el-divider></el-divider>
-        <el-form  :rules="rules" ref="form" :model="setting" label-width="100px">
+        <el-form :rules="rules" ref="form" :model="setting" label-width="100px">
           <el-tabs v-model="activeTab" type="border-card">
             <el-tab-pane label="核心设置" name="0">
               <el-form-item label="饼来源">
@@ -185,7 +185,7 @@
                     <el-col :span="3"
                       ><el-switch v-model="setting.isTag"></el-switch
                     ></el-col>
-                    <el-col v-show="setting.isTag" :span="20" :offset="1">
+                    <el-col v-if="setting.isTag" :span="20" :offset="1">
                       <el-form-item prop="tagActiveName">
                         <el-select
                           v-model="setting.tagActiveName"
@@ -226,15 +226,11 @@
             </el-tab-pane>
           </el-tabs>
           <div class="btn-area">
-            <el-button type="primary" @click="saveSetting('form')">保存</el-button>
+            <el-button type="primary" @click="saveSetting('form')"
+              >保存</el-button
+            >
           </div>
         </el-form>
-        <!-- <el-divider></el-divider>
-        <div style="text-align: center">
-          <el-button @click="getUpdateInfo" size="mini"
-            >检查更新</el-button
-          >
-        </div> -->
       </el-card>
     </div>
   </div>

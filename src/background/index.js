@@ -19,11 +19,8 @@ var date = {
 // 软件临时数据
 let kazeData = {
     isTest: false,
-    testIntervalTime: 1,
-    setting: {},
-    // 哔哩哔哩 微博 通讯组 朝陇山 一拾山 任塞 泰拉记事社 官网
-    // source: ['bili', 'weibo', 'yj', 'cho3', 'ys3', 'sr', 'tl', 'gw'],
-    // Allsource: [0, 1, 2, 3, 4, 5, 6, 7]
+    testIntervalTime: 3,
+    setting: {}
 }
 
 // 软件存储数据 数据互通使用
@@ -94,18 +91,14 @@ let kazeSourceProcess = {
     GetData() {
         kazeLocalData.dunInfo.dunTime = new Date().getTime();
 
-        // kazeData.Allsource.map(x => {
-        //     this.GetAndProcessData(Object.values(kazeSource).filter(y => y.source == x)[0]);
-        // });
-
-        kazeLocalData.setting.source.includes(0) ? this.GetAndProcessData(kazeSource['bili']) : kazeLocalData.cardlistdm.bili = [];
-        kazeLocalData.setting.source.includes(1) ? this.GetAndProcessData(kazeSource['weibo']) : kazeLocalData.cardlistdm.weibo = [];
-        kazeLocalData.setting.source.includes(2) ? this.GetAndProcessData(kazeSource['yj']) : kazeLocalData.cardlistdm.yj = [];
-        kazeLocalData.setting.source.includes(3) ? this.GetAndProcessData(kazeSource['cho3']) : kazeLocalData.cardlistdm.cho3 = [];
-        kazeLocalData.setting.source.includes(4) ? this.GetAndProcessData(kazeSource['ys3']) : kazeLocalData.cardlistdm.ys3 = [];
-        kazeLocalData.setting.source.includes(5) ? this.GetAndProcessData(kazeSource['sr']) : kazeLocalData.cardlistdm.sr = [];
-        kazeLocalData.setting.source.includes(6) ? this.GetAndProcessData(kazeSource['tl']) : kazeLocalData.cardlistdm.tl = [];
-        kazeLocalData.setting.source.includes(7) ? this.GetAndProcessData(kazeSource['gw']) : kazeLocalData.cardlistdm.gw = [];
+        kazeLocalData.setting.source.includes(0) ? this.GetAndProcessData(kazeSource['bili']) : delete kazeLocalData.cardlistdm.bili;
+        kazeLocalData.setting.source.includes(1) ? this.GetAndProcessData(kazeSource['weibo']) : delete kazeLocalData.cardlistdm.weibo;
+        kazeLocalData.setting.source.includes(2) ? this.GetAndProcessData(kazeSource['yj']) : delete kazeLocalData.cardlistdm.yj;
+        kazeLocalData.setting.source.includes(3) ? this.GetAndProcessData(kazeSource['cho3']) : delete kazeLocalData.cardlistdm.cho3;
+        kazeLocalData.setting.source.includes(4) ? this.GetAndProcessData(kazeSource['ys3']) : delete kazeLocalData.cardlistdm.ys3;
+        kazeLocalData.setting.source.includes(5) ? this.GetAndProcessData(kazeSource['sr']) : delete kazeLocalData.cardlistdm.sr;
+        kazeLocalData.setting.source.includes(6) ? this.GetAndProcessData(kazeSource['tl']) : delete kazeLocalData.cardlistdm.tl;
+        kazeLocalData.setting.source.includes(7) ? this.GetAndProcessData(kazeSource['gw']) : delete kazeLocalData.cardlistdm.gw;
     },
 
     //请求 处理 回调 保存
@@ -383,7 +376,12 @@ let kazeFun = {
     },
 
     //蹲饼间隔时间 自带第一次请求 自带清除当前循环 秒
-    intervalGetData(time) {
+    settimeoutGetData(time) {
+        kazeSourceProcess.GetData();
+        this.checkDarkModel();
+        this.checkLowfrequencyModel();
+        kazeFun.saveLocalStorage('dunInfo', kazeLocalData.dunInfo);
+
         // 如果没有传time 获取setting时间
         if (!time) {
             time = kazeLocalData.setting.time;
@@ -392,22 +390,9 @@ let kazeFun = {
                 time = (time * 2);
             }
         }
-        // console.log(`循环时间${time}`,`低频模式${new Date()}为${kazeLocalData.setting.islowfrequency ? '启动' : '关闭'}模式`);
-        // 获取循环标识 删除该标识
-        if (kazeLocalData.saveInfo.setIntervalindex != undefined && kazeLocalData.saveInfo.setIntervalindex != null) {
-            clearInterval(kazeLocalData.saveInfo.setIntervalindex);
-        }
-        // 先请求一次数据
-        kazeSourceProcess.GetData();
-        kazeFun.saveLocalStorage('dunInfo', kazeLocalData.dunInfo);
-        // 添加循环
-        let intervalIndex = setInterval(() => {
-            console.log(new Date(), time);
-            kazeSourceProcess.GetData();
-            this.checkDarkModelAndLowfrequencyModel();
-            kazeFun.saveLocalStorage('dunInfo', kazeLocalData.dunInfo);
+        setTimeout(() => {
+            this.settimeoutGetData();
         }, parseInt(time) * 1000);
-        kazeLocalData.saveInfo.setIntervalindex = intervalIndex;
     },
 
     // 检查一次更新
@@ -427,8 +412,7 @@ let kazeFun = {
             }
         });
     },
-
-    checkDarkModelAndLowfrequencyModel() {
+    checkDarkModel() {
         let hour = new Date().getHours();
         // 判断当前时间是否是启用页面模式的时间
         let darkShow = kazeLocalData.setting.darkshow;
@@ -441,7 +425,9 @@ let kazeFun = {
             kazeLocalData.setting.outsideClass = newOutsideClass;
             kazeFun.saveLocalStorage('setting', kazeLocalData.setting);
         }
-
+    },
+    checkLowfrequencyModel() {
+        let hour = new Date().getHours();
         // 判断当前时间是否是启用低频模式的时间
         let lowfrequency = kazeLocalData.setting.lowfrequency;
         let lowfrequencyTime = kazeLocalData.setting.lowfrequencyTime;
@@ -449,21 +435,16 @@ let kazeFun = {
         let starHour = lowfrequencyTime[0] < 12 ? lowfrequencyTime[0] + 12 : lowfrequencyTime[0] - 12;
         let endHour = lowfrequencyTime[1] < 12 ? lowfrequencyTime[1] + 12 : lowfrequencyTime[1] - 12;
         let newislowfrequency = (lowfrequency && (hour >= starHour || hour < endHour));
-
         if (oldislowfrequency != newislowfrequency) {
             kazeLocalData.setting.islowfrequency = newislowfrequency;
             kazeFun.saveLocalStorage('setting', kazeLocalData.setting);
-            this.intervalGetData();
         }
     },
 
     // 初始化
     Init() {
-        // if (!kazeData.isTest) {
-        //     kazeFun.getUpdateInfo();
-        // }
-        // chrome.browserAction.setBadgeText({ text: 'Beta' });
-        // chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
+        chrome.browserAction.setBadgeText({ text: 'Beta' });
+        chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
         // 初始化
         kazeFun.saveLocalStorage('dunInfo', kazeLocalData.dunInfo);
         kazeFun.saveLocalStorage('saveInfo', kazeLocalData.saveInfo);
@@ -475,7 +456,9 @@ let kazeFun = {
             } else {
                 kazeFun.saveLocalStorage('setting', kazeLocalData.setting);
             }
-            this.intervalGetData()
+
+            // this.intervalGetData()
+            this.settimeoutGetData();
         });
 
         // 监听前台事件
@@ -485,27 +468,23 @@ let kazeFun = {
                 kazeSourceProcess.GetData();
             }
             else if (request.info == "reloadInterval") {
-                // 重启定时器
                 kazeFun.getLocalStorage('setting').then(data => {
                     kazeLocalData.setting = data;
-                    kazeFun.intervalGetData();
+                    // kazeFun.intervalGetData();
                 })
             }
             else if (request.info == "setting") {
-                // 重启定时器
                 kazeFun.getLocalStorage('setting').then(data => {
                     kazeLocalData.cardlistdm = {};
                     kazeLocalData.setting = data;
                     kazeSourceProcess.GetData();
-                    kazeFun.intervalGetData();
+                    // kazeFun.intervalGetData();
                 })
             }
             else if (request.info == "getUpdateInfo") {
                 // 重启定时器
                 kazeFun.getUpdateInfo('alert');
             }
-
-
         })
 
         // 监听标签
@@ -528,13 +507,6 @@ let kazeFun = {
                     url: urlToOpen,
                 });
             }
-            // if (details.reason === 'update') {
-            //     // 更新
-            //     var urlToOpen = chrome.extension.getURL("update.html");
-            //     chrome.tabs.create({
-            //         url: urlToOpen,
-            //     });
-            // }
         });
 
 
@@ -544,7 +516,7 @@ let kazeFun = {
                 kazeLocalData.setting = data;
                 kazeLocalData.setting.time = kazeData.testIntervalTime;
                 kazeFun.saveLocalStorage('setting', kazeLocalData.setting);
-                this.intervalGetData()
+                // this.intervalGetData()
             });
             kazeLocalData.saveInfo.version = `【调试模式】 刷新时间临时调整为${kazeData.testIntervalTime}秒`;
             kazeFun.saveLocalStorage('saveInfo', kazeLocalData.saveInfo);
