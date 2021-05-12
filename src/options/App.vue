@@ -253,6 +253,11 @@ export default {
   },
   computed: {
     nextdunTime() {
+      if (this.setting.islowfrequency) {
+        return timespanToDay(
+          this.dunInfo.dunTime / 1000 + this.setting.time * 1.75
+        );
+      }
       return timespanToDay(this.dunInfo.dunTime / 1000 + this.setting.time);
     },
   },
