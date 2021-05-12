@@ -389,23 +389,25 @@ let kazeFun = {
             time = kazeLocalData.setting.time;
             // 低频模式
             if (kazeLocalData.setting.islowfrequency) {
-                time = (time * 1.75);
+                time = (time * 2);
             }
         }
+        // console.log(`循环时间${time}`,`低频模式${new Date()}为${kazeLocalData.setting.islowfrequency ? '启动' : '关闭'}模式`);
         // 获取循环标识 删除该标识
-        if (kazeLocalData.saveInfo.setIntervalindex) {
+        if (kazeLocalData.saveInfo.setIntervalindex != undefined && kazeLocalData.saveInfo.setIntervalindex != null) {
             clearInterval(kazeLocalData.saveInfo.setIntervalindex);
         }
         // 先请求一次数据
         kazeSourceProcess.GetData();
-        this.checkDarkModelAndLowfrequencyModel();
         kazeFun.saveLocalStorage('dunInfo', kazeLocalData.dunInfo);
         // 添加循环
-        kazeLocalData.saveInfo.setIntervalindex = setInterval(() => {
+        let intervalIndex = setInterval(() => {
+            console.log(new Date(), time);
             kazeSourceProcess.GetData();
             this.checkDarkModelAndLowfrequencyModel();
             kazeFun.saveLocalStorage('dunInfo', kazeLocalData.dunInfo);
         }, parseInt(time) * 1000);
+        kazeLocalData.saveInfo.setIntervalindex = intervalIndex;
     },
 
     // 检查一次更新
@@ -449,7 +451,6 @@ let kazeFun = {
         let newislowfrequency = (lowfrequency && (hour >= starHour || hour < endHour));
 
         if (oldislowfrequency != newislowfrequency) {
-            console.log(`低频模式于${new Date()}切换为${newislowfrequency ? '启动' : '关闭'}模式`);
             kazeLocalData.setting.islowfrequency = newislowfrequency;
             kazeFun.saveLocalStorage('setting', kazeLocalData.setting);
             this.intervalGetData();

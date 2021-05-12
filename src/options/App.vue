@@ -23,7 +23,7 @@
           <div class="info-time">
             本次蹲饼时间：{{ timespanToDay(dunInfo.dunTime / 1000) }}
           </div>
-          <div class="info-time">下次蹲饼时间：{{ nextdunTime }}</div>
+          <!-- <div class="info-time">下次蹲饼时间：{{ nextdunTime }}</div> -->
         </div>
         <el-divider></el-divider>
         <el-form ref="form" :model="setting" label-width="100px">
@@ -105,8 +105,8 @@
                   :min="3"
                   :max="3600"
                 ></el-input-number>
-                <span style="margin-left: 10px" v-if="setting.lowfrequency"
-                  >低频模式下为{{ setting.time * 1.75 }}秒</span
+                <span style="margin-left: 20px" v-if="setting.lowfrequency"
+                  >低频模式下为{{ setting.time * 2 }}秒</span
                 >
               </el-form-item>
               <el-tooltip
@@ -122,7 +122,7 @@
               <el-tooltip
                 class="item"
                 effect="dark"
-                content="时间段内蹲饼的攻速降低75%，用来节省流量和性能"
+                content="时间段内蹲饼的攻速降低100%，用来节省流量和性能"
                 placement="left"
               >
                 <el-form-item label="低频模式">
@@ -252,14 +252,15 @@ export default {
     };
   },
   computed: {
-    nextdunTime() {
-      if (this.setting.islowfrequency) {
-        return timespanToDay(
-          this.dunInfo.dunTime / 1000 + this.setting.time * 1.75
-        );
-      }
-      return timespanToDay(this.dunInfo.dunTime / 1000 + this.setting.time);
-    },
+    // nextdunTime() {
+    //   console.log(this.setting.islowfrequency);
+    //   if (this.setting.islowfrequency) {
+    //     return timespanToDay(
+    //       this.dunInfo.dunTime / 1000 + this.setting.time * 2
+    //     );
+    //   }
+    //   return timespanToDay(this.dunInfo.dunTime / 1000 + this.setting.time);
+    // },
   },
   methods: {
     timespanToDay,
