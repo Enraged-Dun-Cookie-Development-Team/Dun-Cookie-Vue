@@ -1,5 +1,5 @@
 
-import { common, Get } from "../assets/JS/common";
+import { common } from "../assets/JS/common";
 //数据下来后都定位固定格式 没有不用管
 var date = {
     time: '时间 【必填】',
@@ -443,8 +443,8 @@ let kazeFun = {
 
     // 初始化
     Init() {
-        chrome.browserAction.setBadgeText({ text: 'Beta' });
-        chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
+        // chrome.browserAction.setBadgeText({ text: 'Beta' });
+        // chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
         // 初始化
         kazeFun.saveLocalStorage('dunInfo', kazeLocalData.dunInfo);
         kazeFun.saveLocalStorage('saveInfo', kazeLocalData.saveInfo);
