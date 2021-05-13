@@ -55,8 +55,8 @@
     "upgrade": {
         "v": "2.0.78",
         "title": "检测到新版本-2.0.78",
-        "description": "1.添加夜间模式 <br/> 2.添加了低频模式，在时间段内降低蹲饼频率以减少流量性能消耗 <br/> 3.终于把检测更新的逻辑调整完了 <br/> 4.公告区域添加滚动，可以显示更多的消息 <br/> 5.设置页面也更新了 <br/> 6.修复点击推送不跳转链接的BUG",
-        "downCrx": "http://cdn.liuziyang.vip/Dun-Cookie.crx",
-        "downZip": "http://cdn.liuziyang.vip/Dun-Cookie.zip"
+        "description": "1.列表可以选择是分类列表还是一起出来 <br/> 2.调整循环模式，循环蹲饼将按照顺序，不会被中途打断了 <br/> 3.修复低频模式不生效的BUG <br/> 4.修复因为浏览器缓存检测不到最新公告和更新",
+        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/V2.0.88/Dun-Cookie-2.0.88.crx",
+        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/V2.0.88/Dun-Cookie-2.0.88.zip"
     }
 }
