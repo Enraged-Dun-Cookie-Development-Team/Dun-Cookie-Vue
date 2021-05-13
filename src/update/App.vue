@@ -72,7 +72,9 @@ export default {
     },
     // 检查一次更新
     getUpdateInfo() {
-      this.Get(`http://cdn.liuziyang.vip/Dun-Cookies-Info.json`).then(
+      this.Get("http://cdn.liuziyang.vip/Dun-Cookies-Info.json?t=" +
+          new Date().getTime()
+      ).then(
         (responseText) => {
           this.updateInfo = JSON.parse(responseText).upgrade;
         }
