@@ -115,7 +115,7 @@
         <el-card
           v-if="onlineSpeakList && onlineSpeakList.length > 0"
           shadow="always"
-          class="info-card"
+          class="info-card online-speak"
         >
           <el-carousel
             arrow="never"
@@ -492,32 +492,33 @@ export default {
 
     // 获取在线信息
     getOnlineSpeak() {
-      this.Get("http://cdn.liuziyang.vip/Dun-Cookies-Info.json?t="+new Date().getTime()).then(
-        (result) => {
-          // 头部公告
-          let data = JSON.parse(result);
-          let filterList = data.list.filter(
-            (x) =>
-              new Date(x.starTime) <= new Date() &&
-              new Date(x.overTime) >= new Date()
-          );
+      this.Get(
+        "http://cdn.liuziyang.vip/Dun-Cookies-Info.json?t=" +
+          new Date().getTime()
+      ).then((result) => {
+        // 头部公告
+        let data = JSON.parse(result);
+        let filterList = data.list.filter(
+          (x) =>
+            new Date(x.starTime) <= new Date() &&
+            new Date(x.overTime) >= new Date()
+        );
 
-          this.onlineSpeakList.push(...filterList);
+        this.onlineSpeakList.push(...filterList);
 
-          // 快捷连接
-          let btnList = data.btnList.filter(
-            (x) =>
-              new Date(x.starTime) <= new Date() &&
-              new Date(x.overTime) >= new Date()
-          );
-          if (btnList.length > 0) {
-            this.quickJump.tool.push(...btnList);
-          }
-
-          // 是否最新
-          this.isNew = data.upgrade.v != this.saveInfo.version;
+        // 快捷连接
+        let btnList = data.btnList.filter(
+          (x) =>
+            new Date(x.starTime) <= new Date() &&
+            new Date(x.overTime) >= new Date()
+        );
+        if (btnList.length > 0) {
+          this.quickJump.tool.push(...btnList);
         }
-      );
+
+        // 是否最新
+        this.isNew = data.upgrade.v != this.saveInfo.version;
+      });
     },
 
     // 死数据
@@ -722,9 +723,8 @@ ${item.url}
     color: @@setLarge;
   }
   /deep/.el-tabs__item:hover {
-    color: #409EFF;
+    color: #409eff;
   }
-  
 
   .card {
     width: 600px;
@@ -756,6 +756,7 @@ ${item.url}
       position: relative;
       cursor: pointer;
       .img {
+        border-radius: 4px;
         width: 100%;
       }
       &::before {
@@ -831,6 +832,11 @@ ${item.url}
         margin-bottom: 10px;
         cursor: pointer;
         text-align: center;
+      }
+      &.online-speak {
+        /deep/ .el-card__body {
+          padding: 0;
+        }
       }
       /deep/ .el-carousel__button {
         background-color: #23ade5;
@@ -959,7 +965,7 @@ ${item.url}
     height: 100px;
     margin-right: 10px;
     &.radius {
-      border-radius: 5px;
+      border-radius: 4px;
     }
   }
   .online-blue {
