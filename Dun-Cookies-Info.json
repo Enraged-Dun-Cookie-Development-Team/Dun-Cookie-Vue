@@ -53,8 +53,8 @@
         }
     ],
     "upgrade": {
-        "v": "2.0.78",
-        "title": "检测到新版本-2.0.78",
+        "v": "2.0.88",
+        "title": "检测到新版本-2.0.88",
         "description": "1.列表可以选择是分类列表还是一起出来 <br/> 2.调整循环模式，循环蹲饼将按照顺序，不会被中途打断了 <br/> 3.修复低频模式不生效的BUG <br/> 4.修复因为浏览器缓存检测不到最新公告和更新",
         "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/V2.0.88/Dun-Cookie-2.0.88.crx",
         "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/V2.0.88/Dun-Cookie-2.0.88.zip"
