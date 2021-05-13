@@ -971,5 +971,8 @@ ${item.url}
   .online-blue {
     color: #23ade5;
   }
+  .online-red {
+    color: #F56C6C;
+  }
 }
 </style>
