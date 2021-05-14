@@ -436,7 +436,9 @@ ${item.url}
       }
       .content-card-episodes {
         width: 240px;
-        margin: 10px 0 0 20px;
+        margin: 0 0 0 20px;
+        max-height: 310px;
+        overflow: auto;
         .content-card-episodes-btn {
           display: flex;
           align-items: center;
