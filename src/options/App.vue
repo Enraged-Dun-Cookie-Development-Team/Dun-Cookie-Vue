@@ -31,11 +31,19 @@
             <el-tab-pane label="核心设置" name="0">
               <el-form-item label="饼来源">
                 <el-checkbox-group v-model="setting.source" :min="1">
+                  <el-checkbox :label="7">
+                    <span class="checkbox-area">
+                      <img
+                        class="iconimg"
+                        :src="numberOrEnNameToIconSrc(7)"
+                      />官网网站</span
+                    ></el-checkbox
+                  >
                   <el-checkbox :label="0">
                     <span class="checkbox-area">
                       <img
                         class="iconimg"
-                        src="/assets/image/bili.ico"
+                        :src="numberOrEnNameToIconSrc(0)"
                       />B站</span
                     >
                   </el-checkbox>
@@ -43,7 +51,7 @@
                     <span class="checkbox-area">
                       <img
                         class="iconimg"
-                        src="/assets/image/weibo.ico"
+                        :src="numberOrEnNameToIconSrc(1)"
                       />微博</span
                     ></el-checkbox
                   >
@@ -51,7 +59,7 @@
                     <span class="checkbox-area">
                       <img
                         class="iconimg"
-                        src="/assets/image/txz.jpg"
+                        :src="numberOrEnNameToIconSrc(2)"
                       />通讯组</span
                     ></el-checkbox
                   >
@@ -59,7 +67,7 @@
                     <span class="checkbox-area">
                       <img
                         class="iconimg"
-                        src="/assets/image/cho3.jpg"
+                        :src="numberOrEnNameToIconSrc(3)"
                       />朝陇山</span
                     ></el-checkbox
                   >
@@ -67,7 +75,7 @@
                     <span class="checkbox-area">
                       <img
                         class="iconimg"
-                        src="/assets/image/ys3.jpg"
+                        :src="numberOrEnNameToIconSrc(4)"
                       />一拾山</span
                     ></el-checkbox
                   >
@@ -75,31 +83,23 @@
                     <span class="checkbox-area">
                       <img
                         class="iconimg white"
-                        src="/assets/image/sr.ico"
+                       :src="numberOrEnNameToIconSrc(5)"
                       />塞壬唱片</span
                     ></el-checkbox
                   >
-                  <el-checkbox :label="6">
+                   <el-checkbox :label="6">
                     <span class="checkbox-area">
                       <img
                         class="iconimg"
-                        src="/assets/image/tl.jpg"
+                        :src="numberOrEnNameToIconSrc(6)"
                       />泰拉记事社微博</span
-                    ></el-checkbox
-                  >
-                  <el-checkbox :label="7">
-                    <span class="checkbox-area">
-                      <img
-                        class="iconimg"
-                        src="/assets/image/mrfz.ico"
-                      />官网网站</span
                     ></el-checkbox
                   >
                   <el-checkbox :label="8">
                     <span class="checkbox-area">
                       <img
                         class="iconimg"
-                        src="/assets/image/tl.jpg"
+                        :src="numberOrEnNameToIconSrc(7)"
                       />泰拉记事社官网</span
                     ></el-checkbox
                   >
@@ -251,6 +251,7 @@ import {
   common,
   timespanToDay,
   numberOrEnNameToName,
+  numberOrEnNameToIconSrc
 } from "../assets/JS/common";
 export default {
   name: "app",
@@ -306,6 +307,7 @@ export default {
   },
   methods: {
     numberOrEnNameToName,
+    numberOrEnNameToIconSrc,
     timespanToDay,
     init() {
       this.getSaveInfo();

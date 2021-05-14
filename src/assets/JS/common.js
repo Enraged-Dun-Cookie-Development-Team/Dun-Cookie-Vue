@@ -125,9 +125,51 @@ function numberOrEnNameToName(int) {
     }
 }
 
+function numberOrEnNameToIconSrc(int) {
+    switch (int) {
+        case 0:
+        case "bili":
+            return "/assets/image/bili.ico"
+            break;
+        case 1:
+        case "weibo":
+            return "/assets/image/weibo.ico"
+            break;
+        case 2:
+        case "yj":
+            return "/assets/image/txz.jpg"
+            break;
+        case 3:
+        case "cho3":
+            return "/assets/image/cho3.jpg"
+            break;
+        case 4:
+        case "ys3":
+            return "/assets/image/ys3.jpg"
+            break;
+        case 5:
+        case "sr":
+            return "/assets/image/sr.ico"
+            break;
+        case 6:
+        case "tl":
+            return "/assets/image/tl.jpg"
+            break;
+        case 7:
+        case "gw":
+            return "/assets/image/mrfz.ico"
+            break;
+        case 8:
+        case "tlgw":
+            return "/assets/image/tl.jpg"
+            break;
+    }
+}
+
 export {
     common,
     timespanToDay,
     Get,
-    numberOrEnNameToName
+    numberOrEnNameToName,
+    numberOrEnNameToIconSrc
 }
