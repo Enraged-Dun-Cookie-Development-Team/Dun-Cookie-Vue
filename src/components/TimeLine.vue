@@ -117,7 +117,7 @@ export default {
     // 图片卡 先加载dom后加载图片内容
     setTimeout(() => {
       this.imgShow = true;
-    }, 2000);
+    }, 1000);
   },
   methods: {
     timespanToDay,

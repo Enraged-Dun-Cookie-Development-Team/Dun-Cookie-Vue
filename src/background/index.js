@@ -84,7 +84,7 @@ let kazeSource = {
         source: 7,
     },
     tlgw: {
-        url: ['https://terra-historicus.hypergryph.com/api/comic/7748', 'https://terra-historicus.hypergryph.com/api/comic/2865'], //这个改成接口网址啊
+        url: ['https://terra-historicus.hypergryph.com/api/comic/7748', 'https://terra-historicus.hypergryph.com/api/comic/2865'], 
         title: '泰拉记事社',
         dataName: 'tlgw',
         source: 8,
@@ -334,17 +334,17 @@ let kazeSourceProcess = {
         let list = [];
         opt.responseText.map(x => {
             let info = JSON.parse(x).data;
+            info.episodes.reverse();
             list.push({
                 time: info.updateTime,
                 id: info.cid,
-                judgment: info.cid,
-                dynamicInfo: info.title,
+                judgment: info.updateTime,
+                dynamicInfo:info.title ,
                 source: opt.source,
                 image:info.cover,
                 html: info
             });
         });
-        console.log(list);
         return list.sort((x, y) => y.time - x.time);
     }
 }

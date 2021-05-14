@@ -91,7 +91,6 @@
         <span v-if="cardlist.length == 0" style="color: red"
           >【无内容，请检查网络】</span
         >
-        <!-- <span v-else>【已蹲饼{{ dunInfo.dunIndex }}次】</span> -->
         <span v-else>
           <span
             >【已蹲饼
