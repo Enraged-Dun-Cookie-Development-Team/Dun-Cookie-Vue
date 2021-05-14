@@ -571,6 +571,7 @@ let kazeFun = {
             kazeSource.sr.url = `test/srJson.json`;
             kazeSource.tl.url = `test/tlJson.json?type=uid&value=6441489862&containerid=1076037499841383`;
             kazeSource.gw.url = `test/gw.html`;
+            kazeSource.tlgw.url = ['test/xbJson.json', 'test/xgbJson.json'];
         }
     }
 }

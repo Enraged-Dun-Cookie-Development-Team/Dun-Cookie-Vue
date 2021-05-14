@@ -1,0 +1,46 @@
+{
+    "code": 0,
+    "msg": "",
+    "data": {
+        "cid": "2865",
+        "type": 2,
+        "cover": "https://web.hycdn.cn/comic/pic/20210511/ce52a2d283fd1c4c754288fe871bd03d.jpg",
+        "title": "罗德岛相簿",
+        "subtitle": "留下罗德岛干员生活的每一个瞬间！",
+        "authors": [
+            "鹰角网络"
+        ],
+        "keywords": [
+            "日常"
+        ],
+        "introduction": "由芙蓉炎熔姐妹共同发起的《罗德岛相簿》计划正式启动！留下罗德岛干员生活的每一个瞬间！泰拉记事社为你全程记载！",
+        "direction": "right",
+        "episodes": [
+            {
+                "cid": "9060",
+                "type": 1,
+                "shortTitle": "00",
+                "title": "二周年庆典"
+            },
+            {
+                "cid": "4946",
+                "type": 1,
+                "shortTitle": "01-1",
+                "title": "【第一张照片】 NO.001RD"
+            },
+            {
+                "cid": "3197",
+                "type": 1,
+                "shortTitle": "01-2",
+                "title": "【登台之前】NO.110SC"
+            },
+            {
+                "cid": "8671",
+                "type": 1,
+                "shortTitle": "02",
+                "title": "【年的火锅邀请】NO.009RD"
+            }
+        ],
+        "updateTime": 1620921600
+    }
+}
