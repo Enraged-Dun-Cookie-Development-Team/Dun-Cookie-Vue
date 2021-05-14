@@ -1,7 +1,7 @@
 let common = {
     setting: {
         time: 15,
-        source: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+        source: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
         fontsize: 0,
         imgshow: true,
         isTag: false,
@@ -119,8 +119,12 @@ function numberOrEnNameToName(int) {
             return "官网网站"
             break;
         case 8:
-        case "tlgw":
-            return "泰拉记事社官网"
+        case "xb":
+            return "罗德岛相簿"
+            break;
+        case 8:
+        case "xgb":
+            return "罗德岛闲逛部"
             break;
     }
 }
