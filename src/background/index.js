@@ -83,11 +83,17 @@ let kazeSource = {
         dataName: 'gw',
         source: 7,
     },
-    tlgw: {
+    xb: {
         url: 'https://terra-historicus.hypergryph.com/', //这个改成接口网址啊
-        title: '泰拉记事社官网',
-        dataName: 'tlgw',
+        title: '罗德岛相簿',
+        dataName: 'xb',
         source: 8,
+    },
+    xgb: {
+        url: 'https://terra-historicus.hypergryph.com/', //这个改成接口网址啊
+        title: '罗德岛闲逛部',
+        dataName: 'xgb',
+        source: 9,
     }
 }
 
@@ -105,7 +111,8 @@ let kazeSourceProcess = {
         kazeLocalData.setting.source.includes(5) ? this.GetAndProcessData(kazeSource['sr']) : delete kazeLocalData.cardlistdm.sr;
         kazeLocalData.setting.source.includes(6) ? this.GetAndProcessData(kazeSource['tl']) : delete kazeLocalData.cardlistdm.tl;
         kazeLocalData.setting.source.includes(7) ? this.GetAndProcessData(kazeSource['gw']) : delete kazeLocalData.cardlistdm.gw;
-        kazeLocalData.setting.source.includes(7) ? this.GetAndProcessData(kazeSource['tlgw']) : delete kazeLocalData.cardlistdm.tlgw;
+        kazeLocalData.setting.source.includes(8) ? this.GetAndProcessData(kazeSource['xb']) : delete kazeLocalData.cardlistdm.tlgw;
+        kazeLocalData.setting.source.includes(9) ? this.GetAndProcessData(kazeSource['xgb']) : delete kazeLocalData.cardlistdm.tlgw;
     },
 
     //请求 处理 回调 保存
@@ -121,7 +128,7 @@ let kazeSourceProcess = {
         this.Get(opt.url).then(data => {
             opt.responseText = data;
             let newCardList = [];
-            // source: ['bili', 'weibo', 'yj', 'cho3', 'ys3', 'sr', 'tl', 'tlgw']
+            // source: ['bili', 'weibo', 'yj', 'cho3', 'ys3', 'sr', 'tl', ‘xb’, 'xgb']
             if (opt.source == 0) {
                 newCardList = this.processBiliBili(opt);
             }
@@ -137,7 +144,7 @@ let kazeSourceProcess = {
             else if (opt.source == 7) {
                 newCardList = this.processGw(opt)
             }
-            else if (opt.source == 8) {
+            else if (opt.source == 8 || opt.source == 9) {
                 newCardList = this.processTlGw(opt)
             }
 
