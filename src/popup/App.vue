@@ -133,90 +133,6 @@
           </el-carousel>
         </el-card>
 
-        <!-- <el-timeline>
-          <el-timeline-item
-            v-for="(item, index) in cardlist"
-            :key="index"
-            :timestamp="
-              item.source == 2 || item.source == 5 || item.source == 7
-                ? timespanToDay(item.time, 1)
-                : timespanToDay(item.time)
-            "
-            placement="top"
-            :icon="'headImg' + item.source"
-          >
-            <el-card class="card" :class="'font-size-' + setting.fontsize">
-              <div>
-                <el-button
-                  class="to-copy-btn"
-                  size="small"
-                  @click="copyData(item)"
-                  title="复制该条内容及链接"
-                  ><i class="el-icon-document-copy"></i
-                ></el-button>
-                <el-button
-                  class="to-url-btn"
-                  size="small"
-                  title="前往饼之发源地"
-                  @click="openUrl(item.url)"
-                  ><i class="el-icon-right"></i
-                ></el-button>
-                <span class="is-top-info" v-if="item.isTop">
-                  <span class="color-blue"
-                    >【当前条目在微博的时间线内为置顶状态】</span
-                  >
-                </span>
-                <el-row
-                  type="flex"
-                  justify="space-between"
-                  align="middle"
-                  class="margintb"
-                >
-                </el-row>
-                <div :ref="'index_' + index">
-                  <el-row class="margintb">
-                    <div v-html="item.dynamicInfo"></div>
-                  </el-row>
-
-                  <transition name="el-fade-in-linear">
-                    <el-row
-                      class="margintb"
-                      v-if="imgShow && setting.imgshow && item.image"
-                    >
-                      <div
-                        class="img-area"
-                        @click="changeShowAllImage(item.image)"
-                        :class="
-                          showAllImage.includes(item.image) ? 'show-all' : ''
-                        "
-                      >
-                        <div
-                          v-if="
-                            item.imageList != undefined &&
-                            item.imageList.length > 1
-                          "
-                        >
-                          <el-row :gutter="5">
-                            <el-col
-                              v-for="img in item.imageList"
-                              :key="img"
-                              :span="8"
-                              ><img :src="img" class="img" />
-                            </el-col>
-                          </el-row>
-                        </div>
-                        <div v-else>
-                          <img :src="item.image" class="img" />
-                        </div>
-                      </div>
-                    </el-row>
-                  </transition>
-                </div>
-              </div>
-            </el-card>
-          </el-timeline-item>
-        </el-timeline> -->
-
         <time-line
           v-if="!setting.isTag"
           ref="TimeLine"
@@ -240,7 +156,7 @@
             <span slot="label">
               <img
                 :title="numberOrEnNameToName(item)"
-                style="width: 30px"
+                class="title-img"
                 :src="numberOrEnNameToIconSrc(item)"
               />
             </span>
@@ -290,99 +206,7 @@ export default {
       showImage: true,
       showAllImage: [],
       imgShow: false, //延迟展示图片
-      quickJump: {
-        soure: [
-          {
-            url: "https://ak.hypergryph.com/#information",
-            name: "官方网站",
-            img: "/assets/image/mrfz.ico",
-          },
-          {
-            url: "https://space.bilibili.com/161775300/dynamic",
-            name: "官方哔哩哔哩",
-            img: "/assets/image/bili.ico",
-          },
-          {
-            url: "https://weibo.com/arknights",
-            name: "官方微博",
-            img: "/assets/image/weibo.ico",
-          },
-          {
-            url: "https://weibo.com/u/6441489862",
-            name: "朝陇山微博",
-            img: "/assets/image/cho3.jpg",
-            radius: true,
-          },
-          {
-            url: "https://weibo.com/u/7506039414",
-            name: "一拾山微博",
-            img: "/assets/image/ys3.jpg",
-            radius: true,
-          },
-          {
-            url: "https://monster-siren.hypergryph.com/",
-            name: "塞壬官网",
-            img: "/assets/image/sr.ico",
-            radius: true,
-          },
-          {
-            url: "https://weibo.com/u/7499841383",
-            name: "泰拉记事社微博",
-            img: "/assets/image/tl.jpg",
-            radius: true,
-          },
-        ],
-        tool: [
-          {
-            url: "http://prts.wiki/",
-            name: "PRTS.Wiki",
-            img: "/assets/image/akwiki.png",
-            radius: true,
-          },
-          {
-            url: "https://mapcn.ark-nights.com",
-            name: "PRTS.Map",
-            img: "/assets/image/akmap.ico",
-            radius: true,
-          },
-          {
-            url: "https://penguin-stats.cn/",
-            name: "企鹅物流",
-            img: "/assets/image/penguin_stats_logo.webp",
-            radius: true,
-          },
-          {
-            url: "https://www.bigfun.cn/tools/aktools/",
-            name: "明日方舟工具箱",
-            img: "/assets/image/mrgzjjx.png",
-            radius: true,
-          },
-          {
-            url: "https://opssr.net/",
-            name: "源石作战室",
-            img: "/assets/image/yszzs.png",
-            radius: true,
-          },
-          {
-            url: "https://kokodayo.fun/",
-            name: "Kokodayo",
-            img: "/assets/image/kkdy.png",
-            radius: true,
-          },
-          {
-            url: "https://aog.wiki/",
-            name: "刷素材一图流",
-            img: "/assets/image/akgraph.ico",
-            radius: true,
-          },
-          {
-            url: "https://viktorlab.cn/akdata/",
-            name: "Arknight DPS",
-            img: "/assets/image/dps.ico",
-            radius: true,
-          },
-        ],
-      },
+      quickJump: common.quickJump,
     };
   },
   computed: {},
@@ -612,8 +436,13 @@ export default {
     .el-tabs__header {
       margin-bottom: 5px;
       margin-top: 15px;
+      .title-img {
+        width: 30px;
+        border-radius: 4px;
+      }
     }
     .el-tabs__content {
+      min-height: 360px;
       .el-timeline {
         height: 360px;
       }

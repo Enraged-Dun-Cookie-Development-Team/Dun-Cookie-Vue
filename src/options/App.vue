@@ -99,16 +99,8 @@
                     <span class="checkbox-area">
                       <img
                         class="iconimg"
-                        :src="numberOrEnNameToIconSrc(7)"
-                      />罗德岛相簿</span
-                    ></el-checkbox
-                  >
-                  <el-checkbox :label="9">
-                    <span class="checkbox-area">
-                      <img
-                        class="iconimg"
-                        src="/assets/image/tl.jpg"
-                      />罗德岛闲逛部</span
+                        :src="numberOrEnNameToIconSrc(8)"
+                      />泰拉记事社官网</span
                     ></el-checkbox
                   >
                 </el-checkbox-group>
