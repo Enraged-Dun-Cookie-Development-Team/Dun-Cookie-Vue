@@ -972,7 +972,7 @@ ${item.url}
     color: #23ade5;
   }
   .online-red {
-    color: #F56C6C;
+    color: #23ade5;
   }
 }
 </style>
