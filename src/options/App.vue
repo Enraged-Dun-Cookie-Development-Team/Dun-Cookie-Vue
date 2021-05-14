@@ -84,7 +84,7 @@
                       <img
                         class="iconimg"
                         src="/assets/image/tl.jpg"
-                      />泰拉记事社</span
+                      />泰拉记事社微博</span
                     ></el-checkbox
                   >
                   <el-checkbox :label="7">
@@ -93,6 +93,14 @@
                         class="iconimg"
                         src="/assets/image/mrfz.ico"
                       />官网网站</span
+                    ></el-checkbox
+                  >
+                  <el-checkbox :label="8">
+                    <span class="checkbox-area">
+                      <img
+                        class="iconimg"
+                        src="/assets/image/tl.jpg"
+                      />泰拉记事社官网</span
                     ></el-checkbox
                   >
                 </el-checkbox-group>
