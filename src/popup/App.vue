@@ -389,6 +389,12 @@ export default {
             img: "/assets/image/tl.jpg",
             radius: true,
           },
+          {
+            url: "https://terra-historicus.hypergryph.com/",
+            name: "泰拉记事社官网",
+            img: "/assets/image/tl.jpg",
+            radius: true,
+          },
         ],
         tool: [
           {

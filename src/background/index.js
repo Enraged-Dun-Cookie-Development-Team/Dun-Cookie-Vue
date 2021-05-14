@@ -73,7 +73,7 @@ let kazeSource = {
     },
     tl: {
         url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=7499841383&containerid=1076037499841383',
-        title: '泰拉记事社',
+        title: '泰拉记事社微博',
         dataName: 'tl',
         source: 6,
     },
@@ -82,6 +82,12 @@ let kazeSource = {
         title: '官网',
         dataName: 'gw',
         source: 7,
+    },
+    tlgw: {
+        url: 'https://terra-historicus.hypergryph.com/', //这个改成接口网址啊
+        title: '泰拉记事社官网',
+        dataName: 'tlgw',
+        source: 8,
     }
 }
 
@@ -99,6 +105,7 @@ let kazeSourceProcess = {
         kazeLocalData.setting.source.includes(5) ? this.GetAndProcessData(kazeSource['sr']) : delete kazeLocalData.cardlistdm.sr;
         kazeLocalData.setting.source.includes(6) ? this.GetAndProcessData(kazeSource['tl']) : delete kazeLocalData.cardlistdm.tl;
         kazeLocalData.setting.source.includes(7) ? this.GetAndProcessData(kazeSource['gw']) : delete kazeLocalData.cardlistdm.gw;
+        kazeLocalData.setting.source.includes(7) ? this.GetAndProcessData(kazeSource['tlgw']) : delete kazeLocalData.cardlistdm.tlgw;
     },
 
     //请求 处理 回调 保存
@@ -114,7 +121,7 @@ let kazeSourceProcess = {
         this.Get(opt.url).then(data => {
             opt.responseText = data;
             let newCardList = [];
-            // source: ['bili', 'weibo', 'yj', 'cho3', 'ys3', 'sr', 'tl']
+            // source: ['bili', 'weibo', 'yj', 'cho3', 'ys3', 'sr', 'tl', 'tlgw']
             if (opt.source == 0) {
                 newCardList = this.processBiliBili(opt);
             }
@@ -129,6 +136,9 @@ let kazeSourceProcess = {
             }
             else if (opt.source == 7) {
                 newCardList = this.processGw(opt)
+            }
+            else if (opt.source == 8) {
+                newCardList = this.processTlGw(opt)
             }
 
             let oldCardList = kazeLocalData.cardlistdm[opt.dataName];
@@ -304,6 +314,11 @@ let kazeSourceProcess = {
             }
         });
         return list.sort((x, y) => y.time - x.time);
+    },
+
+    // 泰拉记事社官网
+    processTlGw(opt) {
+
     }
 }
 
