@@ -23,20 +23,25 @@
       </el-card>
       <el-divider></el-divider>
       <div style="text-align: center">
-        <el-button @click="toLink(updateInfo.downCrx)" size="mini"
-          >下载Crx</el-button
-        >
-        <el-button @click="toLink(updateInfo.downZip)" size="mini"
-          >下载Zip</el-button
-        >
         <el-button
           size="mini"
-          @click="
-            toLink(
-              `https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN`
-            )
-          "
+           type="success"
+          @click="toLink(updateInfo.downChrome)"
           >Chrome应用商店</el-button
+        >
+
+        <el-button type="success" @click="toLink(updateInfo.downCrx)" size="mini"
+          >下载Crx</el-button
+        >
+        <el-button type="success" @click="toLink(updateInfo.downZip)" size="mini"
+          >下载Zip</el-button
+        >
+        
+        <el-button @click="toLink(updateInfo.downSpareCrx)" size="mini"
+          >（备用）下载Crx</el-button
+        >
+        <el-button @click="toLink(updateInfo.downSpareZip)" size="mini"
+          >（备用）下载Zip</el-button
         >
       </div>
       <el-divider></el-divider>

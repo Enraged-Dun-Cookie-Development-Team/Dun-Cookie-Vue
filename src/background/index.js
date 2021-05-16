@@ -452,7 +452,7 @@ let kazeFun = {
 
     // 检查一次更新
     getUpdateInfo(isAlert) {
-        kazeSourceProcess.Get(`http://cdn.liuziyang.vip/Dun-Cookies-Info.json`, false).then(responseText => {
+        kazeSourceProcess.Get(`http://cdn.liuziyang.vip/Dun-Cookies-Info.json?t=${new Date().getTime()}`, false).then(responseText => {
             let data = JSON.parse(responseText)
             if (kazeLocalData.saveInfo.version != data.upgrade.v) {
                 // 更新
@@ -498,8 +498,8 @@ let kazeFun = {
 
     // 初始化
     Init() {
-        chrome.browserAction.setBadgeText({ text: 'Beta' });
-        chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
+        // chrome.browserAction.setBadgeText({ text: 'Beta' });
+        // chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
         // 初始化
         kazeFun.saveLocalStorage('dunInfo', kazeLocalData.dunInfo);
         kazeFun.saveLocalStorage('saveInfo', kazeLocalData.saveInfo);
