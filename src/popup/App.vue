@@ -105,12 +105,6 @@
         </span>
       </div>
       <div id="content">
-        <el-card v-if="isNew" class="info-card isnew">
-          <div @click="getUpdateInfo">
-            <i class="el-icon-upload2"></i>检测到了新版本，点击这里进入更新页面
-          </div>
-        </el-card>
-
         <el-card
           v-if="onlineSpeakList && onlineSpeakList.length > 0"
           shadow="always"
@@ -123,6 +117,14 @@
             :interval="5000"
             :autoplay="true"
           >
+            <el-carousel-item v-if="isNew" @click="getUpdateInfo">
+              <div class="new-info-area">
+                <img
+                  src="http://prts.wiki/images/b/be/%E9%81%93%E5%85%B7_%E5%B8%A6%E6%A1%86_%E8%B5%84%E6%B7%B1%E5%B9%B2%E5%91%98%E7%89%B9%E8%AE%AD%E9%82%80%E8%AF%B7%E5%87%BD.png"
+                />
+                检测到了新版本，点击这里进入更新页面
+              </div>
+            </el-carousel-item>
             <el-carousel-item
               v-for="(item, index) in onlineSpeakList"
               :key="index"
@@ -473,6 +475,20 @@ export default {
       &.online-speak {
         /deep/ .el-card__body {
           padding: 0;
+          // 升级内容样式
+          .new-info-area {
+            cursor: pointer;
+            height: 100%;
+            display: flex;
+            flex-direction: beww;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            justify-content: space-evenly;
+            img {
+              width: 100px;
+            }
+          }
         }
       }
       /deep/ .el-carousel__button {

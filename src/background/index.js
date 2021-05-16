@@ -342,7 +342,8 @@ let kazeSourceProcess = {
                 dynamicInfo:info.title ,
                 source: opt.source,
                 image:info.cover,
-                html: info
+                html: info,
+                url: `https://terra-historicus.hypergryph.com/comic/${cid}`,
             });
         });
         return list.sort((x, y) => y.time - x.time);
