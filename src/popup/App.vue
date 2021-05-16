@@ -136,7 +136,7 @@
             :autoplay="true"
           >
             <el-carousel-item v-if="isNew">
-              <div class="new-info-area" @click="getUpdateInfo">
+              <div class="new-info-area" @click="openUpdate">
                 <img
                   src="http://prts.wiki/images/b/be/%E9%81%93%E5%85%B7_%E5%B8%A6%E6%A1%86_%E8%B5%84%E6%B7%B1%E5%B9%B2%E5%91%98%E7%89%B9%E8%AE%AD%E9%82%80%E8%AF%B7%E5%87%BD.png"
                 />
@@ -212,6 +212,7 @@ export default {
 
   data() {
     return {
+      show: false,
       isNew: false,
       cardlist: [],
       cardlistdm: {},
@@ -239,9 +240,7 @@ export default {
       this.getSaveInfo();
       this.getSetting();
       this.getDunInfo();
-      setTimeout(() => {
-        this.getOnlineSpeak();
-      }, 1);
+      this.getOnlineSpeak();
     },
 
     // 获取后台数据
@@ -363,6 +362,13 @@ export default {
 
     openSetting() {
       var urlToOpen = chrome.extension.getURL("options.html");
+      chrome.tabs.create({
+        url: urlToOpen,
+      });
+    },
+
+    openUpdate() {
+      var urlToOpen = chrome.extension.getURL("update.html");
       chrome.tabs.create({
         url: urlToOpen,
       });

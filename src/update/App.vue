@@ -37,8 +37,8 @@
           >下载Zip</el-button
         >
         
-        <el-button @click="toLink(updateInfo.downSpare)" size="mini"
-          >（备用）下载地址</el-button
+        <el-button v-if="updateInfo.downSpareText" @click="toLink(updateInfo.downSpare)" size="mini"
+          >{{updateInfo.downSpareText}}</el-button
         >
       </div>
       <el-divider></el-divider>

@@ -83,11 +83,11 @@
                     <span class="checkbox-area">
                       <img
                         class="iconimg white"
-                       :src="numberOrEnNameToIconSrc(5)"
+                        :src="numberOrEnNameToIconSrc(5)"
                       />塞壬唱片</span
                     ></el-checkbox
                   >
-                   <el-checkbox :label="6">
+                  <el-checkbox :label="6">
                     <span class="checkbox-area">
                       <img
                         class="iconimg"
@@ -205,6 +205,10 @@
                             :label="numberOrEnNameToName(item)"
                             :value="numberOrEnNameToName(item)"
                           >
+                          <div style="display:flex;align-items: center">
+                            <img :src="numberOrEnNameToIconSrc(item)" style="width:25px;margin-right: 10px">
+                            <span>{{ numberOrEnNameToName(item) }}</span>
+                          </div>
                           </el-option>
                         </el-select>
                       </el-form-item>
@@ -251,7 +255,7 @@ import {
   common,
   timespanToDay,
   numberOrEnNameToName,
-  numberOrEnNameToIconSrc
+  numberOrEnNameToIconSrc,
 } from "../assets/JS/common";
 export default {
   name: "app",
