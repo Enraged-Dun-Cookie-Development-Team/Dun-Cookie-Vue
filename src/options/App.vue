@@ -29,99 +29,113 @@
         <el-form :rules="rules" ref="form" :model="setting" label-width="100px">
           <el-tabs v-model="activeTab" type="border-card">
             <el-tab-pane label="核心设置" name="0">
-              <el-form-item label="饼来源">
-                <el-checkbox-group v-model="setting.source" :min="1">
-                  <el-checkbox :label="7">
-                    <span class="checkbox-area">
-                      <img
-                        class="iconimg"
-                        :src="numberOrEnNameToIconSrc(7)"
-                      />官网网站</span
-                    ></el-checkbox
-                  >
-                  <el-checkbox :label="0">
-                    <span class="checkbox-area">
-                      <img
-                        class="iconimg"
-                        :src="numberOrEnNameToIconSrc(0)"
-                      />B站</span
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="选择勾选来源，最少选择一个"
+                placement="bottom"
+              >
+                <el-form-item label="饼来源">
+                  <el-checkbox-group v-model="setting.source" :min="1">
+                    <el-checkbox :label="7">
+                      <span class="checkbox-area">
+                        <img
+                          class="iconimg"
+                          :src="numberOrEnNameToIconSrc(7)"
+                        />官网网站</span
+                      ></el-checkbox
                     >
-                  </el-checkbox>
-                  <el-checkbox :label="1">
-                    <span class="checkbox-area">
-                      <img
-                        class="iconimg"
-                        :src="numberOrEnNameToIconSrc(1)"
-                      />微博</span
-                    ></el-checkbox
+                    <el-checkbox :label="0">
+                      <span class="checkbox-area">
+                        <img
+                          class="iconimg"
+                          :src="numberOrEnNameToIconSrc(0)"
+                        />B站</span
+                      >
+                    </el-checkbox>
+                    <el-checkbox :label="1">
+                      <span class="checkbox-area">
+                        <img
+                          class="iconimg"
+                          :src="numberOrEnNameToIconSrc(1)"
+                        />微博</span
+                      ></el-checkbox
+                    >
+                    <el-checkbox :label="2">
+                      <span class="checkbox-area">
+                        <img
+                          class="iconimg"
+                          :src="numberOrEnNameToIconSrc(2)"
+                        />通讯组</span
+                      ></el-checkbox
+                    >
+                    <el-checkbox :label="3">
+                      <span class="checkbox-area">
+                        <img
+                          class="iconimg"
+                          :src="numberOrEnNameToIconSrc(3)"
+                        />朝陇山</span
+                      ></el-checkbox
+                    >
+                    <el-checkbox :label="4">
+                      <span class="checkbox-area">
+                        <img
+                          class="iconimg"
+                          :src="numberOrEnNameToIconSrc(4)"
+                        />一拾山</span
+                      ></el-checkbox
+                    >
+                    <el-checkbox :label="5">
+                      <span class="checkbox-area">
+                        <img
+                          class="iconimg white"
+                          :src="numberOrEnNameToIconSrc(5)"
+                        />塞壬唱片</span
+                      ></el-checkbox
+                    >
+                    <el-checkbox :label="6">
+                      <span class="checkbox-area">
+                        <img
+                          class="iconimg"
+                          :src="numberOrEnNameToIconSrc(6)"
+                        />泰拉记事社微博</span
+                      ></el-checkbox
+                    >
+                    <el-checkbox :label="8">
+                      <span class="checkbox-area">
+                        <img
+                          class="iconimg"
+                          :src="numberOrEnNameToIconSrc(8)"
+                        />泰拉记事社官网</span
+                      ></el-checkbox
+                    >
+                  </el-checkbox-group>
+                </el-form-item>
+              </el-tooltip>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="是多少秒刷新一次，不是一秒刷新多少次"
+                placement="bottom"
+              >
+                <el-form-item label="蹲饼频率(秒)">
+                  <el-input-number
+                    controls-position="right"
+                    size="small"
+                    v-model="setting.time"
+                    :min="3"
+                    :max="3600"
+                  ></el-input-number>
+                  <span style="margin-left: 20px" v-if="setting.lowfrequency"
+                    >低频模式下为{{ setting.time * 2 }}秒</span
                   >
-                  <el-checkbox :label="2">
-                    <span class="checkbox-area">
-                      <img
-                        class="iconimg"
-                        :src="numberOrEnNameToIconSrc(2)"
-                      />通讯组</span
-                    ></el-checkbox
-                  >
-                  <el-checkbox :label="3">
-                    <span class="checkbox-area">
-                      <img
-                        class="iconimg"
-                        :src="numberOrEnNameToIconSrc(3)"
-                      />朝陇山</span
-                    ></el-checkbox
-                  >
-                  <el-checkbox :label="4">
-                    <span class="checkbox-area">
-                      <img
-                        class="iconimg"
-                        :src="numberOrEnNameToIconSrc(4)"
-                      />一拾山</span
-                    ></el-checkbox
-                  >
-                  <el-checkbox :label="5">
-                    <span class="checkbox-area">
-                      <img
-                        class="iconimg white"
-                        :src="numberOrEnNameToIconSrc(5)"
-                      />塞壬唱片</span
-                    ></el-checkbox
-                  >
-                  <el-checkbox :label="6">
-                    <span class="checkbox-area">
-                      <img
-                        class="iconimg"
-                        :src="numberOrEnNameToIconSrc(6)"
-                      />泰拉记事社微博</span
-                    ></el-checkbox
-                  >
-                  <el-checkbox :label="8">
-                    <span class="checkbox-area">
-                      <img
-                        class="iconimg"
-                        :src="numberOrEnNameToIconSrc(8)"
-                      />泰拉记事社官网</span
-                    ></el-checkbox
-                  >
-                </el-checkbox-group>
-              </el-form-item>
-              <el-form-item label="蹲饼频率(秒)">
-                <el-input-number
-                  controls-position="right"
-                  size="small"
-                  v-model="setting.time"
-                  :min="3"
-                  :max="3600"
-                ></el-input-number>
-                <span style="margin-left: 20px" v-if="setting.lowfrequency"
-                  >低频模式下为{{ setting.time * 2 }}秒</span
-                >
-              </el-form-item>
+                </el-form-item>
+              </el-tooltip>
               <el-tooltip
                 class="item"
                 effect="dark"
                 content="关闭后仅可以查看列表，无法在电脑右下角和通知栏收到推送！"
-                placement="left"
+                placement="bottom"
               >
                 <el-form-item label="推送">
                   <el-switch v-model="setting.isPush"></el-switch>
@@ -131,7 +145,7 @@
                 class="item"
                 effect="dark"
                 content="时间段内蹲饼的攻速降低100%，用来节省流量和性能"
-                placement="left"
+                placement="bottom"
               >
                 <el-form-item label="低频模式">
                   <el-row>
@@ -205,10 +219,13 @@
                             :label="numberOrEnNameToName(item)"
                             :value="numberOrEnNameToName(item)"
                           >
-                          <div style="display:flex;align-items: center">
-                            <img :src="numberOrEnNameToIconSrc(item)" style="width:25px;margin-right: 10px">
-                            <span>{{ numberOrEnNameToName(item) }}</span>
-                          </div>
+                            <div style="display: flex; align-items: center">
+                              <img
+                                :src="numberOrEnNameToIconSrc(item)"
+                                style="width: 25px; margin-right: 10px"
+                              />
+                              <span>{{ numberOrEnNameToName(item) }}</span>
+                            </div>
                           </el-option>
                         </el-select>
                       </el-form-item>

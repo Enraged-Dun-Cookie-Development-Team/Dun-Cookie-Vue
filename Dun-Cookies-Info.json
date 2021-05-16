@@ -64,9 +64,9 @@
     "upgrade": {
         "v": "2.0.102",
         "title": "检测到新版本-2.0.102",
-        "description": "🎉使用蹲饼的博士突破2000人了！<br/> 1.刚刚说要降低更新频率，yj就上线了泰拉记事录，我们也就加上去了<br/>2.界面上把公告固定在最顶上了<br/>3.软件更新的信息合并到公告里面了<br/>4.分类模式启用了logo的形式而不是文字了<br/>5.把快捷连接和快捷工具区分开了<br/>6.检测游戏内弹窗，我们比饼更快一步<br/>备用CRX提取码：if8f 备用ZIP提取码：6ntx",
-        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.0.101/Dun-Cookie-2.0.101.crx",
-        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.0.101/Dun-Cookie-2.0.101.zip",
+        "description": "🎉使用蹲饼的博士突破2000人了！<br/> 1.刚刚说要降低更新频率，yj就上线了泰拉记事录，我们也就加上去了<br/>2.界面上把公告固定在最顶上了<br/>3.软件更新的信息合并到公告里面了<br/>4.分类模式启用了logo的形式而不是文字了<br/>5.把快捷连接和快捷工具区分开了<br/>6.检测游戏内弹窗，我们比饼更快一步",
+        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.0.102/Dun-Cookie-2.0.102.crx",
+        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.0.102/Dun-Cookie-2.0.102.zip",
         "downSpare": "https://pan.baidu.com/s/1kzY6kpfYqLcGpuaiwQOGoA",
         "downSpareText":"备用下载（提取码 jzq9）",
         "downChrome": "https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN"

@@ -7,7 +7,7 @@
 <h3 align="center">一起监视自由的兔兔。</h3>
 <h4 align="center">明日方舟兔兔发布动态发布时间越来越奇怪了，我每天下午4点刷都刷不出来，怎么办呢？写一个蹲饼器盯着兔兔看！</h4>
 <br/>
-<h2 align="center"><font color=23ade5>欢迎Star</font></h2>
+<h3 align="center"><font color=23ade5>欢迎Star</font></h3>
 <br/>
 <div align="center">
 <img src="https://img.nga.178.com/attachments/mon_202105/11/-klbw3Q16x-h4z5ZbT1kSdw-ci.gif" height = "200" alt="图片名称" align="center" />
@@ -21,7 +21,16 @@
 
 # 注意事项
 
-    任意途径下安装的2.0.54版本前的蹲饼器，如果要更新，请博士先卸载原有蹲饼器重新安装！
+>   因为需要兼容火狐，任意途径下安装的2.0.54版本前的蹲饼器，如果要更新，请博士先卸载原有蹲饼器重新安装！
+
+>   因为添加了一个新的获取数据的网址导致权限变更，所以任意途径下安装的2.0.102版本前的蹲饼器，如果在更新弹出要求新的权限，请博士先允许新的权限！
+    
+<details>
+  <summary>图为Chrome弹出的权限申请的其中一个示例页面，如果看到请同意</summary>
+  <img src="https://img.nga.178.com/attachments/mon_202105/16/-klbw3Q2o-kqaxK18T1kSfu-9w.jpg"  height = "200"/>
+</details>
+
+
 
 <br/>
 
@@ -96,6 +105,9 @@
 
 # 更新内容
 
+<details>
+    <summary>如果想看看我们之前的改动，可以看看这里面</summary>
+
 ## V2.0
 
     看上面吧
@@ -148,6 +160,9 @@
     2.调整循环模式，循环蹲饼将按照顺序，不会被中途打断了
     3.修复低频模式不生效的BUG
     4.修复因为浏览器缓存检测不到最新公告和更新
+
+</details>
+
 
 ## V2.0.101
 
@@ -230,9 +245,6 @@
 # 注意事项
 
     因为编写和测试都是在Chrome上进行的，兼容性问题可能无法照顾到全部浏览器
-
-> - Edge会有难看的滚动条，正在想办法去除
-
 
 
 <br/>
