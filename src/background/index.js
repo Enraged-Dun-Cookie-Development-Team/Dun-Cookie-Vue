@@ -452,8 +452,7 @@ let kazeFun = {
 
     // 检查一次更新
     getUpdateInfo(isAlert) {
-        kazeSourceProcess.Get("http://cdn.liuziyang.vip/Dun-Cookies-Info.json?t=" +
-        new Date().getTime(), false).then(responseText => {
+        kazeSourceProcess.Get(`http://cdn.liuziyang.vip/Dun-Cookies-Info.json?t=${new Date().getTime()}`, false).then(responseText => {
             let data = JSON.parse(responseText)
             if (kazeLocalData.saveInfo.version != data.upgrade.v) {
                 // 更新
