@@ -37,11 +37,8 @@
           >下载Zip</el-button
         >
         
-        <el-button @click="toLink(updateInfo.downSpareCrx)" size="mini"
-          >（备用）下载Crx</el-button
-        >
-        <el-button @click="toLink(updateInfo.downSpareZip)" size="mini"
-          >（备用）下载Zip</el-button
+        <el-button @click="toLink(updateInfo.downSpare)" size="mini"
+          >（备用）下载地址</el-button
         >
       </div>
       <el-divider></el-divider>
