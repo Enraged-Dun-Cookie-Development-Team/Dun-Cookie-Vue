@@ -84,7 +84,7 @@ let kazeSource = {
         source: 7,
     },
     tlgw: {
-        url: ['https://terra-historicus.hypergryph.com/api/comic/7748', 'https://terra-historicus.hypergryph.com/api/comic/2865'], 
+        url: ['https://terra-historicus.hypergryph.com/api/comic/7748', 'https://terra-historicus.hypergryph.com/api/comic/2865'],
         title: '泰拉记事社',
         dataName: 'tlgw',
         source: 8,
@@ -337,13 +337,13 @@ let kazeSourceProcess = {
             info.episodes.reverse();
             list.push({
                 time: info.updateTime,
-                id: info.cid,
+                id: info.updateTime,
                 judgment: info.updateTime,
-                dynamicInfo:info.title ,
+                dynamicInfo: info.title,
                 source: opt.source,
-                image:info.cover,
+                image: info.cover,
                 html: info,
-                url: `https://terra-historicus.hypergryph.com/comic/${cid}`,
+                url: `https://terra-historicus.hypergryph.com/comic/${info.cid}`,
             });
         });
         return list.sort((x, y) => y.time - x.time);

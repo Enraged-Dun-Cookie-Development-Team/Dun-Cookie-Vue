@@ -10,6 +10,9 @@
         <div class="info-title">
           版本已经更新，让我们更新后继续守护自由的兔兔吧！
         </div>
+        <div class="info-title">
+          Chrome应用商店下载的博士请等候审核通过后更新
+        </div>
       </div>
       <el-divider></el-divider>
       <el-card class="box-card">
@@ -72,13 +75,12 @@ export default {
     },
     // 检查一次更新
     getUpdateInfo() {
-      this.Get("http://cdn.liuziyang.vip/Dun-Cookies-Info.json?t=" +
+      this.Get(
+        "http://cdn.liuziyang.vip/Dun-Cookies-Info.json?t=" +
           new Date().getTime()
-      ).then(
-        (responseText) => {
-          this.updateInfo = JSON.parse(responseText).upgrade;
-        }
-      );
+      ).then((responseText) => {
+        this.updateInfo = JSON.parse(responseText).upgrade;
+      });
     },
     getSaveInfo() {
       this.getLocalStorage("saveInfo").then((data) => {
