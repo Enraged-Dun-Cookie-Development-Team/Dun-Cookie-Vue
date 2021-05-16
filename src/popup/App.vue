@@ -39,7 +39,9 @@
             /></el-button>
           </el-tooltip>
         </el-row>
-        <el-divider v-if="quickJump.url" content-position="left">快捷链接</el-divider>
+        <el-divider v-if="quickJump.url" content-position="left"
+          >快捷链接</el-divider
+        >
         <el-row type="flex" justify="center" class="drawer-btn-area">
           <el-tooltip
             :key="item.img"
@@ -134,7 +136,7 @@
             :autoplay="true"
           >
             <el-carousel-item v-if="isNew">
-              <div class="new-info-area"  @click="getUpdateInfo">
+              <div class="new-info-area" @click="getUpdateInfo">
                 <img
                   src="http://prts.wiki/images/b/be/%E9%81%93%E5%85%B7_%E5%B8%A6%E6%A1%86_%E8%B5%84%E6%B7%B1%E5%B9%B2%E5%91%98%E7%89%B9%E8%AE%AD%E9%82%80%E8%AF%B7%E5%87%BD.png"
                 />
@@ -237,7 +239,9 @@ export default {
       this.getSaveInfo();
       this.getSetting();
       this.getDunInfo();
-      this.getOnlineSpeak();
+      setTimeout(() => {
+        this.getOnlineSpeak();
+      }, 1);
     },
 
     // 获取后台数据

@@ -73,10 +73,10 @@
             </transition>
           </div>
           <div v-if="item.source == 8" class="tlgw">
-            <img class="image-back" :src="item.image" />
+            <img v-if="imgShow" class="image-back" :src="item.image" />
             <div class="content-card">
               <div class="content-card-info">
-                <img :src="item.image" class="content-card-image" />
+                <img  v-if="imgShow" :src="item.image" class="content-card-image" />
                 <div class="content-card-title">{{ item.dynamicInfo }}</div>
                 <div class="content-card-introduction">
                   {{ item.html.introduction }}
