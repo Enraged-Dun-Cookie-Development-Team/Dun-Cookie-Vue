@@ -20,7 +20,8 @@ var date = {
 let kazeData = {
     isTest: false,
     testIntervalTime: 3,
-    setting: {}
+    setting: {},
+    FocusAnnounceId: null
 }
 
 // 软件存储数据 数据互通使用
@@ -170,6 +171,7 @@ let kazeSourceProcess = {
         }
     },
 
+    // 获取数据底层方法
     GetAlgorithm(url) {
         return new Promise((resolve, reject) => {
             let xhr = new XMLHttpRequest();
@@ -277,6 +279,7 @@ let kazeSourceProcess = {
                 });
             }
         });
+        kazeFun.JudgmentNewFocusAnnounceId(data);
         return list.sort((x, y) => y.judgment - x.judgment);
     },
 
@@ -372,6 +375,15 @@ let kazeFun = {
 
     },
 
+    // 通讯组专用 检测到了可能会更新
+    JudgmentNewFocusAnnounceId(data) {
+        if (data) {
+            if (kazeData.FocusAnnounceId && data.focusAnnounceId && kazeData.FocusAnnounceId != data.focusAnnounceId) {
+                this.SendNotice(`【通讯组预告】公子马上有饼吃!`, '检测到游戏出现公告弹窗，可能马上发饼！', null, new Date().getTime())
+            }
+            kazeData.FocusAnnounceId = data.focusAnnounceId;
+        }
+    },
 
     //判断是否为最新 并且在此推送
     JudgmentNew(oldList, newList, title) {

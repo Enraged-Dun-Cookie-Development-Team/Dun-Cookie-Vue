@@ -3,7 +3,11 @@
     <el-timeline-item
       v-for="(item, index) in cardlist"
       :key="index"
-      :timestamp="timespanToDay(item.time)"
+      :timestamp="
+        item.source == 2 || item.source == 5 || item.source == 7 || item.source == 8
+          ? timespanToDay(item.time, 1)
+          : timespanToDay(item.time)
+      "
       placement="top"
       :icon="'headImg' + item.source"
     >
@@ -117,7 +121,7 @@ export default {
     // 图片卡 先加载dom后加载图片内容
     setTimeout(() => {
       this.imgShow = true;
-    }, 1000);
+    }, 1);
   },
   methods: {
     timespanToDay,
