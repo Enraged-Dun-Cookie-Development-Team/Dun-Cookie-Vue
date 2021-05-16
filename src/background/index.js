@@ -20,7 +20,8 @@ var date = {
 let kazeData = {
     isTest: false,
     testIntervalTime: 3,
-    setting: {}
+    setting: {},
+    FocusAnnounceId: null
 }
 
 // 软件存储数据 数据互通使用
@@ -73,7 +74,7 @@ let kazeSource = {
     },
     tl: {
         url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=7499841383&containerid=1076037499841383',
-        title: '泰拉记事社',
+        title: '泰拉记事社微博',
         dataName: 'tl',
         source: 6,
     },
@@ -82,7 +83,13 @@ let kazeSource = {
         title: '官网',
         dataName: 'gw',
         source: 7,
-    }
+    },
+    tlgw: {
+        url: ['https://terra-historicus.hypergryph.com/api/comic/7748', 'https://terra-historicus.hypergryph.com/api/comic/2865'],
+        title: '泰拉记事社',
+        dataName: 'tlgw',
+        source: 8,
+    },
 }
 
 // 数据获取和处理
@@ -99,6 +106,8 @@ let kazeSourceProcess = {
         kazeLocalData.setting.source.includes(5) ? this.GetAndProcessData(kazeSource['sr']) : delete kazeLocalData.cardlistdm.sr;
         kazeLocalData.setting.source.includes(6) ? this.GetAndProcessData(kazeSource['tl']) : delete kazeLocalData.cardlistdm.tl;
         kazeLocalData.setting.source.includes(7) ? this.GetAndProcessData(kazeSource['gw']) : delete kazeLocalData.cardlistdm.gw;
+        kazeLocalData.setting.source.includes(8) ? this.GetAndProcessData(kazeSource['tlgw']) : delete kazeLocalData.cardlistdm.tlgw;
+
     },
 
     //请求 处理 回调 保存
@@ -114,7 +123,7 @@ let kazeSourceProcess = {
         this.Get(opt.url).then(data => {
             opt.responseText = data;
             let newCardList = [];
-            // source: ['bili', 'weibo', 'yj', 'cho3', 'ys3', 'sr', 'tl']
+            // source: ['bili', 'weibo', 'yj', 'cho3', 'ys3', 'sr', 'tl', 'tlgw', ]
             if (opt.source == 0) {
                 newCardList = this.processBiliBili(opt);
             }
@@ -129,6 +138,9 @@ let kazeSourceProcess = {
             }
             else if (opt.source == 7) {
                 newCardList = this.processGw(opt)
+            }
+            else if (opt.source == 8) {
+                newCardList = this.processTlGw(opt)
             }
 
             let oldCardList = kazeLocalData.cardlistdm[opt.dataName];
@@ -146,19 +158,32 @@ let kazeSourceProcess = {
             kazeLocalData.dunInfo.dunIndex++;
         }
         try {
-            return new Promise((resolve, reject) => {
-                let xhr = new XMLHttpRequest();
-                xhr.open("GET", url, true);
-                xhr.onreadystatechange = () => {
-                    if (xhr.readyState == 4 && xhr.status == 200 && xhr.responseText != "") {
-                        resolve(xhr.responseText);
-                    }
-                }
-                xhr.send();
-            })
+            if (typeof url == "string") {
+                url = [url];
+            }
+            return new Promise((resolve) => {
+                Promise.all(url.map(item => this.GetAlgorithm(item))).then((values) => {
+                    resolve(values);
+                });
+            });
         } catch (error) {
             console.log(error);
         }
+    },
+
+    // 获取数据底层方法
+    GetAlgorithm(url) {
+        return new Promise((resolve, reject) => {
+            let xhr = new XMLHttpRequest();
+            xhr.open("GET", url, true);
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState == 4 && xhr.status == 200 && xhr.responseText != "") {
+                    resolve(xhr.responseText);
+                    return;
+                }
+            }
+            xhr.send();
+        });
     },
 
     // 处理微博源
@@ -254,6 +279,7 @@ let kazeSourceProcess = {
                 });
             }
         });
+        kazeFun.JudgmentNewFocusAnnounceId(data);
         return list.sort((x, y) => y.judgment - x.judgment);
     },
 
@@ -304,6 +330,26 @@ let kazeSourceProcess = {
             }
         });
         return list.sort((x, y) => y.time - x.time);
+    },
+
+    // 泰拉记事社官网
+    processTlGw(opt) {
+        let list = [];
+        opt.responseText.map(x => {
+            let info = JSON.parse(x).data;
+            info.episodes.reverse();
+            list.push({
+                time: info.updateTime,
+                id: info.updateTime,
+                judgment: info.updateTime,
+                dynamicInfo: info.title,
+                source: opt.source,
+                image: info.cover,
+                html: info,
+                url: `https://terra-historicus.hypergryph.com/comic/${info.cid}`,
+            });
+        });
+        return list.sort((x, y) => y.time - x.time);
     }
 }
 
@@ -329,6 +375,15 @@ let kazeFun = {
 
     },
 
+    // 通讯组专用 检测到了可能会更新
+    JudgmentNewFocusAnnounceId(data) {
+        if (data) {
+            if (kazeData.FocusAnnounceId && data.focusAnnounceId && kazeData.FocusAnnounceId != data.focusAnnounceId) {
+                this.SendNotice(`【通讯组预告】公子马上有饼吃!`, '检测到游戏出现公告弹窗，可能马上发饼！', null, new Date().getTime())
+            }
+            kazeData.FocusAnnounceId = data.focusAnnounceId;
+        }
+    },
 
     //判断是否为最新 并且在此推送
     JudgmentNew(oldList, newList, title) {
@@ -443,8 +498,8 @@ let kazeFun = {
 
     // 初始化
     Init() {
-        // chrome.browserAction.setBadgeText({ text: 'Beta' });
-        // chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
+        chrome.browserAction.setBadgeText({ text: 'Beta' });
+        chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
         // 初始化
         kazeFun.saveLocalStorage('dunInfo', kazeLocalData.dunInfo);
         kazeFun.saveLocalStorage('saveInfo', kazeLocalData.saveInfo);
@@ -529,6 +584,7 @@ let kazeFun = {
             kazeSource.sr.url = `test/srJson.json`;
             kazeSource.tl.url = `test/tlJson.json?type=uid&value=6441489862&containerid=1076037499841383`;
             kazeSource.gw.url = `test/gw.html`;
+            kazeSource.tlgw.url = ['test/xbJson.json', 'test/xgbJson.json'];
         }
     }
 }
