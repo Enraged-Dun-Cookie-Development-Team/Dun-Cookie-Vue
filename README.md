@@ -167,7 +167,7 @@
 
 > 1. 先解压到任意文件夹
 > 2. 地址栏输入`edge://extensions/`，回车
-> 3. 点击已安装的扩展右边的第一个图标“加载解压缩的扩展”![avatar](http://github-image.liuziyang.vip/edge-load.webp)
+> 3. 点击已安装的扩展右边的第一个图标“加载解压缩的扩展”![avatar](https://img.nga.178.com/attachments/mon_202105/11/-klbw3Q16x-zqeK0.webp)
 > 4. 选择解压后的整个插件文件夹完成安装
 >
 > PS: 可以通过地址栏输入`edge://settings/?search=后台`找到“关闭 Microsoft Edge 后继续运行后台应用关闭”，选择运行后台扩展程序的使用
