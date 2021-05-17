@@ -27,7 +27,10 @@
     
 <details>
   <summary>图为Chrome弹出的权限申请的其中一个示例页面，如果看到请同意</summary>
-  <img src="https://img.nga.178.com/attachments/mon_202105/16/-klbw3Q2o-kqaxK18T1kSfu-9w.jpg"  height = "200"/>
+   
+  ![avatar](https://img.nga.178.com/attachments/mon_202105/17/-klbw3Q2o-8chxKxT1kSfu-9w.jpg)
+  
+  ![avatar](https://img.nga.178.com/attachments/mon_202105/17/-klbw3Q2o-j0r9KeT1kScx-6a.jpg)
 </details>
 
 
