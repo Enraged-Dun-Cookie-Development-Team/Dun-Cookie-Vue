@@ -106,9 +106,9 @@
       ></el-button>
       <div class="version">
         {{ `蹲饼 V${saveInfo.version}` }}
-        <span v-if="cardlist.length == 0" style="color: red"
-          >【无内容，请检查网络】</span
-        >
+        <div v-if="cardlist.length == 0 || loading" style="color: red">
+          【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没有*龙门粗口*正常连接】
+        </div>
         <span v-else>
           <span
             >【已蹲饼
@@ -124,9 +124,10 @@
       </div>
       <div id="content">
         <el-card
-          v-if="onlineSpeakList && onlineSpeakList.length > 0"
-          shadow="always"
+          shadow="never"
           class="info-card online-speak"
+          v-loading="loading"
+          element-loading-text="正在获取在线信息"
         >
           <el-carousel
             arrow="never"
@@ -151,6 +152,8 @@
             </el-carousel-item>
           </el-carousel>
         </el-card>
+
+        <div class="content-timeline-shadown"></div>
 
         <time-line
           v-if="!setting.isTag"
@@ -221,12 +224,10 @@ export default {
       oldDunIndex: 0,
       dunInfo: common.dunInfo,
       setting: common.setting,
-      drawer: false, //打开菜单
-      isReload: false, //是否正在刷新
-      showImage: true,
-      showAllImage: [],
-      imgShow: false, //延迟展示图片
+      drawer: false, // 打开菜单
+      isReload: false, // 是否正在刷新
       quickJump: common.quickJump,
+      loading: true, // 初始化加载
     };
   },
   computed: {},
@@ -236,11 +237,13 @@ export default {
     timespanToDay,
     Get,
     init() {
-      this.getCardlist();
-      this.getSaveInfo();
-      this.getSetting();
-      this.getDunInfo();
-      this.getOnlineSpeak();
+      setTimeout(() => {
+        this.getCardlist();
+        this.getSaveInfo();
+        this.getSetting();
+        this.getDunInfo();
+        this.getOnlineSpeak();
+      }, 1);
     },
 
     // 获取后台数据
@@ -289,6 +292,7 @@ export default {
 
         // 是否最新
         this.isNew = data.upgrade.v != this.saveInfo.version;
+        this.loading = false;
       });
     },
 
@@ -408,8 +412,8 @@ export default {
     // margin: -8px;
     background-color: @@bgColor;
     // border: 8px @@bgColor solid;
-    min-width: 600px;
-    height: 540px0px;
+    width: 700px;
+    height: 600px;
     overflow: auto;
   }
 
@@ -487,9 +491,18 @@ export default {
 
   #content {
     margin-top: 40px;
+    // 间隔阴影
+    .content-timeline-shadown {
+      position: fixed;
+      width: 100%;
+      height: 20px;
+      background: linear-gradient(180deg, @@bgColor 50%, transparent);
+      z-index: 10;
+    }
+
     .info-card {
       padding: 3px;
-      margin: 0px 20px;
+      margin: 0px 18px;
       background-color: @@bgColor;
       border: @@timeline solid 1px;
       color: @@content;
@@ -522,9 +535,9 @@ export default {
       }
     }
     // 更改卡片阴影
-    .is-always-shadow {
-      box-shadow: 0 2px 12px 0 @@shadow;
-    }
+    // .is-always-shadow {
+    //   box-shadow: 0 2px 12px 0 @@shadow;
+    // }
   }
 
   // 隐藏二级菜单

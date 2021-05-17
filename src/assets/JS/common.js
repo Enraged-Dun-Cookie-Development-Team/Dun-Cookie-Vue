@@ -13,6 +13,7 @@ let common = {
     lowfrequency: false,// 低频模式按钮
     lowfrequencyTime: [8, 20],// 低频模式时段 需要转换
     islowfrequency: false, // 是否正处于低频模式状态下
+    retweeted: true,// 是否查看转发
   },
   dunInfo: {
     dunIndex: 0,

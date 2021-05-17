@@ -196,6 +196,15 @@
               <el-form-item label="展示图片">
                 <el-switch v-model="setting.imgshow"></el-switch>
               </el-form-item>
+              <el-tooltip class="item" effect="dark" placement="left">
+                <div slot="content">
+                  转发内容大部分为抽奖结果，为了防止有人吃不了柠檬陷的饼，特意添加此开关。调整此开关会导致<br />
+                  调整此开关会导致源数据改变，可能会有错误的推送！
+                </div>
+                <el-form-item label="显示转发">
+                  <el-switch v-model="setting.retweeted"></el-switch>
+                </el-form-item>
+              </el-tooltip>
               <el-tooltip
                 class="item"
                 effect="dark"

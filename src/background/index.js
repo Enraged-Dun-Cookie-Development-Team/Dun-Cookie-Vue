@@ -13,7 +13,8 @@ var date = {
     source: '条目来源 【必填】',
     url: '跳转后连接 【必填】',
     detail: '详情列表，以后进入二级页面使用',
-    isTop: '在列表中是否为置顶内容 仅限微博'
+    isTop: '在列表中是否为置顶内容 仅限微博',
+    retweeted: '转发的内容'
 }
 
 // 软件临时数据
@@ -192,17 +193,21 @@ let kazeSourceProcess = {
         let data = JSON.parse(opt.responseText);
         if (data.ok == 1 && data.data != null && data.data.cards != null && data.data.cards.length > 0) {
             data.data.cards.forEach(x => {
-                if (x.hasOwnProperty('mblog') && !x.mblog.hasOwnProperty('retweeted_status') && !x.mblog.hasOwnProperty('retweeted_status')) {
+                // 设置是否显示转发内容
+                if (!kazeLocalData.setting.retweeted && x.mblog.hasOwnProperty('retweeted_status')) {
+                    return;
+                }
+                if (x.hasOwnProperty('mblog')) {
                     let dynamicInfo = x.mblog;
                     let weiboId = data.data.cardlistInfo.containerid;
                     let time = Math.floor(new Date(dynamicInfo.created_at).getTime() / 1000);
                     let imageList = dynamicInfo.pic_ids && dynamicInfo.pic_ids.map(x => `https://wx1.sinaimg.cn/large/${x}`);
-                    list.push({
+                    let info = {
                         time: time,
                         id: time,
                         isTop: x.mblog.hasOwnProperty('isTop') && x.mblog.isTop == 1,
                         judgment: time,
-                        dynamicInfo: dynamicInfo.text.replace(/<\a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<\img.*?>|全文|网页链接/g, '').replace(/<br \/>/g, '\n'),
+                        dynamicInfo: dynamicInfo.raw_text || dynamicInfo.text.replace(/<\a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<span class="url-icon">|<\img.*?>|全文|网页链接/g, '').replace(/<br \/>/g, '\n'),
                         html: dynamicInfo.text,
                         image: dynamicInfo.bmiddle_pic || dynamicInfo.original_pic,
                         imageList: imageList,
@@ -210,7 +215,16 @@ let kazeSourceProcess = {
                         source: opt.source,
                         url: "https://weibo.com/" + weiboId.substring((weiboId.length - 10), weiboId.length) + "/" + x.mblog.bid,
                         detail: []
-                    })
+                    };
+                    // 转发内容
+                    if (x.mblog.hasOwnProperty('retweeted_status')) {
+                        let retweeted = {
+                            name: x.mblog.retweeted_status.user.screen_name,
+                            dynamicInfo: x.mblog.retweeted_status.raw_text || x.mblog.retweeted_status.text.replace(/<\a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<span class="url-icon">|<\img.*?>|全文|网页链接/g, '').replace(/<br \/>/g, '\n')
+                        }
+                        info.retweeted = retweeted;
+                    }
+                    list.push(info);
                 }
 
             });
@@ -498,8 +512,8 @@ let kazeFun = {
 
     // 初始化
     Init() {
-        // chrome.browserAction.setBadgeText({ text: 'Beta' });
-        // chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
+        chrome.browserAction.setBadgeText({ text: 'Beta' });
+        chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
         // 初始化
         kazeFun.saveLocalStorage('dunInfo', kazeLocalData.dunInfo);
         kazeFun.saveLocalStorage('saveInfo', kazeLocalData.saveInfo);

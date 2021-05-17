@@ -4,7 +4,10 @@
       v-for="(item, index) in cardlist"
       :key="index"
       :timestamp="
-        item.source == 2 || item.source == 5 || item.source == 7 || item.source == 8
+        item.source == 2 ||
+        item.source == 5 ||
+        item.source == 7 ||
+        item.source == 8
           ? timespanToDay(item.time, 1)
           : timespanToDay(item.time)
       "
@@ -14,6 +17,7 @@
       <el-card
         class="card"
         :class="'font-size-' + setting.fontsize + ' soure-' + item.source"
+        shadow="never"
       >
         <div>
           <span v-if="item.source != 8">
@@ -40,43 +44,54 @@
 
           <!-- 普通列 -->
           <div v-if="item.source != 8">
-            <el-row class="margintb">
+            <el-row>
               <div v-html="item.dynamicInfo"></div>
+              <!-- 如果有转发 -->
+              <el-card
+                v-if="item.retweeted"
+                class="card margintb"
+                shadow="never"
+              >
+                转发至 @{{ item.retweeted.name }}:
+                <br />
+                <span v-html="item.retweeted.dynamicInfo"></span>
+              </el-card>
             </el-row>
-
-            <transition name="el-fade-in-linear">
-              <el-row
-                class="margintb"
-                v-if="imgShow && setting.imgshow && item.image"
+            <el-row
+              v-if="imgShow && setting.imgshow && item.image"
+              class="margintb"
+            >
+              <div
+                class="img-area"
+                @click="changeShowAllImage(item.image)"
+                :class="showAllImage.includes(item.image) ? 'show-all' : ''"
               >
                 <div
-                  class="img-area"
-                  @click="changeShowAllImage(item.image)"
-                  :class="showAllImage.includes(item.image) ? 'show-all' : ''"
+                  v-if="
+                    item.imageList != undefined && item.imageList.length > 1
+                  "
                 >
-                  <div
-                    v-if="
-                      item.imageList != undefined && item.imageList.length > 1
-                    "
-                  >
-                    <el-row :gutter="5">
-                      <el-col v-for="img in item.imageList" :key="img" :span="8"
-                        ><img :src="img" class="img" />
-                      </el-col>
-                    </el-row>
-                  </div>
-                  <div v-else>
-                    <img :src="item.image" class="img" />
-                  </div>
+                  <el-row :gutter="5">
+                    <el-col v-for="img in item.imageList" :key="img" :span="8"
+                      ><img v-lazy="img" class="img" />
+                    </el-col>
+                  </el-row>
                 </div>
-              </el-row>
-            </transition>
+                <div v-else>
+                  <img v-lazy="item.image" class="img" />
+                </div>
+              </div>
+            </el-row>
           </div>
           <div v-if="item.source == 8" class="tlgw">
-            <img v-if="imgShow" class="image-back" :src="item.image" />
+            <img v-if="imgShow" class="image-back" v-lazy="item.image" />
             <div class="content-card">
               <div class="content-card-info">
-                <img  v-if="imgShow" :src="item.image" class="content-card-image" />
+                <img
+                  v-if="imgShow"
+                  v-lazy="item.image"
+                  class="content-card-image"
+                />
                 <div class="content-card-title">{{ item.dynamicInfo }}</div>
                 <div class="content-card-introduction">
                   {{ item.html.introduction }}
@@ -174,6 +189,27 @@ ${item.url}
 };
 </script>
 <style lang="less" >
+// 图片加载中
+img[lazy="loading"] {
+  -webkit-animation: loading 1s linear 1s 5 alternate;
+  animation: loading 1s linear infinite;
+}
+
+img[lazy="error"] {
+  filter: brightness(20%);
+}
+
+@keyframes loading {
+  from {
+    filter: brightness(20%);
+  }
+  50% {
+    filter: brightness(90%);
+  }
+  to {
+    filter: brightness(20%);
+  }
+}
 @import "../theme/theme.less";
 
 .styleChange(@theme) {
@@ -196,10 +232,16 @@ ${item.url}
   }
 
   .card {
-    width: 600px;
+    width: 100%;
     background-color: @@bgColor;
     border: @@timeline solid 1px;
     color: @@content;
+
+    // .retweeted  {
+    //   background-color: @@bgColor;
+    //   border: @@timeline solid 1px;
+    //   color: @@content;
+    // }
 
     &.font-size--1 {
       font-size: 0.7rem;
@@ -215,7 +257,7 @@ ${item.url}
     }
 
     .margintb {
-      margin: 0 0 10px 0;
+      margin: 10px 0 0 0;
     }
     .img-area {
       width: 100%;
@@ -316,9 +358,9 @@ ${item.url}
     }
   }
   // 更改卡片阴影
-  .is-always-shadow {
-    box-shadow: 0 2px 12px 0 @@shadow;
-  }
+  // .is-always-shadow {
+  //   box-shadow: 0 2px 12px 0 @@shadow;
+  // }
 
   .el-timeline {
     padding-left: 25px;
