@@ -20,7 +20,8 @@
             "overTime": "2021-5-29 04:00:00"
         }
     ],
-    "btnList": [{
+    "btnList": [
+        {
             "starTime": "2021-4-24 22:00:00",
             "overTime": "2021-5-18 04:00:00",
             "url": "https://ak.hypergryph.com/activity/preparation?source=game",
@@ -47,26 +48,42 @@
         {
             "starTime": "2021-5-15 12:00:00",
             "overTime": "2021-5-22 04:00:00",
-            "url": "https://www.bilibili.com/video/BV1hq4y177rd",
-            "name": "【全网首杀危机合约24】我们两面包夹芝士！",
-            "img": "https://i2.hdslb.com/bfs/archive/0cd853dc8caa19908b4c3496ff51104474e03f1a.jpg@200w_125h_1c.webp",
+            "url": "https://www.bilibili.com/video/BV1K64y1y7eF",
+            "name": "【全网首发】【明日方舟光谱行动】10分钟的紧张对决！光谱行动25首发！鲸叉战锤展双旗...",
+            "img": "https://i2.hdslb.com/bfs/archive/e2b742498945ff9879f4c3fba2c2ce97268f56d5.png@200w_125h_1c.webp",
             "radius": true
         },
         {
             "starTime": "2021-5-15 12:00:00",
             "overTime": "2021-5-22 04:00:00",
-            "url": "https://www.bilibili.com/video/BV1Xy4y1p77b?t=269",
-            "name": "【光谱行动】【八号竞技场】全网首发5人24级危机等级 - 此刻乃极致之时",
-            "img": "https://i2.hdslb.com/bfs/archive/b996dd6df8ce9a2eea68c57e6e175439c9d1f7ff.jpg@200w_125h_1c.webp",
+            "url": "https://www.bilibili.com/video/BV1YN411Z7KR",
+            "name": "【首杀】【光谱行动6人25】腐败尘土归弹雨，凋零北斗落黄昏",
+            "img": "https://i2.hdslb.com/bfs/archive/88fa85bb9fbde8cbc1c9632483d93a47d869cf54.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-5-15 12:00:00",
+            "overTime": "2021-5-29 04:00:00",
+            "url": "https://www.bilibili.com/video/BV14Q4y1o7qP",
+            "name": "【作业】【明日方舟光谱行动】魔法zc目录",
+            "img": "https://i1.hdslb.com/bfs/archive/a39b95edb24cfd24fdc5545286f55e891051f534.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-5-15 12:00:00",
+            "overTime": "2021-5-29 04:00:00",
+            "url": "https://www.bilibili.com/video/BV1cK411F7vz",
+            "name": "【作业】【明日方舟光谱行动】小狼XF",
+            "img": "https://i2.hdslb.com/bfs/archive/2601cc140f4c2b6fb77726e362b560d36c624b81.jpg@200w_125h_1c.webp",
             "radius": true
         }
     ],
     "upgrade": {
-        "v": "2.0.102",
-        "title": "检测到新版本-2.0.102",
-        "description": "🎉使用蹲饼的博士突破2000人了！<br/> 1.刚刚说要降低更新频率，yj就上线了泰拉记事录，我们也就加上去了<br/>2.界面上把公告固定在最顶上了<br/>3.软件更新的信息合并到公告里面了<br/>4.分类模式启用了logo的形式而不是文字了<br/>5.把快捷连接和快捷工具区分开了<br/>6.检测游戏内弹窗，我们比饼更快一步",
-        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.0.102/Dun-Cookie-2.0.102.crx",
-        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.0.102/Dun-Cookie-2.0.102.zip",
+        "v": "2.0.128",
+        "title": "检测到新版本-2.0.128",
+        "description": "🚀 本次版本主要是优化性能，然后添加了一个功能<br/>1.优化开启速度，耗时超级缩短，点击图标打开列表速度直接拉满！<br/>2.主界面的阴影去除了，保障部分电脑性能，滚动翻页不会卡了<br/>3.强迫症优化，顶部公告和下面卡片距离边框的距离统一了<br/>4.图片懒加载，我们的logo再图片区域闪来闪去的时候就是正在加载图片<br/>5.打开列表界面不会弹一下了<br/>6.公告区域添加loading，网速慢的时候能看到<br/>7.我们支持了微博转发内容的显示，可以在设置里面打开",
+        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.0.128/dun-cookie-2.0.128.crx",
+        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.0.128/dun-cookie-2.0.128.zip",
         "downSpare": "https://pan.baidu.com/s/1kzY6kpfYqLcGpuaiwQOGoA",
         "downSpareText":"备用下载（提取码 jzq9）",
         "downChrome": "https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN"

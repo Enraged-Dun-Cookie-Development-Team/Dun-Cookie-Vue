@@ -194,6 +194,7 @@
     5.打开列表界面不会弹一下了
     6.公告区域添加loading，网速慢的时候能看到
     7.我们支持了微博转发内容的显示，可以在设置里面打开
+    8.调整了和添加了说明文案，不做谜语人
 
 <br/>
 
@@ -204,7 +205,7 @@
 ## Chrome安装方法
 
     Chrome用户相当建议使用应用商店下载，因为更新方便
-> - 推荐 [Chrome应用商店](https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC/gblmdllhbodefkmimbcjpflhjneagkkd)
+> - 推荐 [Chrome应用商店](https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd)
 > - 下载crx安装
 > - 下载zip通过开发者模式加载已解压的扩展程序
 >   1. 先解压到任意文件夹

@@ -512,8 +512,8 @@ let kazeFun = {
 
     // 初始化
     Init() {
-        chrome.browserAction.setBadgeText({ text: 'Beta' });
-        chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
+        // chrome.browserAction.setBadgeText({ text: 'Beta' });
+        // chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
         // 初始化
         kazeFun.saveLocalStorage('dunInfo', kazeLocalData.dunInfo);
         kazeFun.saveLocalStorage('saveInfo', kazeLocalData.saveInfo);

@@ -128,7 +128,7 @@
                     :max="3600"
                   ></el-input-number>
                   <span style="margin-left: 20px" v-if="setting.lowfrequency"
-                    >低频模式下为{{ setting.time * 2 }}秒</span
+                    >低频模式下为{{ setting.time * 2 }}秒刷新一次</span
                   >
                 </el-form-item>
               </el-tooltip>
@@ -145,7 +145,7 @@
               <el-tooltip
                 class="item"
                 effect="dark"
-                content="时间段内蹲饼的攻速降低100%，用来节省流量和性能"
+                content="时间段内蹲饼的攻速降低100%，用来节省流量和性能，降低打开后数据请看蹲饼频率后面的文字说明"
                 placement="bottom"
               >
                 <el-form-item label="低频模式">
