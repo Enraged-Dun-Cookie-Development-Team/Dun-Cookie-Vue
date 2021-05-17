@@ -1,7 +1,8 @@
 <template>
   <div class="background" :class="setting.outsideClass">
     <div id="app">
-      <el-card class="box-card">
+      <el-card class="box-card" 
+          shadow="never">
         <el-row type="flex" align="middle" justify="space-around">
           <el-image class="img" src="../assets/image/icon.png"></el-image>
           <div class="version">蹲饼 V{{ saveInfo.version }}</div>
@@ -452,9 +453,9 @@ export default {
     width: 600px;
     min-width: 600px;
     margin: auto;
-    .is-always-shadow {
-      box-shadow: 0 2px 12px 0 @@shadow;
-    }
+    // .is-always-shadow {
+    //   box-shadow: 0 2px 12px 0 @@shadow;
+    // }
     .box-card {
       background-color: @@bgColor;
       border: @@btnBorder 1px solid;
@@ -483,7 +484,7 @@ export default {
       }
       .el-tabs--border-card {
         border: @@btnBorder 1px solid;
-        box-shadow: 0 2px 4px 0 @@shadow, 0 0 6px 0 @@shadow;
+        box-shadow: none;
 
         /deep/.el-tabs__header {
           background-color: @@numberInput;

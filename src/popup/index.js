@@ -7,8 +7,8 @@ import VueClipboard from 'vue-clipboard2'
 import VueLazyload from 'vue-lazyload'
 
 Vue.use(VueLazyload, {
-    loading: require('@/assets/image/icon.png'),
-    error: require('@/assets/image/icon.png'),
+    loading: '/assets/image/icon.png',
+    error: '/assets/image/icon.png',
 })
 
 Vue.config.productionTip = false
