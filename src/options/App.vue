@@ -199,11 +199,32 @@
                 </el-form-item>
               </el-tooltip>
             </el-tab-pane>
+            <el-tab-pane label="配置导入导出" name="3">
+              <div style="display: flex; justify-content: space-around">
+                <el-button type="success" size="small" @click="settingExport"
+                  >导出配置</el-button
+                >
+                <el-upload
+                  :auto-upload="false"
+                  :on-change="settingImport"
+                  ref="upload"
+                  accept="application/json"
+                  :show-file-list="false"
+                >
+                  <el-button
+                    type="danger"
+                    size="small"
+                    style="margin-left: 50px"
+                    >导入配置</el-button
+                  >
+                </el-upload>
+              </div>
+            </el-tab-pane>
             <el-tab-pane label="反馈通道" name="2">
               <div v-html="saveInfo.feedbackInfo"></div>
             </el-tab-pane>
           </el-tabs>
-          <div class="btn-area">
+          <div class="btn-area" v-if="activeTab == '0' || activeTab == '1'">
             <el-button type="primary" @click="saveSetting('form')"
               >保存</el-button
             >
@@ -316,6 +337,7 @@ export default {
       });
     },
 
+    // 保存设置
     saveSetting(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -353,6 +375,46 @@ export default {
           resolve(null);
         });
       });
+    },
+
+    // 导出设置
+    settingExport() {
+      const blob = new Blob([JSON.stringify(this.setting)], {
+        type: "application/json",
+      });
+      let src = URL.createObjectURL(blob);
+      chrome.downloads.download({ url: src, saveAs: true }, (data) => {
+        console.log(data);
+      });
+    },
+    // 导入设置
+    settingImport(file) {
+      const reader = new FileReader();
+      reader.onload = (res) => {
+        const { result } = res.target; // 得到字符串
+        const data = JSON.parse(result); // 解析成json对象
+        this.$confirm("解析文件成功，是否覆盖当前设置?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        })
+          .then(() => {
+            this.setting = data;
+            this.saveSetting("form");
+          })
+          .catch(() => {
+            this.$message("你决定了不覆盖当前设置项");
+          });
+      }; // 成功回调
+      reader.onerror = (err) => {
+        this.$message.error("没有导入成功，心态崩了啊！");
+        this.$notify({
+          title: "貌似检测到导出失败",
+          message: "可以加QQ群 362860473 后将文件发送给管理员查看检测问题",
+          duration: 0,
+        });
+      }; // 失败回调
+      reader.readAsText(new Blob([file.raw]), "utf-8"); // 按照utf-8编码解析
     },
 
     // 低频时间选择

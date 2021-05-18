@@ -114,7 +114,6 @@ let kazeSourceProcess = {
         kazeLocalData.setting.source.includes(7) ? this.GetAndProcessData(kazeSource['gw']) : delete kazeLocalData.cardlistdm.gw;
         kazeLocalData.setting.source.includes(8) ? this.GetAndProcessData(kazeSource['tlgw']) : delete kazeLocalData.cardlistdm.tlgw;
         kazeLocalData.setting.source.includes(9) ? this.GetAndProcessData(kazeSource['wyyyy']) : delete kazeLocalData.cardlistdm.wyyyy;
-
     },
 
     //请求 处理 回调 保存
