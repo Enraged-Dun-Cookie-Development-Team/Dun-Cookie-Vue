@@ -1,8 +1,7 @@
 <template>
   <div class="background" :class="setting.outsideClass">
     <div id="app">
-      <el-card class="box-card" 
-          shadow="never">
+      <el-card class="box-card" shadow="never">
         <el-row type="flex" align="middle" justify="space-around">
           <el-image class="img" src="../assets/image/icon.png"></el-image>
           <div class="version">蹲饼 V{{ saveInfo.version }}</div>
@@ -38,76 +37,16 @@
               >
                 <el-form-item label="饼来源">
                   <el-checkbox-group v-model="setting.source" :min="1">
-                    <el-checkbox :label="7">
-                      <span class="checkbox-area">
-                        <img
-                          class="iconimg"
-                          :src="numberOrEnNameToIconSrc(7)"
-                        />官网网站</span
-                      ></el-checkbox
+                    <el-checkbox
+                      :label="index - 1"
+                      v-for="index in 10"
+                      :key="index - 1"
                     >
-                    <el-checkbox :label="0">
                       <span class="checkbox-area">
                         <img
                           class="iconimg"
-                          :src="numberOrEnNameToIconSrc(0)"
-                        />B站</span
-                      >
-                    </el-checkbox>
-                    <el-checkbox :label="1">
-                      <span class="checkbox-area">
-                        <img
-                          class="iconimg"
-                          :src="numberOrEnNameToIconSrc(1)"
-                        />微博</span
-                      ></el-checkbox
-                    >
-                    <el-checkbox :label="2">
-                      <span class="checkbox-area">
-                        <img
-                          class="iconimg"
-                          :src="numberOrEnNameToIconSrc(2)"
-                        />通讯组</span
-                      ></el-checkbox
-                    >
-                    <el-checkbox :label="3">
-                      <span class="checkbox-area">
-                        <img
-                          class="iconimg"
-                          :src="numberOrEnNameToIconSrc(3)"
-                        />朝陇山</span
-                      ></el-checkbox
-                    >
-                    <el-checkbox :label="4">
-                      <span class="checkbox-area">
-                        <img
-                          class="iconimg"
-                          :src="numberOrEnNameToIconSrc(4)"
-                        />一拾山</span
-                      ></el-checkbox
-                    >
-                    <el-checkbox :label="5">
-                      <span class="checkbox-area">
-                        <img
-                          class="iconimg white"
-                          :src="numberOrEnNameToIconSrc(5)"
-                        />塞壬唱片</span
-                      ></el-checkbox
-                    >
-                    <el-checkbox :label="6">
-                      <span class="checkbox-area">
-                        <img
-                          class="iconimg"
-                          :src="numberOrEnNameToIconSrc(6)"
-                        />泰拉记事社微博</span
-                      ></el-checkbox
-                    >
-                    <el-checkbox :label="8">
-                      <span class="checkbox-area">
-                        <img
-                          class="iconimg"
-                          :src="numberOrEnNameToIconSrc(8)"
-                        />泰拉记事社官网</span
+                          :src="numberOrEnNameToIconSrc(index - 1)"
+                        />{{ numberOrEnNameToName(index - 1) }}</span
                       ></el-checkbox
                     >
                   </el-checkbox-group>

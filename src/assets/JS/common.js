@@ -1,7 +1,7 @@
 let common = {
   setting: {
     time: 15,
-    source: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+    source: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
     fontsize: 0,
     imgshow: true,
     isTag: false,
@@ -223,6 +223,10 @@ function numberOrEnNameToName(int) {
     case "tlgw":
       return "泰拉记事社官网"
       break;
+    case 9:
+    case "wyyyy":
+      return "网易云音乐"
+      break;
   }
 }
 
@@ -263,6 +267,10 @@ function numberOrEnNameToIconSrc(int) {
     case 8:
     case "tlgw":
       return "/assets/image/tl.jpg"
+      break;
+    case 9:
+    case "tlgw":
+      return "/assets/image/wyyyy.ico"
       break;
   }
 }

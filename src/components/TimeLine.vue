@@ -19,31 +19,89 @@
         :class="'font-size-' + setting.fontsize + ' soure-' + item.source"
         shadow="never"
       >
-        <div>
-          <span v-if="item.source != 8">
-            <el-button
-              class="to-copy-btn"
-              size="small"
-              @click="copyData(item)"
-              title="复制该条内容及链接"
-              ><i class="el-icon-document-copy"></i
-            ></el-button>
-            <el-button
-              class="to-url-btn"
-              size="small"
-              title="前往该条内容"
-              @click="openUrl(item.url)"
-              ><i class="el-icon-right"></i
-            ></el-button>
-            <span class="is-top-info" v-if="item.isTop">
-              <span class="color-blue"
-                >【当前条目在微博的时间线内为置顶状态】</span
-              >
-            </span>
+        <span>
+          <el-button
+            class="to-copy-btn"
+            size="small"
+            @click="copyData(item)"
+            title="复制该条内容及链接"
+            ><i class="el-icon-document-copy"></i
+          ></el-button>
+          <el-button
+            v-if="item.source != 8 && item.source != 9"
+            class="to-url-btn"
+            size="small"
+            title="前往该条内容"
+            @click="openUrl(item.url)"
+            ><i class="el-icon-right"></i
+          ></el-button>
+          <span class="is-top-info" v-if="item.isTop">
+            <span class="color-blue"
+              >【当前条目在微博的时间线内为置顶状态】</span
+            >
           </span>
-
+        </span>
+        <div v-if="item.source == 8" class="tlgw">
+          <img v-if="imgShow" class="image-back" v-lazy="item.image" />
+          <div class="content-card">
+            <div class="content-card-info">
+              <img
+                v-if="imgShow"
+                v-lazy="item.image"
+                class="content-card-image"
+              />
+              <div class="content-card-title">{{ item.dynamicInfo }}</div>
+              <div class="content-card-introduction">
+                {{ item.html.introduction }}
+              </div>
+              <div class="content-card-subtitle">
+                {{ item.html.subtitle }}
+              </div>
+            </div>
+            <div class="content-card-episodes">
+              <span
+                v-for="episodes in item.html.episodes"
+                :key="episodes.cid"
+                class="content-card-episodes-btn"
+                @click="
+                  openUrl(
+                    `https://terra-historicus.hypergryph.com/comic/${item.html.cid}/episode/${episodes.cid}`
+                  )
+                "
+                >{{ episodes.title }}</span
+              >
+            </div>
+          </div>
+        </div>
+        <div
+          v-else-if="item.source == 9"
+          class="wyyyy"
+          @click="openUrl(item.url)"
+        >
+          <img v-if="imgShow" class="image-back" v-lazy="item.image" />
+          <div class="content-card">
+            <div class="record-area">
+              <div class="record-area-record">
+                <img class="record-image" v-lazy="item.image" />
+              </div>
+              <img
+                class="record-image-back"
+                v-lazy="'assets/image/record.png'"
+              />
+            </div>
+            <div class="record-info">
+              {{ item.name }}
+            </div>
+            <div class="record-size">共{{ item.size }}首</div>
+            <div class="record-btn">
+              <i class="el-icon-d-arrow-right"></i>
+              Go To Album
+            </div>
+          </div>
+        </div>
+        <div v-else>
           <!-- 普通列 -->
-          <div v-if="item.source != 8">
+          <div>
             <el-row>
               <div v-html="item.dynamicInfo"></div>
               <!-- 如果有转发 -->
@@ -82,38 +140,6 @@
                 </div>
               </div>
             </el-row>
-          </div>
-          <div v-if="item.source == 8" class="tlgw">
-            <img v-if="imgShow" class="image-back" v-lazy="item.image" />
-            <div class="content-card">
-              <div class="content-card-info">
-                <img
-                  v-if="imgShow"
-                  v-lazy="item.image"
-                  class="content-card-image"
-                />
-                <div class="content-card-title">{{ item.dynamicInfo }}</div>
-                <div class="content-card-introduction">
-                  {{ item.html.introduction }}
-                </div>
-                <div class="content-card-subtitle">
-                  {{ item.html.subtitle }}
-                </div>
-              </div>
-              <div class="content-card-episodes">
-                <span
-                  v-for="episodes in item.html.episodes"
-                  :key="episodes.cid"
-                  class="content-card-episodes-btn"
-                  @click="
-                    openUrl(
-                      `https://terra-historicus.hypergryph.com/comic/${item.html.cid}/episode/${episodes.cid}`
-                    )
-                  "
-                  >{{ episodes.title }}</span
-                >
-              </div>
-            </div>
           </div>
         </div>
       </el-card>
@@ -325,8 +351,9 @@ img[lazy="error"] {
       left: 220px;
     }
 
-    // 罗德岛泰拉记事簿
-    &.soure-8 {
+    // 罗德岛泰拉记事簿 网易云音乐
+    &.soure-8,
+    &.soure-9 {
       .el-card__body {
         padding: 0 !important;
       }
@@ -357,11 +384,6 @@ img[lazy="error"] {
       background-color: #23ade5;
     }
   }
-  // 更改卡片阴影
-  // .is-always-shadow {
-  //   box-shadow: 0 2px 12px 0 @@shadow;
-  // }
-
   .el-timeline {
     padding-left: 25px;
     overflow: auto;
@@ -435,6 +457,11 @@ img[lazy="error"] {
           background: url("/assets/image/tl.jpg") no-repeat center, @@bgColor;
           background-size: cover;
         }
+        &.headImg9::before {
+          border-radius: 10px;
+          background: url("/assets/image/wyyyy.ico") no-repeat center, @@bgColor;
+          background-size: cover;
+        }
       }
     }
   }
@@ -493,13 +520,156 @@ img[lazy="error"] {
           border-radius: 4px;
           line-height: 1.2;
           color: #fff;
-          transition: background-color 0.3s;
+          transition: background-color 0.5s;
           cursor: pointer;
           margin: 10px 0;
           padding: 3px 0;
           &:hover {
             background-color: #b0243b;
           }
+        }
+      }
+    }
+  }
+
+  // 网易云音乐单独使用样式
+  .wyyyy {
+    position: relative;
+    cursor: pointer;
+    .image-back {
+      top: 0;
+      left: 0;
+      width: 100%;
+      filter: blur(70px) brightness(50%);
+      height: 150px;
+      object-fit: cover;
+    }
+    .content-card {
+      top: 0;
+      left: 0;
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      // 左边 图片大小在此控制
+      .record-area {
+        position: absolute;
+        height: 120px;
+        top: 15px;
+        left: 50px;
+        width: 120px;
+        // 动画效果
+        .record-area-record {
+          transform: perspective(500px);
+          transition: transform 0.5s ease, opacity 0.5s ease;
+          height: 100%;
+          position: absolute;
+          left: 0;
+          z-index: 2;
+          overflow: hidden;
+          .record-image {
+            height: 100%;
+            overflow: hidden;
+          }
+          &:after {
+            content: "";
+            position: absolute;
+            top: -58%;
+            left: -18%;
+            width: 150%;
+            height: 150%;
+            background-image: linear-gradient(
+              hsla(0, 0%, 100%, 0.2),
+              hsla(0, 0%, 100%, 0.25) 48%,
+              hsla(0, 0%, 100%, 0) 52%
+            );
+            transform: rotate(24deg);
+            opacity: 0.5;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            pointer-events: none;
+          }
+        }
+
+        .record-image-back {
+          position: absolute;
+          left: 0;
+          top: 5px;
+          height: 110px;
+          transition: all 0.5s;
+          left: 35px;
+        }
+      }
+      // 右边
+      .record-info {
+        transition: all 0.5s;
+        font-family: Geometos, "Sans-Regular", "SourceHanSansCN-Regular", YaHei;
+        font-size: 1.8rem;
+        color: #fff;
+        width: 380px;
+        text-align: center;
+        right: 0;
+        position: absolute;
+        top: 60px;
+        padding: 10px 0;
+      }
+      .record-size {
+        transition: all 0.5s;
+        position: absolute;
+        bottom: 17px;
+        right: 330px;
+        font-family: Geometos, "Sans-Regular", "SourceHanSansCN-Regular", YaHei;
+        color: #fff;
+        font-size: 1.2rem;
+        opacity: 0;
+      }
+      .record-btn {
+        transition: all 0.5s;
+        font-family: Geometos, "Sans-Regular", "SourceHanSansCN-Regular", YaHei;
+        font-size: 1.2rem;
+        right: 15px;
+        position: absolute;
+        bottom: 15px;
+        color: #fff;
+        border: 1px solid #fff;
+        padding: 3px 5px;
+        white-space: nowrap;
+        width: 18px;
+        overflow: hidden;
+        border-radius: 4px;
+      }
+    }
+    &:hover {
+      // 动画效果
+      .record-area {
+        .record-area-record {
+          box-shadow: 0 7px 15px 4px rgb(0 0 0 / 30%);
+          transform: perspective(500px) rotateX(8deg) scale(1.15);
+        }
+        .record-area-record:after {
+          transform: perspective(500px) rotate(24deg) translateY(16%);
+          opacity: 1;
+        }
+        .record-image-back {
+          left: 60px;
+          transform: rotateX(8deg) scale(1.15);
+        }
+      }
+
+      .content-card {
+        // 右边
+        .record-info {
+          font-size: 1.5rem;
+          background: #454545;
+          text-align: center;
+          top: 30px;
+          border-radius: 4px;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+        .record-size {
+          opacity: 1;
+        }
+        .record-btn {
+          width: 170px;
         }
       }
     }

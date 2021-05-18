@@ -91,6 +91,12 @@ let kazeSource = {
         dataName: 'tlgw',
         source: 8,
     },
+    wyyyy: {
+        url: 'http://music.163.com/api/artist/albums/32540734',
+        title: '网易云音乐',
+        dataName: 'wyyyy',
+        source: 9,
+    },
 }
 
 // 数据获取和处理
@@ -98,7 +104,6 @@ let kazeSourceProcess = {
     // 蹲饼入口
     GetData() {
         kazeLocalData.dunInfo.dunTime = new Date().getTime();
-
         kazeLocalData.setting.source.includes(0) ? this.GetAndProcessData(kazeSource['bili']) : delete kazeLocalData.cardlistdm.bili;
         kazeLocalData.setting.source.includes(1) ? this.GetAndProcessData(kazeSource['weibo']) : delete kazeLocalData.cardlistdm.weibo;
         kazeLocalData.setting.source.includes(2) ? this.GetAndProcessData(kazeSource['yj']) : delete kazeLocalData.cardlistdm.yj;
@@ -108,6 +113,7 @@ let kazeSourceProcess = {
         kazeLocalData.setting.source.includes(6) ? this.GetAndProcessData(kazeSource['tl']) : delete kazeLocalData.cardlistdm.tl;
         kazeLocalData.setting.source.includes(7) ? this.GetAndProcessData(kazeSource['gw']) : delete kazeLocalData.cardlistdm.gw;
         kazeLocalData.setting.source.includes(8) ? this.GetAndProcessData(kazeSource['tlgw']) : delete kazeLocalData.cardlistdm.tlgw;
+        kazeLocalData.setting.source.includes(9) ? this.GetAndProcessData(kazeSource['wyyyy']) : delete kazeLocalData.cardlistdm.wyyyy;
 
     },
 
@@ -142,6 +148,9 @@ let kazeSourceProcess = {
             }
             else if (opt.source == 8) {
                 newCardList = this.processTlGw(opt)
+            }
+            else if (opt.source == 9) {
+                newCardList = this.processWyyyy(opt)
             }
 
             let oldCardList = kazeLocalData.cardlistdm[opt.dataName];
@@ -356,7 +365,7 @@ let kazeSourceProcess = {
                 time: info.updateTime,
                 id: info.updateTime,
                 judgment: info.updateTime,
-                dynamicInfo: info.title,
+                dynamicInfo: `泰拉记事社${info.title}已更新`,
                 source: opt.source,
                 image: info.cover,
                 html: info,
@@ -364,6 +373,28 @@ let kazeSourceProcess = {
             });
         });
         return list.sort((x, y) => y.time - x.time);
+    },
+
+    // 网易云音乐
+    processWyyyy(opt) {
+        let list = [];
+        let data = JSON.parse(opt.responseText);
+        if (data && data.hotAlbums && data.hotAlbums.length > 0) {
+            data.hotAlbums.forEach(x => {
+                list.push({
+                    time: x.publishTime / 1000,
+                    id: x.id,
+                    judgment: x.id || time,
+                    dynamicInfo: `塞壬唱片发布新专辑《${x.name}》，共${x.size}首歌曲`,
+                    source: opt.source,
+                    image: x.picUrl+'?param=130y130',
+                    url: `https://music.163.com/#/album?id=${x.id}`,
+                    size: x.size,
+                    name: x.name
+                });
+            });
+            return list.sort((x, y) => y.time - x.time);
+        }
     }
 }
 
