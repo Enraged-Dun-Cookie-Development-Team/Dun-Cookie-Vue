@@ -418,13 +418,7 @@ export default {
     color: #23ade5;
   }
 
-  ::-webkit-scrollbar {
-    width: 0 !important;
-  }
-  ::-webkit-scrollbar {
-    width: 0 !important;
-    height: 0;
-  }
+  
   .version {
     text-align: center;
     color: #23ade5;
@@ -581,6 +575,13 @@ export default {
 <style  lang="less">
 body {
   margin: 0;
+}
+::-webkit-scrollbar {
+  width: 0 !important;
+}
+::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0;
 }
 .online-area {
   display: flex;
