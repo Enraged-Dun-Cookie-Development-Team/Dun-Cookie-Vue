@@ -365,6 +365,7 @@ let kazeSourceProcess = {
                 id: info.updateTime,
                 judgment: info.updateTime,
                 dynamicInfo: `泰拉记事社${info.title}已更新`,
+                name: info.title,
                 source: opt.source,
                 image: info.cover,
                 html: info,
@@ -386,7 +387,7 @@ let kazeSourceProcess = {
                     judgment: x.id || time,
                     dynamicInfo: `塞壬唱片发布新专辑《${x.name}》，共${x.size}首歌曲`,
                     source: opt.source,
-                    image: x.picUrl+'?param=130y130',
+                    image: x.picUrl + '?param=130y130',
                     url: `https://music.163.com/#/album?id=${x.id}`,
                     size: x.size,
                     name: x.name

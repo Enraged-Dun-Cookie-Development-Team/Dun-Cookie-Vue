@@ -269,7 +269,7 @@ function numberOrEnNameToIconSrc(int) {
       return "/assets/image/tl.jpg"
       break;
     case 9:
-    case "tlgw":
+    case "wyyyy":
       return "/assets/image/wyyyy.ico"
       break;
   }
