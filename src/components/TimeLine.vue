@@ -22,6 +22,7 @@
         <span>
           <el-button
             class="to-copy-btn"
+            :class="item.source != 8 && item.source != 9 ? '' : 'rigth-zero'"
             size="small"
             @click="copyData(item)"
             title="复制该条内容及链接"
@@ -341,6 +342,9 @@ img[lazy="error"] {
       background-color: @@bgColor;
       color: @@content;
       border: @@btnBorder 1px solid;
+      &.rigth-zero {
+        right: 0;
+      }
     }
     .to-copy-btn:hover {
       color: #409eff;

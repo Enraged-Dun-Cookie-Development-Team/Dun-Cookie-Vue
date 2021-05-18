@@ -408,12 +408,9 @@ export default {
       color: @@content!important;
     }
 
-    // 抵消body的margin：8px
-    // margin: -8px;
     background-color: @@bgColor;
-    // border: 8px @@bgColor solid;
     width: 700px;
-    height: 600px;
+    height: 599px;
     overflow: auto;
   }
 
