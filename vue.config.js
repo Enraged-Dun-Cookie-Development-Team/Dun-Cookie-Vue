@@ -39,6 +39,13 @@ const config = {
             title: '蹲饼这次更新了什么？',
             chunks: ['chunk-vendors', 'chunk-common', 'update'],
         },
+        donate: {
+            entry: 'src/donate/index.js',
+            template: 'public/index.html',
+            filename: 'donate.html',
+            title: '博士，感谢您为我提供帮助',
+            chunks: ['chunk-vendors', 'chunk-common', 'donate'],
+        },
     },
     css: {
         extract: true,

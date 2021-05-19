@@ -27,6 +27,7 @@ const chainWebpack = config => {
             background: 'background',
             extensionPage: 'popup',
             options: 'options',
+            donate: 'donate',
         }]);
 
         config.plugin('CleanWebpackPlugin').use(CleanWebpackPlugin, [{

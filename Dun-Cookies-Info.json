@@ -6,17 +6,17 @@
             "overTime": "2099-12-31 04:00:00"
         },
         {
-            "html": "<div class='online-area'> <img class='online-title-img radius' src='http://cdn.liuziyang.vip/cake.webp'> <div> <div>博士，庆典筹备计划将于<span class='online-blue'>5月18日03:59</span>结束，今天没有获取调色奶油袋的博士请尽快领取。</div> <div>可在快捷连接中直达活动地址</div> </div> </div>",
-            "starTime": "2021-4-24 22:00:00",
-            "overTime": "2021-5-18 04:00:00"
-        },
-        {
             "html": "<div class='online-area'> <img class='online-title-img radius' src='https://img.nga.178.com/attachments/mon_202104/24/-klbw3Q8h1d-huriZ1hT3cS17c-dw.jpg'> <div> <div>博士，危机合约将于<span class='online-blue'>5月22日04:00</span>开启新约</div> <div>期间更新最高合约首杀，可在快捷连接中直达视频地址</div> </div> </div>",
             "starTime": "2021-4-11 12:00:00",
             "overTime": "2021-5-29 04:00:00"
         },
         {
-            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak-fs.hypergryph.com/announce/images/20210424/7172d81415f7c00ffd45183b1e2d8b27.jpg'> <div> <div>博士，「二周年庆典」，周年组合包限时上线结束时间为<span class='online-blue'>5月29日03:59</span></div> <div>建议信用卡账单日在25日的博士于<span class='online-red'>5月25日</span>之后购买</><div>购买后该账单日期为5月26日-6月25日，最终还款日期可以拖延至7月10号</div> </div> </div>",
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak-fs.hypergryph.com/announce/images/20210424/7172d81415f7c00ffd45183b1e2d8b27.jpg'> <div> <div>博士，「二周年庆典」，周年组合包限时上线结束时间为<span class='online-blue'>5月29日03:59</span></div> <div>建议信用卡账单日在25日的博士于<span class='online-red'>5月25日</span>之后购买</div><div>购买后该账单日期为5月26日-6月25日，最终还款日期可以拖延至7月10号</div> </div> </div>",
+            "starTime": "2021-5-1 16:00:00",
+            "overTime": "2021-5-29 04:00:00"
+        },
+        {
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='/assets/image/icon.ico'> <div> <div>博士，这是一个线上测试页面<span class='online-red'>请勿点击</span></div> <drawer>????????</drawer> <setting>xxxxxxxx</setting> <donate>%%%%%%%%</donate>  </div> </div>",
             "starTime": "2021-5-1 16:00:00",
             "overTime": "2021-5-29 04:00:00"
         }
@@ -80,11 +80,11 @@
         }
     ],
     "upgrade": {
-        "v": "2.0.128",
-        "title": "检测到新版本-2.0.128",
-        "description": "🚀 本次版本主要是优化性能，然后添加了一个功能<br/>1.优化开启速度，耗时超级缩短，点击图标打开列表速度直接拉满！<br/>2.主界面的阴影去除了，保障部分电脑性能，滚动翻页不会卡了<br/>3.强迫症优化，顶部公告和下面卡片距离边框的距离统一了<br/>4.图片懒加载，我们的logo再图片区域闪来闪去的时候就是正在加载图片<br/>5.打开列表界面不会弹一下了<br/>6.公告区域添加loading，网速慢的时候能看到<br/>7.我们支持了微博转发内容的显示，可以在设置里面打开",
-        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.0.128/dun-cookie-2.0.128.crx",
-        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.0.128/dun-cookie-2.0.128.zip",
+        "v": "2.0.140",
+        "title": "检测到新版本 - 2.0.140",
+        "description": "🎵 本次版本主要是添加网易云音乐接口，然后添加了设置的导入导出 <br/>1.添加了网易云音乐接口，可以蹲网易云音乐的专辑了（写动画真累） <br/>2.设置添加了导入导出，以后重装不需要重新设置内容了 <br/>3.修复了设置页面欢迎等页面的页面图标路径 <br/>4.设置界面的阴影也去除了 <br/>5.修复部分界面下点击复制时出现滚动条",
+        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.0.140/dun-cookie-2.0.140.crx",
+        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.0.140/dun-cookie-2.0.140.zip",
         "downSpare": "https://pan.baidu.com/s/1kzY6kpfYqLcGpuaiwQOGoA",
         "downSpareText":"备用下载（提取码 jzq9）",
         "downChrome": "https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN"

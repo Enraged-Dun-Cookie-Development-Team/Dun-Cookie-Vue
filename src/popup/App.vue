@@ -244,6 +244,36 @@ export default {
         this.getDunInfo();
         this.getOnlineSpeak();
       }, 1);
+
+      // 监听标签
+      document
+        .querySelectorAll(".online-speak")[0]
+        .addEventListener("click", () => {
+          var target = event.target || event.srcElement;
+          // 是否为a标签
+          if (target.nodeName.toLocaleLowerCase() === "a") {
+            // 对捕获到的 a 标签进行处理，需要先禁止它的跳转行为
+            if (event.preventDefault) {
+              event.preventDefault();
+            } else {
+              window.event.returnValue = true;
+            }
+            var url = target.getAttribute("href");
+            this.openUrl(url);
+          }
+
+          if (target.nodeName.toLocaleLowerCase() === "drawer") {
+            this.drawer = !this.drawer;
+          }
+
+          if (target.nodeName.toLocaleLowerCase() === "setting") {
+            this.openSetting();
+          }
+
+          if (target.nodeName.toLocaleLowerCase() === "donate") {
+            this.openDonate();
+          }
+        });
     },
 
     // 获取后台数据
@@ -318,7 +348,6 @@ export default {
       this.getLocalStorage("setting").then((data) => {
         if (data != null) {
           this.setting = data;
-          // console.log(this.setting);
           setInterval(() => {
             this.getCardlist();
             this.getDunInfo();
@@ -365,16 +394,20 @@ export default {
     },
 
     openSetting() {
-      var urlToOpen = chrome.extension.getURL("options.html");
       chrome.tabs.create({
-        url: urlToOpen,
+        url: chrome.extension.getURL("options.html"),
+      });
+    },
+
+    openDonate() {
+      chrome.tabs.create({
+        url: chrome.extension.getURL("donate.html"),
       });
     },
 
     openUpdate() {
-      var urlToOpen = chrome.extension.getURL("update.html");
       chrome.tabs.create({
-        url: urlToOpen,
+        url: chrome.extension.getURL("update.html"),
       });
     },
 
@@ -418,7 +451,6 @@ export default {
     color: #23ade5;
   }
 
-  
   .version {
     text-align: center;
     color: #23ade5;
@@ -598,7 +630,16 @@ body {
     color: #23ade5;
   }
   .online-red {
-    color: #23ade5;
+    color: #f56c6c;
+  }
+  .online-yellow {
+    color: #e6a23c;
+  }
+  .online-green {
+    color: #67c23a;
+  }
+  .online-gray {
+    color: #909399;
   }
 }
 </style>
