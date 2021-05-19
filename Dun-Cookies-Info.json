@@ -65,6 +65,14 @@
         {
             "starTime": "2021-5-15 12:00:00",
             "overTime": "2021-5-29 04:00:00",
+            "url": "https://www.bilibili.com/video/BV1f54y1G7tJ",
+            "name": "【光谱行动】6级博士，旧约20级镀层",
+            "img": "https://i1.hdslb.com/bfs/archive/2f11397a7766b32e93b2a6ebcfd0139107e0aa19.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-5-15 12:00:00",
+            "overTime": "2021-5-29 04:00:00",
             "url": "https://www.bilibili.com/video/BV14Q4y1o7qP",
             "name": "【作业】【明日方舟光谱行动】魔法zc目录",
             "img": "https://i1.hdslb.com/bfs/archive/a39b95edb24cfd24fdc5545286f55e891051f534.jpg@200w_125h_1c.webp",
