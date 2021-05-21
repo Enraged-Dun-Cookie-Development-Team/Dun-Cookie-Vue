@@ -270,9 +270,9 @@ export default {
             this.openSetting();
           }
 
-          if (target.nodeName.toLocaleLowerCase() === "donate") {
-            this.openDonate();
-          }
+          // if (target.nodeName.toLocaleLowerCase() === "donate") {
+          //   this.openDonate();
+          // }
         });
     },
 
