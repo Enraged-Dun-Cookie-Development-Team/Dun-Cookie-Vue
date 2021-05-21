@@ -1,12 +1,16 @@
 {
-    "list": [
+    "list": [{
+            "html": "<div class='online-area'> <img class='online-title-img' src='/assets/image/icon.ico'> <div> <div class='online-red'>博士，2.0.145是一个很重要的更新版本！</div> <div>这个版本添加了微博源有时候拿不到最新信息的问题的临时解决办法</div> <div>解决办法就是<span class='online-red'>登录微博手机端</span></div> <div>145版本以上的博士请在<span class='online-red'>设置页面有按钮能快捷跳转到微博登录点</span></div> <div>145版本以下的博士可以先升级再登录</div> <div>不想升级的点击<a href='https://passport.weibo.cn/signin/login'>(右键 - 新标签页打开)进入微博登录页面登录，但还是强烈建议升级</div> </div> </div>",
+            "starTime": "2021-5-01 12:00:00",
+            "overTime": "2099-12-31 04:00:00"
+        },
         {
             "html": "<div class='online-area'> <img class='online-title-img' src='/assets/image/icon.ico'> <div> <div>博士，谢谢你使用蹲饼。</div> <div>如果觉得好用的话，希望能去<a href='https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue'>GitHub</a>上点个Star或者去<a href='https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN'>Chrome商店</a>里面给个好评</div> <div>也可以去<a href='https://ngabbs.com/read.php?tid=26708650'>NGA</a>里面回复我们</div> <div>欢迎加群 <a href='https://jq.qq.com/?_wv=1027&k=Vod1uO13'>【蹲饼测试群】</a> 一起蹲饼！</div> <div>以上链接请博士使用<span style='color:#F56C6C'>鼠标中键</span>或右击选择<span style='color:#F56C6C'>新标签页</span>点击打开</div> </div> </div>",
             "starTime": "2021-5-01 12:00:00",
             "overTime": "2099-12-31 04:00:00"
         },
         {
-            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://img.nga.178.com/attachments/mon_202104/24/-klbw3Q8h1d-huriZ1hT3cS17c-dw.jpg'> <div> <div>博士，危机合约将于<span class='online-blue'>5月22日04:00</span>开启新约</div> <div>期间更新最高合约首杀，可在快捷连接中直达视频地址</div> </div> </div>",
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://img.nga.178.com/attachments/mon_202104/24/-klbw3Q8h1d-huriZ1hT3cS17c-dw.jpg'> <div> <div>博士，危机合约将于<span class='online-blue'>5月22日04:00</span>开启新约</div> <div>期间更新最高合约首杀，可在快捷连接中直达视频地址</div><drawer class='online-green'>2.0.145版本后蹲饼可点击此处直接打开</drawer> </div> </div>",
             "starTime": "2021-4-11 12:00:00",
             "overTime": "2021-5-29 04:00:00"
         },
@@ -16,8 +20,7 @@
             "overTime": "2021-5-29 04:00:00"
         }
     ],
-    "btnList": [
-        {
+    "btnList": [{
             "starTime": "2021-4-24 22:00:00",
             "overTime": "2021-5-18 04:00:00",
             "url": "https://ak.hypergryph.com/activity/preparation?source=game",
@@ -83,13 +86,13 @@
         }
     ],
     "upgrade": {
-        "v": "2.0.140",
-        "title": "检测到新版本 - 2.0.140",
-        "description": "🎵 本次版本主要是添加网易云音乐接口，然后添加了设置的导入导出 <br/>1.添加了网易云音乐接口，可以蹲网易云音乐的专辑了（写动画真累） <br/>2.设置添加了导入导出，以后重装不需要重新设置内容了 <br/>3.修复了设置页面欢迎等页面的页面图标路径 <br/>4.设置界面的阴影也去除了 <br/>5.修复部分界面下点击复制时出现滚动条",
-        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.0.140/dun-cookie-2.0.140.crx",
-        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.0.140/dun-cookie-2.0.140.zip",
+        "v": "2.0.145",
+        "title": "检测到新版本 - 2.0.145",
+        "description": "💢 本次版本主要是发现微博接口API发生了问题，然后作出了相应调整<br/>1.发现了部分微博账号如果不登录就会获取不到最新的数据，在设置页面添加登录引导页<br/>2.调整部分文案<br/>3.添加程序内某些方法的快捷方式<br/>4.彻底断绝了缓存的问题(大概)",
+        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.0.145/dun-cookie-2.0.145.crx",
+        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.0.145/dun-cookie-2.0.145.zip",
         "downSpare": "https://pan.baidu.com/s/1kzY6kpfYqLcGpuaiwQOGoA",
-        "downSpareText":"备用下载（提取码 jzq9）",
+        "downSpareText": "备用下载（提取码 jzq9）",
         "downChrome": "https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN"
     }
 }
