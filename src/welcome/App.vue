@@ -11,7 +11,10 @@
         <div class="info-title">让我们一起守护自由的兔兔吧！</div>
       </div>
       <el-divider></el-divider>
-      <div>如果有意见或建议或想法请在群内反馈</div>
+      <div>如果有意见或建议或想法请在<a
+            href="https://jq.qq.com/?_wv=1027&k=Vod1uO13"
+            >【蹲饼组】</a
+          >反馈 (QQ群：362860473)</div>
       <el-divider></el-divider>
       <div>你可以点击图标查看蹲饼列表</div>
       <el-divider></el-divider>
@@ -36,6 +39,8 @@
         现在可以点击
         <el-button @click="toSetting" size="mini">设置</el-button>
         进入设置来调整蹲饼器
+        <br/>
+        <div style="color:red">如果要蹲微博的饼，请在设置页面点击“进入登录页面”按钮登录，因为经过测试，不登录会有概率获取不到热乎的微博饼</div>
       </div>
       <el-divider></el-divider>
       <div>
