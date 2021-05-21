@@ -52,6 +52,17 @@
                   </el-checkbox-group>
                 </el-form-item>
               </el-tooltip>
+              <el-tooltip class="item" effect="dark" placement="bottom">
+                <div slot="content">
+                  微博端API有些账户需要登录才能查看最新微博<br />
+                  登录完成后点击“查看是否登录成功”按钮，如果能看到正常的微博个人信息，则表示成功<br />
+                  如果是登录注册页面，请点击“进入登录页面”按钮重新登录
+                </div>
+                <el-form-item label="微博登录">
+                  <el-button size="small" @click="openUrl('https://passport.weibo.cn/signin/login')">进入登录页面</el-button>
+                  <el-button size="small" @click="openUrl('https://m.weibo.cn/profile/')">查看是否登录成功</el-button>
+                </el-form-item>
+              </el-tooltip>
               <el-tooltip
                 class="item"
                 effect="dark"
@@ -313,6 +324,11 @@ export default {
           this.saveInfo = data;
         }
       });
+    },
+
+    // 打开网址
+    openUrl(url) {
+      chrome.tabs.create({ url: url });
     },
 
     // 蹲饼数据

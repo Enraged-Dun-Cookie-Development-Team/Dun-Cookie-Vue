@@ -202,7 +202,7 @@ let kazeSourceProcess = {
         if (data.ok == 1 && data.data != null && data.data.cards != null && data.data.cards.length > 0) {
             data.data.cards.forEach(x => {
                 // 设置是否显示转发内容
-                if (!kazeLocalData.setting.retweeted && x.mblog.hasOwnProperty('retweeted_status')) {
+                if (!kazeLocalData.setting.retweeted && x.hasOwnProperty('mblog') && x.mblog.hasOwnProperty('retweeted_status')) {
                     return;
                 }
                 if (x.hasOwnProperty('mblog')) {
