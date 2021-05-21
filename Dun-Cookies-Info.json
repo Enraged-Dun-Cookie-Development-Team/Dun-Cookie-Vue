@@ -63,9 +63,17 @@
         {
             "starTime": "2021-5-15 12:00:00",
             "overTime": "2021-5-29 04:00:00",
-            "url": "https://www.bilibili.com/video/BV1f54y1G7tJ",
-            "name": "【光谱行动】6级博士，旧约20级镀层",
-            "img": "https://i1.hdslb.com/bfs/archive/2f11397a7766b32e93b2a6ebcfd0139107e0aa19.jpg@200w_125h_1c.webp",
+            "url": "https://www.bilibili.com/video/BV1MU4y1b7zJ",
+            "name": "【光谱行动】你是什么时候，产生了6级博士，过不了旧约21级的错觉？",
+            "img": "https://i1.hdslb.com/bfs/archive/85f23d2f8feb74098de599f85fb78ba33a502d66.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-5-15 12:00:00",
+            "overTime": "2021-5-29 04:00:00",
+            "url": "https://www.bilibili.com/video/BV1H64y1y72F",
+            "name": "【光谱行动●八号竞技场】全员无伤也能登顶旧约26？",
+            "img": "https://i1.hdslb.com/bfs/archive/702d9e28e1b445904bc88f4cc7fc7db4d2144f3b.jpg@200w_125h_1c.webp",
             "radius": true
         },
         {
