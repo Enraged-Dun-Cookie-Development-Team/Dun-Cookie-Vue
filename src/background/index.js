@@ -1,4 +1,5 @@
 
+import { Date } from "core-js";
 import { common } from "../assets/JS/common";
 //数据下来后都定位固定格式 没有不用管
 var date = {
@@ -22,7 +23,8 @@ let kazeData = {
     isTest: false,
     testIntervalTime: 3,
     setting: {},
-    FocusAnnounceId: null
+    FocusAnnounceId: null,
+    setIntervalID: null
 }
 
 // 软件存储数据 数据互通使用
@@ -33,66 +35,67 @@ let kazeLocalData = {
     //请求次数
     dunInfo: common.dunInfo,
     setting: common.setting,
+    sane: common.sane
 }
 
 // 数据来源
 let kazeSource = {
     bili: {
-        url: 'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=161775300&offset_dynamic_id=0&need_top=0&platform=web&t='+ new Date().getTime(),
+        url: 'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=161775300&offset_dynamic_id=0&need_top=0&platform=web&t=' + new Date().getTime(),
         title: 'B站',
         dataName: 'bili',
         source: 0,
     },
     weibo: {
-        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=6279793937&containerid=1076036279793937&t='+ new Date().getTime(),
+        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=6279793937&containerid=1076036279793937&t=' + new Date().getTime(),
         title: '官方微博',
         dataName: 'weibo',
         source: 1,
     },
     yj: {
-        url: 'https://ak-fs.hypergryph.com/announce/IOS/announcement.meta.json?t='+ new Date().getTime(),
+        url: 'https://ak-fs.hypergryph.com/announce/IOS/announcement.meta.json?t=' + new Date().getTime(),
         title: '通讯组',
         dataName: 'yj',
         source: 2,
     },
     cho3: {
-        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=6441489862&containerid=1076036441489862&t='+ new Date().getTime(),
+        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=6441489862&containerid=1076036441489862&t=' + new Date().getTime(),
         title: '朝陇山',
         dataName: 'cho3',
         source: 3,
     },
     ys3: {
-        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=7506039414&containerid=1076037506039414&t='+ new Date().getTime(),
+        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=7506039414&containerid=1076037506039414&t=' + new Date().getTime(),
         title: '一拾山',
         dataName: 'ys3',
         source: 4,
     },
     sr: {
-        url: 'https://monster-siren.hypergryph.com/api/news?t='+ new Date().getTime(),
+        url: 'https://monster-siren.hypergryph.com/api/news?t=' + new Date().getTime(),
         title: '塞壬唱片',
         dataName: 'sr',
         source: 5,
     },
     tl: {
-        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=7499841383&containerid=1076037499841383&t='+ new Date().getTime(),
+        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=7499841383&containerid=1076037499841383&t=' + new Date().getTime(),
         title: '泰拉记事社微博',
         dataName: 'tl',
         source: 6,
     },
     gw: {
-        url: 'https://ak.hypergryph.com/?t='+ new Date().getTime(),
+        url: 'https://ak.hypergryph.com/?t=' + new Date().getTime(),
         title: '官网',
         dataName: 'gw',
         source: 7,
     },
     tlgw: {
-        url: ['https://terra-historicus.hypergryph.com/api/comic/7748?t='+ new Date().getTime(), 'https://terra-historicus.hypergryph.com/api/comic/2865?t='+ new Date().getTime()],
+        url: ['https://terra-historicus.hypergryph.com/api/comic/7748?t=' + new Date().getTime(), 'https://terra-historicus.hypergryph.com/api/comic/2865?t=' + new Date().getTime()],
         title: '泰拉记事社',
         dataName: 'tlgw',
         source: 8,
     },
     wyyyy: {
-        url: 'http://music.163.com/api/artist/albums/32540734?t='+ new Date().getTime(),
+        url: 'http://music.163.com/api/artist/albums/32540734?t=' + new Date().getTime(),
         title: '网易云音乐',
         dataName: 'wyyyy',
         source: 9,
@@ -424,7 +427,7 @@ let kazeFun = {
     JudgmentNewFocusAnnounceId(data) {
         if (data) {
             if (kazeData.FocusAnnounceId && data.focusAnnounceId && kazeData.FocusAnnounceId != data.focusAnnounceId) {
-                this.SendNotice(`【通讯组预告】公子马上有饼吃!`, '检测到游戏出现公告弹窗，可能马上发饼！', null, new Date().getTime())
+                this.SendNotice(`【通讯组预告】刀客塔马上有饼吃!`, '检测到游戏出现公告弹窗，可能马上发饼！', null, new Date().getTime())
             }
             kazeData.FocusAnnounceId = data.focusAnnounceId;
         }
@@ -445,7 +448,7 @@ let kazeFun = {
             console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
             // 是否推送
             if (kazeLocalData.setting.isPush == true) {
-                this.SendNotice(`【${title}】喂公子吃饼!`, notice, newInfo.image, newInfo.id)
+                this.SendNotice(`【${title}】喂刀客塔吃饼!`, notice, newInfo.image, newInfo.id)
             }
             return true;
         }
@@ -556,8 +559,8 @@ let kazeFun = {
             } else {
                 kazeFun.saveLocalStorage('setting', kazeLocalData.setting);
             }
-
-            // this.intervalGetData()
+            kazeLocalData.sane.saneIndex = kazeLocalData.setting.saneMax;
+            kazeFun.saveLocalStorage('sane', kazeLocalData.sane);
             this.settimeoutGetData();
         });
 
@@ -584,6 +587,33 @@ let kazeFun = {
             else if (request.info == "getUpdateInfo") {
                 // 重启定时器
                 kazeFun.getUpdateInfo('alert');
+            }
+            else if (request.info == "sane") {
+                kazeFun.getLocalStorage('sane').then(data => {
+                    kazeLocalData.sane = data;
+                    if (kazeLocalData.sane.saneIndex == kazeLocalData.setting.saneMax) {
+                        kazeFun.SendNotice(`哼哼！理智已满！`, `理智已经满了，请刀客塔不要再逗我玩了`, null, new Date().getTime());
+                        return;
+                    }
+                    // 重启定时器
+                    if (kazeData.setIntervalID) {
+                        clearInterval(kazeData.setIntervalID);
+                        kazeData.setIntervalID = null;
+                    }
+                    if (kazeLocalData.sane.sanePush) {
+                        kazeData.setIntervalID = setInterval(() => {
+                            kazeLocalData.sane.saneIndex++
+                            if (kazeLocalData.sane.saneIndex >= kazeLocalData.setting.saneMax) {
+                                kazeFun.SendNotice(`理智已满`, `理智已经满了，请刀客塔赶快上线清理智！`, null, new Date().getTime());
+                                clearInterval(kazeData.setIntervalID);
+                                kazeData.setIntervalID = null;
+                            } else {
+                                kazeFun.saveLocalStorage('sane', kazeLocalData.sane);
+                            }
+                            console.log(kazeLocalData.sane.saneIndex);
+                        }, 360000);
+                    }
+                });
             }
         })
 

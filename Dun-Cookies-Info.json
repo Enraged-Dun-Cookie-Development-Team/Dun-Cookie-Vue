@@ -1,6 +1,6 @@
 {
     "list": [{
-            "html": "<div class='online-area'> <img class='online-title-img' src='/assets/image/icon.ico'> <div> <div class='online-red'>博士，2.0.145是一个很重要的更新版本！</div> <div>这个版本添加了微博源有时候拿不到最新信息的问题的临时解决办法</div> <div>解决办法就是<span class='online-red'>登录微博手机端</span></div> <div>145版本以上的博士请在<span class='online-red'>设置页面有按钮能快捷跳转到微博登录点</span></div> <div>145版本以下的博士可以先升级再登录</div> <div>不想升级的点击<a href='https://passport.weibo.cn/signin/login'>这里</a>(右键 - 新标签页打开)进入微博登录页面登录，但还是强烈建议升级</div> </div> </div>",
+            "html": "<div class='online-area'> <img class='online-title-img' src='https://img4.nga.178.com/ngabbs/post/smile/ac15.png'> <div> <div>到<span class='online-red'>5.25</span>日为止 光谱行动的蚀刻章套组应该完成了 如果没有完成 请及时检查</div> <div>一 是否有借好友助战<span class='online-red'>五次</span><span style='margin-left:20px'></span>二 是否解锁了<span class='online-red'>四个以上常驻地图的3级tag</span></div> <div>三 日替是否是<span class='online-red'>大于等于7/10</span> 剩余日替只有三天</div> <div>四 常驻地图的任务栏 <span class='online-red'>更新了两个新任务</span> </div> <div>源自NGA贴 <a href='https://ngabbs.com/read.php?&tid=26899428'>[防侠氵]提前开始的合约防侠</a></div> </div> </div>",
             "starTime": "2021-5-01 12:00:00",
             "overTime": "2021-5-29 04:00:00"
         },
@@ -93,6 +93,21 @@
             "radius": true
         }
     ],
+    "dayInfo": {
+        "resources": {
+            "starTime": "2021-5-15 16:00:00",
+            "overTime": "2021-5-18 04:00:00"
+        },
+        "countdown": [{
+                "text": "光谱行动结束",
+                "time": "2021-5-29 04:00:00"
+            },
+            {
+                "text": "当前卡池结束",
+                "time": "2021-5-29 04:00:00"
+            }
+        ]
+    },
     "upgrade": {
         "v": "2.0.145",
         "title": "检测到新版本 - 2.0.145",

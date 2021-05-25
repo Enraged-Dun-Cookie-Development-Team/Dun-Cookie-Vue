@@ -33,7 +33,8 @@
 		"http://*.sinaimg.cn/*",
 		"https://*.hycdn.cn/*",
 		"http://*.163.com/*",
-		"http://*.126.net/*"
+		"http://*.126.net/*",
+		"http://*.prts.wiki/*"
 	],
 	"options_ui": {
 		"page": "./options.html"

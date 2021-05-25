@@ -154,18 +154,15 @@
 import { timespanToDay } from "../assets/JS/common";
 export default {
   name: "TimeLine",
-  props: ["cardlist", "setting", "saveInfo"],
+  props: ["cardlist", "setting", "saveInfo","imgShow"],
   data() {
     return {
       showAllImage: [],
-      imgShow: false,
+      // imgShow: false,
     };
   },
   mounted() {
-    // 图片卡 先加载dom后加载图片内容
-    setTimeout(() => {
-      this.imgShow = true;
-    }, 1);
+   
   },
   methods: {
     timespanToDay,

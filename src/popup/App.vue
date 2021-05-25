@@ -5,7 +5,7 @@
         :visible.sync="drawer"
         :show-close="false"
         direction="ttb"
-        size="440px"
+        size="520px"
       >
         <el-divider content-position="left">饼的发源地</el-divider>
         <el-row type="flex" class="drawer-btn-area" justify="center">
@@ -57,6 +57,31 @@
             /></el-button>
           </el-tooltip>
         </el-row>
+        <el-divider content-position="left">理智计算提醒</el-divider>
+        <el-form
+          size="mini"
+          class="sane-calculator"
+          label-position="right"
+          :inline="true"
+          label-width="150px"
+          style="text-align: center"
+        >
+          <el-form-item label="当前理智"
+            ><el-input-number
+              v-model="sane.saneIndex"
+              :min="0"
+              :max="setting.saneMax - 1"
+              label="输入当前理智"
+            ></el-input-number
+          ></el-form-item>
+          <el-form-item label="理智满后是否推送">
+            <el-switch v-model="sane.sanePush"></el-switch>
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="saveSane">开始计算</el-button>
+          </el-form-item>
+        </el-form>
+
         <el-divider content-position="left">调整蹲饼器</el-divider>
         <el-row type="flex" justify="center">
           <el-tooltip content="刷新" placement="top">
@@ -67,14 +92,6 @@
               icon="el-icon-refresh"
             ></el-button>
           </el-tooltip>
-
-          <!-- <el-tooltip v-if="isNew" content="检测更新" placement="top">
-            <el-button
-              type="primary"
-              @click="getUpdateInfo"
-              icon="el-icon-upload2"
-            ></el-button>
-          </el-tooltip> -->
 
           <el-tooltip content="点个star" placement="top">
             <el-button
@@ -144,6 +161,75 @@
                 博士，检测到了新版本，点击这里进入更新页面
               </div>
             </el-carousel-item>
+            <el-carousel-item>
+              <div class="day-info">
+                <div class="day-info-content">
+                  <div class="day-info-content-top">
+                    <div class="day-info-content-top-card-area">
+                      <el-tooltip
+                        class="item"
+                        effect="dark"
+                        placement="top"
+                        v-for="item in dayInfo"
+                        :key="item.type"
+                      >
+                        <div slot="content">
+                          {{
+                            item.name +
+                            " - " +
+                            (item.notToday
+                              ? `开放日期： ${
+                                  item.day
+                                    .map((x) => `${numberToWeek(x)}`)
+                                    .join() + ""
+                                }`
+                              : "开放中")
+                          }}
+                        </div>
+                        <div
+                          class="day-info-content-top-card"
+                          :class="item.notToday ? 'notToday' : ''"
+                        >
+                          <img v-if="imgShow" v-lazy="item.src" />
+                        </div>
+                      </el-tooltip>
+                    </div>
+                    <div class="day-info-content-top-card-area"></div>
+                  </div>
+                  <div  class="day-info-content-bottom">
+                    <div title="国服，UTC-8">
+                      <div
+                        class="day-info-content-bottom-card-area"
+                        :key="index"
+                        v-for="(item, index) in onlineDayInfo.countdown"
+                      >
+                        <div>
+                          距离
+                          <span style="color: #f56c6c">{{ item.text }}</span>
+                          {{ diffTime(item.time) }}
+                        </div>
+                      </div>
+                    </div>
+                    <div v-if="imgShow" class="sane-area" @click="drawer = true">
+                      <div class="sane">
+                        当前理智为<span class="sane-number">{{
+                          sane.saneIndex
+                        }}</span
+                        >点
+                      </div>
+                      <div class="sane-info" v-if="sane.saneIndex == setting.saneMax">
+                        已经回满
+                      </div>
+                      <div class="sane-info" v-else>
+                        约{{
+                          timespanToDay(sane.endTime / 1000, 2)
+                        }}回满，剩余约{{ diffTime(sane.endTime) }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </el-carousel-item>
             <el-carousel-item
               v-for="(item, index) in onlineSpeakList"
               :key="index"
@@ -160,6 +246,7 @@
           ref="TimeLine"
           :saveInfo="saveInfo"
           :setting="setting"
+          :imgShow="imgShow"
           :cardlist="cardlist"
         >
         </time-line>
@@ -186,6 +273,7 @@
               ref="TimeLine"
               :saveInfo="saveInfo"
               :setting="setting"
+              :imgShow="imgShow"
               :cardlist="cardlistdm[item]"
             >
             </time-line>
@@ -205,6 +293,10 @@ import {
   Get,
   numberOrEnNameToName,
   numberOrEnNameToIconSrc,
+  numberToWeek,
+  diffTime,
+  saveLocalStorage,
+  getLocalStorage,
 } from "../assets/JS/common";
 export default {
   name: "app",
@@ -216,6 +308,7 @@ export default {
   data() {
     return {
       show: false,
+      imgShow: false,
       isNew: false,
       cardlist: [],
       cardlistdm: {},
@@ -227,15 +320,22 @@ export default {
       drawer: false, // 打开菜单
       isReload: false, // 是否正在刷新
       quickJump: common.quickJump,
+      dayInfo: common.dayInfo,
       loading: true, // 初始化加载
+      sane: common.sane,
+      onlineDayInfo: {},
     };
   },
   computed: {},
   methods: {
     numberOrEnNameToName,
     numberOrEnNameToIconSrc,
+    numberToWeek,
     timespanToDay,
+    diffTime,
     Get,
+    saveLocalStorage,
+    getLocalStorage,
     init() {
       setTimeout(() => {
         this.getCardlist();
@@ -243,6 +343,8 @@ export default {
         this.getSetting();
         this.getDunInfo();
         this.getOnlineSpeak();
+        // 图片卡 先加载dom后加载图片内容
+        this.imgShow = true;
       }, 1);
 
       // 监听标签
@@ -276,19 +378,24 @@ export default {
         });
     },
 
-    // 获取后台数据
-    getLocalStorage(name) {
-      return new Promise((resolve, reject) => {
-        chrome.storage.local.get([name], (result) => {
-          if (result) {
-            resolve(result[name]);
-            return;
-          }
-          resolve(null);
+    // 今天有没有该资源可以刷
+    resourcesNotToday() {
+      let date = new Date();
+      // 如果日期在里面
+      let starTime = new Date(this.onlineDayInfo.resources.starTime);
+      let overTime = new Date(this.onlineDayInfo.resources.overTime);
+      if (date >= starTime && date <= overTime) {
+        common.dayInfo.forEach((item) => {
+          item.notToday = false;
         });
+        return;
+      }
+      // 如果不在里面
+      let week = new Date().getDay();
+      common.dayInfo.forEach((item) => {
+        item.notToday = !item.day.includes(week);
       });
     },
-
     // 检测更新
     getUpdateInfo() {
       chrome.runtime.sendMessage({ info: "getUpdateInfo" });
@@ -322,6 +429,10 @@ export default {
 
         // 是否最新
         this.isNew = data.upgrade.v != this.saveInfo.version;
+
+        // 资源获取
+        this.onlineDayInfo = data.dayInfo;
+        this.resourcesNotToday();
         this.loading = false;
       });
     },
@@ -349,9 +460,39 @@ export default {
         if (data != null) {
           this.setting = data;
           setInterval(() => {
+            // 轮询在这里
             this.getCardlist();
             this.getDunInfo();
+            this.getSane();
           }, data.time * 500);
+        }
+      });
+    },
+
+    // 获取理智数量
+    getSane() {
+      this.getLocalStorage("sane").then((data) => {
+        if (data != null) {
+          this.sane = data;
+        }
+      });
+    },
+
+    // 设置数据
+    saveSane() {
+      var m = new Date();
+      this.sane.endTime = m.setMinutes(
+        m.getMinutes() + (135 - this.sane.saneIndex) * 6
+      );
+      this.saveLocalStorage("sane", this.sane).then((data) => {
+        if (data != null) {
+          chrome.runtime.sendMessage({ info: "sane" });
+          this.drawer = false;
+          this.$message({
+            center: true,
+            message: "保存成功，开始计算",
+            type: "success",
+          });
         }
       });
     },
@@ -512,6 +653,14 @@ export default {
     }
   }
 
+  .sane-calculator {
+    display: flex;
+    justify-content: space-around;
+    .el-form-item {
+      margin-bottom: 0;
+    }
+  }
+
   #content {
     margin-top: 40px;
     // 间隔阴影
@@ -549,6 +698,67 @@ export default {
             justify-content: space-evenly;
             img {
               width: 100px;
+            }
+          }
+          // 今日信息内容样式
+          .day-info {
+            .day-info-title {
+            }
+            .day-info-content {
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              height: 100px;
+              .day-info-content-top {
+                width: 630px;
+                display: flex;
+                flex-direction: column;
+                & .day-info-content-top-card-area {
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-around;
+                  .day-info-content-top-card {
+                    height: 50px;
+                    width: 70px;
+                    overflow: hidden;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    img {
+                      height: 100%;
+                    }
+                    &.notToday {
+                      filter: opacity(0.2);
+                    }
+                  }
+                }
+              }
+              .day-info-content-bottom {
+                width: 630px;
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-end;
+                .day-info-content-bottom-card-area {
+                }
+                .sane-area {
+                  cursor: pointer;
+                  display: flex;
+                  justify-content: right;
+                  align-items: flex-end;
+                  flex-direction: column;
+                  .sane {
+                    font-size: 16px;
+                    font-family: Geometos, "Sans-Regular",
+                      "SourceHanSansCN-Regular", YaHei;
+                    .sane-number {
+                      font-size: 28px;
+                      color: #23ade5;
+                    }
+                  }
+                  .sane-info {
+                  }
+                }
+              }
             }
           }
         }

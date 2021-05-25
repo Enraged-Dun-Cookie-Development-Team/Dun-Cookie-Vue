@@ -59,8 +59,16 @@
                   如果是登录注册页面，请点击“进入登录页面”按钮重新登录
                 </div>
                 <el-form-item label="微博登录">
-                  <el-button size="small" @click="openUrl('https://passport.weibo.cn/signin/login')">进入登录页面</el-button>
-                  <el-button size="small" @click="openUrl('https://m.weibo.cn/profile/')">查看是否登录成功</el-button>
+                  <el-button
+                    size="small"
+                    @click="openUrl('https://passport.weibo.cn/signin/login')"
+                    >进入登录页面</el-button
+                  >
+                  <el-button
+                    size="small"
+                    @click="openUrl('https://m.weibo.cn/profile/')"
+                    >查看是否登录成功</el-button
+                  >
                 </el-form-item>
               </el-tooltip>
               <el-tooltip
@@ -134,6 +142,7 @@
                   </el-radio-group>
                 </el-form-item>
               </el-tooltip>
+               
             </el-tab-pane>
             <el-tab-pane label="界面设置" name="1">
               <el-form-item label="字体大小">
@@ -191,6 +200,22 @@
                       </el-form-item>
                     </el-col>
                   </el-row>
+                </el-form-item>
+              </el-tooltip>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="用于公告栏计算理智回复"
+                placement="left"
+              >
+                <el-form-item label="理智上限">
+                  <el-input-number
+                    controls-position="right"
+                    size="small"
+                    v-model="setting.saneMax"
+                    :min="80"
+                    :max="135"
+                  ></el-input-number>
                 </el-form-item>
               </el-tooltip>
               <el-tooltip
@@ -254,6 +279,8 @@ import {
   timespanToDay,
   numberOrEnNameToName,
   numberOrEnNameToIconSrc,
+  saveLocalStorage,
+  getLocalStorage,
 } from "../assets/JS/common";
 export default {
   name: "app",
@@ -311,6 +338,8 @@ export default {
     numberOrEnNameToName,
     numberOrEnNameToIconSrc,
     timespanToDay,
+    saveLocalStorage,
+    getLocalStorage,
     init() {
       this.getSaveInfo();
       this.getDunInfo();
@@ -372,26 +401,26 @@ export default {
       });
     },
 
-    // 保存
-    saveLocalStorage(name, data) {
-      return new Promise((resolve, reject) => {
-        chrome.storage.local.set({ [name]: data }, () => {
-          resolve(true);
-        });
-      });
-    },
-    // 读取
-    getLocalStorage(name) {
-      return new Promise((resolve, reject) => {
-        chrome.storage.local.get([name], (result) => {
-          if (Object.keys(result).length != 0) {
-            resolve(result[name]);
-            return;
-          }
-          resolve(null);
-        });
-      });
-    },
+    // // 保存
+    // saveLocalStorage(name, data) {
+    //   return new Promise((resolve, reject) => {
+    //     chrome.storage.local.set({ [name]: data }, () => {
+    //       resolve(true);
+    //     });
+    //   });
+    // },
+    // // 读取
+    // getLocalStorage(name) {
+    //   return new Promise((resolve, reject) => {
+    //     chrome.storage.local.get([name], (result) => {
+    //       if (Object.keys(result).length != 0) {
+    //         resolve(result[name]);
+    //         return;
+    //       }
+    //       resolve(null);
+    //     });
+    //   });
+    // },
 
     // 导出设置
     settingExport() {
