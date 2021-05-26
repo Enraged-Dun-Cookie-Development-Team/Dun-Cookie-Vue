@@ -5,7 +5,7 @@
         :visible.sync="drawer"
         :show-close="false"
         direction="ttb"
-        size="520px"
+        size="600px"
       >
         <el-divider content-position="left">饼的发源地</el-divider>
         <el-row type="flex" class="drawer-btn-area" justify="center">
@@ -42,74 +42,77 @@
         <el-divider v-if="quickJump.url" content-position="left"
           >快捷链接</el-divider
         >
-        <el-row type="flex" justify="center" class="drawer-btn-area">
+        <div class="drawer-btn-area-quickJump" ref="drawerBtnAreaQuickJump">
           <el-tooltip
-            :key="item.img"
-            v-for="item in quickJump.url"
             :content="item.name"
+            :key="index"
+            v-for="(item, index) in quickJump.url"
             placement="top"
           >
-            <el-button size="small" @click="openUrl(item.url)"
-              ><img
+            <div class="quickJump-img-area">
+              <img
+                v-if="imgShow"
+                v-lazy="item.img"
                 class="btn-icon"
                 :class="item.radius ? 'radius' : ''"
-                :src="item.img"
-            /></el-button>
+                @click="openUrl(item.url)"
+              />
+            </div>
           </el-tooltip>
-        </el-row>
+        </div>
         <el-divider content-position="left">理智计算提醒</el-divider>
-        <el-form
-          size="mini"
-          class="sane-calculator"
-          label-position="right"
-          :inline="true"
-          label-width="150px"
-          style="text-align: center"
+        <el-tooltip
+          content="数据不会保存！重启电脑或者重启浏览器重启插件修改设置都会丢失数据"
+          placement="top"
         >
-          <el-form-item label="当前理智"
-            ><el-input-number
-              v-model="sane.saneIndex"
-              :min="0"
-              :max="setting.saneMax - 1"
-              label="输入当前理智"
-            ></el-input-number
-          ></el-form-item>
-          <el-form-item label="理智满后是否推送">
-            <el-switch v-model="sane.sanePush"></el-switch>
-          </el-form-item>
-          <el-form-item>
-            <el-button @click="saveSane">开始计算</el-button>
-          </el-form-item>
-        </el-form>
+          <el-form
+            size="mini"
+            class="sane-calculator"
+            label-position="right"
+            :inline="true"
+            label-width="150px"
+            style="text-align: center"
+          >
+            <el-form-item label="当前理智"
+              ><el-input-number
+                v-model="sane.saneIndex"
+                :min="0"
+                :max="setting.saneMax"
+                label="输入当前理智"
+              ></el-input-number
+            ></el-form-item>
+            <el-form-item label="理智满后是否推送">
+              <el-switch v-model="sane.sanePush"></el-switch>
+            </el-form-item>
+            <el-form-item>
+              <el-button @click="saveSane">开始计算</el-button>
+            </el-form-item>
+          </el-form>
+        </el-tooltip>
 
         <el-divider content-position="left">调整蹲饼器</el-divider>
         <el-row type="flex" justify="center">
-          <el-tooltip content="刷新" placement="top">
-            <el-button
-              type="primary"
-              :loading="isReload"
-              @click="reload"
-              icon="el-icon-refresh"
-            ></el-button>
-          </el-tooltip>
-
-          <el-tooltip content="点个star" placement="top">
-            <el-button
-              type="primary"
-              @click="openGithub"
-              icon="el-icon-star-off"
-            ></el-button>
-          </el-tooltip>
-
-          <el-tooltip content="设置" placement="top">
-            <el-button
-              type="primary"
-              icon="el-icon-setting"
-              @click="openSetting"
-            ></el-button>
-          </el-tooltip>
+          <el-button type="primary" @click="openGithub" icon="el-icon-star-off"
+            >点个star</el-button
+          >
+          <el-button
+            type="primary"
+            :loading="isReload"
+            @click="reload"
+            icon="el-icon-refresh"
+            >刷新</el-button
+          >
+          <el-button type="primary" icon="el-icon-setting" @click="openSetting"
+            >设置</el-button
+          >
+          <el-button
+            type="primary"
+            icon="el-icon-upload2"
+            @click="drawer = false"
+            >收起</el-button
+          >
         </el-row>
-        <div style="text-align: right; margin-right: 10px">
+        <div style="position: absolute; bottom: 10px; right: 10px">
           Power By 蓝芷怡 & lwt
         </div>
       </el-drawer>
@@ -150,7 +153,7 @@
             arrow="never"
             height="100px"
             direction="vertical"
-            :interval="5000"
+            :interval="10000"
             :autoplay="true"
           >
             <el-carousel-item v-if="isNew">
@@ -169,7 +172,7 @@
                       <el-tooltip
                         class="item"
                         effect="dark"
-                        placement="top"
+                        placement="bottom"
                         v-for="item in dayInfo"
                         :key="item.type"
                       >
@@ -196,8 +199,8 @@
                     </div>
                     <div class="day-info-content-top-card-area"></div>
                   </div>
-                  <div  class="day-info-content-bottom">
-                    <div title="国服，UTC-8">
+                  <div class="day-info-content-bottom">
+                    <div title="国服 UTC-8">
                       <div
                         class="day-info-content-bottom-card-area"
                         :key="index"
@@ -210,14 +213,21 @@
                         </div>
                       </div>
                     </div>
-                    <div v-if="imgShow" class="sane-area" @click="drawer = true">
+                    <div
+                      v-if="imgShow"
+                      class="sane-area"
+                      @click="drawer = true"
+                    >
                       <div class="sane">
                         当前理智为<span class="sane-number">{{
                           sane.saneIndex
                         }}</span
                         >点
                       </div>
-                      <div class="sane-info" v-if="sane.saneIndex == setting.saneMax">
+                      <div
+                        class="sane-info"
+                        v-if="sane.saneIndex == setting.saneMax"
+                      >
                         已经回满
                       </div>
                       <div class="sane-info" v-else>
@@ -304,7 +314,17 @@ export default {
   mounted() {
     this.init();
   },
-
+  watch: {
+    drawer(value) {
+      if (value) {
+        this.$nextTick(() => {
+          this.bindScroolFun();
+        });
+      } else {
+        this.unbindScroolFun();
+      }
+    },
+  },
   data() {
     return {
       show: false,
@@ -327,6 +347,7 @@ export default {
     };
   },
   computed: {},
+  beforeDestroy() {},
   methods: {
     numberOrEnNameToName,
     numberOrEnNameToIconSrc,
@@ -343,11 +364,14 @@ export default {
         this.getSetting();
         this.getDunInfo();
         this.getOnlineSpeak();
+        this.getSane();
         // 图片卡 先加载dom后加载图片内容
         this.imgShow = true;
       }, 1);
-
-      // 监听标签
+      this.setClickFun();
+    },
+    // 监听标签
+    setClickFun() {
       document
         .querySelectorAll(".online-speak")[0]
         .addEventListener("click", () => {
@@ -371,13 +395,27 @@ export default {
           if (target.nodeName.toLocaleLowerCase() === "setting") {
             this.openSetting();
           }
-
-          // if (target.nodeName.toLocaleLowerCase() === "donate") {
-          //   this.openDonate();
-          // }
         });
     },
-
+    bindScroolFun() {
+      let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
+      // 添加监听事件（不同浏览器，事件方法不一样，所以可以作判断，也可以如下偷懒）
+      // scrollDiv.addEventListener("DOMMouseScroll", handler, false);
+      scrollDiv.addEventListener("wheel", handler, false);
+      function handler(event) {
+        let detail = event.wheelDelta || event.detail;
+        let moveForwardStep = -1;
+        let moveBackStep = 1;
+        let step = 0;
+        if (detail > 0) {
+          step = moveForwardStep * 100;
+        } else {
+          step = moveBackStep * 100;
+        }
+        scrollDiv.scrollLeft = scrollDiv.scrollLeft + step;
+      }
+    },
+    unbindScroolFun() {},
     // 今天有没有该资源可以刷
     resourcesNotToday() {
       let date = new Date();
@@ -482,7 +520,7 @@ export default {
     saveSane() {
       var m = new Date();
       this.sane.endTime = m.setMinutes(
-        m.getMinutes() + (135 - this.sane.saneIndex) * 6
+        m.getMinutes() + (this.setting.saneMax - this.sane.saneIndex) * 6
       );
       this.saveLocalStorage("sane", this.sane).then((data) => {
         if (data != null) {
@@ -626,6 +664,46 @@ export default {
     }
   }
 
+  // 快捷连接
+  .drawer-btn-area-quickJump {
+    display: flex;
+    overflow-x: scroll;
+    height: 100px;
+    margin: 0 10px;
+    .quickJump-img-area {
+      flex-shrink: 0;
+      max-width: 350px;
+      margin-right: 10px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #dcdfe6;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      .quickJump-img-area {
+      }
+      img {
+        height: 100%;
+      }
+    }
+    &::after {
+      content: " ";
+      position: fixed;
+      height: 100px;
+      right: 0;
+      width: 10px;
+      background: linear-gradient(90deg, transparent, @@bgColor 50%);
+    }
+    &::before {
+      content: " ";
+      position: fixed;
+      height: 100px;
+      left: 0;
+      width: 10px;
+      background: linear-gradient(90deg, @@bgColor 50%, transparent);
+    }
+  }
+
   // 标签栏
   /deep/ .el-tabs {
     .el-tabs__header {
@@ -710,7 +788,7 @@ export default {
               justify-content: space-between;
               height: 100px;
               .day-info-content-top {
-                width: 630px;
+                width: 610px;
                 display: flex;
                 flex-direction: column;
                 & .day-info-content-top-card-area {
@@ -734,7 +812,7 @@ export default {
                 }
               }
               .day-info-content-bottom {
-                width: 630px;
+                width: 610px;
                 display: flex;
                 justify-content: space-between;
                 align-items: flex-end;

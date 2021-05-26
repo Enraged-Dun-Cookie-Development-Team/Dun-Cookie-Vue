@@ -1,5 +1,4 @@
 
-import { Date } from "core-js";
 import { common } from "../assets/JS/common";
 //数据下来后都定位固定格式 没有不用管
 var date = {
@@ -580,6 +579,8 @@ let kazeFun = {
                 kazeFun.getLocalStorage('setting').then(data => {
                     kazeLocalData.cardlistdm = {};
                     kazeLocalData.setting = data;
+                    kazeLocalData.sane.saneIndex = data.saneMax;
+                    kazeFun.saveLocalStorage('sane', kazeLocalData.sane);
                     kazeSourceProcess.GetData();
                     // kazeFun.intervalGetData();
                 })

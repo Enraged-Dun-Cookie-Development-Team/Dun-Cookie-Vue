@@ -20,45 +20,24 @@
             "overTime": "2021-5-29 04:00:00"
         }
     ],
-    "btnList": [{
-            "starTime": "2021-4-24 22:00:00",
-            "overTime": "2021-5-18 04:00:00",
-            "url": "https://ak.hypergryph.com/activity/preparation?source=game",
-            "name": "庆典筹备计划",
-            "img": "http://cdn.liuziyang.vip/cake.webp",
-            "radius": true
-        },
+    "btnList": [
         {
             "starTime": "2020-08-09 00:00:00",
             "overTime": "2021-12-31 23:59:59",
             "url": "https://www.bilibili.com/video/BV1cD4y1S7Yx",
             "name": "damedane",
             "img": "https://img.nga.178.com/attachments/mon_202008/15/-klbw3Q5-4qw4X12ZakT1kS40-40.gif",
-            "radius": true
-        },
-        {
-            "starTime": "2020-08-09 00:00:00",
-            "overTime": "2021-05-14 23:59:59",
-            "url": "https://www.bilibili.com/video/BV1cf4y1W771?p=2",
-            "name": "两面包夹芝士",
-            "img": "https://img.nga.178.com/attachments/mon_202105/07/-klbw3Qq0ox-jw4xZbT1kSdw-dw.jpg",
-            "radius": true
+            "radius": true,
+            "type":1
         },
         {
             "starTime": "2021-5-15 12:00:00",
-            "overTime": "2021-5-22 16:00:00",
-            "url": "https://www.bilibili.com/video/BV1WQ4y1R724",
-            "name": "【旧约之巅】【光谱行动·八号竞技场】全网首杀26危机等级 - 家训，不畏苦暗！",
+            "overTime": "2021-5-29 04:00:00",
+            "url": "https://www.bilibili.com/video/BV1v44y1z7gv",
+            "name": "【危机合约#5】全网首杀 危机等级31 愿我的弹雨能熄灭你们的痛苦",
             "img": "https://i1.hdslb.com/bfs/archive/112bc4c61c025f98bdbd984630e4266b2c77b143.jpg@200w_125h_1c.webp",
-            "radius": true
-        },
-        {
-            "starTime": "2021-5-15 12:00:00",
-            "overTime": "2021-5-22 16:00:00",
-            "url": "https://www.bilibili.com/video/BV1qV411j7Nv",
-            "name": "【明日方舟】光谱行动八号竞技场全网首杀术士重装队26！",
-            "img": "https://i0.hdslb.com/bfs/archive/aca2ba92736ffb5dee32c8f356aa3a55765e0605.jpg@200w_125h_1c.webp",
-            "radius": true
+            "radius": true,
+            "type":1
         },
         {
             "starTime": "2021-5-15 12:00:00",
@@ -66,7 +45,8 @@
             "url": "https://www.bilibili.com/video/BV1MU4y1b7zJ",
             "name": "【光谱行动】你是什么时候，产生了6级博士，过不了旧约21级的错觉？",
             "img": "https://i1.hdslb.com/bfs/archive/85f23d2f8feb74098de599f85fb78ba33a502d66.jpg@200w_125h_1c.webp",
-            "radius": true
+            "radius": true,
+            "type":1
         },
         {
             "starTime": "2021-5-15 12:00:00",
@@ -74,7 +54,8 @@
             "url": "https://www.bilibili.com/video/BV1H64y1y72F",
             "name": "【光谱行动●八号竞技场】全员无伤也能登顶旧约26？",
             "img": "https://i1.hdslb.com/bfs/archive/702d9e28e1b445904bc88f4cc7fc7db4d2144f3b.jpg@200w_125h_1c.webp",
-            "radius": true
+            "radius": true,
+            "type":1
         },
         {
             "starTime": "2021-5-15 12:00:00",
@@ -82,7 +63,8 @@
             "url": "https://www.bilibili.com/video/BV14Q4y1o7qP",
             "name": "【作业】【明日方舟光谱行动】魔法zc目录",
             "img": "https://i1.hdslb.com/bfs/archive/a39b95edb24cfd24fdc5545286f55e891051f534.jpg@200w_125h_1c.webp",
-            "radius": true
+            "radius": true,
+            "type":1
         },
         {
             "starTime": "2021-5-15 12:00:00",
@@ -90,13 +72,23 @@
             "url": "https://www.bilibili.com/video/BV1cK411F7vz",
             "name": "【作业】【明日方舟光谱行动】小狼XF",
             "img": "https://i2.hdslb.com/bfs/archive/2601cc140f4c2b6fb77726e362b560d36c624b81.jpg@200w_125h_1c.webp",
-            "radius": true
+            "radius": true,
+            "type":1
+        },
+        {
+            "starTime": "2021-5-15 12:00:00",
+            "overTime": "2021-5-29 04:00:00",
+            "url": "https://www.bilibili.com/video/BV1cK411F7vz",
+            "name": "线上测试，请勿点击",
+            "img": "https://i2.hdslb.com/bfs/archive/2601cc140f4c2b6fb77726e362b560d36c624b81.jpg@200w_125h_1c.webp",
+            "radius": true,
+            "type":0
         }
     ],
     "dayInfo": {
         "resources": {
             "starTime": "2021-5-15 16:00:00",
-            "overTime": "2021-5-18 04:00:00"
+            "overTime": "2021-5-29 04:00:00"
         },
         "countdown": [{
                 "text": "光谱行动结束",
