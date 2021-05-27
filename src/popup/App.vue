@@ -5,7 +5,7 @@
         :visible.sync="drawer"
         :show-close="false"
         direction="ttb"
-        size="600px"
+        size="520px"
       >
         <el-divider content-position="left">饼的发源地</el-divider>
         <el-row type="flex" class="drawer-btn-area" justify="center">
@@ -60,36 +60,6 @@
             </div>
           </el-tooltip>
         </div>
-        <el-divider content-position="left">理智计算提醒</el-divider>
-        <el-tooltip
-          content="数据不会保存！重启电脑或者重启浏览器重启插件修改设置都会丢失数据"
-          placement="top"
-        >
-          <el-form
-            size="mini"
-            class="sane-calculator"
-            label-position="right"
-            :inline="true"
-            label-width="150px"
-            style="text-align: center"
-          >
-            <el-form-item label="当前理智"
-              ><el-input-number
-                v-model="sane.saneIndex"
-                :min="0"
-                :max="setting.saneMax"
-                label="输入当前理智"
-              ></el-input-number
-            ></el-form-item>
-            <el-form-item label="理智满后是否推送">
-              <el-switch v-model="sane.sanePush"></el-switch>
-            </el-form-item>
-            <el-form-item>
-              <el-button @click="saveSane">开始计算</el-button>
-            </el-form-item>
-          </el-form>
-        </el-tooltip>
-
         <el-divider content-position="left">调整蹲饼器</el-divider>
         <el-row type="flex" justify="center">
           <el-button type="primary" @click="openGithub" icon="el-icon-star-off"
@@ -114,6 +84,41 @@
         </el-row>
         <div style="position: absolute; bottom: 10px; right: 10px">
           Power By 蓝芷怡 & lwt
+        </div>
+      </el-drawer>
+      <el-drawer
+        :visible.sync="toolDrawer"
+        :show-close="false"
+        direction="ttb"
+        size="180px"
+      >
+        <el-divider content-position="left">理智计算提醒</el-divider>
+        <el-form
+          size="mini"
+          class="sane-calculator"
+          label-position="right"
+          :inline="true"
+          label-width="150px"
+          style="text-align: center"
+        >
+          <el-form-item label="当前理智"
+            ><el-input-number
+              ref="saneEdit"
+              v-model="sane.saneIndex"
+              :min="0"
+              :max="setting.saneMax"
+              label="输入当前理智"
+            ></el-input-number
+          ></el-form-item>
+          <el-form-item label="理智满后是否推送">
+            <el-switch v-model="sane.sanePush"></el-switch>
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="saveSane">开始计算</el-button>
+          </el-form-item>
+        </el-form>
+        <div style="text-align: center; margin-top: 16px; opacity: 0.4">
+          数据不会保存！重启电脑，重启浏览器，重启插件，修改设置都会丢失数据
         </div>
       </el-drawer>
       <el-button
@@ -168,7 +173,45 @@
               <div class="day-info">
                 <div class="day-info-content">
                   <div class="day-info-content-top">
-                    <div class="day-info-content-top-card-area">
+                    <div title="国服 UTC-8">
+                      <div
+                        class="day-info-content-top-card-area"
+                        :key="index"
+                        v-for="(item, index) in onlineDayInfo.countdown"
+                      >
+                        <div>
+                          距离
+                          <span style="color: #f56c6c">{{ item.text }}</span>
+                          {{ diffTime(item.time) }}
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      v-if="imgShow"
+                      class="sane-area"
+                      @click.stop="openToolDrawer"
+                    >
+                      <div class="sane">
+                        当前理智为<span class="sane-number">{{
+                          sane.saneIndex
+                        }}</span
+                        >点
+                      </div>
+                      <div
+                        class="sane-info"
+                        v-if="sane.saneIndex == setting.saneMax"
+                      >
+                        已经回满
+                      </div>
+                      <div class="sane-info" v-else>
+                        约{{
+                          timespanToDay(sane.endTime / 1000, 2)
+                        }}回满，剩余约{{ diffTime(sane.endTime) }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="day-info-content-bottom">
+                    <div class="day-info-content-bottom-card-area">
                       <el-tooltip
                         class="item"
                         effect="dark"
@@ -190,51 +233,12 @@
                           }}
                         </div>
                         <div
-                          class="day-info-content-top-card"
+                          class="day-info-content-bottom-card"
                           :class="item.notToday ? 'notToday' : ''"
                         >
                           <img v-if="imgShow" v-lazy="item.src" />
                         </div>
                       </el-tooltip>
-                    </div>
-                    <div class="day-info-content-top-card-area"></div>
-                  </div>
-                  <div class="day-info-content-bottom">
-                    <div title="国服 UTC-8">
-                      <div
-                        class="day-info-content-bottom-card-area"
-                        :key="index"
-                        v-for="(item, index) in onlineDayInfo.countdown"
-                      >
-                        <div>
-                          距离
-                          <span style="color: #f56c6c">{{ item.text }}</span>
-                          {{ diffTime(item.time) }}
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      v-if="imgShow"
-                      class="sane-area"
-                      @click="drawer = true"
-                    >
-                      <div class="sane">
-                        当前理智为<span class="sane-number">{{
-                          sane.saneIndex
-                        }}</span
-                        >点
-                      </div>
-                      <div
-                        class="sane-info"
-                        v-if="sane.saneIndex == setting.saneMax"
-                      >
-                        已经回满
-                      </div>
-                      <div class="sane-info" v-else>
-                        约{{
-                          timespanToDay(sane.endTime / 1000, 2)
-                        }}回满，剩余约{{ diffTime(sane.endTime) }}
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -338,6 +342,7 @@ export default {
       dunInfo: common.dunInfo,
       setting: common.setting,
       drawer: false, // 打开菜单
+      toolDrawer: false, // 理智计算器菜单
       isReload: false, // 是否正在刷新
       quickJump: common.quickJump,
       dayInfo: common.dayInfo,
@@ -474,7 +479,6 @@ export default {
         this.loading = false;
       });
     },
-
     // 死数据
     getSaveInfo() {
       this.getLocalStorage("saveInfo").then((data) => {
@@ -525,13 +529,21 @@ export default {
       this.saveLocalStorage("sane", this.sane).then((data) => {
         if (data != null) {
           chrome.runtime.sendMessage({ info: "sane" });
-          this.drawer = false;
+          this.toolDrawer = false;
           this.$message({
             center: true,
             message: "保存成功，开始计算",
             type: "success",
           });
         }
+      });
+    },
+
+    // 打开计算小工具
+    openToolDrawer() {
+      this.toolDrawer = true;
+      this.$nextTick(() => {
+        this.$refs.saneEdit.focus();
       });
     },
 
@@ -790,34 +802,9 @@ export default {
               .day-info-content-top {
                 width: 610px;
                 display: flex;
-                flex-direction: column;
-                & .day-info-content-top-card-area {
-                  display: flex;
-                  align-items: center;
-                  justify-content: space-around;
-                  .day-info-content-top-card {
-                    height: 50px;
-                    width: 70px;
-                    overflow: hidden;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    img {
-                      height: 100%;
-                    }
-                    &.notToday {
-                      filter: opacity(0.2);
-                    }
-                  }
-                }
-              }
-              .day-info-content-bottom {
-                width: 610px;
-                display: flex;
+                flex-direction: row;
                 justify-content: space-between;
-                align-items: flex-end;
-                .day-info-content-bottom-card-area {
-                }
+                align-items: center;
                 .sane-area {
                   cursor: pointer;
                   display: flex;
@@ -834,6 +821,31 @@ export default {
                     }
                   }
                   .sane-info {
+                  }
+                }
+              }
+              .day-info-content-bottom {
+                width: 610px;
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-end;
+                & .day-info-content-bottom-card-area {
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-around;
+                  .day-info-content-bottom-card {
+                    height: 50px;
+                    width: 70px;
+                    overflow: hidden;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    img {
+                      height: 100%;
+                    }
+                    &.notToday {
+                      filter: opacity(0.2);
+                    }
                   }
                 }
               }
