@@ -117,7 +117,10 @@
             <el-button @click="saveSane">开始计算</el-button>
           </el-form-item>
         </el-form>
-        <div class="mention" style="text-align: center; margin-top: 16px; opacity: 0.4">
+        <div
+          class="mention"
+          style="text-align: center; margin-top: 16px; opacity: 0.4"
+        >
           数据不会保存！重启或休眠电脑，重启浏览器，重启插件，修改设置都会丢失数据
         </div>
       </el-drawer>
@@ -408,16 +411,7 @@ export default {
       // scrollDiv.addEventListener("DOMMouseScroll", handler, false);
       scrollDiv.addEventListener("wheel", handler, false);
       function handler(event) {
-        let detail = event.wheelDelta || event.detail;
-        let moveForwardStep = -1;
-        let moveBackStep = 1;
-        let step = 0;
-        if (detail > 0) {
-          step = moveForwardStep * 100;
-        } else {
-          step = moveBackStep * 100;
-        }
-        scrollDiv.scrollLeft = scrollDiv.scrollLeft + step;
+        scrollDiv.scrollLeft = scrollDiv.scrollLeft + event.deltaY;
       }
     },
     unbindScroolFun() {},
@@ -691,13 +685,13 @@ export default {
       border-radius: 5px;
       overflow: hidden;
       border: 1px solid #dcdfe6;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
+      // display: flex;
+      // flex-wrap: wrap;
+      // align-items: center;
       .quickJump-img-area {
       }
       img {
-        height: 100%;
+        height: 100px;
       }
     }
     &::after {
@@ -950,8 +944,9 @@ export default {
 body {
   margin: 0;
 }
-.el-timeline {
-   scrollbar-width: none;
+.el-timeline,
+.drawer-btn-area-quickJump {
+  scrollbar-width: none;
 }
 ::-webkit-scrollbar {
   width: 0 !important;
