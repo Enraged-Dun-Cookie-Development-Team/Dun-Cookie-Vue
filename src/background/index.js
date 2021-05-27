@@ -303,7 +303,9 @@ let kazeSourceProcess = {
                 });
             }
         });
-        kazeFun.JudgmentNewFocusAnnounceId(data);
+        if (kazeLocalData.setting.isPush == true) {
+            kazeFun.JudgmentNewFocusAnnounceId(data);
+        }
         return list.sort((x, y) => y.judgment - x.judgment);
     },
 

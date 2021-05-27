@@ -117,7 +117,7 @@
             <el-button @click="saveSane">开始计算</el-button>
           </el-form-item>
         </el-form>
-        <div style="text-align: center; margin-top: 16px; opacity: 0.4">
+        <div class="mention" style="text-align: center; margin-top: 16px; opacity: 0.4">
           数据不会保存！重启或休眠电脑，重启浏览器，重启插件，修改设置都会丢失数据
         </div>
       </el-drawer>
@@ -624,8 +624,10 @@ export default {
   @setBtnBorder: "setBtnBorder-@{theme}";
   @btnBg: "btnBg-@{theme}"; // 按钮内部颜色
   @setLarge: "setLarge-@{theme}"; // 设置标题颜色
+  @setSmall: "setSmall-@{theme}"; // 设置文本颜色
   @shadow: "shadow-@{theme}"; // 卡片的阴影
   @hover: "hover-@{theme}"; // 按钮hover颜色
+  @numberInput: "numberInput-@{theme}"; //设置页面加减按钮
 
   #app {
     /deep/ a {
@@ -892,6 +894,46 @@ export default {
       border-color: #c6e2ff;
       background-color: @@hover;
     }
+
+    .mention,
+    .el-form-item__label,
+    .el-button--mini {
+      color: @@setLarge;
+    }
+    .el-input-number__increase,
+    .el-input-number__decrease {
+      background-color: @@numberInput;
+      color: @@setSmall;
+    }
+    .el-input-number__increase {
+      border-left: @@btnBorder 1px solid;
+    }
+    .el-input-number__decrease {
+      border-right: @@btnBorder 1px solid;
+    }
+    .el-input-number__increase:hover + .el-input > .el-input__inner,
+    .el-input-number__decrease:hover
+      + .el-input-number__increase
+      + .el-input
+      > .el-input__inner {
+      border: #409eff 1px solid;
+    }
+    .el-input__inner {
+      background-color: @@bgColor;
+      color: @@setLarge;
+      border: @@btnBorder 1px solid;
+    }
+    .el-input__inner:focus {
+      border-color: #409eff;
+    }
+  }
+  @media screen and (max-width: 700px) {
+    #app {
+      height: 1500px;
+    }
+    .el-timeline {
+      height: 1500px;
+    }
   }
 }
 
@@ -908,6 +950,9 @@ export default {
 body {
   margin: 0;
 }
+.el-timeline {
+   scrollbar-width: none;
+}
 ::-webkit-scrollbar {
   width: 0 !important;
 }
@@ -917,6 +962,7 @@ body {
 }
 .online-area {
   display: flex;
+  font-size: 14px;
   align-items: center;
   margin-right: 30px;
   .online-title-img {

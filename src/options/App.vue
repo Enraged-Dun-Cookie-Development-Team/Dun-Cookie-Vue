@@ -485,6 +485,8 @@ export default {
   @timeline: "timeline-@{theme}"; // 时间线颜色和时间线border颜色
   @subTitle: "subTitle-@{theme}"; // 小标题颜色
   @btnBorder: "btnBorder-@{theme}"; // 按钮边框颜色和一些小线条
+  @setBtnBorder: "setBtnBorder-@{theme}";
+  @btnBg: "btnBg-@{theme}"; // 按钮内部颜色
   @setLarge: "setLarge-@{theme}"; // 设置标题颜色
   @setSmall: "setSmall-@{theme}"; // 设置文本颜色
   @shadow: "shadow-@{theme}"; // 卡片的阴影
@@ -531,6 +533,7 @@ export default {
       .el-tabs--border-card {
         border: @@btnBorder 1px solid;
         box-shadow: none;
+        background: none;
 
         /deep/.el-tabs__header {
           background-color: @@numberInput;
@@ -546,8 +549,20 @@ export default {
         }
         /deep/.el-tabs__content {
           background-color: @@bgColor;
+
+          #pane-0 .el-button {
+            color: @@setSmall;
+            background-color: @@btnBg;
+            border: @@setBtnBorder 1px solid;
+          }
+          #pane-0 .el-button:hover {
+            color: #409eff;
+            border-color: #c6e2ff;
+            background-color: @@hover;
+          }
         }
       }
+
 
       /deep/.el-input-number.is-controls-right .el-input-number__increase {
         border-bottom: 1px solid @@btnBorder;

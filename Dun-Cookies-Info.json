@@ -35,7 +35,16 @@
             "overTime": "2021-5-29 04:00:00",
             "url": "https://www.bilibili.com/video/BV1v44y1z7gv",
             "name": "【危机合约#5】全网首杀 危机等级31 愿我的弹雨能熄灭你们的痛苦",
-            "img": "https://i1.hdslb.com/bfs/archive/112bc4c61c025f98bdbd984630e4266b2c77b143.jpg@200w_125h_1c.webp",
+            "img": "https://i0.hdslb.com/bfs/archive/c9e0f3a46cd6bc4d860e5e1744ee5cb4dbb5a811.jpg@200w_125h_1c.webp",
+            "radius": true,
+            "type":1
+        },
+        {
+            "starTime": "2021-5-15 12:00:00",
+            "overTime": "2021-5-29 04:00:00",
+            "url": "https://www.bilibili.com/video/BV1F64y1o7DE",
+            "name": "【光谱行动】危机等级31 槊扬铳起裂坚胄 浪浊血涌折锋戟",
+            "img": "https://i2.hdslb.com/bfs/archive/3c93756021190fac6704cb2e2e8807e12799ba8c.jpg@200w_125h_1c.webp",
             "radius": true,
             "type":1
         },
@@ -101,11 +110,11 @@
         ]
     },
     "upgrade": {
-        "v": "2.0.145",
-        "title": "检测到新版本 - 2.0.145",
-        "description": "💢 本次版本主要是发现微博接口API发生了问题，然后作出了相应调整<br/>1.发现了部分微博账号如果不登录就会获取不到最新的数据，在设置页面添加登录引导页<br/>2.调整部分文案<br/>3.添加程序内某些方法的快捷方式<br/>4.彻底断绝了缓存的问题(大概)",
-        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.0.145/dun-cookie-2.0.145.crx",
-        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.0.145/dun-cookie-2.0.145.zip",
+        "v": "2.0.155",
+        "title": "检测到新版本 - 2.0.155",
+        "description": "⏰ 本次版本主要是添加了一点实用的小功能<br/>1.添加了理智提醒器，实时监控理智，到点推送，再也不用担心理智超出了<br/>2.添加了材料提示，直接可以查看今天能刷哪些材料<br/>3.添加了倒计时，分钟级提醒时间节点<br/>4.调整抽屉样式，把快捷连接的图片加大了<br/>5.初步适用了手机浏览器的使用",
+        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.0.155/Dun-Cookie-2.0.155.crx",
+        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.0.155/Dun-Cookie-2.0.155.zip",
         "downSpare": "https://pan.baidu.com/s/1kzY6kpfYqLcGpuaiwQOGoA",
         "downSpareText": "备用下载（提取码 jzq9）",
         "downChrome": "https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN"
