@@ -674,7 +674,7 @@ export default {
       flex-shrink: 0;
       max-width: 350px;
       margin-right: 10px;
-      border-radius: 10px;
+      border-radius: 5px;
       overflow: hidden;
       border: 1px solid #dcdfe6;
       display: flex;
@@ -691,7 +691,7 @@ export default {
       position: fixed;
       height: 100px;
       right: 0;
-      width: 10px;
+      width: 20px;
       background: linear-gradient(90deg, transparent, @@bgColor 50%);
     }
     &::before {
@@ -699,7 +699,7 @@ export default {
       position: fixed;
       height: 100px;
       left: 0;
-      width: 10px;
+      width: 20px;
       background: linear-gradient(90deg, @@bgColor 50%, transparent);
     }
   }

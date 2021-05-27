@@ -426,7 +426,7 @@ let kazeFun = {
     JudgmentNewFocusAnnounceId(data) {
         if (data) {
             if (kazeData.FocusAnnounceId && data.focusAnnounceId && kazeData.FocusAnnounceId != data.focusAnnounceId) {
-                this.SendNotice(`【通讯组预告】刀客塔马上有饼吃!`, '检测到游戏出现公告弹窗，可能马上发饼！', null, new Date().getTime())
+                this.SendNotice(`【通讯组预告】博士马上有饼吃!`, '检测到游戏出现公告弹窗，可能马上发饼！', null, new Date().getTime())
             }
             kazeData.FocusAnnounceId = data.focusAnnounceId;
         }
@@ -447,7 +447,7 @@ let kazeFun = {
             console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
             // 是否推送
             if (kazeLocalData.setting.isPush == true) {
-                this.SendNotice(`【${title}】喂刀客塔吃饼!`, notice, newInfo.image, newInfo.id)
+                this.SendNotice(`【${title}】喂博士吃饼!`, notice, newInfo.image, newInfo.id)
             }
             return true;
         }
@@ -593,7 +593,7 @@ let kazeFun = {
                 kazeFun.getLocalStorage('sane').then(data => {
                     kazeLocalData.sane = data;
                     if (kazeLocalData.sane.saneIndex == kazeLocalData.setting.saneMax) {
-                        kazeFun.SendNotice(`哼哼！理智已满！`, `理智已经满了，请刀客塔不要再逗我玩了`, null, new Date().getTime());
+                        kazeFun.SendNotice(`哼哼！理智已满！`, `理智已经满了，请博士不要再逗我玩了`, null, new Date().getTime());
                         return;
                     }
                     // 重启定时器
@@ -605,7 +605,7 @@ let kazeFun = {
                         kazeData.setIntervalID = setInterval(() => {
                             kazeLocalData.sane.saneIndex++
                             if (kazeLocalData.sane.saneIndex >= kazeLocalData.setting.saneMax) {
-                                kazeFun.SendNotice(`理智已满`, `理智已经满了，请刀客塔赶快上线清理智！`, null, new Date().getTime());
+                                kazeFun.SendNotice(`理智已满`, `理智已经满了，请博士赶快上线清理智！`, null, new Date().getTime());
                                 clearInterval(kazeData.setIntervalID);
                                 kazeData.setIntervalID = null;
                             } else {
