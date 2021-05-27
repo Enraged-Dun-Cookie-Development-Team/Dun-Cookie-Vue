@@ -552,8 +552,8 @@ export default {
 
           #pane-0 .el-button {
             color: @@setSmall;
-            background-color: @@btnBg;
-            border: @@setBtnBorder 1px solid;
+            background-color: @@bgColor;
+            border: @@btnBorder 1px solid;
           }
           #pane-0 .el-button:hover {
             color: #409eff;

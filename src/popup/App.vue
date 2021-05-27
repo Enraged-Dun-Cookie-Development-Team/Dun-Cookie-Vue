@@ -927,7 +927,7 @@ export default {
       border-color: #409eff;
     }
   }
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: 699px) {
     #app {
       height: 1500px;
     }
@@ -962,7 +962,7 @@ body {
 }
 .online-area {
   display: flex;
-  font-size: 14px;
+  font-size: 13px;
   align-items: center;
   margin-right: 30px;
   .online-title-img {
