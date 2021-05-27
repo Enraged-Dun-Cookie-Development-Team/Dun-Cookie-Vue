@@ -118,7 +118,7 @@
           </el-form-item>
         </el-form>
         <div style="text-align: center; margin-top: 16px; opacity: 0.4">
-          数据不会保存！重启电脑，重启浏览器，重启插件，修改设置都会丢失数据
+          数据不会保存！重启或休眠电脑，重启浏览器，重启插件，修改设置都会丢失数据
         </div>
       </el-drawer>
       <el-button
