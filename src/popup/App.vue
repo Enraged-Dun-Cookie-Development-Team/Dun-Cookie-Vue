@@ -176,7 +176,7 @@
               <div class="day-info">
                 <div class="day-info-content">
                   <div class="day-info-content-top">
-                    <div title="国服 UTC-8">
+                    <div>
                       <div
                         class="day-info-content-top-card-area"
                         :key="index"
@@ -184,8 +184,19 @@
                       >
                         <div>
                           距离
-                          <span style="color: #f56c6c">{{ item.text }}</span>
-                          {{ diffTime(item.time) }}
+                          <el-tooltip
+                            v-if="item.remark"
+                            :content="item.remark"
+                            placement="right"
+                          >
+                            <span class="online-blue">{{ item.text }}</span>
+                          </el-tooltip>
+                          <span v-else class="online-blue">{{
+                            item.text
+                          }}</span>
+                          <span title="国服 UTC-8">{{
+                            " " + diffTime(item.time)
+                          }}</span>
                         </div>
                       </div>
                     </div>
@@ -195,7 +206,7 @@
                       @click.stop="openToolDrawer"
                     >
                       <div class="sane">
-                        当前理智为<span class="sane-number">{{
+                        当前理智为<span class="online-blue sane-number">{{
                           sane.saneIndex
                         }}</span
                         >点
@@ -207,9 +218,9 @@
                         已经回满
                       </div>
                       <div class="sane-info" v-else>
-                        约{{
-                          timespanToDay(sane.endTime / 1000, 2)
-                        }}回满，剩余约{{ diffTime(sane.endTime) }}
+                        约{{ timespanToDay(sane.endTime / 1000, 2) }}回满，{{
+                          diffTime(sane.endTime)
+                        }}
                       </div>
                     </div>
                   </div>
@@ -813,7 +824,6 @@ export default {
                       "SourceHanSansCN-Regular", YaHei;
                     .sane-number {
                       font-size: 28px;
-                      color: #23ade5;
                     }
                   }
                   .sane-info {
@@ -967,20 +977,23 @@ body {
       border-radius: 4px;
     }
   }
-  .online-blue {
-    color: #23ade5;
-  }
-  .online-red {
-    color: #f56c6c;
-  }
-  .online-yellow {
-    color: #e6a23c;
-  }
-  .online-green {
-    color: #67c23a;
-  }
-  .online-gray {
-    color: #909399;
-  }
+}
+.online-pointer {
+  cursor: pointer;
+}
+.online-blue {
+  color: #23ade5;
+}
+.online-red {
+  color: #f56c6c;
+}
+.online-yellow {
+  color: #e6a23c;
+}
+.online-green {
+  color: #67c23a;
+}
+.online-gray {
+  color: #909399;
 }
 </style>

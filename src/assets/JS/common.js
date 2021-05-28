@@ -240,10 +240,10 @@ function diffTime(endDate, startDate) {
   let text = "";
   if (endDate > startDate) {
     date3 = new Date(endDate).getTime() - new Date(startDate).getTime();
-    text = "还剩 "
+    text = "剩余约"
   } else {
     date3 = new Date(startDate).getTime() - new Date(endDate).getTime();
-    text = "已过去 "
+    text = "已过去"
   }
   var days = Math.floor(date3 / (24 * 3600 * 1000));
   var leave1 = date3 % (24 * 3600 * 1000);
@@ -251,7 +251,7 @@ function diffTime(endDate, startDate) {
   var leave2 = leave1 % (3600 * 1000);
   var minutes = Math.floor(leave2 / (60 * 1000));
   if (days == 0) {
-    return hours + "小时" + minutes + "分钟";
+    return text + hours + "小时" + minutes + "分钟";
   }
   return text + days + "天" + hours + "小时" + minutes + "分钟";
 }
