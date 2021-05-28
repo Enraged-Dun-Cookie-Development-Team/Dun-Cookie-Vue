@@ -1,5 +1,5 @@
 <template>
-  <el-timeline>
+  <el-timeline :style="'height: calc(' + allHeight + 'px - 179px)'">
     <el-timeline-item
       v-for="(item, index) in cardlist"
       :key="index"
@@ -154,7 +154,7 @@
 import { timespanToDay } from "../assets/JS/common";
 export default {
   name: "TimeLine",
-  props: ["cardlist", "setting", "saveInfo","imgShow"],
+  props: ["cardlist", "setting", "saveInfo","imgShow", "allHeight"],
   data() {
     return {
       showAllImage: [],
