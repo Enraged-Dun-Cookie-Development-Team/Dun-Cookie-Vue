@@ -82,7 +82,10 @@
             >收起</el-button
           >
         </el-row>
-        <div style="position: absolute; bottom: 10px; right: 10px">
+        <div 
+          style="position: absolute; bottom: 10px; right: 10px"
+          class="sign"
+        >
           Power By 蓝芷怡 & lwt
         </div>
       </el-drawer>
@@ -822,6 +825,9 @@ export default {
                 flex-direction: row;
                 justify-content: space-between;
                 align-items: center;
+                .day-info-content-top-card-area {
+                  font-size: 12px;
+                }
                 .sane-area {
                   cursor: pointer;
                   display: flex;
@@ -907,6 +913,9 @@ export default {
       color: #409eff;
       border-color: #c6e2ff;
       background-color: @@hover;
+    }
+    .sign {
+      color: @@setLarge;
     }
 
     .mention,
