@@ -1,6 +1,6 @@
 <template>
   <div :class="setting.outsideClass">
-    <div id="app">
+    <div id="app" :style="'height:' + allHeight + 'px'">
       <el-drawer
         :visible.sync="drawer"
         :show-close="false"
@@ -276,6 +276,7 @@
           :setting="setting"
           :imgShow="imgShow"
           :cardlist="cardlist"
+          :allHeight="allHeight"
         >
         </time-line>
 
@@ -363,6 +364,7 @@ export default {
       loading: true, // 初始化加载
       sane: common.sane,
       onlineDayInfo: {},
+      allHeight: 0,
     };
   },
   computed: {},
@@ -378,6 +380,8 @@ export default {
     getLocalStorage,
     init() {
       setTimeout(() => {
+        // 计算高度
+        this.calcHeight();
         this.getCardlist();
         this.getSaveInfo();
         this.getSetting();
@@ -569,6 +573,11 @@ export default {
       });
     },
 
+    // 更改高度，适应手机端
+    calcHeight() {
+      this.allHeight = innerWidth >= 700 ? 599 : innerHeight / innerWidth * 700
+    },
+
     // 强刷
     reload() {
       this.isReload = true;
@@ -643,6 +652,7 @@ export default {
     width: 700px;
     height: 599px;
     overflow: auto;
+    font-size: 14px;
   }
 
   .color-blue {
@@ -931,14 +941,14 @@ export default {
       border-color: #409eff;
     }
   }
-  @media screen and (max-width: 699px) {
-    #app {
-      height: 1500px;
-    }
-    .el-timeline {
-      height: 1500px;
-    }
-  }
+  // @media screen and (max-width: 699px) {
+  //   #app {
+  //     height: 1500px;
+  //   }
+  //   .el-timeline {
+  //     height: 1500px;
+  //   }
+  // }
 }
 
 .dark {
@@ -967,7 +977,6 @@ body {
 }
 .online-area {
   display: flex;
-  font-size: 13px;
   align-items: center;
   margin-right: 30px;
   .online-title-img {
