@@ -236,6 +236,15 @@
     4.调整抽屉样式，把快捷连接的图片加大了
     5.初步适用了手机浏览器的使用
 
+## V2.1.0【未发布】
+
+    😆 本次版本更改名字和Logo，发布稳定版本
+
+    1.更换了自己的Logo与网页名字，可怜的孩子终于有自己的东西啦
+    2.修复了界面上的BUG
+    3.添加了如果不需要理智提醒氪关闭的选项
+    4.修复了手机界面滚动的BUG
+
 <br/>
 
 # 安装方法
@@ -344,6 +353,7 @@
 > - [我自己](https://github.com/LiuZiYang1) —— 震惊！我竟然能3天内肝完V2版本主要功能
 > - [@lwt-414](https://github.com/lwt-414) —— 测试很细心，正则很牛逼，我写代码很放心。还能解决我的燃眉之急（指在2021年4月18号帮我通关WD-8，能让我没有后顾之忧）
 > - [@Houdou](https://github.com/Houdou) —— 帮我解决了疑难杂症
+> - [不画涩图の企鹅](https://pipie457.lofter.com/) —— 提供了该插件的logo
 > - 蹲饼测试组成员 
 > - [HYPERGRYPH](https://www.hypergryph.com/#/)
 > - 脚手架支持 —— [chrome-extension-cli](https://github.com/SlowSoulWen/chrome-extension-cli)
