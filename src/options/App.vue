@@ -202,7 +202,11 @@
                   </el-row>
                 </el-form-item>
               </el-tooltip>
+              <el-form-item label="理智提醒">
+                <el-switch v-model="setting.sanShow"></el-switch>
+              </el-form-item>
               <el-tooltip
+                v-if="setting.sanShow"
                 class="item"
                 effect="dark"
                 content="用于公告栏计算理智回复"
@@ -240,7 +244,9 @@
                 <el-button type="success" size="small" @click="settingExport"
                   >导出配置</el-button
                 >
+                <!-- action随便传个参数，不然会报错 -->
                 <el-upload
+                  action="aaa"
                   :auto-upload="false"
                   :on-change="settingImport"
                   ref="upload"

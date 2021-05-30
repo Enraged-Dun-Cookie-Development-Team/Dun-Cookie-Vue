@@ -204,7 +204,7 @@
                       </div>
                     </div>
                     <div
-                      v-if="imgShow"
+                      v-if="setting.sanShow"
                       class="sane-area"
                       @click.stop="openToolDrawer"
                     >
@@ -352,6 +352,7 @@ export default {
       show: false,
       imgShow: false,
       isNew: false,
+      sanShow: true,
       cardlist: [],
       cardlistdm: {},
       saveInfo: common.saveInfo,

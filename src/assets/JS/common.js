@@ -14,6 +14,7 @@ let common = {
     lowfrequencyTime: [8, 20],// 低频模式时段 需要转换
     islowfrequency: false, // 是否正处于低频模式状态下
     retweeted: true,// 是否查看转发
+    sanShow: true, //是否需要理智提醒
     saneMax: 135//理智上限
   },
   sane: {
