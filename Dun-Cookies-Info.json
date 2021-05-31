@@ -10,14 +10,9 @@
             "overTime": "2099-12-31 04:00:00"
         },
         {
-            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://img.nga.178.com/attachments/mon_202104/24/-klbw3Q8h1d-huriZ1hT3cS17c-dw.jpg'> <div> <div>博士，危机合约将于<span class='online-blue'>5月22日04:00</span>开启新约</div> <div>期间更新最高合约首杀，可在快捷连接中直达视频地址</div><drawer class='online-green'>2.0.145版本后蹲饼可点击此处直接打开</drawer> </div> </div>",
-            "starTime": "2021-4-11 12:00:00",
-            "overTime": "2021-5-29 04:00:00"
-        },
-        {
-            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak-fs.hypergryph.com/announce/images/20210424/7172d81415f7c00ffd45183b1e2d8b27.jpg'> <div> <div>博士，「二周年庆典」，周年组合包限时上线结束时间为<span class='online-blue'>5月29日03:59</span></div> <div>建议信用卡账单日在25日的博士于<span class='online-red'>5月25日</span>后购买</div><div>购买后该账单日期为5月26日-6月25日，最终还款日期可以拖延至7月10号</div> </div> </div>",
-            "starTime": "2021-5-1 16:00:00",
-            "overTime": "2021-5-29 04:00:00"
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='http://prts.wiki/images/thumb/2/2d/%E6%B4%BB%E5%8A%A8%E9%A2%84%E5%91%8A_%E7%81%AF%E7%81%AB%E5%BA%8F%E6%9B%B2_01.jpg/780px-%E6%B4%BB%E5%8A%A8%E9%A2%84%E5%91%8A_%E7%81%AF%E7%81%AB%E5%BA%8F%E6%9B%B2_01.jpg'> <div> <div>博士，新活动「灯火序曲」将于<span class='online-blue'>6月1日16:00</span>开启</div> <div>活动持续一周，建议于今天或明早将剿灭刷完</div> <drawer>活动开启后将更新作业，点击这里查看作业列表</drawer> <div>如果无法打开，请更新软件</div> </div> </div>",
+            "starTime": "2021-5-31 11:00:00",
+            "overTime": "2021-6-8 04:00:00"
         }
     ],
     "btnList": [{
@@ -29,51 +24,11 @@
             "radius": true
         },
         {
-            "starTime": "2021-5-15 12:00:00",
-            "overTime": "2021-5-29 04:00:00",
-            "url": "https://www.bilibili.com/video/BV1v44y1z7gv",
-            "name": "【危机合约#5】全网首杀 危机等级31 愿我的弹雨能熄灭你们的痛苦",
-            "img": "https://i0.hdslb.com/bfs/archive/c9e0f3a46cd6bc4d860e5e1744ee5cb4dbb5a811.jpg@200w_125h_1c.webp",
-            "radius": true
-        },
-        {
-            "starTime": "2021-5-15 12:00:00",
-            "overTime": "2021-5-29 04:00:00",
-            "url": "https://www.bilibili.com/video/BV1F64y1o7DE",
-            "name": "【光谱行动】危机等级31 槊扬铳起裂坚胄 浪浊血涌折锋戟",
-            "img": "https://i2.hdslb.com/bfs/archive/3c93756021190fac6704cb2e2e8807e12799ba8c.jpg@200w_125h_1c.webp",
-            "radius": true
-        },
-        {
-            "starTime": "2021-5-15 12:00:00",
-            "overTime": "2021-5-29 04:00:00",
-            "url": "https://www.bilibili.com/video/BV1MU4y1b7zJ",
-            "name": "【光谱行动】你是什么时候，产生了6级博士，过不了旧约21级的错觉？",
-            "img": "https://i1.hdslb.com/bfs/archive/85f23d2f8feb74098de599f85fb78ba33a502d66.jpg@200w_125h_1c.webp",
-            "radius": true
-        },
-        {
-            "starTime": "2021-5-15 12:00:00",
-            "overTime": "2021-5-29 04:00:00",
-            "url": "https://www.bilibili.com/video/BV1H64y1y72F",
-            "name": "【光谱行动●八号竞技场】全员无伤也能登顶旧约26？",
-            "img": "https://i1.hdslb.com/bfs/archive/702d9e28e1b445904bc88f4cc7fc7db4d2144f3b.jpg@200w_125h_1c.webp",
-            "radius": true
-        },
-        {
-            "starTime": "2021-5-15 12:00:00",
-            "overTime": "2021-5-29 04:00:00",
-            "url": "https://www.bilibili.com/video/BV14Q4y1o7qP",
-            "name": "【作业】【明日方舟光谱行动】魔法zc目录",
-            "img": "https://i1.hdslb.com/bfs/archive/a39b95edb24cfd24fdc5545286f55e891051f534.jpg@200w_125h_1c.webp",
-            "radius": true
-        },
-        {
-            "starTime": "2021-5-15 12:00:00",
-            "overTime": "2021-5-29 04:00:00",
-            "url": "https://www.bilibili.com/video/BV1cK411F7vz",
-            "name": "【作业】【明日方舟光谱行动】小狼XF",
-            "img": "https://i2.hdslb.com/bfs/archive/2601cc140f4c2b6fb77726e362b560d36c624b81.jpg@200w_125h_1c.webp",
+            "starTime": "2021-5-31 11:00:00",
+            "overTime": "2021-6-8 04:00:00",
+            "url": "https://www.bilibili.com/video/BV1oV411j7cx",
+            "name": "《明日方舟》全新故事「灯火序曲」活动宣传PV",
+            "img": "http://i0.hdslb.com/bfs/archive/191f5594c1049aaa601f111512fbdc9c9253ae6b.jpg@320w_200h_1c.webp",
             "radius": true
         }
     ],
@@ -83,18 +38,24 @@
             "overTime": "2021-5-29 03:59:59"
         },
         "countdown": [{
-                "text": "危机合约#5光谱行动结束",
-                "time": "2021-5-29 03:59:59"
-            },
-            {
-                "text": "特选干员定向寻访结束",
-                "remark": "棘刺,温蒂,铃兰,夜莺",
-                "time": "2021-5-29 03:59:59"
-            },
-            {
                 "text": "当前轮换池结束",
                 "remark": "艾雅法拉[兑换],史尔特尔,凛冬,槐琥[兑换],华法琳",
-                "time": "2021-6-10 03:59:59"
+                "time": "2021-6-10 03:59:59",
+                "starTime": "2021-5-15 16:00:00",
+                "overTime": "2021-6-10 03:59:59"
+            },
+            {
+                "text": "故事集「灯火序曲」开始",
+                "remark": "",
+                "time": "2021-6-1 16:00:00",
+                "starTime": "2021-5-30 16:00:00",
+                "overTime": "2021-6-1 16:00:00"
+            }, {
+                "text": "故事集「灯火序曲」结束",
+                "remark": "",
+                "time": "2021-6-8 03:59:59",
+                "starTime": "2021-6-1 16:00:00",
+                "overTime": "2021-6-10 03:59:59"
             }
         ]
     },

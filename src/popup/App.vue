@@ -82,10 +82,7 @@
             >收起</el-button
           >
         </el-row>
-        <div 
-          style="position: absolute; bottom: 10px; right: 10px"
-          class="sign"
-        >
+        <div style="position: absolute; bottom: 10px; right: 10px" class="sign">
           Power By 蓝芷怡 & lwt
         </div>
       </el-drawer>
@@ -488,6 +485,13 @@ export default {
 
         // 资源获取
         this.onlineDayInfo = data.dayInfo;
+        // 倒计时
+        this.onlineDayInfo.countdown = this.onlineDayInfo.countdown.filter(
+          (x) =>
+            new Date(x.starTime) <= new Date() &&
+            new Date(x.overTime) >= new Date()
+        );
+
         this.resourcesNotToday();
         this.loading = false;
       });
@@ -579,7 +583,8 @@ export default {
 
     // 更改高度，适应手机端
     calcHeight() {
-      this.allHeight = innerWidth >= 700 ? 599 : innerHeight / innerWidth * 700
+      this.allHeight =
+        innerWidth >= 700 ? 599 : (innerHeight / innerWidth) * 700;
     },
 
     // 强刷
