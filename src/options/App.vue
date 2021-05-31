@@ -518,7 +518,7 @@ export default {
         background-color: @@btnBorder;
       }
       .img {
-        width: 50px;
+        width: 80px;
       }
       .version {
         font-size: 1.5rem;
