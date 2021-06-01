@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDCI Setting-Dun-Cookie-Info</title>
+</head>
+
+<body>
+    <div id="app">
+        <div class="title center">SDCI</div>
+        <el-divider></el-divider>
+        <div class="flex around" style="width: 700px;margin: 0 auto;">
+            <el-upload :auto-upload="false" action="#" :on-change="importData" ref="upload" accept="application/json"
+                :show-file-list="false">
+                <el-button ref="selectFile" type="primary">导入文件</el-button>
+            </el-upload>
+            <el-button @click="exportData" type="primary">导出文件</el-button>
+            <el-button @click="jsontoform" type="danger">JSON转换为表单</el-button>
+            <el-button @click="formtojson" type="warning">表单转化为JSON</el-button>
+        </div>
+        <el-divider></el-divider>
+        <el-row :gutter="20">
+            <el-col :span="16">
+                <!-- <div class="htmlContent"></div> -->
+                <el-tabs v-model="activeName" type="border-card">
+                    <el-tab-pane label="公告列表(list)" name="list">
+                        <div class="add-area">
+                            <el-button type="success" size="mini" icon="el-icon-plus"
+                                @click="addRows('list','listActiveNames')">
+                            </el-button>
+                        </div>
+                        <el-collapse v-model="listActiveNames">
+                            <el-collapse-item :name="index" v-for="(item,index) in data.list" :key="index">
+                                <template slot="title">
+                                    <div class="flex between width100">
+                                        <div>{{'第'+(index+1)+'个，从 '+item.starTime+' 开始显示，到 '+item.overTime+' 停止显示'}}
+                                        </div>
+                                        <div>
+                                            <el-button type="primary" size="mini" icon="el-icon-delete"></el-button>
+                                        </div>
+                                    </div>
+                                </template>
+                                <el-form :key="index" label-width="100px">
+                                    <el-form-item label="HTML源码">
+                                        <el-input class="margintb" :rows="8" type="textarea" v-model="item.html">
+                                        </el-input>
+                                    </el-form-item>
+                                    <el-form-item label="显示隐藏时间">
+                                        <el-date-picker v-model="item.starTime" type="datetime" placeholder="选择开始显示日期时间"
+                                            value-format="yyyy-MM-dd HH:mm:ss">
+                                        </el-date-picker>
+                                        -
+                                        <el-date-picker v-model="item.overTime" type="datetime" placeholder="选择结束显示日期时间"
+                                            value-format="yyyy-MM-dd HH:mm:ss">
+                                        </el-date-picker>
+                                    </el-form-item>
+                                </el-form>
+                                <div style="display: flex; align-items: center; ">
+                                    <span style="width: 87px; text-align: right; margin-right: 10px;">快速预览</span>
+                                    <div class="list-html margintb" v-html="item.html"></div>
+                                </div>
+
+                            </el-collapse-item>
+                        </el-collapse>
+                    </el-tab-pane>
+                    <el-tab-pane label="按钮列表(btnList)" name="btnList">
+                        <div class="add-area">
+                            <el-button type="success" size="mini" icon="el-icon-plus"
+                                @click="addRows('btnList','btnListActiveNames')">
+                            </el-button>
+                        </div>
+                        <el-collapse v-model="btnListActiveNames">
+                            <el-collapse-item :name="index" v-for="(item,index) in data.btnList" :key="index">
+                                <template slot="title">
+                                    <div class="flex between width100">
+                                        <div>{{'第'+(index+1)+'个，从 '+item.starTime+' 开始显示，到 '+item.overTime+' 停止显示'}}
+                                        </div>
+                                        <div>
+                                            <el-button type="primary" size="mini" icon="el-icon-delete"></el-button>
+                                        </div>
+                                    </div>
+                                </template>
+                                <el-form label-width="100px">
+                                    <el-form-item label="链接地址">
+                                        <el-input v-model="item.url"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="链接名称">
+                                        <el-input v-model="item.name"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="封面图片">
+                                        <el-input v-model="item.img"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="显示隐藏时间">
+                                        <el-date-picker v-model="item.starTime" type="datetime" placeholder="选择开始显示日期时间"
+                                            value-format="yyyy-MM-dd HH:mm:ss">
+                                        </el-date-picker>
+                                        -
+                                        <el-date-picker v-model="item.overTime" type="datetime" placeholder="选择结束显示日期时间"
+                                            value-format="yyyy-MM-dd HH:mm:ss">
+                                        </el-date-picker>
+                                    </el-form-item>
+                                    <el-form-item label="是否加圆角">
+                                        <el-switch v-model="item.radius"></el-switch>
+                                    </el-form-item>
+                                    <el-form-item label="图片预览">
+                                        <img :src="item.img" />
+                                    </el-form-item>
+                                </el-form>
+                            </el-collapse-item>
+                        </el-collapse>
+                    </el-tab-pane>
+                    <el-tab-pane label="资源开启时间(dayInfo.resources)" name="dayInfo_resources">
+                        <el-form label-width="130px">
+                            <el-form-item label="资源全部开启时间">
+                                <el-date-picker v-model="data.dayInfo.resources.starTime" type="datetime"
+                                    placeholder="选择开始日期时间" value-format="yyyy-MM-dd HH:mm:ss">
+                                </el-date-picker>
+                                -
+                                <el-date-picker v-model="data.dayInfo.resources.overTime" type="datetime"
+                                    placeholder="选择结束日期时间" value-format="yyyy-MM-dd HH:mm:ss">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-form>
+                    </el-tab-pane>
+                    <el-tab-pane label="当日信息(dayInfo.countdown)" name="dayInfo_countdown">
+                        <div class="add-area">
+                            <el-button type="success" size="mini" icon="el-icon-plus"
+                                @click="addRows('btnList','dayInfoActiveNames')">
+                            </el-button>
+                        </div>
+                        <el-collapse v-model="dayInfoActiveNames">
+                            <el-collapse-item :name="index" v-for="(item,index) in data.dayInfo.countdown" :key="index">
+                                <template slot="title">
+                                    <div class="flex between width100">
+                                        <div>{{'第'+(index+1)+'个，从 '+item.starTime+' 开始显示，到 '+item.overTime+' 停止显示'}}
+                                        </div>
+                                        <div>
+                                            <el-button type="primary" size="mini" icon="el-icon-delete"></el-button>
+                                        </div>
+                                    </div>
+                                </template>
+                                <el-form label-width="100px">
+                                    <el-form-item label="标题">
+                                        <el-input v-model="item.text"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="描述">
+                                        <el-input v-model="item.remark"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="倒计时终点">
+                                        <el-date-picker v-model="item.time" type="datetime" placeholder="选择倒计时终点"
+                                            value-format="yyyy-MM-dd HH:mm:ss">
+                                        </el-date-picker>
+                                    </el-form-item>
+                                    <el-form-item label="显示隐藏时间">
+                                        <el-date-picker v-model="item.starTime" type="datetime" placeholder="选择开始显示日期时间"
+                                            value-format="yyyy-MM-dd HH:mm:ss">
+                                        </el-date-picker>
+                                        -
+                                        <el-date-picker v-model="item.overTime" type="datetime" placeholder="选择结束显示日期时间"
+                                            value-format="yyyy-MM-dd HH:mm:ss">
+                                        </el-date-picker>
+                                    </el-form-item>
+                                </el-form>
+                            </el-collapse-item>
+                        </el-collapse>
+                    </el-tab-pane>
+                    <el-tab-pane label="升级信息(upgrade)" name="upgrade">
+                        <el-form label-width="100px">
+                            <el-form-item label="版本">
+                                <el-input v-model="data.upgrade.v"></el-input>
+                            </el-form-item>
+                            <el-form-item label="标题">
+                                <el-input v-model="data.upgrade.title"></el-input>
+                            </el-form-item>
+                            <el-form-item label="描述">
+                                <el-input :rows="3" type="textarea" v-model="data.upgrade.description"></el-input>
+                            </el-form-item>
+                            <el-form-item label="CRX下载地址">
+                                <el-input v-model="data.upgrade.downCrx"></el-input>
+                            </el-form-item>
+                            <el-form-item label="ZIP下载地址">
+                                <el-input v-model="data.upgrade.downZip"></el-input>
+                            </el-form-item>
+                            <el-row>
+                                <el-col :span="15">
+                                    <el-form-item label="网盘下载地址">
+                                        <el-input v-model="data.upgrade.downSpare"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="8" :offset="1">
+                                    <el-form-item label="网盘按钮文字">
+                                        <el-input v-model="data.upgrade.downSpareText"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-form-item label="应用商店地址">
+                                <el-input v-model="data.upgrade.downChrome"></el-input>
+                            </el-form-item>
+                        </el-form>
+                        <el-card class="box-card" style="width: 500px;font-size: 12px;margin:auto">
+                            <div slot="header">
+                                <span>{{data.upgrade.title}}</span>
+                            </div>
+                            <div v-html="data.upgrade.description">
+
+                            </div>
+                        </el-card>
+                    </el-tab-pane>
+                </el-tabs>
+            </el-col>
+            <el-col :span="8">
+                <el-input type="textarea" :rows="36" v-model="datatext">
+                </el-input>
+            </el-col>
+        </el-row>
+    </div>
+</body>
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            activeName: 'list',
+            datatext: '',
+            data: {
+                list: [],
+                btnList: [],
+                dayInfo: {
+                    resources: {},
+                    countdown: []
+                },
+                upgrade: {}
+            },
+            listActiveNames: [],
+            btnListActiveNames: [],
+            dayInfoActiveNames: [],
+        },
+        watch: {
+            data: function (val, oldVal) {
+                // this.datatext = JSON.stringify(val);
+            },
+        },
+        mounted() {
+            this.init();
+            this.getInfo();
+        },
+        methods: {
+            init() {
+            },
+            getInfo() {
+                let url = "Dun-Cookies-Info.json"
+                let request = new XMLHttpRequest();
+                request.open("get", url);
+                request.send(null);
+                request.onload = () => {
+                    if (request.status == 200) {
+                        this.data = JSON.parse(request.responseText);
+                        this.datatext = JSON.stringify(this.data);
+                    }
+                    if (request.status == 404) {
+                        this.$message('没有找到文件，点击导入文件按钮开始解析');
+                    }
+                }
+            },
+            addRows(name, refName) {
+                this.data[name].unshift({});
+                this[refName].push(0);
+            },
+            removeRows(name, index) {
+                this.data[name].splice(index, 1);
+            },
+            // 导入设置
+            importData(file) {
+                const reader = new FileReader();
+                reader.onload = (res) => {
+                    const { result } = res.target; // 得到字符串
+                    this.data = JSON.parse(result);
+                    this.datatext = JSON.stringify(this.data);
+                };
+                reader.readAsText(new Blob([file.raw]), "utf-8"); // 按照utf-8编码解析
+            },
+            // 导出设置
+            exportData() {
+                let eleLink = document.createElement('a');
+                eleLink.download = "Dun-Cookies-Info.json";
+                eleLink.style.display = 'none';
+                const blob = new Blob([JSON.stringify(this.data)], {
+                    type: "application/json",
+                });
+                eleLink.href = URL.createObjectURL(blob);
+                document.body.appendChild(eleLink);
+                eleLink.click();
+                document.body.removeChild(eleLink);
+            },
+            jsontoform() {
+                this.$confirm('会覆盖表单中已经修改的数据，确认？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.data = JSON.parse(this.datatext);
+                }).catch(() => {
+
+                });
+            },
+            formtojson() {
+                this.datatext = JSON.stringify(this.data);
+            },
+        },
+    })
+</script>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    #app {
+        padding: 10px;
+    }
+
+    .title {
+        font-size: 30px;
+    }
+
+    .add-area {
+        text-align: right;
+        margin: 10px 0;
+        padding-right: 22px;
+    }
+
+    .center {
+        text-align: center;
+        width: 100%;
+    }
+
+    .content {
+        display: flex;
+    }
+
+    .margintb {
+        margin: 10px 0;
+    }
+
+    .flex {
+        display: flex;
+    }
+
+    .between {
+        justify-content: space-between;
+    }
+
+    .around {
+        justify-content: space-around;
+    }
+
+    .width100 {
+        width: 100%;
+    }
+
+    /* .htmlContent {
+        height: 300px;
+    } */
+
+
+    /* 模拟样式 */
+    /* 这是公告标准大小 */
+    .list-html {
+        padding: 3px;
+        width: 656px;
+        background-color: #fff;
+        border: 1px solid #e4e7ed;
+        color: #848488;
+        font-size: 14px;
+        border-radius: 4px;
+        font-family: "Segoe UI", Arial, "Microsoft Yahei", sans-serif;
+    }
+
+    .online-area {
+        display: flex;
+        align-items: center;
+        margin-right: 30px;
+
+    }
+
+    .online-area .online-title-img {
+        height: 100px;
+        margin-right: 10px;
+        min-width: 100px;
+    }
+
+    .online-area .online-title-img.radius {
+        border-radius: 4px;
+    }
+
+    .online-pointer {
+        cursor: pointer;
+    }
+
+    .online-blue {
+        color: #23ade5;
+    }
+
+    .online-red {
+        color: #f56c6c;
+    }
+
+    .online-yellow {
+        color: #e6a23c;
+    }
+
+    .online-green {
+        color: #67c23a;
+    }
+
+    .online-gray {
+        color: #909399;
+    }
+</style>
+
+</html>
