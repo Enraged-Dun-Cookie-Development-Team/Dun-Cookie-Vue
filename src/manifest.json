@@ -1,8 +1,8 @@
 {
 	"manifest_version": 2,
-	"name": "蹲饼 - 明日方舟蹲饼器 - Arknights-Cookies",
+	"name": "小刻食堂 - 明日方舟蹲饼器 - Arknights-Cookies",
 	"version": "2.0.155",
-	"description": "一起监视自由的兔兔。明日方舟兔兔发布动态发布时间越来越奇怪了，我每天下午4点刷都刷不出来，怎么办呢？写一个蹲饼器盯着兔兔看！",
+	"description": "自由的兔兔把烙好的饼到处藏，就由小刻把它们都找出来吧！",
 	"author": "KazeLiu & LWT",
 	"icons": {
 		"48": "assets/image/icon.png",

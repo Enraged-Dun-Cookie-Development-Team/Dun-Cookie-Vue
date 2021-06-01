@@ -4,24 +4,24 @@
       <el-card class="box-card" shadow="never">
         <el-row type="flex" align="middle" justify="space-around">
           <el-image class="img" src="../assets/image/icon.png"></el-image>
-          <div class="version">蹲饼 V{{ saveInfo.version }}</div>
+          <div class="version">小刻食堂 V{{ saveInfo.version }}</div>
         </el-row>
         <el-divider></el-divider>
         <div class="info">
           <div class="info-time">
-            开始蹲饼时间：{{ timespanToDay(dunInfo.dunFristTime / 1000) }}
+            小刻在 {{ timespanToDay(dunInfo.dunFristTime / 1000) }} 进入食堂
           </div>
           <div class="info-title">
-            已为你蹲饼<span style="color: #23ade5"
+            小刻已经找了<span style="color: #23ade5"
               ><countTo
                 :startVal="oldDunIndex"
                 :endVal="dunInfo.dunIndex"
                 :duration="1000"
               ></countTo></span
-            >次
+            >次饼了
           </div>
           <div class="info-time">
-            本次蹲饼时间：{{ timespanToDay(dunInfo.dunTime / 1000) }}
+            小刻在 {{ timespanToDay(dunInfo.dunTime / 1000, 0) }} 翻箱倒柜一次
           </div>
           <!-- <div class="info-time">下次蹲饼时间：{{ nextdunTime }}</div> -->
         </div>

@@ -4,7 +4,7 @@
       <el-card class="box-card" shadow="never">
         <el-row type="flex" align="middle" justify="space-around">
           <el-image class="img" src="../assets/image/icon.png"></el-image>
-          <div class="version">蹲饼 V{{ saveInfo.version }}</div>
+          <div class="version">小刻食堂 V{{ saveInfo.version }}</div>
         </el-row>
         <el-divider>感谢</el-divider>
         玩了方舟已经两年了，身为开服玩家，我根本不知道方舟竟然能陪我走这么远。

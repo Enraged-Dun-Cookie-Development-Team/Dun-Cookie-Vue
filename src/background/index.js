@@ -428,7 +428,7 @@ let kazeFun = {
     JudgmentNewFocusAnnounceId(data) {
         if (data) {
             if (kazeData.FocusAnnounceId && data.focusAnnounceId && kazeData.FocusAnnounceId != data.focusAnnounceId) {
-                this.SendNotice(`【通讯组预告】博士马上有饼吃!`, '检测到游戏出现公告弹窗，可能马上发饼！', null, new Date().getTime())
+                this.SendNotice(`【通讯组预告】小刻貌似闻到了饼的味道！`, '检测到游戏出现公告弹窗，可能马上发饼！', null, new Date().getTime())
             }
             kazeData.FocusAnnounceId = data.focusAnnounceId;
         }
@@ -449,7 +449,7 @@ let kazeFun = {
             console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
             // 是否推送
             if (kazeLocalData.setting.isPush == true) {
-                this.SendNotice(`【${title}】喂博士吃饼!`, notice, newInfo.image, newInfo.id)
+                this.SendNotice(`小刻在【${title}】里面找到了一个饼！`, notice, newInfo.image, newInfo.id)
             }
             return true;
         }

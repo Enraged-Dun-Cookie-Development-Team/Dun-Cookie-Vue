@@ -3,12 +3,12 @@
     <el-card class="box-card">
       <el-row type="flex" align="middle" justify="space-around">
         <el-image class="img" src="../assets/image/icon.png"></el-image>
-        <div class="version">欢迎使用蹲饼 V{{ saveInfo.version }}</div>
+        <div class="version">欢迎使用小刻食堂 V{{ saveInfo.version }}</div>
       </el-row>
       <el-divider></el-divider>
       <div class="info">
-        <div class="info-title">我们现在已经开始在为你蹲饼了！</div>
-        <div class="info-title">让我们一起守护自由的兔兔吧！</div>
+        <div class="info-title">小刻已经进入食堂找饼啦！</div>
+        <div class="info-title">让我们和小刻一起等待自由的兔兔发饼吧！</div>
       </div>
       <el-divider></el-divider>
       <div>如果有意见或建议或想法请在<a
@@ -40,7 +40,7 @@
         <el-button @click="toSetting" size="mini">设置</el-button>
         进入设置来调整蹲饼器
         <br/>
-        <div style="color:red">如果要蹲微博的饼，请在设置页面点击“进入登录页面”按钮登录，因为经过测试，不登录会有概率获取不到热乎的微博饼</div>
+        <div style="color:red">如果要蹲微博的饼，请在设置页面点击“进入登录页面”按钮登录，因为经过测试，不登录的话，小刻有概率找不到藏太深的饼</div>
       </div>
       <el-divider></el-divider>
       <div>

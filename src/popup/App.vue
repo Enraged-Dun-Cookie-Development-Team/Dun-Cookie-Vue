@@ -133,7 +133,7 @@
         @click.stop="drawer = true"
       ></el-button>
       <div class="version">
-        {{ `蹲饼 V${saveInfo.version}` }}
+        {{ `小刻食堂 V${saveInfo.version}` }}
         <div v-if="loading" style="color: red">
           【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没有*龙门粗口*正常连接】
         </div>

@@ -3,12 +3,12 @@
     <el-card class="box-card">
       <el-row type="flex" align="middle" justify="space-around">
         <el-image class="img" src="../assets/image/icon.png"></el-image>
-        <div class="version">欢迎使用蹲饼 V{{ saveInfo.version }}</div>
+        <div class="version">欢迎使用小刻食堂 V{{ saveInfo.version }}</div>
       </el-row>
       <el-divider></el-divider>
       <div class="info">
         <div class="info-title">
-          版本已经更新，让我们更新后继续守护自由的兔兔吧！
+          版本已经更新，让我们更新后和小刻一起继续等待自由的兔兔发饼吧！
         </div>
         <div class="info-title">
           Chrome应用商店下载的博士请等候审核通过后更新

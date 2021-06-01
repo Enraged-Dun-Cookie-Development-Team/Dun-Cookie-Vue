@@ -176,7 +176,8 @@ export default {
 
 ${item.url}
 
-数据由 蹲饼${this.saveInfo.version} 收集`
+数据由 小刻食堂${this.saveInfo.version} 收集
+工具链接：https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue`
       ).then(
         (e) => {
           this.$message({

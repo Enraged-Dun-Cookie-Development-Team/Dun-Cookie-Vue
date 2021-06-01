@@ -61,7 +61,7 @@
     },
     "upgrade": {
         "v": "2.0.155",
-        "title": "检测到新版本 - 2.0.155",
+        "title": "小刻食堂翻新啦 - 2.0.155",
         "description": "⏰ 本次版本主要是添加了一点实用的小功能<br/>1.添加了理智提醒器，实时监控理智，到点推送，再也不用担心理智超出了<br/>2.添加了材料提示，直接可以查看今天能刷哪些材料<br/>3.添加了倒计时，分钟级提醒时间节点<br/>4.调整抽屉样式，把快捷连接的图片加大了<br/>5.初步适用了手机浏览器的使用",
         "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.0.155/Dun-Cookie-2.0.155.crx",
         "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.0.155/Dun-Cookie-2.0.155.zip",
