@@ -6,8 +6,7 @@
       :timestamp="
         item.source == 2 ||
         item.source == 5 ||
-        item.source == 7 ||
-        item.source == 8
+        item.source == 7 
           ? timespanToDay(item.time, 1)
           : timespanToDay(item.time)
       "

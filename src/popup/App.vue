@@ -51,7 +51,7 @@
           >
             <div class="quickJump-img-area">
               <img
-                v-if="imgShow"
+                v-if="LazyLoaded"
                 v-lazy="item.img"
                 class="btn-icon"
                 :class="item.radius ? 'radius' : ''"
@@ -201,7 +201,7 @@
                       </div>
                     </div>
                     <div
-                      v-if="setting.sanShow"
+                      v-if="setting.sanShow && LazyLoaded"
                       class="sane-area"
                       @click.stop="openToolDrawer"
                     >
@@ -250,7 +250,7 @@
                           class="day-info-content-bottom-card"
                           :class="item.notToday ? 'notToday' : ''"
                         >
-                          <img v-if="imgShow" v-lazy="item.src" />
+                          <img v-if="LazyLoaded" v-lazy="item.src" />
                         </div>
                       </el-tooltip>
                     </div>
@@ -274,7 +274,7 @@
           ref="TimeLine"
           :saveInfo="saveInfo"
           :setting="setting"
-          :imgShow="imgShow"
+          :imgShow="LazyLoaded"
           :cardlist="cardlist"
           :allHeight="allHeight"
         >
@@ -302,7 +302,7 @@
               ref="TimeLine"
               :saveInfo="saveInfo"
               :setting="setting"
-              :imgShow="imgShow"
+              :imgShow="LazyLoaded"
               :cardlist="cardlistdm[item]"
             >
             </time-line>
@@ -347,7 +347,7 @@ export default {
   data() {
     return {
       show: false,
-      imgShow: false,
+      LazyLoaded: false,
       isNew: false,
       sanShow: true,
       cardlist: [],
@@ -390,9 +390,9 @@ export default {
         this.getOnlineSpeak();
         this.getSane();
         // 图片卡 先加载dom后加载图片内容
-        this.imgShow = true;
+        this.LazyLoaded = true;
+        this.setClickFun();
       }, 1);
-      this.setClickFun();
     },
     // 监听标签
     setClickFun() {
