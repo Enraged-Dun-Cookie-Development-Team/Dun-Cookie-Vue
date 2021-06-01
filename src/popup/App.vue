@@ -708,6 +708,8 @@ export default {
     overflow-x: scroll;
     height: 100px;
     margin: 0 10px;
+    justify-content: center;
+    flex-direction: row;
     .quickJump-img-area {
       flex-shrink: 0;
       max-width: 350px;
