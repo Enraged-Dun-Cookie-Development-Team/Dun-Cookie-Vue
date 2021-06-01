@@ -23,7 +23,8 @@ let kazeData = {
     testIntervalTime: 3,
     setting: {},
     FocusAnnounceId: null,
-    setIntervalID: null
+    setIntervalID: null,
+    windowTabId: null,
 }
 
 // 软件存储数据 数据互通使用
@@ -560,6 +561,12 @@ let kazeFun = {
             } else {
                 kazeFun.saveLocalStorage('setting', kazeLocalData.setting);
             }
+            // 注册窗口
+            if (!kazeLocalData.setting.isWindow) {
+                chrome.browserAction.setPopup({ popup: chrome.extension.getURL("popup.html") });
+            } else {
+                chrome.browserAction.setPopup({ popup: "" });
+            }
             kazeLocalData.sane.saneIndex = kazeLocalData.setting.saneMax;
             kazeFun.saveLocalStorage('sane', kazeLocalData.sane);
             this.settimeoutGetData();
@@ -584,6 +591,12 @@ let kazeFun = {
                     kazeLocalData.sane.saneIndex = data.saneMax;
                     kazeFun.saveLocalStorage('sane', kazeLocalData.sane);
                     kazeSourceProcess.GetData();
+                    if (!kazeLocalData.setting.isWindow) {
+                        // 注册popup
+                        chrome.browserAction.setPopup({ popup: chrome.extension.getURL("popup.html") });
+                    } else {
+                        chrome.browserAction.setPopup({ popup: "" });
+                    }
                     // kazeFun.intervalGetData();
                 })
             }
@@ -642,6 +655,20 @@ let kazeFun = {
             }
         });
 
+        // 监听标签打开
+        chrome.browserAction.onClicked.addListener(() => {
+            if (kazeLocalData.setting.isWindow) {
+                if (kazeData.windowTabId != null) {
+                    chrome.windows.remove(kazeData.windowTabId);
+                }
+                // 直接打开
+                chrome.windows.create({ url: chrome.extension.getURL("popup.html"), type: "panel", width: 700, height: 600 }, tab => {
+                    kazeData.windowTabId = tab.id;
+                });
+
+
+            }
+        });
 
         if (kazeData.isTest) {
             // 默认设置

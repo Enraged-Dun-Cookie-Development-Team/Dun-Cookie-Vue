@@ -202,6 +202,9 @@
                   </el-row>
                 </el-form-item>
               </el-tooltip>
+               <el-form-item label="窗口化">
+                <el-switch v-model="setting.isWindow"></el-switch>
+              </el-form-item>
               <el-form-item label="理智提醒">
                 <el-switch v-model="setting.sanShow"></el-switch>
               </el-form-item>

@@ -15,7 +15,8 @@ let common = {
     islowfrequency: false, // 是否正处于低频模式状态下
     retweeted: true,// 是否查看转发
     sanShow: true, //是否需要理智提醒
-    saneMax: 135//理智上限
+    saneMax: 135,//理智上限
+    isWindow: false
   },
   sane: {
     saneIndex: 135,//理智计算
@@ -30,7 +31,7 @@ let common = {
   saveInfo: {
     // 循环的标识
     setIntervalindex: 0,
-    version: '2.0.155',
+    version: '2.1.特供',
     feedbackInfo: `<div class="footer">
         <span>
           如果有意见或建议或者是反馈问题或者是发现程序出现bug<br />可以添加<a
@@ -175,7 +176,7 @@ let common = {
     name: "技巧概要",
     day: [2, 3, 5, 0],
     src: '/assets/image/40px-道具_技巧概要·卷3.png'
-  }, 
+  },
   {
     type: 6,
     name: "摧枯拉朽",
