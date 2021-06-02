@@ -662,11 +662,9 @@ let kazeFun = {
                     chrome.windows.remove(kazeData.windowTabId);
                 }
                 // 直接打开
-                chrome.windows.create({ url: chrome.extension.getURL("popup.html"), type: "panel", width: 700, height: 600 }, tab => {
-                    kazeData.windowTabId = tab.id;
+                chrome.windows.create({ url: chrome.extension.getURL("popup.html"), type: "panel", width: 714, height: 635 }, tab => {
+                    kazeData.windowTabId = tab.id;            
                 });
-
-
             }
         });
 
