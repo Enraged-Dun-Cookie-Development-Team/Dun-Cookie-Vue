@@ -8,85 +8,76 @@
         direction="rtl"
         size="520px"
       >
-        <el-collapse>
-          <el-collapse-item title="饼的发源地">
-            <el-row type="flex" class="drawer-btn-area" justify="center">
-              <el-tooltip
-                :key="item.img"
-                v-for="item in quickJump.soure"
-                :content="item.name"
-                placement="top"
-              >
-                <el-button size="small" @click="openUrl(item.url)"
-                  ><img
-                    class="btn-icon"
-                    :class="item.radius ? 'radius' : ''"
-                    :src="item.img"
-                /></el-button>
-              </el-tooltip>
-            </el-row>
-          </el-collapse-item>
-          <el-collapse-item title="快捷工具">
-            <el-row type="flex" justify="center" class="drawer-btn-area">
-              <el-tooltip
-                :key="item.img"
-                v-for="item in quickJump.tool"
-                :content="item.name"
-                placement="top"
-              >
-                <el-button size="small" @click="openUrl(item.url)"
-                  ><img
-                    class="btn-icon"
-                    :class="item.radius ? 'radius' : ''"
-                    :src="item.img"
-                /></el-button>
-              </el-tooltip>
-            </el-row>
-          </el-collapse-item>
-          <el-collapse-item title="快捷链接">
-            <div class="drawer-btn-area-quickJump" ref="drawerBtnAreaQuickJump">
-              <el-tooltip
-                :content="item.name"
-                :key="index"
-                v-for="(item, index) in quickJump.url"
-                placement="top"
-              >
-                <div class="quickJump-img-area">
-                  <img
-                    v-if="LazyLoaded"
-                    v-lazy="item.img"
-                    class="btn-icon"
-                    :class="item.radius ? 'radius' : ''"
-                    @click="openUrl(item.url)"
-                  />
-                </div>
-              </el-tooltip>
+        <el-divider content-position="left">饼的发源地</el-divider>
+        <el-row type="flex" class="drawer-btn-area" justify="center">
+          <el-tooltip
+            :key="item.img"
+            v-for="item in quickJump.soure"
+            :content="item.name"
+            placement="top"
+          >
+            <el-button size="small" @click="openUrl(item.url)"
+              ><img
+                class="btn-icon"
+                :class="item.radius ? 'radius' : ''"
+                :src="item.img"
+            /></el-button>
+          </el-tooltip>
+        </el-row>
+        <el-divider content-position="left">快捷工具</el-divider>
+        <el-row type="flex" justify="center" class="drawer-btn-area">
+          <el-tooltip
+            :key="item.img"
+            v-for="item in quickJump.tool"
+            :content="item.name"
+            placement="top"
+          >
+            <el-button size="small" @click="openUrl(item.url)"
+              ><img
+                class="btn-icon"
+                :class="item.radius ? 'radius' : ''"
+                :src="item.img"
+            /></el-button>
+          </el-tooltip>
+        </el-row>
+        <el-divider v-if="quickJump.url" content-position="left"
+          >快捷链接</el-divider
+        >
+        <div class="drawer-btn-area-quickJump" ref="drawerBtnAreaQuickJump">
+          <el-tooltip
+            :content="item.name"
+            :key="index"
+            v-for="(item, index) in quickJump.url"
+            placement="top"
+          >
+            <div class="quickJump-img-area">
+              <img
+                v-if="LazyLoaded"
+                v-lazy="item.img"
+                class="btn-icon"
+                :class="item.radius ? 'radius' : ''"
+                @click="openUrl(item.url)"
+              />
             </div>
-          </el-collapse-item>
-          <el-collapse-item title="调整">
-            <el-row type="flex" justify="center">
-              <el-button
-                type="primary"
-                @click="openGithub"
-                icon="el-icon-star-off"
-                >点个star</el-button
-              >
-              <el-button
-                type="primary"
-                :loading="isReload"
-                @click="reload"
-                icon="el-icon-refresh"
-                >刷新</el-button
-              >
-              <el-button
-                type="primary"
-                icon="el-icon-setting"
-                @click="openSetting"
-                >设置</el-button
-              >
-            </el-row>
-          </el-collapse-item>
-        </el-collapse>
+          </el-tooltip>
+        </div>
+        <el-divider content-position="left">调整蹲饼器</el-divider>
+        <el-row type="flex" justify="center">
+          <el-button type="primary" @click="openGithub" icon="el-icon-star-off"
+            >点个star</el-button
+          >
+          <el-button
+            type="primary"
+            :loading="isReload"
+            @click="reload"
+            icon="el-icon-refresh"
+            >刷新</el-button
+          >
+          <el-button type="primary" icon="el-icon-setting" @click="openSetting"
+            >设置</el-button
+          >
+        </el-row>
+        <div class="sign">Power By 蓝芷怡 & lwt</div>
       </el-drawer>
       <el-drawer
         :visible.sync="toolDrawer"
@@ -163,7 +154,7 @@
             arrow="never"
             height="100px"
             direction="vertical"
-            :interval="10000"
+            :interval="990000"
             :autoplay="true"
           >
             <el-carousel-item v-if="isNew">
@@ -271,7 +262,7 @@
 
         <div class="content-timeline-shadown"></div>
 
-        <time-line
+        <!-- <time-line
           v-if="!setting.isTag"
           ref="TimeLine"
           :saveInfo="saveInfo"
@@ -279,6 +270,15 @@
           :imgShow="LazyLoaded"
           :cardlist="cardlist"
           :allHeight="allHeight"
+        >
+        </time-line> -->
+        <time-line
+          v-if="!setting.isTag"
+          ref="TimeLine"
+          :saveInfo="saveInfo"
+          :setting="setting"
+          :imgShow="LazyLoaded"
+          :cardlist="cardlist"
         >
         </time-line>
 
@@ -367,7 +367,7 @@ export default {
       loading: true, // 初始化加载
       sane: common.sane,
       onlineDayInfo: {},
-      allHeight: 0,
+      // allHeight: 0,
     };
   },
   computed: {},
@@ -384,7 +384,7 @@ export default {
     init() {
       setTimeout(() => {
         // 计算高度
-        this.calcHeight();
+        // this.calcHeight();
         this.getCardlist();
         this.getSaveInfo();
         this.getSetting();
@@ -394,34 +394,40 @@ export default {
         // 图片卡 先加载dom后加载图片内容
         this.LazyLoaded = true;
         this.setClickFun();
+        this.listenerWindowSize();
       }, 1);
+    },
+    listenerWindowSize() {
+      window.onresize = (data) => {
+        if (window.innerWidth <= 700) {
+          alert("窗口太小,可能显示出现问题");
+        }
+      };
     },
     // 监听标签
     setClickFun() {
-      document
-        .querySelectorAll(".online-speak")[0]
-        .addEventListener("click", () => {
-          var target = event.target || event.srcElement;
-          // 是否为a标签
-          if (target.nodeName.toLocaleLowerCase() === "a") {
-            // 对捕获到的 a 标签进行处理，需要先禁止它的跳转行为
-            if (event.preventDefault) {
-              event.preventDefault();
-            } else {
-              window.event.returnValue = true;
-            }
-            var url = target.getAttribute("href");
-            this.openUrl(url);
+      document.querySelector(".online-speak").addEventListener("click", () => {
+        var target = event.target || event.srcElement;
+        // 是否为a标签
+        if (target.nodeName.toLocaleLowerCase() === "a") {
+          // 对捕获到的 a 标签进行处理，需要先禁止它的跳转行为
+          if (event.preventDefault) {
+            event.preventDefault();
+          } else {
+            window.event.returnValue = true;
           }
+          var url = target.getAttribute("href");
+          this.openUrl(url);
+        }
 
-          if (target.nodeName.toLocaleLowerCase() === "drawer") {
-            this.drawer = !this.drawer;
-          }
+        if (target.nodeName.toLocaleLowerCase() === "drawer") {
+          this.drawer = !this.drawer;
+        }
 
-          if (target.nodeName.toLocaleLowerCase() === "setting") {
-            this.openSetting();
-          }
-        });
+        if (target.nodeName.toLocaleLowerCase() === "setting") {
+          this.openSetting();
+        }
+      });
     },
     bindScroolFun() {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
@@ -432,7 +438,10 @@ export default {
         scrollDiv.scrollLeft = scrollDiv.scrollLeft + event.deltaY;
       }
     },
-    unbindScroolFun() {},
+    unbindScroolFun() {
+      let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
+      scrollDiv.removeEventListener("wheel");
+    },
     // 今天有没有该资源可以刷
     resourcesNotToday() {
       let date = new Date();
@@ -584,10 +593,10 @@ export default {
     },
 
     // 更改高度，适应手机端
-    calcHeight() {
-      this.allHeight =
-        innerWidth >= 700 ? 599 : (innerHeight / innerWidth) * 700;
-    },
+    // calcHeight() {
+    //   this.allHeight =
+    //     innerWidth >= 700 ? 599 : (innerHeight / innerWidth) * 700;
+    // },
 
     // 强刷
     reload() {
@@ -679,7 +688,6 @@ export default {
     height: 40px;
     line-height: 40px;
     top: 0;
-    z-index: 9999;
   }
   .more-btn {
     position: fixed;
@@ -692,61 +700,40 @@ export default {
     }
   }
   .menu-drawer {
-    .el-drawer__body {
+    /deep/.el-drawer__body {
       padding: 10px;
     }
-  }
-  .drawer-btn-area {
-    .el-button {
-      padding: 5px;
-    }
-    .btn-icon {
-      width: 30px;
-      &.radius {
-        border-radius: 10px;
+    .drawer-btn-area {
+      .el-button {
+        padding: 5px;
+      }
+      .btn-icon {
+        width: 30px;
+        &.radius {
+          border-radius: 10px;
+        }
       }
     }
-  }
 
-  // 快捷连接
-  .drawer-btn-area-quickJump {
-    display: flex;
-    overflow-x: scroll;
-    height: 100px;
-    margin: 0 10px;
-    justify-content: center;
-    flex-direction: row;
-    .quickJump-img-area {
-      flex-shrink: 0;
-      max-width: 350px;
-      margin-right: 10px;
-      border-radius: 5px;
-      overflow: hidden;
-      border: 1px solid #dcdfe6;
-      // display: flex;
-      // flex-wrap: wrap;
-      // align-items: center;
+    // 快捷连接
+    .drawer-btn-area-quickJump {
+      overflow-x: scroll;
+      height: 100px;
+      margin: 0 10px;
+      display: flex;
       .quickJump-img-area {
+        flex-shrink: 0;
+        max-width: 350px;
+        margin-right: 10px;
+        border-radius: 5px;
+        overflow: hidden;
+        border: 1px solid #dcdfe6;
+        .quickJump-img-area {
+        }
+        img {
+          height: 100px;
+        }
       }
-      img {
-        height: 100px;
-      }
-    }
-    &::after {
-      content: " ";
-      position: fixed;
-      height: 100px;
-      right: 0;
-      width: 20px;
-      background: linear-gradient(90deg, transparent, @@bgColor 50%);
-    }
-    &::before {
-      content: " ";
-      position: fixed;
-      height: 100px;
-      left: 0;
-      width: 20px;
-      background: linear-gradient(90deg, @@bgColor 50%, transparent);
     }
   }
 
@@ -833,8 +820,9 @@ export default {
               flex-direction: column;
               justify-content: space-between;
               height: 100px;
+              margin-right: 30px;
               .day-info-content-top {
-                width: 610px;
+                width: 100%;
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
@@ -861,9 +849,9 @@ export default {
                 }
               }
               .day-info-content-bottom {
-                width: 610px;
+                width: 100%;
                 display: flex;
-                justify-content: space-between;
+                justify-content: space-around;
                 align-items: flex-end;
                 & .day-info-content-bottom-card-area {
                   display: flex;
@@ -900,7 +888,7 @@ export default {
   }
 
   // 隐藏二级菜单
-  /deep/ .ttb {
+  /deep/ .el-drawer {
     background-color: @@bgColor;
 
     .el-divider {
@@ -929,6 +917,10 @@ export default {
       background-color: @@hover;
     }
     .sign {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
       color: @@setLarge;
     }
 

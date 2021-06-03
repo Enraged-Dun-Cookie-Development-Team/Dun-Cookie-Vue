@@ -1,6 +1,7 @@
 <template>
   <div :class="setting.outsideClass">
-    <div id="app" :style="'height:' + allHeight + 'px'">
+    <!-- <div id="app" :style="'height:' + allHeight + 'px'"> -->
+    <div id="app">
       <el-drawer
         :visible.sync="drawer"
         :show-close="false"
@@ -269,7 +270,7 @@
 
         <div class="content-timeline-shadown"></div>
 
-        <time-line
+        <!-- <time-line
           v-if="!setting.isTag"
           ref="TimeLine"
           :saveInfo="saveInfo"
@@ -277,6 +278,15 @@
           :imgShow="LazyLoaded"
           :cardlist="cardlist"
           :allHeight="allHeight"
+        >
+        </time-line> -->
+        <time-line
+          v-if="!setting.isTag"
+          ref="TimeLine"
+          :saveInfo="saveInfo"
+          :setting="setting"
+          :imgShow="LazyLoaded"
+          :cardlist="cardlist"
         >
         </time-line>
 
@@ -365,7 +375,7 @@ export default {
       loading: true, // 初始化加载
       sane: common.sane,
       onlineDayInfo: {},
-      allHeight: 0,
+      // allHeight: 0,
     };
   },
   computed: {},
@@ -382,7 +392,7 @@ export default {
     init() {
       setTimeout(() => {
         // 计算高度
-        this.calcHeight();
+        // this.calcHeight();
         this.getCardlist();
         this.getSaveInfo();
         this.getSetting();
@@ -582,10 +592,10 @@ export default {
     },
 
     // 更改高度，适应手机端
-    calcHeight() {
-      this.allHeight =
-        innerWidth >= 700 ? 599 : (innerHeight / innerWidth) * 700;
-    },
+    // calcHeight() {
+    //   this.allHeight =
+    //     innerWidth >= 700 ? 599 : (innerHeight / innerWidth) * 700;
+    // },
 
     // 强刷
     reload() {
