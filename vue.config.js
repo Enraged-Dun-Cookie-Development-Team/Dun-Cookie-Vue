@@ -25,11 +25,18 @@ const config = {
             title: 'Popup',
             chunks: ['chunk-vendors', 'chunk-common', 'popup'],
         },
+        windowPopup: {
+            entry: 'src/windowPopup/index.js',
+            template: 'public/index.html',
+            filename: 'windowPopup.html',
+            title: '小刻食堂',
+            chunks: ['chunk-vendors', 'chunk-common', 'windowPopup'],
+        },
         welcome: {
             entry: 'src/welcome/index.js',
             template: 'public/index.html',
             filename: 'welcome.html',
-            title: '欢迎使用蹲饼',
+            title: '欢迎使用小刻食堂',
             chunks: ['chunk-vendors', 'chunk-common', 'welcome'],
         },
         update: {

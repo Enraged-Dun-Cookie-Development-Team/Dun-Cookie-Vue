@@ -620,6 +620,7 @@ let kazeFun = {
                         kazeData.setIntervalID = setInterval(() => {
                             kazeLocalData.sane.saneIndex++
                             if (kazeLocalData.sane.saneIndex >= kazeLocalData.setting.saneMax) {
+                                kazeLocalData.sane.saneIndex = kazeLocalData.setting.saneMax;
                                 kazeFun.SendNotice(`理智已满`, `理智已经满了，请博士赶快上线清理智！`, null, new Date().getTime());
                                 clearInterval(kazeData.setIntervalID);
                                 kazeData.setIntervalID = null;
@@ -662,8 +663,8 @@ let kazeFun = {
                     chrome.windows.remove(kazeData.windowTabId);
                 }
                 // 直接打开
-                chrome.windows.create({ url: chrome.extension.getURL("popup.html"), type: "panel", width: 714, height: 635 }, tab => {
-                    kazeData.windowTabId = tab.id;            
+                chrome.windows.create({ url: chrome.extension.getURL("windowPopup.html"), type: "panel", width: 1100, height: 750 }, tab => {
+                    kazeData.windowTabId = tab.id;
                 });
             }
         });
