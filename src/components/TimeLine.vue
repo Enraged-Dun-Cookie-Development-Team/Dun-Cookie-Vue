@@ -4,9 +4,7 @@
       v-for="(item, index) in cardlist"
       :key="index"
       :timestamp="
-        item.source == 2 ||
-        item.source == 5 ||
-        item.source == 7 
+        item.source == 2 || item.source == 5 || item.source == 7
           ? timespanToDay(item.time, 1)
           : timespanToDay(item.time)
       "
@@ -137,7 +135,7 @@
                     </el-col>
                   </el-row>
                 </div>
-                <div v-else>
+                <div v-else class="one-img">
                   <img v-lazy="item.image" class="img" />
                 </div>
               </div>
@@ -153,16 +151,14 @@
 import { timespanToDay } from "../assets/JS/common";
 export default {
   name: "TimeLine",
-  props: ["cardlist", "setting", "saveInfo","imgShow"],
+  props: ["cardlist", "setting", "saveInfo", "imgShow"],
   data() {
     return {
       showAllImage: [],
       // imgShow: false,
     };
   },
-  mounted() {
-   
-  },
+  mounted() {},
   methods: {
     timespanToDay,
     // 复制
@@ -291,6 +287,11 @@ img[lazy="error"] {
       overflow: hidden;
       position: relative;
       cursor: pointer;
+      .one-img {
+        max-width: 700px;
+        width: 100%;
+        margin: auto;
+      }
       .img {
         border-radius: 4px;
         width: 100%;
