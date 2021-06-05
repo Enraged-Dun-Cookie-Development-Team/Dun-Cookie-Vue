@@ -45,7 +45,8 @@ let common = {
           也可以去Chrome应用商店查看更新，但是因为审核机制，更新速度会慢于QQ群和github
           <br />
         </span>
-      </div>`
+      </div>`,
+    webType: 0,  //判断浏览器类型
   },
   quickJump: {
     soure: [

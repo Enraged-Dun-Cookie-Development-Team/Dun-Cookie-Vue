@@ -393,7 +393,7 @@ img[lazy="error"] {
     overflow: auto;
     padding-top: 20px;
     padding-right: 20px;
-    height: calc(100vh - 179px);
+    height: 420px;
     margin-top: 10px;
     .el-timeline-item__tail {
       border-left: 2px solid @@timeline;

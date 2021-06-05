@@ -202,7 +202,7 @@
                   </el-row>
                 </el-form-item>
               </el-tooltip>
-               <el-form-item label="窗口化">
+               <el-form-item label="窗口化" v-if="this.showWindow">
                 <el-switch v-model="setting.isWindow"></el-switch>
               </el-form-item>
               <el-form-item label="理智提醒">
@@ -317,6 +317,7 @@ export default {
       cardlist: [],
       saveInfo: common.saveInfo,
       oldDunIndex: 0,
+      showWindow: true,
       dunInfo: common.dunInfo,
       setting: common.setting,
       marks: {
@@ -360,6 +361,7 @@ export default {
       this.getLocalStorage("saveInfo").then((data) => {
         if (data != null) {
           this.saveInfo = data;
+          this.judgeWindow();
         }
       });
     },
@@ -389,6 +391,11 @@ export default {
           }, data.time * 500);
         }
       });
+    },
+
+    // 判断浏览器可否窗口化
+    judgeWindow() {
+      this.showWindow = (this.saveInfo.webType == 0);
     },
 
     // 保存设置

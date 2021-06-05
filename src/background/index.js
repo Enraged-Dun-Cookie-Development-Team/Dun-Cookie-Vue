@@ -546,11 +546,26 @@ let kazeFun = {
         }
     },
 
+    // 获取浏览器信息 (0:chrome内核 1:火狐内核 2:手机端 3:其他) 
+    getWebType() {
+        let head = navigator.userAgent;
+        if (head.indexOf("Android") > 1 || head.indexOf("iPhone") > 1) {
+            kazeLocalData.saveInfo.webType = 2;
+        } else if (head.indexOf("Firefox") > 1) {
+            kazeLocalData.saveInfo.webType = 1;
+        } else if (head.indexOf("Chrome") > 1) {
+            kazeLocalData.saveInfo.webType = 0;
+        } else {
+            kazeLocalData.saveInfo.webType = 3;
+        }
+    },
+
     // 初始化
     Init() {
         // chrome.browserAction.setBadgeText({ text: 'Beta' });
         // chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
         // 初始化
+        kazeFun.getWebType();
         kazeFun.saveLocalStorage('dunInfo', kazeLocalData.dunInfo);
         kazeFun.saveLocalStorage('saveInfo', kazeLocalData.saveInfo);
         // 默认设置
