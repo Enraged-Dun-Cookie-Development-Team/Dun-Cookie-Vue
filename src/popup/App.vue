@@ -73,7 +73,11 @@
             icon="el-icon-refresh"
             >刷新</el-button
           >
-          <el-button type="primary" icon="el-icon-setting" @click="openSetting"
+          <el-button 
+            type="primary" 
+            icon="el-icon-setting" 
+            @click="openSetting"
+            v-if="showOption"
             >设置</el-button
           >
           <el-button
@@ -367,6 +371,7 @@ export default {
       oldDunIndex: 0,
       dunInfo: common.dunInfo,
       setting: common.setting,
+      showOption: true, //火狐浏览器不能进入设置
       drawer: false, // 打开菜单
       toolDrawer: false, // 理智计算器菜单
       isReload: false, // 是否正在刷新
@@ -506,11 +511,16 @@ export default {
         this.loading = false;
       });
     },
+    // 判断浏览器可否有设置
+    judgeOption() {
+      this.showOption = (this.saveInfo.webType != 1);
+    },
     // 死数据
     getSaveInfo() {
       this.getLocalStorage("saveInfo").then((data) => {
         if (data != null) {
           this.saveInfo = data;
+          this.judgeOption();
         }
       });
     },

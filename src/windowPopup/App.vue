@@ -748,9 +748,9 @@ export default {
       }
     }
     .el-tabs__content {
-      min-height: 360px;
+      min-height: calc(100vh - 239px);
       .el-timeline {
-        height: 360px;
+        height: calc(100vh - 239px);
       }
     }
     .el-tabs__nav-wrap::after {
