@@ -511,16 +511,12 @@ export default {
         this.loading = false;
       });
     },
-    // 判断浏览器可否有设置
-    judgeOption() {
-      this.showOption = (this.saveInfo.webType != 1);
-    },
     // 死数据
     getSaveInfo() {
       this.getLocalStorage("saveInfo").then((data) => {
         if (data != null) {
           this.saveInfo = data;
-          this.judgeOption();
+          this.showOption = this.saveInfo.webType != 1; // 如果是火狐内核浏览器，隐藏设置按钮
         }
       });
     },
@@ -538,6 +534,7 @@ export default {
       this.getLocalStorage("setting").then((data) => {
         if (data != null) {
           this.setting = data;
+          this.setting.sanShow = this.saveInfo.webType != 1;  // 如果是火狐内核浏览器，隐藏理智规划
           setInterval(() => {
             // 轮询在这里
             this.getCardlist();
