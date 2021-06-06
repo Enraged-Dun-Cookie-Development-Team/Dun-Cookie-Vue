@@ -1,6 +1,4 @@
-
-<p align="center"><img width="100" src="src/assets/image/icon.png" alt="Dun-Cookie-Vue logo"></p>
-
+<p align="center"><img width="100" src="https://img.nga.178.com/attachments/mon_202106/06/-klbw3Q2o-66qrZ1qT3cSpt-pt.png" alt="Dun-Cookie-Vue logo"></p>
 
 <h1 align="center">蹲饼</h1>
 <h3 align="center">用于实时抓取兔兔发的动态</h3>
@@ -85,34 +83,38 @@
 
     图片收起与展开
 
-![avatar](https://img.nga.178.com/attachments/mon_202105/11/-klbw3Q16x-3md4K2gT3cSjg-gw.jpg)
-![avatar](https://img.nga.178.com/attachments/mon_202105/11/-klbw3Q16x-76geK2hT3cSji-gv.jpg)
+![avatar](https://img.nga.178.com/attachments/mon_202106/06/-klbw3Q2o-8kfnK2eT3cSoi-l3.jpg)
+![avatar](https://img.nga.178.com/attachments/mon_202106/06/-klbw3Q2o-9pgeZaT3cSol-l1.jpg)
 
     图片九宫格
 
-![avatar](https://img.nga.178.com/attachments/mon_202105/11/-klbw3Q16x-brq6ZdT3cSjj-gw.jpg)
+![avatar](https://img.nga.178.com/attachments/mon_202106/06/-klbw3Q2o-9pgeZaT3cSol-l1.jpg)
 
 
     内容快捷复制
 
-![avatar](https://img.nga.178.com/attachments/mon_202105/11/-klbw3Q16x-k29uK1xT3cSxs-8k.jpg)
+![avatar](https://img.nga.178.com/attachments/mon_202106/06/-klbw3Q2o-gozbK1wT3cSo8-d0.jpg)
 
     分类显示
+![avatar](https://img.nga.178.com/attachments/mon_202106/06/-klbw3Q2o-256aZcT3cSoj-kz.jpg)
 
     菜单界面
 
-![avatar](https://img.nga.178.com/attachments/mon_202105/11/-klbw3Q16x-2yupK1zT3cSji-gx.jpg)
+![avatar](https://img.nga.178.com/attachments/mon_202106/06/-klbw3Q2o-4k70K2iT3cSoi-ky.jpg)
 
     设置界面
 
-![avatar](https://img.nga.178.com/attachments/mon_202105/11/-klbw3Q16x-fxrkK1sT1kSh0-n5.jpg)
+![avatar](https://img.nga.178.com/attachments/mon_202106/06/-klbw3Q2o-ivkuK1iT1kSgy-q8.jpg)
 
     夜间模式
 
-![avatar](https://img.nga.178.com/attachments/mon_202105/11/-klbw3Q16x-6urzK2eT3cSje-gq.jpg)
-![avatar](https://img.nga.178.com/attachments/mon_202105/11/-klbw3Q16x-gdr9K2aT1kShc-nh.jpg) 
+![avatar](https://img.nga.178.com/attachments/mon_202106/06/-klbw3Q2o-1oabZaT3cSoc-kv.jpg)
+![avatar](https://img.nga.178.com/attachments/mon_202106/06/-klbw3Q2o-7udoK1fT1kSh2-pv.jpg) 
 
     窗口模式
+![avatar](https://img.nga.178.com/attachments/mon_202106/06/-klbw3Q2o-cyecZbT3cS11w-pz.jpg)
+![avatar](https://img.nga.178.com/attachments/mon_202106/06/-klbw3Q2o-gydaZbT3cS11z-q0.jpg)
+
 </details>
 
 
@@ -284,12 +286,13 @@
 ## Firefox安装方法
 
     火狐用户相当建议使用应用商店下载，因为更新方便
-> - 推荐 [火狐应用商店](https://addons.mozilla.org/zh-CN/firefox/addon/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cookies/)
+> - 推荐 [火狐应用商店](https://addons.mozilla.org/zh-CN/firefox/addon/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cookies/)(未发布)
 > - 下载zip通过开发者模式加载已解压的扩展程序
 >   1. 先解压到任意文件夹
 >   2. 地址栏输入`about:debugging`，回车
 >   3. 点击“此Firefox”->临时载入扩展
 >   4. 随便在解压后的插件文件夹里面点开任意文件即可加载
+> - **PS:因所有开发均根据Chrome内核进行，火狐浏览器设置有BUG，暂时无法进入设置，之后再做兼容**
 
 ## QQ浏览器安装方法
 
