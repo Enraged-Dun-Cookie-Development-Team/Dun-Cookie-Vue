@@ -1,5 +1,5 @@
 <template>
-  <el-timeline>
+  <el-timeline :class="setting.isWindow ? 'window' : ''">
     <el-timeline-item
       v-for="(item, index) in cardlist"
       :key="index"
@@ -393,8 +393,11 @@ img[lazy="error"] {
     overflow: auto;
     padding-top: 20px;
     padding-right: 20px;
-    height: calc(100vh - 179px);
+    height: 420px;
     margin-top: 10px;
+    &.window{
+       height: calc(100vh - 179px);
+    }
     .el-timeline-item__tail {
       border-left: 2px solid @@timeline;
     }

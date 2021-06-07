@@ -342,6 +342,9 @@ import {
 export default {
   name: "app",
   components: { countTo, TimeLine },
+  created(){
+    
+  },
   mounted() {
     this.init();
   },
