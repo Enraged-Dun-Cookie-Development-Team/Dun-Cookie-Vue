@@ -242,13 +242,11 @@
                           {{
                             item.name +
                             " - " +
-                            (item.notToday
-                              ? `开放日期： ${
-                                  item.day
-                                    .map((x) => `${numberToWeek(x)}`)
-                                    .join() + ""
-                                }`
-                              : "开放中")
+                            `开放日期： ${
+                                item.day
+                                  .map((x) => `${numberToWeek(x)}`)
+                                  .join() + ""
+                              }`
                           }}
                         </div>
                         <div
