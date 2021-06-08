@@ -35,7 +35,7 @@
         </el-collapse-item>
       </el-collapse>
       <el-divider></el-divider>
-      <div>
+      <div v-if="showOption">
         现在可以点击
         <el-button @click="toSetting" size="mini">设置</el-button>
         进入设置来调整蹲饼器
@@ -65,6 +65,7 @@ export default {
     return {
       saveInfo: common.saveInfo,
       activeNames: [1],
+      showOption: true,
     };
   },
   computed: {},
@@ -76,6 +77,7 @@ export default {
       this.getLocalStorage("saveInfo").then((data) => {
         if (data != null) {
           this.saveInfo = data;
+          this.showOption = this.saveInfo.webType != 1;  // 如果是火狐内核浏览器，隐藏设置按钮
         }
       });
     },

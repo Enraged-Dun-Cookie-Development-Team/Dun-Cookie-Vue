@@ -1,9 +1,9 @@
 <p align="center"><img width="100" src="https://img.nga.178.com/attachments/mon_202106/06/-klbw3Q2o-66qrZ1qT3cSpt-pt.png" alt="Dun-Cookie-Vue logo"></p>
 
-<h1 align="center">蹲饼</h1>
+<h1 align="center">小刻食堂</h1>
 <h3 align="center">用于实时抓取兔兔发的动态</h3>
-<h3 align="center">一起监视自由的兔兔。</h3>
-<h4 align="center">明日方舟兔兔发布动态发布时间越来越奇怪了，我每天下午4点刷都刷不出来，怎么办呢？写一个蹲饼器盯着兔兔看！</h4>
+<h3 align="center">跟着小刻一起来找饼吧</h3>
+<h4 align="center">自由的兔兔把烙好的饼到处藏，就由小刻把它们都找出来吧！</h4>
 <br/>
 <h3 align="center"><font color=23ade5>欢迎Star</font></h3>
 <br/>
@@ -40,7 +40,7 @@
 <br/>
 
 # 主要功能
-> - 监视兔兔在各地方发饼:
+> - 找出兔兔在各个地方藏的饼:
 >     - 官方B站
 >     - 官方微博
 >     - 通讯组
