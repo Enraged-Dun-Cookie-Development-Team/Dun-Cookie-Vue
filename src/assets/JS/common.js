@@ -116,9 +116,9 @@ let common = {
         radius: true,
       },
       {
-        url: "https://www.bigfun.cn/tools/aktools/",
+        url: "https://arkn.lolicon.app/#/",
         name: "明日方舟工具箱",
-        img: "/assets/image/mrgzjjx.png",
+        img: "/assets/image/arktools.png",
         radius: true,
       },
       {
@@ -144,6 +144,12 @@ let common = {
         name: "Arknight DPS",
         img: "/assets/image/dps.ico",
         radius: true,
+      },
+      {
+        url: "https://arknightscommunity.drblack-system.com/",
+        name: "泰拉通讯枢纽",
+        img: "/assets/image/tlxxsn.png",
+        radius: false,
       },
     ],
     url: []
