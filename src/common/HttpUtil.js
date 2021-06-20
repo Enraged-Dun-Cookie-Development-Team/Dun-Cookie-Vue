@@ -2,16 +2,12 @@ class HttpUtil {
 
   /**
    * 向指定的url发送get请求
-   * @param urls url列表，必须是数组
+   * @param url 想要请求的url
    * @return Promise
    */
-  GET(urls) {
+  GET(url) {
     try {
-      return new Promise((resolve) => {
-        Promise.all(urls.map(item => this.__sendRequest(item, "GET"))).then((values) => {
-          resolve(values);
-        });
-      });
+      return this.__sendRequest(url, "GET");
     } catch (error) {
       console.log(error);
     }

@@ -3,6 +3,7 @@ import {BaseProcessor} from "./BaseProcessor";
 /**
  * 制作组通讯(游戏内公告)处理器。
  * <p>
+ * TODO 该类需要改名为InGameAnnouncementProcessor 游戏内公告处理器
  */
 export class DevNewsProcessor extends BaseProcessor {
   process(opt, kazeLocalData, kazeFun) {

@@ -1,12 +1,6 @@
-import { common } from "../assets/JS/common";
-import {ArknightsOfficialWebProcessor} from './processors/ArknightsOfficialWebProcessor';
-import {BiliBiliProcessor} from './processors/BiliBiliProcessor';
-import {DevNewsProcessor} from './processors/DevNewsProcessor';
-import {MonsterSirenProcessor} from './processors/MonsterSirenProcessor';
-import {NeteaseCloudMusicProcessor} from './processors/NeteaseCloudMusicProcessor';
-import {TerraHistoricusProcessor} from './processors/TerraHistoricusProcessor';
-import {WeiboProcessor} from './processors/WeiboProcessor';
+import {common} from "../assets/JS/common";
 import HttpUtil from '../common/HttpUtil';
+import {defaultDataSources} from '../common/DataSource';
 
 
 //数据下来后都定位固定格式 没有不用管
@@ -49,66 +43,16 @@ let kazeLocalData = {
 
 // 数据来源
 let kazeSource = {
-    bili: {
-        url: 'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=161775300&offset_dynamic_id=0&need_top=0&platform=web&t=' + new Date().getTime(),
-        title: 'B站',
-        dataName: 'bili',
-        source: 0,
-    },
-    weibo: {
-        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=6279793937&containerid=1076036279793937&t=' + new Date().getTime(),
-        title: '官方微博',
-        dataName: 'weibo',
-        source: 1,
-    },
-    yj: {
-        url: 'https://ak-fs.hypergryph.com/announce/IOS/announcement.meta.json?t=' + new Date().getTime(),
-        title: '通讯组',
-        dataName: 'yj',
-        source: 2,
-    },
-    cho3: {
-        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=6441489862&containerid=1076036441489862&t=' + new Date().getTime(),
-        title: '朝陇山',
-        dataName: 'cho3',
-        source: 3,
-    },
-    ys3: {
-        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=7506039414&containerid=1076037506039414&t=' + new Date().getTime(),
-        title: '一拾山',
-        dataName: 'ys3',
-        source: 4,
-    },
-    sr: {
-        url: 'https://monster-siren.hypergryph.com/api/news?t=' + new Date().getTime(),
-        title: '塞壬唱片',
-        dataName: 'sr',
-        source: 5,
-    },
-    tl: {
-        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=7499841383&containerid=1076037499841383&t=' + new Date().getTime(),
-        title: '泰拉记事社微博',
-        dataName: 'tl',
-        source: 6,
-    },
-    gw: {
-        url: 'https://ak.hypergryph.com/?t=' + new Date().getTime(),
-        title: '官网',
-        dataName: 'gw',
-        source: 7,
-    },
-    tlgw: {
-        url: ['https://terra-historicus.hypergryph.com/api/comic/7748?t=' + new Date().getTime(), 'https://terra-historicus.hypergryph.com/api/comic/2865?t=' + new Date().getTime()],
-        title: '泰拉记事社',
-        dataName: 'tlgw',
-        source: 8,
-    },
-    wyyyy: {
-        url: 'http://music.163.com/api/artist/albums/32540734?t=' + new Date().getTime(),
-        title: '网易云音乐',
-        dataName: 'wyyyy',
-        source: 9,
-    },
+    bili: defaultDataSources[0],
+    weibo: defaultDataSources[1],
+    yj: defaultDataSources[2],
+    cho3: defaultDataSources[3],
+    ys3: defaultDataSources[4],
+    sr: defaultDataSources[5],
+    tl: defaultDataSources[6],
+    gw: defaultDataSources[7],
+    tlgw: defaultDataSources[8],
+    wyyyy: defaultDataSources[9],
 }
 let kazeFun = {}
 // 数据获取和处理
@@ -129,49 +73,19 @@ let kazeSourceProcess = {
     },
 
     //请求 处理 回调 保存
-    GetAndProcessData(opt) {
-        let defopt = {
-            url: '',//网址
-            title: '',//弹窗标题
-            dataName: '',//数据源对象名称
-            success: {},//回调方法
-            source: 1,//来源
-        };
-        opt = Object.assign({}, defopt, opt);
+    GetAndProcessData(dataSource) {
         kazeLocalData.dunInfo.dunIndex++;
-        HttpUtil.GET(opt.url).then(data => {
-            opt.responseText = data;
-            let newCardList = [];
-            // source: ['bili', 'weibo', 'yj', 'cho3', 'ys3', 'sr', 'tl', 'tlgw', ]
-            if (opt.source == 0) {
-                newCardList = new BiliBiliProcessor().process(opt, kazeLocalData, kazeFun);
-            }
-            else if (opt.source == 1 || opt.source == 3 || opt.source == 4 || opt.source == 6) {
-                newCardList = new WeiboProcessor().process(opt, kazeLocalData, kazeFun);
-            }
-            else if (opt.source == 2) {
-                newCardList = new DevNewsProcessor().process(opt, kazeLocalData, kazeFun);
-            }
-            else if (opt.source == 5) {
-                newCardList = new MonsterSirenProcessor().process(opt, kazeLocalData, kazeFun);
-            }
-            else if (opt.source == 7) {
-                newCardList = new ArknightsOfficialWebProcessor().process(opt, kazeLocalData, kazeFun);
-            }
-            else if (opt.source == 8) {
-                newCardList = new TerraHistoricusProcessor().process(opt, kazeLocalData, kazeFun);
-            }
-            else if (opt.source == 9) {
-                newCardList = new NeteaseCloudMusicProcessor().process(opt, kazeLocalData, kazeFun);
-            }
-
-            let oldCardList = kazeLocalData.cardlistdm[opt.dataName];
-            let isNew = kazeFun.JudgmentNew(oldCardList, newCardList, opt.title);
-            if (isNew) {
-                kazeLocalData.cardlistdm[opt.dataName] = newCardList;
-                kazeFun.saveLocalStorage(`cardlistdm`, kazeLocalData.cardlistdm);
-            }
-        });
+        dataSource
+          .fetchData(kazeLocalData, kazeFun)
+          .then(newCardList => {
+              console.log(newCardList);
+              let oldCardList = kazeLocalData.cardlistdm[dataSource.dataName];
+              let isNew = kazeFun.JudgmentNew(oldCardList, newCardList, dataSource.title);
+              if (isNew) {
+                  kazeLocalData.cardlistdm[dataSource.dataName] = newCardList;
+                  kazeFun.saveLocalStorage(`cardlistdm`, kazeLocalData.cardlistdm);
+              }
+        })
     },
 
 }
@@ -468,15 +382,15 @@ kazeFun = {
             kazeLocalData.saveInfo.version = `【调试模式】 刷新时间临时调整为${kazeData.testIntervalTime}秒`;
             kazeFun.saveLocalStorage('saveInfo', kazeLocalData.saveInfo);
 
-            kazeSource.bili.url = `test/bJson.json?host_uid=161775300`;
-            kazeSource.weibo.url = `test/wJson.json?type=uid&value=6279793937&containerid=1076036279793937`;
-            kazeSource.yj.url = `test/yJson.json`;
-            kazeSource.cho3.url = `test/cJson.json?type=uid&value=6441489862&containerid=1076036441489862`;
-            kazeSource.ys3.url = `test/ysJson.json?type=uid&value=7506039414&containerid=1076037506039414`;
-            kazeSource.sr.url = `test/srJson.json`;
-            kazeSource.tl.url = `test/tlJson.json?type=uid&value=6441489862&containerid=1076037499841383`;
-            kazeSource.gw.url = `test/gw.html`;
-            kazeSource.tlgw.url = ['test/xbJson.json', 'test/xgbJson.json'];
+            kazeSource.bili.dataUrl = `test/bJson.json?host_uid=161775300`;
+            kazeSource.weibo.dataUrl = `test/wJson.json?type=uid&value=6279793937&containerid=1076036279793937`;
+            kazeSource.yj.dataUrl = `test/yJson.json`;
+            kazeSource.cho3.dataUrl = `test/cJson.json?type=uid&value=6441489862&containerid=1076036441489862`;
+            kazeSource.ys3.dataUrl = `test/ysJson.json?type=uid&value=7506039414&containerid=1076037506039414`;
+            kazeSource.sr.dataUrl = `test/srJson.json`;
+            kazeSource.tl.dataUrl = `test/tlJson.json?type=uid&value=6441489862&containerid=1076037499841383`;
+            kazeSource.gw.dataUrl = `test/gw.html`;
+            kazeSource.tlgw.dataUrl = ['test/xbJson.json', 'test/xgbJson.json'];
         }
     }
 }
