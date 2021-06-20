@@ -1,5 +1,13 @@
-
 import { common } from "../assets/JS/common";
+import {ArknightsOfficialWebProcessor} from './processors/ArknightsOfficialWebProcessor';
+import {BiliBiliProcessor} from './processors/BiliBiliProcessor';
+import {DevNewsProcessor} from './processors/DevNewsProcessor';
+import {MonsterSirenProcessor} from './processors/MonsterSirenProcessor';
+import {NeteaseCloudMusicProcessor} from './processors/NeteaseCloudMusicProcessor';
+import {TerraHistoricusProcessor} from './processors/TerraHistoricusProcessor';
+import {WeiboProcessor} from './processors/WeiboProcessor';
+
+
 //数据下来后都定位固定格式 没有不用管
 var date = {
     time: '时间 【必填】',
@@ -19,7 +27,7 @@ var date = {
 
 // 软件临时数据
 let kazeData = {
-    isTest: false,
+    isTest: true,
     testIntervalTime: 3,
     setting: {},
     FocusAnnounceId: null,
@@ -101,7 +109,7 @@ let kazeSource = {
         source: 9,
     },
 }
-
+let kazeFun = {}
 // 数据获取和处理
 let kazeSourceProcess = {
     // 蹲饼入口
@@ -134,25 +142,25 @@ let kazeSourceProcess = {
             let newCardList = [];
             // source: ['bili', 'weibo', 'yj', 'cho3', 'ys3', 'sr', 'tl', 'tlgw', ]
             if (opt.source == 0) {
-                newCardList = this.processBiliBili(opt);
+                newCardList = new BiliBiliProcessor().process(opt, kazeLocalData, kazeFun);
             }
             else if (opt.source == 1 || opt.source == 3 || opt.source == 4 || opt.source == 6) {
-                newCardList = this.processWeibo(opt)
+                newCardList = new WeiboProcessor().process(opt, kazeLocalData, kazeFun);
             }
             else if (opt.source == 2) {
-                newCardList = this.processYj(opt)
+                newCardList = new DevNewsProcessor().process(opt, kazeLocalData, kazeFun);
             }
             else if (opt.source == 5) {
-                newCardList = this.processSr(opt)
+                newCardList = new MonsterSirenProcessor().process(opt, kazeLocalData, kazeFun);
             }
             else if (opt.source == 7) {
-                newCardList = this.processGw(opt)
+                newCardList = new ArknightsOfficialWebProcessor().process(opt, kazeLocalData, kazeFun);
             }
             else if (opt.source == 8) {
-                newCardList = this.processTlGw(opt)
+                newCardList = new TerraHistoricusProcessor().process(opt, kazeLocalData, kazeFun);
             }
             else if (opt.source == 9) {
-                newCardList = this.processWyyyy(opt)
+                newCardList = new NeteaseCloudMusicProcessor().process(opt, kazeLocalData, kazeFun);
             }
 
             let oldCardList = kazeLocalData.cardlistdm[opt.dataName];
@@ -198,213 +206,10 @@ let kazeSourceProcess = {
         });
     },
 
-    // 处理微博源
-    processWeibo(opt) {
-        let list = [];
-        let data = JSON.parse(opt.responseText);
-        if (data.ok == 1 && data.data != null && data.data.cards != null && data.data.cards.length > 0) {
-            data.data.cards.forEach(x => {
-                // 设置是否显示转发内容
-                if (!kazeLocalData.setting.retweeted && x.hasOwnProperty('mblog') && x.mblog.hasOwnProperty('retweeted_status')) {
-                    return;
-                }
-                if (x.hasOwnProperty('mblog')) {
-                    let dynamicInfo = x.mblog;
-                    let weiboId = data.data.cardlistInfo.containerid;
-                    let time = Math.floor(new Date(dynamicInfo.created_at).getTime() / 1000);
-                    let imageList = dynamicInfo.pic_ids && dynamicInfo.pic_ids.map(x => `https://wx1.sinaimg.cn/large/${x}`);
-                    let info = {
-                        time: time,
-                        id: time,
-                        isTop: x.mblog.hasOwnProperty('isTop') && x.mblog.isTop == 1,
-                        judgment: time,
-                        dynamicInfo: dynamicInfo.raw_text || dynamicInfo.text.replace(/<\a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<span class="url-icon">|<\img.*?>|全文|网页链接/g, '').replace(/<br \/>/g, '\n'),
-                        html: dynamicInfo.text,
-                        image: dynamicInfo.bmiddle_pic || dynamicInfo.original_pic,
-                        imageList: imageList,
-                        type: (dynamicInfo.hasOwnProperty("page_info") && dynamicInfo.page_info.hasOwnProperty('type') && dynamicInfo.page_info.type == "video") ? 0 : 1,
-                        source: opt.source,
-                        url: "https://weibo.com/" + weiboId.substring((weiboId.length - 10), weiboId.length) + "/" + x.mblog.bid,
-                        detail: []
-                    };
-                    // 转发内容
-                    if (x.mblog.hasOwnProperty('retweeted_status')) {
-                        let retweeted = {
-                            name: x.mblog.retweeted_status.user.screen_name,
-                            dynamicInfo: x.mblog.retweeted_status.raw_text || x.mblog.retweeted_status.text.replace(/<\a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<span class="url-icon">|<\img.*?>|全文|网页链接/g, '').replace(/<br \/>/g, '\n')
-                        }
-                        info.retweeted = retweeted;
-                    }
-                    list.push(info);
-                }
-
-            });
-            return list.sort((x, y) => y.judgment - x.judgment);
-        }
-    },
-
-    // 处理B站源
-    processBiliBili(opt) {
-        let list = [];
-        let data = JSON.parse(opt.responseText);
-        if (data.code == 0 && data.data != null && data.data.cards != null && data.data.cards.length > 0) {
-            data.data.cards.forEach(x => {
-                if (x.desc.type == 2 || x.desc.type == 4 || x.desc.type == 8 || x.desc.type == 64) {
-                    let dynamicInfo = JSON.parse(x.card);
-                    let card = {
-                        time: x.desc.timestamp,
-                        id: x.desc.timestamp,
-                        judgment: x.desc.timestamp,
-                        imageList: dynamicInfo.item.pictures && dynamicInfo.item.pictures.map(x => x.img_src),
-                        source: opt.source,
-                    };
-                    //  desc.type  8 是视频 64是专栏 2是动态 4是无图片动态
-                    if (x.desc.type == 2) {
-                        card.image = (dynamicInfo.item.pictures && dynamicInfo.item.pictures.length > 0) ? dynamicInfo.item.pictures[0].img_src : null;
-                        card.dynamicInfo = dynamicInfo.item.description;
-                        card.type = 2;
-                        card.url = `https://t.bilibili.com/${x.desc.dynamic_id_str}`
-                    } else if (x.desc.type == 4) {
-                        card.dynamicInfo = dynamicInfo.item.content;
-                        card.url = `https://t.bilibili.com/${x.desc.dynamic_id_str}`
-                        card.type = 4;
-                    } else if (x.desc.type == 8) {
-                        card.image = dynamicInfo.pic;
-                        card.dynamicInfo = dynamicInfo.dynamic;
-                        card.url = `https://t.bilibili.com/${x.desc.dynamic_id_str}`
-                        card.type = 8;
-                    } else if (x.desc.type == 64) {
-                        card.image = (dynamicInfo.image_urls && dynamicInfo.image_urls.length > 0) ? dynamicInfo.image_urls[0] : null;
-                        card.dynamicInfo = dynamicInfo.summary;
-                        card.url = `https://t.bilibili.com/${x.desc.dynamic_id_str}`
-                        card.type = 64;
-                    }
-                    list.push(card);
-                }
-
-            });
-            return list.sort((x, y) => y.judgment - x.judgment);
-        }
-    },
-
-    // 通讯组
-    processYj(opt) {
-        let list = [];
-        let data = JSON.parse(opt.responseText);
-        data.announceList.forEach(x => {
-            if (x.announceId != 94 && x.announceId != 98 && x.announceId != 192 && x.announceId != 95 && x.announceId != 97) {
-                let time = `${new Date().getFullYear()}/${x.month}/${x.day} ${kazeLocalData.setting.isTop ? '23:59:59' : '00:00:00'}`;
-                list.push({
-                    time: Math.floor(new Date(time).getTime() / 1000),
-                    judgment: x.announceId,
-                    id: x.announceId,
-                    dynamicInfo: x.title,
-                    source: opt.source,
-                    url: x.webUrl,
-                });
-            }
-        });
-        if (kazeLocalData.setting.isPush == true) {
-            kazeFun.JudgmentNewFocusAnnounceId(data);
-        }
-        return list.sort((x, y) => y.judgment - x.judgment);
-    },
-
-    // 唱片
-    processSr(opt) {
-        let list = [];
-        let data = JSON.parse(opt.responseText);
-        if (data && data.data && data.data.list) {
-            data.data.list.forEach(x => {
-                let time = Math.floor(new Date(`${x.date} ${kazeLocalData.setting.isTop ? '23:59:59' : '00:00:00'}`).getTime() / 1000);
-                list.push({
-                    time: time,
-                    id: x.cid,
-                    judgment: parseInt(x.cid) || time,
-                    dynamicInfo: x.title,
-                    source: opt.source,
-                    url: `https://monster-siren.hypergryph.com/info/${x.cid}`,
-                })
-            });
-            return list.sort((x, y) => y.time - x.time);
-        }
-    },
-
-    // 官网
-    processGw(opt) {
-        let list = [];
-        let str = opt.responseText;
-        let gw = document.createElement('div');
-        gw.innerHTML = str;
-        let articleItem = gw.querySelectorAll(".articleList[data-category-key='ANNOUNCEMENT'] .articleItem,.articleList[data-category-key='ACTIVITY'] .articleItem,.articleList[data-category-key='NEWS'] .articleItem");
-        articleItem.forEach((item, index) => {
-            try {
-                let date = item.getElementsByClassName('articleItemDate')[0].innerHTML
-                let title = item.getElementsByClassName('articleItemTitle')[0].innerHTML
-                let url = item.getElementsByClassName('articleItemLink')[0].pathname;
-                let time = Math.floor(new Date(`${date} ${kazeLocalData.setting.isTop ? '23:59:59' : '00:00:00'}`).getTime() / 1000);
-                let judgment = url.match(/\d+/g);
-                list.push({
-                    time: time,
-                    id: judgment.length > 0 ? parseInt(judgment[0]) : index,
-                    judgment: judgment.length > 0 ? parseInt(judgment[0]) : time,
-                    dynamicInfo: title,
-                    source: opt.source,
-                    url: `https://ak.hypergryph.com${url}`,
-                });
-            } catch (error) {
-                console.error('解析官网数据失败', item);
-            }
-        });
-        return list.sort((x, y) => y.time - x.time);
-    },
-
-    // 泰拉记事社官网
-    processTlGw(opt) {
-        let list = [];
-        opt.responseText.map(x => {
-            let info = JSON.parse(x).data;
-            info.episodes.reverse();
-            list.push({
-                time: info.updateTime,
-                id: info.updateTime,
-                judgment: info.updateTime,
-                dynamicInfo: `泰拉记事社${info.title}已更新`,
-                name: info.title,
-                source: opt.source,
-                image: info.cover,
-                html: info,
-                url: `https://terra-historicus.hypergryph.com/comic/${info.cid}`,
-            });
-        });
-        return list.sort((x, y) => y.time - x.time);
-    },
-
-    // 网易云音乐
-    processWyyyy(opt) {
-        let list = [];
-        let data = JSON.parse(opt.responseText);
-        if (data && data.hotAlbums && data.hotAlbums.length > 0) {
-            data.hotAlbums.forEach(x => {
-                list.push({
-                    time: x.publishTime / 1000,
-                    id: x.id,
-                    judgment: x.id || time,
-                    dynamicInfo: `塞壬唱片发布新专辑《${x.name}》，共${x.size}首歌曲`,
-                    source: opt.source,
-                    image: x.picUrl + '?param=130y130',
-                    url: `https://music.163.com/#/album?id=${x.id}`,
-                    size: x.size,
-                    name: x.name
-                });
-            });
-            return list.sort((x, y) => y.time - x.time);
-        }
-    }
 }
 
 // 通用方法
-let kazeFun = {
+kazeFun = {
     saveLocalStorage(name, data) {
         return new Promise((resolve, reject) => {
             chrome.storage.local.set({ [name]: data }, result => {
