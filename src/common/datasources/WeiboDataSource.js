@@ -1,11 +1,16 @@
-import {BaseProcessor} from "./BaseProcessor";
+import {DataSource} from '../DataSource';
 
 /**
- * 微博处理器。
+ * 微博数据源。
  * <p>
  */
-export class WeiboProcessor extends BaseProcessor {
-  process(opt, kazeLocalData, kazeFun) {
+export class WeiboDataSource extends DataSource {
+
+  constructor(icon, dataName, title, dataUrl, source) {
+    super(icon, dataName, title, dataUrl, source);
+  }
+
+  processData(opt, kazeLocalData, kazeFun) {
     let list = [];
     let data = JSON.parse(opt.responseText);
     if (data.ok == 1 && data.data != null && data.data.cards != null && data.data.cards.length > 0) {

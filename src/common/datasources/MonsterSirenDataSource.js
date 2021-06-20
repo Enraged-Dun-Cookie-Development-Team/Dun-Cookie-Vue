@@ -1,11 +1,16 @@
-import {BaseProcessor} from "./BaseProcessor";
+import {DataSource} from '../DataSource';
 
 /**
- * 塞壬唱片(官网)处理器。
+ * 塞壬唱片(官网)数据源。
  * <p>
  */
-export class MonsterSirenProcessor extends BaseProcessor {
-  process(opt, kazeLocalData, kazeFun) {
+export class MonsterSirenDataSource extends DataSource {
+
+  constructor(icon, dataName, title, dataUrl, source) {
+    super(icon, dataName, title, dataUrl, source);
+  }
+
+  processData(opt, kazeLocalData, kazeFun) {
     let list = [];
     let data = JSON.parse(opt.responseText);
     if (data && data.data && data.data.list) {

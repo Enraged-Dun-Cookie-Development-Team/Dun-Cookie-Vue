@@ -5,16 +5,16 @@ class HttpUtil {
    * @param url 想要请求的url
    * @return Promise
    */
-  GET(url) {
+  static GET(url) {
     try {
-      return this.__sendRequest(url, "GET");
+      return HttpUtil.__sendRequest(url, "GET");
     } catch (error) {
       console.log(error);
     }
   }
 
   // 获取数据底层方法
-  __sendRequest(url, method) {
+  static __sendRequest(url, method) {
     return new Promise((resolve) => {
       let xhr = new XMLHttpRequest();
       xhr.open(method, url, true);
@@ -28,5 +28,4 @@ class HttpUtil {
   }
 }
 
-const instance = new HttpUtil();
-export default instance
+export default HttpUtil

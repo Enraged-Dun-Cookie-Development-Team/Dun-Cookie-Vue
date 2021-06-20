@@ -1,12 +1,17 @@
-import {BaseProcessor} from "./BaseProcessor";
+import {DataSource} from '../DataSource';
 
 /**
- * 制作组通讯(游戏内公告)处理器。
+ * 游戏内公告数据源。
  * <p>
- * TODO 该类需要改名为InGameAnnouncementProcessor 游戏内公告处理器
+ * 暂时只用于捕获制作组通讯
  */
-export class DevNewsProcessor extends BaseProcessor {
-  process(opt, kazeLocalData, kazeFun) {
+export class InGameAnnouncementDataSource extends DataSource {
+
+  constructor(icon, dataName, title, dataUrl, source) {
+    super(icon, dataName, title, dataUrl, source);
+  }
+
+  processData(opt, kazeLocalData, kazeFun) {
     let list = [];
     let data = JSON.parse(opt.responseText);
     data.announceList.forEach(x => {

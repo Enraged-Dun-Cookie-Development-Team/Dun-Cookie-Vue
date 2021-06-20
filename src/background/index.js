@@ -1,6 +1,6 @@
 import {common} from "../assets/JS/common";
 import HttpUtil from '../common/HttpUtil';
-import {defaultDataSources} from '../common/DataSource';
+import defaultDataSources from '../common/DefaultDataSources';
 
 
 //数据下来后都定位固定格式 没有不用管
@@ -78,7 +78,6 @@ let kazeSourceProcess = {
         dataSource
           .fetchData(kazeLocalData, kazeFun)
           .then(newCardList => {
-              console.log(newCardList);
               let oldCardList = kazeLocalData.cardlistdm[dataSource.dataName];
               let isNew = kazeFun.JudgmentNew(oldCardList, newCardList, dataSource.title);
               if (isNew) {

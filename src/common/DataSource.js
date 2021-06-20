@@ -1,11 +1,4 @@
 import HttpUtil from './HttpUtil';
-import {BiliBiliProcessor} from '../background/processors/BiliBiliProcessor';
-import {WeiboProcessor} from '../background/processors/WeiboProcessor';
-import {DevNewsProcessor} from '../background/processors/DevNewsProcessor';
-import {MonsterSirenProcessor} from '../background/processors/MonsterSirenProcessor';
-import {ArknightsOfficialWebProcessor} from '../background/processors/ArknightsOfficialWebProcessor';
-import {TerraHistoricusProcessor} from '../background/processors/TerraHistoricusProcessor';
-import {NeteaseCloudMusicProcessor} from '../background/processors/NeteaseCloudMusicProcessor';
 
 /**
  * 表示一个数据源
@@ -34,17 +27,11 @@ class DataSource {
    */
   dataUrl;
 
-  /**
-   * 处理器
-   */
-  processor;
-
-  constructor(icon, dataName, title, dataUrl, processor, source) {
+  constructor(icon, dataName, title, dataUrl, source) {
     this.icon = icon;
     this.dataName = dataName;
     this.title = title;
     this.dataUrl = dataUrl;
-    this.processor = processor;
     this.source = source;
   }
 
@@ -72,11 +59,16 @@ class DataSource {
         source: this.source,
         responseText: value,
       };
-      return this.processor.process(opt, kazeLocalData, kazeFun);
+      return this.processData(opt, kazeLocalData, kazeFun);
     });
   }
 
+  processData(opt, kazeLocalData, kazeFun) {
+    console.error('未实现processData方法！');
+  }
+
   __appendTimeStamp(url) {
+    // 此处是为了兼容有queryString的url和没有queryString的url，用?判断应该大概没问题吧
     if (url.indexOf('?') >= 0) {
       return `${url}&t=${new Date().getTime()}`;
     } else {
@@ -85,87 +77,4 @@ class DataSource {
   }
 }
 
-const defaultDataSources = [
-  new DataSource(
-    '/assets/image/bili.ico',
-    '官方B站动态',
-    'B站',
-    'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=161775300&offset_dynamic_id=0&need_top=0&platform=web',
-    new BiliBiliProcessor(),
-    0
-  ),
-  new DataSource(
-    '/assets/image/weibo.ico',
-    '官方微博',
-    '官方微博',
-    'https://m.weibo.cn/api/container/getIndex?type=uid&value=6279793937&containerid=1076036279793937',
-    new WeiboProcessor(),
-    1
-  ),
-  new DataSource(
-    '/assets/image/txz.ico',
-    '游戏内公告',
-    '通讯组',
-    'https://ak-fs.hypergryph.com/announce/IOS/announcement.meta.json',
-    new DevNewsProcessor(),
-    2
-  ),
-  new DataSource(
-    '/assets/image/cho3Weibo.ico',
-    '朝陇山微博',
-    '朝陇山',
-    'https://m.weibo.cn/api/container/getIndex?type=uid&value=6441489862&containerid=1076036441489862',
-    new WeiboProcessor(),
-    3
-  ),
-  new DataSource(
-    '/assets/image/cho3Weibo.ico',
-    '一拾山微博',
-    '一拾山',
-    'https://m.weibo.cn/api/container/getIndex?type=uid&value=7506039414&containerid=1076037506039414',
-    new WeiboProcessor(),
-    4
-  ),
-  new DataSource(
-    '/assets/image/sr.ico',
-    '塞壬唱片官网',
-    '塞壬唱片',
-    'https://monster-siren.hypergryph.com/api/news',
-    new MonsterSirenProcessor(),
-    5
-  ),
-  new DataSource(
-    '/assets/image/tlWeibo.ico',
-    '泰拉记事社微博',
-    '泰拉记事社微博',
-    'https://m.weibo.cn/api/container/getIndex?type=uid&value=7499841383&containerid=1076037499841383',
-    new WeiboProcessor(),
-    6
-  ),
-  new DataSource(
-    '/assets/image/mrfz.ico',
-    '官网',
-    '官网',
-    'https://ak.hypergryph.com/',
-    new ArknightsOfficialWebProcessor(),
-    7
-  ),
-  new DataSource(
-    '/assets/image/tl.ico',
-    '泰拉记事社官网',
-    '泰拉记事社',
-    ['https://terra-historicus.hypergryph.com/api/comic/7748', 'https://terra-historicus.hypergryph.com/api/comic/2865'],
-    new TerraHistoricusProcessor(),
-    8
-  ),
-  new DataSource(
-    '/assets/image/wyyyy.ico',
-    '塞壬唱片网易云音乐',
-    '网易云音乐',
-    'http://music.163.com/api/artist/albums/32540734',
-    new NeteaseCloudMusicProcessor(),
-    9
-  ),
-];
-
-export {DataSource, defaultDataSources};
+export {DataSource};

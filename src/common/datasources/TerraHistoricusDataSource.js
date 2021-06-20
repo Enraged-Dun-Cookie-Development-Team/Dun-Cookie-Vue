@@ -1,11 +1,16 @@
-import {BaseProcessor} from "./BaseProcessor";
+import {DataSource} from '../DataSource';
 
 /**
- * 泰拉记事社(官网)处理器。
+ * 泰拉记事社(官网)数据源。
  * <p>
  */
-export class TerraHistoricusProcessor extends BaseProcessor {
-  process(opt, kazeLocalData, kazeFun) {
+export class TerraHistoricusDataSource extends DataSource {
+
+  constructor(icon, dataName, title, dataUrl, source) {
+    super(icon, dataName, title, dataUrl, source);
+  }
+
+  processData(opt, kazeLocalData, kazeFun) {
     let list = [];
     opt.responseText.map(x => {
       let info = JSON.parse(x).data;

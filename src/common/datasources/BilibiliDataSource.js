@@ -1,12 +1,16 @@
-import {BaseProcessor} from "./BaseProcessor";
+import {DataSource} from '../DataSource';
 
 /**
- * BiliBili处理器。
+ * 哔哩哔哩数据源。
  * <p>
  */
-export class BiliBiliProcessor extends BaseProcessor {
+export class BilibiliDataSource extends DataSource {
 
-  process(opt, kazeLocalData, kazeFun) {
+  constructor(icon, dataName, title, dataUrl, source) {
+    super(icon, dataName, title, dataUrl, source);
+  }
+
+  processData(opt, kazeLocalData, kazeFun) {
     let list = [];
     let data = JSON.parse(opt.responseText);
     if (data.code == 0 && data.data != null && data.data.cards != null && data.data.cards.length > 0) {

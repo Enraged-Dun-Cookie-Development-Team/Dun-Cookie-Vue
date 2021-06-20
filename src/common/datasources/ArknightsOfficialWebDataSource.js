@@ -1,11 +1,16 @@
-import {BaseProcessor} from './BaseProcessor';
+import {DataSource} from '../DataSource';
 
 /**
- * 明日方舟官网处理器。
+ * 明日方舟官网数据源。
  * <p>
  */
-export class ArknightsOfficialWebProcessor extends BaseProcessor {
-  process(opt, kazeLocalData, kazeFun) {
+export class ArknightsOfficialWebDataSource extends DataSource {
+
+  constructor(icon, dataName, title, dataUrl, source) {
+    super(icon, dataName, title, dataUrl, source);
+  }
+
+  processData(opt, kazeLocalData, kazeFun) {
     let list = [];
     let str = opt.responseText;
     let gw = document.createElement('div');

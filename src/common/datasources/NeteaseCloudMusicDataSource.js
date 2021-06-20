@@ -1,11 +1,16 @@
-import {BaseProcessor} from "./BaseProcessor";
+import {DataSource} from '../DataSource';
 
 /**
- * 网易云音乐处理器。
+ * 网易云音乐数据源。
  * <p>
  */
-export class NeteaseCloudMusicProcessor extends BaseProcessor {
-  process(opt, kazeLocalData, kazeFun) {
+export class NeteaseCloudMusicDataSource extends DataSource {
+
+  constructor(icon, dataName, title, dataUrl, source) {
+    super(icon, dataName, title, dataUrl, source);
+  }
+
+  processData(opt, kazeLocalData, kazeFun) {
     let list = [];
     let data = JSON.parse(opt.responseText);
     if (data && data.hotAlbums && data.hotAlbums.length > 0) {
