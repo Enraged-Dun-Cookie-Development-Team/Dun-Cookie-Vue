@@ -6,6 +6,7 @@ import {MonsterSirenProcessor} from './processors/MonsterSirenProcessor';
 import {NeteaseCloudMusicProcessor} from './processors/NeteaseCloudMusicProcessor';
 import {TerraHistoricusProcessor} from './processors/TerraHistoricusProcessor';
 import {WeiboProcessor} from './processors/WeiboProcessor';
+import HttpUtil from '../common/HttpUtil';
 
 
 //数据下来后都定位固定格式 没有不用管
@@ -137,7 +138,8 @@ let kazeSourceProcess = {
             source: 1,//来源
         };
         opt = Object.assign({}, defopt, opt);
-        this.Get(opt.url).then(data => {
+        kazeLocalData.dunInfo.dunIndex++;
+        HttpUtil.GET(opt.url).then(data => {
             opt.responseText = data;
             let newCardList = [];
             // source: ['bili', 'weibo', 'yj', 'cho3', 'ys3', 'sr', 'tl', 'tlgw', ]
@@ -169,40 +171,6 @@ let kazeSourceProcess = {
                 kazeLocalData.cardlistdm[opt.dataName] = newCardList;
                 kazeFun.saveLocalStorage(`cardlistdm`, kazeLocalData.cardlistdm);
             }
-        });
-    },
-
-    // 获取数据
-    Get(url, isDun = true) {
-        if (isDun) {
-            kazeLocalData.dunInfo.dunIndex++;
-        }
-        try {
-            if (typeof url == "string") {
-                url = [url];
-            }
-            return new Promise((resolve) => {
-                Promise.all(url.map(item => this.GetAlgorithm(item))).then((values) => {
-                    resolve(values);
-                });
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    },
-
-    // 获取数据底层方法
-    GetAlgorithm(url) {
-        return new Promise((resolve, reject) => {
-            let xhr = new XMLHttpRequest();
-            xhr.open("GET", url, true);
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState == 4 && xhr.status == 200 && xhr.responseText != "") {
-                    resolve(xhr.responseText);
-                    return;
-                }
-            }
-            xhr.send();
         });
     },
 
@@ -307,7 +275,7 @@ kazeFun = {
 
     // 检查一次更新
     getUpdateInfo(isAlert) {
-        kazeSourceProcess.Get(`http://cdn.liuziyang.vip/Dun-Cookies-Info.json?t=${new Date().getTime()}`, false).then(responseText => {
+        HttpUtil.GET(`http://cdn.liuziyang.vip/Dun-Cookies-Info.json?t=${new Date().getTime()}`).then(responseText => {
             let data = JSON.parse(responseText)
             if (kazeLocalData.saveInfo.version != data.upgrade.v) {
                 // 更新
