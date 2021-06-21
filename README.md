@@ -237,15 +237,16 @@
     4.调整抽屉样式，把快捷连接的图片加大了
     5.初步适用了手机浏览器的使用
 
-## V2.1.0【未发布】
+## V2.1.0
 
     😆 本次版本更改名字和Logo，发布稳定版本
 
     1.更换成自己的Logo与名字“小刻食堂”，可怜的孩子终于有自己的东西啦
     2.修复了界面上的BUG
-    3.添加了如果不需要理智提醒氪关闭的选项
+    3.添加了如果不需要理智提醒可关闭的选项
     4.取消了兼容手机页面
     5.添加了窗口化(只允许chrome内核的浏览器使用)
+    6.更换了几个快捷工具链接(应用商店的下版本更)
 
 
 <br/>
@@ -271,19 +272,22 @@
 
 ## Edge安装方法
 
-    正在想办法注册Edge开发者
+    Edge用户相当建议使用应用商店下载，因为更新方便
 
-> 1. 先解压到任意文件夹
-> 2. 地址栏输入`edge://extensions/`，回车
-> 3. 点击已安装的扩展右边的第一个图标“加载解压缩的扩展”![avatar](https://img.nga.178.com/attachments/mon_202105/11/-klbw3Q16x-zqeK0.webp)
-> 4. 选择解压后的整个插件文件夹完成安装
->
+> - 推荐 [Edge应用商店](https://microsoftedge.microsoft.com/addons/detail/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknight/jimmfliacfpeabcifcghmdankmdnmfmn?hl=zh-CN)
+> - 下载zip通过开发者模式加载已解压的扩展程序
+>   1. 先解压到任意文件夹
+>   2. 地址栏输入`edge://extensions/`，回车
+>   3. 左下角打开开发者模式
+>   3. 点击已安装的扩展右边的第一个图标“加载解压缩的扩展”![avatar](https://img.nga.178.com/attachments/mon_202105/11/-klbw3Q16x-zqeK0.webp)
+>   4. 选择解压后的整个插件文件夹完成安装
+> 
 > PS: 可以通过地址栏输入`edge://settings/?search=后台`找到“关闭 Microsoft Edge 后继续运行后台应用关闭”，选择运行后台扩展程序的使用
 
 ## Firefox安装方法
 
     火狐用户相当建议使用应用商店下载，因为更新方便
-> - 推荐 [火狐应用商店](https://addons.mozilla.org/zh-CN/firefox/addon/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cookies/)(未发布)
+> - 推荐 [火狐应用商店](https://addons.mozilla.org/zh-CN/firefox/addon/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cookies/)
 > - **PS:因所有开发均根据Chrome内核进行，火狐浏览器设置有BUG，暂时无法进入设置，之后再做兼容**
 
 ## QQ浏览器安装方法
@@ -310,6 +314,7 @@
 > 1. 下载kiwi手机浏览器
 > 2. 点击右上角三个点，找到扩展程序打开
 > 3. 接下来步骤与谷歌浏览器相同
+> 
 > **PS:重点！！！如果想要实时获取推送，将浏览器保存后台打开。但是这会导致消耗大量流量和电量！！！！！** 
 <details>
     <summary>手机端界面</summary>
