@@ -131,7 +131,7 @@ kazeFun = {
     // 发送推送核心方法
     SendNotice(title, message, imageUrl, id) {
         if (imageUrl) {
-            chrome.notifications.create(id + '_', {
+            BrowserUtil.createNotifications(id + '_', {
                 iconUrl: '../assets/image/icon.png',
                 message: message,
                 title: title,
@@ -139,7 +139,7 @@ kazeFun = {
                 type: "image"
             });
         } else {
-            chrome.notifications.create(id + '_', {
+            BrowserUtil.createNotifications(id + '_', {
                 iconUrl: '../assets/image/icon.png',
                 message: message,
                 title: title,
@@ -174,10 +174,7 @@ kazeFun = {
             let data = JSON.parse(responseText)
             if (kazeLocalData.saveInfo.version != data.upgrade.v) {
                 // 更新
-                var urlToOpen = chrome.extension.getURL("update.html");
-                chrome.tabs.create({
-                    url: urlToOpen,
-                });
+                BrowserUtil.createTab(BrowserUtil.getExtensionURL("update.html"));
             } else {
                 if (isAlert) {
                     alert('当前版本为最新版本')
@@ -214,7 +211,7 @@ kazeFun = {
         }
     },
 
-    // 获取浏览器信息 (0:chrome内核 1:火狐内核 2:手机端 3:其他) 
+    // 获取浏览器信息 (0:Chrome内核 1:火狐内核 2:手机端 3:其他)
     getWebType() {
         let head = navigator.userAgent;
         if (head.indexOf("Android") > 1 || head.indexOf("iPhone") > 1) {
@@ -240,9 +237,10 @@ kazeFun = {
         settings.reloadSettings().then(() => {
             // 注册窗口
             if (!settings.isWindow) {
-                chrome.browserAction.setPopup({ popup: chrome.extension.getURL("popup.html") });
+                // 注册popup
+                BrowserUtil.setPopup({ popup: BrowserUtil.getExtensionURL("popup.html") });
             } else {
-                chrome.browserAction.setPopup({ popup: "" });
+                BrowserUtil.setPopup({ popup: "" });
             }
             kazeLocalData.sane.saneIndex = settings.saneMax;
             StorageUtil.saveLocalStorage('sane', kazeLocalData.sane);
@@ -266,9 +264,9 @@ kazeFun = {
                     kazeSourceProcess.GetData();
                     if (!settings.isWindow) {
                         // 注册popup
-                        chrome.browserAction.setPopup({ popup: chrome.extension.getURL("popup.html") });
+                        BrowserUtil.setPopup({ popup: BrowserUtil.getExtensionURL("popup.html") });
                     } else {
-                        chrome.browserAction.setPopup({ popup: "" });
+                        BrowserUtil.setPopup({ popup: "" });
                     }
                 })
             }
@@ -307,37 +305,33 @@ kazeFun = {
         })
 
         // 监听标签
-        chrome.notifications.onClicked.addListener(id => {
+        BrowserUtil.addNotificationClickListener(id => {
             let cardlist = Object.values(kazeLocalData.cardlistdm)
                 .reduce((acc, cur) => [...acc, ...cur], [])
                 .filter(x => x.id + "_" == id);
             if (cardlist != null && cardlist.length > 0) {
-                chrome.tabs.create({ url: cardlist[0].url });
+                BrowserUtil.createTab(cardlist[0].url);
             } else {
                 alert('o(╥﹏╥)o 时间过于久远...最近列表内没有找到该网站');
             }
         });
 
         // 监听安装更新
-        chrome.runtime.onInstalled.addListener(details => {
+        BrowserUtil.addInstallListener(details => {
             if (details.reason === 'install') {
-                var urlToOpen = chrome.extension.getURL("welcome.html");
-                chrome.tabs.create({
-                    url: urlToOpen,
-                });
+                BrowserUtil.createTab(BrowserUtil.getExtensionURL("welcome.html"));
             }
         });
 
         // 监听标签打开
-        chrome.browserAction.onClicked.addListener(() => {
+        BrowserUtil.addIconClickListener(() => {
             if (settings.isWindow) {
                 if (kazeData.windowTabId != null) {
-                    chrome.windows.remove(kazeData.windowTabId);
+                    BrowserUtil.removeWindow(kazeData.windowTabId);
                 }
                 // 直接打开
-                chrome.windows.create({ url: chrome.extension.getURL("windowPopup.html"), type: "panel", width: 1100, height: 750 }, tab => {
-                    kazeData.windowTabId = tab.id;
-                });
+                BrowserUtil.createWindow({ url: BrowserUtil.getExtensionURL("windowPopup.html"), type: "panel", width: 1100, height: 750 })
+                  .then(tab => {kazeData.windowTabId = tab.id;});
             }
         });
 

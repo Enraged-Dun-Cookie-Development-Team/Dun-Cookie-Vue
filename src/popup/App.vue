@@ -300,14 +300,14 @@
           <el-tab-pane
             v-for="item in Object.keys(cardlistdm)"
             :key="item"
-            :label="numberOrEnNameToName(item)"
-            :name="numberOrEnNameToName(item)"
+            :label="item"
+            :name="item"
           >
             <span slot="label">
               <img
-                :title="numberOrEnNameToName(item)"
+                :title="item"
                 class="title-img"
-                :src="numberOrEnNameToIconSrc(item)"
+                :src="sourceNameToIcon(item)"
               />
             </span>
             <time-line
@@ -331,8 +331,6 @@ import TimeLine from "../components/TimeLine";
 import {
   common,
   timespanToDay,
-  numberOrEnNameToName,
-  numberOrEnNameToIconSrc,
   numberToWeek,
   diffTime,
 } from "../assets/JS/common";
@@ -340,6 +338,7 @@ import {settings} from '../common/Settings';
 import StorageUtil from '../common/StorageUtil';
 import HttpUtil from '../common/HttpUtil';
 import BrowserUtil from '../common/BrowserUtil';
+import TmpUtil from '../common/TmpUtil';
 export default {
   name: "app",
   components: { countTo, TimeLine },
@@ -388,8 +387,6 @@ export default {
   computed: {},
   beforeDestroy() {},
   methods: {
-    numberOrEnNameToName,
-    numberOrEnNameToIconSrc,
     numberToWeek,
     timespanToDay,
     diffTime,
@@ -408,6 +405,10 @@ export default {
         this.setClickFun();
       }, 1);
     },
+    sourceNameToIcon(sourceName) {
+      return TmpUtil.sourceNameToIcon(sourceName);
+    },
+
     // 监听标签
     setClickFun() {
       document
@@ -617,32 +618,23 @@ export default {
     },
 
     openUrl(url) {
-      chrome.tabs.create({ url: url });
+      BrowserUtil.createTab(url);
     },
 
     openSetting() {
-      chrome.tabs.create({
-        url: chrome.extension.getURL("options.html"),
-      });
+      BrowserUtil.createTab(BrowserUtil.getExtensionURL('options.html'));
     },
 
     openDonate() {
-      chrome.tabs.create({
-        url: chrome.extension.getURL("donate.html"),
-      });
+      BrowserUtil.createTab(BrowserUtil.getExtensionURL('donate.html'));
     },
 
     openUpdate() {
-      chrome.tabs.create({
-        url: chrome.extension.getURL("update.html"),
-      });
+      BrowserUtil.createTab(BrowserUtil.getExtensionURL('update.html'));
     },
 
     openGithub() {
-      chrome.tabs.create({
-        url:
-          "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue",
-      });
+      BrowserUtil.createTab('https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue');
     },
   },
 };

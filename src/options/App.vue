@@ -186,7 +186,7 @@
                             v-for="item in setting.source"
                             :key="item"
                             :label="numberOrEnNameToName(item)"
-                            :value="numberOrEnNameToName(item)"
+                            :value="sourceToName(item)"
                           >
                             <div style="display: flex; align-items: center">
                               <img
@@ -291,6 +291,8 @@ import {
 } from "../assets/JS/common";
 import {settings} from '../common/Settings';
 import StorageUtil from '../common/StorageUtil';
+import BrowserUtil from '../common/BrowserUtil';
+import TmpUtil from '../common/TmpUtil';
 export default {
   name: "app",
   components: { countTo },
@@ -354,6 +356,10 @@ export default {
       this.getSetting();
     },
 
+    sourceToName(source) {
+      return TmpUtil.sourceToName(source);
+    },
+
     // 死数据
     getSaveInfo() {
       StorageUtil.getLocalStorage("saveInfo").then((data) => {
@@ -366,7 +372,7 @@ export default {
 
     // 打开网址
     openUrl(url) {
-      chrome.tabs.create({ url: url });
+      BrowserUtil.createTab(url);
     },
 
     // 蹲饼数据
@@ -401,6 +407,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           settings.setAll(data);
+          console.log(settings);
           settings.saveSettings().then(() => {
             this.$message({
               center: true,
@@ -421,7 +428,7 @@ export default {
         type: "application/json",
       });
       let src = URL.createObjectURL(blob);
-      chrome.downloads.download({ url: src, saveAs: true }, (data) => {
+      BrowserUtil.downloadFile({ url: src, saveAs: true }, (data) => {
         console.log(data);
       });
     },

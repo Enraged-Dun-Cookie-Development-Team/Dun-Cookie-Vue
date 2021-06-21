@@ -51,6 +51,7 @@
 import { common } from "../assets/JS/common";
 import StorageUtil from '../common/StorageUtil';
 import HttpUtil from '../common/HttpUtil';
+import BrowserUtil from '../common/BrowserUtil';
 export default {
   name: "update",
   mounted() {
@@ -72,9 +73,7 @@ export default {
       this.getUpdateInfo();
     },
     toLink(url) {
-      chrome.tabs.create({
-        url: url,
-      });
+      BrowserUtil.createTab(url);
     },
     // 检查一次更新
     getUpdateInfo() {
@@ -93,15 +92,10 @@ export default {
       });
     },
     toSetting() {
-      chrome.tabs.create({
-        url: chrome.extension.getURL("options.html"),
-      });
+      BrowserUtil.createTab(BrowserUtil.getExtensionURL('options.html'));
     },
     toGithub() {
-      chrome.tabs.create({
-        url:
-          "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue",
-      });
+      BrowserUtil.createTab('https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue');
     },
     // lookList() {
     //   chrome.browserAction.getPopup();

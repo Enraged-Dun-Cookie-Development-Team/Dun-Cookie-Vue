@@ -26,21 +26,21 @@ const defaultDataSources = [
     1
   ),
   new InGameAnnouncementDataSource(
-    '/assets/image/txz.ico',
+    '/assets/image/txz.jpg',
     '游戏内公告',
     '通讯组',
     'https://ak-fs.hypergryph.com/announce/IOS/announcement.meta.json',
     2
   ),
   new WeiboDataSource(
-    '/assets/image/cho3Weibo.ico',
+    '/assets/image/cho3Weibo.jpg',
     '朝陇山微博',
     '朝陇山',
     'https://m.weibo.cn/api/container/getIndex?type=uid&value=6441489862&containerid=1076036441489862',
     3
   ),
   new WeiboDataSource(
-    '/assets/image/cho3Weibo.ico',
+    '/assets/image/ys3Weibo.jpg',
     '一拾山微博',
     '一拾山',
     'https://m.weibo.cn/api/container/getIndex?type=uid&value=7506039414&containerid=1076037506039414',
@@ -54,7 +54,7 @@ const defaultDataSources = [
     5
   ),
   new WeiboDataSource(
-    '/assets/image/tlWeibo.ico',
+    '/assets/image/tlWeibo.jpg',
     '泰拉记事社微博',
     '泰拉记事社微博',
     'https://m.weibo.cn/api/container/getIndex?type=uid&value=7499841383&containerid=1076037499841383',
@@ -68,7 +68,7 @@ const defaultDataSources = [
     7
   ),
   new TerraHistoricusDataSource(
-    '/assets/image/tl.ico',
+    '/assets/image/tl.jpg',
     '泰拉记事社官网',
     '泰拉记事社',
     ['https://terra-historicus.hypergryph.com/api/comic/7748', 'https://terra-historicus.hypergryph.com/api/comic/2865'],

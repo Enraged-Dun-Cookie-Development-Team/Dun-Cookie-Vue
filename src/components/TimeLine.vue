@@ -149,6 +149,7 @@
 
 <script>
 import { timespanToDay } from "../assets/JS/common";
+import BrowserUtil from '../common/BrowserUtil';
 export default {
   name: "TimeLine",
   props: ["cardlist", "setting", "saveInfo", "imgShow"],
@@ -194,7 +195,7 @@ ${item.url}
       );
     },
     openUrl(url) {
-      chrome.tabs.create({ url: url });
+      BrowserUtil.createTab(url);
     },
     // 图片收起展示
     changeShowAllImage(img) {

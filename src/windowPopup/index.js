@@ -12,11 +12,7 @@ Vue.use(VueLazyload, {
 })
 
 Vue.config.productionTip = false
-Vue.use(ElementUI).use(VueClipboard).use({
-    install(Vue) {
-        Vue.prototype.chrome = chrome; // eslint-disable-line
-    }
-})
+Vue.use(ElementUI).use(VueClipboard)
 
 new Vue({
     render: h => h(App),

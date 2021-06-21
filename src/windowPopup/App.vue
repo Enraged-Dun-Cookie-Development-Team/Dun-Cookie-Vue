@@ -610,32 +610,23 @@ export default {
     },
 
     openUrl(url) {
-      chrome.tabs.create({ url: url });
+      BrowserUtil.createTab(url);
     },
 
     openSetting() {
-      chrome.tabs.create({
-        url: chrome.extension.getURL("options.html"),
-      });
+      BrowserUtil.createTab(BrowserUtil.getExtensionURL('options.html'));
     },
 
     openDonate() {
-      chrome.tabs.create({
-        url: chrome.extension.getURL("donate.html"),
-      });
+      BrowserUtil.createTab(BrowserUtil.getExtensionURL('donate.html'));
     },
 
     openUpdate() {
-      chrome.tabs.create({
-        url: chrome.extension.getURL("update.html"),
-      });
+      BrowserUtil.createTab(BrowserUtil.getExtensionURL('update.html'));
     },
 
     openGithub() {
-      chrome.tabs.create({
-        url:
-          "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue",
-      });
+      BrowserUtil.createTab('https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue');
     },
   },
 };

@@ -56,6 +56,7 @@
 <script>
 import { common } from "../assets/JS/common";
 import StorageUtil from '../common/StorageUtil';
+import BrowserUtil from '../common/BrowserUtil';
 export default {
   name: "welcome",
   mounted() {
@@ -83,15 +84,10 @@ export default {
       });
     },
     toSetting() {
-      chrome.tabs.create({
-        url: chrome.extension.getURL("options.html"),
-      });
+      BrowserUtil.createTab(BrowserUtil.getExtensionURL('options.html'))
     },
     toGithub() {
-      chrome.tabs.create({
-        url:
-          "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue",
-      });
+      BrowserUtil.createTab('https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue');
     },
     // lookList() {
     //   chrome.browserAction.getPopup();

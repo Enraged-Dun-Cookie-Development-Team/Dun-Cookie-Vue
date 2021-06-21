@@ -54,6 +54,7 @@ import {
 } from "../assets/JS/common";
 import {settings} from '../common/Settings';
 import StorageUtil from '../common/StorageUtil';
+import BrowserUtil from '../common/BrowserUtil';
 export default {
   name: "app",
   mounted() {
@@ -171,7 +172,7 @@ export default {
         type: "application/json",
       });
       let src = URL.createObjectURL(blob);
-      chrome.downloads.download({ url: src, saveAs: true }, (data) => {
+      BrowserUtil.downloadFile({ url: src, saveAs: true }, (data) => {
         console.log(data);
       });
     },
