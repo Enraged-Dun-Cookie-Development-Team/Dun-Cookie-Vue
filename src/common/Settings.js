@@ -2,6 +2,8 @@ import StorageUtil from './StorageUtil';
 import BrowserUtil from './BrowserUtil';
 
 class Settings {
+  // 插件初始化的时间
+  initTime = new Date().getTime();
   time = 15;
   source = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
   fontsize = 0;
@@ -22,6 +24,7 @@ class Settings {
 
   constructor() {
     this.reloadSettings();
+    BrowserUtil.addMessageListener('settings', 'settings-update', () => this.reloadSettings());
   }
 
   /**
@@ -35,11 +38,17 @@ class Settings {
   /**
    * 将配置储存到localStorage中。
    * <p>
+   * 该方法会自动发送message通知其它页面更新配置<br/>
    * 返回的Promise可以不调用then()
    * @return {Promise}
    */
   saveSettings() {
-    return StorageUtil.saveLocalStorage('settings', this).then(() => BrowserUtil.sendMessage({info: "setting"}));
+    return StorageUtil.saveLocalStorage('settings', this)
+      .then(() => BrowserUtil.sendMessage({
+        type: 'settings-update',
+        data: this,
+        info: "setting"
+      }));
   }
 
   /**

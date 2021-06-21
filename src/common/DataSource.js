@@ -37,7 +37,7 @@ class DataSource {
     this.source = source;
   }
 
-  fetchData(kazeLocalData, kazeFun) {
+  fetchData() {
     let promise;
     if (typeof this.dataUrl === 'string') {
       promise = HttpUtil.GET(this.__appendTimeStamp(this.dataUrl));

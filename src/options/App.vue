@@ -9,19 +9,19 @@
         <el-divider></el-divider>
         <div class="info">
           <div class="info-time">
-            小刻在 {{ timespanToDay(dunInfo.dunFristTime / 1000) }} 进入食堂
+            小刻在 {{ timespanToDay(setting.initTime / 1000) }} 进入食堂
           </div>
           <div class="info-title">
             小刻已经找了<span style="color: #23ade5"
               ><countTo
-                :startVal="oldDunIndex"
-                :endVal="dunInfo.dunIndex"
+                :startVal="oldDunCount"
+                :endVal="dunInfo.counter"
                 :duration="1000"
               ></countTo></span
             >次饼了
           </div>
           <div class="info-time">
-            小刻在 {{ timespanToDay(dunInfo.dunTime / 1000, 0) }} 翻箱倒柜一次
+            小刻在 {{ timespanToDay(dunInfo.lastDunTime / 1000, 0) }} 翻箱倒柜一次
           </div>
           <!-- <div class="info-time">下次蹲饼时间：{{ nextdunTime }}</div> -->
         </div>
@@ -293,6 +293,7 @@ import {settings} from '../common/Settings';
 import StorageUtil from '../common/StorageUtil';
 import BrowserUtil from '../common/BrowserUtil';
 import TmpUtil from '../common/TmpUtil';
+import DunInfo from '../common/sync/DunInfo';
 export default {
   name: "app",
   components: { countTo },
@@ -318,9 +319,9 @@ export default {
     return {
       cardlist: [],
       saveInfo: common.saveInfo,
-      oldDunIndex: 0,
+      oldDunCount: 0,
       showWindow: true,
-      dunInfo: common.dunInfo,
+      dunInfo: DunInfo,
       setting: settings,
       marks: {
         8: "20点",
@@ -377,21 +378,18 @@ export default {
 
     // 蹲饼数据
     getDunInfo() {
-      StorageUtil.getLocalStorage("dunInfo").then((data) => {
-        if (data != null) {
-          this.oldDunIndex = this.dunInfo.dunIndex;
-          this.dunInfo = data;
-        }
+      BrowserUtil.sendMessage({type: 'dunInfo-get'}).then((data) => {
+        this.dunInfo = data;
+      });
+      BrowserUtil.addMessageListener('popup', 'dunInfo-update', (message) => {
+        this.oldDunCount = this.dunInfo.counter;
+        this.dunInfo = message;
       });
     },
 
     // 设置数据
     getSetting() {
-      settings.reloadSettings().then(value => {
-        setInterval(() => {
-          this.getDunInfo();
-        }, value.time * 500);
-      });
+      settings.reloadSettings();
     },
 
     // 判断浏览器可否窗口化

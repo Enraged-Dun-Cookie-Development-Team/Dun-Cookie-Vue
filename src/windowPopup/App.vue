@@ -134,8 +134,8 @@
           <span
             >【已蹲饼
             <countTo
-              :startVal="oldDunIndex"
-              :endVal="dunInfo.dunIndex"
+              :startVal="oldDunCount"
+              :endVal="dunInfo.counter"
               :duration="1000"
             ></countTo
             >次】</span
@@ -330,6 +330,7 @@ import {settings} from '../common/Settings';
 import StorageUtil from '../common/StorageUtil';
 import HttpUtil from '../common/HttpUtil';
 import BrowserUtil from '../common/BrowserUtil';
+import DunInfo from '../common/sync/DunInfo';
 export default {
   name: "app",
   components: { countTo, TimeLine },
@@ -357,8 +358,8 @@ export default {
       cardlistdm: {},
       saveInfo: common.saveInfo,
       onlineSpeakList: [],
-      oldDunIndex: 0,
-      dunInfo: common.dunInfo,
+      oldDunCount: 0,
+      dunInfo: DunInfo,
       setting: settings,
       drawer: false, // 打开菜单
       toolDrawer: false, // 理智计算器菜单
@@ -515,11 +516,12 @@ export default {
     },
     // 蹲饼数据
     getDunInfo() {
-      StorageUtil.getLocalStorage("dunInfo").then((data) => {
-        if (data != null) {
-          this.oldDunIndex = this.dunInfo.dunIndex;
-          this.dunInfo = data;
-        }
+      BrowserUtil.sendMessage({type: 'dunInfo-get'}).then((data) => {
+        this.dunInfo = data;
+      });
+      BrowserUtil.addMessageListener('popup', 'dunInfo-update', (message) => {
+        this.oldDunCount = this.dunInfo.counter;
+        this.dunInfo = message;
       });
     },
     // 设置数据
@@ -527,8 +529,6 @@ export default {
       settings.reloadSettings().then(value => {
         setInterval(() => {
           // 轮询在这里
-          this.getCardlist();
-          this.getDunInfo();
           this.getSane();
         }, value.time * 500);
       });
@@ -572,18 +572,25 @@ export default {
 
     // 获取数据
     getCardlist() {
-      StorageUtil.getLocalStorage("cardlistdm").then((data) => {
-        if (!data) {
-          return;
-        }
+      BrowserUtil.sendMessage({type: 'cardList-get'}).then((data) => {
         this.cardlist = Object.values(data)
-          .reduce((acc, cur) => [...acc, ...cur], [])
-          .sort((x, y) => y.time - x.time)
-          .map((x) => {
-            x.dynamicInfo = x.dynamicInfo.replace(/\n/g, "<br/>");
-            return x;
-          });
+            .reduce((acc, cur) => [...acc, ...cur], [])
+            .sort((x, y) => y.time - x.time)
+            .map((x) => {
+              x.dynamicInfo = x.dynamicInfo.replace(/\n/g, "<br/>");
+              return x;
+            });
         this.cardlistdm = data;
+      });
+      BrowserUtil.addMessageListener('windowPopup', 'cardList-update', (value) => {
+        this.cardlist = Object.values(value)
+            .reduce((acc, cur) => [...acc, ...cur], [])
+            .sort((x, y) => y.time - x.time)
+            .map((x) => {
+              x.dynamicInfo = x.dynamicInfo.replace(/\n/g, "<br/>");
+              return x;
+            });
+        this.cardlistdm = value;
       });
     },
 

@@ -5,24 +5,12 @@ import {settings} from '../common/Settings';
 import StorageUtil from '../common/StorageUtil';
 import BrowserUtil from '../common/BrowserUtil';
 import NotificationUtil from '../common/NotificationUtil';
+import DunInfo from '../common/sync/DunInfo';
 
+// 重构完成后的其它优化：
+// TODO 多个提取出来的类要考虑能否合并(指互相通信的那部分)
+// TODO vue数据更新相关的问题，要确认各个页面的数据能正常更新，并且尽量提高更新相关的可读性
 
-//数据下来后都定位固定格式 没有不用管
-var date = {
-    time: '时间 【必填】',
-    id: '弹窗id 微博B站用时间戳，其他的内容用他们自己的ID 【必填】',
-    judgment: '判定字段 微博B站用时间 鹰角用id 【必填】',
-    dynamicInfo: '处理后内容 用于展示 微博把<br / >替换成 /r/n 后期统一处理 【必填】',
-    html: '处理前内容 原始字段',
-    image: '获取到的图片',
-    imagelist: '获取到的图片list',
-    type: '当前条目的类型',
-    source: '条目来源 【必填】',
-    url: '跳转后连接 【必填】',
-    detail: '详情列表，以后进入二级页面使用',
-    isTop: '在列表中是否为置顶内容 仅限微博',
-    retweeted: '转发的内容'
-}
 
 // 软件临时数据
 let kazeData = {
@@ -37,11 +25,11 @@ let kazeData = {
 let kazeLocalData = {
     // 仅仅只是保存
     saveInfo: common.saveInfo,
-    cardlistdm: {},
-    //请求次数
-    dunInfo: common.dunInfo,
     sane: common.sane
 }
+
+// 缓存获取到的饼
+const cardListCache = {};
 
 // 数据来源
 let kazeSource = {
@@ -61,32 +49,34 @@ let kazeFun = {}
 let kazeSourceProcess = {
     // 蹲饼入口
     GetData() {
-        kazeLocalData.dunInfo.dunTime = new Date().getTime();
-        settings.source.includes(0) ? this.GetAndProcessData(kazeSource['bili']) : delete kazeLocalData.cardlistdm.bili;
-        settings.source.includes(1) ? this.GetAndProcessData(kazeSource['weibo']) : delete kazeLocalData.cardlistdm.weibo;
-        settings.source.includes(2) ? this.GetAndProcessData(kazeSource['yj']) : delete kazeLocalData.cardlistdm.yj;
-        settings.source.includes(3) ? this.GetAndProcessData(kazeSource['cho3']) : delete kazeLocalData.cardlistdm.cho3;
-        settings.source.includes(4) ? this.GetAndProcessData(kazeSource['ys3']) : delete kazeLocalData.cardlistdm.ys3;
-        settings.source.includes(5) ? this.GetAndProcessData(kazeSource['sr']) : delete kazeLocalData.cardlistdm.sr;
-        settings.source.includes(6) ? this.GetAndProcessData(kazeSource['tl']) : delete kazeLocalData.cardlistdm.tl;
-        settings.source.includes(7) ? this.GetAndProcessData(kazeSource['gw']) : delete kazeLocalData.cardlistdm.gw;
-        settings.source.includes(8) ? this.GetAndProcessData(kazeSource['tlgw']) : delete kazeLocalData.cardlistdm.tlgw;
-        settings.source.includes(9) ? this.GetAndProcessData(kazeSource['wyyyy']) : delete kazeLocalData.cardlistdm.wyyyy;
-    },
-
-    //请求 处理 回调 保存
-    GetAndProcessData(dataSource) {
-        kazeLocalData.dunInfo.dunIndex++;
-        dataSource
-          .fetchData(kazeLocalData, kazeFun)
-          .then(newCardList => {
-              let oldCardList = kazeLocalData.cardlistdm[dataSource.dataName];
-              let isNew = kazeFun.JudgmentNew(oldCardList, newCardList, dataSource.title);
-              if (isNew) {
-                  kazeLocalData.cardlistdm[dataSource.dataName] = newCardList;
-                  StorageUtil.saveLocalStorage(`cardlistdm`, kazeLocalData.cardlistdm);
-              }
-        })
+        DunInfo.lastDunTime = new Date().getTime();
+        const promiseList = [];
+        // 由于删除也算更新，所以用一个flag标记来判断是否有更新，而不能只用promise返回值判断
+        let hasUpdated = false;
+        for (const idx in defaultDataSources) {
+            const dataSource = defaultDataSources[idx];
+            if (!settings.source.includes(parseInt(idx))) {
+                if (cardListCache[dataSource.dataName]) {
+                    delete cardListCache[dataSource.dataName];
+                    hasUpdated = true;
+                }
+                continue;
+            }
+            DunInfo.counter++;
+            promiseList.push(dataSource.fetchData().then(newCardList => {
+                let oldCardList = cardListCache[dataSource.dataName];
+                let isNew = kazeFun.JudgmentNew(oldCardList, newCardList, dataSource.title);
+                if (isNew) {
+                    cardListCache[dataSource.dataName] = newCardList;
+                    hasUpdated = true;
+                }
+            }));
+        }
+        Promise.all(promiseList).then(() => {
+            if (hasUpdated) {
+                BrowserUtil.sendMessage({type: 'cardList-update', data: cardListCache});
+            }
+        });
     },
 
 }
@@ -123,7 +113,7 @@ kazeFun = {
         kazeSourceProcess.GetData();
         this.checkDarkModel();
         this.checkLowfrequencyModel();
-        StorageUtil.saveLocalStorage('dunInfo', kazeLocalData.dunInfo);
+        BrowserUtil.sendMessage({ type: 'dunInfo-update', data: DunInfo });
 
         // 如果没有传time 获取setting时间
         if (!time) {
@@ -163,7 +153,7 @@ kazeFun = {
 
         if (oldOutsideClass != newOutsideClass) {
             settings.outsideClass = newOutsideClass;
-            StorageUtil.saveLocalStorage('setting', settings);
+            settings.saveSettings();
         }
     },
     checkLowfrequencyModel() {
@@ -177,7 +167,7 @@ kazeFun = {
         let newislowfrequency = (lowfrequency && (hour >= starHour || hour < endHour));
         if (oldislowfrequency != newislowfrequency) {
             settings.islowfrequency = newislowfrequency;
-            StorageUtil.saveLocalStorage('setting', settings);
+            settings.saveSettings();
         }
     },
 
@@ -201,7 +191,6 @@ kazeFun = {
         // chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
         // 初始化
         kazeFun.getWebType();
-        StorageUtil.saveLocalStorage('dunInfo', kazeLocalData.dunInfo);
         StorageUtil.saveLocalStorage('saveInfo', kazeLocalData.saveInfo);
         // 默认设置
         settings.reloadSettings().then(() => {
@@ -218,7 +207,14 @@ kazeFun = {
         });
 
         // 监听前台事件
-        BrowserUtil.addMessageListener(function (request, sender, sendResponse) {
+        BrowserUtil.addMessageListener('background', null, function (request) {
+            if (request.type) {
+                switch (request.type) {
+                    case 'dunInfo-get': return DunInfo;
+                    case 'cardList-get': return cardListCache;
+                    default: return;
+                }
+            }
             if (request.info == "reload") {
                 // 刷新
                 kazeSourceProcess.GetData();
@@ -228,7 +224,6 @@ kazeFun = {
             }
             else if (request.info == "setting") {
                 settings.reloadSettings().then(data => {
-                    kazeLocalData.cardlistdm = {};
                     kazeLocalData.sane.saneIndex = data.saneMax;
                     StorageUtil.saveLocalStorage('sane', kazeLocalData.sane);
                     kazeSourceProcess.GetData();
@@ -276,7 +271,7 @@ kazeFun = {
 
         // 监听标签
         BrowserUtil.addNotificationClickListener(id => {
-            let cardlist = Object.values(kazeLocalData.cardlistdm)
+            let cardlist = Object.values(cardListCache)
                 .reduce((acc, cur) => [...acc, ...cur], [])
                 .filter(x => x.id + "_" == id);
             if (cardlist != null && cardlist.length > 0) {

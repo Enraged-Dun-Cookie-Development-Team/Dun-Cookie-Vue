@@ -4,11 +4,6 @@ let common = {
     sanePush: true,
     endTime: new Date().getTime()
   },
-  dunInfo: {
-    dunIndex: 0,
-    dunTime: new Date().getTime(),
-    dunFristTime: new Date().getTime(),
-  },
   saveInfo: {
     // 循环的标识
     setIntervalindex: 0,

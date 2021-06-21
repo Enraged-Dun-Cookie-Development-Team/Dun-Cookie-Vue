@@ -79,8 +79,6 @@ export default {
     return {
       cardlist: [],
       saveInfo: common.saveInfo,
-      oldDunIndex: 0,
-      dunInfo: common.dunInfo,
       settings: settings,
       marks: {
         8: "20点",
@@ -96,15 +94,6 @@ export default {
     };
   },
   computed: {
-    // nextdunTime() {
-    //   console.log(settings.islowfrequency);
-    //   if (settings.islowfrequency) {
-    //     return timespanToDay(
-    //       this.dunInfo.dunTime / 1000 + settings.time * 2
-    //     );
-    //   }
-    //   return timespanToDay(this.dunInfo.dunTime / 1000 + settings.time);
-    // },
   },
   methods: {
     numberOrEnNameToName,
@@ -112,7 +101,6 @@ export default {
     timespanToDay,
     init() {
       this.getSaveInfo();
-      this.getDunInfo();
       this.getSetting();
     },
 
@@ -125,23 +113,9 @@ export default {
       });
     },
 
-    // 蹲饼数据
-    getDunInfo() {
-      StorageUtil.getLocalStorage("dunInfo").then((data) => {
-        if (data != null) {
-          this.oldDunIndex = this.dunInfo.dunIndex;
-          this.dunInfo = data;
-        }
-      });
-    },
-
     // 设置数据
     getSetting() {
-      settings.reloadSettings().then(value => {
-        setInterval(() => {
-          this.getDunInfo();
-        }, value.time * 500);
-      });
+      settings.reloadSettings();
     },
 
     // 保存设置
