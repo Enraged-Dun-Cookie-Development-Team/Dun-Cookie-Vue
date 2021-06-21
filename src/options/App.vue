@@ -288,9 +288,9 @@ import {
   timespanToDay,
   numberOrEnNameToName,
   numberOrEnNameToIconSrc,
-  saveLocalStorage,
-  getLocalStorage,
 } from "../assets/JS/common";
+import {settings} from '../common/Settings';
+import StorageUtil from '../common/StorageUtil';
 export default {
   name: "app",
   components: { countTo },
@@ -301,7 +301,7 @@ export default {
     setting: {
       handler(newobj) {
         let hour = new Date().getHours();
-        this.setting.outsideClass =
+        settings.outsideClass =
           (newobj.darkshow == -1 && (hour >= 18 || hour < 6)) ||
           newobj.darkshow == 1
             ? "dark"
@@ -319,7 +319,7 @@ export default {
       oldDunIndex: 0,
       showWindow: true,
       dunInfo: common.dunInfo,
-      setting: common.setting,
+      setting: settings,
       marks: {
         8: "20点",
         12: "当天凌晨",
@@ -335,21 +335,19 @@ export default {
   },
   computed: {
     // nextdunTime() {
-    //   console.log(this.setting.islowfrequency);
-    //   if (this.setting.islowfrequency) {
+    //   console.log(settings.islowfrequency);
+    //   if (settings.islowfrequency) {
     //     return timespanToDay(
-    //       this.dunInfo.dunTime / 1000 + this.setting.time * 2
+    //       this.dunInfo.dunTime / 1000 + settings.time * 2
     //     );
     //   }
-    //   return timespanToDay(this.dunInfo.dunTime / 1000 + this.setting.time);
+    //   return timespanToDay(this.dunInfo.dunTime / 1000 + settings.time);
     // },
   },
   methods: {
     numberOrEnNameToName,
     numberOrEnNameToIconSrc,
     timespanToDay,
-    saveLocalStorage,
-    getLocalStorage,
     init() {
       this.getSaveInfo();
       this.getDunInfo();
@@ -358,7 +356,7 @@ export default {
 
     // 死数据
     getSaveInfo() {
-      this.getLocalStorage("saveInfo").then((data) => {
+      StorageUtil.getLocalStorage("saveInfo").then((data) => {
         if (data != null) {
           this.saveInfo = data;
           this.judgeWindow();
@@ -373,7 +371,7 @@ export default {
 
     // 蹲饼数据
     getDunInfo() {
-      this.getLocalStorage("dunInfo").then((data) => {
+      StorageUtil.getLocalStorage("dunInfo").then((data) => {
         if (data != null) {
           this.oldDunIndex = this.dunInfo.dunIndex;
           this.dunInfo = data;
@@ -383,13 +381,10 @@ export default {
 
     // 设置数据
     getSetting() {
-      this.getLocalStorage("setting").then((data) => {
-        if (data != null) {
-          this.setting = data;
-          setInterval(() => {
-            this.getDunInfo();
-          }, data.time * 500);
-        }
+      settings.reloadSettings().then(value => {
+        setInterval(() => {
+          this.getDunInfo();
+        }, value.time * 500);
       });
     },
 
@@ -399,11 +394,14 @@ export default {
     },
 
     // 保存设置
-    saveSetting(formName) {
+    saveSetting(formName, data) {
+      if (!data) {
+        data = this.$refs[formName].data
+      }
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.saveLocalStorage("setting", this.setting).then(() => {
-            chrome.runtime.sendMessage({ info: "setting" });
+          settings.setAll(data);
+          settings.saveSettings().then(() => {
             this.$message({
               center: true,
               message: "保存成功",
@@ -417,30 +415,9 @@ export default {
       });
     },
 
-    // // 保存
-    // saveLocalStorage(name, data) {
-    //   return new Promise((resolve, reject) => {
-    //     chrome.storage.local.set({ [name]: data }, () => {
-    //       resolve(true);
-    //     });
-    //   });
-    // },
-    // // 读取
-    // getLocalStorage(name) {
-    //   return new Promise((resolve, reject) => {
-    //     chrome.storage.local.get([name], (result) => {
-    //       if (Object.keys(result).length != 0) {
-    //         resolve(result[name]);
-    //         return;
-    //       }
-    //       resolve(null);
-    //     });
-    //   });
-    // },
-
     // 导出设置
     settingExport() {
-      const blob = new Blob([JSON.stringify(this.setting)], {
+      const blob = new Blob([JSON.stringify(settings)], {
         type: "application/json",
       });
       let src = URL.createObjectURL(blob);
@@ -460,8 +437,7 @@ export default {
           type: "warning",
         })
           .then(() => {
-            this.setting = data;
-            this.saveSetting("form");
+            this.saveSetting("form", data);
           })
           .catch(() => {
             this.$message("你决定了不覆盖当前设置项");

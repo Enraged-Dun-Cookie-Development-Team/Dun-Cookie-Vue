@@ -1,4 +1,5 @@
 import {DataSource} from '../DataSource';
+import {settings} from '../Settings';
 
 /**
  * 塞壬唱片(官网)数据源。
@@ -15,7 +16,7 @@ export class MonsterSirenDataSource extends DataSource {
     let data = JSON.parse(opt.responseText);
     if (data && data.data && data.data.list) {
       data.data.list.forEach(x => {
-        let time = Math.floor(new Date(`${x.date} ${kazeLocalData.setting.isTop ? '23:59:59' : '00:00:00'}`).getTime() / 1000);
+        let time = Math.floor(new Date(`${x.date} ${settings.isTop ? '23:59:59' : '00:00:00'}`).getTime() / 1000);
         list.push({
           time: time,
           id: x.cid,

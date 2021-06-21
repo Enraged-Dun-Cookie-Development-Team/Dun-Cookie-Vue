@@ -55,6 +55,7 @@
 
 <script>
 import { common } from "../assets/JS/common";
+import StorageUtil from '../common/StorageUtil';
 export default {
   name: "welcome",
   mounted() {
@@ -74,22 +75,11 @@ export default {
       this.getSaveInfo();
     },
     getSaveInfo() {
-      this.getLocalStorage("saveInfo").then((data) => {
+      StorageUtil.getLocalStorage("saveInfo").then((data) => {
         if (data != null) {
           this.saveInfo = data;
           this.showOption = this.saveInfo.webType != 1;  // 如果是火狐内核浏览器，隐藏设置按钮
         }
-      });
-    },
-    getLocalStorage(name) {
-      return new Promise((resolve, reject) => {
-        chrome.storage.local.get([name], (result) => {
-          if (result) {
-            resolve(result[name]);
-            return;
-          }
-          resolve(null);
-        });
       });
     },
     toSetting() {

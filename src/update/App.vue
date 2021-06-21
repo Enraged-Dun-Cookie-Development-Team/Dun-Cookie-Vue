@@ -48,7 +48,9 @@
 </template>
 
 <script>
-import { common, Get } from "../assets/JS/common";
+import { common } from "../assets/JS/common";
+import StorageUtil from '../common/StorageUtil';
+import HttpUtil from '../common/HttpUtil';
 export default {
   name: "update",
   mounted() {
@@ -65,7 +67,6 @@ export default {
   },
   computed: {},
   methods: {
-    Get,
     init() {
       this.getSaveInfo();
       this.getUpdateInfo();
@@ -77,7 +78,7 @@ export default {
     },
     // 检查一次更新
     getUpdateInfo() {
-      this.Get(
+      HttpUtil.GET(
         "http://cdn.liuziyang.vip/Dun-Cookies-Info.json?t=" +
           new Date().getTime()
       ).then((responseText) => {
@@ -85,21 +86,10 @@ export default {
       });
     },
     getSaveInfo() {
-      this.getLocalStorage("saveInfo").then((data) => {
+      StorageUtil.getLocalStorage("saveInfo").then((data) => {
         if (data != null) {
           this.saveInfo = data;
         }
-      });
-    },
-    getLocalStorage(name) {
-      return new Promise((resolve, reject) => {
-        chrome.storage.local.get([name], (result) => {
-          if (result) {
-            resolve(result[name]);
-            return;
-          }
-          resolve(null);
-        });
       });
     },
     toSetting() {

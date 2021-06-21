@@ -331,14 +331,15 @@ import TimeLine from "../components/TimeLine";
 import {
   common,
   timespanToDay,
-  Get,
   numberOrEnNameToName,
   numberOrEnNameToIconSrc,
   numberToWeek,
   diffTime,
-  saveLocalStorage,
-  getLocalStorage,
 } from "../assets/JS/common";
+import {settings} from '../common/Settings';
+import StorageUtil from '../common/StorageUtil';
+import HttpUtil from '../common/HttpUtil';
+import BrowserUtil from '../common/BrowserUtil';
 export default {
   name: "app",
   components: { countTo, TimeLine },
@@ -371,7 +372,7 @@ export default {
       onlineSpeakList: [],
       oldDunIndex: 0,
       dunInfo: common.dunInfo,
-      setting: common.setting,
+      setting: settings,
       showOption: true, //火狐浏览器不能进入设置
       drawer: false, // 打开菜单
       toolDrawer: false, // 理智计算器菜单
@@ -392,9 +393,6 @@ export default {
     numberToWeek,
     timespanToDay,
     diffTime,
-    Get,
-    saveLocalStorage,
-    getLocalStorage,
     init() {
       setTimeout(() => {
         // 计算高度
@@ -467,12 +465,12 @@ export default {
     },
     // 检测更新
     getUpdateInfo() {
-      chrome.runtime.sendMessage({ info: "getUpdateInfo" });
+      BrowserUtil.sendMessage({ info: "getUpdateInfo" });
     },
 
     // 获取在线信息
     getOnlineSpeak() {
-      this.Get(
+      HttpUtil.GET(
         "http://cdn.liuziyang.vip/Dun-Cookies-Info.json?t=" +
           new Date().getTime()
       ).then((result) => {
@@ -514,7 +512,7 @@ export default {
     },
     // 死数据
     getSaveInfo() {
-      this.getLocalStorage("saveInfo").then((data) => {
+      StorageUtil.getLocalStorage("saveInfo").then((data) => {
         if (data != null) {
           this.saveInfo = data;
           this.showOption = this.saveInfo.webType != 1; // 如果是火狐内核浏览器，隐藏设置按钮
@@ -523,7 +521,7 @@ export default {
     },
     // 蹲饼数据
     getDunInfo() {
-      this.getLocalStorage("dunInfo").then((data) => {
+      StorageUtil.getLocalStorage("dunInfo").then((data) => {
         if (data != null) {
           this.oldDunIndex = this.dunInfo.dunIndex;
           this.dunInfo = data;
@@ -532,23 +530,20 @@ export default {
     },
     // 设置数据
     getSetting() {
-      this.getLocalStorage("setting").then((data) => {
-        if (data != null) {
-          this.setting = data;
-          this.setting.sanShow = this.saveInfo.webType != 1;  // 如果是火狐内核浏览器，隐藏理智规划
-          setInterval(() => {
-            // 轮询在这里
-            this.getCardlist();
-            this.getDunInfo();
-            this.getSane();
-          }, data.time * 500);
-        }
+      settings.reloadSettings().then(value => {
+        settings.sanShow = this.saveInfo.webType != 1;  // 如果是火狐内核浏览器，隐藏理智规划
+        setInterval(() => {
+          // 轮询在这里
+          this.getCardlist();
+          this.getDunInfo();
+          this.getSane();
+        }, value.time * 500);
       });
     },
 
     // 获取理智数量
     getSane() {
-      this.getLocalStorage("sane").then((data) => {
+      StorageUtil.getLocalStorage("sane").then((data) => {
         if (data != null) {
           this.sane = data;
         }
@@ -559,11 +554,11 @@ export default {
     saveSane() {
       var m = new Date();
       this.sane.endTime = m.setMinutes(
-        m.getMinutes() + (this.setting.saneMax - this.sane.saneIndex) * 6
+        m.getMinutes() + (settings.saneMax - this.sane.saneIndex) * 6
       );
-      this.saveLocalStorage("sane", this.sane).then((data) => {
+      StorageUtil.saveLocalStorage("sane", this.sane).then((data) => {
         if (data != null) {
-          chrome.runtime.sendMessage({ info: "sane" });
+          BrowserUtil.sendMessage({ info: "sane" });
           this.toolDrawer = false;
           this.$message({
             center: true,
@@ -584,7 +579,7 @@ export default {
 
     // 获取数据
     getCardlist() {
-      this.getLocalStorage("cardlistdm").then((data) => {
+      StorageUtil.getLocalStorage("cardlistdm").then((data) => {
         if (!data) {
           return;
         }
@@ -608,7 +603,7 @@ export default {
     // 强刷
     reload() {
       this.isReload = true;
-      chrome.runtime.sendMessage({ info: "reload" });
+      BrowserUtil.sendMessage({ info: "reload" });
       this.$message({
         offset: 50,
         center: true,

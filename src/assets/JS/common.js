@@ -1,23 +1,4 @@
 let common = {
-  setting: {
-    time: 15,
-    source: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-    fontsize: 0,
-    imgshow: true,
-    isTag: false,
-    tagActiveName: null,
-    isTop: true,
-    isPush: true,
-    darkshow: 0,// 黑暗模式按钮
-    outsideClass: "light",// 默认白天
-    lowfrequency: false,// 低频模式按钮
-    lowfrequencyTime: [8, 20],// 低频模式时段 需要转换
-    islowfrequency: false, // 是否正处于低频模式状态下
-    retweeted: true,// 是否查看转发
-    sanShow: true, //是否需要理智提醒
-    saneMax: 135,//理智上限
-    isWindow: false
-  },
   sane: {
     saneIndex: 135,//理智计算
     sanePush: true,
@@ -269,27 +250,6 @@ function addZero(m) {
   return m < 10 ? "0" + m : m;
 }
 
-function Get(url) {
-  try {
-    return new Promise((resolve, reject) => {
-      let xhr = new XMLHttpRequest();
-      xhr.open("GET", url, true);
-      xhr.onreadystatechange = () => {
-        if (
-          xhr.readyState == 4 &&
-          xhr.status == 200 &&
-          xhr.responseText != ""
-        ) {
-          resolve(xhr.responseText);
-        }
-      };
-      xhr.send();
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 function numberOrEnNameToName(int) {
   switch (int) {
     case 0:
@@ -398,35 +358,11 @@ function numberToWeek(x) {
   }
 }
 
-// 保存
-function saveLocalStorage(name, data) {
-  return new Promise((resolve, reject) => {
-    chrome.storage.local.set({ [name]: data }, () => {
-      resolve(true);
-    });
-  });
-}
-// 读取
-function getLocalStorage(name) {
-  return new Promise((resolve, reject) => {
-    chrome.storage.local.get([name], (result) => {
-      if (Object.keys(result).length != 0) {
-        resolve(result[name]);
-        return;
-      }
-      resolve(null);
-    });
-  });
-}
-
 export {
   common,
   timespanToDay,
-  Get,
   numberOrEnNameToName,
   numberOrEnNameToIconSrc,
   numberToWeek,
-  diffTime,
-  saveLocalStorage,
-  getLocalStorage
+  diffTime
 }

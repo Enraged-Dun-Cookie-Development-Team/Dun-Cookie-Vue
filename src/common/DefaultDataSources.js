@@ -6,6 +6,10 @@ import {ArknightsOfficialWebDataSource} from './datasources/ArknightsOfficialWeb
 import {TerraHistoricusDataSource} from './datasources/TerraHistoricusDataSource';
 import {NeteaseCloudMusicDataSource} from './datasources/NeteaseCloudMusicDataSource';
 
+/**
+ * 默认数据源
+ * @type {DataSource[]}
+ */
 const defaultDataSources = [
   new BilibiliDataSource(
     '/assets/image/bili.ico',
