@@ -4,6 +4,7 @@ import defaultDataSources from '../common/DefaultDataSources';
 import {settings} from '../common/Settings';
 import StorageUtil from '../common/StorageUtil';
 import BrowserUtil from '../common/BrowserUtil';
+import NotificationUtil from '../common/NotificationUtil';
 
 
 //数据下来后都定位固定格式 没有不用管
@@ -28,7 +29,6 @@ let kazeData = {
     isTest: true,
     testIntervalTime: 3,
     setting: {},
-    FocusAnnounceId: null,
     setIntervalID: null,
     windowTabId: null,
 }
@@ -93,16 +93,6 @@ let kazeSourceProcess = {
 
 // 通用方法
 kazeFun = {
-    // 通讯组专用 检测到了可能会更新
-    JudgmentNewFocusAnnounceId(data) {
-        if (data) {
-            if (kazeData.FocusAnnounceId && data.focusAnnounceId && kazeData.FocusAnnounceId != data.focusAnnounceId) {
-                this.SendNotice(`【通讯组预告】小刻貌似闻到了饼的味道！`, '检测到游戏出现公告弹窗，可能马上发饼！', null, new Date().getTime())
-            }
-            kazeData.FocusAnnounceId = data.focusAnnounceId;
-        }
-    },
-
     //判断是否为最新 并且在此推送
     JudgmentNew(oldList, newList, title) {
         //判断方法 取每条的第一个判定字段  如果新的字段不等于旧的且大于旧的 判定为新条目
@@ -118,7 +108,7 @@ kazeFun = {
             console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
             // 是否推送
             if (settings.isPush == true) {
-                this.SendNotice(`小刻在【${title}】里面找到了一个饼！`, notice, newInfo.image, newInfo.id)
+                NotificationUtil.SendNotice(`小刻在【${title}】里面找到了一个饼！`, notice, newInfo.image, newInfo.id)
             }
             return true;
         }
@@ -126,26 +116,6 @@ kazeFun = {
             return true;
         }
         return false
-    },
-
-    // 发送推送核心方法
-    SendNotice(title, message, imageUrl, id) {
-        if (imageUrl) {
-            BrowserUtil.createNotifications(id + '_', {
-                iconUrl: '../assets/image/icon.png',
-                message: message,
-                title: title,
-                imageUrl: imageUrl,
-                type: "image"
-            });
-        } else {
-            BrowserUtil.createNotifications(id + '_', {
-                iconUrl: '../assets/image/icon.png',
-                message: message,
-                title: title,
-                type: "basic"
-            });
-        }
     },
 
     //蹲饼间隔时间 自带第一次请求 自带清除当前循环 秒
@@ -278,7 +248,7 @@ kazeFun = {
                 StorageUtil.getLocalStorage('sane').then(data => {
                     kazeLocalData.sane = data;
                     if (kazeLocalData.sane.saneIndex == settings.saneMax) {
-                        kazeFun.SendNotice(`哼哼！理智已满！`, `理智已经满了，请博士不要再逗我玩了`, null, new Date().getTime());
+                        NotificationUtil.SendNotice(`哼哼！理智已满！`, `理智已经满了，请博士不要再逗我玩了`, null, new Date().getTime());
                         return;
                     }
                     // 重启定时器
@@ -291,7 +261,7 @@ kazeFun = {
                             kazeLocalData.sane.saneIndex++
                             if (kazeLocalData.sane.saneIndex >= settings.saneMax) {
                                 kazeLocalData.sane.saneIndex = settings.saneMax;
-                                kazeFun.SendNotice(`理智已满`, `理智已经满了，请博士赶快上线清理智！`, null, new Date().getTime());
+                                NotificationUtil.SendNotice(`理智已满`, `理智已经满了，请博士赶快上线清理智！`, null, new Date().getTime());
                                 clearInterval(kazeData.setIntervalID);
                                 kazeData.setIntervalID = null;
                             } else {

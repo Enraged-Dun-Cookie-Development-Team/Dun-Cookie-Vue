@@ -1,5 +1,6 @@
 import {DataSource} from '../DataSource';
 import {settings} from '../Settings';
+import NotificationUtil from '../NotificationUtil';
 
 /**
  * 游戏内公告数据源。
@@ -8,11 +9,13 @@ import {settings} from '../Settings';
  */
 export class InGameAnnouncementDataSource extends DataSource {
 
+  FocusAnnounceId = null;
+
   constructor(icon, dataName, title, dataUrl, source) {
     super(icon, dataName, title, dataUrl, source);
   }
 
-  processData(opt, kazeLocalData, kazeFun) {
+  processData(opt) {
     let list = [];
     let data = JSON.parse(opt.responseText);
     data.announceList.forEach(x => {
@@ -29,8 +32,18 @@ export class InGameAnnouncementDataSource extends DataSource {
       }
     });
     if (settings.isPush == true) {
-      kazeFun.JudgmentNewFocusAnnounceId(data);
+      this.JudgmentNewFocusAnnounceId(data);
     }
     return list.sort((x, y) => y.judgment - x.judgment);
+  }
+
+  // 通讯组专用 检测到了可能会更新
+  JudgmentNewFocusAnnounceId(data) {
+    if (data) {
+      if (this.FocusAnnounceId && data.focusAnnounceId && this.FocusAnnounceId != data.focusAnnounceId) {
+        NotificationUtil.SendNotice(`【通讯组预告】小刻貌似闻到了饼的味道！`, '检测到游戏出现公告弹窗，可能马上发饼！', null, new Date().getTime())
+      }
+      this.FocusAnnounceId = data.focusAnnounceId;
+    }
   }
 }

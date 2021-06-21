@@ -10,7 +10,7 @@ export class TerraHistoricusDataSource extends DataSource {
     super(icon, dataName, title, dataUrl, source);
   }
 
-  processData(opt, kazeLocalData, kazeFun) {
+  processData(opt) {
     let list = [];
     opt.responseText.map(x => {
       let info = JSON.parse(x).data;

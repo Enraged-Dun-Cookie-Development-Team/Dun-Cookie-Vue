@@ -11,7 +11,7 @@ export class ArknightsOfficialWebDataSource extends DataSource {
     super(icon, dataName, title, dataUrl, source);
   }
 
-  processData(opt, kazeLocalData, kazeFun) {
+  processData(opt) {
     let list = [];
     let str = opt.responseText;
     let gw = document.createElement('div');

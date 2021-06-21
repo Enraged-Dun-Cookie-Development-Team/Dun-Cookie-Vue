@@ -61,11 +61,11 @@ class DataSource {
         source: this.source,
         responseText: value,
       };
-      return this.processData(opt, kazeLocalData, kazeFun);
+      return this.processData(opt);
     });
   }
 
-  processData(opt, kazeLocalData, kazeFun) {
+  processData(opt) {
     console.error('未实现processData方法！');
   }
 

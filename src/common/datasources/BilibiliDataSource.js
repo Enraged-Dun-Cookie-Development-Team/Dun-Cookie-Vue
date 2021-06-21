@@ -10,7 +10,7 @@ export class BilibiliDataSource extends DataSource {
     super(icon, dataName, title, dataUrl, source);
   }
 
-  processData(opt, kazeLocalData, kazeFun) {
+  processData(opt) {
     let list = [];
     let data = JSON.parse(opt.responseText);
     if (data.code == 0 && data.data != null && data.data.cards != null && data.data.cards.length > 0) {

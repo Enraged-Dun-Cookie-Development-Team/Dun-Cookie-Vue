@@ -11,7 +11,7 @@ export class MonsterSirenDataSource extends DataSource {
     super(icon, dataName, title, dataUrl, source);
   }
 
-  processData(opt, kazeLocalData, kazeFun) {
+  processData(opt) {
     let list = [];
     let data = JSON.parse(opt.responseText);
     if (data && data.data && data.data.list) {
