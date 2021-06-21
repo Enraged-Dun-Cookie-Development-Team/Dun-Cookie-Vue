@@ -30,7 +30,7 @@ let common = {
     webType: 0,  //判断浏览器类型
   },
   quickJump: {
-    soure: [
+    source: [
       {
         url: "https://ak.hypergryph.com/#information",
         name: "官方网站",

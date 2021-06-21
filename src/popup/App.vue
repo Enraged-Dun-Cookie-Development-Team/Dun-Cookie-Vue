@@ -12,7 +12,7 @@
         <el-row type="flex" class="drawer-btn-area" justify="center">
           <el-tooltip
             :key="item.img"
-            v-for="item in quickJump.soure"
+            v-for="item in quickJump.source"
             :content="item.name"
             placement="top"
           >

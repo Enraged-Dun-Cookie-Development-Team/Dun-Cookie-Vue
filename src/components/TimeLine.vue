@@ -13,7 +13,7 @@
     >
       <el-card
         class="card"
-        :class="'font-size-' + setting.fontsize + ' soure-' + item.source"
+        :class="'font-size-' + setting.fontsize + ' source-' + item.source"
         shadow="never"
       >
         <span>
@@ -356,8 +356,8 @@ img[lazy="error"] {
     }
 
     // 罗德岛泰拉记事簿 网易云音乐
-    &.soure-8,
-    &.soure-9 {
+    &.source-8,
+    &.source-9 {
       .el-card__body {
         padding: 0 !important;
       }
