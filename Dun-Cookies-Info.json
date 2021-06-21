@@ -42,11 +42,19 @@
             "radius": true
         },
         {
-            "starTime": "2021-5-31 11:00:00",
-            "overTime": "2021-6-17 04:00:00",
-            "url": "https://www.bilibili.com/video/BV1ww411f7Rz",
-            "name": "【方舟剧场】隐藏在心中的爱",
-            "img": "https://i2.hdslb.com/bfs/archive/18ee33ac551772710a5c8da3760901be0ee0294d.jpg@200w_125h_1c.webp",
+            "starTime": "2021-6-17 04:00:00",
+            "overTime": "2021-7-01 03:59:59",
+            "url": "https://www.bilibili.com/video/BV12f4y187rR",
+            "name": "【魔法Zc目录】“沃伦姆德的薄暮”TW平民低配攻略合集！阵容平民+低练度+语音详解的愉悦攻略！",
+            "img": "https://i1.hdslb.com/bfs/archive/5144217c0699137adb85826b81b0b9baa12b8573.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-6-17 04:00:00",
+            "overTime": "2021-7-01 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1Bg411g7QR",
+            "name": "【好吃的橘子鸭】更新新干员打法，多思路，必过！！",
+            "img": "https://i2.hdslb.com/bfs/archive/8acdc9cab1e32de2bdea2aeed4eca92030d3dc18.jpg@200w_125h_1c.webp",
             "radius": true
         }
     ],
@@ -65,40 +73,26 @@
             },
             {
                 "text": "当前活动池结束",
-                "remark": "卡涅利安,崖心,绮良,深靛",
-                "time": "2021-6-15 03:59:59",
-                "starTime": "2021-6-10 04:00:00",
-                "overTime": "2021-6-15 03:59:59"
-            },
-            {
-                "text": "当前活动池结束",
                 "remark": "铃兰,断崖,夜魔,卡达",
-                "time": "2021-6-17 16:00:00",
+                "time": "2021-7-01 03:59:59",
                 "starTime": "2021-6-17 16:00:00",
                 "overTime": "2021-7-01 03:59:59"
             },
             {
-                "text": "SideStory「沃伦姆德的薄暮」限时复刻开启",
-                "remark": "",
-                "time": "2021-6-17 15:59:59",
-                "starTime": "2021-6-10 16:00:00",
-                "overTime": "2021-6-17 16:00:00"
-            },
-            {
                 "text": "SideStory「沃伦姆德的薄暮」限时复刻结束",
                 "remark": "",
-                "time": "2021-6-17 16:00:00",
+                "time": "2021-7-01 03:59:59",
                 "starTime": "2021-6-17 16:00:00",
                 "overTime": "2021-7-01 03:59:59"
             }
         ]
     },
     "upgrade": {
-        "v": "2.0.155",
-        "title": "小刻食堂翻新啦 - 2.0.155",
-        "description": "⏰ 本次版本主要是添加了一点实用的小功能<br/>1.添加了理智提醒器，实时监控理智，到点推送，再也不用担心理智超出了<br/>2.添加了材料提示，直接可以查看今天能刷哪些材料<br/>3.添加了倒计时，分钟级提醒时间节点<br/>4.调整抽屉样式，把快捷连接的图片加大了<br/>5.初步适用了手机浏览器的使用",
-        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.0.155/Dun-Cookie-2.0.155.crx",
-        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.0.155/Dun-Cookie-2.0.155.zip",
+        "v": "2.1.0",
+        "title": "小刻食堂翻新啦 - 2.1.0",
+        "description": "😆 本次版本更改名字和Logo，发布稳定版本<br/>1.更换成自己的Logo与名字“小刻食堂”，可怜的孩子终于有自己的东西啦<br/>2.修复了界面上的BUG<br/>3.添加了如果不需要理智提醒可关闭的选项<br/>4.取消了兼容手机页面<br/>5.添加了窗口化(只允许chrome内核的浏览器使用)<br/>6.更换了几个快捷工具链接(应用商店的下版本更)",
+        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.1.0/Dun-Cookie-2.1.0.crx",
+        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.1.0/Dun-Cookie-2.1.0.zip",
         "downSpare": "https://pan.baidu.com/s/1kzY6kpfYqLcGpuaiwQOGoA",
         "downSpareText": "备用下载（提取码 jzq9）",
         "downChrome": "https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN"
