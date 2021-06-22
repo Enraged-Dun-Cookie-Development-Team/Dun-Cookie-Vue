@@ -5,11 +5,15 @@
  * <br>
  * TODO 还有一些作为注释出现的对chrome对象的调用存在于其它文件中，由于暂时不清楚作用先不管，但是之后需要确认并重构掉
  */
+import {DEBUG_LOG} from './Constants';
+
 class BrowserUtil {
   // TODO 之前好像看到Firefox浏览器的sendMessage会发给同一个页面的onMessageListener，而Chrome则不会。但是找不到文档了，需要确认，如果属实则考察是否需要加一个随机ID字段保证不监听自己
   static sendMessage(type, data) {
-    console.log(`sendMessage - ${type}`);
-    console.log(data);
+    if (DEBUG_LOG) {
+      console.log(`sendMessage - ${type}`);
+      console.log(data);
+    }
     const message = {type: type};
     if (data) {
       message.data = data;
@@ -42,8 +46,10 @@ class BrowserUtil {
         data = message.data;
       }
       if (data !== undefined) {
-        console.log(`${id} - ${type} - receiverMessage`);
-        console.log(message);
+        if (DEBUG_LOG) {
+          console.log(`${id} - ${type} - receiverMessage`);
+          console.log(message);
+        }
         const value = listener(data);
         if (value !== null && value !== undefined) {
           if (value.constructor === Promise) {

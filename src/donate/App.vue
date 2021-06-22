@@ -4,7 +4,7 @@
       <el-card class="box-card" shadow="never">
         <el-row type="flex" align="middle" justify="space-around">
           <el-image class="img" src="../assets/image/icon.png"></el-image>
-          <div class="version">小刻食堂 V{{ saveInfo.version }}</div>
+          <div class="version">小刻食堂 V{{currentVersion}}</div>
         </el-row>
         <el-divider>感谢</el-divider>
         玩了方舟已经两年了，身为开服玩家，我根本不知道方舟竟然能陪我走这么远。
@@ -46,15 +46,9 @@
 </template>
 
 <script>
-import {
-  common,
-  timespanToDay,
-  numberOrEnNameToName,
-  numberOrEnNameToIconSrc,
-} from "../assets/JS/common";
 import {settings} from '../common/Settings';
-import StorageUtil from '../common/StorageUtil';
-import BrowserUtil from '../common/BrowserUtil';
+import {CURRENT_VERSION} from '../common/Constants';
+
 export default {
   name: "app",
   mounted() {
@@ -69,7 +63,6 @@ export default {
           newobj.darkshow == 1
             ? "dark"
             : "light";
-        // this.saveSetting();
       },
       deep: true,
       immediate: true,
@@ -77,118 +70,14 @@ export default {
   },
   data() {
     return {
-      cardlist: [],
-      saveInfo: common.saveInfo,
+      currentVersion: CURRENT_VERSION,
       settings: settings,
-      marks: {
-        8: "20点",
-        12: "当天凌晨",
-        20: "8点",
-      },
-      activeTab: "0",
-      rules: {
-        tagActiveName: [
-          { required: true, message: "请选择默认标签", trigger: "blur" },
-        ],
-      },
     };
   },
   computed: {
   },
   methods: {
-    numberOrEnNameToName,
-    numberOrEnNameToIconSrc,
-    timespanToDay,
-    init() {
-      this.getSaveInfo();
-      this.getSetting();
-    },
-
-    // 死数据
-    getSaveInfo() {
-      StorageUtil.getLocalStorage("saveInfo").then((data) => {
-        if (data != null) {
-          this.saveInfo = data;
-        }
-      });
-    },
-
-    // 设置数据
-    getSetting() {
-      settings.reloadSettings();
-    },
-
-    // 保存设置
-    saveSetting(formName, data) {
-      if (!data) {
-        data = this.$refs[formName].data
-      }
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          settings.setAll(data);
-          settings.saveSettings().then(() => {
-            this.$message({
-              center: true,
-              message: "保存成功",
-              type: "success",
-            });
-          });
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
-    },
-
-    // 导出设置
-    settingExport() {
-      const blob = new Blob([JSON.stringify(settings)], {
-        type: "application/json",
-      });
-      let src = URL.createObjectURL(blob);
-      BrowserUtil.downloadFile({ url: src, saveAs: true }, (data) => {
-        console.log(data);
-      });
-    },
-    // 导入设置
-    settingImport(file) {
-      const reader = new FileReader();
-      reader.onload = (res) => {
-        const { result } = res.target; // 得到字符串
-        const data = JSON.parse(result); // 解析成json对象
-        this.$confirm("解析文件成功，是否覆盖当前设置?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
-        })
-          .then(() => {
-            this.saveSetting("form", data);
-          })
-          .catch(() => {
-            this.$message("你决定了不覆盖当前设置项");
-          });
-      }; // 成功回调
-      reader.onerror = (err) => {
-        this.$message.error("没有导入成功，心态崩了啊！");
-        this.$notify({
-          title: "貌似检测到导出失败",
-          message: "可以加QQ群 362860473 后将文件发送给管理员查看检测问题",
-          duration: 0,
-        });
-      }; // 失败回调
-      reader.readAsText(new Blob([file.raw]), "utf-8"); // 按照utf-8编码解析
-    },
-
-    // 低频时间选择
-    lowfrequencyTimeTooltip(val) {
-      if (val == 12) {
-        return "当天凌晨";
-      } else if (val < 12) {
-        return `上一天${val + 12}点整`;
-      } else if (val > 12) {
-        return `当天${val - 12}点整`;
-      }
-    },
+    init() {},
   },
 };
 </script>

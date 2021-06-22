@@ -5,6 +5,7 @@ import NotificationUtil from '../common/NotificationUtil';
 import DunInfo from '../common/sync/DunInfo';
 import SanInfo from '../common/sync/SanInfo';
 import {
+    DEBUG_LOG,
     IS_TEST, MESSAGE_CARD_LIST_GET,
     MESSAGE_CARD_LIST_UPDATE, MESSAGE_DUN_INFO_GET,
     MESSAGE_DUN_INFO_UPDATE, MESSAGE_FORCE_REFRESH, MESSAGE_SAN_GET,
@@ -220,7 +221,9 @@ kazeFun = {
                                     sanIntervalId = null;
                                 }
                                 SanInfo.saveUpdate();
-                                console.log(SanInfo.currentSan);
+                                if (DEBUG_LOG) {
+                                    console.log(`当前理智：${SanInfo.currentSan}`);
+                                }
                             }, SAN_RECOVERY_SPEED);
                         }
                         return;

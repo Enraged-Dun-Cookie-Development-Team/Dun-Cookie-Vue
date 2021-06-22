@@ -368,7 +368,6 @@ export default {
         if (valid) {
           settings.san.noticeWhenFull = settings.webType !== 1;  // 如果是火狐内核浏览器，则强制隐藏理智规划
           settings.setAll(data);
-          console.log(settings);
           settings.saveSettings().then(() => {
             this.$message({
               center: true,
@@ -377,7 +376,7 @@ export default {
             });
           });
         } else {
-          console.log("error submit!!");
+          console.log("form invalid and can't submit!");
           return false;
         }
       });

@@ -9,7 +9,7 @@ class HttpUtil {
     try {
       return HttpUtil.__sendRequest(url, "GET");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 

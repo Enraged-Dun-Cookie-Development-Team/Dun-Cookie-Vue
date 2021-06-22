@@ -1,4 +1,5 @@
 import HttpUtil from './HttpUtil';
+import {DEBUG_LOG} from './Constants';
 
 /**
  * 表示一个数据源
@@ -48,7 +49,9 @@ class DataSource {
         )
       );
     } else {
-      console.log(`无效的dataUrl：${this.dataUrl}`);
+      if (DEBUG_LOG) {
+        console.log(`无效的dataUrl：${this.dataUrl}`);
+      }
       return new Promise((_, reject) => {
         reject(this.dataUrl)
       });
