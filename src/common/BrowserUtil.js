@@ -6,9 +6,14 @@
  * TODO 还有一些作为注释出现的对chrome对象的调用存在于其它文件中，由于暂时不清楚作用先不管，但是之后需要确认并重构掉
  */
 class BrowserUtil {
-  static sendMessage(message) {
-    console.log('sendMessage');
-    console.log(message);
+  // TODO 之前好像看到Firefox浏览器的sendMessage会发给同一个页面的onMessageListener，而Chrome则不会。但是找不到文档了，需要确认，如果属实则考察是否需要加一个随机ID字段保证不监听自己
+  static sendMessage(type, data) {
+    console.log(`sendMessage - ${type}`);
+    console.log(data);
+    const message = {type: type};
+    if (data) {
+      message.data = data;
+    }
 
     return new Promise(resolve => {
       chrome.runtime.sendMessage(message, (response) => {
@@ -34,8 +39,7 @@ class BrowserUtil {
       if (!type) {
         data = message;
       } else if (message.type === type) {
-        // TODO 把info优化掉
-        data = message.data || {info: message.info};
+        data = message.data;
       }
       if (data !== undefined) {
         console.log(`${id} - ${type} - receiverMessage`);
@@ -73,6 +77,11 @@ class BrowserUtil {
     return chrome.runtime.onInstalled.addListener(listener);
   }
 
+  /**
+   * 监听浏览器中的插件图标点击事件。
+   * <p>
+   * <strong>注意：当设置了弹出菜单的时候不会触发监听器</strong>
+   */
   static addIconClickListener(listener) {
     return chrome.browserAction.onClicked.addListener(listener);
   }
@@ -82,7 +91,7 @@ class BrowserUtil {
   }
 
   static createWindow(createData) {
-    return chrome.windows.create(createData);
+    return new Promise(resolve => chrome.windows.create(createData, data => resolve(data)));
   }
 
   static removeWindow(windowId) {

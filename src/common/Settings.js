@@ -1,5 +1,6 @@
 import StorageUtil from './StorageUtil';
 import BrowserUtil from './BrowserUtil';
+import {MESSAGE_SETTINGS_UPDATE} from './Constants';
 
 class Settings {
   // 插件初始化的时间
@@ -18,13 +19,26 @@ class Settings {
   lowfrequencyTime = [8, 20];// 低频模式时段 需要转换
   islowfrequency = false; // 是否正处于低频模式状态下
   retweeted = true;// 是否查看转发
-  sanShow = true; //是否需要理智提醒
-  saneMax = 135;//理智上限
   isWindow = false;
+  // TODO webType不应该被保存，要么让指定字段不被JSON序列化，要么搞个动态类
+  webType = 0;
+  /**
+   * 理智设置
+   */
+  san = {
+    /**
+     * 是否在理智满的时候推送提示信息
+     */
+    noticeWhenFull: true,
+    /**
+     * 理智上限
+     */
+    maxValue: 135
+  }
 
   constructor() {
     this.reloadSettings();
-    BrowserUtil.addMessageListener('settings', 'settings-update', () => this.reloadSettings());
+    BrowserUtil.addMessageListener('settings', MESSAGE_SETTINGS_UPDATE, () => this.reloadSettings());
   }
 
   /**
@@ -44,11 +58,7 @@ class Settings {
    */
   saveSettings() {
     return StorageUtil.saveLocalStorage('settings', this)
-      .then(() => BrowserUtil.sendMessage({
-        type: 'settings-update',
-        data: this,
-        info: "setting"
-      }));
+      .then(() => BrowserUtil.sendMessage(MESSAGE_SETTINGS_UPDATE, this));
   }
 
   /**

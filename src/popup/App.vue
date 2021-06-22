@@ -73,11 +73,12 @@
             icon="el-icon-refresh"
             >刷新</el-button
           >
+          <!-- webType火狐浏览器不能进入设置 -->
           <el-button 
             type="primary" 
             icon="el-icon-setting" 
             @click="openSetting"
-            v-if="showOption"
+            v-if="setting.webType !== 1"
             >设置</el-button
           >
           <el-button
@@ -109,14 +110,14 @@
           <el-form-item label="当前理智"
             ><el-input-number
               ref="saneEdit"
-              v-model="sane.saneIndex"
+              v-model="sane.currentSan"
               :min="0"
-              :max="setting.saneMax"
+              :max="setting.san.maxValue"
               label="输入当前理智"
             ></el-input-number
           ></el-form-item>
           <el-form-item label="理智满后是否推送">
-            <el-switch v-model="sane.sanePush"></el-switch>
+            <el-switch v-model="setting.san.noticeWhenFull"></el-switch>
           </el-form-item>
           <el-form-item>
             <el-button @click="saveSane">开始计算</el-button>
@@ -138,7 +139,7 @@
         @click.stop="drawer = true"
       ></el-button>
       <div class="version">
-        {{ `小刻食堂 V${saveInfo.version}` }}
+        {{ `小刻食堂 V${currentVersion}` }}
         <div v-if="loading" style="color: red">
           【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没有*龙门粗口*正常连接】
         </div>
@@ -206,26 +207,15 @@
                       </div>
                     </div>
                     <div
-                      v-if="setting.sanShow && LazyLoaded"
+                      v-if="setting.san.noticeWhenFull && LazyLoaded"
                       class="sane-area"
                       @click.stop="openToolDrawer"
                     >
                       <div class="sane">
-                        当前理智为<span class="online-blue sane-number">{{
-                          sane.saneIndex
-                        }}</span
-                        >点
+                        当前理智为<span class="online-blue sane-number">{{sane.currentSan }}</span>点
                       </div>
-                      <div
-                        class="sane-info"
-                        v-if="sane.saneIndex == setting.saneMax"
-                      >
-                        已经回满
-                      </div>
-                      <div class="sane-info" v-else>
-                        约{{ timespanToDay(sane.endTime / 1000, 2) }}回满，{{
-                          diffTime(sane.endTime)
-                        }}
+                      <div class="sane-info">
+                        {{sane.calcRemainingTime()}}
                       </div>
                     </div>
                   </div>
@@ -275,7 +265,6 @@
         <!-- <time-line
           v-if="!setting.isTag"
           ref="TimeLine"
-          :saveInfo="saveInfo"
           :setting="setting"
           :imgShow="LazyLoaded"
           :cardlist="cardlist"
@@ -285,7 +274,6 @@
         <time-line
           v-if="!setting.isTag"
           ref="TimeLine"
-          :saveInfo="saveInfo"
           :setting="setting"
           :imgShow="LazyLoaded"
           :cardlist="cardlist"
@@ -312,7 +300,6 @@
             </span>
             <time-line
               ref="TimeLine"
-              :saveInfo="saveInfo"
               :setting="setting"
               :imgShow="LazyLoaded"
               :cardlist="cardlistdm[item]"
@@ -328,18 +315,22 @@
 <script>
 import countTo from "vue-count-to";
 import TimeLine from "../components/TimeLine";
-import {
-  common,
-  timespanToDay,
-  numberToWeek,
-  diffTime,
-} from "../assets/JS/common";
+import {common, diffTime, numberToWeek, timespanToDay,} from "../assets/JS/common";
 import {settings} from '../common/Settings';
-import StorageUtil from '../common/StorageUtil';
 import HttpUtil from '../common/HttpUtil';
 import BrowserUtil from '../common/BrowserUtil';
-import TmpUtil from '../common/TmpUtil';
+import {sourceNameToIcon} from '../common/TmpUtil';
 import DunInfo from '../common/sync/DunInfo';
+import SanInfo from '../common/sync/SanInfo';
+import {
+  CURRENT_VERSION,
+  MESSAGE_CARD_LIST_GET,
+  MESSAGE_CARD_LIST_UPDATE,
+  MESSAGE_DUN_INFO_GET,
+  MESSAGE_DUN_INFO_UPDATE,
+  MESSAGE_FORCE_REFRESH
+} from '../common/Constants';
+
 export default {
   name: "app",
   components: { countTo, TimeLine },
@@ -365,22 +356,20 @@ export default {
       show: false,
       LazyLoaded: false,
       isNew: false,
-      sanShow: true,
       cardlist: [],
       cardlistdm: {},
-      saveInfo: common.saveInfo,
+      currentVersion: CURRENT_VERSION,
       onlineSpeakList: [],
       oldDunCount: 0,
       dunInfo: DunInfo,
       setting: settings,
-      showOption: true, //火狐浏览器不能进入设置
       drawer: false, // 打开菜单
       toolDrawer: false, // 理智计算器菜单
       isReload: false, // 是否正在刷新
       quickJump: common.quickJump,
       dayInfo: common.dayInfo,
       loading: true, // 初始化加载
-      sane: common.sane,
+      sane: SanInfo,
       onlineDayInfo: {},
       // allHeight: 0,
     };
@@ -391,23 +380,18 @@ export default {
     numberToWeek,
     timespanToDay,
     diffTime,
+    sourceNameToIcon,
     init() {
       setTimeout(() => {
         // 计算高度
         // this.calcHeight();
         this.getCardlist();
-        this.getSaveInfo();
-        this.getSetting();
         this.getDunInfo();
         this.getOnlineSpeak();
-        this.getSane();
         // 图片卡 先加载dom后加载图片内容
         this.LazyLoaded = true;
         this.setClickFun();
       }, 1);
-    },
-    sourceNameToIcon(sourceName) {
-      return TmpUtil.sourceNameToIcon(sourceName);
     },
 
     // 监听标签
@@ -465,10 +449,6 @@ export default {
         item.notToday = !item.day.includes(week);
       });
     },
-    // 检测更新
-    getUpdateInfo() {
-      BrowserUtil.sendMessage({ info: "getUpdateInfo" });
-    },
 
     // 获取在线信息
     getOnlineSpeak() {
@@ -497,7 +477,7 @@ export default {
         }
 
         // 是否最新
-        this.isNew = data.upgrade.v != this.saveInfo.version;
+        this.isNew = data.upgrade.v !== CURRENT_VERSION;
 
         // 资源获取
         this.onlineDayInfo = data.dayInfo;
@@ -512,61 +492,25 @@ export default {
         this.loading = false;
       });
     },
-    // 死数据
-    getSaveInfo() {
-      StorageUtil.getLocalStorage("saveInfo").then((data) => {
-        if (data != null) {
-          this.saveInfo = data;
-          this.showOption = this.saveInfo.webType != 1; // 如果是火狐内核浏览器，隐藏设置按钮
-        }
-      });
-    },
     // 蹲饼数据
     getDunInfo() {
-      BrowserUtil.sendMessage({type: 'dunInfo-get'}).then((data) => {
+      BrowserUtil.sendMessage(MESSAGE_DUN_INFO_GET).then((data) => {
         this.dunInfo = data;
       });
-      BrowserUtil.addMessageListener('popup', 'dunInfo-update', (message) => {
+      BrowserUtil.addMessageListener('popup', MESSAGE_DUN_INFO_UPDATE, (message) => {
         this.oldDunCount = this.dunInfo.counter;
         this.dunInfo = message;
-      });
-    },
-    // 设置数据
-    getSetting() {
-      settings.reloadSettings().then(value => {
-        settings.sanShow = this.saveInfo.webType != 1;  // 如果是火狐内核浏览器，隐藏理智规划
-        setInterval(() => {
-          // 轮询在这里
-          this.getSane();
-        }, value.time * 500);
-      });
-    },
-
-    // 获取理智数量
-    getSane() {
-      StorageUtil.getLocalStorage("sane").then((data) => {
-        if (data != null) {
-          this.sane = data;
-        }
       });
     },
 
     // 设置数据
     saveSane() {
-      var m = new Date();
-      this.sane.endTime = m.setMinutes(
-        m.getMinutes() + (settings.saneMax - this.sane.saneIndex) * 6
-      );
-      StorageUtil.saveLocalStorage("sane", this.sane).then((data) => {
-        if (data != null) {
-          BrowserUtil.sendMessage({ info: "sane" });
-          this.toolDrawer = false;
-          this.$message({
-            center: true,
-            message: "保存成功，开始计算",
-            type: "success",
-          });
-        }
+      this.sane.saveUpdate();
+      this.toolDrawer = false;
+      this.$message({
+        center: true,
+        message: "保存成功，开始计算",
+        type: "success",
       });
     },
 
@@ -580,7 +524,7 @@ export default {
 
     // 获取数据
     getCardlist() {
-      BrowserUtil.sendMessage({type: 'cardList-get'}).then((data) => {
+      BrowserUtil.sendMessage(MESSAGE_CARD_LIST_GET).then((data) => {
           this.cardlist = Object.values(data)
               .reduce((acc, cur) => [...acc, ...cur], [])
               .sort((x, y) => y.time - x.time)
@@ -590,7 +534,7 @@ export default {
               });
           this.cardlistdm = data;
       });
-      BrowserUtil.addMessageListener('popup', 'cardList-update', (data) => {
+      BrowserUtil.addMessageListener('popup', MESSAGE_CARD_LIST_UPDATE, (data) => {
         this.cardlist = Object.values(data)
             .reduce((acc, cur) => [...acc, ...cur], [])
             .sort((x, y) => y.time - x.time)
@@ -611,7 +555,7 @@ export default {
     // 强刷
     reload() {
       this.isReload = true;
-      BrowserUtil.sendMessage({ info: "reload" });
+      BrowserUtil.sendMessage(MESSAGE_FORCE_REFRESH);
       this.$message({
         offset: 50,
         center: true,

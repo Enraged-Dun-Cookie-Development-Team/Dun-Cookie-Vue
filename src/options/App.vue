@@ -4,7 +4,7 @@
       <el-card class="box-card" shadow="never">
         <el-row type="flex" align="middle" justify="space-around">
           <el-image class="img" src="../assets/image/icon.png"></el-image>
-          <div class="version">小刻食堂 V{{ saveInfo.version }}</div>
+          <div class="version">小刻食堂 V{{ currentVersion }}</div>
         </el-row>
         <el-divider></el-divider>
         <div class="info">
@@ -202,14 +202,14 @@
                   </el-row>
                 </el-form-item>
               </el-tooltip>
-               <el-form-item label="窗口化" v-if="this.showWindow">
+              <el-form-item label="窗口化" v-if="showWindow">
                 <el-switch v-model="setting.isWindow"></el-switch>
               </el-form-item>
               <el-form-item label="理智提醒">
-                <el-switch v-model="setting.sanShow"></el-switch>
+                <el-switch v-model="setting.san.noticeWhenFull"></el-switch>
               </el-form-item>
               <el-tooltip
-                v-if="setting.sanShow"
+                v-if="setting.san.noticeWhenFull"
                 class="item"
                 effect="dark"
                 content="用于公告栏计算理智回复"
@@ -219,7 +219,7 @@
                   <el-input-number
                     controls-position="right"
                     size="small"
-                    v-model="setting.saneMax"
+                    v-model="setting.san.maxValue"
                     :min="80"
                     :max="135"
                   ></el-input-number>
@@ -266,7 +266,7 @@
               </div>
             </el-tab-pane>
             <el-tab-pane label="反馈通道" name="2">
-              <div v-html="saveInfo.feedbackInfo"></div>
+              <Feedback></Feedback>
             </el-tab-pane>
           </el-tabs>
           <div class="btn-area" v-if="activeTab == '0' || activeTab == '1'">
@@ -283,20 +283,17 @@
 <script>
 import countTo from "vue-count-to";
 
-import {
-  common,
-  timespanToDay,
-  numberOrEnNameToName,
-  numberOrEnNameToIconSrc,
-} from "../assets/JS/common";
+import {numberOrEnNameToIconSrc, numberOrEnNameToName, timespanToDay,} from "../assets/JS/common";
 import {settings} from '../common/Settings';
-import StorageUtil from '../common/StorageUtil';
 import BrowserUtil from '../common/BrowserUtil';
-import TmpUtil from '../common/TmpUtil';
+import {sourceToName} from '../common/TmpUtil';
 import DunInfo from '../common/sync/DunInfo';
+import Feedback from '../components/Feedback';
+import {CURRENT_VERSION, MESSAGE_DUN_INFO_GET, MESSAGE_DUN_INFO_UPDATE} from '../common/Constants';
+
 export default {
   name: "app",
-  components: { countTo },
+  components: {Feedback, countTo },
   mounted() {
     this.init();
   },
@@ -317,8 +314,7 @@ export default {
   },
   data() {
     return {
-      cardlist: [],
-      saveInfo: common.saveInfo,
+      currentVersion: CURRENT_VERSION,
       oldDunCount: 0,
       showWindow: true,
       dunInfo: DunInfo,
@@ -337,38 +333,14 @@ export default {
     };
   },
   computed: {
-    // nextdunTime() {
-    //   console.log(settings.islowfrequency);
-    //   if (settings.islowfrequency) {
-    //     return timespanToDay(
-    //       this.dunInfo.dunTime / 1000 + settings.time * 2
-    //     );
-    //   }
-    //   return timespanToDay(this.dunInfo.dunTime / 1000 + settings.time);
-    // },
   },
   methods: {
     numberOrEnNameToName,
     numberOrEnNameToIconSrc,
     timespanToDay,
+    sourceToName,
     init() {
-      this.getSaveInfo();
       this.getDunInfo();
-      this.getSetting();
-    },
-
-    sourceToName(source) {
-      return TmpUtil.sourceToName(source);
-    },
-
-    // 死数据
-    getSaveInfo() {
-      StorageUtil.getLocalStorage("saveInfo").then((data) => {
-        if (data != null) {
-          this.saveInfo = data;
-          this.judgeWindow();
-        }
-      });
     },
 
     // 打开网址
@@ -378,23 +350,13 @@ export default {
 
     // 蹲饼数据
     getDunInfo() {
-      BrowserUtil.sendMessage({type: 'dunInfo-get'}).then((data) => {
+      BrowserUtil.sendMessage(MESSAGE_DUN_INFO_GET).then((data) => {
         this.dunInfo = data;
       });
-      BrowserUtil.addMessageListener('popup', 'dunInfo-update', (message) => {
+      BrowserUtil.addMessageListener('popup', MESSAGE_DUN_INFO_UPDATE, (message) => {
         this.oldDunCount = this.dunInfo.counter;
         this.dunInfo = message;
       });
-    },
-
-    // 设置数据
-    getSetting() {
-      settings.reloadSettings();
-    },
-
-    // 判断浏览器可否窗口化
-    judgeWindow() {
-      this.showWindow = (this.saveInfo.webType == 0);
     },
 
     // 保存设置
@@ -404,6 +366,7 @@ export default {
       }
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          settings.san.noticeWhenFull = settings.webType !== 1;  // 如果是火狐内核浏览器，则强制隐藏理智规划
           settings.setAll(data);
           console.log(settings);
           settings.saveSettings().then(() => {

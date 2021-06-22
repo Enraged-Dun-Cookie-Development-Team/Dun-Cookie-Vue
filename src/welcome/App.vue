@@ -3,7 +3,7 @@
     <el-card class="box-card">
       <el-row type="flex" align="middle" justify="space-around">
         <el-image class="img" src="../assets/image/icon.png"></el-image>
-        <div class="version">欢迎使用小刻食堂 V{{ saveInfo.version }}</div>
+        <div class="version">欢迎使用小刻食堂 V{{ currentVersion }}</div>
       </el-row>
       <el-divider></el-divider>
       <div class="info">
@@ -35,7 +35,8 @@
         </el-collapse-item>
       </el-collapse>
       <el-divider></el-divider>
-      <div v-if="showOption">
+      <!-- webType火狐浏览器不能进入设置 -->
+      <div v-if="setting.webType !== 1">
         现在可以点击
         <el-button @click="toSetting" size="mini">设置</el-button>
         进入设置来调整蹲饼器
@@ -48,7 +49,7 @@
         >查看项目源码。<span style="color: #23ade5">欢迎点star哦</span>
       </div>
       <el-divider></el-divider>
-      <div v-html="feedbackInfo"></div>
+      <Feedback></Feedback>
     </el-card>
   </div>
 </template>
@@ -57,31 +58,26 @@
 import { common } from "../assets/JS/common";
 import StorageUtil from '../common/StorageUtil';
 import BrowserUtil from '../common/BrowserUtil';
+import Feedback from '../components/Feedback';
+import {CURRENT_VERSION} from '../common/Constants';
+import {settings} from '../common/Settings';
 export default {
   name: "welcome",
+  components: {Feedback},
   mounted() {
     this.init();
   },
 
   data() {
     return {
-      saveInfo: common.saveInfo,
+      currentVersion: CURRENT_VERSION,
+      setting: settings,
       activeNames: [1],
-      showOption: true,
     };
   },
   computed: {},
   methods: {
     init() {
-      this.getSaveInfo();
-    },
-    getSaveInfo() {
-      StorageUtil.getLocalStorage("saveInfo").then((data) => {
-        if (data != null) {
-          this.saveInfo = data;
-          this.showOption = this.saveInfo.webType != 1;  // 如果是火狐内核浏览器，隐藏设置按钮
-        }
-      });
     },
     toSetting() {
       BrowserUtil.createTab(BrowserUtil.getExtensionURL('options.html'))

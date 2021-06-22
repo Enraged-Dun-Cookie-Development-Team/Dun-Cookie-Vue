@@ -148,11 +148,13 @@
 </template>
 
 <script>
-import { timespanToDay } from "../assets/JS/common";
+import {timespanToDay} from "../assets/JS/common";
 import BrowserUtil from '../common/BrowserUtil';
+import {CURRENT_VERSION} from '../common/Constants';
+
 export default {
   name: "TimeLine",
-  props: ["cardlist", "setting", "saveInfo", "imgShow"],
+  props: ["cardlist", "setting", "imgShow"],
   data() {
     return {
       showAllImage: [],
@@ -173,7 +175,7 @@ export default {
 
 ${item.url}
 
-数据由 小刻食堂${this.saveInfo.version} 收集
+数据由 小刻食堂${CURRENT_VERSION} 收集
 工具链接：https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue`
       ).then(
         (e) => {

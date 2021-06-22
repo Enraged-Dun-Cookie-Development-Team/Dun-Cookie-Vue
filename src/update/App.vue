@@ -3,7 +3,7 @@
     <el-card class="box-card">
       <el-row type="flex" align="middle" justify="space-around">
         <el-image class="img" src="../assets/image/icon.png"></el-image>
-        <div class="version">欢迎使用小刻食堂 V{{ saveInfo.version }}</div>
+        <div class="version">欢迎使用小刻食堂 V{{ currentVersion }}</div>
       </el-row>
       <el-divider></el-divider>
       <div class="info">
@@ -42,34 +42,34 @@
         >
       </div>
       <el-divider></el-divider>
-      <div v-html="saveInfo.feedbackInfo"></div>
+      <Feedback></Feedback>
     </el-card>
   </div>
 </template>
 
 <script>
-import { common } from "../assets/JS/common";
-import StorageUtil from '../common/StorageUtil';
 import HttpUtil from '../common/HttpUtil';
 import BrowserUtil from '../common/BrowserUtil';
+import Feedback from '../components/Feedback';
+import {CURRENT_VERSION} from '../common/Constants';
+
 export default {
   name: "update",
+  components: {Feedback},
   mounted() {
     this.init();
   },
 
   data() {
     return {
-      saveInfo: common.saveInfo,
+      currentVersion: CURRENT_VERSION,
       activeNames: [1],
-      feedbackInfo: "",
       updateInfo: {},
     };
   },
   computed: {},
   methods: {
     init() {
-      this.getSaveInfo();
       this.getUpdateInfo();
     },
     toLink(url) {
@@ -82,13 +82,6 @@ export default {
           new Date().getTime()
       ).then((responseText) => {
         this.updateInfo = JSON.parse(responseText).upgrade;
-      });
-    },
-    getSaveInfo() {
-      StorageUtil.getLocalStorage("saveInfo").then((data) => {
-        if (data != null) {
-          this.saveInfo = data;
-        }
       });
     },
     toSetting() {
