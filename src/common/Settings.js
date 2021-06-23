@@ -92,7 +92,7 @@ class Settings {
     /**
      * 是否允许更改设置
      */
-    option: true,
+    options: true,
     /**
      * 是否允许启用windowMode
      * @see display.windowMode
@@ -160,7 +160,7 @@ class Settings {
   }
 
   constructor() {
-    BrowserUtil.addMessageListener('settings', MESSAGE_SETTINGS_UPDATE, () => this.reloadSettings());
+    BrowserUtil.addMessageListener('settings', MESSAGE_SETTINGS_UPDATE, data => deepAssign(this, data));
     this.reloadSettings().then(() => {
       // 这部分主要是初始化一些固定的配置信息，只需要初始化的时候执行一次
 
@@ -169,7 +169,7 @@ class Settings {
         case BROWSER_CHROME:
           break;
         case BROWSER_FIREFOX: {
-          this.feature.option = false;
+          this.feature.options = false;
           this.feature.window = false;
           this.feature.san = false;
           break;

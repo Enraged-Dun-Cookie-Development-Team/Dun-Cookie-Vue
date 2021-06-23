@@ -10,7 +10,6 @@ import {
     MESSAGE_CARD_LIST_GET,
     MESSAGE_CARD_LIST_UPDATE,
     MESSAGE_DUN_INFO_GET,
-    MESSAGE_DUN_INFO_UPDATE,
     MESSAGE_FORCE_REFRESH,
     MESSAGE_SAN_GET,
     MESSAGE_SAN_UPDATE,
@@ -79,7 +78,7 @@ let kazeSourceProcess = {
             if (hasUpdated) {
                 BrowserUtil.sendMessage(MESSAGE_CARD_LIST_UPDATE, cardListCache);
             }
-        });
+        }).finally(() => DunInfo.saveUpdate());
     },
 
 }
@@ -114,7 +113,6 @@ kazeFun = {
     //蹲饼间隔时间 自带第一次请求 自带清除当前循环 秒
     settimeoutGetData(time) {
         kazeSourceProcess.GetData();
-        BrowserUtil.sendMessage(MESSAGE_DUN_INFO_UPDATE, DunInfo);
 
         // 如果没有传time 获取setting时间
         if (!time) {
@@ -151,9 +149,9 @@ kazeFun = {
         });
 
         // 监听前台事件
-        BrowserUtil.addMessageListener('background', null, function (request) {
-            if (request.type) {
-                switch (request.type) {
+        BrowserUtil.addMessageListener('background', null, (message) => {
+            if (message.type) {
+                switch (message.type) {
                     case MESSAGE_FORCE_REFRESH:
                         kazeSourceProcess.GetData();
                         return;
@@ -164,7 +162,7 @@ kazeFun = {
                     case MESSAGE_SAN_GET:
                         return SanInfo;
                     case MESSAGE_SAN_UPDATE: {
-                        if (request.data.currentSan === settings.san.maxValue) {
+                        if (message.data.currentSan === settings.san.maxValue) {
                             NotificationUtil.SendNotice(`哼哼！理智已满！`, `理智已经满了，请博士不要再逗我玩了`, null, new Date().getTime());
                             return;
                         }

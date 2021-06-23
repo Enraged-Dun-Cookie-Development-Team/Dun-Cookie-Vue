@@ -5,6 +5,9 @@ import {settings} from '../Settings';
 import {MESSAGE_SAN_GET, MESSAGE_SAN_UPDATE, SAN_RECOVERY_SPEED} from '../Constants';
 import {deepAssign} from '../TmpUtil';
 
+/**
+ * 理智数据
+ */
 class SanInfo {
   /**
    * 当前理智值
@@ -26,12 +29,8 @@ class SanInfo {
 
   constructor() {
     this.loadFromStorage();
-    BrowserUtil.sendMessage(MESSAGE_SAN_GET).then(data => {
-      deepAssign(this, data);
-    });
-    BrowserUtil.addMessageListener('sanInfo', MESSAGE_SAN_UPDATE, (message) => {
-      deepAssign(this, message);
-    })
+    BrowserUtil.sendMessage(MESSAGE_SAN_GET).then(data => deepAssign(this, data));
+    BrowserUtil.addMessageListener('sanInfo', MESSAGE_SAN_UPDATE, data => deepAssign(this, data));
   }
 
   calcRemainingTime() {

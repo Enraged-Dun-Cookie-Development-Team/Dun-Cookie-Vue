@@ -289,7 +289,7 @@ import BrowserUtil from '../common/BrowserUtil';
 import {sourceToName} from '../common/TmpUtil';
 import DunInfo from '../common/sync/DunInfo';
 import Feedback from '../components/Feedback';
-import {CURRENT_VERSION, MESSAGE_DUN_INFO_GET, MESSAGE_DUN_INFO_UPDATE} from '../common/Constants';
+import {CURRENT_VERSION, MESSAGE_DUN_INFO_UPDATE} from '../common/Constants';
 
 export default {
   name: "app",
@@ -325,23 +325,14 @@ export default {
     timespanToDay,
     sourceToName,
     init() {
-      this.getDunInfo();
+      BrowserUtil.addMessageListener('options', MESSAGE_DUN_INFO_UPDATE, data => {
+        this.oldDunCount = data.counter;
+      });
     },
 
     // 打开网址
     openUrl(url) {
       BrowserUtil.createTab(url);
-    },
-
-    // 蹲饼数据
-    getDunInfo() {
-      BrowserUtil.sendMessage(MESSAGE_DUN_INFO_GET).then((data) => {
-        this.dunInfo = data;
-      });
-      BrowserUtil.addMessageListener('popup', MESSAGE_DUN_INFO_UPDATE, (message) => {
-        this.oldDunCount = this.dunInfo.counter;
-        this.dunInfo = message;
-      });
     },
 
     // 保存设置

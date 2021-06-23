@@ -35,7 +35,7 @@
         </el-collapse-item>
       </el-collapse>
       <el-divider></el-divider>
-      <div v-if="setting.feature.option">
+      <div v-if="setting.feature.options">
         现在可以点击
         <el-button @click="toSetting" size="mini">设置</el-button>
         进入设置来调整蹲饼器

@@ -304,14 +304,7 @@
 <script>
 import countTo from "vue-count-to";
 import TimeLine from "../components/TimeLine";
-import {
-  common,
-  diffTime,
-  numberOrEnNameToIconSrc,
-  numberOrEnNameToName,
-  numberToWeek,
-  timespanToDay,
-} from "../assets/JS/common";
+import {common, diffTime, numberOrEnNameToIconSrc, numberOrEnNameToName, numberToWeek,} from "../assets/JS/common";
 import {settings} from '../common/Settings';
 import HttpUtil from '../common/HttpUtil';
 import BrowserUtil from '../common/BrowserUtil';
@@ -321,7 +314,6 @@ import {
   CURRENT_VERSION,
   MESSAGE_CARD_LIST_GET,
   MESSAGE_CARD_LIST_UPDATE,
-  MESSAGE_DUN_INFO_GET,
   MESSAGE_DUN_INFO_UPDATE,
   MESSAGE_FORCE_REFRESH
 } from '../common/Constants';
@@ -372,14 +364,15 @@ export default {
     numberOrEnNameToName,
     numberOrEnNameToIconSrc,
     numberToWeek,
-    timespanToDay,
     diffTime,
     init() {
+      BrowserUtil.addMessageListener('windowPopup', MESSAGE_DUN_INFO_UPDATE, data => {
+        this.oldDunCount = data.counter;
+      });
       setTimeout(() => {
         // 计算高度
         // this.calcHeight();
         this.getCardlist();
-        this.getDunInfo();
         this.getOnlineSpeak();
         // 图片卡 先加载dom后加载图片内容
         this.LazyLoaded = true;
@@ -492,16 +485,6 @@ export default {
 
         this.resourcesNotToday();
         this.loading = false;
-      });
-    },
-    // 蹲饼数据
-    getDunInfo() {
-      BrowserUtil.sendMessage(MESSAGE_DUN_INFO_GET).then((data) => {
-        this.dunInfo = data;
-      });
-      BrowserUtil.addMessageListener('popup', MESSAGE_DUN_INFO_UPDATE, (message) => {
-        this.oldDunCount = this.dunInfo.counter;
-        this.dunInfo = message;
       });
     },
     // 设置数据
