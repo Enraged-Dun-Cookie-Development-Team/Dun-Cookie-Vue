@@ -41,61 +41,61 @@ let kazeLocalData = {
 // 数据来源
 let kazeSource = {
     bili: {
-        url: 'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=161775300&offset_dynamic_id=0&need_top=0&platform=web&t=' + new Date().getTime(),
+        url: 'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=161775300&offset_dynamic_id=0&need_top=0&platform=web&t=',
         title: 'B站',
         dataName: 'bili',
         source: 0,
     },
     weibo: {
-        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=6279793937&containerid=1076036279793937&t=' + new Date().getTime(),
+        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=6279793937&containerid=1076036279793937&t=',
         title: '官方微博',
         dataName: 'weibo',
         source: 1,
     },
     yj: {
-        url: 'https://ak-fs.hypergryph.com/announce/IOS/announcement.meta.json?t=' + new Date().getTime(),
+        url: 'https://ak-fs.hypergryph.com/announce/IOS/announcement.meta.json?t=',
         title: '通讯组',
         dataName: 'yj',
         source: 2,
     },
     cho3: {
-        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=6441489862&containerid=1076036441489862&t=' + new Date().getTime(),
+        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=6441489862&containerid=1076036441489862&t=',
         title: '朝陇山',
         dataName: 'cho3',
         source: 3,
     },
     ys3: {
-        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=7506039414&containerid=1076037506039414&t=' + new Date().getTime(),
+        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=7506039414&containerid=1076037506039414&t=',
         title: '一拾山',
         dataName: 'ys3',
         source: 4,
     },
     sr: {
-        url: 'https://monster-siren.hypergryph.com/api/news?t=' + new Date().getTime(),
+        url: 'https://monster-siren.hypergryph.com/api/news?t=',
         title: '塞壬唱片',
         dataName: 'sr',
         source: 5,
     },
     tl: {
-        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=7499841383&containerid=1076037499841383&t=' + new Date().getTime(),
+        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=7499841383&containerid=1076037499841383&t=',
         title: '泰拉记事社微博',
         dataName: 'tl',
         source: 6,
     },
     gw: {
-        url: 'https://ak.hypergryph.com/?t=' + new Date().getTime(),
+        url: 'https://ak.hypergryph.com/?t=',
         title: '官网',
         dataName: 'gw',
         source: 7,
     },
     tlgw: {
-        url: ['https://terra-historicus.hypergryph.com/api/comic/7748?t=' + new Date().getTime(), 'https://terra-historicus.hypergryph.com/api/comic/2865?t=' + new Date().getTime()],
+        url: ['https://terra-historicus.hypergryph.com/api/comic/7748?t=', 'https://terra-historicus.hypergryph.com/api/comic/2865?t='],
         title: '泰拉记事社',
         dataName: 'tlgw',
         source: 8,
     },
     wyyyy: {
-        url: 'http://music.163.com/api/artist/albums/32540734?t=' + new Date().getTime(),
+        url: 'http://music.163.com/api/artist/albums/32540734?t=',
         title: '网易云音乐',
         dataName: 'wyyyy',
         source: 9,
@@ -129,7 +129,8 @@ let kazeSourceProcess = {
             source: 1,//来源
         };
         opt = Object.assign({}, defopt, opt);
-        this.Get(opt.url).then(data => {
+        // 添加时间清除缓存
+        this.Get(opt.url + new Date().getTime()).then(data => {
             opt.responseText = data;
             let newCardList = [];
             // source: ['bili', 'weibo', 'yj', 'cho3', 'ys3', 'sr', 'tl', 'tlgw', ]
