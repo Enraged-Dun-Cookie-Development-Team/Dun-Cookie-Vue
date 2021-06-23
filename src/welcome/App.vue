@@ -35,8 +35,7 @@
         </el-collapse-item>
       </el-collapse>
       <el-divider></el-divider>
-      <!-- webType火狐浏览器不能进入设置 -->
-      <div v-if="setting.webType !== 1">
+      <div v-if="setting.feature.option">
         现在可以点击
         <el-button @click="toSetting" size="mini">设置</el-button>
         进入设置来调整蹲饼器

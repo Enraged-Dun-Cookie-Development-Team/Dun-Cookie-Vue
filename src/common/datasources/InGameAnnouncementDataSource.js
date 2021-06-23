@@ -20,7 +20,7 @@ export class InGameAnnouncementDataSource extends DataSource {
     let data = JSON.parse(opt.responseText);
     data.announceList.forEach(x => {
       if (x.announceId != 94 && x.announceId != 98 && x.announceId != 192 && x.announceId != 95 && x.announceId != 97) {
-        let time = `${new Date().getFullYear()}/${x.month}/${x.day} ${settings.isTop ? '23:59:59' : '00:00:00'}`;
+        let time = `${new Date().getFullYear()}/${x.month}/${x.day} ${settings.getTimeBySortMode()}`;
         list.push({
           time: Math.floor(new Date(time).getTime() / 1000),
           judgment: x.announceId,
@@ -31,7 +31,7 @@ export class InGameAnnouncementDataSource extends DataSource {
         });
       }
     });
-    if (settings.isPush == true) {
+    if (settings.dun.enableNotice) {
       this.JudgmentNewFocusAnnounceId(data);
     }
     return list.sort((x, y) => y.judgment - x.judgment);

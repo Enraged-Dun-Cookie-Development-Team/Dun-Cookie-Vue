@@ -3,6 +3,7 @@ import StorageUtil from '../StorageUtil';
 import TimeUtil from '../TimeUtil';
 import {settings} from '../Settings';
 import {MESSAGE_SAN_GET, MESSAGE_SAN_UPDATE, SAN_RECOVERY_SPEED} from '../Constants';
+import {deepAssign} from '../TmpUtil';
 
 class SanInfo {
   /**
@@ -26,10 +27,10 @@ class SanInfo {
   constructor() {
     this.loadFromStorage();
     BrowserUtil.sendMessage(MESSAGE_SAN_GET).then(data => {
-      Object.assign(this, data);
+      deepAssign(this, data);
     });
     BrowserUtil.addMessageListener('sanInfo', MESSAGE_SAN_UPDATE, (message) => {
-      Object.assign(this, message);
+      deepAssign(this, message);
     })
   }
 
@@ -53,7 +54,7 @@ class SanInfo {
   loadFromStorage() {
     StorageUtil.getLocalStorage('san').then(data => {
       if (data) {
-        Object.assign(this, data);
+        deepAssign(this, data);
       }
     });
   }

@@ -1,5 +1,5 @@
 <template>
-  <div class="background" :class="settings.outsideClass">
+  <div class="background" :class="setting.getColorTheme()">
     <div id="app">
       <el-card class="box-card" shadow="never">
         <el-row type="flex" align="middle" justify="space-around">
@@ -54,24 +54,11 @@ export default {
   mounted() {
     this.init();
   },
-  watch: {
-    setting: {
-      handler(newobj) {
-        let hour = new Date().getHours();
-        settings.outsideClass =
-          (newobj.darkshow == -1 && (hour >= 18 || hour < 6)) ||
-          newobj.darkshow == 1
-            ? "dark"
-            : "light";
-      },
-      deep: true,
-      immediate: true,
-    },
-  },
+  watch: {},
   data() {
     return {
       currentVersion: CURRENT_VERSION,
-      settings: settings,
+      setting: settings,
     };
   },
   computed: {

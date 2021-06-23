@@ -1,5 +1,5 @@
 <template>
-  <div :class="setting.outsideClass">
+  <div :class="setting.getColorTheme()">
     <div id="app">
       <el-drawer
         :visible.sync="drawer"
@@ -140,7 +140,7 @@
             ></countTo
             >次】</span
           >
-          <span v-if="setting.islowfrequency"> 【低频蹲饼时段】 </span>
+          <span v-if="setting.checkLowFrequency()"> 【低频蹲饼时段】 </span>
         </span>
       </div>
       <div id="content">
@@ -194,7 +194,7 @@
                       </div>
                     </div>
                     <div
-                      v-if="setting.san.noticeWhenFull && LazyLoaded"
+                      v-if="setting.feature.san && LazyLoaded"
                       class="sane-area"
                       @click.stop="openToolDrawer"
                     >
@@ -252,7 +252,7 @@
         <div class="content-timeline-shadown"></div>
 
         <!-- <time-line
-          v-if="!setting.isTag"
+          v-if="!setting.display.showByTag"
           ref="TimeLine"
           :setting="setting"
           :imgShow="LazyLoaded"
@@ -261,7 +261,7 @@
         >
         </time-line> -->
         <time-line
-          v-if="!setting.isTag"
+          v-if="!setting.display.showByTag"
           ref="TimeLine"
           :setting="setting"
           :imgShow="LazyLoaded"
@@ -270,8 +270,8 @@
         </time-line>
 
         <el-tabs
-          v-if="setting.isTag"
-          v-model="setting.tagActiveName"
+          v-if="setting.display.showByTag"
+          v-model="setting.display.defaultTag"
           :stretch="true"
         >
           <el-tab-pane
@@ -336,10 +336,10 @@ export default {
     drawer(value) {
       if (value) {
         this.$nextTick(() => {
-          this.bindScroolFun();
+          this.bindScrollFun();
         });
       } else {
-        this.unbindScroolFun();
+        this.unbindScrollFun();
       }
     },
   },
@@ -423,13 +423,13 @@ export default {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
       scrollDiv.scrollLeft = scrollDiv.scrollLeft + event.deltaY;
     },
-    bindScroolFun() {
+    bindScrollFun() {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
       // 添加监听事件（不同浏览器，事件方法不一样，所以可以作判断，也可以如下偷懒）
       // scrollDiv.addEventListener("DOMMouseScroll", handler, false);
       scrollDiv.addEventListener("wheel", this.scrollHandler, false);
     },
-    unbindScroolFun() {
+    unbindScrollFun() {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
       scrollDiv.removeEventListener("wheel", this.scrollHandler);
     },

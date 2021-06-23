@@ -1,5 +1,5 @@
 <template>
-  <div class="background" :class="setting.outsideClass">
+  <div class="background" :class="setting.getColorTheme()">
     <div id="app">
       <el-card class="box-card" shadow="never">
         <el-row type="flex" align="middle" justify="space-around">
@@ -81,13 +81,13 @@
                   <el-input-number
                     controls-position="right"
                     size="small"
-                    v-model="setting.time"
+                    v-model="setting.dun.intervalTime"
                     :min="3"
                     :max="3600"
                   ></el-input-number>
-                  <span style="margin-left: 20px" v-if="setting.lowfrequency"
-                    >低频模式下为{{ setting.time * 2 }}秒刷新一次</span
-                  >
+                  <span style="margin-left: 20px" v-if="setting.dun.autoLowFrequency">
+                    低频模式下为{{ setting.dun.intervalTime * 2 }}秒刷新一次
+                  </span>
                 </el-form-item>
               </el-tooltip>
               <el-tooltip
@@ -97,7 +97,7 @@
                 placement="bottom"
               >
                 <el-form-item label="推送">
-                  <el-switch v-model="setting.isPush"></el-switch>
+                  <el-switch v-model="setting.dun.enableNotice"></el-switch>
                 </el-form-item>
               </el-tooltip>
               <el-tooltip
@@ -109,19 +109,19 @@
                 <el-form-item label="低频模式">
                   <el-row>
                     <el-col :span="3">
-                      <el-switch v-model="setting.lowfrequency"></el-switch
+                      <el-switch v-model="setting.dun.autoLowFrequency"></el-switch
                     ></el-col>
                     <el-col
-                      v-show="setting.lowfrequency"
+                      v-show="setting.dun.autoLowFrequency"
                       :span="20"
                       :offset="1"
                     >
                       <el-slider
-                        v-model="setting.lowfrequencyTime"
+                        v-model="setting.dun.lowFrequencyTime"
                         show-stops
                         :max="24"
                         :marks="marks"
-                        :format-tooltip="lowfrequencyTimeTooltip"
+                        :format-tooltip="lowFrequencyTimeTooltip"
                         range
                       >
                       </el-slider>
@@ -136,9 +136,9 @@
                   保存的时候可能会因为数据排序改变而发送错误的推送，请忽略！
                 </div>
                 <el-form-item label="无时间排序">
-                  <el-radio-group v-model="setting.isTop">
-                    <el-radio :label="true">当天内容顶部</el-radio>
-                    <el-radio :label="false">当天内容底部</el-radio>
+                  <el-radio-group v-model="setting.dun.sortModeForOnlyDate">
+                    <el-radio :label="1">当天内容顶部</el-radio>
+                    <el-radio :label="2">当天内容底部</el-radio>
                   </el-radio-group>
                 </el-form-item>
               </el-tooltip>
@@ -146,7 +146,7 @@
             </el-tab-pane>
             <el-tab-pane label="界面设置" name="1">
               <el-form-item label="字体大小">
-                <el-radio-group v-model="setting.fontsize">
+                <el-radio-group v-model="setting.display.fontSize">
                   <el-radio :label="-1">小</el-radio>
                   <el-radio :label="0">正常</el-radio>
                   <el-radio :label="1">大</el-radio>
@@ -154,7 +154,7 @@
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="展示图片">
-                <el-switch v-model="setting.imgshow"></el-switch>
+                <el-switch v-model="setting.display.showImage"></el-switch>
               </el-form-item>
               <el-tooltip class="item" effect="dark" placement="left">
                 <div slot="content">
@@ -162,7 +162,7 @@
                   调整此开关会导致源数据改变，可能会有错误的推送！
                 </div>
                 <el-form-item label="显示转发">
-                  <el-switch v-model="setting.retweeted"></el-switch>
+                  <el-switch v-model="setting.dun.showRetweet"></el-switch>
                 </el-form-item>
               </el-tooltip>
               <el-tooltip
@@ -174,12 +174,12 @@
                 <el-form-item label="分类显示">
                   <el-row>
                     <el-col :span="3"
-                      ><el-switch v-model="setting.isTag"></el-switch
+                      ><el-switch v-model="setting.display.showByTag"></el-switch
                     ></el-col>
-                    <el-col v-if="setting.isTag" :span="20" :offset="1">
-                      <el-form-item prop="tagActiveName">
+                    <el-col v-if="setting.display.showByTag" :span="20" :offset="1">
+                      <el-form-item prop="defaultTag">
                         <el-select
-                          v-model="setting.tagActiveName"
+                          v-model="setting.display.defaultTag"
                           placeholder="选择默认标签"
                         >
                           <el-option
@@ -202,14 +202,14 @@
                   </el-row>
                 </el-form-item>
               </el-tooltip>
-              <el-form-item label="窗口化" v-if="showWindow">
-                <el-switch v-model="setting.isWindow"></el-switch>
+              <el-form-item label="窗口化" v-if="setting.feature.window">
+                <el-switch v-model="setting.display.windowMode"></el-switch>
               </el-form-item>
               <el-form-item label="理智提醒">
                 <el-switch v-model="setting.san.noticeWhenFull"></el-switch>
               </el-form-item>
               <el-tooltip
-                v-if="setting.san.noticeWhenFull"
+                v-if="setting.feature.san"
                 class="item"
                 effect="dark"
                 content="用于公告栏计算理智回复"
@@ -232,7 +232,7 @@
                 placement="left"
               >
                 <el-form-item label="主题切换">
-                  <el-radio-group v-model="setting.darkshow">
+                  <el-radio-group v-model="setting.display.darkMode">
                     <el-radio :label="0">日常模式</el-radio>
                     <el-radio :label="1">夜间模式</el-radio>
                     <el-radio :label="-1" title="18点到06点为夜间模式"
@@ -297,36 +297,21 @@ export default {
   mounted() {
     this.init();
   },
-  watch: {
-    setting: {
-      handler(newobj) {
-        let hour = new Date().getHours();
-        settings.outsideClass =
-          (newobj.darkshow == -1 && (hour >= 18 || hour < 6)) ||
-          newobj.darkshow == 1
-            ? "dark"
-            : "light";
-        // this.saveSetting();
-      },
-      deep: true,
-      immediate: true,
-    },
-  },
+  watch: {},
   data() {
     return {
       currentVersion: CURRENT_VERSION,
       oldDunCount: 0,
-      showWindow: true,
       dunInfo: DunInfo,
       setting: settings,
       marks: {
         8: "20点",
-        12: "当天凌晨",
+        12: "第二天凌晨",
         20: "8点",
       },
       activeTab: "0",
       rules: {
-        tagActiveName: [
+        defaultTag: [
           { required: true, message: "请选择默认标签", trigger: "blur" },
         ],
       },
@@ -366,7 +351,6 @@ export default {
       }
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          settings.san.noticeWhenFull = settings.webType !== 1;  // 如果是火狐内核浏览器，则强制隐藏理智规划
           settings.setAll(data);
           settings.saveSettings().then(() => {
             this.$message({
@@ -422,13 +406,13 @@ export default {
     },
 
     // 低频时间选择
-    lowfrequencyTimeTooltip(val) {
-      if (val == 12) {
-        return "当天凌晨";
+    lowFrequencyTimeTooltip(val) {
+      if (val === 12) {
+        return "第二天凌晨";
       } else if (val < 12) {
-        return `上一天${val + 12}点整`;
+        return `当天${val + 12}点整`;
       } else if (val > 12) {
-        return `当天${val - 12}点整`;
+        return `第二天${val - 12}点整`;
       }
     },
   },

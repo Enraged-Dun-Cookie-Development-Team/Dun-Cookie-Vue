@@ -22,7 +22,7 @@ export class ArknightsOfficialWebDataSource extends DataSource {
         let date = item.getElementsByClassName('articleItemDate')[0].innerHTML
         let title = item.getElementsByClassName('articleItemTitle')[0].innerHTML
         let url = item.getElementsByClassName('articleItemLink')[0].pathname;
-        let time = Math.floor(new Date(`${date} ${settings.isTop ? '23:59:59' : '00:00:00'}`).getTime() / 1000);
+        let time = Math.floor(new Date(`${date} ${settings.getTimeBySortMode()}`).getTime() / 1000);
         let judgment = url.match(/\d+/g);
         list.push({
           time: time,

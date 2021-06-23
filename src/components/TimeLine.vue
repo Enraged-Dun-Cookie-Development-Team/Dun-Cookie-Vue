@@ -1,5 +1,5 @@
 <template>
-  <el-timeline :class="setting.isWindow ? 'window' : ''">
+  <el-timeline :class="setting.display.windowMode ? 'window' : ''">
     <el-timeline-item
       v-for="(item, index) in cardlist"
       :key="index"
@@ -13,7 +13,7 @@
     >
       <el-card
         class="card"
-        :class="'font-size-' + setting.fontsize + ' source-' + item.source"
+        :class="'font-size-' + setting.display.fontSize + ' source-' + item.source"
         shadow="never"
       >
         <span>
@@ -116,7 +116,7 @@
               </el-card>
             </el-row>
             <el-row
-              v-if="imgShow && setting.imgshow && item.image"
+              v-if="imgShow && setting.display.showImage && item.image"
               class="margintb"
             >
               <div

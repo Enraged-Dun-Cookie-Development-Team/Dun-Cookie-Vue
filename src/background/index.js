@@ -6,9 +6,13 @@ import DunInfo from '../common/sync/DunInfo';
 import SanInfo from '../common/sync/SanInfo';
 import {
     DEBUG_LOG,
-    IS_TEST, MESSAGE_CARD_LIST_GET,
-    MESSAGE_CARD_LIST_UPDATE, MESSAGE_DUN_INFO_GET,
-    MESSAGE_DUN_INFO_UPDATE, MESSAGE_FORCE_REFRESH, MESSAGE_SAN_GET,
+    IS_TEST,
+    MESSAGE_CARD_LIST_GET,
+    MESSAGE_CARD_LIST_UPDATE,
+    MESSAGE_DUN_INFO_GET,
+    MESSAGE_DUN_INFO_UPDATE,
+    MESSAGE_FORCE_REFRESH,
+    MESSAGE_SAN_GET,
     MESSAGE_SAN_UPDATE,
     MESSAGE_SETTINGS_UPDATE,
     SAN_RECOVERY_SPEED,
@@ -96,7 +100,7 @@ kazeFun = {
             let notice = newInfo.dynamicInfo.replace(/\n/g, "");
             console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
             // 是否推送
-            if (settings.isPush == true) {
+            if (settings.dun.enableNotice) {
                 NotificationUtil.SendNotice(`小刻在【${title}】里面找到了一个饼！`, notice, newInfo.image, newInfo.id)
             }
             return true;
@@ -110,63 +114,19 @@ kazeFun = {
     //蹲饼间隔时间 自带第一次请求 自带清除当前循环 秒
     settimeoutGetData(time) {
         kazeSourceProcess.GetData();
-        this.checkDarkModel();
-        this.checkLowfrequencyModel();
         BrowserUtil.sendMessage(MESSAGE_DUN_INFO_UPDATE, DunInfo);
 
         // 如果没有传time 获取setting时间
         if (!time) {
-            time = IS_TEST ? TEST_DATA_REFRESH_TIME : settings.time;
+            time = IS_TEST ? TEST_DATA_REFRESH_TIME : settings.dun.intervalTime;
             // 低频模式
-            if (settings.islowfrequency) {
+            if (settings.checkLowFrequency()) {
                 time = (time * 2);
             }
         }
         setTimeout(() => {
             this.settimeoutGetData();
         }, parseInt(time) * 1000);
-    },
-    checkDarkModel() {
-        let hour = new Date().getHours();
-        // 判断当前时间是否是启用页面模式的时间
-        let darkShow = settings.darkshow;
-        let oldOutsideClass = settings.outsideClass;
-        let newOutsideClass = (darkShow == -1 && (hour >= 18 || hour < 6)) || darkShow == 1
-            ? "dark"
-            : "light";
-
-        if (oldOutsideClass != newOutsideClass) {
-            settings.outsideClass = newOutsideClass;
-            settings.saveSettings();
-        }
-    },
-    checkLowfrequencyModel() {
-        let hour = new Date().getHours();
-        // 判断当前时间是否是启用低频模式的时间
-        let lowfrequency = settings.lowfrequency;
-        let lowfrequencyTime = settings.lowfrequencyTime;
-        let oldislowfrequency = settings.islowfrequency;
-        let starHour = lowfrequencyTime[0] < 12 ? lowfrequencyTime[0] + 12 : lowfrequencyTime[0] - 12;
-        let endHour = lowfrequencyTime[1] < 12 ? lowfrequencyTime[1] + 12 : lowfrequencyTime[1] - 12;
-        let newislowfrequency = (lowfrequency && (hour >= starHour || hour < endHour));
-        if (oldislowfrequency != newislowfrequency) {
-            settings.islowfrequency = newislowfrequency;
-            settings.saveSettings();
-        }
-    },
-
-    // 获取浏览器信息 (0:Chrome内核 1:火狐内核 2:手机端 3:其他)
-    getWebType() {
-        let head = navigator.userAgent;
-        if (head.indexOf("Android") > 1 || head.indexOf("iPhone") > 1) {
-            settings.webType = 2;
-        } else if (head.indexOf("Firefox") > 1) {
-            settings.webType = 1;
-        } else if (head.indexOf("Chrome") > 1) {
-            settings.webType = 0;
-        } else {
-            settings.webType = 3;
-        }
     },
 
     // 初始化
@@ -175,9 +135,11 @@ kazeFun = {
         // chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
         // 默认设置
         settings.reloadSettings().then(() => {
-            kazeFun.getWebType();
+            if (settings.source.length === 0) {
+                settings.source = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+            }
             // 注册窗口
-            if (!settings.isWindow) {
+            if (!settings.display.windowMode) {
                 // 注册popup
                 BrowserUtil.setPopup({ popup: BrowserUtil.getExtensionURL("popup.html") });
             } else {
@@ -211,7 +173,7 @@ kazeFun = {
                             clearInterval(sanIntervalId);
                             sanIntervalId = null;
                         }
-                        if (settings.san.noticeWhenFull) {
+                        if (settings.feature.san) {
                             sanIntervalId = setInterval(() => {
                                 SanInfo.currentSan++;
                                 if (SanInfo.currentSan >= settings.san.maxValue) {
@@ -233,7 +195,7 @@ kazeFun = {
                             SanInfo.currentSan = settings.san.maxValue;
                             BrowserUtil.sendMessage(MESSAGE_SAN_UPDATE, SanInfo);
                             kazeSourceProcess.GetData();
-                            if (!settings.isWindow) {
+                            if (!settings.display.windowMode) {
                                 // 注册popup
                                 BrowserUtil.setPopup({popup: BrowserUtil.getExtensionURL("popup.html")});
                             } else {
@@ -269,7 +231,7 @@ kazeFun = {
 
         // 监听标签打开
         BrowserUtil.addIconClickListener(() => {
-            if (settings.isWindow) {
+            if (settings.display.windowMode) {
                 if (kazeData.windowTabId != null) {
                     BrowserUtil.removeWindow(kazeData.windowTabId);
                 }

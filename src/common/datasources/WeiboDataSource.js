@@ -17,7 +17,7 @@ export class WeiboDataSource extends DataSource {
     if (data.ok == 1 && data.data != null && data.data.cards != null && data.data.cards.length > 0) {
       data.data.cards.forEach(x => {
         // 设置是否显示转发内容
-        if (!settings.retweeted && x.hasOwnProperty('mblog') && x.mblog.hasOwnProperty('retweeted_status')) {
+        if (!settings.dun.showRetweet && x.hasOwnProperty('mblog') && x.mblog.hasOwnProperty('retweeted_status')) {
           return;
         }
         if (x.hasOwnProperty('mblog')) {
