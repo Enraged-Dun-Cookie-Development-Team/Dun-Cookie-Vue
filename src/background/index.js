@@ -1,4 +1,4 @@
-import defaultDataSources from '../common/DefaultDataSources';
+import defaultDataSources from '../common/datasource/DefaultDataSources';
 import {settings} from '../common/Settings';
 import BrowserUtil from '../common/BrowserUtil';
 import NotificationUtil from '../common/NotificationUtil';

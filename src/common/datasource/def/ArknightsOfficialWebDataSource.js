@@ -1,5 +1,5 @@
 import {DataSource} from '../DataSource';
-import {settings} from '../Settings';
+import {settings} from '../../Settings';
 
 /**
  * 明日方舟官网数据源。

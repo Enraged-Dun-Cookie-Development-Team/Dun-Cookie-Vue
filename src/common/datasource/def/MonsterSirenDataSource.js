@@ -1,5 +1,5 @@
 import {DataSource} from '../DataSource';
-import {settings} from '../Settings';
+import {settings} from '../../Settings';
 
 /**
  * 塞壬唱片(官网)数据源。

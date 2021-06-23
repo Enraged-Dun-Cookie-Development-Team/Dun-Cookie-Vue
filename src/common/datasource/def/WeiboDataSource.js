@@ -1,5 +1,5 @@
 import {DataSource} from '../DataSource';
-import {settings} from '../Settings';
+import {settings} from '../../Settings';
 
 /**
  * 微博数据源。

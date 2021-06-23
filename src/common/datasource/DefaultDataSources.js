@@ -1,10 +1,10 @@
-import {BilibiliDataSource} from './datasources/BilibiliDataSource';
-import {WeiboDataSource} from './datasources/WeiboDataSource';
-import {InGameAnnouncementDataSource} from './datasources/InGameAnnouncementDataSource';
-import {MonsterSirenDataSource} from './datasources/MonsterSirenDataSource';
-import {ArknightsOfficialWebDataSource} from './datasources/ArknightsOfficialWebDataSource';
-import {TerraHistoricusDataSource} from './datasources/TerraHistoricusDataSource';
-import {NeteaseCloudMusicDataSource} from './datasources/NeteaseCloudMusicDataSource';
+import {BilibiliDataSource} from './def/BilibiliDataSource';
+import {WeiboDataSource} from './def/WeiboDataSource';
+import {InGameAnnouncementDataSource} from './def/InGameAnnouncementDataSource';
+import {MonsterSirenDataSource} from './def/MonsterSirenDataSource';
+import {ArknightsOfficialWebDataSource} from './def/ArknightsOfficialWebDataSource';
+import {TerraHistoricusDataSource} from './def/TerraHistoricusDataSource';
+import {NeteaseCloudMusicDataSource} from './def/NeteaseCloudMusicDataSource';
 
 /**
  * 默认数据源

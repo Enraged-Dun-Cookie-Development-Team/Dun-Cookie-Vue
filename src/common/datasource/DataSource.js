@@ -1,5 +1,5 @@
-import HttpUtil from './HttpUtil';
-import {DEBUG_LOG} from './Constants';
+import HttpUtil from '../HttpUtil';
+import {DEBUG_LOG} from '../Constants';
 
 /**
  * 表示一个数据源

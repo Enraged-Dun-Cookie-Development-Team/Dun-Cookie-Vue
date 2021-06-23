@@ -1,6 +1,6 @@
 import {DataSource} from '../DataSource';
-import {settings} from '../Settings';
-import NotificationUtil from '../NotificationUtil';
+import {settings} from '../../Settings';
+import NotificationUtil from '../../NotificationUtil';
 
 /**
  * 游戏内公告数据源。
