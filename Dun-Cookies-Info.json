@@ -83,7 +83,7 @@
         ]
     },
     "upgrade": {
-        "v": "2.1.0",
+        "v": "2.1.1",
         "title": "小刻食堂翻新啦 - 2.1.1",
         "description": "🐛 紧急修复制作组通讯等延迟推送<br/>1. 消除缓存导致制作组通讯等的饼过期的情况",
         "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.1.1/Dun-Cookie-2.1.1.crx",
