@@ -1,90 +1,86 @@
-import defaultDataSources from '../common/datasource/DefaultDataSources';
 import {settings} from '../common/Settings';
-import BrowserUtil from '../common/BrowserUtil';
-import NotificationUtil from '../common/NotificationUtil';
+import BrowserUtil from '../common/util/BrowserUtil';
+import NotificationUtil from '../common/util/NotificationUtil';
 import DunInfo from '../common/sync/DunInfo';
 import SanInfo from '../common/sync/SanInfo';
 import {
-    DEBUG_LOG,
     IS_TEST,
     MESSAGE_CARD_LIST_GET,
     MESSAGE_CARD_LIST_UPDATE,
     MESSAGE_DUN_INFO_GET,
     MESSAGE_FORCE_REFRESH,
     MESSAGE_SAN_GET,
-    MESSAGE_SAN_UPDATE,
     MESSAGE_SETTINGS_UPDATE,
-    SAN_RECOVERY_SPEED,
     TEST_DATA_REFRESH_TIME
 } from '../common/Constants';
+import {defaultDataSources} from '../common/datasource/DefaultDataSources';
 
 // 重构完成后的其它优化：
 // TODO 多个提取出来的类要考虑能否合并(指互相通信的那部分)
 // TODO vue数据更新相关的问题，要确认各个页面的数据能正常更新，并且尽量提高更新相关的可读性
 
 
-// 软件临时数据
-let kazeData = {
-    windowTabId: null,
-}
+// 开启弹出菜单窗口化时的窗口ID
+let popupWindowId = null;
 
 // 缓存获取到的饼
 const cardListCache = {};
-// 理智计算timer
-let sanIntervalId = null;
 
-// 数据来源
-let kazeSource = {
-    bili: defaultDataSources[0],
-    weibo: defaultDataSources[1],
-    yj: defaultDataSources[2],
-    cho3: defaultDataSources[3],
-    ys3: defaultDataSources[4],
-    sr: defaultDataSources[5],
-    tl: defaultDataSources[6],
-    gw: defaultDataSources[7],
-    tlgw: defaultDataSources[8],
-    wyyyy: defaultDataSources[9],
-}
-let kazeFun = {}
-// 数据获取和处理
-let kazeSourceProcess = {
-    // 蹲饼入口
-    GetData() {
-        DunInfo.lastDunTime = new Date().getTime();
-        const promiseList = [];
-        // 由于删除也算更新，所以用一个flag标记来判断是否有更新，而不能只用promise返回值判断
-        let hasUpdated = false;
-        for (const idx in defaultDataSources) {
-            const dataSource = defaultDataSources[idx];
-            if (!settings.source.includes(parseInt(idx))) {
-                if (cardListCache[dataSource.dataName]) {
-                    delete cardListCache[dataSource.dataName];
-                    hasUpdated = true;
-                }
-                continue;
+/**
+ * 蹲饼！
+ */
+function tryDun(settings) {
+    DunInfo.lastDunTime = new Date().getTime();
+    const promiseList = [];
+    // 由于删除也算更新，所以用一个flag标记来判断是否有更新，而不能只用promise返回值判断
+    let hasUpdated = false;
+    for (const key in cardListCache) {
+        if (cardListCache.hasOwnProperty(key)) {
+            // 如果缓存的key不在启用列表中则删除缓存
+            if (!settings.enableDataSources.includes(key)) {
+                delete cardListCache[key];
+                hasUpdated = true;
             }
-            DunInfo.counter++;
-            promiseList.push(dataSource.fetchData().then(newCardList => {
-                let oldCardList = cardListCache[dataSource.dataName];
-                let isNew = kazeFun.JudgmentNew(oldCardList, newCardList, dataSource.title);
-                if (isNew) {
-                    cardListCache[dataSource.dataName] = newCardList;
-                    hasUpdated = true;
-                }
-            }));
         }
-        Promise.all(promiseList).then(() => {
-            if (hasUpdated) {
-                BrowserUtil.sendMessage(MESSAGE_CARD_LIST_UPDATE, cardListCache);
+    }
+    for (const dataName of settings.enableDataSources) {
+        const source = defaultDataSources[dataName];
+        DunInfo.counter++;
+        promiseList.push(source.fetchData().then(newCardList => {
+            let oldCardList = cardListCache[dataName];
+            let isNew = kazeFun.JudgmentNew(oldCardList, newCardList, source.title);
+            if (isNew) {
+                cardListCache[dataName] = newCardList;
+                hasUpdated = true;
             }
-        }).finally(() => DunInfo.saveUpdate());
-    },
+        }));
+    }
+    Promise.all(promiseList).then(() => {
+        if (hasUpdated) {
+            BrowserUtil.sendMessage(MESSAGE_CARD_LIST_UPDATE, cardListCache);
+        }
+    }).finally(() => DunInfo.saveUpdate());
+}
 
+let dunTimeoutId = null;
+/**
+ * 启动蹲饼timer，会立刻请求一次然后按settings.dun.intervalTime的值进行延时轮询
+ */
+function startDunTimer() {
+    tryDun(settings);
+
+    let delay = IS_TEST ? TEST_DATA_REFRESH_TIME : settings.dun.intervalTime;
+    // 低频模式
+    if (settings.checkLowFrequency()) {
+        delay *= 2;
+    }
+    dunTimeoutId = setTimeout(() => {
+        startDunTimer();
+    }, delay * 1000);
 }
 
 // 通用方法
-kazeFun = {
+const kazeFun = {
     //判断是否为最新 并且在此推送
     JudgmentNew(oldList, newList, title) {
         //判断方法 取每条的第一个判定字段  如果新的字段不等于旧的且大于旧的 判定为新条目
@@ -110,42 +106,13 @@ kazeFun = {
         return false
     },
 
-    //蹲饼间隔时间 自带第一次请求 自带清除当前循环 秒
-    settimeoutGetData(time) {
-        kazeSourceProcess.GetData();
-
-        // 如果没有传time 获取setting时间
-        if (!time) {
-            time = IS_TEST ? TEST_DATA_REFRESH_TIME : settings.dun.intervalTime;
-            // 低频模式
-            if (settings.checkLowFrequency()) {
-                time = (time * 2);
-            }
-        }
-        setTimeout(() => {
-            this.settimeoutGetData();
-        }, parseInt(time) * 1000);
-    },
-
     // 初始化
     Init() {
         // chrome.browserAction.setBadgeText({ text: 'Beta' });
         // chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
         // 默认设置
         settings.reloadSettings().then(() => {
-            if (settings.source.length === 0) {
-                settings.source = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-            }
-            // 注册窗口
-            if (!settings.display.windowMode) {
-                // 注册popup
-                BrowserUtil.setPopup({ popup: BrowserUtil.getExtensionURL("popup.html") });
-            } else {
-                BrowserUtil.setPopup({ popup: "" });
-            }
-            SanInfo.currentSan = settings.san.maxValue;
-            BrowserUtil.sendMessage(MESSAGE_SAN_UPDATE, SanInfo);
-            this.settimeoutGetData();
+            startDunTimer();
         });
 
         // 监听前台事件
@@ -153,7 +120,7 @@ kazeFun = {
             if (message.type) {
                 switch (message.type) {
                     case MESSAGE_FORCE_REFRESH:
-                        kazeSourceProcess.GetData();
+                        tryDun(settings);
                         return;
                     case MESSAGE_DUN_INFO_GET:
                         return DunInfo;
@@ -161,45 +128,14 @@ kazeFun = {
                         return cardListCache;
                     case MESSAGE_SAN_GET:
                         return SanInfo;
-                    case MESSAGE_SAN_UPDATE: {
-                        if (message.data.currentSan === settings.san.maxValue) {
-                            NotificationUtil.SendNotice(`哼哼！理智已满！`, `理智已经满了，请博士不要再逗我玩了`, null, new Date().getTime());
-                            return;
-                        }
-                        // 重启定时器
-                        if (sanIntervalId) {
-                            clearInterval(sanIntervalId);
-                            sanIntervalId = null;
-                        }
-                        if (settings.feature.san) {
-                            sanIntervalId = setInterval(() => {
-                                SanInfo.currentSan++;
-                                if (SanInfo.currentSan >= settings.san.maxValue) {
-                                    SanInfo.currentSan = settings.san.maxValue;
-                                    NotificationUtil.SendNotice(`理智已满`, `理智已经满了，请博士赶快上线清理智！`, null, new Date().getTime());
-                                    clearInterval(sanIntervalId);
-                                    sanIntervalId = null;
-                                }
-                                SanInfo.saveUpdate();
-                                if (DEBUG_LOG) {
-                                    console.log(`当前理智：${SanInfo.currentSan}`);
-                                }
-                            }, SAN_RECOVERY_SPEED);
-                        }
-                        return;
-                    }
                     case MESSAGE_SETTINGS_UPDATE: {
-                        settings.reloadSettings().then(() => {
-                            SanInfo.currentSan = settings.san.maxValue;
-                            BrowserUtil.sendMessage(MESSAGE_SAN_UPDATE, SanInfo);
-                            kazeSourceProcess.GetData();
-                            if (!settings.display.windowMode) {
-                                // 注册popup
-                                BrowserUtil.setPopup({popup: BrowserUtil.getExtensionURL("popup.html")});
-                            } else {
-                                BrowserUtil.setPopup({popup: ""});
-                            }
-                        });
+                        // 由于更新配置后数据源/蹲饼频率可能改变，所以重启蹲饼timer
+                        // TODO 最好能判断配置更新的情况，只有更新了数据源/蹲饼频率的时候才刷新，避免无意义的网络请求
+                        if (dunTimeoutId) {
+                            clearTimeout(dunTimeoutId);
+                            dunTimeoutId = null;
+                        }
+                        startDunTimer();
                         return;
                     }
                     default:
@@ -227,29 +163,16 @@ kazeFun = {
             }
         });
 
-        // 监听标签打开
+        // 监听扩展图标被点击，用于打开窗口化的弹出页面
         BrowserUtil.addIconClickListener(() => {
             if (settings.display.windowMode) {
-                if (kazeData.windowTabId != null) {
-                    BrowserUtil.removeWindow(kazeData.windowTabId);
+                if (popupWindowId != null) {
+                    BrowserUtil.removeWindow(popupWindowId);
                 }
-                // 直接打开
                 BrowserUtil.createWindow({ url: BrowserUtil.getExtensionURL("windowPopup.html"), type: "panel", width: 1100, height: 750 })
-                  .then(tab => {kazeData.windowTabId = tab.id;});
+                  .then(tab => popupWindowId = tab.id);
             }
         });
-
-        if (IS_TEST) {
-            kazeSource.bili.dataUrl = `test/bJson.json?host_uid=161775300`;
-            kazeSource.weibo.dataUrl = `test/wJson.json?type=uid&value=6279793937&containerid=1076036279793937`;
-            kazeSource.yj.dataUrl = `test/yJson.json`;
-            kazeSource.cho3.dataUrl = `test/cJson.json?type=uid&value=6441489862&containerid=1076036441489862`;
-            kazeSource.ys3.dataUrl = `test/ysJson.json?type=uid&value=7506039414&containerid=1076037506039414`;
-            kazeSource.sr.dataUrl = `test/srJson.json`;
-            kazeSource.tl.dataUrl = `test/tlJson.json?type=uid&value=6441489862&containerid=1076037499841383`;
-            kazeSource.gw.dataUrl = `test/gw.html`;
-            kazeSource.tlgw.dataUrl = ['test/xbJson.json', 'test/xgbJson.json'];
-        }
     }
 }
 

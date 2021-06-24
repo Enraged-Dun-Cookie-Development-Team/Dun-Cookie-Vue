@@ -1,13 +1,22 @@
-import {BROWSER_CHROME, BROWSER_FIREFOX, BROWSER_MOBILE_PHONE, BROWSER_UNKNOWN, DEBUG_LOG} from './Constants';
+import {BROWSER_CHROME, BROWSER_FIREFOX, BROWSER_MOBILE_PHONE, BROWSER_UNKNOWN, DEBUG_LOG} from '../Constants';
+
+// 判断当前url中是否包含background(已知的其它方法都不能保证在isBackground被使用之前完成判断)
+const _isBackground = window.document.URL.indexOf('background') !== -1;
+console.log(`Current isBackground: ${_isBackground}`);
 
 /**
  * 浏览器工具。
  * <p>
- * 需要根据浏览器类型调用chrome(Chrome)/browser(Firefox)
+ * TODO 根据浏览器类型调用chrome(Chrome)/browser(Firefox) (完成该功能后此TODO改为普通注释)
  * <br>
  * TODO 还有一些作为注释出现的对chrome对象的调用存在于其它文件中，由于暂时不清楚作用先不管，但是之后需要确认并重构掉
  */
 class BrowserUtil {
+
+  /**
+   * 是否是后台进程
+   */
+  static get isBackground() { return _isBackground; };
 
   static get browserType() {
     let head = navigator.userAgent;
@@ -26,7 +35,7 @@ class BrowserUtil {
   static sendMessage(type, data) {
     if (DEBUG_LOG) {
       console.log(`sendMessage - ${type}`);
-      console.log(data);
+      console.log(data || 'no-data');
     }
     const message = {type: type};
     if (data) {

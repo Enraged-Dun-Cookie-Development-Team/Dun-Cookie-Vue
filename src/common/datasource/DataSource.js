@@ -1,4 +1,4 @@
-import HttpUtil from '../HttpUtil';
+import HttpUtil from '../util/HttpUtil';
 import {DEBUG_LOG} from '../Constants';
 
 /**
@@ -10,9 +10,16 @@ class DataSource {
    */
   icon;
   /**
+   * 数据源类型(比如B站、微博等)，该字段应该由子类提供
+   * <p>
+   * 实际值建议使用域名/品牌名等不易变化的值，有必要的话长一点也没关系<br/>
+   * <strong>注意：该字段用于在储存中标识数据源类型，非必要请不要修改，否则会导致数据解析错误。</strong>
+   */
+  dataType;
+  /**
    * 数据名称(比如朝陇山，泰拉记事社等)，每个数据源必须有一个唯一的dataName，不能重复
    * <p>
-   * <strong>注意：该字段用于在储存中标识数据源，请不要修改，否则会导致用户储存的(该数据源的)旧配置失效</strong>
+   * <strong>注意：该字段用于在储存中标识数据源，非必要请不要修改，否则会导致用户储存的(该数据源的)旧配置失效。</strong>
    */
   dataName;
   /**
@@ -30,8 +37,9 @@ class DataSource {
    */
   dataUrl;
 
-  constructor(icon, dataName, title, dataUrl, source) {
+  constructor(icon, dataType, dataName, title, dataUrl, source) {
     this.icon = icon;
+    this.dataType = dataType;
     this.dataName = dataName;
     this.title = title;
     this.dataUrl = dataUrl;
@@ -58,10 +66,11 @@ class DataSource {
     }
     return promise.then(value => {
       let opt = {
-        url: this.dataUrl,//网址
-        title: this.title,//弹窗标题
-        dataName: this.dataName,//数据源对象名称
-        source: this.source,
+        url: this.dataUrl, // 数据获取网址
+        title: this.title, // 弹窗标题
+        dataName: this.dataName, // 数据源名称
+        dataSourceType: this.dataType, // 数据源类型，这里之所以要用这么长的名称是因为数据源内部解析数据的部分还未重构，避免短名称和解析结果中的字段重复
+        source: this.source, // TODO 暂时未重构完所以先留着
         responseText: value,
       };
       return this.processData(opt);

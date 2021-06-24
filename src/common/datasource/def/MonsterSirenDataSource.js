@@ -8,7 +8,7 @@ import {settings} from '../../Settings';
 export class MonsterSirenDataSource extends DataSource {
 
   constructor(icon, dataName, title, dataUrl, source) {
-    super(icon, dataName, title, dataUrl, source);
+    super(icon, 'monster-siren.hypergryph.com', dataName, title, dataUrl, source);
   }
 
   processData(opt) {
@@ -23,6 +23,7 @@ export class MonsterSirenDataSource extends DataSource {
           judgment: parseInt(x.cid) || time,
           dynamicInfo: x.title,
           source: opt.source,
+          dataSourceType: opt.dataSourceType,
           url: `https://monster-siren.hypergryph.com/info/${x.cid}`,
         })
       });

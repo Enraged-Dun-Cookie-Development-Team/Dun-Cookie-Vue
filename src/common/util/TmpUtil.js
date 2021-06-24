@@ -1,4 +1,4 @@
-import defaultDataSources from './datasource/DefaultDataSources';
+import {defaultDataSources} from '../datasource/DefaultDataSources';
 
 /**
  * 临时工具类

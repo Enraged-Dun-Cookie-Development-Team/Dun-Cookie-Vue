@@ -1,6 +1,6 @@
 import {DataSource} from '../DataSource';
 import {settings} from '../../Settings';
-import NotificationUtil from '../../NotificationUtil';
+import NotificationUtil from '../../util/NotificationUtil';
 
 /**
  * 游戏内公告数据源。
@@ -12,7 +12,7 @@ export class InGameAnnouncementDataSource extends DataSource {
   FocusAnnounceId = null;
 
   constructor(icon, dataName, title, dataUrl, source) {
-    super(icon, dataName, title, dataUrl, source);
+    super(icon, 'arknights_in_game_announcement', dataName, title, dataUrl, source);
   }
 
   processData(opt) {
@@ -27,6 +27,7 @@ export class InGameAnnouncementDataSource extends DataSource {
           id: x.announceId,
           dynamicInfo: x.title,
           source: opt.source,
+          dataSourceType: opt.dataSourceType,
           url: x.webUrl,
         });
       }

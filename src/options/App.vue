@@ -36,19 +36,13 @@
                 placement="bottom"
               >
                 <el-form-item label="饼来源">
-                  <el-checkbox-group v-model="setting.source" :min="1">
-                    <el-checkbox
-                      :label="index - 1"
-                      v-for="index in 10"
-                      :key="index - 1"
-                    >
+                  <el-checkbox-group v-model="setting.enableDataSources" :min="1">
+                    <el-checkbox v-for="source of defSourcesList" :key="source.dataName" :label="source.dataName">
                       <span class="checkbox-area">
-                        <img
-                          class="iconimg"
-                          :src="numberOrEnNameToIconSrc(index - 1)"
-                        />{{ numberOrEnNameToName(index - 1) }}</span
-                      ></el-checkbox
-                    >
+                        <img class="iconimg" :src="source.icon"/>
+                        {{ source.title }}
+                      </span>
+                    </el-checkbox>
                   </el-checkbox-group>
                 </el-form-item>
               </el-tooltip>
@@ -178,22 +172,16 @@
                     ></el-col>
                     <el-col v-if="setting.display.showByTag" :span="20" :offset="1">
                       <el-form-item prop="defaultTag">
-                        <el-select
-                          v-model="setting.display.defaultTag"
-                          placeholder="选择默认标签"
-                        >
+                        <el-select v-model="setting.display.defaultTag" placeholder="选择默认标签">
                           <el-option
-                            v-for="item in setting.source"
-                            :key="item"
-                            :label="numberOrEnNameToName(item)"
-                            :value="sourceToName(item)"
+                              v-for="source in setting.enableDataSources"
+                              :key="source.dataName"
+                              :label="source.title"
+                              :value="source.dataName"
                           >
                             <div style="display: flex; align-items: center">
-                              <img
-                                :src="numberOrEnNameToIconSrc(item)"
-                                style="width: 25px; margin-right: 10px"
-                              />
-                              <span>{{ numberOrEnNameToName(item) }}</span>
+                              <img :src="source.icon" style="width: 25px; margin-right: 10px"/>
+                              <span>{{ source.title }}</span>
                             </div>
                           </el-option>
                         </el-select>
@@ -285,11 +273,12 @@ import countTo from "vue-count-to";
 
 import {numberOrEnNameToIconSrc, numberOrEnNameToName, timespanToDay,} from "../assets/JS/common";
 import {settings} from '../common/Settings';
-import BrowserUtil from '../common/BrowserUtil';
-import {sourceToName} from '../common/TmpUtil';
+import BrowserUtil from '../common/util/BrowserUtil';
+import {sourceToName} from '../common/util/TmpUtil';
 import DunInfo from '../common/sync/DunInfo';
 import Feedback from '../components/Feedback';
 import {CURRENT_VERSION, MESSAGE_DUN_INFO_UPDATE} from '../common/Constants';
+import {defaultDataSourcesList} from '../common/datasource/DefaultDataSources';
 
 export default {
   name: "app",
@@ -304,6 +293,7 @@ export default {
       oldDunCount: 0,
       dunInfo: DunInfo,
       setting: settings,
+      defSourcesList: defaultDataSourcesList,
       marks: {
         8: "20点",
         12: "第二天凌晨",

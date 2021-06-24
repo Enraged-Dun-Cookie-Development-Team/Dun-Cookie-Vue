@@ -54,12 +54,11 @@
 </template>
 
 <script>
-import { common } from "../assets/JS/common";
-import StorageUtil from '../common/StorageUtil';
-import BrowserUtil from '../common/BrowserUtil';
+import BrowserUtil from '../common/util/BrowserUtil';
 import Feedback from '../components/Feedback';
 import {CURRENT_VERSION} from '../common/Constants';
 import {settings} from '../common/Settings';
+
 export default {
   name: "welcome",
   components: {Feedback},

@@ -1,16 +1,19 @@
 <template>
   <el-timeline :class="setting.display.windowMode ? 'window' : ''">
+    <!-- TODO 这里是判断是否为仅有日期无时间的数据源，需要弄一个专门的函数判断 -->
+    <!-- TODO icon看能不能直接使用数据源内的icon，也是搞个函数转换 -->
     <el-timeline-item
       v-for="(item, index) in cardlist"
       :key="index"
       :timestamp="
-        item.source == 2 || item.source == 5 || item.source == 7
+        item.dataSourceType === 'arknights_in_game_announcement' || item.dataSourceType === 'monster-siren.hypergryph.com' || item.dataSourceType === 'ak.hypergryph.com'
           ? timespanToDay(item.time, 1)
           : timespanToDay(item.time)
       "
       placement="top"
       :icon="'headImg' + item.source"
     >
+      <!-- TODO class和下面的判断都是泰拉官网或网易云音乐的，因为泰拉官网和网易云音乐都是一个单独的图片卡，其它的都是图+文，想想怎么优化 -->
       <el-card
         class="card"
         :class="'font-size-' + setting.display.fontSize + ' source-' + item.source"
@@ -19,14 +22,14 @@
         <span>
           <el-button
             class="to-copy-btn"
-            :class="item.source != 8 && item.source != 9 ? '' : 'rigth-zero'"
+            :class="item.dataSourceType !== 'terra-historicus.hypergryph.com' && item.dataSourceType !== 'music.163.com' ? '' : 'rigth-zero'"
             size="small"
             @click="copyData(item)"
             title="复制该条内容及链接"
             ><i class="el-icon-document-copy"></i
           ></el-button>
           <el-button
-            v-if="item.source != 8 && item.source != 9"
+            v-if="item.dataSourceType !== 'terra-historicus.hypergryph.com' && item.dataSourceType !== 'music.163.com'"
             class="to-url-btn"
             size="small"
             title="前往该条内容"
@@ -40,7 +43,7 @@
           </span>
         </span>
         <!-- 泰拉记事社 -->
-        <div v-if="item.source == 8" class="tlgw">
+        <div v-if="item.dataSourceType === 'terra-historicus.hypergryph.com'" class="tlgw">
           <img v-if="imgShow" class="image-back" v-lazy="item.image" />
           <div class="content-card">
             <div class="content-card-info">
@@ -74,7 +77,7 @@
         </div>
         <!-- 网易云音乐 -->
         <div
-          v-else-if="item.source == 9"
+          v-else-if="item.dataSourceType === 'music.163.com'"
           class="wyyyy"
           @click="openUrl(item.url)"
         >
@@ -149,7 +152,7 @@
 
 <script>
 import {timespanToDay} from "../assets/JS/common";
-import BrowserUtil from '../common/BrowserUtil';
+import BrowserUtil from '../common/util/BrowserUtil';
 import {CURRENT_VERSION} from '../common/Constants';
 
 export default {

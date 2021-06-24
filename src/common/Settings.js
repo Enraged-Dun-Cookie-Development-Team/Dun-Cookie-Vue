@@ -1,12 +1,16 @@
-import StorageUtil from './StorageUtil';
-import BrowserUtil from './BrowserUtil';
+import StorageUtil from './util/StorageUtil';
+import BrowserUtil from './util/BrowserUtil';
 import {BROWSER_CHROME, BROWSER_FIREFOX, BROWSER_MOBILE_PHONE, MESSAGE_SETTINGS_UPDATE} from './Constants';
-import {deepAssign} from './TmpUtil';
+import {deepAssign} from './util/TmpUtil';
+import {defaultDataSources} from './datasource/DefaultDataSources';
 
 class Settings {
   // 插件初始化的时间
   initTime = new Date().getTime();
-  source = [];
+  /**
+   * 启用的默认数据源，储存dataName
+   */
+  enableDataSources = [];
 
   /**
    * 蹲饼相关配置
@@ -160,9 +164,21 @@ class Settings {
   }
 
   constructor() {
-    BrowserUtil.addMessageListener('settings', MESSAGE_SETTINGS_UPDATE, data => deepAssign(this, data));
+    BrowserUtil.addMessageListener('settings', MESSAGE_SETTINGS_UPDATE, data => {
+      deepAssign(this, data);
+      this.__updateWindowMode();
+    });
     this.reloadSettings().then(() => {
       // 这部分主要是初始化一些固定的配置信息，只需要初始化的时候执行一次
+
+      // 必须在后台执行的只执行一次的内容
+      if (BrowserUtil.isBackground) {
+        console.log(this);
+        // 如果一个启用的都没有说明是新安装或者旧数据被清除，此时将默认数据源全部启用
+        if (this.enableDataSources.length === 0) {
+          this.enableDataSources = Object.keys(defaultDataSources);
+        }
+      }
 
       // 特定的浏览器需要无视用户配置强行禁用某些功能
       switch (BrowserUtil.browserType) {
@@ -188,7 +204,17 @@ class Settings {
       if (!this.feature.window) {
         this.display.windowMode = false;
       }
+
+      this.__updateWindowMode();
     });
+  }
+
+  __updateWindowMode() {
+    if (this.feature.window && this.display.windowMode) {
+      BrowserUtil.setPopup({popup: ""});
+    } else {
+      BrowserUtil.setPopup({popup: BrowserUtil.getExtensionURL("popup.html")});
+    }
   }
 
   /**

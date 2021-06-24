@@ -7,7 +7,7 @@ import {DataSource} from '../DataSource';
 export class TerraHistoricusDataSource extends DataSource {
 
   constructor(icon, dataName, title, dataUrl, source) {
-    super(icon, dataName, title, dataUrl, source);
+    super(icon, 'terra-historicus.hypergryph.com', dataName, title, dataUrl, source);
   }
 
   processData(opt) {
@@ -22,6 +22,7 @@ export class TerraHistoricusDataSource extends DataSource {
         dynamicInfo: `泰拉记事社${info.title}已更新`,
         name: info.title,
         source: opt.source,
+        dataSourceType: opt.dataSourceType,
         image: info.cover,
         html: info,
         url: `https://terra-historicus.hypergryph.com/comic/${info.cid}`,

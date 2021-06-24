@@ -7,7 +7,7 @@ import {DataSource} from '../DataSource';
 export class BilibiliDataSource extends DataSource {
 
   constructor(icon, dataName, title, dataUrl, source) {
-    super(icon, dataName, title, dataUrl, source);
+    super(icon, 'bilibili_dynamic', dataName, title, dataUrl, source);
   }
 
   processData(opt) {
@@ -23,6 +23,7 @@ export class BilibiliDataSource extends DataSource {
             judgment: x.desc.timestamp,
             imageList: dynamicInfo.item.pictures && dynamicInfo.item.pictures.map(x => x.img_src),
             source: opt.source,
+            dataSourceType: opt.dataSourceType,
           };
           //  desc.type  8 是视频 64是专栏 2是动态 4是无图片动态
           if (x.desc.type == 2) {

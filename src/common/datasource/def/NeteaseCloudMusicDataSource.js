@@ -7,7 +7,7 @@ import {DataSource} from '../DataSource';
 export class NeteaseCloudMusicDataSource extends DataSource {
 
   constructor(icon, dataName, title, dataUrl, source) {
-    super(icon, dataName, title, dataUrl, source);
+    super(icon, 'music.163.com', dataName, title, dataUrl, source);
   }
 
   processData(opt) {
@@ -20,8 +20,9 @@ export class NeteaseCloudMusicDataSource extends DataSource {
           id: x.id,
           judgment: x.id || time,
           dynamicInfo: `塞壬唱片发布新专辑《${x.name}》，共${x.size}首歌曲`,
-          source: opt.source,
+          dataSourceType: opt.dataSourceType,
           image: x.picUrl + '?param=130y130',
+          source: opt.source,
           url: `https://music.163.com/#/album?id=${x.id}`,
           size: x.size,
           name: x.name

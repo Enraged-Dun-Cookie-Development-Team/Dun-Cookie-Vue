@@ -8,7 +8,7 @@ import {settings} from '../../Settings';
 export class WeiboDataSource extends DataSource {
 
   constructor(icon, dataName, title, dataUrl, source) {
-    super(icon, dataName, title, dataUrl, source);
+    super(icon, 'weibo', dataName, title, dataUrl, source);
   }
 
   processData(opt) {
@@ -36,6 +36,7 @@ export class WeiboDataSource extends DataSource {
             imageList: imageList,
             type: (dynamicInfo.hasOwnProperty("page_info") && dynamicInfo.page_info.hasOwnProperty('type') && dynamicInfo.page_info.type == "video") ? 0 : 1,
             source: opt.source,
+            dataSourceType: opt.dataSourceType,
             url: "https://weibo.com/" + weiboId.substring((weiboId.length - 10), weiboId.length) + "/" + x.mblog.bid,
             detail: []
           };

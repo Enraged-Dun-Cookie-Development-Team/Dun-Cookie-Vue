@@ -316,9 +316,9 @@ import countTo from "vue-count-to";
 import TimeLine from "../components/TimeLine";
 import {common, diffTime, numberToWeek} from "../assets/JS/common";
 import {settings} from '../common/Settings';
-import HttpUtil from '../common/HttpUtil';
-import BrowserUtil from '../common/BrowserUtil';
-import {sourceNameToIcon} from '../common/TmpUtil';
+import HttpUtil from '../common/util/HttpUtil';
+import BrowserUtil from '../common/util/BrowserUtil';
+import {sourceNameToIcon} from '../common/util/TmpUtil';
 import DunInfo from '../common/sync/DunInfo';
 import SanInfo from '../common/sync/SanInfo';
 import {

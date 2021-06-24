@@ -8,7 +8,7 @@ import {settings} from '../../Settings';
 export class ArknightsOfficialWebDataSource extends DataSource {
 
   constructor(icon, dataName, title, dataUrl, source) {
-    super(icon, dataName, title, dataUrl, source);
+    super(icon, 'ak.hypergryph.com', dataName, title, dataUrl, source);
   }
 
   processData(opt) {
@@ -30,6 +30,7 @@ export class ArknightsOfficialWebDataSource extends DataSource {
           judgment: judgment.length > 0 ? parseInt(judgment[0]) : time,
           dynamicInfo: title,
           source: opt.source,
+          dataSourceType: opt.dataSourceType,
           url: `https://ak.hypergryph.com${url}`,
         });
       } catch (error) {

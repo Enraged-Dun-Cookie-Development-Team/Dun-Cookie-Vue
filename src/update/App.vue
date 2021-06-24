@@ -48,8 +48,8 @@
 </template>
 
 <script>
-import HttpUtil from '../common/HttpUtil';
-import BrowserUtil from '../common/BrowserUtil';
+import HttpUtil from '../common/util/HttpUtil';
+import BrowserUtil from '../common/util/BrowserUtil';
 import Feedback from '../components/Feedback';
 import {CURRENT_VERSION} from '../common/Constants';
 

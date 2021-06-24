@@ -306,8 +306,8 @@ import countTo from "vue-count-to";
 import TimeLine from "../components/TimeLine";
 import {common, diffTime, numberOrEnNameToIconSrc, numberOrEnNameToName, numberToWeek,} from "../assets/JS/common";
 import {settings} from '../common/Settings';
-import HttpUtil from '../common/HttpUtil';
-import BrowserUtil from '../common/BrowserUtil';
+import HttpUtil from '../common/util/HttpUtil';
+import BrowserUtil from '../common/util/BrowserUtil';
 import DunInfo from '../common/sync/DunInfo';
 import SanInfo from '../common/sync/SanInfo';
 import {

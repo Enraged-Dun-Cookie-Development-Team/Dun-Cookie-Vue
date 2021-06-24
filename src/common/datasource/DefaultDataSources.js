@@ -1,3 +1,5 @@
+// noinspection JSNonASCIINames
+
 import {BilibiliDataSource} from './def/BilibiliDataSource';
 import {WeiboDataSource} from './def/WeiboDataSource';
 import {InGameAnnouncementDataSource} from './def/InGameAnnouncementDataSource';
@@ -5,12 +7,13 @@ import {MonsterSirenDataSource} from './def/MonsterSirenDataSource';
 import {ArknightsOfficialWebDataSource} from './def/ArknightsOfficialWebDataSource';
 import {TerraHistoricusDataSource} from './def/TerraHistoricusDataSource';
 import {NeteaseCloudMusicDataSource} from './def/NeteaseCloudMusicDataSource';
+import {IS_TEST} from '../Constants';
 
 /**
  * 默认数据源
  * @type {DataSource[]}
  */
-const defaultDataSources = [
+const defaultDataSourcesList = [
   new BilibiliDataSource(
     '/assets/image/bili.ico',
     '官方B站动态',
@@ -83,4 +86,30 @@ const defaultDataSources = [
   ),
 ];
 
-export default defaultDataSources;
+// 排序，会影响页面中的显示顺序
+defaultDataSourcesList.sort((a, b) => a.source - b.source);
+
+/**
+ * 需要添加/修改数据源应该在上方列表操作
+ * @see defaultDataSourcesList
+ */
+const defaultDataSources = {};
+for (const source of defaultDataSourcesList) {
+  defaultDataSources[source.dataName] = source;
+}
+
+// 感觉没必要给DataSource多一个testUrl的属性，测试链接在这里修改吧
+if (IS_TEST) {
+  defaultDataSources['官方B站动态'].dataUrl = 'test/bJson.json?host_uid=161775300';
+  defaultDataSources['官方微博'].dataUrl = 'test/wJson.json?type=uid&value=6279793937&containerid=1076036279793937';
+  defaultDataSources['游戏内公告'].dataUrl = 'test/yJson.json';
+  defaultDataSources['朝陇山微博'].dataUrl = 'test/cJson.json?type=uid&value=6441489862&containerid=1076036441489862';
+  defaultDataSources['一拾山微博'].dataUrl = 'test/ysJson.json?type=uid&value=7506039414&containerid=1076037506039414';
+  defaultDataSources['塞壬唱片官网'].dataUrl = 'test/srJson.json';
+  defaultDataSources['泰拉记事社微博'].dataUrl = 'test/tlJson.json?type=uid&value=6441489862&containerid=1076037499841383';
+  defaultDataSources['官网'].dataUrl = 'test/gw.html';
+  defaultDataSources['泰拉记事社官网'].dataUrl = ['test/xbJson.json', 'test/xgbJson.json'];
+}
+
+
+export {defaultDataSources, defaultDataSourcesList};
