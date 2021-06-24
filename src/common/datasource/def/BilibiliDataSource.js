@@ -1,4 +1,5 @@
 import {DataSource} from '../DataSource';
+import TimeUtil from '../../util/TimeUtil';
 
 /**
  * 哔哩哔哩数据源。
@@ -18,11 +19,12 @@ export class BilibiliDataSource extends DataSource {
         if (x.desc.type == 2 || x.desc.type == 4 || x.desc.type == 8 || x.desc.type == 64) {
           let dynamicInfo = JSON.parse(x.card);
           let card = {
-            time: x.desc.timestamp,
+            timestamp: TimeUtil.format(new Date(x.desc.timestamp * 1000), 'yyyy-MM-dd hh:mm:ss'),
             id: x.desc.timestamp,
             judgment: x.desc.timestamp,
             imageList: dynamicInfo.item.pictures && dynamicInfo.item.pictures.map(x => x.img_src),
             source: opt.source,
+            icon: opt.icon,
             dataSourceType: opt.dataSourceType,
           };
           //  desc.type  8 是视频 64是专栏 2是动态 4是无图片动态

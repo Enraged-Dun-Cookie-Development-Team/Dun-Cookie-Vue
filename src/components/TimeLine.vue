@@ -1,22 +1,17 @@
 <template>
   <el-timeline :class="setting.display.windowMode ? 'window' : ''">
-    <!-- TODO 这里是判断是否为仅有日期无时间的数据源，需要弄一个专门的函数判断 -->
-    <!-- TODO icon看能不能直接使用数据源内的icon，也是搞个函数转换 -->
-    <el-timeline-item
+    <MyElTimelineItem
       v-for="(item, index) in cardlist"
       :key="index"
-      :timestamp="
-        item.dataSourceType === 'arknights_in_game_announcement' || item.dataSourceType === 'monster-siren.hypergryph.com' || item.dataSourceType === 'ak.hypergryph.com'
-          ? timespanToDay(item.time, 1)
-          : timespanToDay(item.time)
-      "
+      :timestamp="item.timestamp"
       placement="top"
-      :icon="'headImg' + item.source"
+      :icon-style="{'--icon': `url('${item.icon}')`, '--radius': '10px'}"
+      :icon="'headImg'"
     >
       <!-- TODO class和下面的判断都是泰拉官网或网易云音乐的，因为泰拉官网和网易云音乐都是一个单独的图片卡，其它的都是图+文，想想怎么优化 -->
       <el-card
         class="card"
-        :class="'font-size-' + setting.display.fontSize + ' source-' + item.source"
+        :class="[`font-size-${setting.display.fontSize}`, {'special-source': item.dataSourceType === 'terra-historicus.hypergryph.com' || item.dataSourceType === 'music.163.com'}]"
         shadow="never"
       >
         <span>
@@ -146,17 +141,18 @@
           </div>
         </div>
       </el-card>
-    </el-timeline-item>
+    </MyElTimelineItem>
   </el-timeline>
 </template>
 
 <script>
-import {timespanToDay} from "../assets/JS/common";
 import BrowserUtil from '../common/util/BrowserUtil';
 import {CURRENT_VERSION} from '../common/Constants';
+import MyElTimelineItem from './MyTimeLineItem';
 
 export default {
   name: "TimeLine",
+  components: {MyElTimelineItem},
   props: ["cardlist", "setting", "imgShow"],
   data() {
     return {
@@ -166,7 +162,6 @@ export default {
   },
   mounted() {},
   methods: {
-    timespanToDay,
     // 复制
     copyData(item) {
       this.$copyText(
@@ -362,8 +357,7 @@ img[lazy="error"] {
     }
 
     // 罗德岛泰拉记事簿 网易云音乐
-    &.source-8,
-    &.source-9 {
+    &.special-source {
       .el-card__body {
         padding: 0 !important;
       }
@@ -425,54 +419,9 @@ img[lazy="error"] {
           width: 36px;
           height: 36px;
         }
-        &.headImg0::before {
-          background: url("/assets/image/bili.ico") no-repeat center, @@bgColor;
-          background-size: cover;
-        }
-        &.headImg1::before {
-          background: url("/assets/image/weibo.ico") no-repeat center, @@bgColor;
-          background-size: cover;
-        }
-        &.headImg2::before {
-          border-radius: 10px;
-          background: url("/assets/image/txz.jpg") no-repeat center, @@bgColor;
-          background-size: cover;
-        }
-        &.headImg3::before {
-          border-radius: 10px;
-          background: url("/assets/image/cho3Weibo.jpg") no-repeat center,
-            @@bgColor;
-          background-size: cover;
-        }
-        &.headImg4::before {
-          border-radius: 10px;
-          background: url("/assets/image/ys3Weibo.jpg") no-repeat center,
-            @@bgColor;
-          background-size: cover;
-        }
-        &.headImg5::before {
-          background: url("/assets/image/sr.ico") no-repeat center, #fff;
-          background-size: cover;
-        }
-        &.headImg6::before {
-          border-radius: 10px;
-          background: url("/assets/image/tlWeibo.jpg") no-repeat center,
-            @@bgColor;
-          background-size: cover;
-        }
-        &.headImg7::before {
-          border-radius: 10px;
-          background: url("/assets/image/mrfz.ico") no-repeat center, @@bgColor;
-          background-size: cover;
-        }
-        &.headImg8::before {
-          border-radius: 10px;
-          background: url("/assets/image/tl.jpg") no-repeat center, @@bgColor;
-          background-size: cover;
-        }
-        &.headImg9::before {
-          border-radius: 10px;
-          background: url("/assets/image/wyyyy.ico") no-repeat center, @@bgColor;
+        &.headImg::before {
+          border-radius: var(--radius);
+          background: var(--icon) no-repeat center, @@bgColor;
           background-size: cover;
         }
       }

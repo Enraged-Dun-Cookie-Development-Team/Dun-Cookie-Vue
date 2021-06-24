@@ -69,6 +69,7 @@ class DataSource {
         url: this.dataUrl, // 数据获取网址
         title: this.title, // 弹窗标题
         dataName: this.dataName, // 数据源名称
+        icon: this.icon,
         dataSourceType: this.dataType, // 数据源类型，这里之所以要用这么长的名称是因为数据源内部解析数据的部分还未重构，避免短名称和解析结果中的字段重复
         source: this.source, // TODO 暂时未重构完所以先留着
         responseText: value,

@@ -1,5 +1,6 @@
 import {DataSource} from '../DataSource';
 import {settings} from '../../Settings';
+import TimeUtil from '../../util/TimeUtil';
 
 /**
  * 明日方舟官网数据源。
@@ -22,14 +23,15 @@ export class ArknightsOfficialWebDataSource extends DataSource {
         let date = item.getElementsByClassName('articleItemDate')[0].innerHTML
         let title = item.getElementsByClassName('articleItemTitle')[0].innerHTML
         let url = item.getElementsByClassName('articleItemLink')[0].pathname;
-        let time = Math.floor(new Date(`${date} ${settings.getTimeBySortMode()}`).getTime() / 1000);
+        let time = new Date(`${date} ${settings.getTimeBySortMode()}`);
         let judgment = url.match(/\d+/g);
         list.push({
-          time: time,
+          timestamp: TimeUtil.format(time, 'yyyy-MM-dd'),
           id: judgment.length > 0 ? parseInt(judgment[0]) : index,
-          judgment: judgment.length > 0 ? parseInt(judgment[0]) : time,
+          judgment: judgment.length > 0 ? parseInt(judgment[0]) : Math.floor(time.getTime() / 1000),
           dynamicInfo: title,
           source: opt.source,
+          icon: opt.icon,
           dataSourceType: opt.dataSourceType,
           url: `https://ak.hypergryph.com${url}`,
         });
@@ -37,6 +39,6 @@ export class ArknightsOfficialWebDataSource extends DataSource {
         console.error('解析官网数据失败', item);
       }
     });
-    return list.sort((x, y) => y.time - x.time);
+    return list.sort((x, y) => y.judgment - x.judgment);
   }
 }

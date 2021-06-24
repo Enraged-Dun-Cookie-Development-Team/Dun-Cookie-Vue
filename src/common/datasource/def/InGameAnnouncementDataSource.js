@@ -1,6 +1,7 @@
 import {DataSource} from '../DataSource';
 import {settings} from '../../Settings';
 import NotificationUtil from '../../util/NotificationUtil';
+import TimeUtil from '../../util/TimeUtil';
 
 /**
  * 游戏内公告数据源。
@@ -20,13 +21,13 @@ export class InGameAnnouncementDataSource extends DataSource {
     let data = JSON.parse(opt.responseText);
     data.announceList.forEach(x => {
       if (x.announceId != 94 && x.announceId != 98 && x.announceId != 192 && x.announceId != 95 && x.announceId != 97) {
-        let time = `${new Date().getFullYear()}/${x.month}/${x.day} ${settings.getTimeBySortMode()}`;
         list.push({
-          time: Math.floor(new Date(time).getTime() / 1000),
+          timestamp: TimeUtil.format(new Date(new Date().getFullYear(), x.month, x.day), 'yyyy-MM-dd'),
           judgment: x.announceId,
           id: x.announceId,
           dynamicInfo: x.title,
           source: opt.source,
+          icon: opt.icon,
           dataSourceType: opt.dataSourceType,
           url: x.webUrl,
         });

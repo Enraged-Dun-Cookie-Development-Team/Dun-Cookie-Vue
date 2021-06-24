@@ -520,7 +520,7 @@ export default {
       BrowserUtil.sendMessage(MESSAGE_CARD_LIST_GET).then((data) => {
           this.cardlist = Object.values(data)
               .reduce((acc, cur) => [...acc, ...cur], [])
-              .sort((x, y) => y.time - x.time)
+              .sort((x, y) => new Date(y.timestamp).getTime() - new Date(x.timestamp).getTime())
               .map((x) => {
                 x.dynamicInfo = x.dynamicInfo.replace(/\n/g, "<br/>");
                 return x;
@@ -530,7 +530,7 @@ export default {
       BrowserUtil.addMessageListener('popup', MESSAGE_CARD_LIST_UPDATE, (data) => {
         this.cardlist = Object.values(data)
             .reduce((acc, cur) => [...acc, ...cur], [])
-            .sort((x, y) => y.time - x.time)
+            .sort((x, y) => new Date(y.timestamp).getTime() - new Date(x.timestamp).getTime())
             .map((x) => {
               x.dynamicInfo = x.dynamicInfo.replace(/\n/g, "<br/>");
               return x;

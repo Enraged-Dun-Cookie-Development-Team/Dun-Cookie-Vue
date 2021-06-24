@@ -1,5 +1,5 @@
 import {DataSource} from '../DataSource';
-import {settings} from '../../Settings';
+import TimeUtil from '../../util/TimeUtil';
 
 /**
  * 塞壬唱片(官网)数据源。
@@ -16,18 +16,18 @@ export class MonsterSirenDataSource extends DataSource {
     let data = JSON.parse(opt.responseText);
     if (data && data.data && data.data.list) {
       data.data.list.forEach(x => {
-        let time = Math.floor(new Date(`${x.date} ${settings.getTimeBySortMode()}`).getTime() / 1000);
         list.push({
-          time: time,
+          timestamp: TimeUtil.format(new Date(x.date), 'yyyy-MM-dd'),
           id: x.cid,
-          judgment: parseInt(x.cid) || time,
+          judgment: x.cid,
           dynamicInfo: x.title,
           source: opt.source,
+          icon: opt.icon,
           dataSourceType: opt.dataSourceType,
           url: `https://monster-siren.hypergryph.com/info/${x.cid}`,
         })
       });
-      return list.sort((x, y) => y.time - x.time);
+      return list.sort((x, y) => y.judgment - x.judgment);
     }
   }
 }

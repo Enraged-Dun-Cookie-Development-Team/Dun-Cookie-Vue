@@ -1,5 +1,6 @@
 import {DataSource} from '../DataSource';
 import {settings} from '../../Settings';
+import TimeUtil from '../../util/TimeUtil';
 
 /**
  * 微博数据源。
@@ -26,7 +27,7 @@ export class WeiboDataSource extends DataSource {
           let time = Math.floor(new Date(dynamicInfo.created_at).getTime() / 1000);
           let imageList = dynamicInfo.pic_ids && dynamicInfo.pic_ids.map(x => `https://wx1.sinaimg.cn/large/${x}`);
           let info = {
-            time: time,
+            timestamp: TimeUtil.format(new Date(dynamicInfo.created_at), 'yyyy-MM-dd hh:mm:ss'),
             id: time,
             isTop: x.mblog.hasOwnProperty('isTop') && x.mblog.isTop == 1,
             judgment: time,
@@ -36,6 +37,7 @@ export class WeiboDataSource extends DataSource {
             imageList: imageList,
             type: (dynamicInfo.hasOwnProperty("page_info") && dynamicInfo.page_info.hasOwnProperty('type') && dynamicInfo.page_info.type == "video") ? 0 : 1,
             source: opt.source,
+            icon: opt.icon,
             dataSourceType: opt.dataSourceType,
             url: "https://weibo.com/" + weiboId.substring((weiboId.length - 10), weiboId.length) + "/" + x.mblog.bid,
             detail: []
