@@ -200,7 +200,7 @@
                             item.text
                           }}</span>
                           <span title="国服 UTC-8">{{
-                            " " + diffTime(item.time)
+                            " " + calcActivityDiff(item.time)
                           }}</span>
                         </div>
                       </div>
@@ -292,7 +292,7 @@
               <img
                 :title="item"
                 class="title-img"
-                :src="sourceNameToIcon(item)"
+                :src="getDataSourceByName(item).icon"
               />
             </span>
             <time-line
@@ -311,15 +311,13 @@
 <script>
 import countTo from "vue-count-to";
 import TimeLine from "../components/timeline/TimeLine";
-import {common, diffTime, numberToWeek} from "../assets/JS/common";
 import Settings from '../common/Settings';
 import HttpUtil from '../common/util/HttpUtil';
 import BrowserUtil from '../common/util/BrowserUtil';
-import {sourceNameToIcon} from '../common/util/TmpUtil';
 import DunInfo from '../common/sync/DunInfo';
 import SanInfo from '../common/sync/SanInfo';
 import {
-  CURRENT_VERSION,
+  CURRENT_VERSION, dayInfo,
   MESSAGE_CARD_LIST_GET,
   MESSAGE_CARD_LIST_UPDATE,
   MESSAGE_DUN_INFO_UPDATE,
@@ -327,15 +325,15 @@ import {
   PAGE_DONATE,
   PAGE_GITHUB_REPO,
   PAGE_OPTIONS,
-  PAGE_UPDATE
+  PAGE_UPDATE, quickJump
 } from '../common/Constants';
 import DataSourceUtil from '../common/util/DataSourceUtil';
+import TimeUtil from '../common/util/TimeUtil';
 
 export default {
   name: "app",
   components: { countTo, TimeLine },
   created(){
-    
   },
   mounted() {
     this.init();
@@ -366,8 +364,8 @@ export default {
       drawer: false, // 打开菜单
       toolDrawer: false, // 理智计算器菜单
       isReload: false, // 是否正在刷新
-      quickJump: common.quickJump,
-      dayInfo: common.dayInfo,
+      quickJump: quickJump,
+      dayInfo: dayInfo,
       loading: true, // 初始化加载
       sane: SanInfo,
       onlineDayInfo: {},
@@ -377,9 +375,8 @@ export default {
   computed: {},
   beforeDestroy() {},
   methods: {
-    numberToWeek,
-    diffTime,
-    sourceNameToIcon,
+    numberToWeek: TimeUtil.numberToWeek,
+    getDataSourceByName: DataSourceUtil.getByName,
     openUrl: BrowserUtil.createTab,
     init() {
       BrowserUtil.addMessageListener('popup', MESSAGE_DUN_INFO_UPDATE, data => {
@@ -394,6 +391,15 @@ export default {
         this.LazyLoaded = true;
         this.setClickFun();
       }, 1);
+    },
+
+    calcActivityDiff(endDate) {
+      const diff = TimeUtil.calcDiff(endDate);
+      if (diff) {
+        return '剩' + diff;
+      } else {
+        return '已结束';
+      }
     },
 
     // 监听标签
@@ -444,14 +450,14 @@ export default {
       let starTime = new Date(this.onlineDayInfo.resources.starTime);
       let overTime = new Date(this.onlineDayInfo.resources.overTime);
       if (date >= starTime && date <= overTime) {
-        common.dayInfo.forEach((item) => {
+        this.dayInfo.forEach((item) => {
           item.notToday = false;
         });
         return;
       }
       // 如果不在里面
       let week = new Date().getDay();
-      common.dayInfo.forEach((item) => {
+      this.dayInfo.forEach((item) => {
         item.notToday = !item.day.includes(week);
       });
     },

@@ -9,7 +9,7 @@
         <el-divider></el-divider>
         <div class="info">
           <div class="info-time">
-            小刻在 {{ timespanToDay(settings.initTime / 1000) }} 进入食堂
+            小刻在 {{ formatTime(settings.initTime, 'yyyy-MM-dd hh:mm:ss') }} 进入食堂
           </div>
           <div class="info-title">
             小刻已经找了<span style="color: #23ade5"
@@ -21,7 +21,7 @@
             >次饼了
           </div>
           <div class="info-time">
-            小刻在 {{ timespanToDay(dunInfo.lastDunTime / 1000, 0) }} 翻箱倒柜一次
+            小刻在 {{ formatTime(dunInfo.lastDunTime, 'hh:mm:ss') }} 翻箱倒柜一次
           </div>
           <!-- <div class="info-time">下次蹲饼时间：{{ nextdunTime }}</div> -->
         </div>
@@ -271,13 +271,13 @@
 <script>
 import countTo from "vue-count-to";
 
-import {numberOrEnNameToName, timespanToDay,} from "../assets/JS/common";
 import Settings from '../common/Settings';
 import BrowserUtil from '../common/util/BrowserUtil';
 import DunInfo from '../common/sync/DunInfo';
 import Feedback from '../components/Feedback';
 import {CURRENT_VERSION, MESSAGE_DUN_INFO_UPDATE} from '../common/Constants';
 import {defaultDataSourcesList} from '../common/datasource/DefaultDataSources';
+import TimeUtil from '../common/util/TimeUtil';
 
 export default {
   name: "app",
@@ -309,8 +309,7 @@ export default {
   computed: {
   },
   methods: {
-    numberOrEnNameToName,
-    timespanToDay,
+    formatTime: TimeUtil.format,
     openUrl: BrowserUtil.createTab(url),
     init() {
       BrowserUtil.addMessageListener('options', MESSAGE_DUN_INFO_UPDATE, data => {

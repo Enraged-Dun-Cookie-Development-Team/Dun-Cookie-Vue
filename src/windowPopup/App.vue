@@ -188,7 +188,7 @@
                             item.text
                           }}</span>
                           <span title="国服 UTC-8">{{
-                            " " + diffTime(item.time)
+                            " " + calcActivityDiff(item.time)
                           }}</span>
                         </div>
                       </div>
@@ -273,22 +273,22 @@
           :stretch="true"
         >
           <el-tab-pane
-            v-for="item in Object.keys(cardlistdm)"
-            :key="item"
-            :label="numberOrEnNameToName(item)"
-            :name="numberOrEnNameToName(item)"
+              v-for="item in Object.keys(cardlistdm)"
+              :key="item"
+              :label="item"
+              :name="item"
           >
             <span slot="label">
               <img
-                :title="numberOrEnNameToName(item)"
-                class="title-img"
-                :src="numberOrEnNameToIconSrc(item)"
+                  :title="item"
+                  class="title-img"
+                  :src="getDataSourceByName(item).icon"
               />
             </span>
             <time-line
-              ref="TimeLine"
-              :imgShow="LazyLoaded"
-              :cardlist="cardlistdm[item]"
+                ref="TimeLine"
+                :imgShow="LazyLoaded"
+                :cardlist="cardlistdm[item]"
             >
             </time-line>
           </el-tab-pane>
@@ -301,7 +301,6 @@
 <script>
 import countTo from "vue-count-to";
 import TimeLine from "../components/timeline/TimeLine";
-import {common, diffTime, numberOrEnNameToIconSrc, numberOrEnNameToName, numberToWeek,} from "../assets/JS/common";
 import Settings from '../common/Settings';
 import HttpUtil from '../common/util/HttpUtil';
 import BrowserUtil from '../common/util/BrowserUtil';
@@ -309,6 +308,7 @@ import DunInfo from '../common/sync/DunInfo';
 import SanInfo from '../common/sync/SanInfo';
 import {
   CURRENT_VERSION,
+  dayInfo,
   MESSAGE_CARD_LIST_GET,
   MESSAGE_CARD_LIST_UPDATE,
   MESSAGE_DUN_INFO_UPDATE,
@@ -316,9 +316,11 @@ import {
   PAGE_DONATE,
   PAGE_GITHUB_REPO,
   PAGE_OPTIONS,
-  PAGE_UPDATE
+  PAGE_UPDATE,
+  quickJump
 } from '../common/Constants';
 import DataSourceUtil from '../common/util/DataSourceUtil';
+import TimeUtil from '../common/util/TimeUtil';
 
 export default {
   name: "app",
@@ -352,8 +354,8 @@ export default {
       drawer: false, // 打开菜单
       toolDrawer: false, // 理智计算器菜单
       isReload: false, // 是否正在刷新
-      quickJump: common.quickJump,
-      dayInfo: common.dayInfo,
+      quickJump: quickJump,
+      dayInfo: dayInfo,
       loading: true, // 初始化加载
       sane: SanInfo,
       onlineDayInfo: {},
@@ -363,10 +365,8 @@ export default {
   computed: {},
   beforeDestroy() {},
   methods: {
-    numberOrEnNameToName,
-    numberOrEnNameToIconSrc,
-    numberToWeek,
-    diffTime,
+    numberToWeek: TimeUtil.numberToWeek,
+    getDataSourceByName: DataSourceUtil.getByName,
     openUrl: BrowserUtil.createTab,
     init() {
       BrowserUtil.addMessageListener('windowPopup', MESSAGE_DUN_INFO_UPDATE, data => {
@@ -383,6 +383,16 @@ export default {
         this.listenerWindowSize();
       }, 1);
     },
+
+    calcActivityDiff(endDate) {
+      const diff = TimeUtil.calcDiff(endDate);
+      if (diff) {
+        return '剩' + diff;
+      } else {
+        return '已结束';
+      }
+    },
+
     listenerWindowSize() {
       window.onresize = (data) => {
         if (window.innerWidth <= 700) {
@@ -436,14 +446,14 @@ export default {
       let starTime = new Date(this.onlineDayInfo.resources.starTime);
       let overTime = new Date(this.onlineDayInfo.resources.overTime);
       if (date >= starTime && date <= overTime) {
-        common.dayInfo.forEach((item) => {
+        this.dayInfo.forEach((item) => {
           item.notToday = false;
         });
         return;
       }
       // 如果不在里面
       let week = new Date().getDay();
-      common.dayInfo.forEach((item) => {
+      this.dayInfo.forEach((item) => {
         item.notToday = !item.day.includes(week);
       });
     },

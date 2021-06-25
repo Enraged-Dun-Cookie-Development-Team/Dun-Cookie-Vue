@@ -66,9 +66,7 @@ export default {
       }
       return this.getDataSourceByName(item.dataSource).dataType;
     },
-    getDataSourceByName(dataName) {
-      return DataSourceUtil.getByName(dataName);
-    },
+    getDataSourceByName: DataSourceUtil.getByName,
     // 复制
     copyData(item) {
       this.$copyText(

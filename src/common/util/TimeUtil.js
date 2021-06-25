@@ -1,3 +1,10 @@
+function transformDate(dateValue) {
+  if (typeof dateValue !== 'object' || dateValue.constructor !== Date) {
+    dateValue = new Date(dateValue);
+  }
+  return dateValue;
+}
+
 /**
  * 时间相关工具类
  */
@@ -6,6 +13,7 @@ class TimeUtil {
    * 格式化Date，支持yyyy-MM-dd hh:mm:ss
    */
   static format(date, formatText) {
+    date = transformDate(date);
     const o = {
       //月份
       "M+": date.getMonth() + 1,
@@ -35,22 +43,23 @@ class TimeUtil {
   }
 
   /**
-   * 计算并格式化两个Date的差值
+   * 计算并格式化两个Date的差值，如果startDate >= endDate会返回空值
    */
-  static calcDiff(startDate, endDate) {
-    if (typeof startDate === 'number') {
-      startDate = new Date(startDate);
+  static calcDiff(endDate, startDate = new Date()) {
+    const startTime = transformDate(startDate).getTime();
+    const endTime = transformDate(endDate).getTime();
+
+    if (startTime >= endTime) {
+      return '';
     }
-    if (typeof endDate === 'number') {
-      endDate = new Date(endDate);
-    }
+
     const timeUnits = [
       [24 * 3600 * 1000, '天'],
       [3600 * 1000, '小时'],
       [60 * 1000, '分钟']
     ];
     let text = '';
-    let time = Math.abs(endDate.getTime() - startDate.getTime());
+    let time = Math.abs(endTime - startTime);
     for (const unit of timeUnits) {
       if (time >= unit[0]) {
         const num = Math.floor(time / unit[0]);
@@ -59,6 +68,27 @@ class TimeUtil {
       }
     }
     return text || '0分钟';
+  }
+
+  static numberToWeek(x) {
+    switch (x) {
+      case 0:
+        return '星期天';
+      case 1:
+        return '星期一';
+      case 2:
+        return '星期二';
+      case 3:
+        return '星期三';
+      case 4:
+        return '星期四';
+      case 5:
+        return '星期五';
+      case 6:
+        return '星期六';
+      default:
+        return '无效';
+    }
   }
 }
 

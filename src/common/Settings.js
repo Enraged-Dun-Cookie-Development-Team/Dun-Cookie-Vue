@@ -1,6 +1,6 @@
 import BrowserUtil from './util/BrowserUtil';
 import {BROWSER_CHROME, BROWSER_FIREFOX, BROWSER_MOBILE_PHONE, MESSAGE_SETTINGS_UPDATE} from './Constants';
-import {deepAssign} from './util/TmpUtil';
+import {deepAssign} from './util/CommonFunctions';
 import {defaultDataSourcesNames} from './datasource/DefaultDataSources';
 
 /**

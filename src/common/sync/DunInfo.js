@@ -1,6 +1,6 @@
 import BrowserUtil from '../util/BrowserUtil';
 import {MESSAGE_DUN_INFO_GET, MESSAGE_DUN_INFO_UPDATE} from '../Constants';
-import {deepAssign} from '../util/TmpUtil';
+import {deepAssign} from '../util/CommonFunctions';
 
 /**
  * 蹲饼数据
