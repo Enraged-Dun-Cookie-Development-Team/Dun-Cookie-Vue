@@ -206,7 +206,7 @@
                       </div>
                     </div>
                     <div
-                      v-if="setting.sanShow && LazyLoaded"
+                      v-if="this.setting.sanShow && LazyLoaded"
                       class="sane-area"
                       @click.stop="openToolDrawer"
                     >
@@ -535,7 +535,10 @@ export default {
       this.getLocalStorage("setting").then((data) => {
         if (data != null) {
           this.setting = data;
-          this.setting.sanShow = this.saveInfo.webType != 1;  // 如果是火狐内核浏览器，隐藏理智规划
+          if(this.saveInfo.webType == 1) {
+            this.setting.sanShow = false;  // 如果是火狐内核浏览器，隐藏理智规划
+          }
+          console.log(this.saveInfo.webType != 1)
           setInterval(() => {
             // 轮询在这里
             this.getCardlist();
