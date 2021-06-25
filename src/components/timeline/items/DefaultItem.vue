@@ -9,7 +9,7 @@
         <span v-html="item.retweeted.content"></span>
       </el-card>
     </el-row>
-    <el-row v-if="showImage && setting.display.showImage && item.coverImage" class="margintb">
+    <el-row v-if="showImage && settings.display.showImage && item.coverImage" class="margintb">
       <div :class="{'show-all': showAllImage.includes(item.coverImage)}"
            class="img-area"
            @click="changeShowAllImage(item.coverImage)">
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import {settings} from '../../../common/Settings';
+import Settings from '../../../common/Settings';
 import BrowserUtil from '../../../common/util/BrowserUtil';
 
 export default {
@@ -37,7 +37,7 @@ export default {
   props: ["item", "showImage"],
   data() {
     return {
-      setting: settings,
+      settings: Settings,
       showAllImage: [],
     };
   },

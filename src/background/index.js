@@ -1,4 +1,4 @@
-import {settings} from '../common/Settings';
+import Settings from '../common/Settings';
 import BrowserUtil from '../common/util/BrowserUtil';
 import NotificationUtil from '../common/util/NotificationUtil';
 import DunInfo from '../common/sync/DunInfo';
@@ -10,7 +10,9 @@ import {
     MESSAGE_DUN_INFO_GET,
     MESSAGE_FORCE_REFRESH,
     MESSAGE_SAN_GET,
-    MESSAGE_SETTINGS_UPDATE, PAGE_POPUP_WINDOW, PAGE_WELCOME,
+    MESSAGE_SETTINGS_UPDATE,
+    PAGE_POPUP_WINDOW,
+    PAGE_WELCOME,
     TEST_DATA_REFRESH_TIME
 } from '../common/Constants';
 import {defaultDataSources} from '../common/datasource/DefaultDataSources';
@@ -65,14 +67,14 @@ function tryDun(settings) {
 
 let dunTimeoutId = null;
 /**
- * 启动蹲饼timer，会立刻请求一次然后按settings.dun.intervalTime的值进行延时轮询
+ * 启动蹲饼timer，会立刻请求一次然后按Settings.dun.intervalTime的值进行延时轮询
  */
 function startDunTimer() {
-    tryDun(settings);
+    tryDun(Settings);
 
-    let delay = IS_TEST ? TEST_DATA_REFRESH_TIME : settings.dun.intervalTime;
+    let delay = IS_TEST ? TEST_DATA_REFRESH_TIME : Settings.dun.intervalTime;
     // 低频模式
-    if (settings.checkLowFrequency()) {
+    if (Settings.checkLowFrequency()) {
         delay *= 2;
     }
     dunTimeoutId = setTimeout(() => {
@@ -96,7 +98,7 @@ const kazeFun = {
             let notice = newInfo.dynamicInfo.replace(/\n/g, "");
             console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
             // 是否推送
-            if (settings.dun.enableNotice) {
+            if (Settings.dun.enableNotice) {
                 NotificationUtil.SendNotice(`小刻在【${title}】里面找到了一个饼！`, notice, newInfo.image, newInfo.id)
             }
             return true;
@@ -112,7 +114,7 @@ const kazeFun = {
         // chrome.browserAction.setBadgeText({ text: 'Beta' });
         // chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
         // 开始蹲饼！
-        settings.doAfterInit(() => {
+        Settings.doAfterInit(() => {
             startDunTimer();
         });
 
@@ -121,7 +123,7 @@ const kazeFun = {
             if (message.type) {
                 switch (message.type) {
                     case MESSAGE_FORCE_REFRESH:
-                        tryDun(settings);
+                        tryDun(Settings);
                         return;
                     case MESSAGE_DUN_INFO_GET:
                         return DunInfo;
@@ -164,7 +166,7 @@ const kazeFun = {
 
         // 监听扩展图标被点击，用于打开窗口化的弹出页面
         BrowserUtil.addIconClickListener(() => {
-            if (settings.display.windowMode) {
+            if (Settings.display.windowMode) {
                 if (popupWindowId != null) {
                     BrowserUtil.removeWindow(popupWindowId);
                 }

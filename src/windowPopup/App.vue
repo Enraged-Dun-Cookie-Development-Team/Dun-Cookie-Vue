@@ -1,5 +1,5 @@
 <template>
-  <div :class="setting.getColorTheme()">
+  <div :class="settings.getColorTheme()">
     <div id="app">
       <el-drawer
         :visible.sync="drawer"
@@ -99,12 +99,12 @@
               ref="saneEdit"
               v-model="sane.currentSan"
               :min="0"
-              :max="setting.san.maxValue"
+              :max="settings.san.maxValue"
               label="输入当前理智"
             ></el-input-number
           ></el-form-item>
           <el-form-item label="理智满后是否推送">
-            <el-switch v-model="setting.san.noticeWhenFull"></el-switch>
+            <el-switch v-model="settings.san.noticeWhenFull"></el-switch>
           </el-form-item>
           <el-form-item>
             <el-button @click="saveSane">开始计算</el-button>
@@ -140,7 +140,7 @@
             ></countTo
             >次】</span
           >
-          <span v-if="setting.checkLowFrequency()"> 【低频蹲饼时段】 </span>
+          <span v-if="settings.checkLowFrequency()"> 【低频蹲饼时段】 </span>
         </span>
       </div>
       <div id="content">
@@ -194,7 +194,7 @@
                       </div>
                     </div>
                     <div
-                      v-if="setting.feature.san && LazyLoaded"
+                      v-if="settings.feature.san && LazyLoaded"
                       class="sane-area"
                       @click.stop="openToolDrawer"
                     >
@@ -254,24 +254,22 @@
         <!-- <time-line
           v-if="!setting.display.showByTag"
           ref="TimeLine"
-          :setting="setting"
           :imgShow="LazyLoaded"
           :cardlist="cardlist"
           :allHeight="allHeight"
         >
         </time-line> -->
         <time-line
-          v-if="!setting.display.showByTag"
+          v-if="!settings.display.showByTag"
           ref="TimeLine"
-          :setting="setting"
           :imgShow="LazyLoaded"
           :cardlist="cardlist"
         >
         </time-line>
 
         <el-tabs
-          v-if="setting.display.showByTag"
-          v-model="setting.display.defaultTag"
+          v-if="settings.display.showByTag"
+          v-model="settings.display.defaultTag"
           :stretch="true"
         >
           <el-tab-pane
@@ -289,7 +287,6 @@
             </span>
             <time-line
               ref="TimeLine"
-              :setting="setting"
               :imgShow="LazyLoaded"
               :cardlist="cardlistdm[item]"
             >
@@ -305,7 +302,7 @@
 import countTo from "vue-count-to";
 import TimeLine from "../components/timeline/TimeLine";
 import {common, diffTime, numberOrEnNameToIconSrc, numberOrEnNameToName, numberToWeek,} from "../assets/JS/common";
-import {settings} from '../common/Settings';
+import Settings from '../common/Settings';
 import HttpUtil from '../common/util/HttpUtil';
 import BrowserUtil from '../common/util/BrowserUtil';
 import DunInfo from '../common/sync/DunInfo';
@@ -351,7 +348,7 @@ export default {
       onlineSpeakList: [],
       oldDunCount: 0,
       dunInfo: DunInfo,
-      setting: settings,
+      settings: Settings,
       drawer: false, // 打开菜单
       toolDrawer: false, // 理智计算器菜单
       isReload: false, // 是否正在刷新

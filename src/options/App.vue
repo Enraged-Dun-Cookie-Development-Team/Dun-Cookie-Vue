@@ -1,5 +1,5 @@
 <template>
-  <div class="background" :class="setting.getColorTheme()">
+  <div class="background" :class="settings.getColorTheme()">
     <div id="app">
       <el-card class="box-card" shadow="never">
         <el-row type="flex" align="middle" justify="space-around">
@@ -9,7 +9,7 @@
         <el-divider></el-divider>
         <div class="info">
           <div class="info-time">
-            小刻在 {{ timespanToDay(setting.initTime / 1000) }} 进入食堂
+            小刻在 {{ timespanToDay(settings.initTime / 1000) }} 进入食堂
           </div>
           <div class="info-title">
             小刻已经找了<span style="color: #23ade5"
@@ -26,7 +26,7 @@
           <!-- <div class="info-time">下次蹲饼时间：{{ nextdunTime }}</div> -->
         </div>
         <el-divider></el-divider>
-        <el-form :rules="rules" ref="form" :model="setting" label-width="100px">
+        <el-form :rules="rules" ref="form" :model="settings" label-width="100px">
           <el-tabs v-model="activeTab" type="border-card">
             <el-tab-pane label="核心设置" name="0">
               <el-tooltip
@@ -36,7 +36,7 @@
                 placement="bottom"
               >
                 <el-form-item label="饼来源">
-                  <el-checkbox-group v-model="setting.enableDataSources" :min="1">
+                  <el-checkbox-group v-model="settings.enableDataSources" :min="1">
                     <el-checkbox v-for="source of defSourcesList" :key="source.dataName" :label="source.dataName">
                       <span class="checkbox-area">
                         <img class="iconimg" :src="source.icon"/>
@@ -75,12 +75,12 @@
                   <el-input-number
                     controls-position="right"
                     size="small"
-                    v-model="setting.dun.intervalTime"
+                    v-model="settings.dun.intervalTime"
                     :min="3"
                     :max="3600"
                   ></el-input-number>
-                  <span style="margin-left: 20px" v-if="setting.dun.autoLowFrequency">
-                    低频模式下为{{ setting.dun.intervalTime * 2 }}秒刷新一次
+                  <span style="margin-left: 20px" v-if="settings.dun.autoLowFrequency">
+                    低频模式下为{{ settings.dun.intervalTime * 2 }}秒刷新一次
                   </span>
                 </el-form-item>
               </el-tooltip>
@@ -91,7 +91,7 @@
                 placement="bottom"
               >
                 <el-form-item label="推送">
-                  <el-switch v-model="setting.dun.enableNotice"></el-switch>
+                  <el-switch v-model="settings.dun.enableNotice"></el-switch>
                 </el-form-item>
               </el-tooltip>
               <el-tooltip
@@ -103,15 +103,15 @@
                 <el-form-item label="低频模式">
                   <el-row>
                     <el-col :span="3">
-                      <el-switch v-model="setting.dun.autoLowFrequency"></el-switch
+                      <el-switch v-model="settings.dun.autoLowFrequency"></el-switch
                     ></el-col>
                     <el-col
-                      v-show="setting.dun.autoLowFrequency"
+                      v-show="settings.dun.autoLowFrequency"
                       :span="20"
                       :offset="1"
                     >
                       <el-slider
-                        v-model="setting.dun.lowFrequencyTime"
+                        v-model="settings.dun.lowFrequencyTime"
                         show-stops
                         :max="24"
                         :marks="marks"
@@ -130,7 +130,7 @@
                   保存的时候可能会因为数据排序改变而发送错误的推送，请忽略！
                 </div>
                 <el-form-item label="无时间排序">
-                  <el-radio-group v-model="setting.dun.sortModeForOnlyDate">
+                  <el-radio-group v-model="settings.dun.sortModeForOnlyDate">
                     <el-radio :label="1">当天内容顶部</el-radio>
                     <el-radio :label="2">当天内容底部</el-radio>
                   </el-radio-group>
@@ -140,7 +140,7 @@
             </el-tab-pane>
             <el-tab-pane label="界面设置" name="1">
               <el-form-item label="字体大小">
-                <el-radio-group v-model="setting.display.fontSize">
+                <el-radio-group v-model="settings.display.fontSize">
                   <el-radio :label="-1">小</el-radio>
                   <el-radio :label="0">正常</el-radio>
                   <el-radio :label="1">大</el-radio>
@@ -148,7 +148,7 @@
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="展示图片">
-                <el-switch v-model="setting.display.showImage"></el-switch>
+                <el-switch v-model="settings.display.showImage"></el-switch>
               </el-form-item>
               <el-tooltip class="item" effect="dark" placement="left">
                 <div slot="content">
@@ -156,7 +156,7 @@
                   调整此开关会导致源数据改变，可能会有错误的推送！
                 </div>
                 <el-form-item label="显示转发">
-                  <el-switch v-model="setting.dun.showRetweet"></el-switch>
+                  <el-switch v-model="settings.dun.showRetweet"></el-switch>
                 </el-form-item>
               </el-tooltip>
               <el-tooltip
@@ -168,13 +168,13 @@
                 <el-form-item label="分类显示">
                   <el-row>
                     <el-col :span="3"
-                      ><el-switch v-model="setting.display.showByTag"></el-switch
+                      ><el-switch v-model="settings.display.showByTag"></el-switch
                     ></el-col>
-                    <el-col v-if="setting.display.showByTag" :span="20" :offset="1">
+                    <el-col v-if="settings.display.showByTag" :span="20" :offset="1">
                       <el-form-item prop="defaultTag">
-                        <el-select v-model="setting.display.defaultTag" placeholder="选择默认标签">
+                        <el-select v-model="settings.display.defaultTag" placeholder="选择默认标签">
                           <el-option
-                              v-for="source in setting.enableDataSources"
+                              v-for="source in settings.enableDataSources"
                               :key="source.dataName"
                               :label="source.title"
                               :value="source.dataName"
@@ -190,14 +190,14 @@
                   </el-row>
                 </el-form-item>
               </el-tooltip>
-              <el-form-item label="窗口化" v-if="setting.feature.window">
-                <el-switch v-model="setting.display.windowMode"></el-switch>
+              <el-form-item label="窗口化" v-if="settings.feature.window">
+                <el-switch v-model="settings.display.windowMode"></el-switch>
               </el-form-item>
               <el-form-item label="理智提醒">
-                <el-switch v-model="setting.san.noticeWhenFull"></el-switch>
+                <el-switch v-model="settings.san.noticeWhenFull"></el-switch>
               </el-form-item>
               <el-tooltip
-                v-if="setting.feature.san"
+                v-if="settings.feature.san"
                 class="item"
                 effect="dark"
                 content="用于公告栏计算理智回复"
@@ -207,7 +207,7 @@
                   <el-input-number
                     controls-position="right"
                     size="small"
-                    v-model="setting.san.maxValue"
+                    v-model="settings.san.maxValue"
                     :min="80"
                     :max="135"
                   ></el-input-number>
@@ -220,7 +220,7 @@
                 placement="left"
               >
                 <el-form-item label="主题切换">
-                  <el-radio-group v-model="setting.display.darkMode">
+                  <el-radio-group v-model="settings.display.darkMode">
                     <el-radio :label="0">日常模式</el-radio>
                     <el-radio :label="1">夜间模式</el-radio>
                     <el-radio :label="-1" title="18点到06点为夜间模式"
@@ -272,7 +272,7 @@
 import countTo from "vue-count-to";
 
 import {numberOrEnNameToName, timespanToDay,} from "../assets/JS/common";
-import {settings} from '../common/Settings';
+import Settings from '../common/Settings';
 import BrowserUtil from '../common/util/BrowserUtil';
 import DunInfo from '../common/sync/DunInfo';
 import Feedback from '../components/Feedback';
@@ -291,7 +291,7 @@ export default {
       currentVersion: CURRENT_VERSION,
       oldDunCount: 0,
       dunInfo: DunInfo,
-      setting: settings,
+      settings: Settings,
       defSourcesList: defaultDataSourcesList,
       marks: {
         8: "20点",

@@ -1,7 +1,7 @@
 import BrowserUtil from '../util/BrowserUtil';
 import StorageUtil from '../util/StorageUtil';
 import TimeUtil from '../util/TimeUtil';
-import {settings} from '../Settings';
+import Settings from '../Settings';
 import {
   DEBUG_LOG,
   MESSAGE_SAN_GET,
@@ -23,8 +23,8 @@ let sanTimerId = null;
 
 function sanRecovery(san) {
   san.currentSan++;
-  if (san.currentSan >= settings.san.maxValue) {
-    san.currentSan = settings.san.maxValue;
+  if (san.currentSan >= Settings.san.maxValue) {
+    san.currentSan = Settings.san.maxValue;
     NotificationUtil.SendNotice(`理智已满`, `理智已经满了，请博士赶快上线清理智！`, null, new Date().getTime());
     clearTimeout(sanTimerId);
     sanTimerId = null;
@@ -44,7 +44,7 @@ function startSanRecovery(san, delay) {
   sanTimerId = setTimeout(() => {
     // 将实际恢复逻辑放进setTimeout中，如果放在外面就会出现第一次会立刻恢复1理智(而没有等待恢复时间)的问题
     sanRecovery(san);
-    if (san.currentSan < settings.san.maxValue) {
+    if (san.currentSan < Settings.san.maxValue) {
       startSanRecovery(san);
     }
   }, delay);
@@ -123,7 +123,7 @@ class SanInfo {
   /**
    * 当前理智值
    */
-  __currentSan = settings.san.maxValue;
+  __currentSan = Settings.san.maxValue;
   /**
    * 当前理智更新时间
    */
@@ -143,10 +143,10 @@ class SanInfo {
       BrowserUtil.sendMessage(MESSAGE_SAN_GET).then(data => deepAssign(this, data));
       // 仅在后台页面进行理智计算
       if (BrowserUtil.isBackground) {
-        tryReload(this, settings);
+        tryReload(this, Settings);
         BrowserUtil.addMessageListener('sanInfo', MESSAGE_SAN_UPDATE, data => {
           deepAssign(this, data);
-          handleSanUpdate(this, settings);
+          handleSanUpdate(this, Settings);
         });
         BrowserUtil.addMessageListener('sanInfo', MESSAGE_SETTINGS_UPDATE, data => handleSettingsUpdate(this, data));
       } else {
@@ -156,10 +156,10 @@ class SanInfo {
   }
 
   calcRemainingTime() {
-    if (this.currentSan >= settings.san.maxValue) {
+    if (this.currentSan >= Settings.san.maxValue) {
       return '已经回满';
     }
-    const endTime = new Date(new Date().getTime() + (settings.san.maxValue - this.currentSan) * SAN_RECOVERY_SPEED);
+    const endTime = new Date(new Date().getTime() + (Settings.san.maxValue - this.currentSan) * SAN_RECOVERY_SPEED);
 
     // 由于理智回满最多13个小时多，所以只可能是今天或明天回满
     const tomorrow = endTime.getDay() !== new Date(this.updateTime).getDay() ? '明天' : '';

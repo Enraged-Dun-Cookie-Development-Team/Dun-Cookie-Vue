@@ -1,5 +1,5 @@
 import {DataSource} from '../DataSource';
-import {settings} from '../../Settings';
+import Settings from '../../Settings';
 import TimeUtil from '../../util/TimeUtil';
 import {DataItem, RetweetedInfo} from '../../DataItem';
 
@@ -23,7 +23,7 @@ export class WeiboDataSource extends DataSource {
     if (data.ok == 1 && data.data != null && data.data.cards != null && data.data.cards.length > 0) {
       data.data.cards.forEach(x => {
         // 是否显示转发内容
-        if (!settings.dun.showRetweet && x.hasOwnProperty('mblog') && x.mblog.hasOwnProperty('retweeted_status')) {
+        if (!Settings.dun.showRetweet && x.hasOwnProperty('mblog') && x.mblog.hasOwnProperty('retweeted_status')) {
           return;
         }
         if (x.hasOwnProperty('mblog')) {

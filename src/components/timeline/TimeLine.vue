@@ -1,5 +1,5 @@
 <template>
-  <el-timeline :class="setting.display.windowMode ? 'window' : ''">
+  <el-timeline :class="settings.display.windowMode ? 'window' : ''">
     <MyElTimelineItem
       v-for="(item, index) in cardlist"
       :key="index"
@@ -10,7 +10,7 @@
     >
       <el-card
         class="card"
-        :class="[`font-size-${setting.display.fontSize}`, {'special-source': item.component}]"
+        :class="[`font-size-${settings.display.fontSize}`, {'special-source': item.component}]"
         shadow="never"
       >
         <span>
@@ -46,13 +46,16 @@ import {CURRENT_VERSION} from '../../common/Constants';
 import MyElTimelineItem from './MyTimeLineItem';
 import DefaultItem from './items/DefaultItem';
 import DataSourceUtil from '../../common/util/DataSourceUtil';
+import Settings from '../../common/Settings';
 
 export default {
   name: "TimeLine",
   components: {MyElTimelineItem},
-  props: ["cardlist", "setting", "imgShow"],
+  props: ["cardlist", "imgShow"],
   data() {
-    return {};
+    return {
+      settings: Settings
+    };
   },
   mounted() {},
   methods: {

@@ -1,5 +1,5 @@
 import {DataSource} from '../DataSource';
-import {settings} from '../../Settings';
+import Settings from '../../Settings';
 import NotificationUtil from '../../util/NotificationUtil';
 import TimeUtil from '../../util/TimeUtil';
 import {DataItem} from '../../DataItem';
@@ -35,7 +35,7 @@ export class InGameAnnouncementDataSource extends DataSource {
       if (ignoreAnnounces.includes(parseInt(x.announceId))) {
         return;
       }
-      const time = new Date(`${new Date().getFullYear()}-${x.month}-${x.day} ${settings.getTimeBySortMode()}`);
+      const time = new Date(`${new Date().getFullYear()}-${x.month}-${x.day} ${Settings.getTimeBySortMode()}`);
       list.push(DataItem.builder(opt.dataName)
         .id(x.announceId)
         .timeForSort(time.getTime())
@@ -45,7 +45,7 @@ export class InGameAnnouncementDataSource extends DataSource {
         .build()
       );
     });
-    if (settings.dun.enableNotice) {
+    if (Settings.dun.enableNotice) {
       this.JudgmentNewFocusAnnounceId(data);
     }
     return list;

@@ -1,5 +1,5 @@
 import {DataSource} from '../DataSource';
-import {settings} from '../../Settings';
+import Settings from '../../Settings';
 import TimeUtil from '../../util/TimeUtil';
 import {DataItem} from '../../DataItem';
 
@@ -28,7 +28,7 @@ export class ArknightsOfficialWebDataSource extends DataSource {
         let date = item.getElementsByClassName('articleItemDate')[0].innerHTML
         let title = item.getElementsByClassName('articleItemTitle')[0].innerHTML
         let url = item.getElementsByClassName('articleItemLink')[0].pathname;
-        let time = new Date(`${date} ${settings.getTimeBySortMode()}`);
+        let time = new Date(`${date} ${Settings.getTimeBySortMode()}`);
         let judgment = url.match(/\d+/g);
         list.push(DataItem.builder(opt.dataName)
           .id(judgment.length > 0 ? parseInt(judgment[0]) : index)

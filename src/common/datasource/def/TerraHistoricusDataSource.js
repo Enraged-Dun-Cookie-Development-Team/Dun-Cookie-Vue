@@ -1,7 +1,7 @@
 import {DataSource} from '../DataSource';
 import TimeUtil from '../../util/TimeUtil';
 import {DataItem} from '../../DataItem';
-import {settings} from '../../Settings';
+import Settings from '../../Settings';
 
 /**
  * 泰拉记事社(官网)数据源。
@@ -23,7 +23,7 @@ export class TerraHistoricusDataSource extends DataSource {
       let info = JSON.parse(x).data;
       info.episodes.reverse();
       const date = TimeUtil.format(new Date(info.updateTime * 1000), 'yyyy-MM-dd');
-      const time = new Date(`${date} ${settings.getTimeBySortMode()}`);
+      const time = new Date(`${date} ${Settings.getTimeBySortMode()}`);
       list.push(DataItem.builder(opt.dataName)
         .id(info.cid)
         .timeForSort(time.getTime())

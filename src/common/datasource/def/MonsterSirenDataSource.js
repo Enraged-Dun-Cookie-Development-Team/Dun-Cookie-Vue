@@ -1,7 +1,7 @@
 import {DataSource} from '../DataSource';
 import TimeUtil from '../../util/TimeUtil';
 import {DataItem} from '../../DataItem';
-import {settings} from '../../Settings';
+import Settings from '../../Settings';
 
 /**
  * 塞壬唱片(官网)数据源。
@@ -22,7 +22,7 @@ export class MonsterSirenDataSource extends DataSource {
     let data = JSON.parse(opt.responseText);
     if (data && data.data && data.data.list) {
       data.data.list.forEach(x => {
-        const time = new Date(`${x.date} ${settings.getTimeBySortMode()}`);
+        const time = new Date(`${x.date} ${Settings.getTimeBySortMode()}`);
         list.push(DataItem.builder(opt.dataName)
           .id(x.cid)
           .timeForSort(time.getTime())

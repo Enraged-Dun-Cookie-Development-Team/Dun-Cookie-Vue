@@ -35,7 +35,7 @@
         </el-collapse-item>
       </el-collapse>
       <el-divider></el-divider>
-      <div v-if="setting.feature.options">
+      <div v-if="settings.feature.options">
         现在可以点击
         <el-button @click="toSetting" size="mini">设置</el-button>
         进入设置来调整蹲饼器
@@ -57,7 +57,7 @@
 import BrowserUtil from '../common/util/BrowserUtil';
 import Feedback from '../components/Feedback';
 import {CURRENT_VERSION, PAGE_GITHUB_REPO, PAGE_OPTIONS} from '../common/Constants';
-import {settings} from '../common/Settings';
+import Settings from '../common/Settings';
 
 export default {
   name: "welcome",
@@ -69,7 +69,7 @@ export default {
   data() {
     return {
       currentVersion: CURRENT_VERSION,
-      setting: settings,
+      settings: Settings,
       activeNames: [1],
     };
   },

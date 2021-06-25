@@ -279,7 +279,7 @@ class Settings {
   }
 }
 
-const settings = new Settings()
-global.settings = settings;
+const instance = new Settings()
+global.instance = instance;
 
-export {settings};
+export default instance;

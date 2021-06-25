@@ -1,7 +1,7 @@
 import {DataSource} from '../DataSource';
 import TimeUtil from '../../util/TimeUtil';
 import {DataItem} from '../../DataItem';
-import {settings} from '../../Settings';
+import Settings from '../../Settings';
 
 /**
  * 网易云音乐数据源。
@@ -23,7 +23,7 @@ export class NeteaseCloudMusicDataSource extends DataSource {
     if (data && data.hotAlbums && data.hotAlbums.length > 0) {
       data.hotAlbums.forEach(x => {
         const date = TimeUtil.format(new Date(x.publishTime), 'yyyy-MM-dd');
-        const time = new Date(`${date} ${settings.getTimeBySortMode()}`);
+        const time = new Date(`${date} ${Settings.getTimeBySortMode()}`);
         list.push(DataItem.builder(opt.dataName)
           .id(x.id)
           .timeForSort(time.getTime())

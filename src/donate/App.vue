@@ -1,5 +1,5 @@
 <template>
-  <div class="background" :class="setting.getColorTheme()">
+  <div class="background" :class="settings.getColorTheme()">
     <div id="app">
       <el-card class="box-card" shadow="never">
         <el-row type="flex" align="middle" justify="space-around">
@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import {settings} from '../common/Settings';
+import Settings from '../common/Settings';
 import {CURRENT_VERSION} from '../common/Constants';
 
 export default {
@@ -58,7 +58,7 @@ export default {
   data() {
     return {
       currentVersion: CURRENT_VERSION,
-      setting: settings,
+      settings: Settings,
     };
   },
   computed: {
