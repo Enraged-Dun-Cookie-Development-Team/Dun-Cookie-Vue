@@ -115,6 +115,16 @@ class BrowserUtil {
     return chrome.browserAction.onClicked.addListener(listener);
   }
 
+  /**
+   * 在新标签页中打开拓展内置页面
+   */
+  static createExtensionTab(url) {
+    return chrome.tabs.create({url: BrowserUtil.getExtensionURL(url)});
+  }
+
+  /**
+   * 在新标签页中打开指定url
+   */
   static createTab(url) {
     return chrome.tabs.create({url: url});
   }

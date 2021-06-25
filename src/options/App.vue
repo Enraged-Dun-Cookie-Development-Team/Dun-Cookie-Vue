@@ -271,10 +271,9 @@
 <script>
 import countTo from "vue-count-to";
 
-import {numberOrEnNameToIconSrc, numberOrEnNameToName, timespanToDay,} from "../assets/JS/common";
+import {numberOrEnNameToName, timespanToDay,} from "../assets/JS/common";
 import {settings} from '../common/Settings';
 import BrowserUtil from '../common/util/BrowserUtil';
-import {sourceToName} from '../common/util/TmpUtil';
 import DunInfo from '../common/sync/DunInfo';
 import Feedback from '../components/Feedback';
 import {CURRENT_VERSION, MESSAGE_DUN_INFO_UPDATE} from '../common/Constants';
@@ -311,20 +310,13 @@ export default {
   },
   methods: {
     numberOrEnNameToName,
-    numberOrEnNameToIconSrc,
     timespanToDay,
-    sourceToName,
+    openUrl: BrowserUtil.createTab(url),
     init() {
       BrowserUtil.addMessageListener('options', MESSAGE_DUN_INFO_UPDATE, data => {
         this.oldDunCount = data.counter;
       });
     },
-
-    // 打开网址
-    openUrl(url) {
-      BrowserUtil.createTab(url);
-    },
-
     // 保存设置
     saveSetting(formName, data) {
       if (!data) {

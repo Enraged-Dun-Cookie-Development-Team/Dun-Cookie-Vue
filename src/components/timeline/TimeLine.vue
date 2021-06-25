@@ -56,6 +56,7 @@ export default {
   },
   mounted() {},
   methods: {
+    openUrl: BrowserUtil.createTab,
     resolveComponent(item) {
       if (!item.componentData) {
         return DefaultItem;
@@ -96,9 +97,6 @@ ${item.url}
           });
         }
       );
-    },
-    openUrl(url) {
-      BrowserUtil.createTab(url);
     },
   },
 };

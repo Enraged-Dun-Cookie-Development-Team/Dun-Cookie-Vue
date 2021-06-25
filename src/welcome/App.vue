@@ -56,7 +56,7 @@
 <script>
 import BrowserUtil from '../common/util/BrowserUtil';
 import Feedback from '../components/Feedback';
-import {CURRENT_VERSION} from '../common/Constants';
+import {CURRENT_VERSION, PAGE_GITHUB_REPO, PAGE_OPTIONS} from '../common/Constants';
 import {settings} from '../common/Settings';
 
 export default {
@@ -78,10 +78,10 @@ export default {
     init() {
     },
     toSetting() {
-      BrowserUtil.createTab(BrowserUtil.getExtensionURL('options.html'))
+      BrowserUtil.createExtensionTab(PAGE_OPTIONS);
     },
     toGithub() {
-      BrowserUtil.createTab('https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue');
+      BrowserUtil.createTab(PAGE_GITHUB_REPO);
     },
     // lookList() {
     //   chrome.browserAction.getPopup();

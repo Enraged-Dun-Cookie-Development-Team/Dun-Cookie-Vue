@@ -12,12 +12,13 @@ class DataSourceUtil {
   }
 
   /**
-   * 合并数据(并排序)
+   * 合并数据，可以将合并的数据进行排序(默认启用排序)
    */
-  static mergeAllData(data) {
-    return Object.values(data)
-      .reduce((acc, cur) => [...acc, ...cur], [])
-      .sort((x, y) => {
+  static mergeAllData(data, sort = true) {
+    const result = Object.values(data)
+      .reduce((acc, cur) => [...acc, ...cur], []);
+    if (sort) {
+      result.sort((x, y) => {
         // 时间戳大的优先
         let ret = new Date(y.timeForSort).getTime() - new Date(x.timeForSort).getTime();
         if (ret === 0) {
@@ -30,6 +31,8 @@ class DataSourceUtil {
         }
         return ret;
       });
+    }
+    return result;
   }
 }
 

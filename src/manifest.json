@@ -37,7 +37,8 @@
 		"http://*.prts.wiki/*"
 	],
 	"options_ui": {
-		"page": "./options.html"
+		"page": "options.html",
+		"open_in_tab": true
 	},
 	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }

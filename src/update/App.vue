@@ -26,18 +26,18 @@
         <el-button
           size="mini"
            type="success"
-          @click="toLink(updateInfo.downChrome)"
+          @click="openUrl(updateInfo.downChrome)"
           >Chrome应用商店</el-button
         >
 
-        <el-button type="success" @click="toLink(updateInfo.downCrx)" size="mini"
+        <el-button type="success" @click="openUrl(updateInfo.downCrx)" size="mini"
           >下载Crx</el-button
         >
-        <el-button type="success" @click="toLink(updateInfo.downZip)" size="mini"
+        <el-button type="success" @click="openUrl(updateInfo.downZip)" size="mini"
           >下载Zip</el-button
         >
         
-        <el-button v-if="updateInfo.downSpareText" @click="toLink(updateInfo.downSpare)" size="mini"
+        <el-button v-if="updateInfo.downSpareText" @click="openUrl(updateInfo.downSpare)" size="mini"
           >{{updateInfo.downSpareText}}</el-button
         >
       </div>
@@ -63,7 +63,6 @@ export default {
   data() {
     return {
       currentVersion: CURRENT_VERSION,
-      activeNames: [1],
       updateInfo: {},
     };
   },
@@ -72,9 +71,7 @@ export default {
     init() {
       this.getUpdateInfo();
     },
-    toLink(url) {
-      BrowserUtil.createTab(url);
-    },
+    openUrl: BrowserUtil.createTab,
     // 检查一次更新
     getUpdateInfo() {
       HttpUtil.GET(
@@ -84,15 +81,6 @@ export default {
         this.updateInfo = JSON.parse(responseText).upgrade;
       });
     },
-    toSetting() {
-      BrowserUtil.createTab(BrowserUtil.getExtensionURL('options.html'));
-    },
-    toGithub() {
-      BrowserUtil.createTab('https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue');
-    },
-    // lookList() {
-    //   chrome.browserAction.getPopup();
-    // },
   },
 };
 </script>

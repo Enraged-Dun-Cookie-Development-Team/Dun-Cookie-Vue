@@ -59,3 +59,14 @@ const BROWSER_UNKNOWN = 'Unknown';
 
 export {BROWSER_CHROME, BROWSER_FIREFOX, BROWSER_MOBILE_PHONE, BROWSER_UNKNOWN};
 // endregion
+
+// region 扩展内置页面
+const PAGE_WELCOME = 'welcome.html';
+const PAGE_OPTIONS = 'options.html';
+const PAGE_DONATE = 'donate.html';
+const PAGE_UPDATE = 'update.html';
+const PAGE_POPUP_WINDOW = 'windowPopup.html';
+const PAGE_GITHUB_REPO = 'https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue';
+
+export {PAGE_WELCOME, PAGE_POPUP_WINDOW, PAGE_OPTIONS, PAGE_DONATE, PAGE_UPDATE, PAGE_GITHUB_REPO};
+// endregion

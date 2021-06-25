@@ -315,7 +315,11 @@ import {
   MESSAGE_CARD_LIST_GET,
   MESSAGE_CARD_LIST_UPDATE,
   MESSAGE_DUN_INFO_UPDATE,
-  MESSAGE_FORCE_REFRESH
+  MESSAGE_FORCE_REFRESH,
+  PAGE_DONATE,
+  PAGE_GITHUB_REPO,
+  PAGE_OPTIONS,
+  PAGE_UPDATE
 } from '../common/Constants';
 import DataSourceUtil from '../common/util/DataSourceUtil';
 
@@ -366,6 +370,7 @@ export default {
     numberOrEnNameToIconSrc,
     numberToWeek,
     diffTime,
+    openUrl: BrowserUtil.createTab,
     init() {
       BrowserUtil.addMessageListener('windowPopup', MESSAGE_DUN_INFO_UPDATE, data => {
         this.oldDunCount = data.counter;
@@ -547,24 +552,20 @@ export default {
       }, 5000);
     },
 
-    openUrl(url) {
-      BrowserUtil.createTab(url);
-    },
-
     openSetting() {
-      BrowserUtil.createTab(BrowserUtil.getExtensionURL('options.html'));
+      BrowserUtil.createExtensionTab(PAGE_OPTIONS);
     },
 
     openDonate() {
-      BrowserUtil.createTab(BrowserUtil.getExtensionURL('donate.html'));
+      BrowserUtil.createExtensionTab(PAGE_DONATE);
     },
 
     openUpdate() {
-      BrowserUtil.createTab(BrowserUtil.getExtensionURL('update.html'));
+      BrowserUtil.createExtensionTab(PAGE_UPDATE);
     },
 
     openGithub() {
-      BrowserUtil.createTab('https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue');
+      BrowserUtil.createTab(PAGE_GITHUB_REPO);
     },
   },
 };

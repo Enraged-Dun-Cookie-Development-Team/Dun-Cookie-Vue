@@ -10,10 +10,11 @@ import {
     MESSAGE_DUN_INFO_GET,
     MESSAGE_FORCE_REFRESH,
     MESSAGE_SAN_GET,
-    MESSAGE_SETTINGS_UPDATE,
+    MESSAGE_SETTINGS_UPDATE, PAGE_POPUP_WINDOW, PAGE_WELCOME,
     TEST_DATA_REFRESH_TIME
 } from '../common/Constants';
 import {defaultDataSources} from '../common/datasource/DefaultDataSources';
+import DataSourceUtil from '../common/util/DataSourceUtil';
 
 // 重构完成后的其它优化：
 // TODO 多个提取出来的类要考虑能否合并(指互相通信的那部分)
@@ -146,11 +147,9 @@ const kazeFun = {
 
         // 监听标签
         BrowserUtil.addNotificationClickListener(id => {
-            let cardlist = Object.values(cardListCache)
-                .reduce((acc, cur) => [...acc, ...cur], [])
-                .filter(x => x.id + "_" == id);
-            if (cardlist != null && cardlist.length > 0) {
-                BrowserUtil.createTab(cardlist[0].url);
+            let item = DataSourceUtil.mergeAllData(cardListCache, false).find(x => x.id === id);
+            if (item) {
+                BrowserUtil.createTab(item.url);
             } else {
                 alert('o(╥﹏╥)o 时间过于久远...最近列表内没有找到该网站');
             }
@@ -159,7 +158,7 @@ const kazeFun = {
         // 监听安装更新
         BrowserUtil.addInstallListener(details => {
             if (details.reason === 'install') {
-                BrowserUtil.createTab(BrowserUtil.getExtensionURL("welcome.html"));
+                BrowserUtil.createExtensionTab(PAGE_WELCOME);
             }
         });
 
@@ -169,7 +168,7 @@ const kazeFun = {
                 if (popupWindowId != null) {
                     BrowserUtil.removeWindow(popupWindowId);
                 }
-                BrowserUtil.createWindow({ url: BrowserUtil.getExtensionURL("windowPopup.html"), type: "panel", width: 1100, height: 750 })
+                BrowserUtil.createWindow({ url: BrowserUtil.getExtensionURL(PAGE_POPUP_WINDOW), type: "panel", width: 1100, height: 750 })
                   .then(tab => popupWindowId = tab.id);
             }
         });
