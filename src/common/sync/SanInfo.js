@@ -1,5 +1,4 @@
 import BrowserUtil from '../util/BrowserUtil';
-import StorageUtil from '../util/StorageUtil';
 import TimeUtil from '../util/TimeUtil';
 import Settings from '../Settings';
 import {
@@ -168,13 +167,13 @@ class SanInfo {
   }
 
   saveUpdate() {
-    const promise = StorageUtil.saveLocalStorage('san', this);
+    const promise = BrowserUtil.saveLocalStorage('san', this);
     promise.then(() => BrowserUtil.sendMessage(MESSAGE_SAN_UPDATE, this));
     return promise;
   }
 
   reloadFromStorage() {
-    return StorageUtil.getLocalStorage('san').then(data => {
+    return BrowserUtil.getLocalStorage('san').then(data => {
       if (data) {
         deepAssign(this, data);
       }

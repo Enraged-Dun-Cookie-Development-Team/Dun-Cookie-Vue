@@ -31,6 +31,47 @@ class BrowserUtil {
     }
   }
 
+  /**
+   * 获取storage.local中储存的内容
+   * @param {string|string[]|object} name
+   */
+  static getLocalStorage(name) {
+    return new Promise((resolve, reject) => {
+      chrome.storage.local.get(name, (result) => {
+        const lastError = chrome.runtime.lastError;
+        if (lastError) {
+          reject(lastError);
+          return;
+        }
+        if (typeof name === 'string') {
+          resolve(result[name]);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  /**
+   * 将数据储存到storage.local中
+   * @param {string} name
+   * @param data
+   */
+  static saveLocalStorage(name, data) {
+    const val = {};
+    val[name] = data;
+    return new Promise((resolve, reject) => {
+      chrome.storage.local.set(val, () => {
+        const lastError = chrome.runtime.lastError;
+        if (lastError) {
+          reject(lastError);
+          return;
+        }
+        resolve(true);
+      });
+    });
+  }
+
   // TODO 之前好像看到Firefox浏览器的sendMessage会发给同一个页面的onMessageListener，而Chrome则不会。但是找不到文档了，需要确认，如果属实则考察是否需要加一个随机ID字段保证不监听自己
   static sendMessage(type, data) {
     if (DEBUG_LOG) {

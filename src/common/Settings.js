@@ -1,4 +1,3 @@
-import StorageUtil from './util/StorageUtil';
 import BrowserUtil from './util/BrowserUtil';
 import {BROWSER_CHROME, BROWSER_FIREFOX, BROWSER_MOBILE_PHONE, MESSAGE_SETTINGS_UPDATE} from './Constants';
 import {deepAssign} from './util/TmpUtil';
@@ -148,7 +147,7 @@ class Settings {
    * 检查当前是否在低频模式时段内
    */
   checkLowFrequency() {
-    if (!settings.dun.autoLowFrequency) {
+    if (!this.dun.autoLowFrequency) {
       return false;
     }
     let currentHour = new Date().getHours();
@@ -212,9 +211,6 @@ class Settings {
 
         // 必须在后台执行的只执行一次的内容
         if (BrowserUtil.isBackground) {
-          console.log('当前配置：');
-          console.log(this);
-          console.log('============');
           // 如果一个启用的都没有说明是新安装或者旧数据被清除，此时将默认数据源全部启用
           if (this.enableDataSources.length === 0) {
             this.enableDataSources = defaultDataSourcesNames;
@@ -255,7 +251,7 @@ class Settings {
    * @return {Promise}
    */
   saveSettings() {
-    const promise = StorageUtil.saveLocalStorage('settings', this);
+    const promise = BrowserUtil.saveLocalStorage('settings', this);
     promise.then(() => BrowserUtil.sendMessage(MESSAGE_SETTINGS_UPDATE, this));
     return promise;
   }
@@ -269,8 +265,13 @@ class Settings {
    * @return {Promise<Settings>}
    */
   reloadSettings() {
-    return StorageUtil.getLocalStorage('settings')
+    return BrowserUtil.getLocalStorage('settings')
       .then(value => {
+        if (BrowserUtil.isBackground) {
+          console.log("从储存中读取配置：");
+          console.log(this);
+          console.log('============');
+        }
         if (value != null) {
           deepAssign(this, value);
         }
