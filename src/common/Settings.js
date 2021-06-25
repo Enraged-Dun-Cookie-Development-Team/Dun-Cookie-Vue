@@ -255,8 +255,9 @@ class Settings {
    * @return {Promise}
    */
   saveSettings() {
-    return StorageUtil.saveLocalStorage('settings', this)
-      .then(() => BrowserUtil.sendMessage(MESSAGE_SETTINGS_UPDATE, this));
+    const promise = StorageUtil.saveLocalStorage('settings', this);
+    promise.then(() => BrowserUtil.sendMessage(MESSAGE_SETTINGS_UPDATE, this));
+    return promise;
   }
 
   /**

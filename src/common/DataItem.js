@@ -34,12 +34,10 @@ class DataItem {
   jumpUrl;
   /**
    * 封面图，用于在页面/通知上显示的饼的图片
-   * TODO 这个字段记得测试
    */
   coverImage;
   /**
    * 图片列表，对于多图的饼可以把图片全部显示出来
-   * TODO 这个字段记得测试
    */
   imageList;
   /**

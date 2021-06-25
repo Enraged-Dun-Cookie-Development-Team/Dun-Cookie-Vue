@@ -168,8 +168,9 @@ class SanInfo {
   }
 
   saveUpdate() {
-    StorageUtil.saveLocalStorage('san', this)
-      .then(() => BrowserUtil.sendMessage(MESSAGE_SAN_UPDATE, this));
+    const promise = StorageUtil.saveLocalStorage('san', this);
+    promise.then(() => BrowserUtil.sendMessage(MESSAGE_SAN_UPDATE, this));
+    return promise;
   }
 
   reloadFromStorage() {
