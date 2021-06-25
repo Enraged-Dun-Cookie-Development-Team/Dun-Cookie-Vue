@@ -1,72 +1,157 @@
+/**
+ * 代表一块饼！
+ */
 class DataItem {
   /**
-   * 时间 【必填】
+   * 【必填】标识这个饼来自哪个数据源，值为数据源的dataName
    */
-  time;
+  dataSource;
   /**
-   * 弹窗id 微博B站用时间戳，其他的内容用他们自己的ID 【必填】
+   * 【必填】唯一id，格式为 数据源类型名 + _ + 该数据源内部的唯一id
+   * <p>
+   * 加数据源类型名是为了避免不同数据源内部的id重复。
+   * 对于没有内部id的数据源，应使用时间戳作为id。
+   * <strong>注意：使用builder方法会自动加上数据源类型名，子类无需操心</strong>
    */
   id;
   /**
-   * 条目来源 【必填】
+   * 【必填】用于在时间线上排序的字段，值为Unix时间戳
+   * <p>
+   * 应统一使用饼发布的时间，对于只有日期没有具体时间的按照用户设置将具体时间设为00:00:00或23:59:59
    */
-  source;
+  timeForSort;
   /**
-   * 判定字段 微博B站用时间 鹰角用id 【必填】
+   * 【必填】用于显示在时间线上的时间，格式应该统一为<code>yyyy-MM-dd hh:mm:ss</code>，其中hh:mm:ss是可选的
    */
-  judgment;
+  timeForDisplay;
   /**
-   * 处理后内容 用于展示 微博把<br / >替换成 /r/n 后期统一处理 【必填】
+   * 【必填】饼的内容，这里的值应该是转换后可以直接显示在页面上的，并且可以直接复制的
    */
-  dynamicInfo;
+  content;
   /**
-   * 处理前内容 原始字段
+   * 【必填】跳转链接，用于点击跳转到对应的饼
    */
-  html;
+  jumpUrl;
   /**
-   * 获取到的图片
+   * 封面图，用于在页面/通知上显示的饼的图片
+   * TODO 这个字段记得测试
    */
-  image;
+  coverImage;
   /**
-   * 获取到的图片list
+   * 图片列表，对于多图的饼可以把图片全部显示出来
+   * TODO 这个字段记得测试
    */
-  imagelist;
+  imageList;
   /**
-   * 当前条目的类型
-   */
-  type;
-  /**
-   * 跳转后连接 【必填】
-   */
-  url;
-  /**
-   * 详情列表，以后进入二级页面使用
-   */
-  detail;
-  /**
-   * 在列表中是否为置顶内容 仅限微博
+   * 在列表中是否为置顶内容
    */
   isTop;
   /**
    * 转发的内容
    */
   retweeted;
+  /**
+   * 当使用特殊组件时，提供给组件的数据
+   * <p>
+   * 当提供了该属性时会自动寻找特殊组件
+   * 需要在components/timeline/items下新增组件，并且在popup/index.js注册组件(组件名为dataSource的dataType)
+   */
+  componentData;
+
+  static builder(dataSourceName) {
+    const instance = new DataItem();
+    instance.dataSource = dataSourceName;
+    // 其实这里用反射生成应该可读性更强一些，但是只有明确写出来IDE才能识别并自动补全
+    const _builder = {
+      /**
+       * @see DataItem.id
+       */
+      id: (val) => {
+        instance.id = `${dataSourceName}_${val}`;
+        return _builder;
+      },
+      /**
+       * @see DataItem.timeForSort
+       */
+      timeForSort: (val) => {
+        instance.timeForSort = val;
+        return _builder;
+      },
+      /**
+       * @see DataItem.timeForDisplay
+       */
+      timeForDisplay: (val) => {
+        instance.timeForDisplay = val;
+        return _builder;
+      },
+      /**
+       * @see DataItem.content
+       */
+      content: (val) => {
+        instance.content = val;
+        return _builder;
+      },
+      /**
+       * @see DataItem.jumpUrl
+       */
+      jumpUrl: (val) => {
+        instance.jumpUrl = val;
+        return _builder;
+      },
+      /**
+       * @see DataItem.coverImage
+       */
+      coverImage: (val) => {
+        instance.coverImage = val;
+        return _builder;
+      },
+      /**
+       * @see DataItem.imageList
+       */
+      imageList: (val) => {
+        instance.imageList = val;
+        return _builder;
+      },
+      /**
+       * @see DataItem.isTop
+       */
+      setTop: () => {
+        instance.isTop = true;
+        return _builder;
+      },
+      /**
+       * @see DataItem.retweeted
+       */
+      retweeted: (val) => {
+        instance.retweeted = val;
+        return _builder;
+      },
+      /**
+       * @see DataItem.componentData
+       */
+      componentData: (val) => {
+        instance.componentData = val;
+        return _builder;
+      },
+      build: () => instance,
+    };
+    return _builder;
+  }
 }
 
 class RetweetedInfo {
   /**
    * 被转发内容的原作者
-   * @type {string}
    */
   name;
   /**
    * 被转发的内容
    */
-  dynamicInfo;
+  content;
 
-  constructor(name, dynamicInfo) {
+  constructor(name, content) {
     this.name = name;
-    this.dynamicInfo = dynamicInfo;
+    this.content = content;
   }
 }
 

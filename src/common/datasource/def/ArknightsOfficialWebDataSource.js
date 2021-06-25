@@ -1,6 +1,7 @@
 import {DataSource} from '../DataSource';
 import {settings} from '../../Settings';
 import TimeUtil from '../../util/TimeUtil';
+import {DataItem} from '../../DataItem';
 
 /**
  * 明日方舟官网数据源。
@@ -8,8 +9,12 @@ import TimeUtil from '../../util/TimeUtil';
  */
 export class ArknightsOfficialWebDataSource extends DataSource {
 
+  static get typeName() {
+    return 'ak.hypergryph.com';
+  };
+
   constructor(icon, dataName, title, dataUrl, source) {
-    super(icon, 'ak.hypergryph.com', dataName, title, dataUrl, source);
+    super(icon, dataName, title, dataUrl, source);
   }
 
   processData(opt) {
@@ -25,20 +30,18 @@ export class ArknightsOfficialWebDataSource extends DataSource {
         let url = item.getElementsByClassName('articleItemLink')[0].pathname;
         let time = new Date(`${date} ${settings.getTimeBySortMode()}`);
         let judgment = url.match(/\d+/g);
-        list.push({
-          timestamp: TimeUtil.format(time, 'yyyy-MM-dd'),
-          id: judgment.length > 0 ? parseInt(judgment[0]) : index,
-          judgment: judgment.length > 0 ? parseInt(judgment[0]) : Math.floor(time.getTime() / 1000),
-          dynamicInfo: title,
-          source: opt.source,
-          icon: opt.icon,
-          dataSourceType: opt.dataSourceType,
-          url: `https://ak.hypergryph.com${url}`,
-        });
+        list.push(DataItem.builder(opt.dataName)
+          .id(judgment.length > 0 ? parseInt(judgment[0]) : index)
+          .timeForSort(time.getTime())
+          .timeForDisplay(TimeUtil.format(time, 'yyyy-MM-dd'))
+          .content(title)
+          .jumpUrl(`https://ak.hypergryph.com${url}`)
+          .build()
+        );
       } catch (error) {
         console.error('解析官网数据失败', item);
       }
     });
-    return list.sort((x, y) => y.judgment - x.judgment);
+    return list;
   }
 }

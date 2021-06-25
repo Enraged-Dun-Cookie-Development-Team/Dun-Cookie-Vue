@@ -303,7 +303,7 @@
 
 <script>
 import countTo from "vue-count-to";
-import TimeLine from "../components/TimeLine";
+import TimeLine from "../components/timeline/TimeLine";
 import {common, diffTime, numberOrEnNameToIconSrc, numberOrEnNameToName, numberToWeek,} from "../assets/JS/common";
 import {settings} from '../common/Settings';
 import HttpUtil from '../common/util/HttpUtil';
@@ -511,9 +511,9 @@ export default {
       BrowserUtil.sendMessage(MESSAGE_CARD_LIST_GET).then((data) => {
         this.cardlist = Object.values(data)
             .reduce((acc, cur) => [...acc, ...cur], [])
-            .sort((x, y) => new Date(y.timestamp).getTime() - new Date(x.timestamp).getTime())
+            .sort((x, y) => new Date(y.timeForSort).getTime() - new Date(x.timeForSort).getTime())
             .map((x) => {
-              x.dynamicInfo = x.dynamicInfo.replace(/\n/g, "<br/>");
+              x.content = x.content.replace(/\n/g, "<br/>");
               return x;
             });
         this.cardlistdm = data;
@@ -521,9 +521,9 @@ export default {
       BrowserUtil.addMessageListener('windowPopup', MESSAGE_CARD_LIST_UPDATE, (value) => {
         this.cardlist = Object.values(value)
             .reduce((acc, cur) => [...acc, ...cur], [])
-            .sort((x, y) => new Date(y.timestamp).getTime() - new Date(x.timestamp).getTime())
+            .sort((x, y) => new Date(y.timeForSort).getTime() - new Date(x.timeForSort).getTime())
             .map((x) => {
-              x.dynamicInfo = x.dynamicInfo.replace(/\n/g, "<br/>");
+              x.content = x.content.replace(/\n/g, "<br/>");
               return x;
             });
         this.cardlistdm = value;

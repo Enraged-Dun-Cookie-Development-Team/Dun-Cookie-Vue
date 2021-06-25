@@ -139,7 +139,7 @@ class SanInfo {
   }
 
   constructor() {
-    this.loadFromStorage().then(() => {
+    this.reloadFromStorage().then(() => {
       BrowserUtil.sendMessage(MESSAGE_SAN_GET).then(data => deepAssign(this, data));
       // 仅在后台页面进行理智计算
       if (BrowserUtil.isBackground) {
@@ -172,7 +172,7 @@ class SanInfo {
       .then(() => BrowserUtil.sendMessage(MESSAGE_SAN_UPDATE, this));
   }
 
-  loadFromStorage() {
+  reloadFromStorage() {
     return StorageUtil.getLocalStorage('san').then(data => {
       if (data) {
         deepAssign(this, data);

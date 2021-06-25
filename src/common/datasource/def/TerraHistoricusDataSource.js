@@ -1,5 +1,7 @@
 import {DataSource} from '../DataSource';
 import TimeUtil from '../../util/TimeUtil';
+import {DataItem} from '../../DataItem';
+import {settings} from '../../Settings';
 
 /**
  * 泰拉记事社(官网)数据源。
@@ -7,8 +9,12 @@ import TimeUtil from '../../util/TimeUtil';
  */
 export class TerraHistoricusDataSource extends DataSource {
 
+  static get typeName() {
+    return 'terra-historicus.hypergryph.com';
+  };
+
   constructor(icon, dataName, title, dataUrl, source) {
-    super(icon, 'terra-historicus.hypergryph.com', dataName, title, dataUrl, source);
+    super(icon, dataName, title, dataUrl, source);
   }
 
   processData(opt) {
@@ -16,20 +22,19 @@ export class TerraHistoricusDataSource extends DataSource {
     opt.responseText.map(x => {
       let info = JSON.parse(x).data;
       info.episodes.reverse();
-      list.push({
-        timestamp: TimeUtil.format(new Date(info.updateTime * 1000), 'yyyy-MM-dd'),
-        id: info.updateTime,
-        judgment: info.updateTime,
-        dynamicInfo: `泰拉记事社${info.title}已更新`,
-        name: info.title,
-        source: opt.source,
-        icon: opt.icon,
-        dataSourceType: opt.dataSourceType,
-        image: info.cover,
-        html: info,
-        url: `https://terra-historicus.hypergryph.com/comic/${info.cid}`,
-      });
+      const date = TimeUtil.format(new Date(info.updateTime * 1000), 'yyyy-MM-dd');
+      const time = new Date(`${date} ${settings.getTimeBySortMode()}`);
+      list.push(DataItem.builder(opt.dataName)
+        .id(info.cid)
+        .timeForSort(time.getTime())
+        .timeForDisplay(date)
+        .content(`泰拉记事社${info.title}已更新`)
+        .jumpUrl(`https://terra-historicus.hypergryph.com/comic/${info.cid}`)
+        .coverImage(info.cover)
+        .componentData(Object.assign({name: info.title}, info))
+        .build()
+      );
     });
-    return list.sort((x, y) => y.judgment - x.judgment);
+    return list;
   }
 }

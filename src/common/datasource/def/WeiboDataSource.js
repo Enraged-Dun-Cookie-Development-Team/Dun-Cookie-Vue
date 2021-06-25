@@ -1,6 +1,7 @@
 import {DataSource} from '../DataSource';
 import {settings} from '../../Settings';
 import TimeUtil from '../../util/TimeUtil';
+import {DataItem, RetweetedInfo} from '../../DataItem';
 
 /**
  * 微博数据源。
@@ -8,8 +9,12 @@ import TimeUtil from '../../util/TimeUtil';
  */
 export class WeiboDataSource extends DataSource {
 
+  static get typeName() {
+    return 'weibo';
+  };
+
   constructor(icon, dataName, title, dataUrl, source) {
-    super(icon, 'weibo', dataName, title, dataUrl, source);
+    super(icon, dataName, title, dataUrl, source);
   }
 
   processData(opt) {
@@ -17,44 +22,39 @@ export class WeiboDataSource extends DataSource {
     let data = JSON.parse(opt.responseText);
     if (data.ok == 1 && data.data != null && data.data.cards != null && data.data.cards.length > 0) {
       data.data.cards.forEach(x => {
-        // 设置是否显示转发内容
+        // 是否显示转发内容
         if (!settings.dun.showRetweet && x.hasOwnProperty('mblog') && x.mblog.hasOwnProperty('retweeted_status')) {
           return;
         }
         if (x.hasOwnProperty('mblog')) {
           let dynamicInfo = x.mblog;
-          let weiboId = data.data.cardlistInfo.containerid;
-          let time = Math.floor(new Date(dynamicInfo.created_at).getTime() / 1000);
-          let imageList = dynamicInfo.pic_ids && dynamicInfo.pic_ids.map(x => `https://wx1.sinaimg.cn/large/${x}`);
-          let info = {
-            timestamp: TimeUtil.format(new Date(dynamicInfo.created_at), 'yyyy-MM-dd hh:mm:ss'),
-            id: time,
-            isTop: x.mblog.hasOwnProperty('isTop') && x.mblog.isTop == 1,
-            judgment: time,
-            dynamicInfo: dynamicInfo.raw_text || dynamicInfo.text.replace(/<\a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<span class="url-icon">|<\img.*?>|全文|网页链接/g, '').replace(/<br \/>/g, '\n'),
-            html: dynamicInfo.text,
-            image: dynamicInfo.bmiddle_pic || dynamicInfo.original_pic,
-            imageList: imageList,
-            type: (dynamicInfo.hasOwnProperty("page_info") && dynamicInfo.page_info.hasOwnProperty('type') && dynamicInfo.page_info.type == "video") ? 0 : 1,
-            source: opt.source,
-            icon: opt.icon,
-            dataSourceType: opt.dataSourceType,
-            url: "https://weibo.com/" + weiboId.substring((weiboId.length - 10), weiboId.length) + "/" + x.mblog.bid,
-            detail: []
-          };
+          const containerId = data.data.cardlistInfo.containerid;
+          let weiboId = containerId.substring((containerId.length - 10), containerId.length) + '/' + x.mblog.bid;
+          let time = new Date(dynamicInfo.created_at);
+
+          const builder = DataItem.builder(opt.dataName)
+            .id(weiboId)
+            .timeForSort(time.getTime())
+            .timeForDisplay(TimeUtil.format(new Date(time), 'yyyy-MM-dd hh:mm:ss'))
+            .content(dynamicInfo.raw_text || dynamicInfo.text.replace(/<\a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<span class="url-icon">|<\img.*?>|全文|网页链接/g, '').replace(/<br \/>/g, '\n'))
+            .jumpUrl(`https://weibo.com/${weiboId}`)
+            .coverImage(dynamicInfo.bmiddle_pic || dynamicInfo.original_pic)
+            .imageList(dynamicInfo.pic_ids && dynamicInfo.pic_ids.map(x => `https://wx1.sinaimg.cn/large/${x}`));
+
+          if (x.mblog.hasOwnProperty('isTop') && x.mblog.isTop == 1) {
+            builder.setTop();
+          }
           // 转发内容
           if (x.mblog.hasOwnProperty('retweeted_status')) {
-            let retweeted = {
-              name: x.mblog.retweeted_status.user.screen_name,
-              dynamicInfo: x.mblog.retweeted_status.raw_text || x.mblog.retweeted_status.text.replace(/<\a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<span class="url-icon">|<\img.*?>|全文|网页链接/g, '').replace(/<br \/>/g, '\n')
-            }
-            info.retweeted = retweeted;
+            builder.retweeted(new RetweetedInfo(
+              x.mblog.retweeted_status.user.screen_name,
+              x.mblog.retweeted_status.raw_text || x.mblog.retweeted_status.text.replace(/<\a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<span class="url-icon">|<\img.*?>|全文|网页链接/g, '').replace(/<br \/>/g, '\n')
+            ));
           }
-          list.push(info);
+          list.push(builder.build());
         }
-
       });
-      return list.sort((x, y) => y.judgment - x.judgment);
+      return list;
     }
   }
 }

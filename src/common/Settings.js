@@ -2,11 +2,17 @@ import StorageUtil from './util/StorageUtil';
 import BrowserUtil from './util/BrowserUtil';
 import {BROWSER_CHROME, BROWSER_FIREFOX, BROWSER_MOBILE_PHONE, MESSAGE_SETTINGS_UPDATE} from './Constants';
 import {deepAssign} from './util/TmpUtil';
-import {defaultDataSources} from './datasource/DefaultDataSources';
+import {defaultDataSourcesNames} from './datasource/DefaultDataSources';
+
+/**
+ * 这个可以确保代码在settings初始化完毕之后再执行
+ */
+let initPromise;
 
 class Settings {
   // 插件初始化的时间
   initTime = new Date().getTime();
+
   /**
    * 启用的默认数据源，储存dataName
    */
@@ -163,50 +169,66 @@ class Settings {
     }
   }
 
+  /**
+   * 使用此方法确保代码在初始化之后执行
+   */
+  doAfterInit(callback) {
+    initPromise.then(callback);
+  }
+
   constructor() {
     BrowserUtil.addMessageListener('settings', MESSAGE_SETTINGS_UPDATE, data => {
       deepAssign(this, data);
       this.__updateWindowMode();
     });
-    this.reloadSettings().then(() => {
-      // 这部分主要是初始化一些固定的配置信息，只需要初始化的时候执行一次
+    initPromise = new Promise(resolve => {
+      this.reloadSettings().then(() => {
+        // 这部分主要是初始化一些固定的配置信息，只需要初始化的时候执行一次
 
-      // 必须在后台执行的只执行一次的内容
-      if (BrowserUtil.isBackground) {
-        console.log(this);
-        // 如果一个启用的都没有说明是新安装或者旧数据被清除，此时将默认数据源全部启用
-        if (this.enableDataSources.length === 0) {
-          this.enableDataSources = Object.keys(defaultDataSources);
+        // 特定的浏览器需要无视用户配置强行禁用某些功能
+        switch (BrowserUtil.browserType) {
+          case BROWSER_CHROME:
+            break;
+          case BROWSER_FIREFOX: {
+            this.feature.options = false;
+            this.feature.window = false;
+            this.feature.san = false;
+            break;
+          }
+          case BROWSER_MOBILE_PHONE: {
+            this.feature.window = false;
+            break;
+          }
+          default: {
+            this.feature.window = false;
+            break;
+          }
         }
-      }
+        // 根据被禁用的功能强行关闭配置
+        // 虽然理论上应该保证被禁用的功能不会被用户开启，但是保险起见这里还是再设置一下
+        if (!this.feature.window) {
+          this.display.windowMode = false;
+        }
 
-      // 特定的浏览器需要无视用户配置强行禁用某些功能
-      switch (BrowserUtil.browserType) {
-        case BROWSER_CHROME:
-          break;
-        case BROWSER_FIREFOX: {
-          this.feature.options = false;
-          this.feature.window = false;
-          this.feature.san = false;
-          break;
-        }
-        case BROWSER_MOBILE_PHONE: {
-          this.feature.window = false;
-          break;
-        }
-        default: {
-          this.feature.window = false;
-          break;
-        }
-      }
-      // 根据被禁用的功能强行关闭配置
-      // 虽然理论上应该保证被禁用的功能不会被用户开启，但是保险起见这里还是再设置一下
-      if (!this.feature.window) {
-        this.display.windowMode = false;
-      }
+        // 必须在后台执行的只执行一次的内容
+        if (BrowserUtil.isBackground) {
+          console.log('当前配置：');
+          console.log(this);
+          console.log('============');
+          // 如果一个启用的都没有说明是新安装或者旧数据被清除，此时将默认数据源全部启用
+          if (this.enableDataSources.length === 0) {
+            this.enableDataSources = defaultDataSourcesNames;
+            console.log("未启用任何默认数据源，将自动启用全部默认数据源");
+          }
 
-      this.__updateWindowMode();
-    });
+          this.__updateWindowMode();
+
+          // 只需要在后台进行保存，其它页面不需要保存
+          this.saveSettings().then(() => resolve(this));
+        }
+
+      });
+    })
   }
 
   __updateWindowMode() {
@@ -257,4 +279,6 @@ class Settings {
 }
 
 const settings = new Settings()
+global.settings = settings;
+
 export {settings};

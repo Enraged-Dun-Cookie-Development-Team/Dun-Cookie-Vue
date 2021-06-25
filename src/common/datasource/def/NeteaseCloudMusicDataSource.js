@@ -1,5 +1,7 @@
 import {DataSource} from '../DataSource';
 import TimeUtil from '../../util/TimeUtil';
+import {DataItem} from '../../DataItem';
+import {settings} from '../../Settings';
 
 /**
  * 网易云音乐数据源。
@@ -7,8 +9,12 @@ import TimeUtil from '../../util/TimeUtil';
  */
 export class NeteaseCloudMusicDataSource extends DataSource {
 
+  static get typeName() {
+    return 'music.163.com';
+  };
+
   constructor(icon, dataName, title, dataUrl, source) {
-    super(icon, 'music.163.com', dataName, title, dataUrl, source);
+    super(icon, dataName, title, dataUrl, source);
   }
 
   processData(opt) {
@@ -16,21 +22,23 @@ export class NeteaseCloudMusicDataSource extends DataSource {
     let data = JSON.parse(opt.responseText);
     if (data && data.hotAlbums && data.hotAlbums.length > 0) {
       data.hotAlbums.forEach(x => {
-        list.push({
-          timestamp: TimeUtil.format(new Date(x.publishTime), 'yyyy-MM-dd'),
-          id: x.id,
-          judgment: x.id,
-          dynamicInfo: `塞壬唱片发布新专辑《${x.name}》，共${x.size}首歌曲`,
-          dataSourceType: opt.dataSourceType,
-          image: x.picUrl + '?param=130y130',
-          source: opt.source,
-          icon: opt.icon,
-          url: `https://music.163.com/#/album?id=${x.id}`,
-          size: x.size,
-          name: x.name
-        });
+        const date = TimeUtil.format(new Date(x.publishTime), 'yyyy-MM-dd');
+        const time = new Date(`${date} ${settings.getTimeBySortMode()}`);
+        list.push(DataItem.builder(opt.dataName)
+          .id(x.id)
+          .timeForSort(time.getTime())
+          .timeForDisplay(date)
+          .content(`塞壬唱片发布新专辑《${x.name}》，共${x.size}首歌曲`)
+          .jumpUrl(`https://music.163.com/#/album?id=${x.id}`)
+          .coverImage(x.picUrl + '?param=130y130')
+          .componentData({
+            size: x.size,
+            name: x.name,
+          })
+          .build()
+        );
       });
-      return list.sort((x, y) => y.judgment - x.judgment);
+      return list;
     }
   }
 }

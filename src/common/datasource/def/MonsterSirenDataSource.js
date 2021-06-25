@@ -1,5 +1,7 @@
 import {DataSource} from '../DataSource';
 import TimeUtil from '../../util/TimeUtil';
+import {DataItem} from '../../DataItem';
+import {settings} from '../../Settings';
 
 /**
  * 塞壬唱片(官网)数据源。
@@ -7,8 +9,12 @@ import TimeUtil from '../../util/TimeUtil';
  */
 export class MonsterSirenDataSource extends DataSource {
 
+  static get typeName() {
+    return 'monster-siren.hypergryph.com';
+  };
+
   constructor(icon, dataName, title, dataUrl, source) {
-    super(icon, 'monster-siren.hypergryph.com', dataName, title, dataUrl, source);
+    super(icon, dataName, title, dataUrl, source);
   }
 
   processData(opt) {
@@ -16,18 +22,17 @@ export class MonsterSirenDataSource extends DataSource {
     let data = JSON.parse(opt.responseText);
     if (data && data.data && data.data.list) {
       data.data.list.forEach(x => {
-        list.push({
-          timestamp: TimeUtil.format(new Date(x.date), 'yyyy-MM-dd'),
-          id: x.cid,
-          judgment: x.cid,
-          dynamicInfo: x.title,
-          source: opt.source,
-          icon: opt.icon,
-          dataSourceType: opt.dataSourceType,
-          url: `https://monster-siren.hypergryph.com/info/${x.cid}`,
-        })
+        const time = new Date(`${x.date} ${settings.getTimeBySortMode()}`);
+        list.push(DataItem.builder(opt.dataName)
+          .id(x.cid)
+          .timeForSort(time.getTime())
+          .timeForDisplay(TimeUtil.format(time, 'yyyy-MM-dd'))
+          .content(x.title)
+          .jumpUrl(`https://monster-siren.hypergryph.com/info/${x.cid}`)
+          .build()
+        );
       });
-      return list.sort((x, y) => y.judgment - x.judgment);
+      return list;
     }
   }
 }

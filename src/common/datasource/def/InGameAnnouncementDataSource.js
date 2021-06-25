@@ -2,6 +2,14 @@ import {DataSource} from '../DataSource';
 import {settings} from '../../Settings';
 import NotificationUtil from '../../util/NotificationUtil';
 import TimeUtil from '../../util/TimeUtil';
+import {DataItem} from '../../DataItem';
+
+/**
+ * 需要被忽略的公告列表，一般是常驻活动/用户协议公告之类的
+ * <p>
+ * <strong>注意：这里只设置了IOS公告的值，Android的值是不同的，如果以后要获取Android的公告需要把那边的忽略列表也加上去</strong>
+ */
+const ignoreAnnounces = [94, 95, 97, 98, 192];
 
 /**
  * 游戏内公告数据源。
@@ -10,33 +18,37 @@ import TimeUtil from '../../util/TimeUtil';
  */
 export class InGameAnnouncementDataSource extends DataSource {
 
+  static get typeName() {
+    return 'arknights_in_game_announcement';
+  };
+
   FocusAnnounceId = null;
 
   constructor(icon, dataName, title, dataUrl, source) {
-    super(icon, 'arknights_in_game_announcement', dataName, title, dataUrl, source);
+    super(icon, dataName, title, dataUrl, source);
   }
 
   processData(opt) {
     let list = [];
     let data = JSON.parse(opt.responseText);
     data.announceList.forEach(x => {
-      if (x.announceId != 94 && x.announceId != 98 && x.announceId != 192 && x.announceId != 95 && x.announceId != 97) {
-        list.push({
-          timestamp: TimeUtil.format(new Date(new Date().getFullYear(), x.month, x.day), 'yyyy-MM-dd'),
-          judgment: x.announceId,
-          id: x.announceId,
-          dynamicInfo: x.title,
-          source: opt.source,
-          icon: opt.icon,
-          dataSourceType: opt.dataSourceType,
-          url: x.webUrl,
-        });
+      if (ignoreAnnounces.includes(parseInt(x.announceId))) {
+        return;
       }
+      const time = new Date(`${new Date().getFullYear()}-${x.month}-${x.day} ${settings.getTimeBySortMode()}`);
+      list.push(DataItem.builder(opt.dataName)
+        .id(x.announceId)
+        .timeForSort(time.getTime())
+        .timeForDisplay(TimeUtil.format(time, 'yyyy-MM-dd'))
+        .content(x.title)
+        .jumpUrl(x.webUrl)
+        .build()
+      );
     });
     if (settings.dun.enableNotice) {
       this.JudgmentNewFocusAnnounceId(data);
     }
-    return list.sort((x, y) => y.judgment - x.judgment);
+    return list;
   }
 
   // 通讯组专用 检测到了可能会更新

@@ -97,6 +97,7 @@ const defaultDataSources = {};
 for (const source of defaultDataSourcesList) {
   defaultDataSources[source.dataName] = source;
 }
+const defaultDataSourcesNames = Object.keys(defaultDataSources);
 
 // 感觉没必要给DataSource多一个testUrl的属性，测试链接在这里修改吧
 if (IS_TEST) {
@@ -112,4 +113,4 @@ if (IS_TEST) {
 }
 
 
-export {defaultDataSources, defaultDataSourcesList};
+export {defaultDataSources, defaultDataSourcesList, defaultDataSourcesNames};

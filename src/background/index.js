@@ -110,8 +110,8 @@ const kazeFun = {
     Init() {
         // chrome.browserAction.setBadgeText({ text: 'Beta' });
         // chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
-        // 默认设置
-        settings.reloadSettings().then(() => {
+        // 开始蹲饼！
+        settings.doAfterInit(() => {
             startDunTimer();
         });
 

@@ -1,5 +1,6 @@
 import {DataSource} from '../DataSource';
 import TimeUtil from '../../util/TimeUtil';
+import {DataItem} from '../../DataItem';
 
 /**
  * 哔哩哔哩数据源。
@@ -7,8 +8,12 @@ import TimeUtil from '../../util/TimeUtil';
  */
 export class BilibiliDataSource extends DataSource {
 
+  static get typeName() {
+    return 'bilibili_dynamic';
+  };
+
   constructor(icon, dataName, title, dataUrl, source) {
-    super(icon, 'bilibili_dynamic', dataName, title, dataUrl, source);
+    super(icon, dataName, title, dataUrl, source);
   }
 
   processData(opt) {
@@ -16,43 +21,49 @@ export class BilibiliDataSource extends DataSource {
     let data = JSON.parse(opt.responseText);
     if (data.code == 0 && data.data != null && data.data.cards != null && data.data.cards.length > 0) {
       data.data.cards.forEach(x => {
-        if (x.desc.type == 2 || x.desc.type == 4 || x.desc.type == 8 || x.desc.type == 64) {
-          let dynamicInfo = JSON.parse(x.card);
-          let card = {
-            timestamp: TimeUtil.format(new Date(x.desc.timestamp * 1000), 'yyyy-MM-dd hh:mm:ss'),
-            id: x.desc.timestamp,
-            judgment: x.desc.timestamp,
-            imageList: dynamicInfo.item.pictures && dynamicInfo.item.pictures.map(x => x.img_src),
-            source: opt.source,
-            icon: opt.icon,
-            dataSourceType: opt.dataSourceType,
-          };
-          //  desc.type  8 是视频 64是专栏 2是动态 4是无图片动态
-          if (x.desc.type == 2) {
-            card.image = (dynamicInfo.item.pictures && dynamicInfo.item.pictures.length > 0) ? dynamicInfo.item.pictures[0].img_src : null;
-            card.dynamicInfo = dynamicInfo.item.description;
-            card.type = 2;
-            card.url = `https://t.bilibili.com/${x.desc.dynamic_id_str}`
-          } else if (x.desc.type == 4) {
-            card.dynamicInfo = dynamicInfo.item.content;
-            card.url = `https://t.bilibili.com/${x.desc.dynamic_id_str}`
-            card.type = 4;
-          } else if (x.desc.type == 8) {
-            card.image = dynamicInfo.pic;
-            card.dynamicInfo = dynamicInfo.dynamic;
-            card.url = `https://t.bilibili.com/${x.desc.dynamic_id_str}`
-            card.type = 8;
-          } else if (x.desc.type == 64) {
-            card.image = (dynamicInfo.image_urls && dynamicInfo.image_urls.length > 0) ? dynamicInfo.image_urls[0] : null;
-            card.dynamicInfo = dynamicInfo.summary;
-            card.url = `https://t.bilibili.com/${x.desc.dynamic_id_str}`
-            card.type = 64;
-          }
-          list.push(card);
-        }
+        const dynamicInfo = JSON.parse(x.card);
+        const builder = DataItem.builder(opt.dataName)
+          .id(x.desc.timestamp)
+          .timeForSort(x.desc.timestamp * 1000)
+          .timeForDisplay(TimeUtil.format(new Date(x.desc.timestamp * 1000), 'yyyy-MM-dd hh:mm:ss'))
+          .jumpUrl(`https://t.bilibili.com/${x.desc.dynamic_id_str}`)
+          .imageList(dynamicInfo.item.pictures && dynamicInfo.item.pictures.map(x => x.img_src));
 
+        switch (parseInt(x.desc.type)) {
+          // 普通动态
+          case 2: {
+            builder
+              .coverImage((dynamicInfo.item.pictures && dynamicInfo.item.pictures.length > 0) ? dynamicInfo.item.pictures[0].img_src : null)
+              .content(dynamicInfo.item.description);
+            break;
+          }
+          // 无图片动态
+          case 4: {
+            builder
+              .content(dynamicInfo.item.content);
+            break;
+          }
+          // 视频
+          case 8: {
+            builder
+              .coverImage(dynamicInfo.pic)
+              .content(dynamicInfo.dynamic);
+            break;
+          }
+          // 专栏
+          case 64: {
+            builder
+              .coverImage((dynamicInfo.image_urls && dynamicInfo.image_urls.length > 0) ? dynamicInfo.image_urls[0] : null)
+              .content(dynamicInfo.summary);
+            break;
+          }
+          // 不支持的类型直接返回
+          default:
+            return;
+        }
+        list.push(builder.build());
       });
-      return list.sort((x, y) => y.judgment - x.judgment);
+      return list;
     }
   }
 }

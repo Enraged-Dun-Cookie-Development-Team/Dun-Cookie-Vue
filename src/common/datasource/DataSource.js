@@ -3,6 +3,10 @@ import {DEBUG_LOG} from '../Constants';
 
 /**
  * 表示一个数据源
+ * <p>
+ *
+ * <strong>注意：子类需要定义一个<code>static get typeName() {}</code>函数，详情参考dataType的注释</strong>
+ * @see dataType
  */
 class DataSource {
   /**
@@ -10,12 +14,16 @@ class DataSource {
    */
   icon;
   /**
-   * 数据源类型(比如B站、微博等)，该字段应该由子类提供
-   * <p>
+   * 关于dataType：<br/>
+   * 用于代表一个数据源(比如官网、朝陇山，泰拉记事社等)，每个数据源必须有一个唯一的dataType，不能重复<br/>
    * 实际值建议使用域名/品牌名等不易变化的值，有必要的话长一点也没关系<br/>
-   * <strong>注意：该字段用于在储存中标识数据源类型，非必要请不要修改，否则会导致数据解析错误。</strong>
+   * <strong>注意：子类需要用一个<code>static get typeName() {}</code>函数来定义类型数据源类型名称</strong>，
+   *              实例化的时候会自动解析(使用静态是为了便于其它文件获取)<br/>
+   * <strong>注意：dataType用于在储存中标识数据源类型，非必要请不要修改，否则会导致数据解析错误。</strong>
    */
-  dataType;
+  get dataType() {
+    return this.constructor.typeName;
+  };
   /**
    * 数据名称(比如朝陇山，泰拉记事社等)，每个数据源必须有一个唯一的dataName，不能重复
    * <p>
@@ -37,9 +45,8 @@ class DataSource {
    */
   dataUrl;
 
-  constructor(icon, dataType, dataName, title, dataUrl, source) {
+  constructor(icon, dataName, title, dataUrl, source) {
     this.icon = icon;
-    this.dataType = dataType;
     this.dataName = dataName;
     this.title = title;
     this.dataUrl = dataUrl;
@@ -66,15 +73,17 @@ class DataSource {
     }
     return promise.then(value => {
       let opt = {
-        url: this.dataUrl, // 数据获取网址
-        title: this.title, // 弹窗标题
         dataName: this.dataName, // 数据源名称
-        icon: this.icon,
-        dataSourceType: this.dataType, // 数据源类型，这里之所以要用这么长的名称是因为数据源内部解析数据的部分还未重构，避免短名称和解析结果中的字段重复
-        source: this.source, // TODO 暂时未重构完所以先留着
         responseText: value,
       };
-      return this.processData(opt);
+      const data = this.processData(opt);
+      return data.sort((a, b) => {
+        let ret = a.timeForSort - b.timeForSort
+        if (ret === 0) {
+          ret = a.content.localeCompare(b.content);
+        }
+        return ret;
+      });
     });
   }
 
