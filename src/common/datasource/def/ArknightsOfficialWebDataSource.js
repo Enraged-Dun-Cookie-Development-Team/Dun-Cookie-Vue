@@ -13,8 +13,8 @@ export class ArknightsOfficialWebDataSource extends DataSource {
     return 'ak.hypergryph.com';
   };
 
-  constructor(icon, dataName, title, dataUrl, source) {
-    super(icon, dataName, title, dataUrl, source);
+  constructor(icon, dataName, title, dataUrl, priority) {
+    super(icon, dataName, title, dataUrl, priority);
   }
 
   processData(opt) {

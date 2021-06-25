@@ -328,6 +328,7 @@ import {
   MESSAGE_DUN_INFO_UPDATE,
   MESSAGE_FORCE_REFRESH
 } from '../common/Constants';
+import DataSourceUtil from '../common/util/DataSourceUtil';
 
 export default {
   name: "app",
@@ -518,23 +519,17 @@ export default {
     // 获取数据
     getCardlist() {
       BrowserUtil.sendMessage(MESSAGE_CARD_LIST_GET).then((data) => {
-          this.cardlist = Object.values(data)
-              .reduce((acc, cur) => [...acc, ...cur], [])
-              .sort((x, y) => new Date(y.timeForSort).getTime() - new Date(x.timeForSort).getTime())
-              .map((x) => {
-                x.content = x.content.replace(/\n/g, "<br/>");
-                return x;
-              });
+          this.cardlist = DataSourceUtil.mergeAllData(data).map((x) => {
+            x.content = x.content.replace(/\n/g, "<br/>");
+            return x;
+          });
           this.cardlistdm = data;
       });
       BrowserUtil.addMessageListener('popup', MESSAGE_CARD_LIST_UPDATE, (data) => {
-        this.cardlist = Object.values(data)
-            .reduce((acc, cur) => [...acc, ...cur], [])
-            .sort((x, y) => new Date(y.timeForSort).getTime() - new Date(x.timeForSort).getTime())
-            .map((x) => {
-              x.content = x.content.replace(/\n/g, "<br/>");
-              return x;
-            });
+        this.cardlist = DataSourceUtil.mergeAllData(data).map((x) => {
+          x.content = x.content.replace(/\n/g, "<br/>");
+          return x;
+        });
         this.cardlistdm = data;
       });
     },

@@ -35,22 +35,21 @@ class DataSource {
    */
   title;
   /**
-   * 旧的判断数据源的字段
-   * TODO 重构后应该不需要该字段，改为使用dataName判断(考虑将这个字段改为priority用来控制在设置页面的显示顺序)
+   * 优先级，用于在显示时排序，越小越靠前
    */
-  source;
+  priority;
 
   /**
    * 用于获取数据的URL，可以是string或array
    */
   dataUrl;
 
-  constructor(icon, dataName, title, dataUrl, source) {
+  constructor(icon, dataName, title, dataUrl, priority = 100) {
     this.icon = icon;
     this.dataName = dataName;
     this.title = title;
     this.dataUrl = dataUrl;
-    this.source = source;
+    this.priority = priority;
   }
 
   fetchData() {

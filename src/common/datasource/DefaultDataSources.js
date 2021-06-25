@@ -87,7 +87,7 @@ const defaultDataSourcesList = [
 ];
 
 // 排序，会影响页面中的显示顺序
-defaultDataSourcesList.sort((a, b) => a.source - b.source);
+defaultDataSourcesList.sort((a, b) => a.priority - b.priority);
 
 /**
  * 需要添加/修改数据源应该在上方列表操作
