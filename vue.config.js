@@ -22,7 +22,7 @@ const config = {
             entry: 'src/popup/index.js',
             template: 'public/index.html',
             filename: 'popup.html',
-            title: 'Popup',
+            title: '列表',
             chunks: ['chunk-vendors', 'chunk-common', 'popup'],
         },
         windowPopup: {
@@ -45,6 +45,13 @@ const config = {
             filename: 'update.html',
             title: '蹲饼这次更新了什么？',
             chunks: ['chunk-vendors', 'chunk-common', 'update'],
+        },
+        viewImg: {
+            entry: 'src/viewImg/index.js',
+            template: 'public/index.html',
+            filename: 'viewImg.html',
+            title: '查看图片',
+            chunks: ['chunk-vendors', 'chunk-common', 'viewImg'],
         },
         donate: {
             entry: 'src/donate/index.js',

@@ -221,7 +221,7 @@ let kazeSourceProcess = {
                         judgment: time,
                         dynamicInfo: dynamicInfo.raw_text || dynamicInfo.text.replace(/<\a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<span class="url-icon">|<\img.*?>|全文|网页链接/g, '').replace(/<br \/>/g, '\n'),
                         html: dynamicInfo.text,
-                        image: dynamicInfo.bmiddle_pic || dynamicInfo.original_pic,
+                        image: dynamicInfo.original_pic,
                         imageList: imageList,
                         type: (dynamicInfo.hasOwnProperty("page_info") && dynamicInfo.page_info.hasOwnProperty('type') && dynamicInfo.page_info.type == "video") ? 0 : 1,
                         source: opt.source,
@@ -590,6 +590,10 @@ let kazeFun = {
 
         // 监听前台事件
         chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+            // 如果是tab 就不管
+            if (request.info == "tab") {
+                return false;
+            }
             if (request.info == "reload") {
                 // 刷新
                 kazeSourceProcess.GetData();
