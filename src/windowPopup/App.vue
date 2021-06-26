@@ -349,11 +349,6 @@ export default {
       });
     },
 
-    openUpdate() {
-      chrome.tabs.create({
-        url: chrome.extension.getURL("update.html"),
-      });
-    },
 
     openGithub() {
       chrome.tabs.create({

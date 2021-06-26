@@ -382,6 +382,12 @@ export default {
     diffTime,
     saveLocalStorage,
     getLocalStorage,
+    
+    openUpdate() {
+      chrome.tabs.create({
+        url: chrome.extension.getURL("update.html"),
+      });
+    },
     // 调整过滤文字
     changeFilterText(text) {
       text = text.trim();
