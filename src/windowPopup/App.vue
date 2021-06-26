@@ -79,6 +79,44 @@
         </el-row>
         <div class="sign">Power By 蓝芷怡 & lwt</div>
       </el-drawer>
+      <el-drawer
+        :visible.sync="toolDrawer"
+        :show-close="false"
+        direction="ttb"
+        size="180px"
+      >
+        <el-divider content-position="left">理智计算提醒</el-divider>
+        <el-form
+          size="mini"
+          class="sane-calculator"
+          label-position="right"
+          :inline="true"
+          label-width="150px"
+          style="text-align: center"
+        >
+          <el-form-item label="当前理智"
+            ><el-input-number
+              ref="saneEdit"
+              v-model="sane.saneIndex"
+              :min="0"
+              :max="setting.saneMax"
+              label="输入当前理智"
+            ></el-input-number
+          ></el-form-item>
+          <el-form-item label="理智满后是否推送">
+            <el-switch v-model="sane.sanePush"></el-switch>
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="saveSane">开始计算</el-button>
+          </el-form-item>
+        </el-form>
+        <div
+          class="mention"
+          style="text-align: center; margin-top: 16px; opacity: 0.4"
+        >
+          数据不会保存！重启或休眠电脑，重启浏览器，重启插件，修改设置都会丢失数据
+        </div>
+      </el-drawer>
       <el-button
         v-show="!drawer"
         icon="el-icon-more"
@@ -89,7 +127,11 @@
       ></el-button>
       <div class="version">
         {{ `小刻食堂 V${saveInfo.version}` }}
-       <span
+        <div v-if="loading" style="color: red">
+          【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没有*龙门粗口*正常连接】
+        </div>
+        <span v-else>
+          <span
             >【已蹲饼
             <countTo
               :startVal="oldDunIndex"
@@ -99,8 +141,127 @@
             >次】</span
           >
           <span v-if="setting.islowfrequency"> 【低频蹲饼时段】 </span>
+        </span>
       </div>
       <div id="content">
+        <el-card
+          shadow="never"
+          class="info-card online-speak"
+          v-loading="loading"
+          element-loading-text="正在获取在线信息"
+        >
+          <el-carousel
+            arrow="never"
+            height="100px"
+            direction="vertical"
+            :interval="990000"
+            :autoplay="true"
+          >
+            <el-carousel-item v-if="isNew">
+              <div class="new-info-area" @click="openUpdate">
+                <img
+                  src="http://prts.wiki/images/b/be/%E9%81%93%E5%85%B7_%E5%B8%A6%E6%A1%86_%E8%B5%84%E6%B7%B1%E5%B9%B2%E5%91%98%E7%89%B9%E8%AE%AD%E9%82%80%E8%AF%B7%E5%87%BD.png"
+                />
+                博士，检测到了新版本，点击这里进入更新页面
+              </div>
+            </el-carousel-item>
+            <el-carousel-item>
+              <div class="day-info">
+                <div class="day-info-content">
+                  <div class="day-info-content-top">
+                    <div>
+                      <div
+                        class="day-info-content-top-card-area"
+                        :key="index"
+                        v-for="(item, index) in onlineDayInfo.countdown"
+                      >
+                        <div>
+                          距离
+                          <el-tooltip
+                            v-if="item.remark"
+                            :content="item.remark"
+                            placement="right"
+                          >
+                            <span class="online-blue">{{ item.text }}</span>
+                          </el-tooltip>
+                          <span v-else class="online-blue">{{
+                            item.text
+                          }}</span>
+                          <span title="国服 UTC-8">{{
+                            " " + diffTime(item.time)
+                          }}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      v-if="setting.sanShow && LazyLoaded"
+                      class="sane-area"
+                      @click.stop="openToolDrawer"
+                    >
+                      <div class="sane">
+                        当前理智为<span class="online-blue sane-number">{{
+                          sane.saneIndex
+                        }}</span
+                        >点
+                      </div>
+                      <div
+                        class="sane-info"
+                        v-if="sane.saneIndex == setting.saneMax"
+                      >
+                        已经回满
+                      </div>
+                      <div class="sane-info" v-else>
+                        约{{ timespanToDay(sane.endTime / 1000, 2) }}回满，{{
+                          diffTime(sane.endTime)
+                        }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="day-info-content-bottom">
+                    <div class="day-info-content-bottom-card-area">
+                      <el-tooltip
+                        class="item"
+                        effect="dark"
+                        placement="bottom"
+                        v-for="item in dayInfo"
+                        :key="item.type"
+                      >
+                        <div slot="content">
+                          {{
+                            item.name +
+                            " - " +
+                            (item.notToday
+                              ? `开放日期： ${
+                                  item.day
+                                    .map((x) => `${numberToWeek(x)}`)
+                                    .join() + ""
+                                }`
+                              : "开放中")
+                          }}
+                        </div>
+                        <div
+                          class="day-info-content-bottom-card"
+                          :class="item.notToday ? 'notToday' : ''"
+                        >
+                          <img v-if="LazyLoaded" v-lazy="item.src" />
+                        </div>
+                      </el-tooltip>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </el-carousel-item>
+            <el-carousel-item
+              v-for="(item, index) in onlineSpeakList"
+              :key="index"
+            >
+              <div v-html="item.html"></div>
+            </el-carousel-item>
+          </el-carousel>
+        </el-card>
+
+        <div class="content-timeline-shadown"></div>
+
         <!-- <time-line
           v-if="!setting.isTag"
           ref="TimeLine"
@@ -611,7 +772,120 @@ export default {
     }
   }
 
-  
+  #content {
+    margin-top: 40px;
+    // 间隔阴影
+    .content-timeline-shadown {
+      position: fixed;
+      width: 100%;
+      height: 20px;
+      background: linear-gradient(180deg, @@bgColor 50%, transparent);
+      z-index: 10;
+    }
+
+    .info-card {
+      padding: 3px;
+      margin: 0px 18px;
+      background-color: @@bgColor;
+      border: @@timeline solid 1px;
+      color: @@content;
+      &.isnew {
+        margin-bottom: 10px;
+        cursor: pointer;
+        text-align: center;
+      }
+      &.online-speak {
+        /deep/ .el-card__body {
+          padding: 0;
+          // 升级内容样式
+          .new-info-area {
+            cursor: pointer;
+            height: 100%;
+            display: flex;
+            flex-direction: beww;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            justify-content: space-evenly;
+            img {
+              width: 100px;
+            }
+          }
+          // 今日信息内容样式
+          .day-info {
+            .day-info-title {
+            }
+            .day-info-content {
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              height: 100px;
+              margin-right: 30px;
+              .day-info-content-top {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                .day-info-content-top-card-area {
+                  font-size: 12px;
+                }
+                .sane-area {
+                  cursor: pointer;
+                  display: flex;
+                  justify-content: right;
+                  align-items: flex-end;
+                  flex-direction: column;
+                  .sane {
+                    font-size: 16px;
+                    font-family: Geometos, "Sans-Regular",
+                      "SourceHanSansCN-Regular", YaHei;
+                    .sane-number {
+                      font-size: 28px;
+                    }
+                  }
+                  .sane-info {
+                  }
+                }
+              }
+              .day-info-content-bottom {
+                width: 100%;
+                display: flex;
+                justify-content: space-around;
+                align-items: flex-end;
+                & .day-info-content-bottom-card-area {
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-around;
+                  .day-info-content-bottom-card {
+                    height: 50px;
+                    width: 70px;
+                    overflow: hidden;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    img {
+                      height: 100%;
+                    }
+                    &.notToday {
+                      filter: opacity(0.2);
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      /deep/ .el-carousel__button {
+        background-color: #23ade5;
+      }
+    }
+    // 更改卡片阴影
+    // .is-always-shadow {
+    //   box-shadow: 0 2px 12px 0 @@shadow;
+    // }
+  }
 
   // 隐藏二级菜单
   /deep/ .el-drawer {
