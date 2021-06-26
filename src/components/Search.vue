@@ -11,7 +11,7 @@ export default {
   created() {},
 
   mounted() {
-    this.init();
+    // this.init();
   },
   watch: {
     searchText(value) {
