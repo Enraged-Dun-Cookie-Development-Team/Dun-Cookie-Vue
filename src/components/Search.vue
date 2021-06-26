@@ -1,27 +1,36 @@
 <template>
-  <div class="search-area" v-if="false">
-    <input type="text" class="input-border" />
+  <div class="search-area" :class="searchShow ? 'show' : ''">
+    <input
+      type="text"
+      class="input-border"
+      v-model="searchText"
+      ref="searchText"
+    />
   </div>
 </template>
 <script>
 export default {
   name: "search",
-  //   props: ["searchShow"],
+  props: ["searchShow"],
   components: {},
   created() {},
-
-  mounted() {
-    // this.init();
-  },
+  mounted() {},
   watch: {
-    searchText(value) {
+    searchShow(value) {
       if (value) {
-        this.$nextTick(() => {});
+        this.$refs.searchText.focus();
+      } else {
+        this.$refs.searchText.blur();
       }
+    },
+    searchText(value) {
+      this.$parent.changeFilterText(value);
     },
   },
   data() {
-    return {};
+    return {
+      searchText: "",
+    };
   },
   computed: {},
   beforeDestroy() {},
@@ -37,6 +46,8 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: 0.5s top;
+  top: -150px;
   .input-border {
     outline: none;
     width: 80%;
@@ -50,6 +61,10 @@ export default {
     box-shadow: 0 0 40px 0px #23ade5;
     background: #ffffff5c;
     color: #23ade5;
+  }
+  &.show {
+    top: 40px;
+    opacity: 1;
   }
 }
 </style> 

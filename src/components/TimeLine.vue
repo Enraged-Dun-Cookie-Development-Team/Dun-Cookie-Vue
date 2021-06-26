@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <serach-model></serach-model>
+  <div id="timeline-area">
+    <serach-model :searchShow="searchShow"></serach-model>
     <el-drawer
       :visible.sync="toolDrawer"
       :show-close="false"
@@ -43,6 +43,7 @@
     <el-card
       shadow="never"
       class="info-card online-speak"
+      :class="searchShow ? 'searching' : ''"
       v-loading="loading"
       element-loading-text="【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没有*龙门粗口*正常连接】"
     >
@@ -153,7 +154,7 @@
     <div class="content-timeline-shadown"></div>
     <el-timeline :class="setting.isWindow ? 'window' : ''">
       <el-timeline-item
-        v-for="(item, index) in cardlist"
+        v-for="(item, index) in filterCardlist"
         :key="index"
         :timestamp="
           item.source == 2 || item.source == 5 || item.source == 7
@@ -357,14 +358,22 @@ export default {
       isNew: false,
       sane: common.sane,
       toolDrawer: false, // 理智计算器菜单
-
       quickJump: common.quickJump,
+      searchShow: false,
+      filterCardlist: [],
+      filterText: null,
     };
   },
   mounted() {
     this.getOnlineSpeak();
     this.getSane();
     this.setClickFun();
+    this.listenKeyBord();
+  },
+  watch: {
+    cardlist() {
+      this.filterList();
+    },
   },
   methods: {
     timespanToDay,
@@ -373,6 +382,30 @@ export default {
     diffTime,
     saveLocalStorage,
     getLocalStorage,
+    // 调整过滤文字
+    changeFilterText(text) {
+      text = text.trim();
+      this.filterText = text;
+      this.filterList();
+    },
+    filterList() {
+      if (this.filterText) {
+        this.filterCardlist = this.cardlist.filter((item) =>
+          item.dynamicInfo.includes(this.filterText)
+        );
+      } else {
+        this.filterCardlist = this.cardlist;
+      }
+    },
+
+    // 监听键盘
+    listenKeyBord() {
+      document.addEventListener("keyup", (e) => {
+        if (e.keyCode == 13) {
+          this.searchShow = !this.searchShow;
+        }
+      });
+    },
     // 监听标签
     setClickFun() {
       document
@@ -808,6 +841,11 @@ img[lazy="error"] {
       text-align: center;
     }
     &.online-speak {
+      filter: blur(0);
+      transition: 0.5s filter;
+      &.searching {
+        filter: blur(40px);
+      }
       .el-card__body {
         padding: 0;
       }
