@@ -483,13 +483,6 @@ export default {
     }
   }
 
-  .sane-calculator {
-    display: flex;
-    justify-content: space-around;
-    .el-form-item {
-      margin-bottom: 0;
-    }
-  }
 
   #content {
     margin-top: 40px;
@@ -500,106 +493,6 @@ export default {
       height: 20px;
       background: linear-gradient(180deg, @@bgColor 50%, transparent);
       z-index: 10;
-    }
-
-    .info-card {
-      padding: 3px;
-      margin: 0px 18px;
-      background-color: @@bgColor;
-      border: @@timeline solid 1px;
-      color: @@content;
-      &.isnew {
-        margin-bottom: 10px;
-        cursor: pointer;
-        text-align: center;
-      }
-      &.online-speak {
-        /deep/ .el-card__body {
-          padding: 0;
-          // 升级内容样式
-          .new-info-area {
-            cursor: pointer;
-            height: 100%;
-            display: flex;
-            flex-direction: beww;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            justify-content: space-evenly;
-            img {
-              width: 100px;
-            }
-          }
-          // 今日信息内容样式
-          .day-info {
-            .day-info-title {
-            }
-            .day-info-content {
-              display: flex;
-              flex-direction: column;
-              justify-content: flex-start;
-              height: 100px;
-              margin-right: 30px;
-              .day-info-content-top {
-                width: 100%;
-                display: flex;
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                .day-info-content-top-card-area {
-                  font-size: 12px;
-                }
-                .sane-area {
-                  cursor: pointer;
-                  display: flex;
-                  justify-content: right;
-                  align-items: flex-end;
-                  flex-direction: column;
-                  .sane {
-                    font-size: 16px;
-                    font-family: Geometos, "Sans-Regular",
-                      "SourceHanSansCN-Regular", YaHei;
-                    .sane-number {
-                      font-size: 28px;
-                    }
-                  }
-                  .sane-info {
-                  }
-                }
-              }
-              .day-info-content-bottom {
-                margin-top: 5px;
-                width: 100%;
-                display: flex;
-                justify-content: space-around;
-                align-items: flex-end;
-                & .day-info-content-bottom-card-area {
-                  display: flex;
-                  align-items: center;
-                  justify-content: space-around;
-                  .day-info-content-bottom-card {
-                    height: 40px;
-                    width: 70px;
-                    overflow: hidden;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    img {
-                      height: 100%;
-                    }
-                    &.notToday {
-                      filter: opacity(0.2);
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-      /deep/ .el-carousel__button {
-        background-color: #23ade5;
-      }
     }
     // 更改卡片阴影
     // .is-always-shadow {

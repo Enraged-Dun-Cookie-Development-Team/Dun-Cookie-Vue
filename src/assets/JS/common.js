@@ -31,7 +31,7 @@ let common = {
   saveInfo: {
     // 循环的标识
     setIntervalindex: 0,
-    version: '2.1.1',
+    version: '2.1.2',
     feedbackInfo: `<div class="footer">
         <span>
           如果有意见或建议或者是反馈问题或者是发现程序出现bug<br />可以添加<a
