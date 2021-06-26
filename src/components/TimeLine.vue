@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- <div class="search-area">？？</div> -->
+    <serach-model></serach-model>
     <el-timeline :class="setting.isWindow ? 'window' : ''">
       <el-timeline-item
         v-for="(item, index) in cardlist"
@@ -183,8 +183,10 @@
 
 <script>
 import { timespanToDay } from "../assets/JS/common";
+import SerachModel from "../components/Search";
 export default {
   name: "TimeLine",
+  components: { SerachModel },
   props: ["cardlist", "setting", "saveInfo", "imgShow"],
   data() {
     return {
@@ -196,7 +198,6 @@ export default {
   mounted() {},
   methods: {
     timespanToDay,
-
     copyImg(refName) {
       let width = this.$refs[refName][0].naturalWidth;
       let height = this.$refs[refName][0].naturalHeight;

@@ -844,7 +844,7 @@ export default {
             .day-info-content {
               display: flex;
               flex-direction: column;
-              justify-content: space-between;
+              justify-content: flex-start;
               height: 100px;
               .day-info-content-top {
                 width: 610px;
@@ -874,6 +874,7 @@ export default {
                 }
               }
               .day-info-content-bottom {
+                margin-top: 5px;
                 width: 610px;
                 display: flex;
                 justify-content: space-between;
@@ -883,7 +884,7 @@ export default {
                   align-items: center;
                   justify-content: space-around;
                   .day-info-content-bottom-card {
-                    height: 50px;
+                    height: 40px;
                     width: 70px;
                     overflow: hidden;
                     display: flex;
