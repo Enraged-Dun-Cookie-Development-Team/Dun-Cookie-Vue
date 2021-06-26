@@ -79,7 +79,7 @@
         </el-row>
         <div class="sign">Power By 蓝芷怡 & lwt</div>
       </el-drawer>
-      
+
       <el-button
         v-show="!drawer"
         icon="el-icon-more"
@@ -90,21 +90,19 @@
       ></el-button>
       <div class="version">
         {{ `小刻食堂 V${saveInfo.version}` }}
-      
-          <span
-            >【已蹲饼
-            <countTo
-              :startVal="oldDunIndex"
-              :endVal="dunInfo.dunIndex"
-              :duration="1000"
-            ></countTo
-            >次】</span
-          >
-          <span v-if="setting.islowfrequency"> 【低频蹲饼时段】 </span>
+
+        <span
+          >【已蹲饼
+          <countTo
+            :startVal="oldDunIndex"
+            :endVal="dunInfo.dunIndex"
+            :duration="1000"
+          ></countTo
+          >次】</span
+        >
+        <span v-if="setting.islowfrequency"> 【低频蹲饼时段】 </span>
       </div>
       <div id="content">
-      
-
         <!-- <time-line
           v-if="!setting.isTag"
           ref="TimeLine"
@@ -121,11 +119,11 @@
           :saveInfo="saveInfo"
           :setting="setting"
           :imgShow="LazyLoaded"
-          :cardlist="cardlist"
+          :cardlistdm="cardlistdm"
         >
         </time-line>
 
-        <el-tabs
+        <!-- <el-tabs
           v-if="setting.isTag"
           v-model="setting.tagActiveName"
           :stretch="true"
@@ -152,7 +150,7 @@
             >
             </time-line>
           </el-tab-pane>
-        </el-tabs>
+        </el-tabs> -->
       </div>
     </div>
   </div>
@@ -165,8 +163,6 @@ import {
   common,
   timespanToDay,
   Get,
-  numberOrEnNameToName,
-  numberOrEnNameToIconSrc,
   numberToWeek,
   diffTime,
   saveLocalStorage,
@@ -214,8 +210,6 @@ export default {
   computed: {},
   beforeDestroy() {},
   methods: {
-    numberOrEnNameToName,
-    numberOrEnNameToIconSrc,
     numberToWeek,
     timespanToDay,
     diffTime,
@@ -260,7 +254,6 @@ export default {
       chrome.runtime.sendMessage({ info: "getUpdateInfo" });
     },
 
-    
     // 死数据
     getSaveInfo() {
       this.getLocalStorage("saveInfo").then((data) => {
@@ -287,26 +280,19 @@ export default {
             // 轮询在这里
             this.getCardlist();
             this.getDunInfo();
+            debugger;
             this.$refs.TimeLine.getSane();
           }, data.time * 500);
         }
       });
     },
 
-    
     // 获取数据
     getCardlist() {
       this.getLocalStorage("cardlistdm").then((data) => {
         if (!data) {
           return;
         }
-        this.cardlist = Object.values(data)
-          .reduce((acc, cur) => [...acc, ...cur], [])
-          .sort((x, y) => y.time - x.time)
-          .map((x) => {
-            x.dynamicInfo = x.dynamicInfo.replace(/\n/g, "<br/>");
-            return x;
-          });
         this.cardlistdm = data;
       });
     },
@@ -349,11 +335,9 @@ export default {
       });
     },
 
-
     openGithub() {
       chrome.tabs.create({
-        url:
-          "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue",
+        url: "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue",
       });
     },
   },
@@ -477,7 +461,6 @@ export default {
       }
     }
   }
-
 
   #content {
     margin-top: 40px;

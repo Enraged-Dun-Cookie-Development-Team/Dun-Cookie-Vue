@@ -151,7 +151,33 @@
       </el-carousel>
     </el-card>
 
+    <el-tabs
+      v-if="setting.isTag"
+      v-model="setting.tagActiveName"
+      :stretch="true"
+      style="height: 30px"
+      @tab-click="filterDmList"
+    >
+      <el-tab-pane
+        :ref="numberOrEnNameToName(item)"
+        v-for="item in Object.keys(cardlistdm)"
+        :key="item"
+        :label="item"
+        :name="numberOrEnNameToName(item)"
+      >
+        <span slot="label">
+          <img
+            :title="numberOrEnNameToName(item)"
+            class="title-img"
+            :src="numberOrEnNameToIconSrc(item)"
+          />
+        </span>
+        .
+      </el-tab-pane>
+    </el-tabs>
+
     <div class="content-timeline-shadown"></div>
+
     <el-timeline :class="setting.isWindow ? 'window' : ''">
       <el-timeline-item
         v-for="(item, index) in filterCardlist"
@@ -336,6 +362,8 @@
 import {
   timespanToDay,
   common,
+  numberOrEnNameToName,
+  numberOrEnNameToIconSrc,
   numberToWeek,
   Get,
   diffTime,
@@ -346,7 +374,7 @@ import SerachModel from "../components/Search";
 export default {
   name: "TimeLine",
   components: { SerachModel },
-  props: ["cardlist", "setting", "saveInfo", "imgShow"],
+  props: ["setting", "saveInfo", "imgShow", "cardlistdm"],
   data() {
     return {
       showAllImage: [],
@@ -361,6 +389,7 @@ export default {
       quickJump: common.quickJump,
       searchShow: false,
       filterCardlist: [],
+      cardlist: [],
       filterText: null,
     };
   },
@@ -374,6 +403,9 @@ export default {
     cardlist() {
       this.filterList();
     },
+    cardlistdm() {
+      this.filterDmList();
+    },
   },
   methods: {
     timespanToDay,
@@ -382,7 +414,9 @@ export default {
     diffTime,
     saveLocalStorage,
     getLocalStorage,
-    
+    numberOrEnNameToName,
+    numberOrEnNameToIconSrc,
+    // 更改标签了
     openUpdate() {
       chrome.tabs.create({
         url: chrome.extension.getURL("update.html"),
@@ -393,6 +427,20 @@ export default {
       text = text.trim();
       this.filterText = text;
       this.filterList();
+    },
+    filterDmList() {
+      // 如果是单独的
+      if (this.setting.isTag) {
+        this.cardlist = this.cardlistdm[this.$refs[this.setting.tagActiveName][0].label];
+      } else {
+        this.cardlist = Object.values(this.cardlistdm)
+          .reduce((acc, cur) => [...acc, ...cur], [])
+          .sort((x, y) => y.time - x.time)
+          .map((x) => {
+            x.dynamicInfo = x.dynamicInfo.replace(/\n/g, "<br/>");
+            return x;
+          });
+      }
     },
     filterList() {
       if (this.filterText) {

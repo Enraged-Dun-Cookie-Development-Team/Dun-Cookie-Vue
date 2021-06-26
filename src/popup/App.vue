@@ -102,15 +102,15 @@
       <div class="version">
         {{ `小刻食堂 V${saveInfo.version}` }}
         <span
-            >【已蹲饼
-            <countTo
-              :startVal="oldDunIndex"
-              :endVal="dunInfo.dunIndex"
-              :duration="1000"
-            ></countTo
-            >次】</span
-          >
-          <span v-if="setting.islowfrequency"> 【低频蹲饼时段】 </span>
+          >【已蹲饼
+          <countTo
+            :startVal="oldDunIndex"
+            :endVal="dunInfo.dunIndex"
+            :duration="1000"
+          ></countTo
+          >次】</span
+        >
+        <span v-if="setting.islowfrequency"> 【低频蹲饼时段】 </span>
       </div>
       <div id="content">
         <!-- <time-line
@@ -124,15 +124,13 @@
         >
         </time-line> -->
         <time-line
-          v-if="!setting.isTag"
-          ref="TimeLine"
           :saveInfo="saveInfo"
           :setting="setting"
           :imgShow="LazyLoaded"
-          :cardlist="cardlist"
+          :cardlistdm="cardlistdm"
         >
         </time-line>
-
+        <!-- 
         <el-tabs
           v-if="setting.isTag"
           v-model="setting.tagActiveName"
@@ -160,7 +158,7 @@
             >
             </time-line>
           </el-tab-pane>
-        </el-tabs>
+        </el-tabs> -->
       </div>
     </div>
   </div>
@@ -204,7 +202,6 @@ export default {
       LazyLoaded: false,
       isNew: false,
       sanShow: true,
-      cardlist: [],
       cardlistdm: {},
       saveInfo: common.saveInfo,
       onlineSpeakList: [],
@@ -246,7 +243,7 @@ export default {
         this.LazyLoaded = true;
       }, 1);
     },
-    
+
     bindScroolFun() {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
       // 添加监听事件（不同浏览器，事件方法不一样，所以可以作判断，也可以如下偷懒）
@@ -280,7 +277,6 @@ export default {
       chrome.runtime.sendMessage({ info: "getUpdateInfo" });
     },
 
-   
     // 死数据
     getSaveInfo() {
       this.getLocalStorage("saveInfo").then((data) => {
@@ -307,18 +303,16 @@ export default {
           if (this.saveInfo.webType == 1) {
             this.setting.sanShow = false; // 如果是火狐内核浏览器，隐藏理智规划
           }
-          console.log(this.saveInfo.webType != 1);
           setInterval(() => {
             // 轮询在这里
             this.getCardlist();
             this.getDunInfo();
-            this.$refs.TimeLine.getSane();
+            console.log(this.$refs);
+            // this.$refs.TimeLine.getSane();
           }, data.time * 500);
         }
       });
     },
-
-   
 
     // 获取数据
     getCardlist() {
@@ -326,13 +320,6 @@ export default {
         if (!data) {
           return;
         }
-        this.cardlist = Object.values(data)
-          .reduce((acc, cur) => [...acc, ...cur], [])
-          .sort((x, y) => y.time - x.time)
-          .map((x) => {
-            x.dynamicInfo = x.dynamicInfo.replace(/\n/g, "<br/>");
-            return x;
-          });
         this.cardlistdm = data;
       });
     },
@@ -377,8 +364,7 @@ export default {
 
     openGithub() {
       chrome.tabs.create({
-        url:
-          "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue",
+        url: "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue",
       });
     },
   },
