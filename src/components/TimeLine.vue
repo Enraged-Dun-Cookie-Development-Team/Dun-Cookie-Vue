@@ -1,13 +1,10 @@
 <template>
   <div id="content">
-    <div v-if="loading" style="color: red">
-      【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没有*龙门粗口*正常连接】
-    </div>
     <el-card
       shadow="never"
       class="info-card online-speak"
       v-loading="loading"
-      element-loading-text="正在获取在线信息"
+      element-loading-text="【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没有*龙门粗口*正常连接】"
     >
       <el-carousel
         arrow="never"
