@@ -1,6 +1,6 @@
 <template>
   <div id="timeline-area">
-    <serach-model :searchShow="searchShow"></serach-model>
+    <serach-model ref="SerachModel" :searchShow="searchShow"></serach-model>
     <el-drawer
       :visible.sync="toolDrawer"
       :show-close="false"
@@ -51,7 +51,7 @@
         arrow="never"
         height="100px"
         direction="vertical"
-        :interval="990000"
+        :interval="3000"
         :autoplay="true"
       >
         <el-carousel-item v-if="isNew">
@@ -425,7 +425,9 @@ export default {
     },
     // 调整过滤文字
     changeFilterText(text) {
-      text = text.trim();
+      if (text != null) {
+        text = text.trim();
+      }
       this.filterText = text;
       this.filterList();
     },
@@ -459,6 +461,10 @@ export default {
       document.addEventListener("keyup", (e) => {
         if (e.keyCode == 13) {
           this.searchShow = !this.searchShow;
+          if (!this.searchShow) {
+            this.$refs.SerachModel.clearText();
+            this.filterText = null;
+          }
         }
       });
     },
@@ -633,7 +639,7 @@ export default {
               img: img,
               winId: window.id,
             });
-          }, 500);
+          }, 1000);
         }
       );
     },
@@ -1039,17 +1045,17 @@ img[lazy="error"] {
   .el-timeline {
     padding-left: 25px;
     overflow: auto;
-    padding-top: 30px;
+    padding-top: 25px;
     padding-right: 20px;
-    height: 410px;
+    height: 415px;
     margin-top: 10px;
     &.tag {
       height: 365px;
     }
     &.window {
-      height: calc(100vh - 189px);
+      height: calc(100vh - 184px);
       &.tag {
-        height: calc(100vh - 234px);
+        height: calc(100vh - 230px);
       }
     }
     .el-timeline-item__tail {

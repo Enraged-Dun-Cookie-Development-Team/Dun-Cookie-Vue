@@ -124,6 +124,7 @@
         >
         </time-line> -->
         <time-line
+          ref="TimeLine"
           :saveInfo="saveInfo"
           :setting="setting"
           :imgShow="LazyLoaded"
@@ -171,8 +172,6 @@ import {
   common,
   timespanToDay,
   Get,
-  numberOrEnNameToName,
-  numberOrEnNameToIconSrc,
   numberToWeek,
   diffTime,
   saveLocalStorage,
@@ -223,8 +222,6 @@ export default {
   computed: {},
   beforeDestroy() {},
   methods: {
-    numberOrEnNameToName,
-    numberOrEnNameToIconSrc,
     numberToWeek,
     timespanToDay,
     diffTime,
@@ -307,8 +304,9 @@ export default {
             // 轮询在这里
             this.getCardlist();
             this.getDunInfo();
-            console.log(this.$refs);
-            // this.$refs.TimeLine.getSane();
+            try {
+              this.$refs.TimeLine.getSane();
+            } catch (error) {}
           }, data.time * 500);
         }
       });

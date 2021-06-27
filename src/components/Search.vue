@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-06-26 22:25:30
+ * @LastEditTime: 2021-06-27 21:21:20
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: \Dun-Cookie-Vue\src\components\Search.vue
+-->
 <template>
   <div class="search-area" :class="searchShow ? 'show' : ''">
     <input
@@ -34,7 +42,11 @@ export default {
   },
   computed: {},
   beforeDestroy() {},
-  methods: {},
+  methods: {
+    clearText() {
+      this.searchText = null;
+    },
+  },
 };
 </script>
 <style lang="less" scoped>
@@ -58,13 +70,34 @@ export default {
     text-align: center;
     font-weight: bold;
     border: 0;
-    box-shadow: 0 0 40px 0px #23ade5;
     background: #ffffff5c;
-    color: #23ade5;
+    animation: 30s textAnimate infinite linear;
+    // box-shadow: 0 0 40px 0px #23ade5;
+    // color: #23ade5;
   }
   &.show {
     top: 40px;
     opacity: 1;
+  }
+}
+
+@keyframes textAnimate {
+  0%,
+  100% {
+    box-shadow: 0 0 40px 0px #23ade5;
+    color: #23ade5;
+  }
+  25% {
+    box-shadow: 18px -14px 50px 15px #ff5ea7;
+    color: #ff5ea7;
+  }
+  60% {
+    box-shadow: 9px 7px 60px 0px #ff6530;
+    color: #ff6530;
+  }
+  80% {
+    box-shadow: -9px 5px 60px -10px #010fcb;
+    color: #010fcb;
   }
 }
 </style> 

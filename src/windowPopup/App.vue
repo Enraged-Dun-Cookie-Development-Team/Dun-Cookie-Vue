@@ -279,7 +279,11 @@ export default {
             // 轮询在这里
             this.getCardlist();
             this.getDunInfo();
-            // this.$refs.TimeLine.getSane();
+            try {
+              this.$refs.TimeLine.getSane();
+            } catch (error) {
+              
+            }
           }, data.time * 500);
         }
       });
