@@ -130,31 +130,41 @@ let kazeSourceProcess = {
         };
         opt = Object.assign({}, defopt, opt);
         // 添加时间清除缓存
-        this.Get(opt.url + new Date().getTime()).then(data => {
-            opt.responseText = data;
+        this.Get(opt.url).then(data => {
             let newCardList = [];
-            // source: ['bili', 'weibo', 'yj', 'cho3', 'ys3', 'sr', 'tl', 'tlgw', ]
-            if (opt.source == 0) {
-                newCardList = this.processBiliBili(opt);
+            // 如果没数据 就使用旧数据
+            if (data && data.length >= 0 && data[0] == null) {
+                if (kazeLocalData.cardlistdm.hasOwnProperty(opt.dataName)) {
+                    newCardList = kazeLocalData.cardlistdm[opt.dataName];
+                } else {
+                    newCardList = [];
+                }
+            } else {
+                opt.responseText = data;
+                // source: ['bili', 'weibo', 'yj', 'cho3', 'ys3', 'sr', 'tl', 'tlgw', ]
+                if (opt.source == 0) {
+                    newCardList = this.processBiliBili(opt);
+                }
+                else if (opt.source == 1 || opt.source == 3 || opt.source == 4 || opt.source == 6) {
+                    newCardList = this.processWeibo(opt)
+                }
+                else if (opt.source == 2) {
+                    newCardList = this.processYj(opt)
+                }
+                else if (opt.source == 5) {
+                    newCardList = this.processSr(opt)
+                }
+                else if (opt.source == 7) {
+                    newCardList = this.processGw(opt)
+                }
+                else if (opt.source == 8) {
+                    newCardList = this.processTlGw(opt)
+                }
+                else if (opt.source == 9) {
+                    newCardList = this.processWyyyy(opt)
+                }
             }
-            else if (opt.source == 1 || opt.source == 3 || opt.source == 4 || opt.source == 6) {
-                newCardList = this.processWeibo(opt)
-            }
-            else if (opt.source == 2) {
-                newCardList = this.processYj(opt)
-            }
-            else if (opt.source == 5) {
-                newCardList = this.processSr(opt)
-            }
-            else if (opt.source == 7) {
-                newCardList = this.processGw(opt)
-            }
-            else if (opt.source == 8) {
-                newCardList = this.processTlGw(opt)
-            }
-            else if (opt.source == 9) {
-                newCardList = this.processWyyyy(opt)
-            }
+
 
             let oldCardList = kazeLocalData.cardlistdm[opt.dataName];
             let isNew = kazeFun.JudgmentNew(oldCardList, newCardList, opt.title);
@@ -187,11 +197,16 @@ let kazeSourceProcess = {
     // 获取数据底层方法
     GetAlgorithm(url) {
         return new Promise((resolve, reject) => {
+            url += new Date().getTime();
             let xhr = new XMLHttpRequest();
             xhr.open("GET", url, true);
             xhr.onreadystatechange = () => {
                 if (xhr.readyState == 4 && xhr.status == 200 && xhr.responseText != "") {
                     resolve(xhr.responseText);
+                    return;
+                }
+                if (xhr.status == 403) {
+                    resolve(null);
                     return;
                 }
             }
@@ -569,6 +584,9 @@ let kazeFun = {
         kazeFun.getWebType();
         kazeFun.saveLocalStorage('dunInfo', kazeLocalData.dunInfo);
         kazeFun.saveLocalStorage('saveInfo', kazeLocalData.saveInfo);
+        kazeFun.getLocalStorage('cardlistdm').then(data => {
+            kazeLocalData.cardlistdm = data;
+        })
         // 默认设置
         kazeFun.getLocalStorage('setting').then(data => {
             if (data) {

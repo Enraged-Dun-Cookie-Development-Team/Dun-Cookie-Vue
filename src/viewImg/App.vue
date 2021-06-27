@@ -13,17 +13,17 @@
 </template>
 
 <script>
+import { getLocalStorage } from "../assets/JS/common";
 export default {
   name: "ViewImg",
-  created() {
-    chrome.runtime.onMessage.addListener(({ item, img, winId }) => {
+  created() {},
+  mounted() {
+    this.getLocalStorage("viewImg").then(({ item, img, winId }) => {
       this.item = item;
       this.img = img;
       this.winId = winId;
-      console.log( item, img, winId)
     });
   },
-  mounted() {},
 
   data() {
     return {
@@ -35,6 +35,7 @@ export default {
   },
   computed: {},
   methods: {
+    getLocalStorage,
     imgOnload(data) {
       this.load = false;
       this.info = {

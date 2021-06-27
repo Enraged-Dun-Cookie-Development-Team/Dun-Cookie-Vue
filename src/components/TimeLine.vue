@@ -395,10 +395,13 @@ export default {
     };
   },
   mounted() {
+    console.log(this.setting.isTag);
     this.getOnlineSpeak();
     this.getSane();
     this.setClickFun();
     this.listenKeyBord();
+
+    this.filterDmList();
   },
   watch: {
     cardlist() {
@@ -433,9 +436,9 @@ export default {
     },
     filterDmList() {
       // 如果是单独的
+      console.log(this.setting.isTag);
       if (this.setting.isTag) {
-        this.cardlist =
-          this.cardlistdm[this.$refs[this.setting.tagActiveName][0].label];
+        this.cardlist = this.cardlistdm["weibo"];
       } else {
         this.cardlist = Object.values(this.cardlistdm)
           .reduce((acc, cur) => [...acc, ...cur], [])
@@ -632,14 +635,12 @@ export default {
         },
         (window) => {
           this.windowTabId = window.id;
-          setTimeout(() => {
-            chrome.runtime.sendMessage({
-              info: "tab",
-              item: item,
-              img: img,
-              winId: window.id,
-            });
-          }, 1000);
+          this.saveLocalStorage("viewImg", {
+            info: "tab",
+            item: item,
+            img: img,
+            winId: window.id,
+          }).then((data) => {});
         }
       );
     },

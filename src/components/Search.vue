@@ -71,7 +71,7 @@ export default {
     font-weight: bold;
     border: 0;
     background: #ffffff5c;
-    animation: 30s textAnimate infinite linear;
+    animation: 10s textAnimate infinite linear;
     // box-shadow: 0 0 40px 0px #23ade5;
     // color: #23ade5;
   }
@@ -88,11 +88,11 @@ export default {
     color: #23ade5;
   }
   25% {
-    box-shadow: 18px -14px 50px 15px #ff5ea7;
+    box-shadow: 9px -9px 50px 15px #ff5ea7;
     color: #ff5ea7;
   }
   60% {
-    box-shadow: 9px 7px 60px 0px #ff6530;
+    box-shadow: 9px 7px 80px 0px #ff6530;
     color: #ff6530;
   }
   80% {

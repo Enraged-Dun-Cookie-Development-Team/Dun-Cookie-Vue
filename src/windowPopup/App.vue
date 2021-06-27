@@ -103,16 +103,6 @@
         <span v-if="setting.islowfrequency"> 【低频蹲饼时段】 </span>
       </div>
       <div id="content">
-        <!-- <time-line
-          v-if="!setting.isTag"
-          ref="TimeLine"
-          :saveInfo="saveInfo"
-          :setting="setting"
-          :imgShow="LazyLoaded"
-          :cardlist="cardlist"
-          :allHeight="allHeight"
-        >
-        </time-line> -->
         <time-line
           ref="TimeLine"
           :saveInfo="saveInfo"
@@ -121,35 +111,6 @@
           :cardlistdm="cardlistdm"
         >
         </time-line>
-
-        <!-- <el-tabs
-          v-if="setting.isTag"
-          v-model="setting.tagActiveName"
-          :stretch="true"
-        >
-          <el-tab-pane
-            v-for="item in Object.keys(cardlistdm)"
-            :key="item"
-            :label="numberOrEnNameToName(item)"
-            :name="numberOrEnNameToName(item)"
-          >
-            <span slot="label">
-              <img
-                :title="numberOrEnNameToName(item)"
-                class="title-img"
-                :src="numberOrEnNameToIconSrc(item)"
-              />
-            </span>
-            <time-line
-              ref="TimeLine"
-              :saveInfo="saveInfo"
-              :setting="setting"
-              :imgShow="LazyLoaded"
-              :cardlist="cardlistdm[item]"
-            >
-            </time-line>
-          </el-tab-pane>
-        </el-tabs> -->
       </div>
     </div>
   </div>
