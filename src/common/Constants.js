@@ -10,6 +10,10 @@ const IS_DEBUG = false;
  */
 const DEBUG_LOG = IS_DEBUG && true;
 /**
+ * 当前配置文件版本号
+ */
+const CURRENT_SETTING_VERSION = 1;
+/**
  * 当前插件版本号
  */
 const CURRENT_VERSION = '2.1.1';
@@ -18,7 +22,7 @@ const CURRENT_VERSION = '2.1.1';
  */
 const SHOW_VERSION = CURRENT_VERSION + (IS_DEBUG ? '【调试模式】' : '');
 
-export {IS_DEBUG, DEBUG_LOG, CURRENT_VERSION, SHOW_VERSION};
+export {IS_DEBUG, DEBUG_LOG, CURRENT_SETTING_VERSION, CURRENT_VERSION, SHOW_VERSION};
 // endregion
 
 // region 各种参数，主要用于测试模式

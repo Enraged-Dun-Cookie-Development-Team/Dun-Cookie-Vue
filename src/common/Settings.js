@@ -1,9 +1,15 @@
 import BrowserUtil from './util/BrowserUtil';
-import {BROWSER_CHROME, BROWSER_FIREFOX, BROWSER_MOBILE_PHONE, MESSAGE_SETTINGS_UPDATE} from './Constants';
+import {
+  BROWSER_CHROME,
+  BROWSER_FIREFOX,
+  BROWSER_MOBILE_PHONE,
+  CURRENT_SETTING_VERSION,
+  MESSAGE_SETTINGS_UPDATE
+} from './Constants';
 import {deepAssign} from './util/CommonFunctions';
 import {defaultDataSources, defaultDataSourcesNames} from './datasource/DefaultDataSources';
-import {DataSource} from './datasource/DataSource';
 import {customDataSourceTypes} from './datasource/CustomDataSources';
+import {updateSettings} from './SettingsUpdater';
 
 /**
  * 这个可以确保代码在settings初始化完毕之后再执行
@@ -60,6 +66,8 @@ function transformDataSource(settings) {
 class Settings {
   // 插件初始化的时间
   initTime = new Date().getTime();
+  // 插件版本号
+  version = CURRENT_SETTING_VERSION;
 
   /**
    * 启用的默认数据源，储存dataName
@@ -346,7 +354,7 @@ class Settings {
           console.log('============');
         }
         if (value != null) {
-          deepAssign(this, value);
+          deepAssign(this, updateSettings(value));
         }
         return this;
       });
