@@ -306,6 +306,6 @@ class Settings {
 }
 
 const instance = new Settings()
-global.instance = instance;
+global.Settings = instance;
 
 export default instance;

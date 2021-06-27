@@ -26,7 +26,7 @@
           <!-- <div class="info-time">下次蹲饼时间：{{ nextdunTime }}</div> -->
         </div>
         <el-divider></el-divider>
-        <el-form :rules="rules" ref="form" :model="settings" label-width="100px">
+        <el-form ref="form" :model="settings" label-width="100px">
           <el-tabs v-model="activeTab" type="border-card">
             <el-tab-pane label="核心设置" name="0">
               <el-tooltip
@@ -171,10 +171,10 @@
                       ><el-switch v-model="settings.display.showByTag"></el-switch
                     ></el-col>
                     <el-col v-if="settings.display.showByTag" :span="20" :offset="1">
-                      <el-form-item prop="defaultTag">
+                      <el-form-item prop="display.defaultTag" :rules="{required: true, message: '请选择默认标签', trigger: 'blur'}">
                         <el-select v-model="settings.display.defaultTag" placeholder="选择默认标签">
                           <el-option
-                              v-for="source in settings.enableDataSources"
+                              v-for="source in settings.currentDataSources"
                               :key="source.dataName"
                               :label="source.title"
                               :value="source.dataName"
@@ -352,11 +352,6 @@ export default {
         20: "8点",
       },
       activeTab: "0",
-      rules: {
-        defaultTag: [
-          { required: true, message: "请选择默认标签", trigger: "blur" },
-        ],
-      },
       customData: []
     };
   },
@@ -395,7 +390,6 @@ export default {
       if (data) {
         deepAssign(this.settings, data);
       }
-      console.log(this.customData);
       this.settings.customDataSources = this.customData.map(item => {
         return {
           type: item.type.typeName,

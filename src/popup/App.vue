@@ -283,22 +283,22 @@
           :stretch="true"
         >
           <el-tab-pane
-            v-for="item in Object.keys(cardlistdm)"
-            :key="item"
-            :label="item"
-            :name="item"
+            v-for="item of transformToSortList(cardlistdm)"
+            :key="item.dataName"
+            :label="item.dataName"
+            :name="item.dataName"
           >
             <span slot="label">
               <img
                 :title="item"
                 class="title-img"
-                :src="getDataSourceByName(item).icon"
+                :src="getDataSourceByName(item.dataName).icon"
               />
             </span>
             <time-line
               ref="TimeLine"
               :imgShow="LazyLoaded"
-              :cardlist="cardlistdm[item]"
+              :cardlist="item.data"
             >
             </time-line>
           </el-tab-pane>
@@ -376,8 +376,9 @@ export default {
   beforeDestroy() {},
   methods: {
     numberToWeek: TimeUtil.numberToWeek,
-    getDataSourceByName: DataSourceUtil.getByName,
     openUrl: BrowserUtil.createTab,
+    getDataSourceByName: DataSourceUtil.getByName,
+    transformToSortList: DataSourceUtil.transformToSortList,
     init() {
       BrowserUtil.addMessageListener('popup', MESSAGE_DUN_INFO_UPDATE, data => {
         this.oldDunCount = data.counter;

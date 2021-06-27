@@ -12,6 +12,25 @@ class DataSourceUtil {
   }
 
   /**
+   * 将k-v结构的数据转换成按照优先级排序的list，用于分类显示的排序
+   */
+  static transformToSortList(data) {
+    const list = [];
+    for (const k in data) {
+      if (data.hasOwnProperty(k)) {
+        list.push({
+          dataName: k,
+          data: data[k]
+        });
+      }
+    }
+    list.sort((a, b) => {
+      return DataSourceUtil.getByName(a.dataName).priority - DataSourceUtil.getByName(b.dataName).priority;
+    });
+    return list;
+  }
+
+  /**
    * 合并数据，可以将合并的数据进行排序(默认启用排序)
    */
   static mergeAllData(data, sort = true) {
