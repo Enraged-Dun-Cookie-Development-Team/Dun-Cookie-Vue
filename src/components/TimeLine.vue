@@ -375,9 +375,10 @@ import SerachModel from "../components/Search";
 export default {
   name: "TimeLine",
   components: { SerachModel },
-  props: ["setting", "saveInfo", "imgShow", "cardlistdm"],
+  props: ["saveInfo", "imgShow", "cardlistdm"],
   data() {
     return {
+      setting: common.setting,
       showAllImage: [],
       windowTabId: null,
       onlineSpeakList: [],
@@ -395,13 +396,12 @@ export default {
     };
   },
   mounted() {
-    console.log(this.setting.isTag);
+    this.getSetting();
     this.getOnlineSpeak();
     this.getSane();
     this.setClickFun();
     this.listenKeyBord();
-
-    this.filterDmList();
+    // this.filterDmList();
   },
   watch: {
     cardlist() {
@@ -420,6 +420,11 @@ export default {
     getLocalStorage,
     numberOrEnNameToName,
     numberOrEnNameToIconSrc,
+    getSetting() {
+      this.getLocalStorage("setting").then((data) => {
+        this.setting = data;
+      });
+    },
     // 更改标签了
     openUpdate() {
       chrome.tabs.create({
@@ -436,9 +441,11 @@ export default {
     },
     filterDmList() {
       // 如果是单独的
-      console.log(this.setting.isTag);
       if (this.setting.isTag) {
-        this.cardlist = this.cardlistdm["weibo"];
+        this.$nextTick(() => {
+          this.cardlist =
+            this.cardlistdm[this.$refs[this.setting.tagActiveName][0].label];
+        });
       } else {
         this.cardlist = Object.values(this.cardlistdm)
           .reduce((acc, cur) => [...acc, ...cur], [])
