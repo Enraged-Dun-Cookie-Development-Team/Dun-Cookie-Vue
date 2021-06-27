@@ -4,7 +4,7 @@ import NotificationUtil from '../common/util/NotificationUtil';
 import DunInfo from '../common/sync/DunInfo';
 import SanInfo from '../common/sync/SanInfo';
 import {
-    IS_TEST,
+    IS_DEBUG,
     MESSAGE_CARD_LIST_GET,
     MESSAGE_CARD_LIST_UPDATE,
     MESSAGE_DUN_INFO_GET,
@@ -72,7 +72,7 @@ let dunTimeoutId = null;
 function startDunTimer() {
     tryDun(Settings);
 
-    let delay = IS_TEST ? TEST_DATA_REFRESH_TIME : Settings.dun.intervalTime;
+    let delay = IS_DEBUG ? TEST_DATA_REFRESH_TIME : Settings.dun.intervalTime;
     // 低频模式
     if (Settings.checkLowFrequency()) {
         delay *= 2;

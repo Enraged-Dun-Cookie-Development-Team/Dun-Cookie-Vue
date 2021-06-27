@@ -2,13 +2,13 @@
 /**
  * 是否是测试模式
  */
-const IS_TEST = true;
+const IS_DEBUG = true;
 /**
  * 是否输出调试日志
  * <p>
- * 需要注意的是如果输出日志太多会导致打卡开发者控制台(F12)会非常卡，所以不要动前面的<code>IS_TEST &&</code>以避免忘记修改导致生产版本出问题
+ * 需要注意的是如果输出日志太多会导致打卡开发者控制台(F12)会非常卡，所以不要动前面的<code>IS_DEBUG &&</code>以避免忘记修改导致生产版本出问题
  */
-const DEBUG_LOG = IS_TEST && false;
+const DEBUG_LOG = IS_DEBUG && false;
 /**
  * 当前插件版本号
  */
@@ -16,20 +16,20 @@ const CURRENT_VERSION = '2.1.0';
 /**
  * 展示用的版本号
  */
-const SHOW_VERSION = CURRENT_VERSION + (IS_TEST ? '【测试模式】' : '');
+const SHOW_VERSION = CURRENT_VERSION + (IS_DEBUG ? '【调试模式】' : '');
 
-export {IS_TEST, DEBUG_LOG, CURRENT_VERSION, SHOW_VERSION};
+export {IS_DEBUG, DEBUG_LOG, CURRENT_VERSION, SHOW_VERSION};
 // endregion
 
 // region 各种参数，主要用于测试模式
 /**
  * 测试模式的数据刷新间隔(秒)
  */
-const TEST_DATA_REFRESH_TIME = 3;
+const TEST_DATA_REFRESH_TIME = 5;
 /**
  * 理智恢复速度，非测试模式6分钟，测试模式30秒
  */
-const SAN_RECOVERY_SPEED = IS_TEST ? 30 * 1000 : 6 * 60 * 1000;
+const SAN_RECOVERY_SPEED = IS_DEBUG ? 15 * 1000 : 6 * 60 * 1000;
 
 export {TEST_DATA_REFRESH_TIME, SAN_RECOVERY_SPEED};
 // endregion

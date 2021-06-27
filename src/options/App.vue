@@ -325,7 +325,7 @@ import Settings from '../common/Settings';
 import BrowserUtil from '../common/util/BrowserUtil';
 import DunInfo from '../common/sync/DunInfo';
 import Feedback from '../components/Feedback';
-import {CURRENT_VERSION, MESSAGE_DUN_INFO_UPDATE} from '../common/Constants';
+import {MESSAGE_DUN_INFO_UPDATE, SHOW_VERSION} from '../common/Constants';
 import {defaultDataSourcesList} from '../common/datasource/DefaultDataSources';
 import TimeUtil from '../common/util/TimeUtil';
 import {customDataSourceTypes} from '../common/datasource/CustomDataSources';
@@ -340,7 +340,7 @@ export default {
   watch: {},
   data() {
     return {
-      currentVersion: CURRENT_VERSION,
+      currentVersion: SHOW_VERSION,
       oldDunCount: 0,
       dunInfo: DunInfo,
       settings: Settings,

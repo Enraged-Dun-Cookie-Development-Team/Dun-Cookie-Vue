@@ -317,7 +317,8 @@ import BrowserUtil from '../common/util/BrowserUtil';
 import DunInfo from '../common/sync/DunInfo';
 import SanInfo from '../common/sync/SanInfo';
 import {
-  CURRENT_VERSION, dayInfo,
+  CURRENT_VERSION,
+  dayInfo,
   MESSAGE_CARD_LIST_GET,
   MESSAGE_CARD_LIST_UPDATE,
   MESSAGE_DUN_INFO_UPDATE,
@@ -325,7 +326,9 @@ import {
   PAGE_DONATE,
   PAGE_GITHUB_REPO,
   PAGE_OPTIONS,
-  PAGE_UPDATE, quickJump
+  PAGE_UPDATE,
+  quickJump,
+  SHOW_VERSION
 } from '../common/Constants';
 import DataSourceUtil from '../common/util/DataSourceUtil';
 import TimeUtil from '../common/util/TimeUtil';
@@ -356,7 +359,7 @@ export default {
       isNew: false,
       cardlist: [],
       cardlistdm: {},
-      currentVersion: CURRENT_VERSION,
+      currentVersion: SHOW_VERSION,
       onlineSpeakList: [],
       oldDunCount: 0,
       dunInfo: DunInfo,

@@ -7,7 +7,7 @@ import {MonsterSirenDataSource} from './def/MonsterSirenDataSource';
 import {ArknightsOfficialWebDataSource} from './def/ArknightsOfficialWebDataSource';
 import {TerraHistoricusDataSource} from './def/TerraHistoricusDataSource';
 import {NeteaseCloudMusicDataSource} from './def/NeteaseCloudMusicDataSource';
-import {IS_TEST} from '../Constants';
+import {IS_DEBUG} from '../Constants';
 
 /**
  * 默认数据源
@@ -100,7 +100,7 @@ for (const source of defaultDataSourcesList) {
 const defaultDataSourcesNames = Object.keys(defaultDataSources);
 
 // 感觉没必要给DataSource多一个testUrl的属性，测试链接在这里修改吧
-if (IS_TEST) {
+if (IS_DEBUG) {
   defaultDataSources['官方B站动态'].dataUrl = 'test/bJson.json?host_uid=161775300';
   defaultDataSources['官方微博'].dataUrl = 'test/wJson.json?type=uid&value=6279793937&containerid=1076036279793937';
   defaultDataSources['游戏内公告'].dataUrl = 'test/yJson.json';
