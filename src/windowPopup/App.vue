@@ -273,22 +273,22 @@
           :stretch="true"
         >
           <el-tab-pane
-              v-for="item in Object.keys(cardlistdm)"
-              :key="item"
-              :label="item"
-              :name="item"
+              v-for="item in transformToSortList(cardlistdm)"
+              :key="item.dataName"
+              :label="item.dataName"
+              :name="item.dataName"
           >
             <span slot="label">
               <img
                   :title="item"
                   class="title-img"
-                  :src="getDataSourceByName(item).icon"
+                  :src="getDataSourceByName(item.dataName).icon"
               />
             </span>
             <time-line
                 ref="TimeLine"
                 :imgShow="LazyLoaded"
-                :cardlist="cardlistdm[item]"
+                :cardlist="item.data"
             >
             </time-line>
           </el-tab-pane>
@@ -317,7 +317,8 @@ import {
   PAGE_GITHUB_REPO,
   PAGE_OPTIONS,
   PAGE_UPDATE,
-  quickJump
+  quickJump,
+  SHOW_VERSION
 } from '../common/Constants';
 import DataSourceUtil from '../common/util/DataSourceUtil';
 import TimeUtil from '../common/util/TimeUtil';
@@ -346,7 +347,7 @@ export default {
       isNew: false,
       cardlist: [],
       cardlistdm: {},
-      currentVersion: CURRENT_VERSION,
+      currentVersion: SHOW_VERSION,
       onlineSpeakList: [],
       oldDunCount: 0,
       dunInfo: DunInfo,
@@ -366,8 +367,9 @@ export default {
   beforeDestroy() {},
   methods: {
     numberToWeek: TimeUtil.numberToWeek,
-    getDataSourceByName: DataSourceUtil.getByName,
     openUrl: BrowserUtil.createTab,
+    getDataSourceByName: DataSourceUtil.getByName,
+    transformToSortList: DataSourceUtil.transformToSortList,
     init() {
       BrowserUtil.addMessageListener('windowPopup', MESSAGE_DUN_INFO_UPDATE, data => {
         this.oldDunCount = data.counter;
