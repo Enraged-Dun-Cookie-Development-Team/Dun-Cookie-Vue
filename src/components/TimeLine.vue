@@ -646,10 +646,10 @@ export default {
 `
         )}   
 
-${item.url}
+饼来源：${item.url}
 
 数据由 小刻食堂${this.saveInfo.version} 收集
-工具链接：https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue`
+工具介绍链接：https://arknightscommunity.drblack-system.com/2012.html`
       ).then(
         (e) => {
           this.$message({
