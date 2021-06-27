@@ -310,7 +310,7 @@ export default {
   },
   methods: {
     formatTime: TimeUtil.format,
-    openUrl: BrowserUtil.createTab(url),
+    openUrl: BrowserUtil.createTab,
     init() {
       BrowserUtil.addMessageListener('options', MESSAGE_DUN_INFO_UPDATE, data => {
         this.oldDunCount = data.counter;
@@ -323,8 +323,8 @@ export default {
       }
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          settings.setAll(data);
-          settings.saveSettings().then(() => {
+          this.settings.setAll(data);
+          this.settings.saveSettings().then(() => {
             this.$message({
               center: true,
               message: "保存成功",
@@ -340,7 +340,7 @@ export default {
 
     // 导出设置
     settingExport() {
-      const blob = new Blob([JSON.stringify(settings)], {
+      const blob = new Blob([JSON.stringify(this.settings)], {
         type: "application/json",
       });
       let src = URL.createObjectURL(blob);
