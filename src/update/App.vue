@@ -22,15 +22,28 @@
         <div v-html="updateInfo.description"></div>
       </el-card>
       <el-divider></el-divider>
-      <div style="text-align: center">
+      <div style="text-align: center; margin-bottom: 10px">
         <el-button
           size="mini"
            type="success"
           @click="openUrl(updateInfo.downChrome)"
           >Chrome应用商店</el-button
         >
-
-        <el-button type="success" @click="openUrl(updateInfo.downCrx)" size="mini"
+        <el-button
+            size="mini"
+            type="success"
+            @click="openUrl(updateInfo.downEdge)"
+        >Edge应用商店</el-button
+        >
+        <el-button
+            size="mini"
+            type="success"
+            @click="openUrl(updateInfo.downFirefox)"
+        >Firefox应用商店</el-button
+        >
+      </div>
+      <div style="text-align: center">
+      <el-button type="success" @click="openUrl(updateInfo.downCrx)" size="mini"
           >下载Crx</el-button
         >
         <el-button type="success" @click="openUrl(updateInfo.downZip)" size="mini"

@@ -13,15 +13,26 @@
       <div :class="{'show-all': showAllImage.includes(item.coverImage)}"
            class="img-area"
            @click="changeShowAllImage(item.coverImage)">
-        <div v-if="item.imageList && item.imageList.length > 1">
+        <div v-if="item.imageList && item.imageList.length > 1" class="multi-img">
           <el-row :gutter="5">
-            <el-col v-for="img in item.imageList" :key="img" :span="8">
-              <img v-lazy="img" class="img"/>
+            <el-col v-for="(img, index) in item.imageList" :key="img" :span="8">
+              <img :ref="item.id + '_' + index" v-lazy="img" class="img"/>
+              <span class="img-btn img-look-btn"
+                    @click.stop="ViewImg(item, img, item.id + '_' + index)"
+              >
+                <i class="el-icon-view"></i>
+              </span>
             </el-col>
           </el-row>
         </div>
         <div v-else class="one-img">
-          <img v-lazy="item.coverImage" class="img"/>
+          <img :ref="item.id" v-lazy="item.coverImage" class="img"/>
+          <span
+              class="img-btn img-look-btn"
+              @click.stop="ViewImg(item, item.coverImage, item.id)"
+          >
+            <i class="el-icon-view"></i>
+          </span>
         </div>
       </div>
     </el-row>
@@ -39,6 +50,7 @@ export default {
     return {
       settings: Settings,
       showAllImage: [],
+      windowTabId: null,
     };
   },
   methods: {
@@ -53,6 +65,57 @@ export default {
       } else {
         this.showAllImage.push(img);
       }
+    },
+    ViewImg(item, img, refName) {
+      // 舍弃 会把列表关闭
+      // chrome.tabs.create(
+      //   {
+      //     url: chrome.extension.getURL("viewImg.html"),
+      //     active: true,
+      //   },
+      //   function (_tab) {
+      //    setTimeout(() => {
+      //       chrome.tabs.sendMessage(_tab.id, {
+      //       message: "some custom message",
+      //       arg: "some arg",
+      //     });
+      //    }, 1000);
+      //   }
+      // );
+      // 直接打开 我也不知道为什么要加上这个神奇的数字 但是还是有缝隙
+      let ref = this.$refs[refName];
+      if (Array.isArray(ref)) {
+        ref = ref[0];
+      }
+      let width = ref.naturalWidth + 32 || 1100;
+      let height = ref.naturalHeight + 67 || 750;
+      if (this.windowTabId != null) {
+        chrome.windows.remove(this.windowTabId, () => {
+          // 避免报错
+          if (chrome.runtime.lastError) {
+            console.log(chrome.runtime.lastError)
+          }
+        });
+      }
+      chrome.windows.create(
+          {
+            url: chrome.extension.getURL("viewImg.html"),
+            type: "panel",
+            width: width,
+            height: height,
+          },
+          (window) => {
+            this.windowTabId = window.id;
+            setTimeout(() => {
+              chrome.runtime.sendMessage({
+                info: "tab",
+                item: item,
+                img: img,
+                winId: window.id,
+              });
+            }, 500);
+          }
+      );
     },
   }
 }

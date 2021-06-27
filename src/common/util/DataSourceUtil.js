@@ -37,21 +37,26 @@ class DataSourceUtil {
     const result = Object.values(data)
       .reduce((acc, cur) => [...acc, ...cur], []);
     if (sort) {
-      result.sort((x, y) => {
-        // 时间戳大的优先
-        let ret = new Date(y.timeForSort).getTime() - new Date(x.timeForSort).getTime();
-        if (ret === 0) {
-          // 相同时间，则数据源优先级小的优先
-          ret = DataSourceUtil.getByName(x.dataSource).priority - DataSourceUtil.getByName(y.dataSource).priority;
-        }
-        if (ret === 0) {
-          // 相同时间、数据源优先级也相同，则根据id排序，id小的优先
-          ret = x.id.localeCompare(y.id);
-        }
-        return ret;
-      });
+      DataSourceUtil.sortData(result);
     }
     return result;
+  }
+
+  static sortData(data) {
+    data.sort((x, y) => {
+      // 时间戳大的优先
+      let ret = new Date(y.timeForSort).getTime() - new Date(x.timeForSort).getTime();
+      if (ret === 0) {
+        // 相同时间，则数据源优先级小的优先
+        ret = DataSourceUtil.getByName(x.dataSource).priority - DataSourceUtil.getByName(y.dataSource).priority;
+      }
+      if (ret === 0) {
+        // 相同时间、数据源优先级也相同，则根据id排序，id大的优先
+        ret = y.id.localeCompare(x.id);
+      }
+      return ret;
+    });
+    return data;
   }
 }
 

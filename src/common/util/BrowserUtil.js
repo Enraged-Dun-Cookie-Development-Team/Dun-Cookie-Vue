@@ -38,9 +38,8 @@ class BrowserUtil {
   static getLocalStorage(name) {
     return new Promise((resolve, reject) => {
       chrome.storage.local.get(name, (result) => {
-        const lastError = chrome.runtime.lastError;
-        if (lastError) {
-          reject(lastError);
+        if (chrome.runtime.lastError) {
+          reject(chrome.runtime.lastError);
           return;
         }
         if (typeof name === 'string') {
@@ -89,6 +88,10 @@ class BrowserUtil {
         // 不提供callback参数时如果没有监听器只会默默失败
         // 所以这里要进行判断
         if (!chrome.runtime.lastError) {
+          if (DEBUG_LOG) {
+            console.log(`response - ${type}`);
+            console.log(response);
+          }
           resolve(response);
         } else {
           resolve(null);

@@ -2,17 +2,17 @@
 /**
  * 是否是测试模式
  */
-const IS_DEBUG = true;
+const IS_DEBUG = false;
 /**
  * 是否输出调试日志
  * <p>
  * 需要注意的是如果输出日志太多会导致打卡开发者控制台(F12)会非常卡，所以不要动前面的<code>IS_DEBUG &&</code>以避免忘记修改导致生产版本出问题
  */
-const DEBUG_LOG = IS_DEBUG && false;
+const DEBUG_LOG = IS_DEBUG && true;
 /**
  * 当前插件版本号
  */
-const CURRENT_VERSION = '2.1.0';
+const CURRENT_VERSION = '2.1.1';
 /**
  * 展示用的版本号
  */

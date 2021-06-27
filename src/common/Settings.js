@@ -1,7 +1,9 @@
 import BrowserUtil from './util/BrowserUtil';
 import {BROWSER_CHROME, BROWSER_FIREFOX, BROWSER_MOBILE_PHONE, MESSAGE_SETTINGS_UPDATE} from './Constants';
 import {deepAssign} from './util/CommonFunctions';
-import {defaultDataSourcesNames} from './datasource/DefaultDataSources';
+import {defaultDataSources, defaultDataSourcesNames} from './datasource/DefaultDataSources';
+import {DataSource} from './datasource/DataSource';
+import {customDataSourceTypes} from './datasource/CustomDataSources';
 
 /**
  * 这个可以确保代码在settings初始化完毕之后再执行
@@ -12,6 +14,47 @@ let initPromise;
  * 更新监听器
  */
 const updateListeners = [];
+
+
+/**
+ * 将配置信息转化成可以用于蹲饼的数据源
+ */
+function transformDataSource(settings) {
+  const list = {};
+  for (const dataName of settings.enableDataSources) {
+    list[dataName] = defaultDataSources[dataName];
+  }
+  const promiseList = [];
+  for (const info of settings.customDataSources) {
+    // 虽然这里用时间复杂度很离谱的双层for，但由于customDataSourceTypes很少，配置需要更新的情况也很少，所以影响不大
+    for (const type of customDataSourceTypes) {
+      if (info.type === type.name) {
+        promiseList.push(type.builder.build(info.arg));
+        break;
+      }
+    }
+  }
+  return Promise.allSettled(promiseList).then(results => {
+    for (const result of results) {
+      if (result.status) {
+        if (result.value) {
+          list[result.value.dataName] = result.value;
+        } else {
+          console.error(result);
+        }
+      } else {
+        console.error(result.reason);
+      }
+    }
+    settings.currentDataSources = list;
+    if (BrowserUtil.isBackground) {
+      settings.saveSettings();
+      console.log('new datasource list: ');
+      console.log(settings.currentDataSources);
+    }
+    return true;
+  });
+}
 
 // TODO 自动导入旧版配置并转化成新版配置
 class Settings {
@@ -203,9 +246,11 @@ class Settings {
     BrowserUtil.addMessageListener('settings', MESSAGE_SETTINGS_UPDATE, data => {
       deepAssign(this, data);
       this.__updateWindowMode();
-      for (const listener of updateListeners) {
-        listener(this);
-      }
+      transformDataSource(this).finally(() => {
+        for (const listener of updateListeners) {
+          listener(this);
+        }
+      });
     });
     initPromise = new Promise((resolve) => {
       this.reloadSettings().then(() => {
@@ -243,6 +288,9 @@ class Settings {
             this.enableDataSources = defaultDataSourcesNames;
             console.log("未启用任何默认数据源，将自动启用全部默认数据源");
           }
+
+          this.currentDataSources = {};
+          transformDataSource(this);
 
           this.__updateWindowMode();
 
