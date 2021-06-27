@@ -81,6 +81,10 @@ function startDunTimer() {
     if (Settings.checkLowFrequency()) {
         delay *= 2;
     }
+    // 数据源尚未准备好的时候0.5秒刷新一次
+    if (Object.keys(cardListCache).length === 0 && Object.keys(Settings.currentDataSources).length === 0) {
+        delay = 0.5;
+    }
     dunTimeoutId = setTimeout(() => {
         startDunTimer();
     }, delay * 1000);
@@ -95,15 +99,15 @@ const kazeFun = {
             && newList
             && oldList.length > 0
             && newList.length > 0
-            && oldList[0].judgment != newList[0].judgment
+            && oldList[0].id != newList[0].id
         ) {
             let newInfo = newList[0];
             let timeNow = new Date()
-            let notice = newInfo.dynamicInfo.replace(/\n/g, "");
+            let notice = newInfo.content.replace(/\n/g, "");
             console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
             // 是否推送
             if (Settings.dun.enableNotice) {
-                NotificationUtil.SendNotice(`小刻在【${title}】里面找到了一个饼！`, notice, newInfo.image, newInfo.id)
+                NotificationUtil.SendNotice(`小刻在【${title}】里面找到了一个饼！`, notice, newInfo.coverImage, newInfo.id)
             }
             return true;
         }
@@ -155,7 +159,7 @@ const kazeFun = {
         BrowserUtil.addNotificationClickListener(id => {
             let item = DataSourceUtil.mergeAllData(cardListCache, false).find(x => x.id === id);
             if (item) {
-                BrowserUtil.createTab(item.url);
+                BrowserUtil.createTab(item.jumpUrl);
             } else {
                 alert('o(╥﹏╥)o 时间过于久远...最近列表内没有找到该网站');
             }

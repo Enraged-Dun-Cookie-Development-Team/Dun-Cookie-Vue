@@ -4,7 +4,7 @@ class NotificationUtil {
   // 发送推送核心方法
   static SendNotice(title, message, imageUrl, id) {
     if (imageUrl) {
-      BrowserUtil.createNotifications(id + '_', {
+      BrowserUtil.createNotifications(id, {
         iconUrl: '../assets/image/icon.png',
         message: message,
         title: title,
@@ -12,7 +12,7 @@ class NotificationUtil {
         type: "image"
       });
     } else {
-      BrowserUtil.createNotifications(id + '_', {
+      BrowserUtil.createNotifications(id, {
         iconUrl: '../assets/image/icon.png',
         message: message,
         title: title,
