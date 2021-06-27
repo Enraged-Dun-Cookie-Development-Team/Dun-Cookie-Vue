@@ -479,42 +479,34 @@ export default {
   }
 
   // 标签栏
-  /deep/ .el-tabs {
-    .el-tabs__header {
-      margin-bottom: 5px;
-      margin-top: 15px;
-      .title-img {
-        width: 30px;
-        border-radius: 4px;
-      }
-    }
-    .el-tabs__content {
-      min-height: 360px;
-      .el-timeline {
-        height: 360px;
-      }
-    }
-    .el-tabs__nav-wrap::after {
-      background-color: @@timeline;
-    }
-    .el-tabs__item {
-      color: @@setLarge;
-      &:hover {
-        color: #409eff;
-      }
-    }
-  }
+  // /deep/ .el-tabs {
+  //   .el-tabs__header {
+  //     margin-bottom: 5px;
+  //     margin-top: 15px;
+  //     .title-img {
+  //       width: 30px;
+  //       border-radius: 4px;
+  //     }
+  //   }
+  //   .el-tabs__content {
+  //     min-height: 360px;
+  //     .el-timeline {
+  //       height: 360px;
+  //     }
+  //   }
+  //   .el-tabs__nav-wrap::after {
+  //     background-color: @@timeline;
+  //   }
+  //   .el-tabs__item {
+  //     color: @@setLarge;
+  //     &:hover {
+  //       color: #409eff;
+  //     }
+  //   }
+  // }
 
   #content {
     margin-top: 40px;
-    // 间隔阴影
-    .content-timeline-shadown {
-      position: fixed;
-      width: 100%;
-      height: 20px;
-      background: linear-gradient(180deg, @@bgColor 50%, transparent);
-      z-index: 10;
-    }
     // 更改卡片阴影
     // .is-always-shadow {
     //   box-shadow: 0 2px 12px 0 @@shadow;

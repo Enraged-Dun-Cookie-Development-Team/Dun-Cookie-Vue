@@ -647,7 +647,6 @@ export default {
 
 .dark {
   .styleChange(dark);
-  margin: -8px;
   background-color: #22272e;
   border: #22272e 8px solid;
 }

@@ -172,13 +172,14 @@
             :src="numberOrEnNameToIconSrc(item)"
           />
         </span>
-        .
       </el-tab-pane>
     </el-tabs>
 
     <div class="content-timeline-shadown"></div>
 
-    <el-timeline :class="setting.isWindow ? 'window' : ''">
+    <el-timeline
+      :class="[setting.isWindow ? 'window' : '', setting.isTag ? 'tag' : '']"
+    >
       <el-timeline-item
         v-for="(item, index) in filterCardlist"
         :key="index"
@@ -431,7 +432,8 @@ export default {
     filterDmList() {
       // 如果是单独的
       if (this.setting.isTag) {
-        this.cardlist = this.cardlistdm[this.$refs[this.setting.tagActiveName][0].label];
+        this.cardlist =
+          this.cardlistdm[this.$refs[this.setting.tagActiveName][0].label];
       } else {
         this.cardlist = Object.values(this.cardlistdm)
           .reduce((acc, cur) => [...acc, ...cur], [])
@@ -727,6 +729,22 @@ img[lazy="error"] {
     color: #23ade5;
   }
 
+  .is-top {
+    z-index: 11;
+  }
+
+  #timeline-area {
+    position: relative;
+    // 间隔阴影
+    .content-timeline-shadown {
+      position: absolute;
+      width: 100%;
+      height: 25px;
+      background: linear-gradient(180deg, @@bgColor 50%, transparent);
+      z-index: 10;
+    }
+  }
+
   .card {
     width: 100%;
     background-color: @@bgColor;
@@ -751,7 +769,6 @@ img[lazy="error"] {
     &.font-size-2 {
       font-size: 1.5rem;
     }
-
     .margintb {
       margin: 10px 0 0 0;
     }
@@ -993,15 +1010,47 @@ img[lazy="error"] {
     }
   }
 
+  .el-tabs {
+    .el-tabs__header {
+      margin-bottom: 5px;
+      margin-top: 15px;
+      .title-img {
+        width: 30px;
+        border-radius: 4px;
+      }
+    }
+    .el-tabs__content {
+      min-height: 360px;
+      .el-timeline {
+        height: 360px;
+      }
+    }
+    .el-tabs__nav-wrap::after {
+      background-color: @@timeline;
+    }
+    .el-tabs__item {
+      color: @@setLarge;
+      &:hover {
+        color: #409eff;
+      }
+    }
+  }
+
   .el-timeline {
     padding-left: 25px;
     overflow: auto;
-    padding-top: 20px;
+    padding-top: 30px;
     padding-right: 20px;
-    height: 420px;
+    height: 410px;
     margin-top: 10px;
+    &.tag {
+      height: 365px;
+    }
     &.window {
-      height: calc(100vh - 179px);
+      height: calc(100vh - 189px);
+      &.tag {
+        height: calc(100vh - 234px);
+      }
     }
     .el-timeline-item__tail {
       border-left: 2px solid @@timeline;
