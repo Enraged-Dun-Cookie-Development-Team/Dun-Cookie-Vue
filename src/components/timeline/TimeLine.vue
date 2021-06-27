@@ -1,6 +1,6 @@
 <template>
   <div id="timeline-area">
-    <Search :searchShow="searchShow"></Search>
+    <Search ref="SearchModel" :searchShow="searchShow"></Search>
     <el-drawer
         :visible.sync="toolDrawer"
         :show-close="false"
@@ -48,7 +48,7 @@
           arrow="never"
           height="100px"
           direction="vertical"
-          :interval="10000"
+          :interval="3000"
           :autoplay="true"
       >
         <el-carousel-item v-if="isNew">
@@ -359,7 +359,9 @@ export default {
     },
     // 调整过滤文字
     changeFilterText(text) {
-      text = text.trim();
+      if (text != null) {
+        text = text.trim();
+      }
       this.filterText = text;
       this.filterList();
     },
@@ -375,6 +377,10 @@ export default {
       document.addEventListener("keyup", (e) => {
         if (e.keyCode === 13) {
           this.searchShow = !this.searchShow;
+          if (!this.searchShow) {
+            this.$refs.SearchModel.clearText();
+            this.filterText = null;
+          }
         }
       });
     },
@@ -698,15 +704,18 @@ img[lazy="error"] {
   .el-timeline {
     padding-left: 25px;
     overflow: auto;
-    padding-top: 20px;
+    padding-top: 25px;
     padding-right: 20px;
-    height: 420px;
+    height: 415px;
     margin-top: 10px;
-    &.window{
-       height: calc(100vh - 179px);
+    &.tag {
+      height: 365px;
     }
-    .el-timeline-item__tail {
-      border-left: 2px solid @@timeline;
+    &.window {
+      height: calc(100vh - 184px);
+      &.tag {
+        height: calc(100vh - 230px);
+      }
     }
     .el-timeline-item__timestamp {
       color: @@subTitle;

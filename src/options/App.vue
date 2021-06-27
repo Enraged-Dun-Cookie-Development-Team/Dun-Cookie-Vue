@@ -76,7 +76,7 @@
                     controls-position="right"
                     size="small"
                     v-model="settings.dun.intervalTime"
-                    :min="3"
+                    :min="15"
                     :max="3600"
                   ></el-input-number>
                   <span style="margin-left: 20px" v-if="settings.dun.autoLowFrequency">

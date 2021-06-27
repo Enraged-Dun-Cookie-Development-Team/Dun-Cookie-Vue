@@ -113,7 +113,7 @@ export default {
                 img: img,
                 winId: window.id,
               });
-            }, 500);
+            }, 1000);
           }
       );
     },
