@@ -459,7 +459,7 @@ export default {
     filterList() {
       if (this.filterText) {
         this.filterCardlist = this.cardlist.filter((item) =>
-          item.dynamicInfo.includes(this.filterText)
+          item.dynamicInfo.toLowerCase().includes(this.filterText.toLowerCase())
         );
       } else {
         this.filterCardlist = this.cardlist;
