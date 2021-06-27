@@ -10,13 +10,13 @@ import {
     MESSAGE_DUN_INFO_GET,
     MESSAGE_FORCE_REFRESH,
     MESSAGE_SAN_GET,
-    MESSAGE_SETTINGS_UPDATE,
     PAGE_POPUP_WINDOW,
     PAGE_WELCOME,
     TEST_DATA_REFRESH_TIME
 } from '../common/Constants';
 import {defaultDataSources} from '../common/datasource/DefaultDataSources';
 import DataSourceUtil from '../common/util/DataSourceUtil';
+import {customDataSourceTypes} from '../common/datasource/CustomDataSources';
 
 // 重构完成后的其它优化：
 // TODO 多个提取出来的类要考虑能否合并(指互相通信的那部分)
@@ -40,14 +40,14 @@ function tryDun(settings) {
     for (const key in cardListCache) {
         if (cardListCache.hasOwnProperty(key)) {
             // 如果缓存的key不在启用列表中则删除缓存
-            if (!settings.enableDataSources.includes(key)) {
+            if (!settings.currentDataSources[key]) {
                 delete cardListCache[key];
                 hasUpdated = true;
             }
         }
     }
-    for (const dataName of settings.enableDataSources) {
-        const source = defaultDataSources[dataName];
+    for (const dataName in settings.currentDataSources) {
+        const source = settings.currentDataSources[dataName];
         DunInfo.counter++;
         promiseList.push(source.fetchData().then(newCardList => {
             let oldCardList = cardListCache[dataName];
@@ -82,6 +82,44 @@ function startDunTimer() {
     }, delay * 1000);
 }
 
+/**
+ * 将配置信息转化成可以用于蹲饼的数据源
+ */
+function transformDataSource(settings) {
+    const list = {};
+    for (const dataName of settings.enableDataSources) {
+        list[dataName] = defaultDataSources[dataName];
+    }
+    const promiseList = [];
+    for (const info of settings.customDataSources) {
+        // 虽然这里用时间复杂度很离谱的双层for，但由于customDataSourceTypes很少，配置需要更新的情况也很少，所以影响不大
+        for (const type of customDataSourceTypes) {
+            if (info.type === type.name) {
+                promiseList.push(type.builder.build(info.arg));
+                break;
+            }
+        }
+    }
+    return Promise.allSettled(promiseList).then(results => {
+        for (const result of results) {
+            if (result.status) {
+                if (result.value) {
+                    list[result.value.dataName] = result.value;
+                } else {
+                    console.error(result);
+                }
+            } else {
+                console.error(result.reason);
+            }
+        }
+        settings.currentDataSources = list;
+        settings.saveSettings();
+        console.log('new datasource list: ');
+        console.log(settings.currentDataSources);
+        return true;
+    });
+}
+
 // 通用方法
 const kazeFun = {
     //判断是否为最新 并且在此推送
@@ -114,8 +152,22 @@ const kazeFun = {
         // chrome.browserAction.setBadgeText({ text: 'Beta' });
         // chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
         // 开始蹲饼！
-        Settings.doAfterInit(() => {
-            startDunTimer();
+        Settings.doAfterInit((settings) => {
+            transformDataSource(settings).then(() => {
+                startDunTimer();
+            });
+        });
+
+        Settings.doAfterUpdate((settings) => {
+            // 由于更新配置后数据源/蹲饼频率可能改变，所以重启蹲饼timer
+            // TODO 最好能判断配置更新的情况，只有更新了数据源/蹲饼频率的时候才刷新，避免无意义的网络请求
+            transformDataSource(settings).then(() => {
+                if (dunTimeoutId) {
+                    clearTimeout(dunTimeoutId);
+                    dunTimeoutId = null;
+                }
+                startDunTimer();
+            });
         });
 
         // 监听前台事件
@@ -131,16 +183,6 @@ const kazeFun = {
                         return cardListCache;
                     case MESSAGE_SAN_GET:
                         return SanInfo;
-                    case MESSAGE_SETTINGS_UPDATE: {
-                        // 由于更新配置后数据源/蹲饼频率可能改变，所以重启蹲饼timer
-                        // TODO 最好能判断配置更新的情况，只有更新了数据源/蹲饼频率的时候才刷新，避免无意义的网络请求
-                        if (dunTimeoutId) {
-                            clearTimeout(dunTimeoutId);
-                            dunTimeoutId = null;
-                        }
-                        startDunTimer();
-                        return;
-                    }
                     default:
                         return;
                 }

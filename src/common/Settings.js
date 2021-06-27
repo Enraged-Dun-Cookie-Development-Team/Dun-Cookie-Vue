@@ -8,6 +8,12 @@ import {defaultDataSourcesNames} from './datasource/DefaultDataSources';
  */
 let initPromise;
 
+/**
+ * 更新监听器
+ */
+const updateListeners = [];
+
+// TODO 自动导入旧版配置并转化成新版配置
 class Settings {
   // 插件初始化的时间
   initTime = new Date().getTime();
@@ -16,6 +22,14 @@ class Settings {
    * 启用的默认数据源，储存dataName
    */
   enableDataSources = [];
+  /**
+   * 自定义数据源
+   */
+  customDataSources = [];
+  /**
+   * 当前启用的数据源，由后台进行更新其它页面可以直接读取
+   */
+  currentDataSources = {};
 
   /**
    * 蹲饼相关配置
@@ -172,15 +186,28 @@ class Settings {
    * 使用此方法确保代码在初始化之后执行
    */
   doAfterInit(callback) {
-    initPromise.then(callback);
+    initPromise.then(res => {
+      callback(res);
+      return res;
+    });
+  }
+
+  /**
+   * 使用此方法确保代码在更新之后执行
+   */
+  doAfterUpdate(callback) {
+    updateListeners.push(callback);
   }
 
   constructor() {
     BrowserUtil.addMessageListener('settings', MESSAGE_SETTINGS_UPDATE, data => {
       deepAssign(this, data);
       this.__updateWindowMode();
+      for (const listener of updateListeners) {
+        listener(this);
+      }
     });
-    initPromise = new Promise(resolve => {
+    initPromise = new Promise((resolve) => {
       this.reloadSettings().then(() => {
         // 这部分主要是初始化一些固定的配置信息，只需要初始化的时候执行一次
 
@@ -221,10 +248,12 @@ class Settings {
 
           // 只需要在后台进行保存，其它页面不需要保存
           this.saveSettings().then(() => resolve(this));
+        } else {
+          resolve(this);
         }
 
       });
-    })
+    });
   }
 
   __updateWindowMode() {
@@ -236,14 +265,6 @@ class Settings {
   }
 
   /**
-   * 修改配置，内部使用deepAssign来进行修改
-   * TODO 这个方法理应被优化掉
-   */
-  setAll(data) {
-    deepAssign(this, data);
-  }
-
-  /**
    * 将配置储存到localStorage中。
    * <p>
    * 该方法会自动发送message通知其它页面更新配置<br/>
@@ -252,7 +273,11 @@ class Settings {
    */
   saveSettings() {
     const promise = BrowserUtil.saveLocalStorage('settings', this);
-    promise.then(() => BrowserUtil.sendMessage(MESSAGE_SETTINGS_UPDATE, this));
+    promise.then(() => {
+      BrowserUtil.sendMessage(MESSAGE_SETTINGS_UPDATE, this);
+      console.log('update settings: ');
+      console.log(this);
+    });
     return promise;
   }
 

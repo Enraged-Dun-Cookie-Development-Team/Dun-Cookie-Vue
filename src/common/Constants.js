@@ -6,9 +6,9 @@ const IS_TEST = true;
 /**
  * 是否输出调试日志
  * <p>
- * 需要注意的是如果输出日志太多会导致打卡开发者控制台(F12)会非常卡
+ * 需要注意的是如果输出日志太多会导致打卡开发者控制台(F12)会非常卡，所以不要动前面的<code>IS_TEST &&</code>以避免忘记修改导致生产版本出问题
  */
-const DEBUG_LOG = IS_TEST;
+const DEBUG_LOG = IS_TEST && false;
 /**
  * 当前插件版本号
  */

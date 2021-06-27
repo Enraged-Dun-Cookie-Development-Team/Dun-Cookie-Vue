@@ -83,13 +83,15 @@ class BrowserUtil {
       message.data = data;
     }
 
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       chrome.runtime.sendMessage(message, (response) => {
         // 需要注意的是，在提供了callback参数后，如果没有可用的监听器，那么会抛异常lastError。
         // 不提供callback参数时如果没有监听器只会默默失败
         // 所以这里要进行判断
         if (!chrome.runtime.lastError) {
           resolve(response);
+        } else {
+          resolve(null);
         }
       });
     });

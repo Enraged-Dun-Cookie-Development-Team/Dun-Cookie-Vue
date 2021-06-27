@@ -256,8 +256,58 @@
             <el-tab-pane label="反馈通道" name="2">
               <Feedback></Feedback>
             </el-tab-pane>
+            <el-tab-pane label="高级设置" name="4">
+              <div>
+                <span>自定义数据源</span>
+                <el-table
+                    :data="customData"
+                    style="width: 100%"
+                    max-height="350">
+                  <el-table-column
+                      label="类型"
+                      width="150">
+                    <template #default="scope">
+                      <el-select v-model="scope.row.type" placeholder="请选择">
+                        <el-option
+                            v-for="item in customTypes"
+                            :key="item.name"
+                            :label="item.builder.title"
+                            :value="item">
+                        </el-option>
+                      </el-select>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                      label="参数"
+                      width="270">
+                    <template #default="scope">
+                      <el-popover :show-after="1500" trigger="hover" placement="top">
+                        <template #default>{{ scope.row.type.argTip }}</template>
+                        <template #reference>
+                          <el-input v-model="customData[scope.$index].arg" :placeholder="scope.row.type.argPlaceholder"></el-input>
+                        </template>
+                      </el-popover>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="操作">
+                    <template #header>
+                      <el-button
+                          size="mini"
+                          type="success"
+                          @click="addCustomData()">新增</el-button>
+                    </template>
+                    <template #default="scope">
+                      <el-button
+                          size="mini"
+                          type="danger"
+                          @click="removeCustomData(scope.$index)">删除</el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </div>
+            </el-tab-pane>
           </el-tabs>
-          <div class="btn-area" v-if="activeTab == '0' || activeTab == '1'">
+          <div class="btn-area" v-if="activeTab == '0' || activeTab == '1' || activeTab == '4'">
             <el-button type="primary" @click="saveSetting('form')"
               >保存</el-button
             >
@@ -278,6 +328,8 @@ import Feedback from '../components/Feedback';
 import {CURRENT_VERSION, MESSAGE_DUN_INFO_UPDATE} from '../common/Constants';
 import {defaultDataSourcesList} from '../common/datasource/DefaultDataSources';
 import TimeUtil from '../common/util/TimeUtil';
+import {customDataSourceTypes} from '../common/datasource/CustomDataSources';
+import {deepAssign} from '../common/util/CommonFunctions';
 
 export default {
   name: "app",
@@ -293,6 +345,7 @@ export default {
       dunInfo: DunInfo,
       settings: Settings,
       defSourcesList: defaultDataSourcesList,
+      customTypes: customDataSourceTypes,
       marks: {
         8: "20点",
         12: "第二天凌晨",
@@ -304,6 +357,7 @@ export default {
           { required: true, message: "请选择默认标签", trigger: "blur" },
         ],
       },
+      customData: []
     };
   },
   computed: {
@@ -312,18 +366,44 @@ export default {
     formatTime: TimeUtil.format,
     openUrl: BrowserUtil.createTab,
     init() {
+      this.settings.doAfterInit((settings) => {
+        this.customData = settings.customDataSources.map(item => {
+          for (const type of customDataSourceTypes) {
+            if (item.type === type.name) {
+              return {
+                type: type.builder,
+                arg: item.arg
+              };
+            }
+          }
+          return null;
+        }).filter(item => !!item);
+      });
       BrowserUtil.addMessageListener('options', MESSAGE_DUN_INFO_UPDATE, data => {
         this.oldDunCount = data.counter;
       });
     },
+    addCustomData() {
+      this.customData.push({type: customDataSourceTypes[0].builder});
+    },
+    removeCustomData(index) {
+      this.customData.splice(index, 1);
+    },
+
     // 保存设置
     saveSetting(formName, data) {
-      if (!data) {
-        data = this.$refs[formName].data
+      if (data) {
+        deepAssign(this.settings, data);
       }
+      console.log(this.customData);
+      this.settings.customDataSources = this.customData.map(item => {
+        return {
+          type: item.type.typeName,
+          arg: item.arg
+        };
+      });
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.settings.setAll(data);
           this.settings.saveSettings().then(() => {
             this.$message({
               center: true,
