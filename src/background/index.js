@@ -19,7 +19,7 @@ var date = {
 
 // 软件临时数据
 let kazeData = {
-    isTest: true,
+    isTest: false,
     testIntervalTime: 3,
     setting: {},
     FocusAnnounceId: null,
