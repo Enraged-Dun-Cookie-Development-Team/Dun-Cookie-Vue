@@ -181,6 +181,7 @@
     <el-timeline
       v-if="LazyLoaded"
       :class="[setting.isWindow ? 'window' : '', setting.isTag ? 'tag' : '']"
+      ref="el-timeline-area"
     >
       <el-timeline-item
         v-for="(item, index) in filterCardlist"
@@ -499,6 +500,8 @@ export default {
             }
             this.$refs.SerachModel.clearText();
             this.filterText = null;
+            // 同时滚动条回到最顶上
+            this.$refs["el-timeline-area"].$el.scrollTop = 0;
           }
         }
       });
