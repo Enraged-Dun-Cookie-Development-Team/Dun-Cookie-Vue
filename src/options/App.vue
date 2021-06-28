@@ -39,7 +39,7 @@
                   <el-checkbox-group v-model="setting.source" :min="1">
                     <el-checkbox
                       :label="index - 1"
-                      v-for="index in 10"
+                      v-for="index in setting.numberOfSource"
                       :key="index - 1"
                     >
                       <span class="checkbox-area">
@@ -306,6 +306,7 @@ export default {
           newobj.darkshow == 1
             ? "dark"
             : "light";
+        this.setting.numberOfSource = newobj.insider ? 23 : 10;
         // this.saveSetting();
       },
       deep: true,

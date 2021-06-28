@@ -393,6 +393,8 @@ export default {
       filterCardlist: [],
       cardlist: [],
       filterText: null,
+      insiderCode: null, // 储存内部密码
+      insiderOpen: true, // 内部模式开启
     };
   },
   mounted() {
@@ -437,6 +439,12 @@ export default {
         text = text.trim();
       }
       this.filterText = text;
+      if (this.insiderOpen) {
+        this.changeInsider();
+      } else {
+        this.setting.insider = false;
+        this.saveLocalStorage("setting", this.setting);
+      }
       this.filterList();
     },
     filterDmList() {
@@ -463,6 +471,18 @@ export default {
         );
       } else {
         this.filterCardlist = this.cardlist;
+      }
+    },
+
+    changeInsider() {
+      if (this.filterText == this.insiderCode) {
+        this.setting.insider = true;
+        this.saveLocalStorage("setting", this.setting);
+        this.$message({
+          center: true,
+          message: "成功进入隐藏模式",
+          type: "success",
+        });
       }
     },
 
@@ -560,6 +580,10 @@ export default {
             new Date(x.starTime) <= new Date() &&
             new Date(x.overTime) >= new Date()
         );
+
+        // 内部密码
+        this.insiderCode = data.insider.insiderCode;
+        this.insiderOpen = data.insider.insiderOpen;
 
         this.resourcesNotToday();
         this.loading = false;

@@ -16,7 +16,8 @@ let common = {
     retweeted: true,// 是否查看转发
     sanShow: true, //是否需要理智提醒
     saneMax: 135,//理智上限
-    isWindow: false
+    isWindow: false,
+    insider: false,
   },
   sane: {
     saneIndex: 135,//理智计算
@@ -333,6 +334,58 @@ function numberOrEnNameToName(int) {
     case "wyyyy":
       return "网易云音乐"
       break;
+    case 10:
+    case "hmlhw":
+      return "海猫络合物"
+      break;
+    case 11:
+    case "wei":
+      return "唯at_W"
+      break;
+    case 12:
+    case "anmi":
+      return "繪師Anmi"
+      break;
+    case 13:
+    case "starying":
+      return "STAR影法師"
+      break;
+    case 14:
+    case "lqy":
+      return "龙崎一"
+      break;
+    case 15:
+    case "xyhm":
+      return "下野宏铭"
+      break;
+    case 16:
+    case "xrz":
+      return "麻痹的小日子"
+      break;
+    case 17:
+    case "agm":
+      return "阿戈魔AGM"
+      break;
+    case 18:
+    case "lm7":
+      return "__LM7__"
+      break;
+    case 19:
+    case "ht":
+      return "-黒田-"
+      break;
+    case 20:
+    case "skade":
+      return "Skade"
+      break;
+    case 21:
+    case "alchemaniaC":
+      return "alchemaniaC"
+      break;
+    case 22:
+    case "jsd":
+      return "九十度无限嘿"
+      break;
   }
 }
 
@@ -377,6 +430,58 @@ function numberOrEnNameToIconSrc(int) {
     case 9:
     case "wyyyy":
       return "/assets/image/wyyyy.ico"
+      break;
+    case 10:
+    case "hmlhw":
+      return "/assets/image/hmlhw.jpg"
+      break;
+    case 11:
+    case "wei":
+      return "/assets/image/wei.jpg"
+      break;
+    case 12:
+    case "anmi":
+      return "/assets/image/anmi.jpg"
+      break;
+    case 13:
+    case "starying":
+      return "/assets/image/starying.jpg"
+      break;
+    case 14:
+    case "lqy":
+      return "/assets/image/lqy.jpg"
+      break;
+    case 15:
+    case "xyhm":
+      return "/assets/image/xyhm.jpg"
+      break;
+    case 16:
+    case "xrz":
+      return "/assets/image/xrz.jpg"
+      break;
+    case 17:
+    case "agm":
+      return "/assets/image/agm.jpg"
+      break;
+    case 18:
+    case "lm7":
+      return "/assets/image/lm7.jpg"
+      break;
+    case 19:
+    case "ht":
+      return "/assets/image/ht.jpg"
+      break;
+    case 20:
+    case "skade":
+      return "/assets/image/skade.jpg"
+      break;
+    case 21:
+    case "alchemaniaC":
+      return "/assets/image/alchemaniaC.jpg"
+      break;
+    case 22:
+    case "jsd":
+      return "/assets/image/jsd.jpg"
       break;
   }
 }

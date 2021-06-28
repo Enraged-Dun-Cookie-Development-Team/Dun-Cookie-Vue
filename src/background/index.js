@@ -100,6 +100,84 @@ let kazeSource = {
         dataName: 'wyyyy',
         source: 9,
     },
+    hmlhw: {
+        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=1652903644&containerid=1076031652903644&t=',
+        title: '海猫络合物',
+        dataName: 'hmlhw',
+        source: 10,
+    },
+    wei: {
+        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=2152152455&containerid=1076032152152455&t=',
+        title: '唯at_W',
+        dataName: 'wei',
+        source: 11,
+    },
+    anmi: {
+        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=5732727922&containerid=1076035732727922&t=',
+        title: '繪師Anmi',
+        dataName: 'anmi',
+        source: 12,
+    },
+    starying: {
+        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=2111397132&containerid=1076032111397132&t=',
+        title: 'STAR影法師',
+        dataName: 'starying',
+        source: 13,
+    },
+    lqy: {
+        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=1141030532&containerid=1076031141030532&t=',
+        title: '龙崎一',
+        dataName: 'lqy',
+        source: 14,
+    },
+    xyhm: {
+        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=2156631357&containerid=1076032156631357&t=',
+        title: '下野宏铭',
+        dataName: 'xyhm',
+        source: 15,
+    },
+    xrz: {
+        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=1752467412&containerid=1076031752467412&t=',
+        title: '麻痹的小日子',
+        dataName: 'xrz',
+        source: 16,
+    },
+    agm: {
+        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=5724585538&containerid=1076035724585538&t=',
+        title: '阿戈魔AGM',
+        dataName: 'agm',
+        source: 17,
+    },
+    lm7: {
+        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=5674786286&containerid=1076035674786286&t=',
+        title: '__LM7__',
+        dataName: 'lm7',
+        source: 18,
+    },
+    ht: {
+        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=2315109910&containerid=1076032315109910&t=',
+        title: '-黒田-',
+        dataName: 'ht',
+        source: 19,
+    },
+    skade: {
+        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=1800333020&containerid=1076031800333020&t=',
+        title: 'Skade',
+        dataName: 'skade',
+        source: 20,
+    },
+    alchemaniaC: {
+        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=6583151762&containerid=1076036583151762&t=',
+        title: 'alchemaniaC',
+        dataName: 'alchemaniaC',
+        source: 21,
+    },
+    jsd: {
+        url: 'https://m.weibo.cn/api/container/getIndex?type=uid&value=6808798852&containerid=1076036808798852&t=',
+        title: '九十度无限嘿',
+        dataName: 'jsd',
+        source: 22,
+    },
 }
 
 // 数据获取和处理
@@ -117,6 +195,19 @@ let kazeSourceProcess = {
         kazeLocalData.setting.source.includes(7) ? this.GetAndProcessData(kazeSource['gw']) : delete kazeLocalData.cardlistdm.gw;
         kazeLocalData.setting.source.includes(8) ? this.GetAndProcessData(kazeSource['tlgw']) : delete kazeLocalData.cardlistdm.tlgw;
         kazeLocalData.setting.source.includes(9) ? this.GetAndProcessData(kazeSource['wyyyy']) : delete kazeLocalData.cardlistdm.wyyyy;
+        kazeLocalData.setting.source.includes(10) ? this.GetAndProcessData(kazeSource['hmlhw']) : delete kazeLocalData.cardlistdm.hmlhw;
+        kazeLocalData.setting.source.includes(11) ? this.GetAndProcessData(kazeSource['wei']) : delete kazeLocalData.cardlistdm.wei;
+        kazeLocalData.setting.source.includes(12) ? this.GetAndProcessData(kazeSource['anmi']) : delete kazeLocalData.cardlistdm.anmi;
+        kazeLocalData.setting.source.includes(13) ? this.GetAndProcessData(kazeSource['starying']) : delete kazeLocalData.cardlistdm.starying;
+        kazeLocalData.setting.source.includes(14) ? this.GetAndProcessData(kazeSource['lqy']) : delete kazeLocalData.cardlistdm.lqy;
+        kazeLocalData.setting.source.includes(15) ? this.GetAndProcessData(kazeSource['xyhm']) : delete kazeLocalData.cardlistdm.xyhm;
+        kazeLocalData.setting.source.includes(16) ? this.GetAndProcessData(kazeSource['xrz']) : delete kazeLocalData.cardlistdm.xrz;
+        kazeLocalData.setting.source.includes(17) ? this.GetAndProcessData(kazeSource['rellakinoko']) : delete kazeLocalData.cardlistdm.rellakinoko;
+        kazeLocalData.setting.source.includes(18) ? this.GetAndProcessData(kazeSource['lm7']) : delete kazeLocalData.cardlistdm.lm7;
+        kazeLocalData.setting.source.includes(19) ? this.GetAndProcessData(kazeSource['ht']) : delete kazeLocalData.cardlistdm.ht;
+        kazeLocalData.setting.source.includes(20) ? this.GetAndProcessData(kazeSource['skade']) : delete kazeLocalData.cardlistdm.skade;
+        kazeLocalData.setting.source.includes(21) ? this.GetAndProcessData(kazeSource['alchemaniaC']) : delete kazeLocalData.cardlistdm.alchemaniaC;
+        kazeLocalData.setting.source.includes(22) ? this.GetAndProcessData(kazeSource['jsd']) : delete kazeLocalData.cardlistdm.jsd;
     },
 
     //请求 处理 回调 保存
@@ -145,7 +236,7 @@ let kazeSourceProcess = {
                 if (opt.source == 0) {
                     newCardList = this.processBiliBili(opt);
                 }
-                else if (opt.source == 1 || opt.source == 3 || opt.source == 4 || opt.source == 6) {
+                else if (opt.source == 1 || opt.source == 3 || opt.source == 4 || opt.source == 6 || (opt.source >= 10 && opt.source <= 22)) {
                     newCardList = this.processWeibo(opt)
                 }
                 else if (opt.source == 2) {
