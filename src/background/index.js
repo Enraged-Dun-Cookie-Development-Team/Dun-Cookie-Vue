@@ -222,6 +222,7 @@ let kazeSourceProcess = {
         opt = Object.assign({}, defopt, opt);
         // 添加时间清除缓存
         this.Get(opt.url).then(data => {
+
             let newCardList = [];
             // 如果没数据 就使用旧数据
             if (data && data.length >= 0 && data[0] == null) {
@@ -255,8 +256,6 @@ let kazeSourceProcess = {
                     newCardList = this.processWyyyy(opt)
                 }
             }
-
-
             let oldCardList = kazeLocalData.cardlistdm[opt.dataName];
             let isNew = kazeFun.JudgmentNew(oldCardList, newCardList, opt.title);
             if (isNew) {
@@ -562,7 +561,7 @@ let kazeFun = {
             }
             return true;
         }
-        else if (!oldList) {
+        else if (oldList.length == 0 && newList.length > 0) {
             return true;
         }
         return false
@@ -676,6 +675,7 @@ let kazeFun = {
         kazeFun.getWebType();
         kazeFun.saveLocalStorage('dunInfo', kazeLocalData.dunInfo);
         kazeFun.saveLocalStorage('saveInfo', kazeLocalData.saveInfo);
+        kazeFun.saveLocalStorage('kazeSource', kazeSource);
         kazeFun.getLocalStorage('cardlistdm').then(data => {
             kazeLocalData.cardlistdm = data;
         })
@@ -772,7 +772,7 @@ let kazeFun = {
             if (cardlist != null && cardlist.length > 0) {
                 chrome.tabs.create({ url: cardlist[0].url });
             } else {
-                alert('o(╥﹏╥)o 时间过于久远...最近列表内没有找到该网站');
+                // alert('o(╥﹏╥)o 时间过于久远...最近列表内没有找到该网站');
             }
         });
 
@@ -793,7 +793,7 @@ let kazeFun = {
                     chrome.windows.remove(kazeData.windowTabId);
                 }
                 // 直接打开
-                chrome.windows.create({ url: chrome.extension.getURL("windowPopup.html"), type: "panel", width: 1100, height: 750 }, tab => {
+                chrome.windows.create({ url: chrome.extension.getURL("windowPopup.html"), type: "panel", width: 750, height: 800 }, tab => {
                     kazeData.windowTabId = tab.id;
                 });
             }

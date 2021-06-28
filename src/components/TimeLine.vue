@@ -155,22 +155,23 @@
       v-if="setting.isTag"
       v-model="setting.tagActiveName"
       :stretch="true"
-      style="height: 30px"
       @tab-click="filterDmList"
     >
       <el-tab-pane
         :ref="numberOrEnNameToName(item)"
-        v-for="item in Object.keys(cardlistdm)"
+        v-for="item in elTabPaneSortTitle"
         :key="item"
         :label="item"
         :name="numberOrEnNameToName(item)"
       >
         <span slot="label">
-          <img
-            :title="numberOrEnNameToName(item)"
-            class="title-img"
-            :src="numberOrEnNameToIconSrc(item)"
-          />
+          <el-tooltip
+            effect="dark"
+            :content="numberOrEnNameToName(item)"
+            placement="top"
+          >
+            <img class="title-img" :src="numberOrEnNameToIconSrc(item)" />
+          </el-tooltip>
         </span>
       </el-tab-pane>
     </el-tabs>
@@ -178,6 +179,7 @@
     <div class="content-timeline-shadown"></div>
 
     <el-timeline
+      v-if="LazyLoaded"
       :class="[setting.isWindow ? 'window' : '', setting.isTag ? 'tag' : '']"
     >
       <el-timeline-item
@@ -321,11 +323,6 @@
                           class="img"
                           :ref="item.id + '_' + index"
                         />
-                        <!-- <span
-                        class="img-btn img-copy-btn"
-                        @click.stop="copyImg(item.id + '_' + index)"
-                        ><i class="el-icon-document-copy"></i
-                      ></span> -->
                         <span
                           class="img-btn img-look-btn"
                           @click.stop="
@@ -338,11 +335,6 @@
                   </div>
                   <div v-else class="one-img">
                     <img v-lazy="item.image" :ref="item.id" class="img" />
-                    <!-- <span
-                    class="img-btn img-copy-btn"
-                    @click.stop="copyImg(item.id)"
-                    ><i class="el-icon-document-copy"></i
-                  ></span> -->
                     <span
                       class="img-btn img-look-btn"
                       @click.stop="ViewImg(item, item.image, item.id)"
@@ -356,6 +348,7 @@
         </el-card>
       </el-timeline-item>
     </el-timeline>
+    <div v-else style="height: 300px" v-loading="loading"></div>
   </div>
 </template>
 
@@ -395,21 +388,31 @@ export default {
       filterText: null,
       insiderCode: null, // 储存内部密码
       insiderOpen: true, // 内部模式开启
+      kazeSource: {},
+      elTabPaneSortTitle: [],
+      LazyLoaded: false,
     };
   },
   mounted() {
+    this.getkazeSource();
     this.getSetting();
     this.getOnlineSpeak();
     this.getSane();
     this.setClickFun();
     this.listenKeyBord();
-    // this.filterDmList();
+    setTimeout(() => {
+      this.LazyLoaded = true;
+    }, 233);
   },
   watch: {
     cardlist() {
       this.filterList();
     },
     cardlistdm() {
+      this.elTabPaneSortTitle = Object.keys(this.cardlistdm)
+        .map((x) => this.kazeSource[x])
+        .sort((x, y) => x.source - y.source)
+        .map((x) => x.dataName);
       this.filterDmList();
     },
   },
@@ -422,6 +425,11 @@ export default {
     getLocalStorage,
     numberOrEnNameToName,
     numberOrEnNameToIconSrc,
+    getkazeSource() {
+      this.getLocalStorage("kazeSource").then((data) => {
+        this.kazeSource = data;
+      });
+    },
     getSetting() {
       this.getLocalStorage("setting").then((data) => {
         this.setting = data;
@@ -439,12 +447,6 @@ export default {
         text = text.trim();
       }
       this.filterText = text;
-      if (this.insiderOpen) {
-        this.changeInsider();
-      } else {
-        this.setting.insider = false;
-        this.saveLocalStorage("setting", this.setting);
-      }
       this.filterList();
     },
     filterDmList() {
@@ -492,6 +494,9 @@ export default {
         if (e.keyCode == 13) {
           this.searchShow = !this.searchShow;
           if (!this.searchShow) {
+            if (this.insiderOpen) {
+              this.changeInsider();
+            }
             this.$refs.SerachModel.clearText();
             this.filterText = null;
           }
@@ -584,7 +589,8 @@ export default {
         // 内部密码
         this.insiderCode = data.insider.insiderCode;
         this.insiderOpen = data.insider.insiderOpen;
-
+        this.setting.insider = this.insiderOpen;
+        this.saveLocalStorage("setting", this.setting);
         this.resourcesNotToday();
         this.loading = false;
       });
@@ -1043,7 +1049,15 @@ img[lazy="error"] {
     }
   }
 
+  // 标签栏
   .el-tabs {
+    height: 30px;
+    margin: 0px 10px;
+    .el-tabs__nav-prev,
+    .el-tabs__nav-next {
+      line-height: 30px;
+      font-size: 18px;
+    }
     .el-tabs__header {
       margin-bottom: 5px;
       margin-top: 15px;
@@ -1069,6 +1083,7 @@ img[lazy="error"] {
     }
   }
 
+  // 时间线
   .el-timeline {
     padding-left: 25px;
     overflow: auto;
@@ -1159,6 +1174,73 @@ img[lazy="error"] {
         &.headImg9::before {
           border-radius: 10px;
           background: url("/assets/image/wyyyy.ico") no-repeat center, @@bgColor;
+          background-size: cover;
+        }
+        &.headImg10::before {
+          border-radius: 10px;
+          background: url("/assets/image/hmlhw.jpg") no-repeat center, @@bgColor;
+          background-size: cover;
+        }
+        &.headImg11::before {
+          border-radius: 10px;
+          background: url("/assets/image/wei.jpg") no-repeat center, @@bgColor;
+          background-size: cover;
+        }
+        &.headImg12::before {
+          border-radius: 10px;
+          background: url("/assets/image/anmi.jpg") no-repeat center, @@bgColor;
+          background-size: cover;
+        }
+        &.headImg13::before {
+          border-radius: 10px;
+          background: url("/assets/image/starying.jpg") no-repeat center,
+            @@bgColor;
+          background-size: cover;
+        }
+        &.headImg14::before {
+          border-radius: 10px;
+          background: url("/assets/image/lqy.jpg") no-repeat center, @@bgColor;
+          background-size: cover;
+        }
+        &.headImg15::before {
+          border-radius: 10px;
+          background: url("/assets/image/xyhm.jpg") no-repeat center, @@bgColor;
+          background-size: cover;
+        }
+        &.headImg16::before {
+          border-radius: 10px;
+          background: url("/assets/image/xrz.jpg") no-repeat center, @@bgColor;
+          background-size: cover;
+        }
+        &.headImg17::before {
+          border-radius: 10px;
+          background: url("/assets/image/agm.jpg") no-repeat center, @@bgColor;
+          background-size: cover;
+        }
+        &.headImg18::before {
+          border-radius: 10px;
+          background: url("/assets/image/lm7.jpg") no-repeat center, @@bgColor;
+          background-size: cover;
+        }
+        &.headImg19::before {
+          border-radius: 10px;
+          background: url("/assets/image/ht.jpg") no-repeat center, @@bgColor;
+          background-size: cover;
+        }
+        &.headImg20::before {
+          border-radius: 10px;
+          background: url("/assets/image/skade.jpg") no-repeat center, @@bgColor;
+          background-size: cover;
+        }
+        &.headImg21::before {
+          border-radius: 10px;
+          background: url("/assets/image/alchemaniaC.jpg") no-repeat center,
+            @@bgColor;
+          background-size: cover;
+        }
+        &.headImg22::before {
+          border-radius: 10px;
+          background: url("/assets/image/jsd.jpg") no-repeat center, @@bgColor;
           background-size: cover;
         }
       }
