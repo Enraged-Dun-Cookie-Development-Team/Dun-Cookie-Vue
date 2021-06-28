@@ -18,7 +18,7 @@
                 :endVal="dunInfo.dunIndex"
                 :duration="1000"
               ></countTo></span
-            >次饼了
+            >次饼了，成功找到 {{ dunInfo.numberOfCookies }} 个饼
           </div>
           <div class="info-time">
             小刻在 {{ timespanToDay(dunInfo.dunTime / 1000, 0) }} 翻箱倒柜一次

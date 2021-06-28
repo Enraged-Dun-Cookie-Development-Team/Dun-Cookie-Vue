@@ -27,6 +27,7 @@ let common = {
     dunIndex: 0,
     dunTime: new Date().getTime(),
     dunFristTime: new Date().getTime(),
+    numberOfCookies: 0,
   },
   saveInfo: {
     // 循环的标识
