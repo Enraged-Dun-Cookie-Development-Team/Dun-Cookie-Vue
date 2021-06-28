@@ -469,8 +469,20 @@ export default {
     },
     filterList() {
       if (this.filterText) {
-        this.filterCardlist = this.cardlist.filter((item) =>
-          item.dynamicInfo.toLowerCase().includes(this.filterText.toLowerCase())
+        this.filterCardlist = this.cardlist.filter((item) => {
+          return item.dynamicInfo
+            .toLowerCase()
+            .includes(this.filterText.toLowerCase());
+        });
+        this.filterCardlist.forEach(
+          (item) =>
+            {
+              debugger;
+              (item.dynamicInfo = item.dynamicInfo.replaceAll(
+              this.filterText,
+              `<span class="highlight">${this.filterText}</span>`
+            ))
+            }
         );
       } else {
         this.filterCardlist = this.cardlist;
@@ -1094,6 +1106,15 @@ img[lazy="error"] {
     padding-right: 20px;
     height: 415px;
     margin-top: 10px;
+    transition: all 0.5s;
+    .highlight {
+      color: #23ade5;
+      box-shadow: 0 0 10px 0 red;
+      transform: scale(1.1);
+      padding: 5px;
+      margin: 5px;
+      display: inline-block;
+    }
     &.tag {
       height: 365px;
     }
