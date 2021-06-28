@@ -191,6 +191,11 @@
         placement="top"
         :icon="'headImg' + item.source"
       >
+        <span class="is-top-info" v-if="item.isTop">
+          <span class="color-blue" style="font-size: 1rem"
+            >【当前条目在微博的时间线内为置顶状态】</span
+          >
+        </span>
         <el-card
           class="card"
           :class="'font-size-' + setting.fontsize + ' soure-' + item.source"
@@ -213,11 +218,6 @@
               @click="openUrl(item.url)"
               ><i class="el-icon-right"></i
             ></el-button>
-            <span class="is-top-info" v-if="item.isTop">
-              <span class="color-blue"
-                >【当前条目在微博的时间线内为置顶状态】</span
-              >
-            </span>
           </span>
           <!-- 泰拉记事社 -->
           <div v-if="item.source == 8" class="tlgw">
@@ -895,11 +895,6 @@ img[lazy="error"] {
       border-color: #c6e2ff;
       background-color: @@hover;
     }
-    .is-top-info {
-      position: absolute;
-      top: 0px;
-      left: 220px;
-    }
 
     // 罗德岛泰拉记事簿 网易云音乐
     &.soure-8,
@@ -1065,6 +1060,11 @@ img[lazy="error"] {
       &.tag {
         height: calc(100vh - 230px);
       }
+    }
+    .is-top-info {
+      position: absolute;
+      top: 0px;
+      left: 220px;
     }
     .el-timeline-item__tail {
       border-left: 2px solid @@timeline;

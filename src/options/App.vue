@@ -395,7 +395,7 @@ export default {
 
     // 判断浏览器可否窗口化
     judgeWindow() {
-      this.showWindow = (this.saveInfo.webType == 0);
+      this.showWindow = this.saveInfo.webType == 0;
     },
 
     // 保存设置
@@ -579,7 +579,6 @@ export default {
         }
       }
 
-
       /deep/.el-input-number.is-controls-right .el-input-number__increase {
         border-bottom: 1px solid @@btnBorder;
       }
@@ -606,7 +605,8 @@ export default {
       }
       /deep/.el-form-item__label,
       /deep/.el-radio,
-      /deep/.el-checkbox {
+      /deep/.el-checkbox,
+      /deep/.el-form-item__content span {
         color: @@setSmall;
       }
       .lowfrequency-time-picker {

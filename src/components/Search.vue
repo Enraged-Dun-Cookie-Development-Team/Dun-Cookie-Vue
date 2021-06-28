@@ -1,11 +1,3 @@
-<!--
- * @Author: your name
- * @Date: 2021-06-26 22:25:30
- * @LastEditTime: 2021-06-28 01:11:32
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \Dun-Cookie-Vue\src\components\Search.vue
--->
 <template>
   <div class="search-area" :class="searchShow ? 'show' : ''">
     <input
