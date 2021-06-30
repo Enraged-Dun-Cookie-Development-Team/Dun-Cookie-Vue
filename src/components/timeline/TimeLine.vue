@@ -150,11 +150,7 @@
                   :content="getDataSourceByName(item.dataName).title"
                   placement="top"
               >
-              <img
-                  :title="item"
-                  class="title-img"
-                  :src="getDataSourceByName(item.dataName).icon"
-              />
+              <img class="title-img" :src="getDataSourceByName(item.dataName).icon"/>
               </el-tooltip>
             </span>
         </el-tab-pane>
