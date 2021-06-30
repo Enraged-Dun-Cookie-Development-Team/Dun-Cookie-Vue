@@ -104,6 +104,7 @@ const kazeFun = {
             let newInfo = newList[0];
             let timeNow = new Date()
             let notice = newInfo.content.replace(/\n/g, "");
+            DunInfo.cookieCount++;
             console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
             // 是否推送
             if (Settings.dun.enableNotice) {
@@ -111,7 +112,7 @@ const kazeFun = {
             }
             return true;
         }
-        else if (!oldList) {
+        else if (newList && newList.length > (oldList ? oldList.length : 0)) {
             return true;
         }
         return false

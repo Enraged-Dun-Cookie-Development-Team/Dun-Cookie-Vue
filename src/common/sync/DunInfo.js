@@ -10,6 +10,8 @@ import {deepAssign} from '../util/CommonFunctions';
 class DunInfo {
   // 蹲饼次数
   counter = 0;
+  // 蹲到的饼的数量
+  cookieCount = 0;
   // 最后一次蹲饼时间
   lastDunTime = -1;
 

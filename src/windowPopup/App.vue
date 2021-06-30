@@ -104,46 +104,7 @@
         </span>
       </div>
       <div id="content">
-        <!-- <time-line
-          v-if="!setting.display.showByTag"
-          ref="TimeLine"
-          :imgShow="LazyLoaded"
-          :cardlist="cardlist"
-          :allHeight="allHeight"
-        >
-        </time-line> -->
-        <time-line
-          :imgShow="LazyLoaded"
-          :cardlist="cardlist"
-        >
-        </time-line>
-
-        <!-- <el-tabs
-          v-if="settings.display.showByTag"
-          v-model="settings.display.defaultTag"
-          :stretch="true"
-        >
-          <el-tab-pane
-              v-for="item in transformToSortList(cardlistdm)"
-              :key="item.dataName"
-              :label="item.dataName"
-              :name="item.dataName"
-          >
-            <span slot="label">
-              <img
-                  :title="item"
-                  class="title-img"
-                  :src="getDataSourceByName(item.dataName).icon"
-              />
-            </span>
-            <time-line
-                ref="TimeLine"
-                :imgShow="LazyLoaded"
-                :cardlist="item.data"
-            >
-            </time-line>
-          </el-tab-pane>
-        </el-tabs> -->
+        <time-line :cardlist="cardlist" :imgShow="LazyLoaded"></time-line>
       </div>
     </div>
   </div>
@@ -417,6 +378,13 @@ export default {
 
   // 标签栏
   /deep/ .el-tabs {
+    height: 30px;
+    margin: 0 10px;
+    .el-tabs__nav-prev,
+    .el-tabs__nav-next {
+      line-height: 30px;
+      font-size: 18px;
+    }
     .el-tabs__header {
       margin-bottom: 5px;
       margin-top: 15px;

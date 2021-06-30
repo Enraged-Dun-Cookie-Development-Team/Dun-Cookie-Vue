@@ -18,7 +18,7 @@
                 :endVal="dunInfo.counter"
                 :duration="1000"
               ></countTo></span
-            >次饼了
+            >次饼了，成功找到 {{ dunInfo.cookieCount }} 个饼
           </div>
           <div class="info-time">
             小刻在 {{ formatTime(dunInfo.lastDunTime, 'hh:mm:ss') }} 翻箱倒柜一次
@@ -30,6 +30,7 @@
           <el-tabs v-model="activeTab" type="border-card">
             <el-tab-pane label="核心设置" name="0">
               <el-tooltip
+                :open-delay="1000"
                 class="item"
                 effect="dark"
                 content="选择勾选来源，最少选择一个"
@@ -46,7 +47,12 @@
                   </el-checkbox-group>
                 </el-form-item>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" placement="bottom">
+              <el-tooltip
+                  :open-delay="1000"
+                  class="item"
+                  effect="dark"
+                  placement="bottom"
+              >
                 <div slot="content">
                   微博端API有些账户需要登录才能查看最新微博<br />
                   登录完成后点击“查看是否登录成功”按钮，如果能看到正常的微博个人信息，则表示成功<br />
@@ -66,6 +72,7 @@
                 </el-form-item>
               </el-tooltip>
               <el-tooltip
+                :open-delay="1000"
                 class="item"
                 effect="dark"
                 content="是多少秒刷新一次，不是一秒刷新多少次"
@@ -85,6 +92,7 @@
                 </el-form-item>
               </el-tooltip>
               <el-tooltip
+                :open-delay="1000"
                 class="item"
                 effect="dark"
                 content="关闭后仅可以查看列表，无法在电脑右下角和通知栏收到推送！"
@@ -95,6 +103,7 @@
                 </el-form-item>
               </el-tooltip>
               <el-tooltip
+                :open-delay="1000"
                 class="item"
                 effect="dark"
                 content="时间段内蹲饼的攻速降低100%，用来节省流量和性能，降低打开后数据请看蹲饼频率后面的文字说明"
@@ -124,7 +133,12 @@
                 </el-form-item>
               </el-tooltip>
 
-              <el-tooltip class="item" effect="dark" placement="bottom">
+              <el-tooltip
+                  :open-delay="1000"
+                  class="item"
+                  effect="dark"
+                  placement="bottom"
+              >
                 <div slot="content">
                   有些数据比如通讯组是只有日期没有时间的，在数据列表内无法排序，所以在此统一这些卡片在当天信息流内是置顶还是置底。<br />
                   保存的时候可能会因为数据排序改变而发送错误的推送，请忽略！
@@ -136,7 +150,6 @@
                   </el-radio-group>
                 </el-form-item>
               </el-tooltip>
-               
             </el-tab-pane>
             <el-tab-pane label="界面设置" name="1">
               <el-form-item label="字体大小">
@@ -150,7 +163,12 @@
               <el-form-item label="展示图片">
                 <el-switch v-model="settings.display.showImage"></el-switch>
               </el-form-item>
-              <el-tooltip class="item" effect="dark" placement="left">
+              <el-tooltip
+                  :open-delay="1000"
+                  class="item"
+                  effect="dark"
+                  placement="left"
+              >
                 <div slot="content">
                   转发内容大部分为抽奖结果，为了防止有人吃不了柠檬陷的饼，特意添加此开关。调整此开关会导致<br />
                   调整此开关会导致源数据改变，可能会有错误的推送！
@@ -160,6 +178,7 @@
                 </el-form-item>
               </el-tooltip>
               <el-tooltip
+                :open-delay="1000"
                 class="item"
                 effect="dark"
                 content="用标签栏分类或者直接全部展示"
@@ -197,6 +216,7 @@
                 <el-switch v-model="settings.san.noticeWhenFull"></el-switch>
               </el-form-item>
               <el-tooltip
+                :open-delay="1000"
                 v-if="settings.feature.san"
                 class="item"
                 effect="dark"
@@ -214,6 +234,7 @@
                 </el-form-item>
               </el-tooltip>
               <el-tooltip
+                :open-delay="1000"
                 class="item"
                 effect="dark"
                 content="模式切换仅为预览，需点击保存存储设置"
@@ -556,7 +577,6 @@ export default {
         }
       }
 
-
       /deep/.el-input-number.is-controls-right .el-input-number__increase {
         border-bottom: 1px solid @@btnBorder;
       }
@@ -583,7 +603,8 @@ export default {
       }
       /deep/.el-form-item__label,
       /deep/.el-radio,
-      /deep/.el-checkbox {
+      /deep/.el-checkbox,
+      /deep/.el-form-item__content span {
         color: @@setSmall;
       }
       .lowfrequency-time-picker {

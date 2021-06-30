@@ -110,15 +110,7 @@
                       :key="item.type"
                   >
                     <div slot="content">
-                      {{
-                        item.name +
-                        " - " +
-                        `开放日期： ${
-                            item.day
-                                .map((x) => `${numberToWeek(x)}`)
-                                .join() + ""
-                        }`
-                      }}
+                      {{`${item.name} - 开放日期： ${calcResourceOpenDay(item.day)}`}}
                     </div>
                     <div
                         class="day-info-content-bottom-card"
@@ -145,7 +137,6 @@
           v-if="settings.display.showByTag"
           v-model="settings.display.defaultTag"
           :stretch="true"
-          style="height: 30px"
           @tab-click="selectListByTag"
       >
         <el-tab-pane
@@ -154,15 +145,21 @@
             :label="item.dataName"
             :name="item.dataName">
             <span slot="label">
+              <el-tooltip
+                  effect="dark"
+                  :content="getDataSourceByName(item.dataName).title"
+                  placement="top"
+              >
               <img
                   :title="item"
                   class="title-img"
                   :src="getDataSourceByName(item.dataName).icon"
               />
+              </el-tooltip>
             </span>
         </el-tab-pane>
       </el-tabs>
-    <el-timeline :class="settings.display.windowMode ? 'window' : ''">
+    <el-timeline ref="el-timeline-area" v-if="LazyLoaded" :class="settings.display.windowMode ? 'window' : ''">
       <MyElTimelineItem
           v-for="(item, index) in filterCardList"
           :key="index"
@@ -171,6 +168,9 @@
           :icon-style="{'--icon': `url('${getDataSourceByName(item.dataSource).icon}')`}"
           :icon="'headImg'"
       >
+        <span class="is-top-info" v-if="item.isTop">
+          <span class="color-blue">【当前条目在{{getDataSourceByName(item.dataSource).title}}的时间线内为置顶状态】</span>
+        </span>
         <el-card
             class="card"
             :class="[`font-size-${settings.display.fontSize}`, {'special-source': item.component}]"
@@ -193,14 +193,12 @@
               @click="openUrl(item.jumpUrl)"
           ><i class="el-icon-right"></i
           ></el-button>
-          <span class="is-top-info" v-if="item.isTop">
-            <span class="color-blue">【当前条目在{{getDataSourceByName(item.dataSource).title}}的时间线内为置顶状态】</span>
-          </span>
         </span>
           <component :is="resolveComponent(item)" :item="item" :show-image="imgShow"></component>
         </el-card>
       </MyElTimelineItem>
     </el-timeline>
+    <div v-else style="height: 300px" v-loading="loading"></div>
   </div>
 </template>
 
@@ -215,6 +213,7 @@ import SanInfo from '../../common/sync/SanInfo';
 import TimeUtil from '../../common/util/TimeUtil';
 import Search from '../Search';
 import HttpUtil from '../../common/util/HttpUtil';
+import {deepAssign} from '../../common/util/CommonFunctions';
 
 export default {
   name: "TimeLine",
@@ -236,12 +235,18 @@ export default {
       cardListAll: {},
       filterText: '',
       filterCardList: [],
+      LazyLoaded: false,
+      insiderCode: null, // 储存内部密码
+      insiderOpen: true, // 内部模式开启
     };
   },
   mounted() {
     this.getOnlineSpeak();
     this.setClickFun();
     this.listenKeyBord();
+    setTimeout(() => {
+      this.LazyLoaded = true;
+    }, 233);
   },
   watch: {
     cardListByTag() {
@@ -257,7 +262,6 @@ export default {
   },
   methods: {
     openUrl: BrowserUtil.createTab,
-    numberToWeek: TimeUtil.numberToWeek,
     getDataSourceByName: DataSourceUtil.getByName,
     transformToSortList: DataSourceUtil.transformToSortList,
     resolveComponent(item) {
@@ -345,6 +349,9 @@ export default {
                 new Date(x.overTime) >= new Date()
         );
 
+        // 内部密码
+        this.insiderCode = data.insider.insiderCode;
+        this.insiderOpen = data.insider.insiderOpen;
         this.resourcesNotToday();
         this.loading = false;
       });
@@ -357,6 +364,14 @@ export default {
         return '已结束';
       }
     },
+    // 计算资源关卡开启时间
+    calcResourceOpenDay(days) {
+      if (days.notToday) {
+        return days.map(x => TimeUtil.numberToWeek(x)).join();
+      } else {
+        return '开放中';
+      }
+    },
     // 调整过滤文字
     changeFilterText(text) {
       if (text != null) {
@@ -367,9 +382,41 @@ export default {
     },
     filterList() {
       if (this.filterText) {
-        this.filterCardList = this.cardList.filter((item) => item.content.includes(this.filterText));
+        const newFilterList = [];
+        deepAssign([], this.cardList)
+            .forEach((item) => {
+              const lowerCase = item.content.toLowerCase();
+              let oldIdx = 0;
+              let idx = 0;
+              let flag = false;
+              let newContent = '';
+              while ((idx = lowerCase.indexOf(this.filterText, idx)) >= 0) {
+                flag = true;
+                newContent += item.content.substring(oldIdx, idx);
+                newContent += `<span class="highlight">${item.content.substring(idx, this.filterText.length)}</span>`;
+                oldIdx = idx;
+                idx += this.filterText.length;
+              }
+              if (flag) {
+                newContent += item.content.substring(idx);
+                item.content = newContent;
+                newFilterList.push(item.content);
+              }
+            });
+        this.filterCardList = newFilterList;
       } else {
         this.filterCardList = this.cardList;
+      }
+    },
+    changeInsider() {
+      if (this.filterText === this.insiderCode) {
+        this.setting.insider = true;
+        this.saveLocalStorage("setting", this.setting);
+        this.$message({
+          center: true,
+          message: "成功进入隐藏模式",
+          type: "success",
+        });
       }
     },
     // 监听键盘
@@ -378,8 +425,13 @@ export default {
         if (e.keyCode === 13) {
           this.searchShow = !this.searchShow;
           if (!this.searchShow) {
+            if (this.insiderOpen) {
+              this.changeInsider();
+            }
             this.$refs.SearchModel.clearText();
             this.filterText = null;
+            // 同时滚动条回到最顶上
+            this.$refs["el-timeline-area"].$el.scrollTop = 0;
           }
         }
       });
@@ -555,11 +607,6 @@ img[lazy="error"] {
       border-color: #c6e2ff;
       background-color: @@hover;
     }
-    .is-top-info {
-      position: absolute;
-      top: 0px;
-      left: 220px;
-    }
 
     // 需要特殊显示的数据源
     &.special-source {
@@ -708,6 +755,15 @@ img[lazy="error"] {
     padding-right: 20px;
     height: 415px;
     margin-top: 10px;
+    transition: all 0.5s;
+    .highlight {
+      color: #23ade5;
+      box-shadow: 0 0 10px 0 red;
+      transform: scale(1.1);
+      padding: 5px;
+      margin: 5px;
+      display: inline-block;
+    }
     &.tag {
       height: 365px;
     }
@@ -716,6 +772,11 @@ img[lazy="error"] {
       &.tag {
         height: calc(100vh - 230px);
       }
+    }
+    .is-top-info {
+      position: absolute;
+      top: 0px;
+      left: 220px;
     }
     .el-timeline-item__timestamp {
       color: @@subTitle;
