@@ -1,10 +1,10 @@
 <template>
-  <div class="background" :class="setting.outsideClass">
+  <div class="background" :class="settings.getColorTheme()">
     <div id="app">
       <el-card class="box-card" shadow="never">
         <el-row type="flex" align="middle" justify="space-around">
           <el-image class="img" src="../assets/image/icon.png"></el-image>
-          <div class="version">小刻食堂 V{{ saveInfo.version }}</div>
+          <div class="version">小刻食堂 V{{currentVersion}}</div>
         </el-row>
         <el-divider>感谢</el-divider>
         玩了方舟已经两年了，身为开服玩家，我根本不知道方舟竟然能陪我走这么远。
@@ -46,194 +46,25 @@
 </template>
 
 <script>
-import {
-  common,
-  timespanToDay,
-  numberOrEnNameToName,
-  numberOrEnNameToIconSrc,
-} from "../assets/JS/common";
+import Settings from '../common/Settings';
+import {CURRENT_VERSION} from '../common/Constants';
+
 export default {
   name: "app",
   mounted() {
     this.init();
   },
-  watch: {
-    setting: {
-      handler(newobj) {
-        let hour = new Date().getHours();
-        this.setting.outsideClass =
-          (newobj.darkshow == -1 && (hour >= 18 || hour < 6)) ||
-          newobj.darkshow == 1
-            ? "dark"
-            : "light";
-        // this.saveSetting();
-      },
-      deep: true,
-      immediate: true,
-    },
-  },
+  watch: {},
   data() {
     return {
-      cardlist: [],
-      saveInfo: common.saveInfo,
-      oldDunIndex: 0,
-      dunInfo: common.dunInfo,
-      setting: common.setting,
-      marks: {
-        8: "20点",
-        12: "当天凌晨",
-        20: "8点",
-      },
-      activeTab: "0",
-      rules: {
-        tagActiveName: [
-          { required: true, message: "请选择默认标签", trigger: "blur" },
-        ],
-      },
+      currentVersion: CURRENT_VERSION,
+      settings: Settings,
     };
   },
   computed: {
-    // nextdunTime() {
-    //   console.log(this.setting.islowfrequency);
-    //   if (this.setting.islowfrequency) {
-    //     return timespanToDay(
-    //       this.dunInfo.dunTime / 1000 + this.setting.time * 2
-    //     );
-    //   }
-    //   return timespanToDay(this.dunInfo.dunTime / 1000 + this.setting.time);
-    // },
   },
   methods: {
-    numberOrEnNameToName,
-    numberOrEnNameToIconSrc,
-    timespanToDay,
-    init() {
-      this.getSaveInfo();
-      this.getDunInfo();
-      this.getSetting();
-    },
-
-    // 死数据
-    getSaveInfo() {
-      this.getLocalStorage("saveInfo").then((data) => {
-        if (data != null) {
-          this.saveInfo = data;
-        }
-      });
-    },
-
-    // 蹲饼数据
-    getDunInfo() {
-      this.getLocalStorage("dunInfo").then((data) => {
-        if (data != null) {
-          this.oldDunIndex = this.dunInfo.dunIndex;
-          this.dunInfo = data;
-        }
-      });
-    },
-
-    // 设置数据
-    getSetting() {
-      this.getLocalStorage("setting").then((data) => {
-        if (data != null) {
-          this.setting = data;
-          setInterval(() => {
-            this.getDunInfo();
-          }, data.time * 500);
-        }
-      });
-    },
-
-    // 保存设置
-    saveSetting(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.saveLocalStorage("setting", this.setting).then(() => {
-            chrome.runtime.sendMessage({ info: "setting" });
-            this.$message({
-              center: true,
-              message: "保存成功",
-              type: "success",
-            });
-          });
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
-    },
-
-    // 保存
-    saveLocalStorage(name, data) {
-      return new Promise((resolve, reject) => {
-        chrome.storage.local.set({ [name]: data }, () => {
-          resolve(true);
-        });
-      });
-    },
-    // 读取
-    getLocalStorage(name) {
-      return new Promise((resolve, reject) => {
-        chrome.storage.local.get([name], (result) => {
-          if (Object.keys(result).length != 0) {
-            resolve(result[name]);
-            return;
-          }
-          resolve(null);
-        });
-      });
-    },
-
-    // 导出设置
-    settingExport() {
-      const blob = new Blob([JSON.stringify(this.setting)], {
-        type: "application/json",
-      });
-      let src = URL.createObjectURL(blob);
-      chrome.downloads.download({ url: src, saveAs: true }, (data) => {
-        console.log(data);
-      });
-    },
-    // 导入设置
-    settingImport(file) {
-      const reader = new FileReader();
-      reader.onload = (res) => {
-        const { result } = res.target; // 得到字符串
-        const data = JSON.parse(result); // 解析成json对象
-        this.$confirm("解析文件成功，是否覆盖当前设置?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
-        })
-          .then(() => {
-            this.setting = data;
-            this.saveSetting("form");
-          })
-          .catch(() => {
-            this.$message("你决定了不覆盖当前设置项");
-          });
-      }; // 成功回调
-      reader.onerror = (err) => {
-        this.$message.error("没有导入成功，心态崩了啊！");
-        this.$notify({
-          title: "貌似检测到导出失败",
-          message: "可以加QQ群 362860473 后将文件发送给管理员查看检测问题",
-          duration: 0,
-        });
-      }; // 失败回调
-      reader.readAsText(new Blob([file.raw]), "utf-8"); // 按照utf-8编码解析
-    },
-
-    // 低频时间选择
-    lowfrequencyTimeTooltip(val) {
-      if (val == 12) {
-        return "当天凌晨";
-      } else if (val < 12) {
-        return `上一天${val + 12}点整`;
-      } else if (val > 12) {
-        return `当天${val - 12}点整`;
-      }
-    },
+    init() {},
   },
 };
 </script>

@@ -3,7 +3,7 @@
     <el-card class="box-card">
       <el-row type="flex" align="middle" justify="space-around">
         <el-image class="img" src="../assets/image/icon.png"></el-image>
-        <div class="version">欢迎使用小刻食堂 V{{ saveInfo.version }}</div>
+        <div class="version">欢迎使用小刻食堂 V{{ currentVersion }}</div>
       </el-row>
       <el-divider></el-divider>
       <div class="info">
@@ -35,7 +35,7 @@
         </el-collapse-item>
       </el-collapse>
       <el-divider></el-divider>
-      <div v-if="showOption">
+      <div v-if="settings.feature.options">
         现在可以点击
         <el-button @click="toSetting" size="mini">设置</el-button>
         进入设置来调整蹲饼器
@@ -48,60 +48,40 @@
         >查看项目源码。<span style="color: #23ade5">欢迎点star哦</span>
       </div>
       <el-divider></el-divider>
-      <div v-html="feedbackInfo"></div>
+      <Feedback></Feedback>
     </el-card>
   </div>
 </template>
 
 <script>
-import { common } from "../assets/JS/common";
+import BrowserUtil from '../common/util/BrowserUtil';
+import Feedback from '../components/Feedback';
+import {CURRENT_VERSION, PAGE_GITHUB_REPO, PAGE_OPTIONS} from '../common/Constants';
+import Settings from '../common/Settings';
+
 export default {
   name: "welcome",
+  components: {Feedback},
   mounted() {
     this.init();
   },
 
   data() {
     return {
-      saveInfo: common.saveInfo,
+      currentVersion: CURRENT_VERSION,
+      settings: Settings,
       activeNames: [1],
-      showOption: true,
     };
   },
   computed: {},
   methods: {
     init() {
-      this.getSaveInfo();
-    },
-    getSaveInfo() {
-      this.getLocalStorage("saveInfo").then((data) => {
-        if (data != null) {
-          this.saveInfo = data;
-          this.showOption = this.saveInfo.webType != 1;  // 如果是火狐内核浏览器，隐藏设置按钮
-        }
-      });
-    },
-    getLocalStorage(name) {
-      return new Promise((resolve, reject) => {
-        chrome.storage.local.get([name], (result) => {
-          if (result) {
-            resolve(result[name]);
-            return;
-          }
-          resolve(null);
-        });
-      });
     },
     toSetting() {
-      chrome.tabs.create({
-        url: chrome.extension.getURL("options.html"),
-      });
+      BrowserUtil.createExtensionTab(PAGE_OPTIONS);
     },
     toGithub() {
-      chrome.tabs.create({
-        url:
-          "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue",
-      });
+      BrowserUtil.createTab(PAGE_GITHUB_REPO);
     },
     // lookList() {
     //   chrome.browserAction.getPopup();

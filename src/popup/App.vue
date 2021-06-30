@@ -1,5 +1,5 @@
 <template>
-  <div :class="setting.outsideClass">
+  <div :class="settings.getColorTheme()">
     <!-- <div id="app" :style="'height:' + allHeight + 'px'"> -->
     <div id="app">
       <el-drawer
@@ -12,7 +12,7 @@
         <el-row type="flex" class="drawer-btn-area" justify="center">
           <el-tooltip
             :key="item.img"
-            v-for="item in quickJump.soure"
+            v-for="item in quickJump.source"
             :content="item.name"
             placement="top"
           >
@@ -77,7 +77,7 @@
             type="primary"
             icon="el-icon-setting"
             @click="openSetting"
-            v-if="showOption"
+            v-if="settings.feature.options"
             >设置</el-button
           >
           <el-button
@@ -100,66 +100,26 @@
         @click.stop="drawer = true"
       ></el-button>
       <div class="version">
-        {{ `小刻食堂 V${saveInfo.version}` }}
-        <span
-          >【已蹲饼
-          <countTo
-            :startVal="oldDunIndex"
-            :endVal="dunInfo.dunIndex"
-            :duration="1000"
-          ></countTo
-          >次】</span
-        >
-        <span v-if="setting.islowfrequency"> 【低频蹲饼时段】 </span>
+        {{ `小刻食堂 V${currentVersion}` }}
+        <span>
+          <span
+            >【已蹲饼
+            <countTo
+              :startVal="oldDunCount"
+              :endVal="dunInfo.counter"
+              :duration="1000"
+            ></countTo
+            >次】</span
+          >
+          <span v-if="settings.checkLowFrequency()"> 【低频蹲饼时段】 </span>
+        </span>
       </div>
       <div id="content">
-        <!-- <time-line
-          v-if="!setting.isTag"
-          ref="TimeLine"
-          :saveInfo="saveInfo"
-          :setting="setting"
-          :imgShow="LazyLoaded"
-          :cardlist="cardlist"
-          :allHeight="allHeight"
-        >
-        </time-line> -->
         <time-line
-          ref="TimeLine"
-          :saveInfo="saveInfo"
-          :setting="setting"
           :imgShow="LazyLoaded"
-          :cardlistdm="cardlistdm"
+          :cardListByTag="cardList"
         >
         </time-line>
-        <!-- 
-        <el-tabs
-          v-if="setting.isTag"
-          v-model="setting.tagActiveName"
-          :stretch="true"
-        >
-          <el-tab-pane
-            v-for="item in Object.keys(cardlistdm)"
-            :key="item"
-            :label="numberOrEnNameToName(item)"
-            :name="numberOrEnNameToName(item)"
-          >
-            <span slot="label">
-              <img
-                :title="numberOrEnNameToName(item)"
-                class="title-img"
-                :src="numberOrEnNameToIconSrc(item)"
-              />
-            </span>
-            <time-line
-              ref="TimeLine"
-              :saveInfo="saveInfo"
-              :setting="setting"
-              :imgShow="LazyLoaded"
-              :cardlist="cardlistdm[item]"
-            >
-            </time-line>
-          </el-tab-pane>
-        </el-tabs> -->
       </div>
     </div>
   </div>
@@ -167,16 +127,24 @@
 
 <script>
 import countTo from "vue-count-to";
-import TimeLine from "../components/TimeLine";
+import TimeLine from "../components/timeline/TimeLine";
+import Settings from '../common/Settings';
+import BrowserUtil from '../common/util/BrowserUtil';
+import DunInfo from '../common/sync/DunInfo';
 import {
-  common,
-  timespanToDay,
-  Get,
-  numberToWeek,
-  diffTime,
-  saveLocalStorage,
-  getLocalStorage,
-} from "../assets/JS/common";
+  dayInfo,
+  MESSAGE_CARD_LIST_GET,
+  MESSAGE_CARD_LIST_UPDATE,
+  MESSAGE_DUN_INFO_UPDATE,
+  MESSAGE_FORCE_REFRESH,
+  PAGE_DONATE,
+  PAGE_GITHUB_REPO,
+  PAGE_OPTIONS,
+  PAGE_UPDATE,
+  quickJump,
+  SHOW_VERSION
+} from '../common/Constants';
+
 export default {
   name: "app",
   components: { countTo, TimeLine },
@@ -188,10 +156,10 @@ export default {
     drawer(value) {
       if (value) {
         this.$nextTick(() => {
-          this.bindScroolFun();
+          this.bindScrollFun();
         });
       } else {
-        this.unbindScroolFun();
+        this.unbindScrollFun();
       }
     },
   },
@@ -200,21 +168,18 @@ export default {
       show: false,
       LazyLoaded: false,
       isNew: false,
-      sanShow: true,
-      cardlistdm: {},
-      saveInfo: common.saveInfo,
+      cardList: {},
+      currentVersion: SHOW_VERSION,
       onlineSpeakList: [],
-      oldDunIndex: 0,
-      dunInfo: common.dunInfo,
-      setting: common.setting,
-      showOption: true, //火狐浏览器不能进入设置
+      oldDunCount: 0,
+      dunInfo: DunInfo,
+      settings: Settings,
       drawer: false, // 打开菜单
       toolDrawer: false, // 理智计算器菜单
       isReload: false, // 是否正在刷新
-      quickJump: common.quickJump,
-      dayInfo: common.dayInfo,
+      quickJump: quickJump,
+      dayInfo: dayInfo,
       loading: true, // 初始化加载
-      sane: common.sane,
       onlineDayInfo: {},
       // allHeight: 0,
     };
@@ -222,103 +187,38 @@ export default {
   computed: {},
   beforeDestroy() {},
   methods: {
-    numberToWeek,
-    timespanToDay,
-    diffTime,
-    Get,
-    saveLocalStorage,
-    getLocalStorage,
+    openUrl: BrowserUtil.createTab,
     init() {
+      BrowserUtil.addMessageListener('popup', MESSAGE_DUN_INFO_UPDATE, data => {
+        this.oldDunCount = data.counter;
+      });
       setTimeout(() => {
         // 计算高度
         // this.calcHeight();
-        this.getCardlist();
-        this.getSaveInfo();
-        this.getSetting();
-        this.getDunInfo();
+        this.getCardList();
         // 图片卡 先加载dom后加载图片内容
         this.LazyLoaded = true;
       }, 1);
     },
-
-    bindScroolFun() {
+    scrollHandler() {
+      let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
+      scrollDiv.scrollLeft = scrollDiv.scrollLeft + event.deltaY;
+    },
+    bindScrollFun() {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
       // 添加监听事件（不同浏览器，事件方法不一样，所以可以作判断，也可以如下偷懒）
       // scrollDiv.addEventListener("DOMMouseScroll", handler, false);
-      scrollDiv.addEventListener("wheel", handler, false);
-      function handler(event) {
-        scrollDiv.scrollLeft = scrollDiv.scrollLeft + event.deltaY;
-      }
+      scrollDiv.addEventListener("wheel", this.scrollHandler, false);
     },
-    unbindScroolFun() {},
-    // 今天有没有该资源可以刷
-    resourcesNotToday() {
-      let date = new Date();
-      // 如果日期在里面
-      let starTime = new Date(this.onlineDayInfo.resources.starTime);
-      let overTime = new Date(this.onlineDayInfo.resources.overTime);
-      if (date >= starTime && date <= overTime) {
-        common.dayInfo.forEach((item) => {
-          item.notToday = false;
-        });
-        return;
-      }
-      // 如果不在里面
-      let week = new Date().getDay();
-      common.dayInfo.forEach((item) => {
-        item.notToday = !item.day.includes(week);
-      });
+    unbindScrollFun() {
+      let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
+      scrollDiv.removeEventListener("wheel", this.scrollHandler);
     },
-    // 检测更新
-    getUpdateInfo() {
-      chrome.runtime.sendMessage({ info: "getUpdateInfo" });
-    },
-
-    // 死数据
-    getSaveInfo() {
-      this.getLocalStorage("saveInfo").then((data) => {
-        if (data != null) {
-          this.saveInfo = data;
-          this.showOption = this.saveInfo.webType != 1; // 如果是火狐内核浏览器，隐藏设置按钮
-        }
-      });
-    },
-    // 蹲饼数据
-    getDunInfo() {
-      this.getLocalStorage("dunInfo").then((data) => {
-        if (data != null) {
-          this.oldDunIndex = this.dunInfo.dunIndex;
-          this.dunInfo = data;
-        }
-      });
-    },
-    // 设置数据
-    getSetting() {
-      this.getLocalStorage("setting").then((data) => {
-        if (data != null) {
-          this.setting = data;
-          if (this.saveInfo.webType == 1) {
-            this.setting.sanShow = false; // 如果是火狐内核浏览器，隐藏理智规划
-          }
-          setInterval(() => {
-            // 轮询在这里
-            this.getCardlist();
-            this.getDunInfo();
-            try {
-              this.$refs.TimeLine.getSane();
-            } catch (error) {}
-          }, data.time * 500);
-        }
-      });
-    },
-
     // 获取数据
-    getCardlist() {
-      this.getLocalStorage("cardlistdm").then((data) => {
-        if (!data) {
-          return;
-        }
-        this.cardlistdm = data;
+    getCardList() {
+      BrowserUtil.addMessageListener('popup', MESSAGE_CARD_LIST_UPDATE, (data) => this.cardList = data);
+      BrowserUtil.sendMessage(MESSAGE_CARD_LIST_GET).then((data) => {
+        this.cardList = data;
       });
     },
 
@@ -331,7 +231,7 @@ export default {
     // 强刷
     reload() {
       this.isReload = true;
-      chrome.runtime.sendMessage({ info: "reload" });
+      BrowserUtil.sendMessage(MESSAGE_FORCE_REFRESH);
       this.$message({
         offset: 50,
         center: true,
@@ -344,26 +244,20 @@ export default {
       }, 5000);
     },
 
-    openUrl(url) {
-      chrome.tabs.create({ url: url });
-    },
-
     openSetting() {
-      chrome.tabs.create({
-        url: chrome.extension.getURL("options.html"),
-      });
+      BrowserUtil.createExtensionTab(PAGE_OPTIONS);
     },
 
     openDonate() {
-      chrome.tabs.create({
-        url: chrome.extension.getURL("donate.html"),
-      });
+      BrowserUtil.createExtensionTab(PAGE_DONATE);
+    },
+
+    openUpdate() {
+      BrowserUtil.createExtensionTab(PAGE_UPDATE);
     },
 
     openGithub() {
-      chrome.tabs.create({
-        url: "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue",
-      });
+      BrowserUtil.createTab(PAGE_GITHUB_REPO);
     },
   },
 };
@@ -477,38 +371,37 @@ export default {
   }
 
   // 标签栏
-  // /deep/ .el-tabs {
-  //   .el-tabs__header {
-  //     margin-bottom: 5px;
-  //     margin-top: 15px;
-  //     .title-img {
-  //       width: 30px;
-  //       border-radius: 4px;
-  //     }
-  //   }
-  //   .el-tabs__content {
-  //     min-height: 360px;
-  //     .el-timeline {
-  //       height: 360px;
-  //     }
-  //   }
-  //   .el-tabs__nav-wrap::after {
-  //     background-color: @@timeline;
-  //   }
-  //   .el-tabs__item {
-  //     color: @@setLarge;
-  //     &:hover {
-  //       color: #409eff;
-  //     }
-  //   }
-  // }
-
-  #content {
-    margin-top: 40px;
-    // 更改卡片阴影
-    // .is-always-shadow {
-    //   box-shadow: 0 2px 12px 0 @@shadow;
-    // }
+  /deep/ .el-tabs {
+    height: 30px;
+    margin: 0 10px;
+    .el-tabs__nav-prev,
+    .el-tabs__nav-next {
+      line-height: 30px;
+      font-size: 18px;
+    }
+    .el-tabs__header {
+      margin-bottom: 5px;
+      margin-top: 15px;
+      .title-img {
+        width: 30px;
+        border-radius: 4px;
+      }
+    }
+    .el-tabs__content {
+      min-height: 360px;
+      .el-timeline {
+        height: 360px;
+      }
+    }
+    .el-tabs__nav-wrap::after {
+      background-color: @@timeline;
+    }
+    .el-tabs__item {
+      color: @@setLarge;
+      &:hover {
+        color: #409eff;
+      }
+    }
   }
 
   // 隐藏二级菜单

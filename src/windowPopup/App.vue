@@ -1,5 +1,5 @@
 <template>
-  <div :class="setting.outsideClass">
+  <div :class="settings.getColorTheme()">
     <div id="app">
       <el-drawer
         :visible.sync="drawer"
@@ -12,7 +12,7 @@
         <el-row type="flex" class="drawer-btn-area" justify="center">
           <el-tooltip
             :key="item.img"
-            v-for="item in quickJump.soure"
+            v-for="item in quickJump.source"
             :content="item.name"
             placement="top"
           >
@@ -89,28 +89,22 @@
         @click.stop="drawer = true"
       ></el-button>
       <div class="version">
-        {{ `小刻食堂 V${saveInfo.version}` }}
-
-        <span
-          >【已蹲饼
-          <countTo
-            :startVal="oldDunIndex"
-            :endVal="dunInfo.dunIndex"
-            :duration="1000"
-          ></countTo
-          >次】</span
-        >
-        <span v-if="setting.islowfrequency"> 【低频蹲饼时段】 </span>
+        {{ `小刻食堂 V${currentVersion}` }}
+        <span>
+          <span
+            >【已蹲饼
+            <countTo
+              :startVal="oldDunCount"
+              :endVal="dunInfo.counter"
+              :duration="1000"
+            ></countTo
+            >次】</span
+          >
+          <span v-if="settings.checkLowFrequency()"> 【低频蹲饼时段】 </span>
+        </span>
       </div>
       <div id="content">
-        <time-line
-          ref="TimeLine"
-          :saveInfo="saveInfo"
-          :setting="setting"
-          :imgShow="LazyLoaded"
-          :cardlistdm="cardlistdm"
-        >
-        </time-line>
+        <time-line :cardlist="cardlist" :imgShow="LazyLoaded"></time-line>
       </div>
     </div>
   </div>
@@ -118,16 +112,25 @@
 
 <script>
 import countTo from "vue-count-to";
-import TimeLine from "../components/TimeLine";
+import TimeLine from "../components/timeline/TimeLine";
+import Settings from '../common/Settings';
+import BrowserUtil from '../common/util/BrowserUtil';
+import DunInfo from '../common/sync/DunInfo';
 import {
-  common,
-  timespanToDay,
-  Get,
-  numberToWeek,
-  diffTime,
-  saveLocalStorage,
-  getLocalStorage,
-} from "../assets/JS/common";
+  dayInfo,
+  MESSAGE_CARD_LIST_GET,
+  MESSAGE_CARD_LIST_UPDATE,
+  MESSAGE_DUN_INFO_UPDATE,
+  MESSAGE_FORCE_REFRESH,
+  PAGE_DONATE,
+  PAGE_GITHUB_REPO,
+  PAGE_OPTIONS,
+  PAGE_UPDATE,
+  quickJump,
+  SHOW_VERSION
+} from '../common/Constants';
+import DataSourceUtil from '../common/util/DataSourceUtil';
+
 export default {
   name: "app",
   components: { countTo, TimeLine },
@@ -138,10 +141,10 @@ export default {
     drawer(value) {
       if (value) {
         this.$nextTick(() => {
-          this.bindScroolFun();
+          this.bindScrollFun();
         });
       } else {
-        this.unbindScroolFun();
+        this.unbindScrollFun();
       }
     },
   },
@@ -150,18 +153,17 @@ export default {
       show: false,
       LazyLoaded: false,
       isNew: false,
-      sanShow: true,
       cardlist: [],
       cardlistdm: {},
-      saveInfo: common.saveInfo,
+      currentVersion: SHOW_VERSION,
       onlineSpeakList: [],
-      oldDunIndex: 0,
-      dunInfo: common.dunInfo,
-      setting: common.setting,
+      oldDunCount: 0,
+      dunInfo: DunInfo,
+      settings: Settings,
       drawer: false, // 打开菜单
       isReload: false, // 是否正在刷新
-      quickJump: common.quickJump,
-      dayInfo: common.dayInfo,
+      quickJump: quickJump,
+      dayInfo: dayInfo,
       loading: true, // 初始化加载
       onlineDayInfo: {},
       // allHeight: 0,
@@ -170,20 +172,15 @@ export default {
   computed: {},
   beforeDestroy() {},
   methods: {
-    numberToWeek,
-    timespanToDay,
-    diffTime,
-    Get,
-    saveLocalStorage,
-    getLocalStorage,
+    openUrl: BrowserUtil.createTab,
     init() {
+      BrowserUtil.addMessageListener('windowPopup', MESSAGE_DUN_INFO_UPDATE, data => {
+        this.oldDunCount = data.counter;
+      });
       setTimeout(() => {
         // 计算高度
         // this.calcHeight();
         this.getCardlist();
-        this.getSaveInfo();
-        this.getSetting();
-        this.getDunInfo();
         // 图片卡 先加载dom后加载图片内容
         this.LazyLoaded = true;
         this.listenerWindowSize();
@@ -196,67 +193,54 @@ export default {
         }
       };
     },
-    bindScroolFun() {
+    scrollHandler() {
+      let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
+      scrollDiv.scrollLeft = scrollDiv.scrollLeft + event.deltaY;
+    },
+    bindScrollFun() {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
       // 添加监听事件（不同浏览器，事件方法不一样，所以可以作判断，也可以如下偷懒）
       // scrollDiv.addEventListener("DOMMouseScroll", handler, false);
-      scrollDiv.addEventListener("wheel", handler, false);
-      function handler(event) {
-        scrollDiv.scrollLeft = scrollDiv.scrollLeft + event.deltaY;
-      }
+      scrollDiv.addEventListener("wheel", this.scrollHandler, false);
     },
-    unbindScroolFun() {
+    unbindScrollFun() {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
-      scrollDiv.removeEventListener("wheel");
-    },
-    // 检测更新
-    getUpdateInfo() {
-      chrome.runtime.sendMessage({ info: "getUpdateInfo" });
-    },
-
-    // 死数据
-    getSaveInfo() {
-      this.getLocalStorage("saveInfo").then((data) => {
-        if (data != null) {
-          this.saveInfo = data;
-        }
-      });
-    },
-    // 蹲饼数据
-    getDunInfo() {
-      this.getLocalStorage("dunInfo").then((data) => {
-        if (data != null) {
-          this.oldDunIndex = this.dunInfo.dunIndex;
-          this.dunInfo = data;
-        }
-      });
+      scrollDiv.removeEventListener("wheel", this.scrollHandler);
     },
     // 设置数据
-    getSetting() {
-      this.getLocalStorage("setting").then((data) => {
-        if (data != null) {
-          this.setting = data;
-          setInterval(() => {
-            // 轮询在这里
-            this.getCardlist();
-            this.getDunInfo();
-            try {
-              this.$refs.TimeLine.getSane();
-            } catch (error) {
-              
-            }
-          }, data.time * 500);
-        }
+    saveSane() {
+      this.sane.saveUpdate();
+      this.toolDrawer = false;
+      this.$message({
+        center: true,
+        message: "保存成功，开始计算",
+        type: "success",
+      });
+    },
+
+    // 打开计算小工具
+    openToolDrawer() {
+      this.toolDrawer = true;
+      this.$nextTick(() => {
+        this.$refs.saneEdit.focus();
       });
     },
 
     // 获取数据
     getCardlist() {
-      this.getLocalStorage("cardlistdm").then((data) => {
-        if (!data) {
-          return;
-        }
+      BrowserUtil.sendMessage(MESSAGE_CARD_LIST_GET).then((data) => {
+        this.cardlist = DataSourceUtil.mergeAllData(data).map((x) => {
+          x.content = x.content.replace(/\n/g, "<br/>");
+          return x;
+        });
         this.cardlistdm = data;
+      });
+      BrowserUtil.addMessageListener('windowPopup', MESSAGE_CARD_LIST_UPDATE, (value) => {
+        this.cardlist = DataSourceUtil.mergeAllData(data).map((x) => {
+          x.content = x.content.replace(/\n/g, "<br/>");
+          return x;
+        });
+        this.cardlistdm = value;
       });
     },
 
@@ -269,7 +253,7 @@ export default {
     // 强刷
     reload() {
       this.isReload = true;
-      chrome.runtime.sendMessage({ info: "reload" });
+      BrowserUtil.sendMessage(MESSAGE_FORCE_REFRESH);
       this.$message({
         offset: 50,
         center: true,
@@ -282,26 +266,20 @@ export default {
       }, 5000);
     },
 
-    openUrl(url) {
-      chrome.tabs.create({ url: url });
-    },
-
     openSetting() {
-      chrome.tabs.create({
-        url: chrome.extension.getURL("options.html"),
-      });
+      BrowserUtil.createExtensionTab(PAGE_OPTIONS);
     },
 
     openDonate() {
-      chrome.tabs.create({
-        url: chrome.extension.getURL("donate.html"),
-      });
+      BrowserUtil.createExtensionTab(PAGE_DONATE);
+    },
+
+    openUpdate() {
+      BrowserUtil.createExtensionTab(PAGE_UPDATE);
     },
 
     openGithub() {
-      chrome.tabs.create({
-        url: "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue",
-      });
+      BrowserUtil.createTab(PAGE_GITHUB_REPO);
     },
   },
 };
@@ -399,39 +377,37 @@ export default {
   }
 
   // 标签栏
-  // /deep/ .el-tabs {
-  //   .el-tabs__header {
-  //     margin-bottom: 5px;
-  //     margin-top: 15px;
-  //     .title-img {
-  //       width: 30px;
-  //       border-radius: 4px;
-  //     }
-  //   }
-  //   .el-tabs__content {
-  //     min-height: calc(100vh - 239px);
-  //     .el-timeline {
-  //       height: calc(100vh - 239px);
-  //     }
-  //   }
-  //   .el-tabs__nav-wrap::after {
-  //     background-color: @@timeline;
-  //   }
-  //   .el-tabs__item {
-  //     color: @@setLarge;
-  //     &:hover {
-  //       color: #409eff;
-  //     }
-  //   }
-  // }
-
-  #content {
-    margin-top: 40px;
-    
-    // 更改卡片阴影
-    // .is-always-shadow {
-    //   box-shadow: 0 2px 12px 0 @@shadow;
-    // }
+  /deep/ .el-tabs {
+    height: 30px;
+    margin: 0 10px;
+    .el-tabs__nav-prev,
+    .el-tabs__nav-next {
+      line-height: 30px;
+      font-size: 18px;
+    }
+    .el-tabs__header {
+      margin-bottom: 5px;
+      margin-top: 15px;
+      .title-img {
+        width: 30px;
+        border-radius: 4px;
+      }
+    }
+    .el-tabs__content {
+      min-height: calc(100vh - 239px);
+      .el-timeline {
+        height: calc(100vh - 239px);
+      }
+    }
+    .el-tabs__nav-wrap::after {
+      background-color: @@timeline;
+    }
+    .el-tabs__item {
+      color: @@setLarge;
+      &:hover {
+        color: #409eff;
+      }
+    }
   }
 
   // 隐藏二级菜单

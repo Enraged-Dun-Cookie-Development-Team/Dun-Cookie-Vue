@@ -13,17 +13,20 @@
 </template>
 
 <script>
-import { getLocalStorage } from "../assets/JS/common";
 export default {
   name: "ViewImg",
-  created() {},
-  mounted() {
-    this.getLocalStorage("viewImg").then(({ item, img, winId }) => {
-      this.item = item;
-      this.img = img;
-      this.winId = winId;
+  created() {
+    chrome.runtime.onMessage.addListener((data) => {
+      console.log(data);
+      if (data.info != 'tab') {
+        return;
+      }
+      this.item = data.item;
+      this.img = data.img;
+      this.winId = data.winId;
     });
   },
+  mounted() {},
 
   data() {
     return {
@@ -35,7 +38,6 @@ export default {
   },
   computed: {},
   methods: {
-    getLocalStorage,
     imgOnload(data) {
       this.load = false;
       this.info = {
@@ -54,7 +56,6 @@ export default {
   width: 100vw;
   display: flex;
   align-items: flex-start;
-  justify-content: center;
   justify-content: flex-start;
 }
 </style>

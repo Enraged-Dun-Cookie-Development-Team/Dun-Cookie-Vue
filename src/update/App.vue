@@ -3,7 +3,7 @@
     <el-card class="box-card">
       <el-row type="flex" align="middle" justify="space-around">
         <el-image class="img" src="../assets/image/icon.png"></el-image>
-        <div class="version">欢迎使用小刻食堂 V{{ saveInfo.version }}</div>
+        <div class="version">欢迎使用小刻食堂 V{{ currentVersion }}</div>
       </el-row>
       <el-divider></el-divider>
       <div class="info">
@@ -26,109 +26,74 @@
         <el-button
           size="mini"
            type="success"
-          @click="toLink(updateInfo.downChrome)"
+          @click="openUrl(updateInfo.downChrome)"
           >Chrome应用商店</el-button
         >
         <el-button
-          size="mini"
-           type="success"
-          @click="toLink(updateInfo.downEdge)"
-          >Edge应用商店</el-button
+            size="mini"
+            type="success"
+            @click="openUrl(updateInfo.downEdge)"
+        >Edge应用商店</el-button
         >
         <el-button
-          size="mini"
-           type="success"
-          @click="toLink(updateInfo.downFirefox)"
-          >Firefox应用商店</el-button
+            size="mini"
+            type="success"
+            @click="openUrl(updateInfo.downFirefox)"
+        >Firefox应用商店</el-button
         >
       </div>
-      <div style="text-align: center">  
-        <el-button type="success" @click="toLink(updateInfo.downCrx)" size="mini"
+      <div style="text-align: center">
+      <el-button type="success" @click="openUrl(updateInfo.downCrx)" size="mini"
           >下载Crx</el-button
         >
-        <el-button type="success" @click="toLink(updateInfo.downZip)" size="mini"
+        <el-button type="success" @click="openUrl(updateInfo.downZip)" size="mini"
           >下载Zip</el-button
         >
         
-        <el-button v-if="updateInfo.downSpareText" @click="toLink(updateInfo.downSpare)" size="mini"
+        <el-button v-if="updateInfo.downSpareText" @click="openUrl(updateInfo.downSpare)" size="mini"
           >{{updateInfo.downSpareText}}</el-button
         >
       </div>
       <el-divider></el-divider>
-      <div v-html="saveInfo.feedbackInfo"></div>
+      <Feedback></Feedback>
     </el-card>
   </div>
 </template>
 
 <script>
-import { common, Get } from "../assets/JS/common";
+import HttpUtil from '../common/util/HttpUtil';
+import BrowserUtil from '../common/util/BrowserUtil';
+import Feedback from '../components/Feedback';
+import {CURRENT_VERSION} from '../common/Constants';
+
 export default {
   name: "update",
+  components: {Feedback},
   mounted() {
     this.init();
   },
 
   data() {
     return {
-      saveInfo: common.saveInfo,
-      activeNames: [1],
-      feedbackInfo: "",
+      currentVersion: CURRENT_VERSION,
       updateInfo: {},
     };
   },
   computed: {},
   methods: {
-    Get,
     init() {
-      this.getSaveInfo();
       this.getUpdateInfo();
     },
-    toLink(url) {
-      chrome.tabs.create({
-        url: url,
-      });
-    },
+    openUrl: BrowserUtil.createTab,
     // 检查一次更新
     getUpdateInfo() {
-      this.Get(
+      HttpUtil.GET(
         "http://cdn.liuziyang.vip/Dun-Cookies-Info.json?t=" +
           new Date().getTime()
       ).then((responseText) => {
         this.updateInfo = JSON.parse(responseText).upgrade;
       });
     },
-    getSaveInfo() {
-      this.getLocalStorage("saveInfo").then((data) => {
-        if (data != null) {
-          this.saveInfo = data;
-        }
-      });
-    },
-    getLocalStorage(name) {
-      return new Promise((resolve, reject) => {
-        chrome.storage.local.get([name], (result) => {
-          if (result) {
-            resolve(result[name]);
-            return;
-          }
-          resolve(null);
-        });
-      });
-    },
-    toSetting() {
-      chrome.tabs.create({
-        url: chrome.extension.getURL("options.html"),
-      });
-    },
-    toGithub() {
-      chrome.tabs.create({
-        url:
-          "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue",
-      });
-    },
-    // lookList() {
-    //   chrome.browserAction.getPopup();
-    // },
   },
 };
 </script>
