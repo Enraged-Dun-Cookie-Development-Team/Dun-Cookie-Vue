@@ -387,22 +387,10 @@ export default {
         const newFilterList = [];
         deepAssign([], this.cardList)
             .forEach((item) => {
-              const lowerCase = item.content.toLowerCase();
-              let oldIdx = 0;
-              let idx = 0;
-              let flag = false;
-              let newContent = '';
-              while ((idx = lowerCase.indexOf(this.filterText, idx)) >= 0) {
-                flag = true;
-                newContent += item.content.substring(oldIdx, idx);
-                newContent += `<span class="highlight">${item.content.substring(idx, this.filterText.length)}</span>`;
-                oldIdx = idx;
-                idx += this.filterText.length;
-              }
-              if (flag) {
-                newContent += item.content.substring(idx);
-                item.content = newContent;
-                newFilterList.push(item.content);
+              const regex = new RegExp('(' + this.filterText.replaceAll(/([*.?+$^\[\](){}|\\\/])/g, '\\$1') + ')', 'gi');
+              if (regex.test(item.content.replaceAll(/(<([^>]+)>)/ig, ''))) {
+                item.content = item.content.replaceAll(regex, '<span class="highlight">$1</span>');
+                newFilterList.push(item);
               }
             });
         this.filterCardList = newFilterList;
