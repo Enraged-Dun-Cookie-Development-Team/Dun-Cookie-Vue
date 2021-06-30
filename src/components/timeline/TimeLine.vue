@@ -237,7 +237,6 @@ export default {
       filterCardList: [],
       LazyLoaded: false,
       insiderCode: null, // 储存内部密码
-      insiderOpen: true, // 内部模式开启
     };
   },
   mounted() {
@@ -351,7 +350,10 @@ export default {
 
         // 内部密码
         this.insiderCode = data.insider.insiderCode;
-        this.insiderOpen = data.insider.insiderOpen;
+        if (this.insiderCode !== this.settings.insider.code) {
+          this.settings.insider.level = 0;
+          this.settings.saveSettings();
+        }
         this.resourcesNotToday();
         this.loading = false;
       });
@@ -410,8 +412,9 @@ export default {
     },
     changeInsider() {
       if (this.filterText === this.insiderCode) {
-        this.setting.insider = true;
-        this.saveLocalStorage("setting", this.setting);
+        this.settings.insider.code = this.insiderCode;
+        this.settings.insider.level = 1;
+        this.settings.saveSettings();
         this.$message({
           center: true,
           message: "成功进入隐藏模式",
@@ -425,9 +428,7 @@ export default {
         if (e.keyCode === 13) {
           this.searchShow = !this.searchShow;
           if (!this.searchShow) {
-            if (this.insiderOpen) {
-              this.changeInsider();
-            }
+            this.changeInsider();
             this.$refs.SearchModel.clearText();
             this.filterText = null;
             // 同时滚动条回到最顶上
