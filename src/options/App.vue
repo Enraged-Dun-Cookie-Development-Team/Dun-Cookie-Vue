@@ -267,12 +267,12 @@
                       label="类型"
                       width="150">
                     <template #default="scope">
-                      <el-select v-model="scope.row.type" placeholder="请选择">
+                      <el-select v-model="scope.row.type" @change="handleChangeCustomDataType(scope.$index, scope.row.type)" placeholder="请选择">
                         <el-option
                             v-for="item in customTypes"
                             :key="item.name"
                             :label="item.builder.title"
-                            :value="item">
+                            :value="item.name">
                         </el-option>
                       </el-select>
                     </template>
@@ -281,10 +281,10 @@
                       label="参数"
                       width="270">
                     <template #default="scope">
-                      <el-popover :show-after="1500" trigger="hover" placement="top">
-                        <template #default>{{ scope.row.type.argTip }}</template>
+                      <el-popover v-if="scope.row.type" :open-delay="700" trigger="hover" placement="top">
+                        <template #default>{{ scope.row.builder.title }}</template>
                         <template #reference>
-                          <el-input v-model="customData[scope.$index].arg" :placeholder="scope.row.type.argPlaceholder"></el-input>
+                          <el-input v-model="scope.row.arg" :placeholder="scope.row.builder.argTip"></el-input>
                         </template>
                       </el-popover>
                     </template>
@@ -328,7 +328,7 @@ import Feedback from '../components/Feedback';
 import {MESSAGE_DUN_INFO_UPDATE, SHOW_VERSION} from '../common/Constants';
 import {defaultDataSourcesList} from '../common/datasource/DefaultDataSources';
 import TimeUtil from '../common/util/TimeUtil';
-import {customDataSourceTypes} from '../common/datasource/CustomDataSources';
+import {customDataSourceTypesByName, customDataSourceTypes} from '../common/datasource/CustomDataSources';
 import {deepAssign} from '../common/util/CommonFunctions';
 
 export default {
@@ -346,6 +346,7 @@ export default {
       settings: Settings,
       defSourcesList: defaultDataSourcesList,
       customTypes: customDataSourceTypes,
+      customTypesByName: customDataSourceTypesByName,
       marks: {
         8: "20点",
         12: "第二天凌晨",
@@ -363,23 +364,26 @@ export default {
     init() {
       this.settings.doAfterInit((settings) => {
         this.customData = settings.customDataSources.map(item => {
-          for (const type of customDataSourceTypes) {
-            if (item.type === type.name) {
-              return {
-                type: type.builder,
-                arg: item.arg
-              };
-            }
+          const type = customDataSourceTypesByName[item.type];
+          if (type) {
+            return {
+              type: type.typeName,
+              builder: type,
+              arg: item.arg
+            };
           }
-          return null;
         }).filter(item => !!item);
+        global.customData = this.customData;
       });
       BrowserUtil.addMessageListener('options', MESSAGE_DUN_INFO_UPDATE, data => {
         this.oldDunCount = data.counter;
       });
     },
     addCustomData() {
-      this.customData.push({type: customDataSourceTypes[0].builder});
+      this.customData.push({type: ''});
+    },
+    handleChangeCustomDataType(index, newType) {
+      this.customData[index].builder = customDataSourceTypesByName[newType];
     },
     removeCustomData(index) {
       this.customData.splice(index, 1);
@@ -392,7 +396,7 @@ export default {
       }
       this.settings.customDataSources = this.customData.map(item => {
         return {
-          type: item.type.typeName,
+          type: item.type,
           arg: item.arg
         };
       });

@@ -67,7 +67,7 @@ class DataSource {
         console.log(`无效的dataUrl：${this.dataUrl}`);
       }
       return new Promise((_, reject) => {
-        reject(this.dataUrl)
+        reject(this.dataUrl);
       });
     }
     return promise.then(value => {

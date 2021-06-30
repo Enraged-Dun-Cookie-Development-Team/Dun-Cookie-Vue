@@ -1,5 +1,6 @@
 import {BilibiliDataSource} from './def/BilibiliDataSource';
 import HttpUtil from '../util/HttpUtil';
+import {WeiboDataSource} from './def/WeiboDataSource';
 
 class CustomDataSourceBuilder {
   /**
@@ -44,10 +45,10 @@ const customDataSourceTypes = [
   {
     name: BilibiliDataSource.typeName,
     builder: new CustomDataSourceBuilder(BilibiliDataSource, 'B站', '请输入B站UID', 'B站UID', function (arg) {
-      const uid = parseInt(arg)
-      if (uid <= 0) {
+      if (!/^\d+$/.test(arg)) {
         return null;
       }
+      const uid = arg;
       return HttpUtil.GET_Json(`https://api.bilibili.com/x/space/acc/info?mid=${uid}&jsonp=jsonp`).then(json => {
         if (json.code != 0) {
           throw 'request fail: ' + JSON.stringify(json);
@@ -61,7 +62,32 @@ const customDataSourceTypes = [
         console.log(error);
       });
     })
-  }
+  },
+  {
+    name: WeiboDataSource.typeName,
+    builder: new CustomDataSourceBuilder(WeiboDataSource, '微博', '请输入微博UID', '微博UID', function (arg) {
+      if (!/^\d+$/.test(arg)) {
+        return null;
+      }
+      const uid = arg;
+      return HttpUtil.GET_Json(`https://m.weibo.cn/api/container/getIndex?type=uid&value=${uid}&containerid=100505${uid}`).then(json => {
+        if (json.ok != 1) {
+          throw 'request fail: ' + JSON.stringify(json);
+        }
+        const iconUrl = json.data.userInfo.avatar_hd;
+        const dataName = this.type.typeName + '_' + uid;
+        const title = json.data.userInfo.screen_name;
+        const dataUrl = `https://m.weibo.cn/api/container/getIndex?type=uid&value=${uid}&containerid=107603${uid}`;
+        return new this.type(iconUrl, dataName, title, dataUrl, BASE_PRIORITY);
+      }).catch(error => {
+        console.log(error);
+      });
+    })
+  },
 ];
+const customDataSourceTypesByName = {};
+for (const type of customDataSourceTypes) {
+  customDataSourceTypesByName[type.name] = type.builder;
+}
 
-export {customDataSourceTypes};
+export {customDataSourceTypes, customDataSourceTypesByName};

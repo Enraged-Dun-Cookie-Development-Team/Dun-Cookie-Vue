@@ -38,8 +38,9 @@ class BrowserUtil {
   static getLocalStorage(name) {
     return new Promise((resolve, reject) => {
       chrome.storage.local.get(name, (result) => {
-        if (chrome.runtime.lastError) {
-          reject(chrome.runtime.lastError);
+        const lastError = chrome.runtime.lastError;
+        if (lastError) {
+          reject(lastError);
           return;
         }
         if (typeof name === 'string') {

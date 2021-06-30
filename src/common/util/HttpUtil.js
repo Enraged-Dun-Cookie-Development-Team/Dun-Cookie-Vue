@@ -7,7 +7,7 @@ class HttpUtil {
    */
   static GET_Json(url) {
     try {
-      return HttpUtil.__sendRequest(url, "GET").then(response => JSON.parse(response));
+      return HttpUtil.GET(url).then(response => JSON.parse(response));
     } catch (error) {
       console.error(error);
     }
@@ -19,11 +19,7 @@ class HttpUtil {
    * @return Promise
    */
   static GET(url) {
-    try {
-      return HttpUtil.__sendRequest(url, "GET");
-    } catch (error) {
-      console.error(error);
-    }
+    return HttpUtil.__sendRequest(url, "GET").catch(error => console.error(error));
   }
 
   // 获取数据底层方法
