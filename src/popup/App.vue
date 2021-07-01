@@ -88,7 +88,7 @@
           >
         </el-row>
         <div style="position: absolute; bottom: 10px; right: 10px" class="sign">
-          Power By 蓝芷怡 & lwt & YunShan
+          Power By 蓝芷怡 & lwt & 云闪
         </div>
       </el-drawer>
       <el-button

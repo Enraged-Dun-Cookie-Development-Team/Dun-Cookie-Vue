@@ -41,6 +41,7 @@
     <el-card
         shadow="never"
         class="info-card online-speak"
+        :class="searchShow ? 'searching' : ''"
         v-loading="loading"
         element-loading-text="正在获取在线信息"
     >
@@ -766,6 +767,9 @@ img[lazy="error"] {
       position: absolute;
       top: 0px;
       left: 220px;
+    }
+    .el-timeline-item__tail {
+      border-left: 2px solid @@timeline;
     }
     .el-timeline-item__timestamp {
       color: @@subTitle;

@@ -15,7 +15,7 @@
            @click="changeShowAllImage(item.coverImage)">
         <div v-if="item.imageList && item.imageList.length > 1" class="multi-img">
           <el-row :gutter="5">
-            <el-col v-for="(img, index) in item.imageList" :key="img" :span="8">
+            <el-col v-for="(img, index) in item.imageList" :key="img" :span="8" class="multi-img-area">
               <img :ref="item.id + '_' + index" v-lazy="img" class="img"/>
               <span class="img-btn img-look-btn"
                     @click.stop="ViewImg(item, img, item.id + '_' + index)"
@@ -138,15 +138,58 @@ export default {
     position: relative;
     cursor: pointer;
 
+    .multi-img {
+      max-width: 700px;
+      width: 100%;
+      margin: auto;
+      .multi-img-area {
+        position: relative;
+      }
+    }
+
     .one-img {
       max-width: 700px;
       width: 100%;
       margin: auto;
+      position: relative;
     }
+    .multi-img-area,
+    .one-img {
+      .img-btn {
+        opacity: 0;
+        transition: 0.5s opacity;
+      }
+      &:hover {
+        .img-btn {
+          opacity: 1;
+        }
+      }
+    }
+  
 
     .img {
       border-radius: 4px;
       width: 100%;
+    }
+    // 图片操作按钮
+    .img-btn {
+      position: absolute;
+      z-index: 1;
+      right: 6px;
+      top: 2px;
+      width: 26px;
+      height: 20px;
+      text-align: center;
+      background: #fff;
+      line-height: 16px;
+      border-radius: 3px;
+      i {
+        font-size: 12px;
+      }
+    }
+
+    .img-copy-btn {
+      right: 36px;
     }
 
     &::before {

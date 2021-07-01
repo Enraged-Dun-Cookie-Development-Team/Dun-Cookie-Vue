@@ -17,14 +17,14 @@ const defaultDataSourcesList = [
   new BilibiliDataSource(
     '/assets/image/bili.ico',
     '官方B站动态',
-    'B站',
+    '哔哩哔哩',
     'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=161775300&offset_dynamic_id=0&need_top=0&platform=web',
     0
   ),
   new WeiboDataSource(
     '/assets/image/weibo.ico',
     '官方微博',
-    '官方微博',
+    '微博',
     'https://m.weibo.cn/api/container/getIndex?type=uid&value=6279793937&containerid=1076036279793937',
     1
   ),
@@ -50,7 +50,7 @@ const defaultDataSourcesList = [
     4
   ),
   new MonsterSirenDataSource(
-    '/assets/image/sr.ico',
+    '/assets/image/sr.png',
     '塞壬唱片官网',
     '塞壬唱片',
     'https://monster-siren.hypergryph.com/api/news',
@@ -66,14 +66,14 @@ const defaultDataSourcesList = [
   new ArknightsOfficialWebDataSource(
     '/assets/image/mrfz.ico',
     '官网',
-    '官网',
+    '官网网站',
     'https://ak.hypergryph.com/',
     7
   ),
   new TerraHistoricusDataSource(
     '/assets/image/tl.jpg',
     '泰拉记事社官网',
-    '泰拉记事社',
+    '泰拉记事社官网',
     ['https://terra-historicus.hypergryph.com/api/comic/7748', 'https://terra-historicus.hypergryph.com/api/comic/2865'],
     8
   ),
