@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-06-28 00:50:41
+ * @LastEditTime: 2021-07-02 01:18:32
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: \Dun-Cookie-Vue\src\components\Search.vue
+-->
 <template>
   <div class="search-area" :class="searchShow ? 'show' : ''">
     <input
@@ -51,7 +59,7 @@ export default {
   justify-content: center;
   align-items: center;
   transition: 0.5s top;
-  top: -150px;
+  top: -180px;
   .input-border {
     outline: none;
     width: 80%;

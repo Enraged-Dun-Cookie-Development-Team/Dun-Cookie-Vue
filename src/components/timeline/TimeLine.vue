@@ -765,7 +765,7 @@ img[lazy="error"] {
     }
     .is-top-info {
       position: absolute;
-      top: 0px;
+      top: 2px;
       left: 220px;
     }
     .el-timeline-item__tail {
