@@ -465,7 +465,7 @@ export default {
 `
         )}   
 
-${item.url}
+${item.jumpUrl}
 
 数据由 小刻食堂${CURRENT_VERSION} 收集
 工具链接：https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue`
