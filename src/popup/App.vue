@@ -5,7 +5,7 @@
       <el-drawer
         :visible.sync="drawer"
         :show-close="false"
-        direction="ttb"
+        :direction="settings.display.windowMode?'rtl':'ttb'"
         size="520px"
       >
         <el-divider content-position="left">饼的发源地</el-divider>
@@ -88,7 +88,7 @@
           >
         </el-row>
         <div style="position: absolute; bottom: 10px; right: 10px" class="sign">
-          Power By 蓝芷怡 & lwt
+          Power By 蓝芷怡 & lwt & YunShan
         </div>
       </el-drawer>
       <el-button
@@ -352,22 +352,23 @@ export default {
         height: 100px;
       }
     }
-    &::after {
-      content: " ";
-      position: fixed;
-      height: 100px;
-      right: 0;
-      width: 20px;
-      background: linear-gradient(90deg, transparent, @@bgColor 50%);
-    }
-    &::before {
-      content: " ";
-      position: fixed;
-      height: 100px;
-      left: 0;
-      width: 20px;
-      background: linear-gradient(90deg, @@bgColor 50%, transparent);
-    }
+    // 展示注释
+    // &::after {
+    //   content: " ";
+    //   position: fixed;
+    //   height: 100px;
+    //   right: 0;
+    //   width: 20px;
+    //   background: linear-gradient(90deg, transparent, @@bgColor 50%);
+    // }
+    // &::before {
+    //   content: " ";
+    //   position: fixed;
+    //   height: 100px;
+    //   left: 0;
+    //   width: 20px;
+    //   background: linear-gradient(90deg, @@bgColor 50%, transparent);
+    // }
   }
 
   // 标签栏
