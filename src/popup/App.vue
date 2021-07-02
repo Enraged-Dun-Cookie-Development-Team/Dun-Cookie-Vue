@@ -5,7 +5,7 @@
       <el-drawer
         :visible.sync="drawer"
         :show-close="false"
-        :direction="settings.display.windowMode?'rtl':'ttb'"
+        :direction="settings.display.windowMode? 'rtl' : 'ttb'"
         size="520px"
       >
         <el-divider content-position="left">饼的发源地</el-divider>
@@ -470,18 +470,12 @@ export default {
       border-color: #409eff;
     }
   }
-  // @media screen and (max-width: 699px) {
-  //   #app {
-  //     height: 1500px;
-  //   }
-  //   .el-timeline {
-  //     height: 1500px;
-  //   }
-  // }
 }
 
 .dark {
   .styleChange(dark);
+  background: #22272e;
+  height: 100vh;
 }
 
 .light {

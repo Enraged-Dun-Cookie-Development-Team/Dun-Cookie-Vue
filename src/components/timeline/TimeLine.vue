@@ -133,7 +133,6 @@
         </el-carousel-item>
       </el-carousel>
     </el-card>
-    <div class="content-timeline-shadow"></div>
     <el-tabs
           v-if="settings.display.showByTag"
           v-model="settings.display.defaultTag"
@@ -160,6 +159,7 @@
             </span>
         </el-tab-pane>
       </el-tabs>
+    <div class="content-timeline-shadow"></div>
     <el-timeline ref="el-timeline-area" v-if="LazyLoaded" :class="settings.display.windowMode ? 'window' : ''">
       <MyElTimelineItem
           v-for="(item, index) in filterCardList"
@@ -610,17 +610,24 @@ img[lazy="error"] {
     padding: 10px;
   }
 
+  .is-top {
+    z-index: 11;
+  }
+
   #content {
     margin-top: 40px;
     position: fixed;
     width: 100%;
-    // 间隔阴影
-    .content-timeline-shadow {
-      position: fixed;
-      width: 100%;
-      height: 20px;
-      background: linear-gradient(180deg, @@bgColor 50%, transparent);
-      z-index: 10;
+    #timeline-area {
+    position: relative;
+      // 间隔阴影
+      .content-timeline-shadow {
+        position: absolute;
+        width: 100%;
+        height: 25px;
+        background: linear-gradient(180deg, @@bgColor 50%, transparent);
+        z-index: 10;
+      }
     }
     // 更改卡片阴影
     // .is-always-shadow {
