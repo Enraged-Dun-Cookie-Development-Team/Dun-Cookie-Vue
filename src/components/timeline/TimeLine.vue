@@ -308,6 +308,8 @@ export default {
       }
       // 如果不在里面
       let week = new Date().getDay();
+      // 判断4点更新
+      week = date.getHours() >= 4 ? week : week-1; 
       this.dayInfo.forEach((item) => {
         item.notToday = !item.day.includes(week);
       });
@@ -369,11 +371,7 @@ export default {
     },
     // 计算资源关卡开启时间
     calcResourceOpenDay(days) {
-      if (days.notToday) {
-        return days.map(x => TimeUtil.numberToWeek(x)).join();
-      } else {
-        return '开放中';
-      }
+      return days.map(x => TimeUtil.numberToWeek(x)).join();
     },
     // 调整过滤文字
     changeFilterText(text) {
