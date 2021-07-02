@@ -345,8 +345,8 @@ class Settings {
     const promise = BrowserUtil.saveLocalStorage('settings', this);
     promise.then(() => {
       BrowserUtil.sendMessage(MESSAGE_SETTINGS_UPDATE, this);
-      console.log('update settings: ');
-      console.log(this);
+      // console.log('update settings: ');
+      // console.log(this);
     });
     return promise;
   }

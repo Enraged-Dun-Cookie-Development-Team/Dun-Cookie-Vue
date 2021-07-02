@@ -174,7 +174,7 @@
         </span>
         <el-card
             class="card"
-            :class="[`font-size-${settings.display.fontSize}`, {'special-source': item.component}]"
+            :class="[`font-size-${settings.display.fontSize}`, {'special-source': item.componentData}]"
             shadow="never"
         >
         <span>

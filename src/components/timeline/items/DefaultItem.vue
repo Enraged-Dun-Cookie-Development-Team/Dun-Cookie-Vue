@@ -82,13 +82,14 @@ export default {
       //    }, 1000);
       //   }
       // );
-      // 直接打开 我也不知道为什么要加上这个神奇的数字 但是还是有缝隙
+
+      // 直接打开 我也不知道为什么要加上这个神奇的数字 希望在非Chrome能兼容
       let ref = this.$refs[refName];
       if (Array.isArray(ref)) {
         ref = ref[0];
       }
-      let width = ref.naturalWidth + 32 || 1100;
-      let height = ref.naturalHeight + 67 || 750;
+      let width = ref.naturalWidth + 16 || 1100;
+      let height = ref.naturalHeight + 39 || 750;
       if (this.windowTabId != null) {
         chrome.windows.remove(this.windowTabId, () => {
           // 避免报错

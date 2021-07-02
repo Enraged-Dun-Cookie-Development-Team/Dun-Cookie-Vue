@@ -17,7 +17,6 @@ export default {
   name: "ViewImg",
   created() {
     chrome.runtime.onMessage.addListener((data) => {
-      console.log(data);
       if (data.info != 'tab') {
         return;
       }
