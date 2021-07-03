@@ -172,10 +172,6 @@ class Settings {
      * @see display.windowMode
      */
     window: true,
-    /**
-     * 是否启用理智计算(自动提醒)
-     */
-    san: true,
   }
 
   /**
@@ -183,9 +179,9 @@ class Settings {
    */
   san = {
     /**
-     * 是否在理智满的时候推送提示信息
+     * 是否启用理智计算(自动提醒)
      */
-    noticeWhenFull: true,
+    sanShow: true,
     /**
      * 理智上限
      */

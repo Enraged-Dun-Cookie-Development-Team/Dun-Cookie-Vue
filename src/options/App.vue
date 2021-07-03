@@ -213,11 +213,11 @@
                 <el-switch v-model="settings.display.windowMode"></el-switch>
               </el-form-item>
               <el-form-item label="理智提醒">
-                <el-switch v-model="settings.san.noticeWhenFull"></el-switch>
+                <el-switch v-model="settings.san.sanShow"></el-switch>
               </el-form-item>
               <el-tooltip
                 :open-delay="1000"
-                v-if="settings.feature.san"
+                v-if="settings.san.sanShow"
                 class="item"
                 effect="dark"
                 content="用于公告栏计算理智回复"

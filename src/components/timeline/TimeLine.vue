@@ -89,7 +89,7 @@
                   </div>
                 </div>
                 <div
-                    v-if="settings.feature.san && imgShow"
+                    v-if="settings.san.sanShow && imgShow"
                     class="sane-area"
                     @click.stop="openToolDrawer"
                 >
