@@ -198,7 +198,15 @@ export default {
         this.getCardList();
         // 图片卡 先加载dom后加载图片内容
         this.LazyLoaded = true;
+        this.listenerWindowSize();
       }, 1);
+    },
+    listenerWindowSize() {
+      window.onresize = (data) => {
+        if (window.innerWidth <= 699) {
+          alert("窗口太小,可能显示出现问题");
+        }
+      };
     },
     scrollHandler() {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
