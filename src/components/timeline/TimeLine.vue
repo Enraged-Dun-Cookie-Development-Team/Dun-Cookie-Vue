@@ -463,10 +463,10 @@ export default {
 `
         )}   
 
-${item.jumpUrl}
+蜜饼来源：${item.jumpUrl}
 
 数据由 小刻食堂${CURRENT_VERSION} 收集
-工具链接：https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue`
+工具介绍链接：https://arknightscommunity.drblack-system.com/2012.html`
       ).then(
         (e) => {
           this.$message({
