@@ -5,6 +5,7 @@
         :visible.sync="toolDrawer"
         :show-close="false"
         direction="ttb"
+        :modal-append-to-body="false"
         size="180px"
     >
       <el-divider content-position="left">理智计算提醒</el-divider>
@@ -89,7 +90,7 @@
                   </div>
                 </div>
                 <div
-                    v-if="settings.san.sanShow && imgShow"
+                    v-if="settings.feature.san && imgShow"
                     class="sane-area"
                     @click.stop="openToolDrawer"
                 >
