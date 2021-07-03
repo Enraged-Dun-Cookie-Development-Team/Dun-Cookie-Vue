@@ -213,7 +213,7 @@
                 <el-switch v-model="settings.display.windowMode"></el-switch>
               </el-form-item>
               <el-form-item label="理智提醒">
-                <el-switch v-model="settings.san.noticeWhenFull"></el-switch>
+                <el-switch v-model="settings.feature.san"></el-switch>
               </el-form-item>
               <el-tooltip
                 :open-delay="1000"
@@ -604,7 +604,7 @@ export default {
       /deep/.el-form-item__label,
       /deep/.el-radio,
       /deep/.el-checkbox,
-      /deep/.el-form-item__content span {
+      /deep/.el-form-item__content {
         color: @@setSmall;
       }
       .lowfrequency-time-picker {
@@ -645,7 +645,6 @@ export default {
 
 .dark {
   .styleChange(dark);
-  margin: -8px;
   background-color: #22272e;
   border: #22272e 8px solid;
 }

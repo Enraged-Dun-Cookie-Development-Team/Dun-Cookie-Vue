@@ -5,7 +5,7 @@
       <el-drawer
         :visible.sync="drawer"
         :show-close="false"
-        direction="ttb"
+        :direction="settings.display.windowMode? 'rtl' : 'ttb'"
         size="520px"
       >
         <el-divider content-position="left">饼的发源地</el-divider>
@@ -88,7 +88,7 @@
           >
         </el-row>
         <div style="position: absolute; bottom: 10px; right: 10px" class="sign">
-          Power By 蓝芷怡 & lwt
+          Power By 蓝芷怡 & lwt & 云闪
         </div>
       </el-drawer>
       <el-button
@@ -198,7 +198,15 @@ export default {
         this.getCardList();
         // 图片卡 先加载dom后加载图片内容
         this.LazyLoaded = true;
+        this.listenerWindowSize();
       }, 1);
+    },
+    listenerWindowSize() {
+      window.onresize = (data) => {
+        if (window.innerWidth <= 699) {
+          alert("窗口太小,可能显示出现问题");
+        }
+      };
     },
     scrollHandler() {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
@@ -352,22 +360,23 @@ export default {
         height: 100px;
       }
     }
-    &::after {
-      content: " ";
-      position: fixed;
-      height: 100px;
-      right: 0;
-      width: 20px;
-      background: linear-gradient(90deg, transparent, @@bgColor 50%);
-    }
-    &::before {
-      content: " ";
-      position: fixed;
-      height: 100px;
-      left: 0;
-      width: 20px;
-      background: linear-gradient(90deg, @@bgColor 50%, transparent);
-    }
+    // 展示注释
+    // &::after {
+    //   content: " ";
+    //   position: fixed;
+    //   height: 100px;
+    //   right: 0;
+    //   width: 20px;
+    //   background: linear-gradient(90deg, transparent, @@bgColor 50%);
+    // }
+    // &::before {
+    //   content: " ";
+    //   position: fixed;
+    //   height: 100px;
+    //   left: 0;
+    //   width: 20px;
+    //   background: linear-gradient(90deg, @@bgColor 50%, transparent);
+    // }
   }
 
   // 标签栏
@@ -469,18 +478,12 @@ export default {
       border-color: #409eff;
     }
   }
-  // @media screen and (max-width: 699px) {
-  //   #app {
-  //     height: 1500px;
-  //   }
-  //   .el-timeline {
-  //     height: 1500px;
-  //   }
-  // }
 }
 
 .dark {
   .styleChange(dark);
+  background: #22272e;
+  height: 100vh;
 }
 
 .light {

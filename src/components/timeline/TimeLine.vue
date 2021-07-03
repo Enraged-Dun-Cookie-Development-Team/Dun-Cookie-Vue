@@ -5,6 +5,7 @@
         :visible.sync="toolDrawer"
         :show-close="false"
         direction="ttb"
+        :modal-append-to-body="false"
         size="180px"
     >
       <el-divider content-position="left">理智计算提醒</el-divider>
@@ -41,8 +42,9 @@
     <el-card
         shadow="never"
         class="info-card online-speak"
+        :class="searchShow ? 'searching' : ''"
         v-loading="loading"
-        element-loading-text="正在获取在线信息"
+        element-loading-text="【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没有*龙门粗口*正常连接】"
     >
       <el-carousel
           arrow="never"
@@ -132,7 +134,6 @@
         </el-carousel-item>
       </el-carousel>
     </el-card>
-    <div class="content-timeline-shadow"></div>
     <el-tabs
           v-if="settings.display.showByTag"
           v-model="settings.display.defaultTag"
@@ -155,6 +156,7 @@
             </span>
         </el-tab-pane>
       </el-tabs>
+    <div class="content-timeline-shadow"></div>
     <el-timeline ref="el-timeline-area" v-if="LazyLoaded" :class="settings.display.windowMode ? 'window' : ''">
       <MyElTimelineItem
           v-for="(item, index) in filterCardList"
@@ -169,7 +171,7 @@
         </span>
         <el-card
             class="card"
-            :class="[`font-size-${settings.display.fontSize}`, {'special-source': item.component}]"
+            :class="[`font-size-${settings.display.fontSize}`, {'special-source': item.componentData}]"
             shadow="never"
         >
         <span>
@@ -303,6 +305,8 @@ export default {
       }
       // 如果不在里面
       let week = new Date().getDay();
+      // 判断4点更新
+      week = date.getHours() >= 4 ? week : week-1; 
       this.dayInfo.forEach((item) => {
         item.notToday = !item.day.includes(week);
       });
@@ -364,11 +368,7 @@ export default {
     },
     // 计算资源关卡开启时间
     calcResourceOpenDay(days) {
-      if (days.notToday) {
-        return days.map(x => TimeUtil.numberToWeek(x)).join();
-      } else {
-        return '开放中';
-      }
+      return days.map(x => TimeUtil.numberToWeek(x)).join();
     },
     // 调整过滤文字
     changeFilterText(text) {
@@ -440,11 +440,11 @@ export default {
             }
 
             if (target.nodeName.toLocaleLowerCase() === "drawer") {
-              this.drawer = !this.drawer;
+              this.$parent.drawer = !this.$parent.drawer;
             }
 
             if (target.nodeName.toLocaleLowerCase() === "setting") {
-              this.openSetting();
+              this.$parent.openSetting();
             }
           });
     },
@@ -460,10 +460,10 @@ export default {
 `
         )}   
 
-${item.url}
+蜜饼来源：${item.jumpUrl}
 
 数据由 小刻食堂${CURRENT_VERSION} 收集
-工具链接：https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue`
+工具介绍链接：https://arknightscommunity.drblack-system.com/2012.html`
       ).then(
         (e) => {
           this.$message({
@@ -605,17 +605,24 @@ img[lazy="error"] {
     padding: 10px;
   }
 
+  .is-top {
+    z-index: 11;
+  }
+
   #content {
     margin-top: 40px;
     position: fixed;
     width: 100%;
-    // 间隔阴影
-    .content-timeline-shadow {
-      position: fixed;
-      width: 100%;
-      height: 20px;
-      background: linear-gradient(180deg, @@bgColor 50%, transparent);
-      z-index: 10;
+    #timeline-area {
+    position: relative;
+      // 间隔阴影
+      .content-timeline-shadow {
+        position: absolute;
+        width: 100%;
+        height: 25px;
+        background: linear-gradient(180deg, @@bgColor 50%, transparent);
+        z-index: 10;
+      }
     }
     // 更改卡片阴影
     // .is-always-shadow {
@@ -760,8 +767,11 @@ img[lazy="error"] {
     }
     .is-top-info {
       position: absolute;
-      top: 0px;
+      top: 2px;
       left: 220px;
+    }
+    .el-timeline-item__tail {
+      border-left: 2px solid @@timeline;
     }
     .el-timeline-item__timestamp {
       color: @@subTitle;

@@ -179,7 +179,7 @@ const kazeFun = {
                 if (popupWindowId != null) {
                     BrowserUtil.removeWindow(popupWindowId);
                 }
-                BrowserUtil.createWindow({ url: BrowserUtil.getExtensionURL(PAGE_POPUP_WINDOW), type: "panel", width: 1100, height: 750 })
+                BrowserUtil.createWindow({ url: BrowserUtil.getExtensionURL(PAGE_POPUP_WINDOW), type: "panel", width: 800, height: 950 })
                   .then(tab => popupWindowId = tab.id);
             }
         });

@@ -175,7 +175,7 @@ class Settings {
     /**
      * 是否启用理智计算(自动提醒)
      */
-    san: true,
+     san: true,
   }
 
   /**
@@ -183,9 +183,9 @@ class Settings {
    */
   san = {
     /**
-     * 是否在理智满的时候推送提示信息
+     * 理智满时时候推送
      */
-    noticeWhenFull: true,
+     noticeWhenFull: true,
     /**
      * 理智上限
      */
@@ -345,8 +345,8 @@ class Settings {
     const promise = BrowserUtil.saveLocalStorage('settings', this);
     promise.then(() => {
       BrowserUtil.sendMessage(MESSAGE_SETTINGS_UPDATE, this);
-      console.log('update settings: ');
-      console.log(this);
+      // console.log('update settings: ');
+      // console.log(this);
     });
     return promise;
   }

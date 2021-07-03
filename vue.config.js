@@ -25,13 +25,13 @@ const config = {
             title: '列表',
             chunks: ['chunk-vendors', 'chunk-common', 'popup'],
         },
-        windowPopup: {
-            entry: 'src/windowPopup/index.js',
-            template: 'public/index.html',
-            filename: 'windowPopup.html',
-            title: '小刻食堂',
-            chunks: ['chunk-vendors', 'chunk-common', 'windowPopup'],
-        },
+        // windowPopup: {
+        //     entry: 'src/windowPopup/index.js',
+        //     template: 'public/index.html',
+        //     filename: 'windowPopup.html',
+        //     title: '小刻食堂',
+        //     chunks: ['chunk-vendors', 'chunk-common', 'windowPopup'],
+        // },
         welcome: {
             entry: 'src/welcome/index.js',
             template: 'public/index.html',
