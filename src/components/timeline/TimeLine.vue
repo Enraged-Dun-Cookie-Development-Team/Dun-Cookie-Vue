@@ -444,11 +444,11 @@ export default {
             }
 
             if (target.nodeName.toLocaleLowerCase() === "drawer") {
-              this.drawer = !this.drawer;
+              this.$parent.drawer = !this.$parent.drawer;
             }
 
             if (target.nodeName.toLocaleLowerCase() === "setting") {
-              this.openSetting();
+              this.$parent.openSetting();
             }
           });
     },
