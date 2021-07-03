@@ -43,7 +43,7 @@
         class="info-card online-speak"
         :class="searchShow ? 'searching' : ''"
         v-loading="loading"
-        element-loading-text="正在获取在线信息"
+        element-loading-text="【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没有*龙门粗口*正常连接】"
     >
       <el-carousel
           arrow="never"
