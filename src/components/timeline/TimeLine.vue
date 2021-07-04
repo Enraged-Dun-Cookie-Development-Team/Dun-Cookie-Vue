@@ -161,7 +161,11 @@
         </el-tab-pane>
       </el-tabs>
     <div class="content-timeline-shadow"></div>
-    <el-timeline ref="el-timeline-area" v-if="LazyLoaded" :class="settings.display.windowMode ? 'window' : ''">
+    <el-timeline 
+      ref="el-timeline-area" 
+      v-if="LazyLoaded" 
+      :class="[settings.display.windowMode ? 'window' : '', settings.display.showByTag ? 'tag' : '']"
+      >
       <MyElTimelineItem
           v-for="(item, index) in filterCardList"
           :key="index"
@@ -761,7 +765,7 @@ img[lazy="error"] {
       display: inline-block;
     }
     &.tag {
-      height: 365px;
+      height: 368px;
     }
     &.window {
       height: calc(100vh - 184px);

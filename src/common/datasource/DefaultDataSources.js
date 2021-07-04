@@ -32,7 +32,7 @@ const defaultDataSourcesList = [
     '/assets/image/txz.jpg',
     '游戏内公告',
     '通讯组',
-    'https://ak-fs.hypergryph.com/announce/IOS/announcement.meta.json',
+    'https://ak-conf.hypergryph.com/config/prod/announce_meta/Android/announcement.meta.json',
     2
   ),
   new WeiboDataSource(
