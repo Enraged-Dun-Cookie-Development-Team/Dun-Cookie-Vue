@@ -110,6 +110,7 @@ if (IS_DEBUG) {
   defaultDataSources['泰拉记事社微博'].dataUrl = 'test/tlJson.json?type=uid&value=6441489862&containerid=1076037499841383';
   defaultDataSources['官网'].dataUrl = 'test/gw.html';
   defaultDataSources['泰拉记事社官网'].dataUrl = ['test/xbJson.json', 'test/xgbJson.json'];
+  defaultDataSources['塞壬唱片网易云音乐'].dataUrl = 'test/wyyJson.json';
 }
 
 
