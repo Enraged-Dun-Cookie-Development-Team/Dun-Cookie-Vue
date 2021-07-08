@@ -74,7 +74,7 @@ const defaultDataSourcesList = [
     '/assets/image/tl.jpg',
     '泰拉记事社官网',
     '泰拉记事社官网',
-    ['https://terra-historicus.hypergryph.com/api/comic/7748', 'https://terra-historicus.hypergryph.com/api/comic/2865'],
+    ['https://terra-historicus.hypergryph.com/api/comic/7748', 'https://terra-historicus.hypergryph.com/api/comic/2865', 'https://terra-historicus.hypergryph.com/api/comic/9382'],
     8
   ),
   new NeteaseCloudMusicDataSource(
