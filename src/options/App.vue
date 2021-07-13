@@ -212,7 +212,7 @@
               <el-form-item label="窗口化" v-if="settings.feature.window">
                 <el-switch v-model="settings.display.windowMode"></el-switch>
               </el-form-item>
-              <el-form-item label="理智提醒">
+              <el-form-item v-if="false" label="理智提醒">
                 <el-switch v-model="settings.feature.san"></el-switch>
               </el-form-item>
               <el-tooltip
@@ -277,7 +277,7 @@
             <el-tab-pane label="反馈通道" name="2">
               <Feedback></Feedback>
             </el-tab-pane>
-            <el-tab-pane label="高级设置" name="4">
+            <el-tab-pane v-if="false" label="高级设置" name="4">
               <div>
                 <span>自定义数据源</span>
                 <el-table
