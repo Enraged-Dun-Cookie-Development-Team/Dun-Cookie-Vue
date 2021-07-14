@@ -290,9 +290,9 @@
 
 ## Edge安装方法
 
-    Edge用户相当建议使用应用商店下载，因为更新方便
+    Edge用户相当不建议使用应用商店下载，虽然更新方便，但是因为审核问题，版本会晚两周左右更新
 
-> - 推荐 [Edge应用商店](https://microsoftedge.microsoft.com/addons/detail/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknight/jimmfliacfpeabcifcghmdankmdnmfmn?hl=zh-CN)
+> - [Edge应用商店](https://microsoftedge.microsoft.com/addons/detail/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknight/jimmfliacfpeabcifcghmdankmdnmfmn?hl=zh-CN)
 > - 下载zip通过开发者模式加载已解压的扩展程序
 >   1. 先解压到任意文件夹
 >   2. 地址栏输入`edge://extensions/`，回车
