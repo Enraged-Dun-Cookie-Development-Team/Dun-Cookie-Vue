@@ -128,6 +128,10 @@ class SanInfo {
    */
   updateTime = new Date().getTime();
 
+  remainTimeIntervalId = 0;
+
+  remainTime = `-`;
+
   set currentSan(san) {
     this.__currentSan = san;
     this.updateTime = new Date().getTime();
@@ -137,7 +141,9 @@ class SanInfo {
     return this.__currentSan;
   }
 
+
   constructor() {
+
     this.reloadFromStorage().then(() => {
       BrowserUtil.sendMessage(MESSAGE_SAN_GET).then(data => deepAssign(this, data));
       // 仅在后台页面进行理智计算
@@ -152,18 +158,27 @@ class SanInfo {
         BrowserUtil.addMessageListener('sanInfo', MESSAGE_SAN_UPDATE, data => deepAssign(this, data));
       }
     });
+
+    this.startReloadTime();
+    this.calcRemainingTime();
   }
 
   calcRemainingTime() {
     if (this.currentSan >= Settings.san.maxValue) {
-      return '已经回满';
+      // 停止计时
+      if (this.remainTimeIntervalId != 0) {
+        clearInterval(this.remainTimeIntervalId);
+        this.remainTimeIntervalId = 0;
+      }
+      this.remainTime = '已经回满';
+      return;
     }
     const endTime = new Date(this.updateTime + (Settings.san.maxValue - this.currentSan) * SAN_RECOVERY_SPEED);
 
     // 由于理智回满最多13个小时多，所以只可能是今天或明天回满
     const tomorrow = endTime.getDay() !== new Date(this.updateTime).getDay() ? '明天' : '';
 
-    return `预计${tomorrow}${TimeUtil.format(endTime, 'hh:mm')}回满，剩${TimeUtil.calcDiff(endTime, this.updateTime)}`;
+    this.remainTime = `预计${tomorrow}${TimeUtil.format(endTime, 'hh:mm')}回满，剩${TimeUtil.calcDiff(endTime, this.updateTime)}`;
   }
 
   saveUpdate() {
@@ -181,6 +196,14 @@ class SanInfo {
     });
   }
 
+  // 通过计时器每分钟刷新当前剩余的时间
+  startReloadTime() {
+
+    this.remainTimeIntervalId = setInterval(() => {
+      this.calcRemainingTime();
+    }, SAN_RECOVERY_SPEED / 12);
+    console.log('启动计时器', this.remainTimeIntervalId);
+  }
 }
 
 const instance = new SanInfo();

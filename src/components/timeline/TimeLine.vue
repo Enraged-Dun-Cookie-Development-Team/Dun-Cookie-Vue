@@ -60,7 +60,7 @@
                     当前理智为<span class="online-blue sane-number">{{san.currentSan }}</span>点
                   </div>
                   <div class="sane-info">
-                    {{san.calcRemainingTime()}}
+                    {{san.remainTime}}
                   </div>
                 </div>
               </div>
