@@ -54,7 +54,7 @@ export class InGameAnnouncementDataSource extends DataSource {
   // 通讯组专用 检测到了可能会更新
   JudgmentNewFocusAnnounceId(data) {
     if (data) {
-      if (this.FocusAnnounceId && data.focusAnnounceId && this.FocusAnnounceId != data.focusAnnounceId) {
+      if (this.FocusAnnounceId && data.focusAnnounceId && this.FocusAnnounceId != data.focusAnnounceId && this.FocusAnnounceId < data.focusAnnounceId) {
         NotificationUtil.SendNotice(`【通讯组预告】小刻貌似闻到了饼的味道！`, '检测到游戏出现公告弹窗，可能马上发饼！', null, new Date().getTime())
       }
       this.FocusAnnounceId = data.focusAnnounceId;

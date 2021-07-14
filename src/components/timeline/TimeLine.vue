@@ -1,44 +1,6 @@
 <template>
   <div id="timeline-area">
     <Search ref="SearchModel" :searchShow="searchShow"></Search>
-    <el-drawer
-        :visible.sync="toolDrawer"
-        :show-close="false"
-        direction="ttb"
-        :modal-append-to-body="false"
-        size="180px"
-    >
-      <el-divider content-position="left">理智计算提醒</el-divider>
-      <el-form
-          size="mini"
-          class="sane-calculator"
-          label-position="right"
-          :inline="true"
-          label-width="150px"
-          style="text-align: center"
-      >
-        <el-form-item label="当前理智"
-        ><el-input-number
-            ref="saneEdit"
-            v-model="san.currentSan"
-            :min="0"
-            :max="settings.san.maxValue"
-            label="输入当前理智"
-        ></el-input-number
-        ></el-form-item>
-        <el-form-item label="理智满后是否推送">
-          <el-switch v-model="settings.san.noticeWhenFull"></el-switch>
-        </el-form-item>
-        <el-form-item>
-          <el-button @click="saveSan">开始计算</el-button>
-        </el-form-item>
-      </el-form>
-      <div
-          class="mention"
-          style="text-align: center; margin-top: 16px; opacity: 0.4"
-      >
-      </div>
-    </el-drawer>
     <el-card
         shadow="never"
         class="info-card online-speak"
@@ -157,7 +119,11 @@
         </el-tab-pane>
       </el-tabs>
     <div class="content-timeline-shadow"></div>
-    <el-timeline ref="el-timeline-area" v-if="LazyLoaded" :class="settings.display.windowMode ? 'window' : ''">
+    <el-timeline 
+      ref="el-timeline-area" 
+      v-if="LazyLoaded" 
+      :class="[settings.display.windowMode ? 'window' : '', settings.display.showByTag ? 'tag' : '']"
+      >
       <MyElTimelineItem
           v-for="(item, index) in filterCardList"
           :key="index"
@@ -222,7 +188,6 @@ export default {
       settings: Settings,
       san: SanInfo,
       searchShow: false,
-      toolDrawer: false, // 理智计算器菜单
       onlineDayInfo: {},
       onlineSpeakList: [],
       isNew: false,
@@ -276,19 +241,9 @@ export default {
     },
     // 打开计算小工具
     openToolDrawer() {
-      this.toolDrawer = true;
+      this.$parent.toolDrawer = true;
       this.$nextTick(() => {
-        this.$refs.saneEdit.focus();
-      });
-    },
-    // 设置数据
-    saveSan() {
-      this.san.saveUpdate();
-      this.toolDrawer = false;
-      this.$message({
-        center: true,
-        message: "保存成功，开始计算",
-        type: "success",
+        this.$parent.$refs.saneEdit.focus();
       });
     },
     // 今天有没有该资源可以刷
@@ -757,7 +712,7 @@ img[lazy="error"] {
       display: inline-block;
     }
     &.tag {
-      height: 365px;
+      height: 368px;
     }
     &.window {
       height: calc(100vh - 184px);

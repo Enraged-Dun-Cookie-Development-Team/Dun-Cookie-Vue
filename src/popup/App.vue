@@ -3,9 +3,45 @@
     <!-- <div id="app" :style="'height:' + allHeight + 'px'"> -->
     <div id="app">
       <el-drawer
+        :visible.sync="toolDrawer"
+        :show-close="false"
+        direction="ttb"
+        size="180px"
+      >
+        <el-divider content-position="left">理智计算提醒</el-divider>
+        <el-form
+          size="mini"
+          class="sane-calculator"
+          label-position="right"
+          :inline="true"
+          label-width="150px"
+          style="text-align: center"
+        >
+          <el-form-item label="当前理智"
+            ><el-input-number
+              ref="saneEdit"
+              v-model="san.currentSan"
+              :min="0"
+              :max="settings.san.maxValue"
+              label="输入当前理智"
+            ></el-input-number
+          ></el-form-item>
+          <el-form-item label="理智满后是否推送">
+            <el-switch v-model="settings.san.noticeWhenFull"></el-switch>
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="saveSan">开始计算</el-button>
+          </el-form-item>
+        </el-form>
+        <div
+          class="mention"
+          style="text-align: center; margin-top: 16px; opacity: 0.4"
+        ></div>
+      </el-drawer>
+      <el-drawer
         :visible.sync="drawer"
         :show-close="false"
-        :direction="settings.display.windowMode? 'rtl' : 'ttb'"
+        :direction="settings.display.windowMode ? 'rtl' : 'ttb'"
         size="520px"
       >
         <el-divider content-position="left">饼的发源地</el-divider>
@@ -115,11 +151,7 @@
         </span>
       </div>
       <div id="content">
-        <time-line
-          :imgShow="LazyLoaded"
-          :cardListByTag="cardList"
-        >
-        </time-line>
+        <time-line :imgShow="LazyLoaded" :cardListByTag="cardList"> </time-line>
       </div>
     </div>
   </div>
@@ -128,9 +160,10 @@
 <script>
 import countTo from "vue-count-to";
 import TimeLine from "../components/timeline/TimeLine";
-import Settings from '../common/Settings';
-import BrowserUtil from '../common/util/BrowserUtil';
-import DunInfo from '../common/sync/DunInfo';
+import Settings from "../common/Settings";
+import BrowserUtil from "../common/util/BrowserUtil";
+import SanInfo from '../common/sync/SanInfo';
+import DunInfo from "../common/sync/DunInfo";
 import {
   dayInfo,
   MESSAGE_CARD_LIST_GET,
@@ -142,8 +175,8 @@ import {
   PAGE_OPTIONS,
   PAGE_UPDATE,
   quickJump,
-  SHOW_VERSION
-} from '../common/Constants';
+  SHOW_VERSION,
+} from "../common/Constants";
 
 export default {
   name: "app",
@@ -165,6 +198,7 @@ export default {
   },
   data() {
     return {
+      san: SanInfo,
       show: false,
       LazyLoaded: false,
       isNew: false,
@@ -189,9 +223,13 @@ export default {
   methods: {
     openUrl: BrowserUtil.createTab,
     init() {
-      BrowserUtil.addMessageListener('popup', MESSAGE_DUN_INFO_UPDATE, data => {
-        this.oldDunCount = data.counter;
-      });
+      BrowserUtil.addMessageListener(
+        "popup",
+        MESSAGE_DUN_INFO_UPDATE,
+        (data) => {
+          this.oldDunCount = data.counter;
+        }
+      );
       setTimeout(() => {
         // 计算高度
         // this.calcHeight();
@@ -224,9 +262,23 @@ export default {
     },
     // 获取数据
     getCardList() {
-      BrowserUtil.addMessageListener('popup', MESSAGE_CARD_LIST_UPDATE, (data) => this.cardList = data);
+      BrowserUtil.addMessageListener(
+        "popup",
+        MESSAGE_CARD_LIST_UPDATE,
+        (data) => (this.cardList = data)
+      );
       BrowserUtil.sendMessage(MESSAGE_CARD_LIST_GET).then((data) => {
         this.cardList = data;
+      });
+    },
+    // 设置数据
+    saveSan() {
+      this.san.saveUpdate();
+      this.toolDrawer = false;
+      this.$message({
+        center: true,
+        message: "保存成功，开始计算",
+        type: "success",
       });
     },
 

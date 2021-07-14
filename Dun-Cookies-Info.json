@@ -11,14 +11,14 @@
             "overTime": "2099-12-31 04:00:00"
         },
         {
-            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak-fs.hypergryph.com/announce/images/20210625/3597b782a0053577dd2403cc8b9d3ce9.jpg'> <div> <div>新活动联锁竞赛「荷谟伊智境」将于<span class='online-blue'>7月2号</span>开启</div> <div>本次活动有些关卡会使用<span class='online-blue'>理智</span></div> <div>建议在活动开启前刷完本周的<span class='online-red'>剿灭任务</span></div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>处更新<span class='online-blue'>作业视频</span></div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
-            "starTime": "2021-06-27 16:39:42",
-            "overTime": "2021-07-09 03:59:59"
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20210708/9864c121e25fb46e0fee1ccd4c3b3652.jpg'> <div> <div>新活动故事集「如我所见」将于<span class='online-blue'>7月13号</span>开启</div> <div>新剿灭积水潮窟将于<span class='online-blue'>7月12号</span>开启，查看<a href=\"https://mapcn.ark-nights.com/map/camp_r_05\">出怪顺序</a></div> <div>建议在活动开启前刷完本周的<span class='online-red'>剿灭任务</span></div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>处更新<span class='online-blue'>作业视频</span></div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
+            "starTime": "2021-07-08 16:00:00",
+            "overTime": "2021-07-20 03:59:59"
         }
     ],
     "btnList": [
         {
-            "starTime": "2020-08-09 00:00:00",
+            "starTime": "2021-07-20 04:00:00",
             "overTime": "2021-12-31 23:59:59",
             "url": "https://www.bilibili.com/video/BV1cD4y1S7Yx",
             "name": "damedane",
@@ -26,35 +26,75 @@
             "radius": true
         },
         {
-            "starTime": "2021-7-02 11:00:00",
-            "overTime": "2021-7-09 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1vo4y1C7BP",
-            "name": "【好吃的橘子鸭】LK-DP/FIN-TS 全关卡平民攻略合集 低配+中配，多打法，语音详解，有手就过！",
-            "img": "https://i1.hdslb.com/bfs/archive/47704fc7b6118bdaf35d61017c15249628e43c17.jpg@200w_125h_1c.webp",
+            "starTime": "2021-7-13 11:00:00",
+            "overTime": "2021-7-20 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1Vv411n7Et",
+            "name": "【魔法zc目录】“如我所见”VI-1~7平民全关卡低配攻略（含突袭）",
+            "img": "https://i1.hdslb.com/bfs/archive/7b6ea2c1deb336ee7914a2873b8a23dce0303209.jpg@200w_125h_1c.webp",
             "radius": true
         },
         {
-            "starTime": "2021-7-02 11:00:00",
-            "overTime": "2021-7-09 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1xy4y1M7wQ",
-            "name": "【小狼XF】联锁竞赛攻略FIN-TS/LK-DP 全关卡+4级难度单6星",
-            "img": "https://i1.hdslb.com/bfs/archive/657b42f57270782b9e265f047d2b6998c61749d7.jpg@200w_125h_1c.webp",
+            "starTime": "2021-7-13 11:00:00",
+            "overTime": "2021-7-20 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1MX4y1A7zh",
+            "name": "【小狼XF】VI-全关卡+突袭 平民单6星攻略/ VI-5 VI-6 VI-7《明日方舟》如我所见",
+            "img": "https://i0.hdslb.com/bfs/archive/00f661181cc4e126e3297e2e466907a35c1c66ee.jpg@200w_125h_1c.webp",
             "radius": true
         },
         {
-            "starTime": "2021-7-02 11:00:00",
-            "overTime": "2021-7-09 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1zy4y1M7j6",
-            "name": "【自在道爷】联锁竞赛挂机流，TB,LK,FIN-TS",
-            "img": "https://i1.hdslb.com/bfs/archive/05f296f0bb21ee40e5e2bd58b9e804c4de03c78e.jpg@200w_125h_1c.webp",
+            "starTime": "2021-7-13 11:00:00",
+            "overTime": "2021-7-20 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1WU4y1n7vp",
+            "name": "【好吃的橘子鸭】VI系列平民攻略合集，最高单核，语音详解，有手就行，你必过！",
+            "img": "https://i2.hdslb.com/bfs/archive/5326421892640351dbdad58d79543ad5cb746f9a.jpg@200w_125h_1c.webp",
             "radius": true
         },
         {
-            "starTime": "2021-7-02 11:00:00",
-            "overTime": "2021-7-09 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1tq4y1s733",
-            "name": "【魔法zc目录】“荷谟伊智境”LK/FIN-平民全关卡低配攻略！阵容平民+低练度+语音详解的愉悦攻略！",
-            "img": "https://i2.hdslb.com/bfs/archive/9d1a1693ecd4cf7ed94f8e700743b5abe9c6e4e3.jpg@200w_125h_1c.webp",
+            "starTime": "2021-7-13 11:00:00",
+            "overTime": "2021-7-20 03:59:59",
+            "url": "https://www.bilibili.com/video/BV16y4y1T7Gc",
+            "name": "【高配四人】低潜能4人突袭VI-7 简单易抄",
+            "img": "https://i2.hdslb.com/bfs/archive/c45e49619e46975bdf4dbd7f9d27f993707ac59f.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-7-12 11:00:00",
+            "overTime": "2021-7-19 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1yK4y1M7eJ",
+            "name": "【4人积水潮窟】桃子带队，劳模傀影满场跑，mon3tr摸头慢慢磨（全程代理）",
+            "img": "https://i2.hdslb.com/bfs/archive/762e6754b841e73645ff54aceb943082101da843.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-7-12 11:00:00",
+            "overTime": "2021-7-19 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1th41167Bk",
+            "name": "【仅6人】全自动挂机，莽穿最简单剿灭积水潮窟",
+            "img": "https://i2.hdslb.com/bfs/archive/1b3fa924d5a503543c2a15e5dc10c2bdfd3b2a1e.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-7-17 11:00:00",
+            "overTime": "2021-7-24 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1864y14736",
+            "name": "【全网首杀】三星队 JT8-3突袭 —— 由平凡铸就的奇迹",
+            "img": "https://i1.hdslb.com/bfs/archive/70315b658c66ac8cbe0cc0973848b6a12d2db19f.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-7-12 11:00:00",
+            "overTime": "2021-7-19 03:59:59",
+            "url": "https://www.bilibili.com/video/BV16X4y1w7JN",
+            "name": "【自在道爷】积水潮窟挂机流，新剿灭摆完就过！精二31快乐讲解，轻松解放双手~",
+            "img": "https://i2.hdslb.com/bfs/archive/e980bb20d33950a6db8c09ade0ad779c59518de7.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-7-12 11:00:00",
+            "overTime": "2021-7-19 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1Uh411h7Lm",
+            "name": "【全网首发】积水潮窟无精2无56星简易低配攻略",
+            "img": "https://i0.hdslb.com/bfs/archive/74d3c7248e507e3a3b04003e5c74a69b42ffe832.jpg@200w_125h_1c.webp",
             "radius": true
         }
     ],
@@ -66,10 +106,10 @@
         "countdown": [
             {
                 "text": "当前轮换池结束",
-                "remark": "风笛[兑换],空弦,月禾,初雪[兑换],蜜蜡",
-                "time": "2021-7-08 03:59:59",
-                "starTime": "2021-6-24 04:00:00",
-                "overTime": "2021-7-08 03:59:59"
+                "remark": "塞雷娅[兑换],嵯峨,食铁兽,灰喉[兑换],四月",
+                "time": "2021-7-22 03:59:59",
+                "starTime": "2021-7-09 04:00:00",
+                "overTime": "2021-7-22 03:59:59"
             },
             {
                 "text": "当前活动池结束",
@@ -86,27 +126,20 @@
                 "overTime": "2021-7-16 03:59:59"
             },
             {
-                "text": "联锁竞赛「荷谟伊智境」，活动开启",
+                "text": "故事集「如我所见」，活动结束",
                 "remark": "",
-                "time": "2021-7-02 15:59:59",
-                "starTime": "2021-6-29 16:00:00",
-                "overTime": "2021-7-02 15:59:59"
-            },
-            {
-                "text": "联锁竞赛「荷谟伊智境」，活动结束",
-                "remark": "",
-                "time": "2021-7-9 03:59:59",
-                "starTime": "2021-7-02 16:00:00",
-                "overTime": "2021-7-9 03:59:59"
+                "time": "2021-7-20 03:59:59",
+                "starTime": "2021-7-13 16:00:00",
+                "overTime": "2021-7-20 03:59:59"
             }
         ]
     },
     "upgrade": {
-        "v": "2.1.1",
-        "title": "小刻食堂翻新啦 - 2.1.1",
-        "description": "🐛 紧急修复制作组通讯等延迟推送<br/>1. 消除缓存导致制作组通讯等的饼过期的情况",
-        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.1.1/Dun-Cookie-2.1.1.crx",
-        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.1.1/Dun-Cookie-2.1.1.zip",
+        "v": "2.4.0",
+        "title": "小刻食堂翻新啦 - 2.4.0",
+        "description": "🏘️ 本次更新属于大更新，重构了整份的代码，新增两个功能，修复部分BUG</br>1.修复理智提醒无法关闭的BUG</br>2.重构了整份代码</br>3.更新上泰拉记事社新内容--感染者记事</br>4.添加了列表搜索功能</br>5.添加了列表查看大图功能</br>6.调整样式与文案</br>(因为大改底层引发的Bug，暂时关闭理智计算)",
+        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.4.0/Dun-Cookie-2.4.0.crx",
+        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.4.0/Dun-Cookie-2.4.0.zip",
         "downSpare": "https://pan.baidu.com/s/1kzY6kpfYqLcGpuaiwQOGoA",
         "downSpareText": "备用下载（提取码 jzq9）",
         "downChrome": "https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN",

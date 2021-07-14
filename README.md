@@ -225,7 +225,6 @@
     2.调整部分文案
     3.添加程序内某些方法的快捷方式
     4.彻底断绝了缓存的问题(大概)
-</details>
 
 ## V2.0.155
 
@@ -236,6 +235,7 @@
     3.添加了倒计时，分钟级提醒时间节点
     4.调整抽屉样式，把快捷连接的图片加大了
     5.初步适用了手机浏览器的使用
+</details>
 
 ## V2.1.0
 
@@ -254,11 +254,17 @@
 
     1.消除缓存导致制作组通讯等的饼过期的情况
 
-## V2.1.? 【未发布】
+## V2.4.0
 
-    
+    🏘️ 本次更新属于大更新，重构了整份的代码，新增两个功能，修复部分BUG
 
     1.修复理智提醒无法关闭的BUG
+    2.重构了整份代码
+    3.更新上泰拉记事社新内容--感染者记事
+    4.添加了列表搜索功能
+    5.添加了列表查看大图功能
+    6.调整样式与文案
+    (因为大改底层引发的Bug，暂时关闭理智计算)
 
 
 <br/>
@@ -284,9 +290,9 @@
 
 ## Edge安装方法
 
-    Edge用户相当建议使用应用商店下载，因为更新方便
+    Edge用户相当不建议使用应用商店下载，虽然更新方便，但是因为审核问题，版本会晚两周左右更新
 
-> - 推荐 [Edge应用商店](https://microsoftedge.microsoft.com/addons/detail/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknight/jimmfliacfpeabcifcghmdankmdnmfmn?hl=zh-CN)
+> - [Edge应用商店](https://microsoftedge.microsoft.com/addons/detail/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknight/jimmfliacfpeabcifcghmdankmdnmfmn?hl=zh-CN)
 > - 下载zip通过开发者模式加载已解压的扩展程序
 >   1. 先解压到任意文件夹
 >   2. 地址栏输入`edge://extensions/`，回车
@@ -355,13 +361,18 @@
 > - 点击[这里加群](https://jq.qq.com/?_wv=1027&k=Vod1uO13)一起聊天 群号：362860473
 
 
+<br/>
+
+# 开发人员
+
+> - [蓝芷怡](https://github.com/LiuZiYang1)
+> - [@lwt-414](https://github.com/lwt-414)
+> - [云闪](https://github.com/Yun-Shan) 
 
 <br/>
 
 # 鸣谢
 
-> - [我自己](https://github.com/LiuZiYang1) —— 震惊！我竟然能3天内肝完V2版本主要功能
-> - [@lwt-414](https://github.com/lwt-414) —— 测试很细心，正则很牛逼，我写代码很放心。还能解决我的燃眉之急（指在2021年4月18号帮我通关WD-8，能让我没有后顾之忧）
 > - [@Houdou](https://github.com/Houdou) —— 帮我解决了疑难杂症
 > - [不画涩图の企鹅](https://pipie457.lofter.com/) —— 提供了该插件的logo
 > - 蹲饼测试组成员 

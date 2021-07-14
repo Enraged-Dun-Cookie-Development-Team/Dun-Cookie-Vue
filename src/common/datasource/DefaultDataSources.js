@@ -32,7 +32,7 @@ const defaultDataSourcesList = [
     '/assets/image/txz.jpg',
     '游戏内公告',
     '通讯组',
-    'https://ak-fs.hypergryph.com/announce/IOS/announcement.meta.json',
+    'https://ak-conf.hypergryph.com/config/prod/announce_meta/Android/announcement.meta.json',
     2
   ),
   new WeiboDataSource(
@@ -74,7 +74,7 @@ const defaultDataSourcesList = [
     '/assets/image/tl.jpg',
     '泰拉记事社官网',
     '泰拉记事社官网',
-    ['https://terra-historicus.hypergryph.com/api/comic/7748', 'https://terra-historicus.hypergryph.com/api/comic/2865'],
+    ['https://terra-historicus.hypergryph.com/api/comic/7748', 'https://terra-historicus.hypergryph.com/api/comic/2865', 'https://terra-historicus.hypergryph.com/api/comic/9382'],
     8
   ),
   new NeteaseCloudMusicDataSource(
@@ -110,6 +110,7 @@ if (IS_DEBUG) {
   defaultDataSources['泰拉记事社微博'].dataUrl = 'test/tlJson.json?type=uid&value=6441489862&containerid=1076037499841383';
   defaultDataSources['官网'].dataUrl = 'test/gw.html';
   defaultDataSources['泰拉记事社官网'].dataUrl = ['test/xbJson.json', 'test/xgbJson.json'];
+  defaultDataSources['塞壬唱片网易云音乐'].dataUrl = 'test/wyyJson.json';
 }
 
 
