@@ -108,6 +108,12 @@ class Settings {
      */
     lowFrequencyTime: [8, 20],
     /**
+     * 低频模式时间倍率
+     * <p>
+     * 该时间倍率乘原蹲饼频率为低频模式刷新时间
+     */
+     timeOfLowFrequency: 2,
+    /**
      * 是否显示转发的饼
      */
     showRetweet: true,

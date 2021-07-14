@@ -79,7 +79,7 @@ function startDunTimer() {
     let delay = IS_DEBUG ? TEST_DATA_REFRESH_TIME : Settings.dun.intervalTime;
     // 低频模式
     if (Settings.checkLowFrequency()) {
-        delay *= 2;
+        delay *= Settings.dun.timeOfLowFrequency;
     }
     // 数据源尚未准备好的时候0.5秒刷新一次
     if (Object.keys(cardListCache).length === 0 && Object.keys(Settings.currentDataSources).length === 0) {
