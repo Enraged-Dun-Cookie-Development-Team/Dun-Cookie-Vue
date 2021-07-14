@@ -8,7 +8,7 @@ import {
   MESSAGE_SETTINGS_UPDATE,
   SAN_RECOVERY_SPEED
 } from '../Constants';
-import {deepAssign} from '../util/CommonFunctions';
+import { deepAssign } from '../util/CommonFunctions';
 import NotificationUtil from '../util/NotificationUtil';
 
 // region 理智计算(自动提醒)
@@ -158,7 +158,7 @@ class SanInfo {
     if (this.currentSan >= Settings.san.maxValue) {
       return '已经回满';
     }
-    const endTime = new Date(new Date().getTime() + (Settings.san.maxValue - this.currentSan) * SAN_RECOVERY_SPEED);
+    const endTime = new Date(this.updateTime + (Settings.san.maxValue - this.currentSan) * SAN_RECOVERY_SPEED);
 
     // 由于理智回满最多13个小时多，所以只可能是今天或明天回满
     const tomorrow = endTime.getDay() !== new Date(this.updateTime).getDay() ? '明天' : '';
