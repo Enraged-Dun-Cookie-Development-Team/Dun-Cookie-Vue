@@ -161,7 +161,7 @@
 import countTo from "vue-count-to";
 import TimeLine from "../components/timeline/TimeLine";
 import Settings from "../common/Settings";
-import BrowserUtil from "../common/util/BrowserUtil";
+import BrowserUtil from "../common/platform/BrowserUtil";
 import SanInfo from '../common/sync/SanInfo';
 import DunInfo from "../common/sync/DunInfo";
 import {

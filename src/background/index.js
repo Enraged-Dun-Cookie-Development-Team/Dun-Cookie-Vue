@@ -1,5 +1,5 @@
 import Settings from '../common/Settings';
-import BrowserUtil from '../common/util/BrowserUtil';
+import BrowserUtil from '../common/platform/BrowserUtil';
 import NotificationUtil from '../common/util/NotificationUtil';
 import DunInfo from '../common/sync/DunInfo';
 import SanInfo from '../common/sync/SanInfo';

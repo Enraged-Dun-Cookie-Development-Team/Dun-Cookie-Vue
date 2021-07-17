@@ -22,7 +22,7 @@
 
 <script>
 // 用于NeteaseCloudMusicDataSource的特殊组件
-import BrowserUtil from '../../../common/util/BrowserUtil';
+import BrowserUtil from '../../../common/platform/BrowserUtil';
 
 export default {
   name: "NeteaseCloudMusicItem",

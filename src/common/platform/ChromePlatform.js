@@ -1,24 +1,16 @@
 import {BROWSER_CHROME, BROWSER_FIREFOX, BROWSER_MOBILE_PHONE, BROWSER_UNKNOWN, DEBUG_LOG} from '../Constants';
 
-// 判断当前url中是否包含background(已知的其它方法都不能保证在isBackground被使用之前完成判断)
+// 判断当前url中是否包含background(已知的其它方法都是Promise，都不能保证在isBackground被使用之前完成判断)
 const _isBackground = window.document.URL.indexOf('background') !== -1;
 console.log(`Current isBackground: ${_isBackground}`);
 
-/**
- * 浏览器工具。
- * <p>
- * TODO 根据浏览器类型调用chrome(Chrome)/browser(Firefox) (完成该功能后此TODO改为普通注释)
- * <br>
- * TODO 还有一些作为注释出现的对chrome对象的调用存在于其它文件中，由于暂时不清楚作用先不管，但是之后需要确认并重构掉
- */
-class BrowserUtil {
+export default class ChromePlatform extends AbstractPlatform {
 
-  /**
-   * 是否是后台进程
-   */
-  static get isBackground() { return _isBackground; };
+  get isBackground() { return _isBackground; };
 
-  static get browserType() {
+  get platformType() {
+    // TODO 只是简单的将原来的代码copy了过来，做多平台兼容的时候要记得修改这边
+    // 修改方式：这边直接return BROWSER_CHROME; 其它平台各自返回相应的值
     let head = navigator.userAgent;
     if (head.indexOf("Chrome") > 1) {
       return BROWSER_CHROME;
@@ -31,11 +23,7 @@ class BrowserUtil {
     }
   }
 
-  /**
-   * 获取storage.local中储存的内容
-   * @param {string|string[]|object} name
-   */
-  static getLocalStorage(name) {
+  getLocalStorage(name) {
     return new Promise((resolve, reject) => {
       chrome.storage.local.get(name, (result) => {
         const lastError = chrome.runtime.lastError;
@@ -52,12 +40,7 @@ class BrowserUtil {
     });
   }
 
-  /**
-   * 将数据储存到storage.local中
-   * @param {string} name
-   * @param data
-   */
-  static saveLocalStorage(name, data) {
+  saveLocalStorage(name, data) {
     const val = {};
     val[name] = data;
     return new Promise((resolve, reject) => {
@@ -72,8 +55,7 @@ class BrowserUtil {
     });
   }
 
-  // TODO 之前好像看到Firefox浏览器的sendMessage会发给同一个页面的onMessageListener，而Chrome则不会。但是找不到文档了，需要确认，如果属实则考察是否需要加一个随机ID字段保证不监听自己
-  static sendMessage(type, data) {
+  sendMessage(type, data) {
     if (DEBUG_LOG) {
       console.log(`sendMessage - ${type}`);
       console.log(data || 'no-data');
@@ -107,7 +89,7 @@ class BrowserUtil {
    * @param type 如果不提供type或者type为false则监听所有信息，否则只监听对应type的信息
    * @param listener 监听器，接收一个参数处理信息
    */
-  static addMessageListener(id, type, listener) {
+  addMessageListener(id, type, listener) {
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       let data;
       if (!type) {
@@ -133,23 +115,23 @@ class BrowserUtil {
     });
   }
 
-  static setPopup(detail) {
+  setPopup(detail) {
     return chrome.browserAction.setPopup(detail);
   }
 
-  static getExtensionURL(file) {
+  getExtensionURL(file) {
     return chrome.extension.getURL(file);
   }
 
-  static createNotifications(id, options) {
+  createNotifications(id, options) {
     return chrome.notifications.create(id, options);
   }
 
-  static addNotificationClickListener(listener) {
+  addNotificationClickListener(listener) {
     return chrome.notifications.onClicked.addListener(listener);
   }
 
-  static addInstallListener(listener) {
+  addInstallListener(listener) {
     return chrome.runtime.onInstalled.addListener(listener);
   }
 
@@ -158,33 +140,33 @@ class BrowserUtil {
    * <p>
    * <strong>注意：当设置了弹出菜单的时候不会触发监听器</strong>
    */
-  static addIconClickListener(listener) {
+  addIconClickListener(listener) {
     return chrome.browserAction.onClicked.addListener(listener);
   }
 
   /**
    * 在新标签页中打开拓展内置页面
    */
-  static createExtensionTab(url) {
+  createExtensionTab(url) {
     return chrome.tabs.create({url: BrowserUtil.getExtensionURL(url)});
   }
 
   /**
    * 在新标签页中打开指定url
    */
-  static createTab(url) {
+  createTab(url) {
     return chrome.tabs.create({url: url});
   }
 
-  static createWindow(createData) {
+  createWindow(createData) {
     return new Promise(resolve => chrome.windows.create(createData, data => resolve(data)));
   }
 
-  static removeWindow(windowId) {
+  removeWindow(windowId) {
     return chrome.windows.remove(windowId);
   }
 
-  static downloadFile(options, callback) {
+  downloadFile(options, callback) {
     let promise = new Promise(resolve => chrome.downloads.download(options, data => resolve(data)));
     if (typeof callback == 'function') {
       promise = promise.then(callback);
@@ -192,5 +174,3 @@ class BrowserUtil {
     return promise;
   }
 }
-
-export default BrowserUtil;

@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import BrowserUtil from '../common/util/BrowserUtil';
+import BrowserUtil from '../common/platform/BrowserUtil';
 import Feedback from '../components/Feedback';
 import {CURRENT_VERSION, PAGE_GITHUB_REPO, PAGE_OPTIONS} from '../common/Constants';
 import Settings from '../common/Settings';

@@ -1,4 +1,4 @@
-import BrowserUtil from '../util/BrowserUtil';
+import BrowserUtil from '../platform/BrowserUtil';
 import TimeUtil from '../util/TimeUtil';
 import Settings from '../Settings';
 import {

@@ -1,4 +1,4 @@
-import BrowserUtil from './util/BrowserUtil';
+import BrowserUtil from './platform/BrowserUtil';
 import {
   BROWSER_CHROME,
   BROWSER_FIREFOX,

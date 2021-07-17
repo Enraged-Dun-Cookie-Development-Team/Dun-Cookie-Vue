@@ -361,7 +361,7 @@
 import countTo from "vue-count-to";
 
 import Settings from '../common/Settings';
-import BrowserUtil from '../common/util/BrowserUtil';
+import BrowserUtil from '../common/platform/BrowserUtil';
 import DunInfo from '../common/sync/DunInfo';
 import Feedback from '../components/Feedback';
 import {MESSAGE_DUN_INFO_UPDATE, SHOW_VERSION} from '../common/Constants';

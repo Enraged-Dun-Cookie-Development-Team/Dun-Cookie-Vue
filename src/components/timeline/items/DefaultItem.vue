@@ -41,7 +41,7 @@
 
 <script>
 import Settings from '../../../common/Settings';
-import BrowserUtil from '../../../common/util/BrowserUtil';
+import BrowserUtil from '../../../common/platform/BrowserUtil';
 
 export default {
   name: "DefaultItem",

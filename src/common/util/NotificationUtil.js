@@ -1,4 +1,4 @@
-import BrowserUtil from './BrowserUtil';
+import BrowserUtil from '../platform/BrowserUtil';
 
 class NotificationUtil {
   // 发送推送核心方法

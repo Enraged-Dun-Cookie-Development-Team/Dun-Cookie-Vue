@@ -1,4 +1,4 @@
-import BrowserUtil from '../util/BrowserUtil';
+import BrowserUtil from '../platform/BrowserUtil';
 import {MESSAGE_DUN_INFO_GET, MESSAGE_DUN_INFO_UPDATE} from '../Constants';
 import {deepAssign} from '../util/CommonFunctions';
 

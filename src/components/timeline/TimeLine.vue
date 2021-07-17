@@ -167,7 +167,7 @@
 </template>
 
 <script>
-import BrowserUtil from '../../common/util/BrowserUtil';
+import BrowserUtil from '../../common/platform/BrowserUtil';
 import {CURRENT_VERSION, dayInfo, PAGE_UPDATE, quickJump} from '../../common/Constants';
 import MyElTimelineItem from './MyTimeLineItem';
 import DefaultItem from './items/DefaultItem';

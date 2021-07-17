@@ -2,7 +2,7 @@
 /**
  * 是否是测试模式
  */
-const IS_DEBUG = false;
+const IS_DEBUG = true;
 /**
  * 是否输出调试日志
  * <p>
@@ -56,6 +56,7 @@ export {MESSAGE_FORCE_REFRESH};
 // endregion
 
 // region 浏览器类型
+// TODO 这个类型常量最好能想办法放进PlatformHelper里面去(放的时候要注意避免出现循环依赖)
 const BROWSER_CHROME = 'Chrome';
 const BROWSER_FIREFOX = 'Firefox';
 const BROWSER_MOBILE_PHONE = 'MobilePhone';
