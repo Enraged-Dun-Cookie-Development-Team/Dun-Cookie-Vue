@@ -261,7 +261,8 @@ export default {
       // 如果不在里面
       let week = new Date().getDay();
       // 判断4点更新
-      week = date.getHours() >= 4 ? week : week-1; 
+      week = date.getHours() >= 4 ? week : week-1;
+      week = week == -1 ? 6 : week;  
       this.dayInfo.forEach((item) => {
         item.notToday = !item.day.includes(week);
       });
