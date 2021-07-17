@@ -87,8 +87,26 @@
                     :max="3600"
                   ></el-input-number>
                   <span style="margin-left: 20px" v-if="settings.dun.autoLowFrequency">
-                    低频模式下为{{ settings.dun.intervalTime * 2 }}秒刷新一次
+                    低频模式下为{{ settings.dun.intervalTime * settings.dun.timeOfLowFrequency }}秒刷新一次
                   </span>
+                </el-form-item>
+              </el-tooltip>
+              <el-tooltip
+                v-if="settings.dun.autoLowFrequency"
+                :open-delay="1000"
+                class="item"
+                effect="dark"
+                content="这个低频模式倍数乘原蹲饼时间为低频模式每次刷新时间间隔"
+                placement="bottom"
+              >
+                <el-form-item label="蹲饼频率(秒)">
+                  <el-input-number
+                    controls-position="right"
+                    size="small"
+                    v-model="settings.dun.timeOfLowFrequency"
+                    :min="2"
+                    :max="20"
+                  ></el-input-number>
                 </el-form-item>
               </el-tooltip>
               <el-tooltip
