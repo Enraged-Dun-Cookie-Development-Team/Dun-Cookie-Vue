@@ -15,6 +15,7 @@ import {
     TEST_DATA_REFRESH_TIME
 } from '../common/Constants';
 import DataSourceUtil from '../common/util/DataSourceUtil';
+import PlatformHelper from '../common/platform/PlatformHelper';
 
 // 重构完成后的其它优化：
 // TODO 多个提取出来的类要考虑能否合并(指互相通信的那部分)
@@ -177,9 +178,10 @@ const kazeFun = {
         BrowserUtil.addIconClickListener(() => {
             if (Settings.display.windowMode) {
                 if (popupWindowId != null) {
-                    BrowserUtil.removeWindow(popupWindowId);
+                    PlatformHelper.Windows.remove(popupWindowId);
                 }
-                BrowserUtil.createWindow({ url: BrowserUtil.getExtensionURL(PAGE_POPUP_WINDOW), type: "panel", width: 800, height: 950 })
+                PlatformHelper.Windows
+                  .createPanelWindow(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW), 800, 950)
                   .then(tab => popupWindowId = tab.id);
             }
         });

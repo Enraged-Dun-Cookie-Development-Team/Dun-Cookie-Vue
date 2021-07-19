@@ -1,4 +1,5 @@
 import {BROWSER_CHROME, BROWSER_FIREFOX, BROWSER_MOBILE_PHONE, BROWSER_UNKNOWN, DEBUG_LOG} from '../Constants';
+import BrowserUtil from './BrowserUtil';
 
 // 判断当前url中是否包含background(已知的其它方法都是Promise，都不能保证在isBackground被使用之前完成判断)
 const _isBackground = window.document.URL.indexOf('background') !== -1;
@@ -6,7 +7,9 @@ console.log(`Current isBackground: ${_isBackground}`);
 
 export default class ChromePlatform extends AbstractPlatform {
 
-  get isBackground() { return _isBackground; };
+  get isBackground() {
+    return _isBackground;
+  };
 
   get platformType() {
     // TODO 只是简单的将原来的代码copy了过来，做多平台兼容的时候要记得修改这边
@@ -123,16 +126,23 @@ export default class ChromePlatform extends AbstractPlatform {
     return chrome.extension.getURL(file);
   }
 
-  createNotifications(id, options) {
+  createNotifications(id, iconUrl, title, message, imageUrl) {
+    var options = {
+      type: 'basic',
+      iconUrl: iconUrl,
+      message: message,
+      title: title,
+    };
+    // TODO 参考 https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/notifications/TemplateType，完成Firefox的兼容的时候不需要这一块，直接忽略掉imageUrl这个参数
+    if (imageUrl) {
+      options.type = 'image';
+      options.imageUrl = imageUrl;
+    }
     return chrome.notifications.create(id, options);
   }
 
   addNotificationClickListener(listener) {
     return chrome.notifications.onClicked.addListener(listener);
-  }
-
-  addInstallListener(listener) {
-    return chrome.runtime.onInstalled.addListener(listener);
   }
 
   /**
@@ -158,7 +168,13 @@ export default class ChromePlatform extends AbstractPlatform {
     return chrome.tabs.create({url: url});
   }
 
-  createWindow(createData) {
+  createWindow(url, type, width, height) {
+    var createData = {
+      url: url,
+      type: type,
+      width: width,
+      height: height
+    };
     return new Promise(resolve => chrome.windows.create(createData, data => resolve(data)));
   }
 
@@ -166,11 +182,20 @@ export default class ChromePlatform extends AbstractPlatform {
     return chrome.windows.remove(windowId);
   }
 
-  downloadFile(options, callback) {
-    let promise = new Promise(resolve => chrome.downloads.download(options, data => resolve(data)));
-    if (typeof callback == 'function') {
-      promise = promise.then(callback);
+  download(url, filename, saveAs) {
+    var options = {
+      url: url
+    };
+    if (filename && typeof filename === 'string') {
+      options.filename = filename;
     }
-    return promise;
+    if (saveAs && typeof saveAs === 'boolean') {
+      options.saveAs = saveAs;
+    }
+    return new Promise(resolve => chrome.downloads.download(options, data => resolve(data)));
+  }
+
+  addInstallListener(listener) {
+    return chrome.runtime.onInstalled.addListener(listener);
   }
 }

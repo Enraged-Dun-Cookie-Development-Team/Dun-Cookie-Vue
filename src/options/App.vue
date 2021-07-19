@@ -369,6 +369,7 @@ import {defaultDataSourcesList} from '../common/datasource/DefaultDataSources';
 import TimeUtil from '../common/util/TimeUtil';
 import {customDataSourceTypesByName, customDataSourceTypes} from '../common/datasource/CustomDataSources';
 import {deepAssign} from '../common/util/CommonFunctions';
+import PlatformHelper from '../common/platform/PlatformHelper';
 
 export default {
   name: "app",
@@ -460,10 +461,10 @@ export default {
       const blob = new Blob([JSON.stringify(this.settings)], {
         type: "application/json",
       });
-      let src = URL.createObjectURL(blob);
-      BrowserUtil.downloadFile({ url: src, saveAs: true }, (data) => {
-        console.log(data);
-      });
+      PlatformHelper.Downloads.downloadURL(URL.createObjectURL(blob), undefined, true)
+          .then(data => {
+            console.log(data);
+          });
     },
     // 导入设置
     settingImport(file) {
