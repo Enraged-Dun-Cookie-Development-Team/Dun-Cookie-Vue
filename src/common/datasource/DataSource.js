@@ -71,12 +71,21 @@ class DataSource {
       });
     }
     return promise.then(value => {
+      if (!value) {
+        console.error(`${this.dataName}获取数据失败`);
+        return null;
+      }
       let opt = {
         dataName: this.dataName, // 数据源名称
         responseText: value,
       };
-      const data = this.processData(opt);
-      return DataSourceUtil.sortData(data);
+      try {
+        const data = this.processData(opt);
+        return DataSourceUtil.sortData(data);
+      } catch (e) {
+        console.error(`${this.dataName}解析数据失败：${e.message}`);
+        return null;
+      }
     });
   }
 

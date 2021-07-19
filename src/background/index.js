@@ -58,7 +58,7 @@ function tryDun(settings) {
             }));
         }
     }
-    Promise.all(promiseList).then(() => {
+    Promise.allSettled(promiseList).then(() => {
         if (hasUpdated) {
             PlatformHelper.Message.send(MESSAGE_CARD_LIST_UPDATE, cardListCache);
         }

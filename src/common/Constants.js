@@ -2,7 +2,7 @@
 /**
  * 是否是测试模式
  */
-const IS_DEBUG = true;
+const IS_DEBUG = false;
 /**
  * 是否输出调试日志
  * <p>

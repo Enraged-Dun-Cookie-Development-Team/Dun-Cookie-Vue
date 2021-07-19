@@ -1,6 +1,8 @@
 import {PLATFORM_CHROME, DEBUG_LOG} from '../../Constants';
 import AbstractPlatform from '../AbstractPlatform';
 
+const IGNORE_MESSAGE_RECEIVER_NOT_EXISTS = 'Could not establish connection. Receiving end does not exist.';
+
 let _isBackground;
 let _isMobile;
 
@@ -72,7 +74,14 @@ export default class ChromePlatform extends AbstractPlatform {
     return new Promise((resolve, reject) => {
       chrome.runtime.sendMessage(message, (response) => {
         if (chrome.runtime.lastError) {
-          reject(chrome.runtime.lastError);
+          if (chrome.runtime.lastError === IGNORE_MESSAGE_RECEIVER_NOT_EXISTS) {
+            if (DEBUG_LOG) {
+              console.log(`response - ${type} - receiver not exists`);
+            }
+            resolve();
+          } else {
+            reject(chrome.runtime.lastError);
+          }
           return;
         }
         if (response === AbstractPlatform.__MESSAGE_WITHOUT_RESPONSE) {
@@ -239,5 +248,25 @@ export default class ChromePlatform extends AbstractPlatform {
 
   addInstallListener(listener) {
     return chrome.runtime.onInstalled.addListener(listener);
+  }
+
+  sendHttpRequest(url, method) {
+    return new Promise((resolve, reject) => {
+      let xhr = new XMLHttpRequest();
+      xhr.open(method, url, true);
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            resolve(xhr.responseText);
+          } else {
+            reject(xhr.responseText);
+          }
+        }
+      }
+      xhr.onerror = () => {
+        reject('request error');
+      }
+      xhr.send();
+    });
   }
 }

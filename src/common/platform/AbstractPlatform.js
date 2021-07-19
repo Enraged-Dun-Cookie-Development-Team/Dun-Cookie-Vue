@@ -5,6 +5,8 @@ const unsupportedTip = "该平台未实现该接口！请联系[小刻食堂]开
 // TODO 实现子类时，如果是callback的方法(Chrome v2)，务必检查runtime.lastError。如果是Promise的方法(Chrome v3、Firefox)，务必catch。
 //  所有接口的返回值务必使用Promise(catch放在哪里的问题可以再考虑)
 //  当所有接口检查过确认进行了上述的错误处理后，才能删掉这条TODO
+
+// TODO 提取Chrome和Firefox中的公共代码
 /**
  * 抽象平台.
  * <p>
@@ -65,7 +67,6 @@ export default class AbstractPlatform {
    * @param id 监听器ID，暂时的用途只有调试输出
    * @param type 如果不提供type或者type为false则监听所有信息，否则只监听对应type的信息
    * @param listener 监听器，接收一个参数处理信息，可以使用返回值返回消息
-   * @return {Promise}
    */
   addMessageListener(id, type, listener) { throw unsupportedTip; };
 
@@ -147,5 +148,13 @@ export default class AbstractPlatform {
    * @param listener 监听器，接收一个参数(details{id,previousVersion,reason})
    */
   addInstallListener(listener) { throw unsupportedTip; };
+
+  /**
+   * 发送HTTP请求
+   * @param url 目标url
+   * @param method 请求方法(GET/POST等)
+   * @return {Promise} reslove接收一个参数(http响应内容)
+   */
+  sendHttpRequest(url, method) { throw unsupportedTip; };
 }
 
