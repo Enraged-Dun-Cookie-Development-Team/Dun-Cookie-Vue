@@ -80,19 +80,26 @@ export default class FirefoxPlatform extends AbstractPlatform {
         } else {
           value = listener(message.data);
         }
-      }
 
-      if (value !== null && value !== undefined) {
-        // 根据W3C规范，异步回复消息应该直接返回Promise
-        // 参考文档：https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onMessage
-        if (value.constructor === Promise) {
-          return value;
+        if (value !== null && value !== undefined) {
+          if (DEBUG_LOG) {
+            console.log(`${id} - ${type}|${message.type} - receiverMessage - response`);
+            console.log(value);
+          }
+          // 根据W3C规范，异步回复消息应该直接返回Promise
+          // 参考文档：https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onMessage
+          if (value.constructor === Promise) {
+            return value;
+          } else {
+            sendResponse(value);
+          }
         } else {
-          sendResponse(value);
+          if (DEBUG_LOG) {
+            console.log(`${id} - ${type}|${message.type} - receiverMessage - responseEmpty`);
+          }
+          // 必须要返回点什么东西来避免报错
+          sendResponse(AbstractPlatform.__MESSAGE_WITHOUT_RESPONSE);
         }
-      } else {
-        // 必须要返回点什么东西来避免报错
-        sendResponse(AbstractPlatform.__MESSAGE_WITHOUT_RESPONSE);
       }
     });
   }

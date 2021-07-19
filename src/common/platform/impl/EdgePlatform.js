@@ -65,18 +65,25 @@ export default class EdgePlatform extends AbstractPlatform {
         } else {
           value = listener(message.data);
         }
-      }
 
-      if (value !== null && value !== undefined) {
-        // Chromium内核中必须用return true的方式进行异步返回，不支持直接返回Promise
-        // 参考兼容性表格：https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onMessage
-        sendResponse(value);
-        if (value.constructor === Promise) {
-          return true;
+        if (value !== null && value !== undefined) {
+          if (DEBUG_LOG) {
+            console.log(`${id} - ${type}|${message.type} - receiverMessage - response`);
+            console.log(value);
+          }
+          // Chromium内核中必须用return true的方式进行异步返回，不支持直接返回Promise
+          // 参考兼容性表格：https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onMessage
+          sendResponse(value);
+          if (value.constructor === Promise) {
+            return true;
+          }
+        } else {
+          if (DEBUG_LOG) {
+            console.log(`${id} - ${type}|${message.type} - receiverMessage - responseEmpty`);
+          }
+          // 必须要返回点什么东西来避免报错
+          sendResponse(AbstractPlatform.__MESSAGE_WITHOUT_RESPONSE);
         }
-      } else {
-        // 必须要返回点什么东西来避免报错
-        sendResponse(AbstractPlatform.__MESSAGE_WITHOUT_RESPONSE);
       }
     });
   }
