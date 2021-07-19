@@ -161,7 +161,6 @@
 import countTo from "vue-count-to";
 import TimeLine from "../components/timeline/TimeLine";
 import Settings from "../common/Settings";
-import BrowserUtil from "../common/platform/BrowserUtil";
 import SanInfo from '../common/sync/SanInfo';
 import DunInfo from "../common/sync/DunInfo";
 import {
@@ -224,7 +223,7 @@ export default {
   methods: {
     openUrl: PlatformHelper.Tabs.create,
     init() {
-      BrowserUtil.addMessageListener(
+      PlatformHelper.Message.registerListener(
         "popup",
         MESSAGE_DUN_INFO_UPDATE,
         (data) => {
@@ -263,12 +262,12 @@ export default {
     },
     // 获取数据
     getCardList() {
-      BrowserUtil.addMessageListener(
+      PlatformHelper.Message.registerListener(
         "popup",
         MESSAGE_CARD_LIST_UPDATE,
         (data) => (this.cardList = data)
       );
-      BrowserUtil.sendMessage(MESSAGE_CARD_LIST_GET).then((data) => {
+      PlatformHelper.Message.send(MESSAGE_CARD_LIST_GET).then((data) => {
         this.cardList = data;
       });
     },
@@ -292,7 +291,7 @@ export default {
     // 强刷
     reload() {
       this.isReload = true;
-      BrowserUtil.sendMessage(MESSAGE_FORCE_REFRESH);
+      PlatformHelper.Message.send(MESSAGE_FORCE_REFRESH);
       this.$message({
         offset: 50,
         center: true,

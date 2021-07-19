@@ -1,4 +1,3 @@
-import BrowserUtil from './platform/BrowserUtil';
 import {CURRENT_SETTING_VERSION, MESSAGE_SETTINGS_UPDATE, PAGE_POPUP_WINDOW, PLATFORM_UNKNOWN} from './Constants';
 import {deepAssign} from './util/CommonFunctions';
 import {defaultDataSources, defaultDataSourcesNames} from './datasource/DefaultDataSources';
@@ -48,7 +47,7 @@ function transformDataSource(settings) {
       }
     }
     settings.currentDataSources = list;
-    if (BrowserUtil.isBackground) {
+    if (PlatformHelper.isBackground) {
       settings.saveSettings();
       console.log('new datasource list: ');
       console.log(settings.currentDataSources);
@@ -266,7 +265,7 @@ class Settings {
   }
 
   constructor() {
-    BrowserUtil.addMessageListener('settings', MESSAGE_SETTINGS_UPDATE, data => {
+    PlatformHelper.Message.registerListener('settings', MESSAGE_SETTINGS_UPDATE, data => {
       deepAssign(this, data);
       this.__updateWindowMode();
       transformDataSource(this).finally(() => {
@@ -290,7 +289,7 @@ class Settings {
         }
 
         // 必须在后台执行的只执行一次的内容
-        if (BrowserUtil.isBackground) {
+        if (PlatformHelper.isBackground) {
           // 如果一个启用的都没有说明是新安装或者旧数据被清除，此时将默认数据源全部启用
           if (this.enableDataSources.length === 0) {
             this.enableDataSources = defaultDataSourcesNames;
@@ -328,9 +327,9 @@ class Settings {
    * @return {Promise}
    */
   saveSettings() {
-    const promise = BrowserUtil.saveLocalStorage('settings', this);
+    const promise = PlatformHelper.Storage.saveLocalStorage('settings', this);
     promise.then(() => {
-      BrowserUtil.sendMessage(MESSAGE_SETTINGS_UPDATE, this);
+      PlatformHelper.Message.send(MESSAGE_SETTINGS_UPDATE, this);
       // console.log('update settings: ');
       // console.log(this);
     });
@@ -346,9 +345,9 @@ class Settings {
    * @return {Promise<Settings>}
    */
   reloadSettings() {
-    return BrowserUtil.getLocalStorage('settings')
+    return PlatformHelper.Storage.getLocalStorage('settings')
       .then(value => {
-        if (BrowserUtil.isBackground) {
+        if (PlatformHelper.isBackground) {
           console.log("从储存中读取配置：");
           console.log(this);
           console.log('============');

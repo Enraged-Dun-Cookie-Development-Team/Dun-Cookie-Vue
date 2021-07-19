@@ -361,7 +361,6 @@
 import countTo from "vue-count-to";
 
 import Settings from '../common/Settings';
-import BrowserUtil from '../common/platform/BrowserUtil';
 import DunInfo from '../common/sync/DunInfo';
 import Feedback from '../components/Feedback';
 import {MESSAGE_DUN_INFO_UPDATE, SHOW_VERSION} from '../common/Constants';
@@ -415,7 +414,7 @@ export default {
         }).filter(item => !!item);
         global.customData = this.customData;
       });
-      BrowserUtil.addMessageListener('options', MESSAGE_DUN_INFO_UPDATE, data => {
+      PlatformHelper.Message.registerListener('options', MESSAGE_DUN_INFO_UPDATE, data => {
         this.oldDunCount = data.counter;
       });
     },

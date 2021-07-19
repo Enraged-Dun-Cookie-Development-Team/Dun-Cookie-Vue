@@ -13,13 +13,12 @@
 </template>
 
 <script>
+import PlatformHelper from '../common/platform/PlatformHelper';
+
 export default {
   name: "ViewImg",
   created() {
-    chrome.runtime.onMessage.addListener((data) => {
-      if (data.info != 'tab') {
-        return;
-      }
+    PlatformHelper.Message.registerListener('view-img', 'view-img', data => {
       this.item = data.item;
       this.img = data.img;
       this.winId = data.winId;

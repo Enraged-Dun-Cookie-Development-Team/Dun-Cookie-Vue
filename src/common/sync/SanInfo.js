@@ -1,4 +1,3 @@
-import BrowserUtil from '../platform/BrowserUtil';
 import TimeUtil from '../util/TimeUtil';
 import Settings from '../Settings';
 import {
@@ -8,8 +7,9 @@ import {
   MESSAGE_SETTINGS_UPDATE,
   SAN_RECOVERY_SPEED
 } from '../Constants';
-import { deepAssign } from '../util/CommonFunctions';
+import {deepAssign} from '../util/CommonFunctions';
 import NotificationUtil from '../util/NotificationUtil';
+import PlatformHelper from '../platform/PlatformHelper';
 
 // region 理智计算(自动提醒)
 
@@ -145,17 +145,17 @@ class SanInfo {
   constructor() {
 
     this.reloadFromStorage().then(() => {
-      BrowserUtil.sendMessage(MESSAGE_SAN_GET).then(data => deepAssign(this, data));
+      PlatformHelper.Message.send(MESSAGE_SAN_GET).then(data => deepAssign(this, data));
       // 仅在后台页面进行理智计算
-      if (BrowserUtil.isBackground) {
+      if (PlatformHelper.isBackground) {
         tryReload(this, Settings);
-        BrowserUtil.addMessageListener('sanInfo', MESSAGE_SAN_UPDATE, data => {
+        PlatformHelper.Message.registerListener('sanInfo', MESSAGE_SAN_UPDATE, data => {
           deepAssign(this, data);
           handleSanUpdate(this, Settings);
         });
-        BrowserUtil.addMessageListener('sanInfo', MESSAGE_SETTINGS_UPDATE, data => handleSettingsUpdate(this, data));
+        PlatformHelper.Message.registerListener('sanInfo', MESSAGE_SETTINGS_UPDATE, data => handleSettingsUpdate(this, data));
       } else {
-        BrowserUtil.addMessageListener('sanInfo', MESSAGE_SAN_UPDATE, data => deepAssign(this, data));
+        PlatformHelper.Message.registerListener('sanInfo', MESSAGE_SAN_UPDATE, data => deepAssign(this, data));
       }
     });
 
@@ -182,13 +182,13 @@ class SanInfo {
   }
 
   saveUpdate() {
-    const promise = BrowserUtil.saveLocalStorage('san', this);
-    promise.then(() => BrowserUtil.sendMessage(MESSAGE_SAN_UPDATE, this));
+    const promise = PlatformHelper.Storage.saveLocalStorage('san', this);
+    promise.then(() => PlatformHelper.Message.send(MESSAGE_SAN_UPDATE, this));
     return promise;
   }
 
   reloadFromStorage() {
-    return BrowserUtil.getLocalStorage('san').then(data => {
+    return PlatformHelper.Storage.getLocalStorage('san').then(data => {
       if (data) {
         deepAssign(this, data);
       }

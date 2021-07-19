@@ -11,6 +11,7 @@ const isWebWorker = !isNode && ('undefined' !== typeof WorkerGlobalScope) && ("f
 const isBrowser = !isNode && !isWebWorker && ("undefined" !== typeof navigator) && ("undefined" !== typeof document);
 const isBrowserWindow = isBrowser && !!window.opener;
 
+// TODO 还有一些以注释形式存在于其它文件中的chrome调用，之后记得处理
 /**
  * @type AbstractPlatform
  */

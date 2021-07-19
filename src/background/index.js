@@ -1,5 +1,4 @@
 import Settings from '../common/Settings';
-import BrowserUtil from '../common/platform/BrowserUtil';
 import NotificationUtil from '../common/util/NotificationUtil';
 import DunInfo from '../common/sync/DunInfo';
 import SanInfo from '../common/sync/SanInfo';
@@ -61,7 +60,7 @@ function tryDun(settings) {
     }
     Promise.all(promiseList).then(() => {
         if (hasUpdated) {
-            BrowserUtil.sendMessage(MESSAGE_CARD_LIST_UPDATE, cardListCache);
+            PlatformHelper.Message.send(MESSAGE_CARD_LIST_UPDATE, cardListCache);
         }
     }).finally(() => DunInfo.saveUpdate());
 }
@@ -139,7 +138,7 @@ const kazeFun = {
         });
 
         // 监听前台事件
-        BrowserUtil.addMessageListener('background', null, (message) => {
+        PlatformHelper.Message.registerListener('background', null, (message) => {
             if (message.type) {
                 switch (message.type) {
                     case MESSAGE_FORCE_REFRESH:
@@ -158,7 +157,7 @@ const kazeFun = {
         });
 
         // 监听标签
-        BrowserUtil.addNotificationClickListener(id => {
+        PlatformHelper.Notification.addClickListener(id => {
             let item = DataSourceUtil.mergeAllData(cardListCache, false).find(x => x.id === id);
             if (item) {
                 PlatformHelper.Tabs.create(item.jumpUrl);
@@ -168,14 +167,14 @@ const kazeFun = {
         });
 
         // 监听安装更新
-        BrowserUtil.addInstallListener(details => {
+        PlatformHelper.Lifecycle.addInstalledListener(details => {
             if (details.reason === 'install') {
                 PlatformHelper.Tabs.createWithExtensionFile(PAGE_WELCOME);
             }
         });
 
         // 监听扩展图标被点击，用于打开窗口化的弹出页面
-        BrowserUtil.addIconClickListener(() => {
+        PlatformHelper.BrowserAction.addIconClickListener(() => {
             if (Settings.display.windowMode) {
                 if (popupWindowId != null) {
                     PlatformHelper.Windows.remove(popupWindowId);
