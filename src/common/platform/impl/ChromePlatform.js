@@ -1,14 +1,21 @@
 import {PLATFORM_CHROME, DEBUG_LOG} from '../../Constants';
 import AbstractPlatform from '../AbstractPlatform';
 
-// 判断当前url中是否包含background(已知的其它方法都是Promise，都不能保证在isBackground被使用之前完成判断)
-const _isBackground = window.document.URL.indexOf('background') !== -1;
-console.log(`Current isBackground: ${_isBackground}`);
-
-const head = navigator.userAgent;
-const _isMobile = head.indexOf("Android") > 1 || head.indexOf("iPhone") > 1;
+let _isBackground;
+let _isMobile;
 
 export default class ChromePlatform extends AbstractPlatform {
+
+  constructor() {
+    super();
+    // 这部分放在类里面的原因是放在外面会被意外执行导致报错
+    // 判断当前url中是否包含background(已知的其它方法都是Promise，都不能保证在isBackground被使用之前完成判断)
+    _isBackground = window.document.URL.indexOf('background') !== -1;
+    console.log(`Current isBackground: ${_isBackground}`);
+
+    const head = navigator.userAgent;
+    _isMobile = head.indexOf("Android") > 1 || head.indexOf("iPhone") > 1;
+  }
 
   get isBackground() {
     return _isBackground;

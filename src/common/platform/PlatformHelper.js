@@ -1,8 +1,8 @@
 import ChromePlatform from './impl/ChromePlatform';
 import FirefoxPlatform from './impl/FirefoxPlatform';
 import EdgePlatform from './impl/EdgePlatform';
-import UnknownPlatform from './impl/UnknownPlatform';
 import NodePlatform from './impl/NodePlatform';
+import UnknownPlatform from './impl/UnknownPlatform';
 
 // 这个环境检测的代码复制于 https://stackoverflow.com/questions/7507638/any-standard-mechanism-for-detecting-if-a-javascript-is-executing-as-a-webworker
 const isNode = ("undefined" !== typeof global) && ('[object global]' === Object.prototype.toString.call(global));
@@ -32,17 +32,6 @@ if (isBrowser) {
 if (currentPlatform === undefined) {
   currentPlatform = new UnknownPlatform();
 }
-
-// 将API分类整理
-const messageHelper = new MessageHelper();
-const storageHelper = new StorageHelper();
-const browserActionHelper = new BrowserActionHelper();
-const extensionHelper = new ExtensionHelper();
-const tabsHelper = new TabsHelper();
-const notificationHelper = new NotificationHelper();
-const windowsHelper = new WindowsHelper();
-const downloadsHelper = new DownloadsHelper();
-const lifecycleHelper = new LifecycleHelper();
 
 /**
  * 帮助类，本文件相关方法的所有注释可参考AbstractPlatform。
@@ -217,3 +206,12 @@ class LifecycleHelper {
   }
 }
 
+const messageHelper = new MessageHelper();
+const storageHelper = new StorageHelper();
+const browserActionHelper = new BrowserActionHelper();
+const extensionHelper = new ExtensionHelper();
+const tabsHelper = new TabsHelper();
+const notificationHelper = new NotificationHelper();
+const windowsHelper = new WindowsHelper();
+const downloadsHelper = new DownloadsHelper();
+const lifecycleHelper = new LifecycleHelper();
