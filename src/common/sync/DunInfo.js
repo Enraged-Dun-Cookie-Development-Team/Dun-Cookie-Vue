@@ -1,6 +1,6 @@
-import BrowserUtil from '../util/BrowserUtil';
 import {MESSAGE_DUN_INFO_GET, MESSAGE_DUN_INFO_UPDATE} from '../Constants';
 import {deepAssign} from '../util/CommonFunctions';
+import PlatformHelper from '../platform/PlatformHelper';
 
 /**
  * 蹲饼数据
@@ -16,12 +16,12 @@ class DunInfo {
   lastDunTime = -1;
 
   constructor() {
-    BrowserUtil.sendMessage(MESSAGE_DUN_INFO_GET).then(data => deepAssign(this, data));
-    BrowserUtil.addMessageListener('dunInfo', MESSAGE_DUN_INFO_UPDATE, data => deepAssign(this, data));
+    PlatformHelper.Message.send(MESSAGE_DUN_INFO_GET).then(data => deepAssign(this, data));
+    PlatformHelper.Message.registerListener('dunInfo', MESSAGE_DUN_INFO_UPDATE, data => deepAssign(this, data));
   }
 
   saveUpdate() {
-    BrowserUtil.sendMessage(MESSAGE_DUN_INFO_UPDATE, this);
+    PlatformHelper.Message.send(MESSAGE_DUN_INFO_UPDATE, this);
   }
 }
 

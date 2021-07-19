@@ -161,7 +161,6 @@
 import countTo from "vue-count-to";
 import TimeLine from "../components/timeline/TimeLine";
 import Settings from "../common/Settings";
-import BrowserUtil from "../common/util/BrowserUtil";
 import SanInfo from '../common/sync/SanInfo';
 import DunInfo from "../common/sync/DunInfo";
 import {
@@ -177,6 +176,7 @@ import {
   quickJump,
   SHOW_VERSION,
 } from "../common/Constants";
+import PlatformHelper from '../common/platform/PlatformHelper';
 
 export default {
   name: "app",
@@ -221,9 +221,9 @@ export default {
   computed: {},
   beforeDestroy() {},
   methods: {
-    openUrl: BrowserUtil.createTab,
+    openUrl: PlatformHelper.Tabs.create,
     init() {
-      BrowserUtil.addMessageListener(
+      PlatformHelper.Message.registerListener(
         "popup",
         MESSAGE_DUN_INFO_UPDATE,
         (data) => {
@@ -262,12 +262,12 @@ export default {
     },
     // 获取数据
     getCardList() {
-      BrowserUtil.addMessageListener(
+      PlatformHelper.Message.registerListener(
         "popup",
         MESSAGE_CARD_LIST_UPDATE,
         (data) => (this.cardList = data)
       );
-      BrowserUtil.sendMessage(MESSAGE_CARD_LIST_GET).then((data) => {
+      PlatformHelper.Message.send(MESSAGE_CARD_LIST_GET).then((data) => {
         this.cardList = data;
       });
     },
@@ -291,7 +291,7 @@ export default {
     // 强刷
     reload() {
       this.isReload = true;
-      BrowserUtil.sendMessage(MESSAGE_FORCE_REFRESH);
+      PlatformHelper.Message.send(MESSAGE_FORCE_REFRESH);
       this.$message({
         offset: 50,
         center: true,
@@ -305,19 +305,19 @@ export default {
     },
 
     openSetting() {
-      BrowserUtil.createExtensionTab(PAGE_OPTIONS);
+      PlatformHelper.Tabs.createWithExtensionFile(PAGE_OPTIONS);
     },
 
     openDonate() {
-      BrowserUtil.createExtensionTab(PAGE_DONATE);
+      PlatformHelper.Tabs.createWithExtensionFile(PAGE_DONATE);
     },
 
     openUpdate() {
-      BrowserUtil.createExtensionTab(PAGE_UPDATE);
+      PlatformHelper.Tabs.createWithExtensionFile(PAGE_UPDATE);
     },
 
     openGithub() {
-      BrowserUtil.createTab(PAGE_GITHUB_REPO);
+      PlatformHelper.Tabs.create(PAGE_GITHUB_REPO);
     },
   },
 };

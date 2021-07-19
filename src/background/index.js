@@ -1,5 +1,4 @@
 import Settings from '../common/Settings';
-import BrowserUtil from '../common/util/BrowserUtil';
 import NotificationUtil from '../common/util/NotificationUtil';
 import DunInfo from '../common/sync/DunInfo';
 import SanInfo from '../common/sync/SanInfo';
@@ -15,6 +14,7 @@ import {
     TEST_DATA_REFRESH_TIME
 } from '../common/Constants';
 import DataSourceUtil from '../common/util/DataSourceUtil';
+import PlatformHelper from '../common/platform/PlatformHelper';
 
 // 重构完成后的其它优化：
 // TODO 多个提取出来的类要考虑能否合并(指互相通信的那部分)
@@ -60,7 +60,7 @@ function tryDun(settings) {
     }
     Promise.all(promiseList).then(() => {
         if (hasUpdated) {
-            BrowserUtil.sendMessage(MESSAGE_CARD_LIST_UPDATE, cardListCache);
+            PlatformHelper.Message.send(MESSAGE_CARD_LIST_UPDATE, cardListCache);
         }
     }).finally(() => DunInfo.saveUpdate());
 }
@@ -138,7 +138,7 @@ const kazeFun = {
         });
 
         // 监听前台事件
-        BrowserUtil.addMessageListener('background', null, (message) => {
+        PlatformHelper.Message.registerListener('background', null, (message) => {
             if (message.type) {
                 switch (message.type) {
                     case MESSAGE_FORCE_REFRESH:
@@ -157,29 +157,30 @@ const kazeFun = {
         });
 
         // 监听标签
-        BrowserUtil.addNotificationClickListener(id => {
+        PlatformHelper.Notification.addClickListener(id => {
             let item = DataSourceUtil.mergeAllData(cardListCache, false).find(x => x.id === id);
             if (item) {
-                BrowserUtil.createTab(item.jumpUrl);
+                PlatformHelper.Tabs.create(item.jumpUrl);
             } else {
                 alert('o(╥﹏╥)o 时间过于久远...最近列表内没有找到该网站');
             }
         });
 
         // 监听安装更新
-        BrowserUtil.addInstallListener(details => {
+        PlatformHelper.Lifecycle.addInstalledListener(details => {
             if (details.reason === 'install') {
-                BrowserUtil.createExtensionTab(PAGE_WELCOME);
+                PlatformHelper.Tabs.createWithExtensionFile(PAGE_WELCOME);
             }
         });
 
         // 监听扩展图标被点击，用于打开窗口化的弹出页面
-        BrowserUtil.addIconClickListener(() => {
+        PlatformHelper.BrowserAction.addIconClickListener(() => {
             if (Settings.display.windowMode) {
                 if (popupWindowId != null) {
-                    BrowserUtil.removeWindow(popupWindowId);
+                    PlatformHelper.Windows.remove(popupWindowId);
                 }
-                BrowserUtil.createWindow({ url: BrowserUtil.getExtensionURL(PAGE_POPUP_WINDOW), type: "panel", width: 800, height: 950 })
+                PlatformHelper.Windows
+                  .createPanelWindow(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW), 800, 950)
                   .then(tab => popupWindowId = tab.id);
             }
         });

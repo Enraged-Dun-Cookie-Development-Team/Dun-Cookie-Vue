@@ -62,9 +62,9 @@
 
 <script>
 import HttpUtil from '../common/util/HttpUtil';
-import BrowserUtil from '../common/util/BrowserUtil';
 import Feedback from '../components/Feedback';
 import {CURRENT_VERSION} from '../common/Constants';
+import PlatformHelper from '../common/platform/PlatformHelper';
 
 export default {
   name: "update",
@@ -84,7 +84,7 @@ export default {
     init() {
       this.getUpdateInfo();
     },
-    openUrl: BrowserUtil.createTab,
+    openUrl: PlatformHelper.Tabs.create,
     // 检查一次更新
     getUpdateInfo() {
       HttpUtil.GET(

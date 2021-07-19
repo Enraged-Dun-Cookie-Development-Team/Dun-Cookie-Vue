@@ -26,13 +26,13 @@
 
 <script>
 // 用于TerraHistoricusDataSource的特殊组件
-import BrowserUtil from '../../../common/util/BrowserUtil';
+import PlatformHelper from '../../../common/platform/PlatformHelper';
 
 export default {
   name: "TerraHistoricusItem",
   props: ["item", "showImage"],
   methods: {
-    openUrl: BrowserUtil.createTab
+    openUrl: PlatformHelper.Tabs.create
   }
 }
 </script>

@@ -54,10 +54,10 @@
 </template>
 
 <script>
-import BrowserUtil from '../common/util/BrowserUtil';
 import Feedback from '../components/Feedback';
 import {CURRENT_VERSION, PAGE_GITHUB_REPO, PAGE_OPTIONS} from '../common/Constants';
 import Settings from '../common/Settings';
+import PlatformHelper from '../common/platform/PlatformHelper';
 
 export default {
   name: "welcome",
@@ -78,10 +78,10 @@ export default {
     init() {
     },
     toSetting() {
-      BrowserUtil.createExtensionTab(PAGE_OPTIONS);
+      PlatformHelper.Tabs.createWithExtensionFile(PAGE_OPTIONS);
     },
     toGithub() {
-      BrowserUtil.createTab(PAGE_GITHUB_REPO);
+      PlatformHelper.Tabs.create(PAGE_GITHUB_REPO);
     },
     // lookList() {
     //   chrome.browserAction.getPopup();

@@ -41,7 +41,7 @@
 
 <script>
 import Settings from '../../../common/Settings';
-import BrowserUtil from '../../../common/util/BrowserUtil';
+import PlatformHelper from '../../../common/platform/PlatformHelper';
 
 export default {
   name: "DefaultItem",
@@ -54,7 +54,7 @@ export default {
     };
   },
   methods: {
-    openUrl: BrowserUtil.createTab,
+    openUrl: PlatformHelper.Tabs.create,
     // 图片收起展示
     changeShowAllImage(img) {
       if (this.showAllImage.includes(img)) {
@@ -91,32 +91,22 @@ export default {
       let width = ref.naturalWidth + 16 || 1100;
       let height = ref.naturalHeight + 39 || 750;
       if (this.windowTabId != null) {
-        chrome.windows.remove(this.windowTabId, () => {
-          // 避免报错
-          if (chrome.runtime.lastError) {
-            console.log(chrome.runtime.lastError)
-          }
-        });
+        PlatformHelper.Windows.remove(this.windowTabId)
+            .catch(err => console.log(err));
       }
-      chrome.windows.create(
-          {
-            url: chrome.extension.getURL("viewImg.html"),
-            type: "panel",
-            width: width,
-            height: height,
-          },
-          (window) => {
+      // TODO viewImg.html、view-img 改为常量
+      PlatformHelper.Windows.createPanelWindow(PlatformHelper.Extension.getURL('viewImg.html'), width, height)
+          .then(window => {
             this.windowTabId = window.id;
             setTimeout(() => {
-              chrome.runtime.sendMessage({
-                info: "tab",
+              PlatformHelper.Message.send('view-img', {
                 item: item,
                 img: img,
                 winId: window.id,
-              });
+              })
             }, 1000);
-          }
-      );
+          })
+          .catch(err => console.log(err));
     },
   }
 }

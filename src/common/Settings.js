@@ -1,15 +1,9 @@
-import BrowserUtil from './util/BrowserUtil';
-import {
-  BROWSER_CHROME,
-  BROWSER_FIREFOX,
-  BROWSER_MOBILE_PHONE,
-  CURRENT_SETTING_VERSION,
-  MESSAGE_SETTINGS_UPDATE
-} from './Constants';
+import {CURRENT_SETTING_VERSION, MESSAGE_SETTINGS_UPDATE, PAGE_POPUP_WINDOW, PLATFORM_UNKNOWN} from './Constants';
 import {deepAssign} from './util/CommonFunctions';
 import {defaultDataSources, defaultDataSourcesNames} from './datasource/DefaultDataSources';
 import {customDataSourceTypes} from './datasource/CustomDataSources';
 import {updateSettings} from './SettingsUpdater';
+import PlatformHelper from './platform/PlatformHelper';
 
 /**
  * 这个可以确保代码在settings初始化完毕之后再执行
@@ -53,7 +47,7 @@ function transformDataSource(settings) {
       }
     }
     settings.currentDataSources = list;
-    if (BrowserUtil.isBackground) {
+    if (PlatformHelper.isBackground) {
       settings.saveSettings();
       console.log('new datasource list: ');
       console.log(settings.currentDataSources);
@@ -271,7 +265,7 @@ class Settings {
   }
 
   constructor() {
-    BrowserUtil.addMessageListener('settings', MESSAGE_SETTINGS_UPDATE, data => {
+    PlatformHelper.Message.registerListener('settings', MESSAGE_SETTINGS_UPDATE, data => {
       deepAssign(this, data);
       this.__updateWindowMode();
       transformDataSource(this).finally(() => {
@@ -284,24 +278,9 @@ class Settings {
       this.reloadSettings().then(() => {
         // 这部分主要是初始化一些固定的配置信息，只需要初始化的时候执行一次
 
-        // 特定的浏览器需要无视用户配置强行禁用某些功能
-        switch (BrowserUtil.browserType) {
-          case BROWSER_CHROME:
-            break;
-          case BROWSER_FIREFOX: {
-            this.feature.options = false;
-            this.feature.window = false;
-            this.feature.san = false;
-            break;
-          }
-          case BROWSER_MOBILE_PHONE: {
-            this.feature.window = false;
-            break;
-          }
-          default: {
-            this.feature.window = false;
-            break;
-          }
+        // 未知平台或移动端强制禁用窗口化
+        if (PlatformHelper.PlatformType === PLATFORM_UNKNOWN || PlatformHelper.isMobile) {
+          this.feature.window = false;
         }
         // 根据被禁用的功能强行关闭配置
         // 虽然理论上应该保证被禁用的功能不会被用户开启，但是保险起见这里还是再设置一下
@@ -310,7 +289,7 @@ class Settings {
         }
 
         // 必须在后台执行的只执行一次的内容
-        if (BrowserUtil.isBackground) {
+        if (PlatformHelper.isBackground) {
           // 如果一个启用的都没有说明是新安装或者旧数据被清除，此时将默认数据源全部启用
           if (this.enableDataSources.length === 0) {
             this.enableDataSources = defaultDataSourcesNames;
@@ -334,9 +313,9 @@ class Settings {
 
   __updateWindowMode() {
     if (this.feature.window && this.display.windowMode) {
-      BrowserUtil.setPopup({popup: ""});
+      PlatformHelper.BrowserAction.removePopup();
     } else {
-      BrowserUtil.setPopup({popup: BrowserUtil.getExtensionURL("popup.html")});
+      PlatformHelper.BrowserAction.setPopupURL(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW));
     }
   }
 
@@ -348,9 +327,9 @@ class Settings {
    * @return {Promise}
    */
   saveSettings() {
-    const promise = BrowserUtil.saveLocalStorage('settings', this);
+    const promise = PlatformHelper.Storage.saveLocalStorage('settings', this);
     promise.then(() => {
-      BrowserUtil.sendMessage(MESSAGE_SETTINGS_UPDATE, this);
+      PlatformHelper.Message.send(MESSAGE_SETTINGS_UPDATE, this);
       // console.log('update settings: ');
       // console.log(this);
     });
@@ -366,9 +345,9 @@ class Settings {
    * @return {Promise<Settings>}
    */
   reloadSettings() {
-    return BrowserUtil.getLocalStorage('settings')
+    return PlatformHelper.Storage.getLocalStorage('settings')
       .then(value => {
-        if (BrowserUtil.isBackground) {
+        if (PlatformHelper.isBackground) {
           console.log("从储存中读取配置：");
           console.log(this);
           console.log('============');

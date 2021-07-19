@@ -361,14 +361,14 @@
 import countTo from "vue-count-to";
 
 import Settings from '../common/Settings';
-import BrowserUtil from '../common/util/BrowserUtil';
 import DunInfo from '../common/sync/DunInfo';
 import Feedback from '../components/Feedback';
 import {MESSAGE_DUN_INFO_UPDATE, SHOW_VERSION} from '../common/Constants';
 import {defaultDataSourcesList} from '../common/datasource/DefaultDataSources';
 import TimeUtil from '../common/util/TimeUtil';
-import {customDataSourceTypesByName, customDataSourceTypes} from '../common/datasource/CustomDataSources';
+import {customDataSourceTypes, customDataSourceTypesByName} from '../common/datasource/CustomDataSources';
 import {deepAssign} from '../common/util/CommonFunctions';
+import PlatformHelper from '../common/platform/PlatformHelper';
 
 export default {
   name: "app",
@@ -399,7 +399,7 @@ export default {
   },
   methods: {
     formatTime: TimeUtil.format,
-    openUrl: BrowserUtil.createTab,
+    openUrl: PlatformHelper.Tabs.create,
     init() {
       this.settings.doAfterInit((settings) => {
         this.customData = settings.customDataSources.map(item => {
@@ -414,7 +414,7 @@ export default {
         }).filter(item => !!item);
         global.customData = this.customData;
       });
-      BrowserUtil.addMessageListener('options', MESSAGE_DUN_INFO_UPDATE, data => {
+      PlatformHelper.Message.registerListener('options', MESSAGE_DUN_INFO_UPDATE, data => {
         this.oldDunCount = data.counter;
       });
     },
@@ -460,10 +460,10 @@ export default {
       const blob = new Blob([JSON.stringify(this.settings)], {
         type: "application/json",
       });
-      let src = URL.createObjectURL(blob);
-      BrowserUtil.downloadFile({ url: src, saveAs: true }, (data) => {
-        console.log(data);
-      });
+      PlatformHelper.Downloads.downloadURL(URL.createObjectURL(blob), undefined, true)
+          .then(data => {
+            console.log(data);
+          });
     },
     // 导入设置
     settingImport(file) {

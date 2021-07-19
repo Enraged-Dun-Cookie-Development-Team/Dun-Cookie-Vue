@@ -2,7 +2,7 @@
 /**
  * 是否是测试模式
  */
-const IS_DEBUG = false;
+const IS_DEBUG = true;
 /**
  * 是否输出调试日志
  * <p>
@@ -55,13 +55,14 @@ export {MESSAGE_SAN_GET, MESSAGE_DUN_INFO_GET, MESSAGE_CARD_LIST_GET};
 export {MESSAGE_FORCE_REFRESH};
 // endregion
 
-// region 浏览器类型
-const BROWSER_CHROME = 'Chrome';
-const BROWSER_FIREFOX = 'Firefox';
-const BROWSER_MOBILE_PHONE = 'MobilePhone';
-const BROWSER_UNKNOWN = 'Unknown';
+// region 平台类型
+const PLATFORM_CHROME = 'Chrome';
+const PLATFORM_FIREFOX = 'Firefox';
+const PLATFORM_EDGE = 'Edge';
+const PLATFORM_NODE = 'Node';
+const PLATFORM_UNKNOWN = 'Unknown';
 
-export {BROWSER_CHROME, BROWSER_FIREFOX, BROWSER_MOBILE_PHONE, BROWSER_UNKNOWN};
+export {PLATFORM_CHROME, PLATFORM_FIREFOX, PLATFORM_EDGE, PLATFORM_NODE, PLATFORM_UNKNOWN};
 // endregion
 
 // region 扩展内置页面
