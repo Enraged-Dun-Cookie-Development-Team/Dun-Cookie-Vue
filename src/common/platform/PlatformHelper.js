@@ -94,6 +94,10 @@ export default class PlatformHelper {
   static get Lifecycle() {
     return lifecycleHelper;
   }
+
+  static get Http() {
+    return httpHelper;
+  }
 }
 
 // 以下为分类API Helper
@@ -206,6 +210,12 @@ class LifecycleHelper {
   }
 }
 
+class HttpHelper {
+  sendGet(url) {
+    return currentPlatform.sendHttpRequest(url, 'GET');
+  }
+}
+
 const messageHelper = new MessageHelper();
 const storageHelper = new StorageHelper();
 const browserActionHelper = new BrowserActionHelper();
@@ -215,3 +225,4 @@ const notificationHelper = new NotificationHelper();
 const windowsHelper = new WindowsHelper();
 const downloadsHelper = new DownloadsHelper();
 const lifecycleHelper = new LifecycleHelper();
+const httpHelper = new HttpHelper();
