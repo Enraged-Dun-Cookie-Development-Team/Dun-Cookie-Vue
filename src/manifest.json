@@ -21,7 +21,6 @@
 	"permissions": [
 		"clipboardWrite",
 		"background",
-		"webRequest",
 		"storage",
 		"unlimitedStorage",
 		"notifications",
