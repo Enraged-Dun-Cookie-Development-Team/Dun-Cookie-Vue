@@ -1,4 +1,4 @@
-import {BROWSER_CHROME, DEBUG_LOG} from '../../Constants';
+import {PLATFORM_CHROME, DEBUG_LOG} from '../../Constants';
 import AbstractPlatform from '../AbstractPlatform';
 
 // 判断当前url中是否包含background(已知的其它方法都是Promise，都不能保证在isBackground被使用之前完成判断)
@@ -19,7 +19,7 @@ export default class ChromePlatform extends AbstractPlatform {
   }
 
   get PlatformType() {
-    return BROWSER_CHROME;
+    return PLATFORM_CHROME;
   }
 
   getLocalStorage(name) {

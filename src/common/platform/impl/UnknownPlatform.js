@@ -1,5 +1,5 @@
 import ChromePlatform from './ChromePlatform';
-import {BROWSER_UNKNOWN} from '../../Constants';
+import {PLATFORM_UNKNOWN} from '../../Constants';
 import AbstractPlatform from '../AbstractPlatform';
 
 /**
@@ -15,7 +15,7 @@ export default class UnknownPlatform extends AbstractPlatform {
   }
 
   get PlatformType() {
-    return BROWSER_UNKNOWN;
+    return PLATFORM_UNKNOWN;
   }
 
   // 以下为defPlatform的代理方法

@@ -1,10 +1,10 @@
 import BrowserUtil from './platform/BrowserUtil';
 import {
-  BROWSER_CHROME,
-  BROWSER_FIREFOX,
-  BROWSER_MOBILE_PHONE,
   CURRENT_SETTING_VERSION,
-  MESSAGE_SETTINGS_UPDATE, PAGE_POPUP_WINDOW
+  MESSAGE_SETTINGS_UPDATE,
+  PAGE_POPUP_WINDOW,
+  PLATFORM_CHROME,
+  PLATFORM_FIREFOX
 } from './Constants';
 import {deepAssign} from './util/CommonFunctions';
 import {defaultDataSources, defaultDataSourcesNames} from './datasource/DefaultDataSources';
@@ -286,23 +286,22 @@ class Settings {
         // 这部分主要是初始化一些固定的配置信息，只需要初始化的时候执行一次
 
         // 特定的浏览器需要无视用户配置强行禁用某些功能
-        switch (BrowserUtil.browserType) {
-          case BROWSER_CHROME:
+        switch (PlatformHelper.PlatformType) {
+          case PLATFORM_CHROME:
             break;
-          case BROWSER_FIREFOX: {
+          case PLATFORM_FIREFOX: {
             this.feature.options = false;
             this.feature.window = false;
             this.feature.san = false;
-            break;
-          }
-          case BROWSER_MOBILE_PHONE: {
-            this.feature.window = false;
             break;
           }
           default: {
             this.feature.window = false;
             break;
           }
+        }
+        if (PlatformHelper.isMobile) {
+          this.feature.window = false;
         }
         // 根据被禁用的功能强行关闭配置
         // 虽然理论上应该保证被禁用的功能不会被用户开启，但是保险起见这里还是再设置一下

@@ -55,15 +55,14 @@ export {MESSAGE_SAN_GET, MESSAGE_DUN_INFO_GET, MESSAGE_CARD_LIST_GET};
 export {MESSAGE_FORCE_REFRESH};
 // endregion
 
-// region 浏览器类型
-// TODO 这个类型常量最好能想办法放进PlatformHelper里面去(放的时候要注意避免出现循环依赖)
-const BROWSER_CHROME = 'Chrome';
-const BROWSER_FIREFOX = 'Firefox';
-const BROWSER_EDGE = 'Edge';
-const BROWSER_MOBILE_PHONE = 'MobilePhone';
-const BROWSER_UNKNOWN = 'Unknown';
+// region 平台类型
+const PLATFORM_CHROME = 'Chrome';
+const PLATFORM_FIREFOX = 'Firefox';
+const PLATFORM_EDGE = 'Edge';
+const PLATFORM_NODE = 'Node';
+const PLATFORM_UNKNOWN = 'Unknown';
 
-export {BROWSER_CHROME, BROWSER_FIREFOX, BROWSER_EDGE, BROWSER_MOBILE_PHONE, BROWSER_UNKNOWN};
+export {PLATFORM_CHROME, PLATFORM_FIREFOX, PLATFORM_EDGE, PLATFORM_NODE, PLATFORM_UNKNOWN};
 // endregion
 
 // region 扩展内置页面

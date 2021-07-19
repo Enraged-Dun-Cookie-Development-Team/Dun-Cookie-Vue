@@ -1,5 +1,5 @@
 import ChromePlatform from './ChromePlatform';
-import {BROWSER_EDGE, DEBUG_LOG} from '../../Constants';
+import {PLATFORM_EDGE, DEBUG_LOG} from '../../Constants';
 import AbstractPlatform from '../AbstractPlatform';
 
 // 根据MDN中的兼容性表格中的说明，Edge会将message发给同一个页面的onMessageListener，因此在每个页面生成一个唯一id，接收时过滤掉相同页面的消息
@@ -19,7 +19,7 @@ export default class EdgePlatform extends AbstractPlatform {
   }
 
   get PlatformType() {
-    return BROWSER_EDGE;
+    return PLATFORM_EDGE;
   }
 
   sendMessage(type, data) {
