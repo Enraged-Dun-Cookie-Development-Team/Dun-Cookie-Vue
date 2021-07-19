@@ -14,6 +14,11 @@
             "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20210708/9864c121e25fb46e0fee1ccd4c3b3652.jpg'> <div> <div>新活动故事集「如我所见」将于<span class='online-blue'>7月13号</span>开启</div> <div>新剿灭积水潮窟将于<span class='online-blue'>7月12号</span>开启，查看<a href=\"https://mapcn.ark-nights.com/map/camp_r_05\">出怪顺序</a></div> <div>建议在活动开启前刷完本周的<span class='online-red'>剿灭任务</span></div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>处更新<span class='online-blue'>作业视频</span></div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
             "starTime": "2021-07-08 16:00:00",
             "overTime": "2021-07-20 03:59:59"
+        },
+        {
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20210716/173c91d26c9e4c8afe57d5a2d94a143c.JPG'> <div> <div>SideStory「密林悍将归来」将于<span class='online-blue'>7月20号</span>开启</div> <div>本次活动掉落<span class='online-blue'>固源岩组，糖组，RMA70-12</span></div> <div>建议在活动开启前刷完本周的<span class='online-red'>剿灭任务</span></div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>处更新<span class='online-blue'>作业视频</span></div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
+            "starTime": "2021-07-19 00:01:24",
+            "overTime": "2021-08-03 03:59:59"
         }
     ],
     "btnList": [
@@ -119,6 +124,13 @@
                 "overTime": "2021-8-03 03:59:59"
             },
             {
+                "text": "故事集「如我所见」，活动结束",
+                "remark": "",
+                "time": "2021-7-20 03:59:59",
+                "starTime": "2021-7-13 16:00:00",
+                "overTime": "2021-7-20 03:59:59"
+            },
+            {
                 "text": "SideStory「密林悍将归来」，限时复刻开启",
                 "remark": "",
                 "time": "2021-7-20 15:59:59",
@@ -137,7 +149,7 @@
     "upgrade": {
         "v": "2.4.2",
         "title": "小刻食堂翻新啦 - 2.4.2",
-        "description": "🐛 紧急修复部分2.4.0大版本存在的BUG</br>1.修复微博存在无法推送的bug</br>2.修复资源开放提醒在周天0点到4点显示错误的bug",
+        "description": "🐛 紧急修复部分2.4.0大版本存在的BUG</br>1.修复微博存在无法推送的bug</br>2.修复资源开放提醒在周天0点到4点显示错误的bug</br>3.添加可调整低频模式与原本蹲饼频率时间倍数",
         "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.4.2/Dun-Cookie-2.4.2.crx",
         "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.4.2/Dun-Cookie-2.4.2.zip",
         "downSpare": "https://pan.baidu.com/s/1kzY6kpfYqLcGpuaiwQOGoA",
