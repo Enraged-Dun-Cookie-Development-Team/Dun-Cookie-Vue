@@ -1,11 +1,5 @@
 import BrowserUtil from './platform/BrowserUtil';
-import {
-  CURRENT_SETTING_VERSION,
-  MESSAGE_SETTINGS_UPDATE,
-  PAGE_POPUP_WINDOW,
-  PLATFORM_CHROME,
-  PLATFORM_FIREFOX
-} from './Constants';
+import {CURRENT_SETTING_VERSION, MESSAGE_SETTINGS_UPDATE, PAGE_POPUP_WINDOW, PLATFORM_UNKNOWN} from './Constants';
 import {deepAssign} from './util/CommonFunctions';
 import {defaultDataSources, defaultDataSourcesNames} from './datasource/DefaultDataSources';
 import {customDataSourceTypes} from './datasource/CustomDataSources';
@@ -285,22 +279,8 @@ class Settings {
       this.reloadSettings().then(() => {
         // 这部分主要是初始化一些固定的配置信息，只需要初始化的时候执行一次
 
-        // 特定的浏览器需要无视用户配置强行禁用某些功能
-        switch (PlatformHelper.PlatformType) {
-          case PLATFORM_CHROME:
-            break;
-          case PLATFORM_FIREFOX: {
-            this.feature.options = false;
-            this.feature.window = false;
-            this.feature.san = false;
-            break;
-          }
-          default: {
-            this.feature.window = false;
-            break;
-          }
-        }
-        if (PlatformHelper.isMobile) {
+        // 未知平台或移动端强制禁用窗口化
+        if (PlatformHelper.PlatformType === PLATFORM_UNKNOWN || PlatformHelper.isMobile) {
           this.feature.window = false;
         }
         // 根据被禁用的功能强行关闭配置
