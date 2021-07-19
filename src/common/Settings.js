@@ -56,7 +56,6 @@ function transformDataSource(settings) {
   });
 }
 
-// TODO 自动导入旧版配置并转化成新版配置
 class Settings {
   // 插件初始化的时间
   initTime = new Date().getTime();
