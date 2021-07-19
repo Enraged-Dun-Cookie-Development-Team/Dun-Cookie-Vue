@@ -10,24 +10,37 @@ const unsupportedTip = "该平台未实现该接口！请联系[小刻食堂]开
  * <p>
  * 需要注意的是：如果是无法实现的接口，也应由子类主动实现一个空方法，如果子类不实现就会抛异常，这种设计的目的是为了避免子类忘记实现接口(所以说js没有抽象方法真的惨)
  */
-class AbstractPlatform {
+export default class AbstractPlatform {
+
+  static __MESSAGE_WITHOUT_RESPONSE = '__NO_RESPONSE__'
 
   /**
    * 是否是后台线程(后台线程应该有且只有一个，尽量将需要计算的内容都放入后台线程)
-   * @return boolean
+   * @return {boolean}
    */
   get isBackground() { throw unsupportedTip; };
 
   /**
-   * 浏览器类型
-   * @return string
+   * 获取当前是否是移动端
+   * @return {boolean}
    */
-  get platformType() { throw unsupportedTip; };
+  get isMobile() { throw unsupportedTip; };
 
   /**
-   * 获取本地储存中的内容
-   * @param {string|string[]|object} name
-   * @return Promise
+   * 浏览器类型
+   * @return {string}
+   */
+  get PlatformType() { throw unsupportedTip; };
+
+  // TODO 关于数据同步
+  //  如果使用浏览器自带的同步功能：
+  //  Chrome可以简单地将storage.local改为storage.sync，Firefox需要在改为storage.sync后参考以下链接进行相应设置(Edge不清楚，按理说应该是和Chrome一样的)
+  //  https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/sync
+
+  /**
+   * 读取本地储存中的内容
+   * @param {string|string[]|object} name 如果不提供该参数则返回储存中的全部内容
+   * @return {Promise} 读取成功则reslove(键值对，如果请求的是单个string则直接返回值)，读取失败则reject
    */
   getLocalStorage(name) { throw unsupportedTip; };
 
@@ -35,61 +48,104 @@ class AbstractPlatform {
    * 将数据储存到本地
    * @param {string} name
    * @param data
-   * @return Promise
+   * @return {Promise} 储存成功则reslove(无任何参数)，储存失败则reject
    */
   saveLocalStorage(name, data) { throw unsupportedTip; };
 
-  // TODO 根据MDN中的兼容性表格中的说明，Edge会将message发给同一个页面的onMessageListener，实现Edge兼容时需要考虑进行特殊处理(比如在每个页面生成一个唯一id，接收时进行判断)
-  // https://developer.mozilla.org/zh-CN/docs/Mozilla/Add-ons/WebExtensions/API/runtime/sendMessage#browser_compatibility
+  /**
+   * 向其它页面发送消息
+   * @param type 消息类型，只有监听指定类型的监听器才能接收到消息
+   * @param data 消息内容
+   * @return {Promise} 如果有消息接收者有返回消息的话可以在这个Promise获取(注意：如果没有返回消息的话Promise会得到undefined)
+   */
   sendMessage(type, data) { throw unsupportedTip; };
 
   /**
    * 监听message
    * @param id 监听器ID，暂时的用途只有调试输出
    * @param type 如果不提供type或者type为false则监听所有信息，否则只监听对应type的信息
-   * @param listener 监听器，接收一个参数处理信息
+   * @param listener 监听器，接收一个参数处理信息，可以使用返回值返回消息
+   * @return {Promise}
    */
   addMessageListener(id, type, listener) { throw unsupportedTip; };
 
-  setPopup(detail) { throw unsupportedTip; };
+  /**
+   * 设置点击扩展图标时的弹出窗
+   * @param url 指定弹出窗的url，如果不提供改参数则会移除弹出窗
+   * @return {Promise}
+   */
+  setPopup(url) { throw unsupportedTip; };
 
-  getExtensionURL(file) { throw unsupportedTip; };
+  /**
+   * 获取扩展插件中指定文件对应的URL
+   * @param file
+   * @return {string}
+   */
+  getURLForExtensionFile(file) { throw unsupportedTip; };
 
+  /**
+   * 创建一个桌面通知
+   * @param id 通知ID
+   * @param iconUrl 图标URL
+   * @param title 标题
+   * @param message 内容
+   * @param imageUrl 图片URL
+   * @return {Promise}
+   */
   createNotifications(id, iconUrl, title, message, imageUrl) { throw unsupportedTip; };
 
+  /**
+   * 注册桌面通知被点击的监听器
+   * @param listener 监听器，接收一个参数(通知ID)
+   */
   addNotificationClickListener(listener) { throw unsupportedTip; };
 
   /**
    * 监听浏览器中的插件图标点击事件。
    * <p>
    * <strong>注意：当设置了弹出菜单的时候不会触发监听器</strong>
+   * @param listener 监听器，接收一个参数(当前页面的tab对象)
    */
   addIconClickListener(listener) { throw unsupportedTip; };
 
   /**
-   * 在新标签页中打开扩展插件的内置页面
-   */
-  createExtensionTab(url) { throw unsupportedTip; };
-
-  /**
    * 在新标签页中打开指定url
+   * @param url 目标url
+   * @return {Promise}
    */
   createTab(url) { throw unsupportedTip; };
 
+  /**
+   * 打开新窗口
+   * @param url 新窗口显示的url
+   * @param type 窗口类型
+   * @param width 窗口宽度
+   * @param height 窗口高度
+   * @return {Promise} reslove接收一个参数(新窗口的tab对象)
+   */
   createWindow(url, type, width, height) { throw unsupportedTip; };
 
+  /**
+   * 关闭指定窗口
+   * @param windowId 要关闭的窗口ID
+   * @return {Promise}
+   */
   removeWindow(windowId) { throw unsupportedTip; };
 
   /**
    * 下载指定url的内容
-   * // TODO 实现Firefox For Android的时候需要注意，安卓版的Firefox不能提供saveAs=true，否则会报错，参考 https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/downloads/download
    * @param url 目标url
    * @param filename 文件名，如果传入空字符串或者非string类型的值则使用浏览器默认的文件名
    * @param saveAs 是否提供文件选择对话框，true->提供，false->不提供，非boolean类型的值->使用浏览器默认设置
-   * @return Promise
+   * @return {Promise} reslove接收一个参数(下载任务的id)
    */
   download(url, filename, saveAs) { throw unsupportedTip; };
 
+  /**
+   * 监听扩展插件的安装事件。
+   * <p>
+   * @param listener 监听器，接收一个参数(details{id,previousVersion,reason})
+   */
   addInstallListener(listener) { throw unsupportedTip; };
 }
 

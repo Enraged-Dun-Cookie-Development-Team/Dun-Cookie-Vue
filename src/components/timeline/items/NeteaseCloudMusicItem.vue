@@ -22,13 +22,13 @@
 
 <script>
 // 用于NeteaseCloudMusicDataSource的特殊组件
-import BrowserUtil from '../../../common/platform/BrowserUtil';
+import PlatformHelper from '../../../common/platform/PlatformHelper';
 
 export default {
   name: "NeteaseCloudMusicItem",
   props: ["item", "showImage"],
   methods: {
-    openUrl: BrowserUtil.createTab
+    openUrl: PlatformHelper.Tabs.create
   }
 }
 </script>

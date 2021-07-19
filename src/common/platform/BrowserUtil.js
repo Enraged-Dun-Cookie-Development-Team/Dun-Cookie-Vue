@@ -31,28 +31,12 @@ class BrowserUtil {
     return PlatformHelper.Message.registerListener(id, type, listener);
   }
 
-  static setPopup(detail) {
-    return PlatformHelper.BrowserAction.setPopupURL(detail.popup);
-  }
-
-  static getExtensionURL(file) {
-    return PlatformHelper.Extension.getURL(file);
-  }
-
   static addNotificationClickListener(listener) {
     return PlatformHelper.Notification.addClickListener(listener);
   }
 
   static addIconClickListener(listener) {
     return PlatformHelper.BrowserAction.addIconClickListener(listener);
-  }
-
-  static createExtensionTab(file) {
-    return PlatformHelper.Tabs.createWithExtensionFile(file);
-  }
-
-  static createTab(url) {
-    return PlatformHelper.Tabs.create(url);
   }
 
   static addInstallListener(listener) {

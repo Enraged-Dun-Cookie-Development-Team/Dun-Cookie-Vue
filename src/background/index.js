@@ -161,7 +161,7 @@ const kazeFun = {
         BrowserUtil.addNotificationClickListener(id => {
             let item = DataSourceUtil.mergeAllData(cardListCache, false).find(x => x.id === id);
             if (item) {
-                BrowserUtil.createTab(item.jumpUrl);
+                PlatformHelper.Tabs.create(item.jumpUrl);
             } else {
                 alert('o(╥﹏╥)o 时间过于久远...最近列表内没有找到该网站');
             }
@@ -170,7 +170,7 @@ const kazeFun = {
         // 监听安装更新
         BrowserUtil.addInstallListener(details => {
             if (details.reason === 'install') {
-                BrowserUtil.createExtensionTab(PAGE_WELCOME);
+                PlatformHelper.Tabs.createWithExtensionFile(PAGE_WELCOME);
             }
         });
 

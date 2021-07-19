@@ -167,7 +167,6 @@
 </template>
 
 <script>
-import BrowserUtil from '../../common/platform/BrowserUtil';
 import {CURRENT_VERSION, dayInfo, PAGE_UPDATE, quickJump} from '../../common/Constants';
 import MyElTimelineItem from './MyTimeLineItem';
 import DefaultItem from './items/DefaultItem';
@@ -178,6 +177,7 @@ import TimeUtil from '../../common/util/TimeUtil';
 import Search from '../Search';
 import HttpUtil from '../../common/util/HttpUtil';
 import {deepAssign} from '../../common/util/CommonFunctions';
+import PlatformHelper from '../../common/platform/PlatformHelper';
 
 export default {
   name: "TimeLine",
@@ -223,7 +223,7 @@ export default {
     }
   },
   methods: {
-    openUrl: BrowserUtil.createTab,
+    openUrl: PlatformHelper.Tabs.create,
     getDataSourceByName: DataSourceUtil.getByName,
     transformToSortList: DataSourceUtil.transformToSortList,
     resolveComponent(item) {
@@ -405,7 +405,7 @@ export default {
           });
     },
     openUpdate() {
-      BrowserUtil.createExtensionTab(PAGE_UPDATE);
+      PlatformHelper.Tabs.createWithExtensionFile(PAGE_UPDATE);
     },
     // 复制
     copyData(item) {

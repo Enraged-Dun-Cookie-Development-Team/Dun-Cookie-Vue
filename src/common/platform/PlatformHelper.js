@@ -1,13 +1,23 @@
-import ChromePlatform from './ChromePlatform';
+import ChromePlatform from './impl/ChromePlatform';
+import FirefoxPlatform from './impl/FirefoxPlatform';
+import EdgePlatform from './impl/EdgePlatform';
+import UnknownPlatform from './impl/UnknownPlatform';
 
 /**
  * @type AbstractPlatform
  */
 let currentPlatform;
-// TODO 在这里做浏览器检测并使用相应的子类
-//  需要注意的是，如果在这里初始化的话AbstractPlatform的子类不应该引用PlatformHelper，否则会造成循环依赖。
-//  如果必须子类必须要依赖PlatformHelper的话，大概率是设计不当
-currentPlatform = new ChromePlatform();
+let head = navigator.userAgent;
+if (head.indexOf("Edg") > 1) {
+  // Edge的userAgent即有Chrome又有Edg，因此先判断Edg
+  currentPlatform = new EdgePlatform();
+} else if (head.indexOf("Chrome") > 1) {
+  currentPlatform = new ChromePlatform();
+} else if (head.indexOf("Firefox") > 1) {
+  currentPlatform = new FirefoxPlatform();
+} else {
+  currentPlatform = new UnknownPlatform();
+}
 
 // 将API分类整理
 const messageHelper = new MessageHelper();
@@ -27,10 +37,16 @@ const lifecycleHelper = new LifecycleHelper();
  */
 export default class PlatformHelper {
 
-  static get isBackground() { return currentPlatform.isBackground; };
+  static get isBackground() {
+    return currentPlatform.isBackground;
+  };
+
+  static get isMobile() {
+    return currentPlatform.isMobile;
+  }
 
   static get PlatformType() {
-    return currentPlatform.platformType;
+    return currentPlatform.PlatformType;
   }
 
   static get PlatformInstance() {
@@ -77,6 +93,8 @@ export default class PlatformHelper {
   }
 }
 
+// 以下为分类API Helper
+
 class MessageHelper {
   send(type, data) {
     return currentPlatform.sendMessage(type, data);
@@ -98,11 +116,15 @@ class StorageHelper {
 }
 
 class BrowserActionHelper {
+  removePopup() {
+    return this.setPopupURL('');
+  }
+
   setPopupURL(url) {
     if (!url || typeof url !== 'string') {
       url = ''
     }
-    return currentPlatform.setPopup({popup: url});
+    return currentPlatform.setPopup(url);
   }
 
   addIconClickListener(listener) {
@@ -112,7 +134,7 @@ class BrowserActionHelper {
 
 class ExtensionHelper {
   getURL(file) {
-    return currentPlatform.getExtensionURL(file);
+    return currentPlatform.getURLForExtensionFile(file);
   }
 }
 

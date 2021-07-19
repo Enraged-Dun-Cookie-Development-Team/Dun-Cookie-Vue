@@ -41,7 +41,7 @@
 
 <script>
 import Settings from '../../../common/Settings';
-import BrowserUtil from '../../../common/platform/BrowserUtil';
+import PlatformHelper from '../../../common/platform/PlatformHelper';
 
 export default {
   name: "DefaultItem",
@@ -54,7 +54,7 @@ export default {
     };
   },
   methods: {
-    openUrl: BrowserUtil.createTab,
+    openUrl: PlatformHelper.Tabs.create,
     // 图片收起展示
     changeShowAllImage(img) {
       if (this.showAllImage.includes(img)) {

@@ -59,10 +59,11 @@ export {MESSAGE_FORCE_REFRESH};
 // TODO 这个类型常量最好能想办法放进PlatformHelper里面去(放的时候要注意避免出现循环依赖)
 const BROWSER_CHROME = 'Chrome';
 const BROWSER_FIREFOX = 'Firefox';
+const BROWSER_EDGE = 'Edge';
 const BROWSER_MOBILE_PHONE = 'MobilePhone';
 const BROWSER_UNKNOWN = 'Unknown';
 
-export {BROWSER_CHROME, BROWSER_FIREFOX, BROWSER_MOBILE_PHONE, BROWSER_UNKNOWN};
+export {BROWSER_CHROME, BROWSER_FIREFOX, BROWSER_EDGE, BROWSER_MOBILE_PHONE, BROWSER_UNKNOWN};
 // endregion
 
 // region 扩展内置页面

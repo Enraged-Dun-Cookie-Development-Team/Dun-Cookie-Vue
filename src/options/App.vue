@@ -367,7 +367,7 @@ import Feedback from '../components/Feedback';
 import {MESSAGE_DUN_INFO_UPDATE, SHOW_VERSION} from '../common/Constants';
 import {defaultDataSourcesList} from '../common/datasource/DefaultDataSources';
 import TimeUtil from '../common/util/TimeUtil';
-import {customDataSourceTypesByName, customDataSourceTypes} from '../common/datasource/CustomDataSources';
+import {customDataSourceTypes, customDataSourceTypesByName} from '../common/datasource/CustomDataSources';
 import {deepAssign} from '../common/util/CommonFunctions';
 import PlatformHelper from '../common/platform/PlatformHelper';
 
@@ -400,7 +400,7 @@ export default {
   },
   methods: {
     formatTime: TimeUtil.format,
-    openUrl: BrowserUtil.createTab,
+    openUrl: PlatformHelper.Tabs.create,
     init() {
       this.settings.doAfterInit((settings) => {
         this.customData = settings.customDataSources.map(item => {

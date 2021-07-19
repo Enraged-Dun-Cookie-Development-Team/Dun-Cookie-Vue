@@ -4,12 +4,13 @@ import {
   BROWSER_FIREFOX,
   BROWSER_MOBILE_PHONE,
   CURRENT_SETTING_VERSION,
-  MESSAGE_SETTINGS_UPDATE
+  MESSAGE_SETTINGS_UPDATE, PAGE_POPUP_WINDOW
 } from './Constants';
 import {deepAssign} from './util/CommonFunctions';
 import {defaultDataSources, defaultDataSourcesNames} from './datasource/DefaultDataSources';
 import {customDataSourceTypes} from './datasource/CustomDataSources';
 import {updateSettings} from './SettingsUpdater';
+import PlatformHelper from './platform/PlatformHelper';
 
 /**
  * 这个可以确保代码在settings初始化完毕之后再执行
@@ -334,9 +335,9 @@ class Settings {
 
   __updateWindowMode() {
     if (this.feature.window && this.display.windowMode) {
-      BrowserUtil.setPopup({popup: ""});
+      PlatformHelper.BrowserAction.removePopup();
     } else {
-      BrowserUtil.setPopup({popup: BrowserUtil.getExtensionURL("popup.html")});
+      PlatformHelper.BrowserAction.setPopupURL(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW));
     }
   }
 

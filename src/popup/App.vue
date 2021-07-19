@@ -177,6 +177,7 @@ import {
   quickJump,
   SHOW_VERSION,
 } from "../common/Constants";
+import PlatformHelper from '../common/platform/PlatformHelper';
 
 export default {
   name: "app",
@@ -221,7 +222,7 @@ export default {
   computed: {},
   beforeDestroy() {},
   methods: {
-    openUrl: BrowserUtil.createTab,
+    openUrl: PlatformHelper.Tabs.create,
     init() {
       BrowserUtil.addMessageListener(
         "popup",
@@ -305,19 +306,19 @@ export default {
     },
 
     openSetting() {
-      BrowserUtil.createExtensionTab(PAGE_OPTIONS);
+      PlatformHelper.Tabs.createWithExtensionFile(PAGE_OPTIONS);
     },
 
     openDonate() {
-      BrowserUtil.createExtensionTab(PAGE_DONATE);
+      PlatformHelper.Tabs.createWithExtensionFile(PAGE_DONATE);
     },
 
     openUpdate() {
-      BrowserUtil.createExtensionTab(PAGE_UPDATE);
+      PlatformHelper.Tabs.createWithExtensionFile(PAGE_UPDATE);
     },
 
     openGithub() {
-      BrowserUtil.createTab(PAGE_GITHUB_REPO);
+      PlatformHelper.Tabs.create(PAGE_GITHUB_REPO);
     },
   },
 };
