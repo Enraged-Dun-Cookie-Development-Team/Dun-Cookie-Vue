@@ -105,7 +105,7 @@ class Settings {
      * <p>
      * 该时间倍率乘原蹲饼频率为低频模式刷新时间
      */
-     timeOfLowFrequency: 2,
+    timeOfLowFrequency: 2,
     /**
      * 是否显示转发的饼
      */
@@ -184,7 +184,7 @@ class Settings {
     /**
      * 理智满时时候推送
      */
-     noticeWhenFull: true,
+    noticeWhenFull: true,
     /**
      * 理智上限
      */
@@ -240,9 +240,12 @@ class Settings {
    */
   getTimeBySortMode() {
     switch (this.dun.sortModeForOnlyDate) {
-      case 1: return '23:59:59';
-      case 2: return '00:00:00';
-      default: throw `unknown sort mode ${this.dun.sortModeForOnlyDate}`;
+      case 1:
+        return '23:59:59';
+      case 2:
+        return '00:00:00';
+      default:
+        throw `unknown sort mode ${this.dun.sortModeForOnlyDate}`;
     }
   }
 

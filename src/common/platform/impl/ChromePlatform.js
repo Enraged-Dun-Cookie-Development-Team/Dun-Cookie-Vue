@@ -74,7 +74,7 @@ export default class ChromePlatform extends AbstractPlatform {
     return new Promise((resolve, reject) => {
       chrome.runtime.sendMessage(message, (response) => {
         if (chrome.runtime.lastError) {
-          if (chrome.runtime.lastError === IGNORE_MESSAGE_RECEIVER_NOT_EXISTS) {
+          if (chrome.runtime.lastError.message === IGNORE_MESSAGE_RECEIVER_NOT_EXISTS) {
             if (DEBUG_LOG) {
               console.log(`response - ${type} - receiver not exists`);
             }
