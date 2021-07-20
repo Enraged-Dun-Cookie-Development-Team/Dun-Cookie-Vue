@@ -31,9 +31,9 @@ export {IS_DEBUG, DEBUG_LOG, CURRENT_SETTING_VERSION, CURRENT_VERSION, SHOW_VERS
  */
 const TEST_DATA_REFRESH_TIME = 5;
 /**
- * 理智恢复速度，非测试模式6分钟，测试模式30秒
+ * 理智恢复速度，非测试模式6分钟，测试模式75秒
  */
-const SAN_RECOVERY_SPEED = IS_DEBUG ? 15 * 1000 : 6 * 60 * 1000;
+const SAN_RECOVERY_SPEED = IS_DEBUG ? 75 * 1000 : 6 * 60 * 1000;
 
 export {TEST_DATA_REFRESH_TIME, SAN_RECOVERY_SPEED};
 // endregion
