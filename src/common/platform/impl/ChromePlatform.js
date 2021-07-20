@@ -1,7 +1,8 @@
 import {PLATFORM_CHROME, DEBUG_LOG} from '../../Constants';
 import AbstractPlatform from '../AbstractPlatform';
 
-const IGNORE_MESSAGE_RECEIVER_NOT_EXISTS = 'Could not establish connection. Receiving end does not exist.';
+const IGNORE_MESSAGE_ERROR_1 = 'Could not establish connection. Receiving end does not exist.';
+const IGNORE_MESSAGE_ERROR_2 = 'The message port closed before a response was received.';
 
 let _isBackground;
 let _isMobile;
@@ -74,7 +75,8 @@ export default class ChromePlatform extends AbstractPlatform {
     return new Promise((resolve, reject) => {
       chrome.runtime.sendMessage(message, (response) => {
         if (chrome.runtime.lastError) {
-          if (chrome.runtime.lastError.message === IGNORE_MESSAGE_RECEIVER_NOT_EXISTS) {
+          if (chrome.runtime.lastError.message === IGNORE_MESSAGE_ERROR_1
+          || chrome.runtime.lastError.message === IGNORE_MESSAGE_ERROR_2) {
             if (DEBUG_LOG) {
               console.log(`response - ${type} - receiver not exists`);
             }

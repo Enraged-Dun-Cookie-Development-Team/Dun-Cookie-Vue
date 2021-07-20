@@ -174,7 +174,7 @@ class Settings {
     /**
      * 是否启用理智计算(自动提醒)
      */
-    san: false,
+    san: true,
   }
 
   /**
