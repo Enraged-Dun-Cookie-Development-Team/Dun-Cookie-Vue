@@ -171,10 +171,11 @@ class SanInfo {
       const endTime = new Date(this.updateTime + (Settings.san.maxValue - this.currentSan) * SAN_RECOVERY_SPEED);
 
       // 由于理智回满最多13个小时多，所以只可能是今天或明天回满
-      const isSameDay = endTime.getDay() !== new Date(this.updateTime).getDay();
+      const now = new Date();
+      const isSameDay = endTime.getDay() !== now.getDay();
       const tomorrow = isSameDay ? '明天' : '';
 
-      this.remainTime = `预计${tomorrow}${TimeUtil.format(endTime, 'hh:mm')}回满，剩${TimeUtil.calcDiff(endTime, this.updateTime)}`;
+      this.remainTime = `预计${tomorrow}${TimeUtil.format(endTime, 'hh:mm')}回满，剩${TimeUtil.calcDiff(endTime, now.getTime())}`;
     }
     this.saveUpdate();
   }
@@ -198,7 +199,7 @@ class SanInfo {
   startReloadTime() {
     remainTimeIntervalId = setInterval(() => {
       this.calcRemainingTime();
-    }, SAN_RECOVERY_SPEED / 12);
+    }, 1000);
   }
 }
 
