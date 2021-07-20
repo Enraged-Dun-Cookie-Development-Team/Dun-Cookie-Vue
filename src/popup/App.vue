@@ -20,7 +20,7 @@
           <el-form-item label="当前理智"
             ><el-input-number
               ref="saneEdit"
-              v-model="san.currentSan"
+              v-model="currentSan"
               :min="0"
               :max="settings.san.maxValue"
               label="输入当前理智"
@@ -199,6 +199,7 @@ export default {
   data() {
     return {
       san: SanInfo,
+      currentSan: SanInfo.currentSan,
       show: false,
       LazyLoaded: false,
       isNew: false,
@@ -273,6 +274,7 @@ export default {
     },
     // 设置数据
     saveSan() {
+      this.san.currentSan = this.currentSan;
       this.san.saveUpdate();
       this.toolDrawer = false;
       this.$message({

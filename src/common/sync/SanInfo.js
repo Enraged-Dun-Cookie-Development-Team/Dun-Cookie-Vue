@@ -142,7 +142,6 @@ class SanInfo {
     return this.__currentSan;
   }
 
-
   constructor() {
     this.reloadFromStorage().then(() => {
       PlatformHelper.Message.send(MESSAGE_SAN_GET).then(data => deepAssign(this, data));

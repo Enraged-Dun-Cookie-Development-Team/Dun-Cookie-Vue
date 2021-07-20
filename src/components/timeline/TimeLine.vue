@@ -242,6 +242,7 @@ export default {
     // 打开计算小工具
     openToolDrawer() {
       this.$parent.toolDrawer = true;
+      this.$parent.currentSan = SanInfo.currentSan;
       this.$nextTick(() => {
         this.$parent.$refs.saneEdit.focus();
       });
