@@ -230,7 +230,7 @@
               <el-form-item label="窗口化" v-if="settings.feature.window">
                 <el-switch v-model="settings.display.windowMode"></el-switch>
               </el-form-item>
-              <el-form-item v-if="false" label="理智提醒">
+              <el-form-item label="理智提醒">
                 <el-switch v-model="settings.feature.san"></el-switch>
               </el-form-item>
               <el-tooltip

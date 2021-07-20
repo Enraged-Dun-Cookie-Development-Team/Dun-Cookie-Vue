@@ -168,15 +168,15 @@ class SanInfo {
         this.remainTimeIntervalId = 0;
       }
       this.remainTime = '已经回满';
-      return;
+    } else {
+      const endTime = new Date(this.updateTime + (Settings.san.maxValue - this.currentSan) * SAN_RECOVERY_SPEED);
+
+      // 由于理智回满最多13个小时多，所以只可能是今天或明天回满
+      const isSameDay = endTime.getDay() !== new Date(this.updateTime).getDay();
+      const tomorrow = isSameDay ? '明天' : '';
+
+      this.remainTime = `预计${tomorrow}${TimeUtil.format(endTime, 'hh:mm')}回满，剩${TimeUtil.calcDiff(endTime, this.updateTime)}`;
     }
-    const endTime = new Date(this.updateTime + (Settings.san.maxValue - this.currentSan) * SAN_RECOVERY_SPEED);
-
-    // 由于理智回满最多13个小时多，所以只可能是今天或明天回满
-    const isSameDay = endTime.getDay() !== new Date(this.updateTime).getDay();
-    const tomorrow = isSameDay ? '明天' : '';
-
-    this.remainTime = `预计${tomorrow}${TimeUtil.format(endTime, 'hh:mm')}回满，剩${TimeUtil.calcDiff(endTime, this.updateTime)}`;
     this.saveUpdate();
   }
 
