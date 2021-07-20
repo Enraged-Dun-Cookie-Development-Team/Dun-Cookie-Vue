@@ -341,8 +341,11 @@ export default {
         deepAssign([], this.cardList)
             .forEach((item) => {
               const regex = new RegExp('(' + this.filterText.replaceAll(/([*.?+$^\[\](){}|\\\/])/g, '\\$1') + ')', 'gi');
-              if (regex.test(item.content.replaceAll(/(<([^>]+)>)/ig, ''))) {
-                item.content = item.content.replaceAll(regex, '<span class="highlight">$1</span>');
+              if (regex.test(item.content.replaceAll(/(<([^>]+)>)/gi, ''))) {
+                let newContent = item.content.replaceAll(/<br\/?>/gi, '\n')
+                newContent = newContent.replaceAll(regex, '<span class="highlight">$1</span>');
+                newContent = newContent.replaceAll('\n', '<br>');
+                item.content = newContent;
                 newFilterList.push(item);
               }
             });
