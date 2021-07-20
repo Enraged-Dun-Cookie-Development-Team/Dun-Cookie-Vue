@@ -34,12 +34,15 @@ function sanRecovery(san) {
   }
 }
 
+let remainTimeIntervalId = 0;
+
 // 理智计算timer
 function startSanRecovery(san, delay) {
   // 如果提供了时间参数则依照提供的参数延时，便于插件重启后正确更新
   if (!delay) {
     delay = SAN_RECOVERY_SPEED;
   }
+  san.startReloadTime();
   sanTimerId = setTimeout(() => {
     // 将实际恢复逻辑放进setTimeout中，如果放在外面就会出现第一次会立刻恢复1理智(而没有等待恢复时间)的问题
     sanRecovery(san);
@@ -64,12 +67,13 @@ function handleSanUpdate(san, settings) {
   }
 }
 
-// 由于现在Settings的更新message不能识别更新了哪些内容，故此处加一个变量来识别，<=0代表尚未更新过
-let oldMaxSan = -1;
+// 由于现在Settings的更新message不能识别更新了哪些内容，故此处加一个变量来识别
+let oldMaxSan = Settings.san.maxValue;
 
 function handleSettingsUpdate(san, settings) {
   // 如果功能被禁用或者理智最大值有更新，则停止计时器并将当前理智设置为最大值
   if (!settings.feature.san || oldMaxSan !== settings.san.maxValue) {
+    oldMaxSan = settings.san.maxValue;
     if (sanTimerId) {
       clearTimeout(sanTimerId);
       sanTimerId = null;
@@ -127,8 +131,6 @@ class SanInfo {
    */
   updateTime = new Date().getTime();
 
-  remainTimeIntervalId = 0;
-
   remainTime = `-`;
 
   set currentSan(san) {
@@ -156,9 +158,6 @@ class SanInfo {
         PlatformHelper.Message.registerListener('sanInfo', MESSAGE_SAN_UPDATE, data => deepAssign(this, data));
       }
     });
-
-    this.startReloadTime();
-    this.calcRemainingTime();
   }
 
   calcRemainingTime() {
@@ -178,6 +177,7 @@ class SanInfo {
     const tomorrow = isSameDay ? '明天' : '';
 
     this.remainTime = `预计${tomorrow}${TimeUtil.format(endTime, 'hh:mm')}回满，剩${TimeUtil.calcDiff(endTime, this.updateTime)}`;
+    this.saveUpdate();
   }
 
   saveUpdate() {
@@ -197,7 +197,7 @@ class SanInfo {
 
   // 通过计时器每分钟刷新当前剩余的时间
   startReloadTime() {
-    this.remainTimeIntervalId = setInterval(() => {
+    remainTimeIntervalId = setInterval(() => {
       this.calcRemainingTime();
     }, SAN_RECOVERY_SPEED / 12);
   }
