@@ -4,7 +4,7 @@
       <div v-html="item.content"></div>
       <!-- 如果有转发 -->
       <el-card v-if="item.retweeted" class="card margintb" shadow="never">
-        转发至 @{{ item.retweeted.name }}:
+        转发自 @{{ item.retweeted.name }}:
         <br/>
         <span v-html="item.retweeted.content"></span>
       </el-card>
