@@ -1,6 +1,11 @@
 {
     "list": [
         {
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://i0.hdslb.com/bfs/album/e190f6763ec0ddce357dcbfff5b84eda5ff8c247.jpg'> <div> <div>各位博士，</div> <div>记得参与<span class='online-yellow'>网页活动</span></div><div>领取合成玉，龙门币，家具等奖励</div><div>活动时间为<span class='online-blue'> 2021年7月26日16:00~8月5日15:59</span></div> <div>点击 <a href=\"https://ak.hypergryph.com/activity/dossoles-holiday\">这里</a> 快速跳转活动网页</div> ",
+            "starTime": "2021-07-25 00:58:57",
+            "overTime": "2021-08-05 15:59:59"
+        },
+        {
             "html": "<div class='online-area'> <img class='online-title-img' src='http://cdn.liuziyang.vip/qrcode.png'> <div> <div>博士，这是一份关于我们下一个项目的问卷。</div> <div>这个项目是<span class='online-blue'>基建最大收益可视化</span></div> <div>具体是由该工具根据你的干员自动安排换人时间与更换的干员等达到<span class='online-blue'>最大收益</span></div> <div>还请博士扫描一下左边的<span class='online-red'>二维码</span>或者点击 <a href='https://wj.qq.com/s2/8511686/0d6d/'>问卷链接</a> 填写下问卷噢~</div> <div>也欢迎去 <a href='https://github.com/Closure-Engineering-Team/Closure_Terminal'>Github</a> 点个star关注我们进度</div> </div> </div>",
             "starTime": "2021-06-27 16:34:22",
             "overTime": "2021-07-31 03:59:59"
@@ -11,14 +16,14 @@
             "overTime": "2099-12-31 04:00:00"
         },
         {
-            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20210708/9864c121e25fb46e0fee1ccd4c3b3652.jpg'> <div> <div>新活动故事集「如我所见」将于<span class='online-blue'>7月13号</span>开启</div> <div>新剿灭积水潮窟将于<span class='online-blue'>7月12号</span>开启，查看<a href=\"https://mapcn.ark-nights.com/map/camp_r_05\">出怪顺序</a></div> <div>建议在活动开启前刷完本周的<span class='online-red'>剿灭任务</span></div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>处更新<span class='online-blue'>作业视频</span></div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
-            "starTime": "2021-07-08 16:00:00",
-            "overTime": "2021-07-20 03:59:59"
-        },
-        {
             "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20210716/173c91d26c9e4c8afe57d5a2d94a143c.JPG'> <div> <div>SideStory「密林悍将归来」将于<span class='online-blue'>7月20号</span>开启</div> <div>本次活动掉落<span class='online-blue'>固源岩组，糖组，RMA70-12</span></div> <div>建议在活动开启前刷完本周的<span class='online-red'>剿灭任务</span></div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>处更新<span class='online-blue'>作业视频</span></div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
             "starTime": "2021-07-19 00:01:24",
             "overTime": "2021-08-03 03:59:59"
+        },
+        {
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20210723/97677d4072e316d7f834b9470736f21d.JPG'> <div> <div>SideStory「多索雷斯假日」将于<span class='online-blue'>8月3号</span>开启</div> <div>开启时间为周二下午4点</div> <div>建议在活动开启前刷完本周的<span class='online-red'>剿灭任务</span></div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>处更新<span class='online-blue'>作业视频</span></div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
+            "starTime": "2021-07-27 00:23:18",
+            "overTime": "2021-08-24 03:59:59"
         }
     ],
     "btnList": [
@@ -32,7 +37,7 @@
         },
         {
             "starTime": "2021-7-20 11:00:00",
-            "overTime": "2021-8-03 03:59:59",
+            "overTime": "2021-7-30 03:59:59",
             "url": "https://www.bilibili.com/video/BV1nV411p7Ug",
             "name": "【魔法zc目录】“密林悍将归来”RI平民攻略合集！阵容平民+低练度+语音详解的愉悦攻略！",
             "img": "https://i1.hdslb.com/bfs/archive/17cedede72da428acd810faa0364e9a6385cba49.jpg@200w_125h_1c.webp",
@@ -48,7 +53,7 @@
         },
         {
             "starTime": "2021-7-20 11:00:00",
-            "overTime": "2021-8-03 03:59:59",
+            "overTime": "2021-7-30 03:59:59",
             "url": "https://www.bilibili.com/video/BV1654y1E7om",
             "name": "【好吃的橘子鸭】复刻·密林悍将归来 速刷+刷信赖+更新打法，语音详解，你必过！",
             "img": "https://i0.hdslb.com/bfs/archive/c9b99409dd7fb26efeec5f06344ff58552e4fd92.jpg@200w_125h_1c.webp",
@@ -56,25 +61,33 @@
         },
         {
             "starTime": "2021-7-17 11:00:00",
-            "overTime": "2021-7-24 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1864y14736",
-            "name": "【全网首杀】三星队 JT8-3突袭 —— 由平凡铸就的奇迹",
-            "img": "https://i1.hdslb.com/bfs/archive/70315b658c66ac8cbe0cc0973848b6a12d2db19f.jpg@200w_125h_1c.webp",
+            "overTime": "2021-8-03 15:59:59",
+            "url": "https://www.bilibili.com/video/BV1QV411p7PM?t=257",
+            "name": "【杨颜同学】官方直播资讯盘点，夏日活动前瞻。",
+            "img": "https://i1.hdslb.com/bfs/archive/1222cf5581731752a698ef91381db6ccabc03d49.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-7-17 11:00:00",
+            "overTime": "2021-8-03 15:59:59",
+            "url": "https://www.bilibili.com/video/BV1ZL411J7Xv",
+            "name": "【小狼XF】5分钟速看夏活直播！新养成系统！加强！陈限定！中文配音！新主线！",
+            "img": "https://i2.hdslb.com/bfs/archive/6110bcc4c580820c23511816c2c88b78bbe8234e.jpg@200w_125h_1c.webp",
             "radius": true
         }
     ],
     "dayInfo": {
         "resources": {
-            "starTime": "2021-5-15 16:00:00",
-            "overTime": "2021-5-29 03:59:59"
+            "starTime": "2021-8-26 16:00:00",
+            "overTime": "2021-9-09 03:59:59"
         },
         "countdown": [
             {
                 "text": "当前轮换池结束",
-                "remark": "塞雷娅[兑换],嵯峨,食铁兽,灰喉[兑换],四月",
-                "time": "2021-7-22 03:59:59",
-                "starTime": "2021-7-09 04:00:00",
-                "overTime": "2021-7-22 03:59:59"
+                "remark": "安洁莉娜[兑换],早露,普罗旺斯,梅尔[兑换],乌有",
+                "time": "2021-8-05 03:59:59",
+                "starTime": "2021-7-22 04:00:00",
+                "overTime": "2021-8-05 03:59:59"
             },
             {
                 "text": "当前活动池结束",
@@ -84,34 +97,41 @@
                 "overTime": "2021-8-03 03:59:59"
             },
             {
-                "text": "故事集「如我所见」，活动结束",
-                "remark": "",
-                "time": "2021-7-20 03:59:59",
-                "starTime": "2021-7-13 16:00:00",
-                "overTime": "2021-7-20 03:59:59"
+                "text": "当前活动池结束",
+                "remark": "假日威龙陈[限定],水月,羽毛笔",
+                "time": "2021-8-17 03:59:59",
+                "starTime": "2021-8-03 16:00:00",
+                "overTime": "2021-8-17 03:59:59"
             },
             {
-                "text": "SideStory「密林悍将归来」，限时复刻开启",
+                "text": "SideStory「多索雷斯假日」，活动结束",
                 "remark": "",
-                "time": "2021-7-20 15:59:59",
-                "starTime": "2021-7-17 16:00:00",
-                "overTime": "2021-7-20 15:59:59"
+                "time": "2021-8-24 03:59:59",
+                "starTime": "2021-8-03 16:00:00",
+                "overTime": "2021-8-24 03:59:59"
+            },
+            {
+                "text": "SideStory「多索雷斯假日」，活动开启",
+                "remark": "",
+                "time": "2021-8-03 15:59:59",
+                "starTime": "2021-7-30 04:00:00",
+                "overTime": "2021-8-03 15:59:59"
             },
             {
                 "text": "SideStory「密林悍将归来」，限时复刻结束",
                 "remark": "",
-                "time": "2021-8-03 03:59:59",
+                "time": "2021-7-30 03:59:59",
                 "starTime": "2021-7-20 16:00:00",
-                "overTime": "2021-8-03 03:59:59"
+                "overTime": "2021-7-30 03:59:59"
             }
         ]
     },
     "upgrade": {
-        "v": "2.4.2",
-        "title": "小刻食堂翻新啦 - 2.4.2",
-        "description": "🐛 紧急修复部分2.4.0大版本存在的BUG</br>1.修复微博存在无法推送的bug</br>2.修复资源开放提醒在周天0点到4点显示错误的bug</br>3.添加可调整低频模式与原本蹲饼频率时间倍数",
-        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.4.2/Dun-Cookie-2.4.2.crx",
-        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.4.2/Dun-Cookie-2.4.2.zip",
+        "v": "2.5.0",
+        "title": "小刻食堂翻新啦 - 2.5.0",
+        "description": "😆 兼容火狐浏览器</br>1.兼容火狐浏览器，火狐浏览器可以使用所用功能</br>2.兼容nodejs，方便之后开发</br>3.微调部逻辑，搜索更分文案</br>4.调整搜索逻辑，搜索更加精准",
+        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.5.0/Dun-Cookie-2.5.0.crx",
+        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.5.0/Dun-Cookie-2.5.0.zip",
         "downSpare": "https://pan.baidu.com/s/1kzY6kpfYqLcGpuaiwQOGoA",
         "downSpareText": "备用下载（提取码 jzq9）",
         "downChrome": "https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN",
