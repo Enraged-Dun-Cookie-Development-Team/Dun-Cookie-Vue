@@ -84,6 +84,13 @@ const defaultDataSourcesList = [
     'http://music.163.com/api/artist/albums/32540734',
     9
   ),
+  new WeiboDataSource(
+    '/assets/image/yjwb.jpg',
+    '鹰角网络微博',
+    '鹰角网络微博',
+    'https://m.weibo.cn/api/container/getIndex?type=uid&value=7461423907&containerid=1076037461423907',
+    10
+  ),
 ];
 
 // 排序，会影响页面中的显示顺序
@@ -111,6 +118,7 @@ if (IS_DEBUG) {
   defaultDataSources['官网'].dataUrl = 'test/gw.html';
   defaultDataSources['泰拉记事社官网'].dataUrl = ['test/xbJson.json', 'test/xgbJson.json'];
   defaultDataSources['塞壬唱片网易云音乐'].dataUrl = 'test/wyyJson.json';
+  defaultDataSources['鹰角网络微博'].dataUrl = 'test/yjwbJson.json?type=uid&value=7461423907&containerid=1076037461423907';
 }
 
 
