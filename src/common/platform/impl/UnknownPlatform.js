@@ -83,4 +83,8 @@ export default class UnknownPlatform extends AbstractPlatform {
   addInstallListener(listener) {
     return this.defPlatform.addInstallListener(listener);
   }
+
+  sendHttpRequest(url, method) {
+    return this.defPlatform.sendHttpRequest(url, method);
+  }
 }
