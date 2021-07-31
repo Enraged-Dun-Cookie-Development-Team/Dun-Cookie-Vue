@@ -120,7 +120,7 @@
       </el-tabs>
     <div class="content-timeline-shadow"></div>
     <el-timeline 
-      ref="el-timeline-area" 
+      ref="elTimelineArea" 
       v-if="LazyLoaded" 
       :class="[settings.display.windowMode ? 'window' : '', settings.display.showByTag ? 'tag' : '']"
       >

@@ -128,6 +128,14 @@
         </div>
       </el-drawer>
       <el-button
+        v-show="!drawer && scrollShow"
+        icon="el-icon-top"
+        type="primary"
+        circle
+        class="top-btn"
+        @click.stop="goTop"
+      ></el-button>
+      <el-button
         v-show="!drawer"
         icon="el-icon-more"
         type="primary"
@@ -151,7 +159,7 @@
         </span>
       </div>
       <div id="content">
-        <time-line :imgShow="LazyLoaded" :cardListByTag="cardList"> </time-line>
+        <time-line ref="timeline" :imgShow="LazyLoaded" :cardListByTag="cardList"> </time-line>
       </div>
     </div>
   </div>
@@ -184,6 +192,8 @@ export default {
   created() {},
   mounted() {
     this.init();
+    // 监听鼠标滚动事件
+    window.addEventListener('scroll', this.handleScroll, true); 
   },
   watch: {
     drawer(value) {
@@ -216,6 +226,7 @@ export default {
       dayInfo: dayInfo,
       loading: true, // 初始化加载
       onlineDayInfo: {},
+      scrollShow: false,
       // allHeight: 0,
     };
   },
@@ -306,6 +317,25 @@ export default {
       }, 5000);
     },
 
+    // 检测滚动条高度，大于600出现回顶部按钮 
+    handleScroll() {
+      let scrollArea = this.$refs.timeline.$refs.elTimelineArea.$el;
+      this.scrollShow = scrollArea.scrollTop > 600 ? true : false;
+    },
+
+    // 回顶部
+    goTop() {
+      let scrollArea = this.$refs.timeline.$refs.elTimelineArea.$el;
+      let top = scrollArea.scrollTop;
+      let changeTop = top / 10;
+      const timeTop = setInterval(() => {
+      scrollArea.scrollTop = top -= changeTop;
+        if (top <= 0) {
+          clearInterval(timeTop)
+        }
+      }, 10)
+    },
+
     openSetting() {
       PlatformHelper.Tabs.createWithExtensionFile(PAGE_OPTIONS);
     },
@@ -373,6 +403,16 @@ export default {
     position: fixed;
     bottom: 30px;
     right: 30px;
+    z-index: 9999;
+    opacity: 0.3;
+    &:hover {
+      opacity: 1;
+    }
+  }
+  .top-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 80px;
     z-index: 9999;
     opacity: 0.3;
     &:hover {
