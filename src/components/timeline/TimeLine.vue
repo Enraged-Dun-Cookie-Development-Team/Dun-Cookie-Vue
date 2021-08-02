@@ -225,6 +225,7 @@ export default {
     }
   },
   methods: {
+    openWeb: PlatformHelper.Tabs.create,
     openUrl(url, w = 1024, h = 950) {
       PlatformHelper.Windows
           .createPanelWindow(url, w, h);
@@ -402,7 +403,11 @@ export default {
                 window.event.returnValue = true;
               }
               const url = target.getAttribute("href");
-              this.openUrl(url, 1400, 950);
+              if (target.className === "webOpen") {
+                this.openWeb(url);
+              } else {
+                this.openUrl(url, 1400, 950);
+              }
             }
 
             if (target.nodeName.toLocaleLowerCase() === "drawer") {
