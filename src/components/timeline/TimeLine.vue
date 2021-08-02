@@ -57,10 +57,10 @@
                     @click.stop="openToolDrawer"
                 >
                   <div class="sane">
-                    当前理智为<span class="online-blue sane-number">{{san.currentSan }}</span>点
+                    当前理智为<span class="online-blue sane-number">{{ san.currentSan }}</span>点
                   </div>
                   <div class="sane-info">
-                    {{san.remainTime}}
+                    {{ san.remainTime }}
                   </div>
                 </div>
               </div>
@@ -74,13 +74,13 @@
                       :key="item.type"
                   >
                     <div slot="content">
-                      {{`${item.name} - 开放日期： ${calcResourceOpenDay(item.day)}`}}
+                      {{ `${item.name} - 开放日期： ${calcResourceOpenDay(item.day)}` }}
                     </div>
                     <div
                         class="day-info-content-bottom-card"
                         :class="item.notToday ? 'notToday' : ''"
                     >
-                      <img v-if="imgShow" v-lazy="item.src" />
+                      <img v-if="imgShow" v-lazy="item.src"/>
                     </div>
                   </el-tooltip>
                 </div>
@@ -97,16 +97,16 @@
       </el-carousel>
     </el-card>
     <el-tabs
-          v-if="settings.display.showByTag"
-          v-model="settings.display.defaultTag"
-          :stretch="true"
-          @tab-click="selectListByTag"
-      >
-        <el-tab-pane
-            v-for="item of transformToSortList(cardListByTag)"
-            :key="item.dataName"
-            :label="item.dataName"
-            :name="item.dataName">
+        v-if="settings.display.showByTag"
+        v-model="settings.display.defaultTag"
+        :stretch="true"
+        @tab-click="selectListByTag"
+    >
+      <el-tab-pane
+          v-for="item of transformToSortList(cardListByTag)"
+          :key="item.dataName"
+          :label="item.dataName"
+          :name="item.dataName">
             <span slot="label">
               <el-tooltip
                   effect="dark"
@@ -116,14 +116,14 @@
               <img class="title-img" :src="getDataSourceByName(item.dataName).icon"/>
               </el-tooltip>
             </span>
-        </el-tab-pane>
-      </el-tabs>
+      </el-tab-pane>
+    </el-tabs>
     <div class="content-timeline-shadow"></div>
-    <el-timeline 
-      ref="elTimelineArea" 
-      v-if="LazyLoaded" 
-      :class="[settings.display.windowMode ? 'window' : '', settings.display.showByTag ? 'tag' : '']"
-      >
+    <el-timeline
+        ref="elTimelineArea"
+        v-if="LazyLoaded"
+        :class="[settings.display.windowMode ? 'window' : '', settings.display.showByTag ? 'tag' : '']"
+    >
       <MyElTimelineItem
           v-for="(item, index) in filterCardList"
           :key="index"
@@ -133,14 +133,10 @@
           :icon="'headImg'"
       >
         <span class="is-top-info" v-if="item.isTop">
-          <span class="color-blue">【当前条目在{{getDataSourceByName(item.dataSource).title}}的时间线内为置顶状态】</span>
+          <span class="color-blue">【当前条目在{{ getDataSourceByName(item.dataSource).title }}的时间线内为置顶状态】</span>
         </span>
-        <el-card
-            class="card"
-            :class="[`font-size-${settings.display.fontSize}`, {'special-source': item.componentData}]"
-            shadow="never"
-        >
-        <span>
+
+        <span class="card-btn-area">
           <el-button
               class="to-copy-btn"
               :class="{'special-source': item.componentData}"
@@ -158,6 +154,11 @@
           ><i class="el-icon-right"></i
           ></el-button>
         </span>
+        <el-card
+            class="card"
+            :class="[`font-size-${settings.display.fontSize}`, {'special-source': item.componentData}]"
+            shadow="never"
+        >
           <component :is="resolveComponent(item)" :item="item" :show-image="imgShow"></component>
         </el-card>
       </MyElTimelineItem>
@@ -200,6 +201,7 @@ export default {
       filterCardList: [],
       LazyLoaded: false,
       insiderCode: null, // 储存内部密码
+      janvas: null //菜单模块icon
     };
   },
   mounted() {
@@ -223,9 +225,13 @@ export default {
     }
   },
   methods: {
-    openUrl: PlatformHelper.Tabs.create,
+    openUrl(url, w = 1024, h = 950) {
+      PlatformHelper.Windows
+          .createPanelWindow(url, w, h);
+    },
     getDataSourceByName: DataSourceUtil.getByName,
     transformToSortList: DataSourceUtil.transformToSortList,
+
     resolveComponent(item) {
       if (!item.componentData) {
         return DefaultItem;
@@ -262,8 +268,8 @@ export default {
       // 如果不在里面
       let week = new Date().getDay();
       // 判断4点更新
-      week = date.getHours() >= 4 ? week : week-1;
-      week = week == -1 ? 6 : week;  
+      week = date.getHours() >= 4 ? week : week - 1;
+      week = week == -1 ? 6 : week;
       this.dayInfo.forEach((item) => {
         item.notToday = !item.day.includes(week);
       });
@@ -396,7 +402,7 @@ export default {
                 window.event.returnValue = true;
               }
               const url = target.getAttribute("href");
-              this.openUrl(url);
+              this.openUrl(url, 1400, 950);
             }
 
             if (target.nodeName.toLocaleLowerCase() === "drawer") {
@@ -414,33 +420,33 @@ export default {
     // 复制
     copyData(item) {
       this.$copyText(
-        `${item.content.replace(
-          /<br\/>/g,
-          `
+          `${item.content.replace(
+              /<br\/>/g,
+              `
 `
-        )}   
+          )}
 
 蜜饼来源：${item.jumpUrl}
 
 数据由 小刻食堂${CURRENT_VERSION} 收集
 工具介绍链接：https://arknightscommunity.drblack-system.com/2012.html`
       ).then(
-        (e) => {
-          this.$message({
-            offset: 50,
-            center: true,
-            message: "复制成功",
-            type: "success",
-          });
-        },
-        (e) => {
-          this.$message({
-            offset: 50,
-            center: true,
-            message: "复制失败",
-            type: "error",
-          });
-        }
+          (e) => {
+            this.$message({
+              offset: 50,
+              center: true,
+              message: "复制成功",
+              type: "success",
+            });
+          },
+          (e) => {
+            this.$message({
+              offset: 50,
+              center: true,
+              message: "复制失败",
+              type: "error",
+            });
+          }
       );
     },
   },
@@ -468,6 +474,7 @@ img[lazy="error"] {
     filter: brightness(20%);
   }
 }
+
 @import "../../theme/theme.less";
 
 .styleChange(@theme) {
@@ -483,7 +490,7 @@ img[lazy="error"] {
   @hover: "hover-@{theme}"; // 按钮hover颜色
 
   a {
-    color: @@content!important;
+    color: @@content !important;
   }
   .color-blue {
     color: #23ade5;
@@ -494,7 +501,6 @@ img[lazy="error"] {
     background-color: @@bgColor;
     border: @@timeline solid 1px;
     color: @@content;
-
     // .retweeted  {
     //   background-color: @@bgColor;
     //   border: @@timeline solid 1px;
@@ -504,12 +510,15 @@ img[lazy="error"] {
     &.font-size--1 {
       font-size: 0.7rem;
     }
+
     &.font-size-0 {
       font-size: 1rem;
     }
+
     &.font-size-1 {
       font-size: 1.2rem;
     }
+
     &.font-size-2 {
       font-size: 1.5rem;
     }
@@ -519,45 +528,9 @@ img[lazy="error"] {
       margin-left: 10px;
       color: #23ade5;
     }
+
     .head-img {
       width: 20px;
-    }
-    .to-url-btn {
-      position: absolute;
-      top: -8px;
-      right: 0;
-      background-color: @@bgColor;
-      color: @@content;
-      border: @@btnBorder 1px solid;
-    }
-    .to-url-btn:hover {
-      color: #409eff;
-      border-color: #c6e2ff;
-      background-color: @@hover;
-    }
-    .to-copy-btn {
-      position: absolute;
-      top: -8px;
-      right: 50px;
-      background-color: @@bgColor;
-      color: @@content;
-      border: @@btnBorder 1px solid;
-      // 需要特殊显示的数据源只提供复制按钮，跳转由数据源自行实现
-      &.special-source {
-        right: 0;
-      }
-    }
-    .to-copy-btn:hover {
-      color: #409eff;
-      border-color: #c6e2ff;
-      background-color: @@hover;
-    }
-
-    // 需要特殊显示的数据源
-    &.special-source {
-      .el-card__body {
-        padding: 0 !important;
-      }
     }
   }
 
@@ -573,8 +546,9 @@ img[lazy="error"] {
     margin-top: 40px;
     position: fixed;
     width: 100%;
+
     #timeline-area {
-    position: relative;
+      position: relative;
       // 间隔阴影
       .content-timeline-shadow {
         position: absolute;
@@ -584,6 +558,7 @@ img[lazy="error"] {
         z-index: 10;
       }
     }
+
     // 更改卡片阴影
     // .is-always-shadow {
     //   box-shadow: 0 2px 12px 0 @@shadow;
@@ -598,14 +573,17 @@ img[lazy="error"] {
     color: @@content;
     filter: blur(0);
     transition: 0.5s filter;
+
     &.isnew {
       margin-bottom: 10px;
       cursor: pointer;
       text-align: center;
     }
+
     &.searching {
       filter: blur(40px);
     }
+
     .el-card__body {
       padding: 0;
       // 升级内容样式
@@ -618,57 +596,69 @@ img[lazy="error"] {
         justify-content: center;
         font-size: 1.3rem;
         justify-content: space-evenly;
+
         img {
           width: 100px;
         }
       }
+
       // 今日信息内容样式
       .day-info {
         .day-info-title {
         }
+
         .day-info-content {
           display: flex;
           flex-direction: column;
           justify-content: flex-start;
           height: 100px;
           margin-right: 30px;
+
           .day-info-content-top {
             width: 100%;
             display: flex;
             flex-direction: row;
             justify-content: space-between;
             align-items: center;
+
             .day-info-content-top-card-area {
               font-size: 12px;
             }
+
             .sane-area {
               cursor: pointer;
               display: flex;
               justify-content: right;
               align-items: flex-end;
               flex-direction: column;
+
               .sane {
                 font-size: 16px;
                 font-family: Geometos, "Sans-Regular", "SourceHanSansCN-Regular",
                 YaHei;
+
                 .sane-number {
                   font-size: 28px;
                 }
               }
+
               .sane-info {
               }
             }
           }
+
           .day-info-content-bottom {
             margin-top: 5px;
             width: 100%;
             display: flex;
             justify-content: space-around;
             align-items: flex-end;
+
             & .day-info-content-bottom-card-area {
               display: flex;
               align-items: center;
               justify-content: space-around;
+
               .day-info-content-bottom-card {
                 height: 40px;
                 width: 70px;
@@ -676,9 +666,11 @@ img[lazy="error"] {
                 display: flex;
                 align-items: center;
                 justify-content: center;
+
                 img {
                   height: 100%;
                 }
+
                 &.notToday {
                   filter: opacity(0.2);
                 }
@@ -688,6 +680,7 @@ img[lazy="error"] {
         }
       }
     }
+
     .el-carousel__button {
       background-color: #23ade5;
     }
@@ -695,6 +688,7 @@ img[lazy="error"] {
   .sane-calculator {
     display: flex;
     justify-content: space-around;
+
     .el-form-item {
       margin-bottom: 0;
     }
@@ -708,6 +702,7 @@ img[lazy="error"] {
     height: 415px;
     margin-top: 10px;
     transition: all 0.5s;
+
     .highlight {
       color: #23ade5;
       box-shadow: 0 0 10px 0 red;
@@ -716,33 +711,89 @@ img[lazy="error"] {
       margin: 5px;
       display: inline-block;
     }
+
     &.tag {
       height: 368px;
     }
+
     &.window {
       height: calc(100vh - 184px);
+
       &.tag {
         height: calc(100vh - 230px);
       }
     }
+
     .is-top-info {
       position: absolute;
       top: 2px;
       left: 220px;
     }
+
+    .card-btn-area {
+      position: absolute;
+      top: 2px;
+      right: 0;
+
+      .to-url-btn {
+        position: absolute;
+        top: -8px;
+        right: 0;
+        background-color: @@bgColor;
+        color: @@content;
+        border: @@btnBorder 1px solid;
+      }
+
+      .to-url-btn:hover {
+        color: #409eff;
+        border-color: #c6e2ff;
+        background-color: @@hover;
+      }
+
+      .to-copy-btn {
+        position: absolute;
+        top: -8px;
+        right: 50px;
+        background-color: @@bgColor;
+        color: @@content;
+        border: @@btnBorder 1px solid;
+        // 需要特殊显示的数据源只提供复制按钮，跳转由数据源自行实现
+        &.special-source {
+          right: 0;
+        }
+      }
+
+      .to-copy-btn:hover {
+        color: #409eff;
+        border-color: #c6e2ff;
+        background-color: @@hover;
+      }
+
+      // 需要特殊显示的数据源
+      &.special-source {
+        .el-card__body {
+          padding: 0 !important;
+        }
+      }
+    }
+
     .el-timeline-item__tail {
       border-left: 2px solid @@timeline;
     }
+
     .el-timeline-item__timestamp {
       color: @@subTitle;
       margin-left: 20px;
       margin-bottom: 15px;
       font-size: 1rem;
     }
+
     .el-timeline-item__node {
       background: none;
+
       .el-timeline-item__icon {
         position: relative;
+
         &::before {
           content: " ";
           position: absolute;
@@ -751,6 +802,7 @@ img[lazy="error"] {
           width: 36px;
           height: 36px;
         }
+
         &.headImg::before {
           border-radius: 10px;
           background: var(--icon) no-repeat center, @@bgColor;

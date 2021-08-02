@@ -27,12 +27,16 @@
 <script>
 // 用于TerraHistoricusDataSource的特殊组件
 import PlatformHelper from '../../../common/platform/PlatformHelper';
+import {PAGE_POPUP_WINDOW} from "@/common/Constants";
 
 export default {
   name: "TerraHistoricusItem",
   props: ["item", "showImage"],
   methods: {
-    openUrl: PlatformHelper.Tabs.create
+    openUrl(url) {
+      PlatformHelper.Windows
+          .createPanelWindow(url, 900, 1000);
+    }
   }
 }
 </script>
@@ -55,7 +59,7 @@ export default {
     position: absolute;
     height: 100%;
     width: 100%;
-    padding: 2% 4%;
+    padding: 2% 2%;
 
     .content-card-info {
       margin-top: 3%;
@@ -87,7 +91,7 @@ export default {
     }
 
     .content-card-episodes {
-      width: 240px;
+      width: 250px;
       margin: 0 0 0 20px;
       max-height: 310px;
       overflow: auto;

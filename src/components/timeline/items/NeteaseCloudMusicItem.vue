@@ -28,7 +28,10 @@ export default {
   name: "NeteaseCloudMusicItem",
   props: ["item", "showImage"],
   methods: {
-    openUrl: PlatformHelper.Tabs.create
+    openUrl(url) {
+      PlatformHelper.Windows
+          .createPanelWindow(url, 1400, 800);
+    }
   }
 }
 </script>
