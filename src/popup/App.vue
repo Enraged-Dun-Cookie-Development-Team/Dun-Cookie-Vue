@@ -382,6 +382,7 @@ export default {
       this.san.saveUpdate();
       this.toolDrawer = false;
       this.$message({
+        offset: 50,
         center: true,
         message: "保存成功，开始计算",
         type: "success",
