@@ -494,7 +494,7 @@ export default {
     font-size: 1rem;
     color: #23ade5;
     user-select: none;
-    background: #ffffff;
+    background: @@bgColor;
 
     .version {
       text-align: left;
