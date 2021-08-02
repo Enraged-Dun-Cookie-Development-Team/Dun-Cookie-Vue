@@ -164,7 +164,7 @@
           </span>
         </div>
         <!-- <span class="menu-btn el-icon-menu" @click.stop="drawer = !drawer"></span> -->
-        <span id="menu-btn"  @click.stop="drawer = !drawer;" style="width:23px;height:23px;"></span>
+        <span id="menu-btn"  @click.stop="drawer = !drawer;" style="width:30px;height:30px;"></span>
       </div>
       <div id="content">
         <time-line

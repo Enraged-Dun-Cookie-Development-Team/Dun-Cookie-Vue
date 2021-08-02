@@ -8,7 +8,14 @@
 -->
 <template>
   <div id="app" v-loading="load">
-    <img :src="img" @load="imgOnload($event)" />
+    <div class="img-info" v-show="!load">
+      <h3>图片信息</h3>
+      <div>链接：{{ this.info.currentSrc }}</div>
+      <div>{{ this.info.naturalWidth }} × {{ this.info.naturalHeight }}</div>
+    </div>
+        <img class="img" :src="img" :class="showInfo?'show-info':''" @click="viewInfo" @load="imgOnload($event)"/>
+<!--    <img class="img" src="http://wx1.sinaimg.cn/bmiddle/006QZngZgy1gt2gik67e8j31hc0u07ht.jpg"-->
+         :class="showInfo?'show-info':''" @click="viewInfo" @load="imgOnload($event)"/>
   </div>
 </template>
 
@@ -24,36 +31,60 @@ export default {
       this.winId = data.winId;
     });
   },
-  mounted() {},
+  mounted() {
+  },
 
   data() {
     return {
       load: true,
       item: null,
       img: null,
-      info: null,
+      info: {},
+      showInfo: false,
     };
   },
   computed: {},
   methods: {
     imgOnload(data) {
       this.load = false;
-      this.info = {
-        currentSrc: data.currentSrc,
-        naturalHeight: data.naturalHeight,
-        naturalWidth: data.naturalWidth,
-      };
+      this.info.currentSrc = this.img;
+      this.info.naturalHeight = data.target.height;
+      this.info.naturalWidth = data.target.width;
     },
+    // 查看图片信息
+    viewInfo() {
+      this.showInfo = !this.showInfo;
+    }
   },
 };
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 #app {
   height: 100vh;
   width: 100vw;
+  overflow: hidden;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
+  perspective: 1000px;
+
+  .img-info {
+    position: fixed;
+    width: 100%;
+    text-align: center;
+    z-index: -1;
+  }
+
+  .img {
+    transition: all 1s;
+
+    &.show-info {
+      transform-style: preserve-3d;
+      transform-origin: bottom;
+      transform: rotateX(50deg);
+      box-shadow: 0 0 30px -5px #23ade5;
+    }
+  }
 }
 </style>
