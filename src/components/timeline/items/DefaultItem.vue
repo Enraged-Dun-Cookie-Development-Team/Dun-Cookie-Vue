@@ -1,13 +1,16 @@
 <template>
-  <div>
+  <div class="wrapper" :data-id="item.id">
     <el-row>
-      <div v-html="item.content"></div>
-      <!-- 如果有转发 -->
-      <el-card v-if="item.retweeted" class="card margintb" shadow="never">
-        转发自 @{{ item.retweeted.name }}:
-        <br/>
-        <span v-html="item.retweeted.content"></span>
-      </el-card>
+      <span class="wrapper-content">
+        <span v-html="item.content"></span>
+        <!-- 如果有转发 -->
+      <br/>
+        <div v-if="item.retweeted" class="margintb card card-retweeted">
+          转发自 @{{ item.retweeted.name }}:
+          <br/>
+          <span v-html="item.retweeted.content"></span>
+        </div>
+      </span>
     </el-row>
     <el-row v-if="showImage && settings.display.showImage && item.coverImage" class="margintb">
       <div :class="{'show-all': showAllImage.includes(item.coverImage)}"
@@ -121,7 +124,11 @@ export default {
   .margintb {
     margin: 10px 0 0 0;
   }
-
+  .card-retweeted {
+    padding: 10px;
+    border-radius: 3px;
+    width: auto;
+  }
   .img-area {
     width: 100%;
     height: 150px;
@@ -133,6 +140,7 @@ export default {
       max-width: 700px;
       width: 100%;
       margin: auto;
+
       .multi-img-area {
         position: relative;
       }
@@ -144,24 +152,27 @@ export default {
       margin: auto;
       position: relative;
     }
+
     .multi-img-area,
     .one-img {
       .img-btn {
         opacity: 0;
         transition: 0.5s opacity;
       }
+
       &:hover {
         .img-btn {
           opacity: 1;
         }
       }
     }
-  
+
 
     .img {
       border-radius: 4px;
       width: 100%;
     }
+
     // 图片操作按钮
     .img-btn {
       position: absolute;
@@ -174,6 +185,7 @@ export default {
       background: #fff;
       line-height: 16px;
       border-radius: 3px;
+
       i {
         font-size: 12px;
       }

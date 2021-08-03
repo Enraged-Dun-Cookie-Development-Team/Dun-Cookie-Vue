@@ -164,7 +164,7 @@
           </span>
         </div>
         <!-- <span class="menu-btn el-icon-menu" @click.stop="drawer = !drawer"></span> -->
-        <span id="menu-btn"  @click.stop="drawer = !drawer;" style="width:30px;height:30px;"></span>
+        <span id="menu-btn" @click.stop="drawer = !drawer;" style="width:30px;height:30px;"></span>
       </div>
       <div id="content">
         <time-line
@@ -274,7 +274,8 @@ export default {
       this.janvas = new janvas.Canvas({
         container: "#menu-btn", // #容器 id 或者是容器引用
         props: {
-          color: "#23ade5" // 颜色采用 HEX 格式，
+          color: "#23ade5", // 颜色采用 HEX 格式，起始颜色，也即最开始展示的颜色
+          backgroundColor: "#ffffff" // 中止颜色，也即背景颜色
         },
         methods: {
           init: function () { // 控件第一次初始化时调用，仅调用一次
@@ -293,27 +294,28 @@ export default {
             size = w - rect.getStartX() * 2; // 此为计算边界矩形大小
             var border = this.border = new janvas.Rect(ctx, // 边界矩形大小，为了避免多余像素
                 rect.getStartX() + 1, rect.getStartY() + 1, size - 2, size - 2, ox, oy);
-            border.getStyle().setFillStyle("white");
-            var hsl = new janvas.Hsl().fromRgb(new janvas.Rgb().fromHexString(this.color)),
-                light = hsl.getLightness();
+            border.getStyle().setFillStyle(this.backgroundColor);
+            var sRgbStart = new janvas.Rgb().fromHexString(this.color).sRgbInverseCompanding(),
+                sRgbEnd = new janvas.Rgb().fromHexString(this.backgroundColor).sRgbInverseCompanding(),
+                rgb = new janvas.Rgb();
             this.rotate = new janvas.Animation(this.$raf, 500, 0, // 动画精灵对象
                 function () {
                   if (this.status) {
                     this.angle = this.angleRange, this.angleRange = -Math.PI / 4;
-                    this.light = 100, this.lightRange = light - 100;
+                    this.sRgbStart = sRgbEnd, this.sRgbEnd = sRgbStart;
                   } else {
                     this.angle = 0, this.angleRange = Math.PI / 4;
-                    this.light = light, this.lightRange = 100 - light;
+                    this.sRgbStart = sRgbStart, this.sRgbEnd = sRgbEnd;
                   }
                 },
                 function (ratio) {
                   ratio = janvas.Utils.ease.out.cubic(ratio);
                   rect.getMatrix().setAngle(this.angle + this.angleRange * ratio);
                   border.getMatrix().setAngle(this.angle + this.angleRange * ratio);
-                  rect.getStyle().setFillStyle(
-                      hsl.setLightness(this.light + this.lightRange * ratio).toHslString());
-                  border.getStyle().setFillStyle(
-                      hsl.setLightness(this.light + this.lightRange * (1 - ratio)).toHslString());
+                  janvas.Rgb.sRgbMixing(this.sRgbStart, this.sRgbEnd, ratio, rgb);
+                  rect.getStyle().setFillStyle(rgb.sRgbCompanding().toRgbString());
+                  janvas.Rgb.sRgbMixing(this.sRgbStart, this.sRgbEnd, 1 - ratio, rgb);
+                  border.getStyle().setFillStyle(rgb.sRgbCompanding().toRgbString());
                 },
                 function (forward) {
                   if (forward) this.status = !this.status;
@@ -518,6 +520,7 @@ export default {
     &.top-btn-show {
       right: 20px;
       opacity: 0.3;
+
       &:hover {
         opacity: 1;
       }

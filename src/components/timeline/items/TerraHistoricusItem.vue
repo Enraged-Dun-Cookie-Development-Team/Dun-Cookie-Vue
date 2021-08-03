@@ -1,5 +1,6 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper" :data-id="item.id">
+    <span class="wrapper-content"></span>
     <img v-if="showImage" v-lazy="item.coverImage" class="image-back"/>
     <div class="content-card">
       <div class="content-card-info">

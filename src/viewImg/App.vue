@@ -7,15 +7,13 @@
  * @FilePath: \Dun-Cookie-Vue\src\viewImg\App.vue
 -->
 <template>
-  <div id="app" v-loading="load">
+  <div id="app" @click="showInfo = !showInfo" v-loading="load">
     <div class="img-info" v-show="!load">
       <h3>图片信息</h3>
-      <div>链接：{{ this.info.currentSrc }}</div>
+      <div>{{ this.info.currentSrc }}</div>
       <div>{{ this.info.naturalWidth }} × {{ this.info.naturalHeight }}</div>
     </div>
-        <img class="img" :src="img" :class="showInfo?'show-info':''" @click="viewInfo" @load="imgOnload($event)"/>
-<!--    <img class="img" src="http://wx1.sinaimg.cn/bmiddle/006QZngZgy1gt2gik67e8j31hc0u07ht.jpg"
-         :class="showInfo?'show-info':''" @click="viewInfo" @load="imgOnload($event)"/>-->
+    <img class="img" :src="img" :class="showInfo?'show-info':''" @load="imgOnload($event)"/>
   </div>
 </template>
 

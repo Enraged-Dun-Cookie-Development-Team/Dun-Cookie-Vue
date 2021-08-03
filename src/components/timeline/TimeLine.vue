@@ -138,13 +138,23 @@
 
         <span class="card-btn-area">
           <el-button
-              class="to-copy-btn"
+              class="to-copy-share"
               :class="{'special-source': item.componentData}"
               size="small"
               @click="copyData(item)"
-              title="复制该条内容及链接"
-          ><i class="el-icon-document-copy"></i
-          ></el-button>
+              title="生成图片并复制进剪切板"
+          >
+            <i class="el-icon-share"></i>
+          </el-button>
+         <el-button
+             class="to-copy-btn"
+             :class="{'special-source': item.componentData}"
+             size="small"
+             @click="copyTextData(item)"
+             title="复制文字进剪切板"
+         >
+            <i class="el-icon-document-copy"></i>
+          </el-button>
           <el-button
               v-if="!item.componentData"
               class="to-url-btn"
@@ -177,8 +187,11 @@ import SanInfo from '../../common/sync/SanInfo';
 import TimeUtil from '../../common/util/TimeUtil';
 import Search from '../Search';
 import HttpUtil from '../../common/util/HttpUtil';
-import {deepAssign} from '../../common/util/CommonFunctions';
+import {deepAssign, testSync} from '../../common/util/CommonFunctions';
 import PlatformHelper from '../../common/platform/PlatformHelper';
+import html2canvas from 'html2canvas'
+import janvas from '../../common/util/janvas.min.js'
+import QRCode from 'qrcode'
 
 export default {
   name: "TimeLine",
@@ -201,7 +214,8 @@ export default {
       filterCardList: [],
       LazyLoaded: false,
       insiderCode: null, // 储存内部密码
-      janvas: null //菜单模块icon
+      janvas: null, //菜单模块icon
+      test: null
     };
   },
   mounted() {
@@ -422,8 +436,7 @@ export default {
     openUpdate() {
       PlatformHelper.Tabs.createWithExtensionFile(PAGE_UPDATE);
     },
-    // 复制
-    copyData(item) {
+    copyTextData() {
       this.$copyText(
           `${item.content.replace(
               /<br\/>/g,
@@ -453,7 +466,93 @@ export default {
             });
           }
       );
+      return;
     },
+    // 复制
+    copyData(item) {
+      this.$message({
+        offset: 50,
+        center: true,
+        message: "生成图片中，请稍后",
+        type: "info",
+      });
+      item.imgObj = {
+        icon: "/assets/image/icon.png",
+        sourceIcon: this.getDataSourceByName(item.dataSource).icon,
+        toolQrCode: "/assets/image/ToolQrCode.png",
+      };
+      if (item.coverImage) {
+        item.imgObj.image = item.coverImage;
+      }
+
+      setTimeout(() => {
+        QRCode.toCanvas(item.jumpUrl)
+            .then(canvas => {
+              item.jumpQrCode = canvas;
+              this.generatePicture(item);
+            })
+      }, 10);
+    },
+
+    generatePicture(item) {
+      let that = this;
+      html2canvas(document.querySelector(`.wrapper[data-id='${item.id}'] .wrapper-content`)).then(function (textCanvas) {
+        janvas.Utils.loadImages(item.imgObj, function (data) {
+          let canvas = document.createElement('canvas');
+          let ctx = canvas.getContext('2d');
+          // 判断是图片大还是文字大 根据这两个来判断canvas宽度 但最少要600宽度
+          let canvasWidth = textCanvas.width;
+          let canvasHeight = textCanvas.height;
+          if (data.image != undefined) {
+            canvasWidth = (textCanvas.width > data.image.width ? textCanvas.width : data.image.width);
+            canvasHeight = textCanvas.height + data.image.height;
+          }
+          if (canvasWidth < 580) {
+            canvasWidth = 580
+          }
+          canvas.width = canvasWidth + 20;
+          canvas.height = canvasHeight + 180;
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(data.icon, 10, 10, 100, 100);
+          ctx.drawImage(data.sourceIcon, 120, 70, 40, 40);
+          ctx.fillStyle = "#23ade5";
+          ctx.font = "36px Microsoft Yahei";
+          ctx.fillText(`小刻食堂 V${CURRENT_VERSION}`, 120, 50);
+          ctx.fillStyle = "#848488";
+          ctx.font = "20px Microsoft Yahei";
+          ctx.fillText(`${item.dataSource}`, 170, 90);
+          ctx.fillStyle = "#909399";
+          ctx.font = "14px Microsoft Yahei";
+          ctx.fillText(`${item.timeForDisplay}`, 170, 110);
+          ctx.drawImage(item.jumpQrCode, canvas.width - 200, 10, 90, 90);
+          ctx.drawImage(data.toolQrCode, canvas.width - 100, 10, 90, 90);
+          ctx.fillStyle = "#23ade5";
+          ctx.fillText(`数据来源`, canvas.width - 183, 110);
+          ctx.fillText(`食堂介绍`, canvas.width - 83, 110);
+          if (textCanvas.width != 0) {
+            ctx.drawImage(textCanvas, 10, 140, textCanvas.width, textCanvas.height);
+          } else {
+            ctx.fillStyle = "#848488";
+            ctx.font = "20px Microsoft Yahei";
+            ctx.fillText(item.content, 10, 160);
+          }
+          if (item.coverImage) {
+            ctx.drawImage(data.image, (canvas.width - data.image.width) / 2, textCanvas.height + 160, data.image.width, data.image.height);
+          }
+          canvas.toBlob(function (blob) {
+            const item = new ClipboardItem({"image/png": blob});
+            navigator.clipboard.write([item]);
+            that.$message({
+              offset: 50,
+              center: true,
+              message: "已复制到剪切板",
+              type: "success",
+            });
+          });
+        })
+      });
+    }
   },
 };
 </script>
@@ -755,7 +854,7 @@ img[lazy="error"] {
         background-color: @@hover;
       }
 
-      .to-copy-btn {
+      .to-copy-btn, .to-copy-share {
         position: absolute;
         top: -8px;
         right: 50px;
@@ -766,12 +865,16 @@ img[lazy="error"] {
         &.special-source {
           right: 0;
         }
+
+        &:hover {
+          color: #409eff;
+          border-color: #c6e2ff;
+          background-color: @@hover;
+        }
       }
 
-      .to-copy-btn:hover {
-        color: #409eff;
-        border-color: #c6e2ff;
-        background-color: @@hover;
+      .to-copy-share {
+        right: 100px;
       }
 
       // 需要特殊显示的数据源
