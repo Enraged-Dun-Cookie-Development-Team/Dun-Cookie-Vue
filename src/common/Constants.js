@@ -16,7 +16,7 @@ const CURRENT_SETTING_VERSION = 1;
 /**
  * 当前插件版本号
  */
-const CURRENT_VERSION = '2.5.0';
+const CURRENT_VERSION = '2.5.2';
 /**
  * 展示用的版本号
  */
@@ -190,55 +190,55 @@ const dayInfo = [
     type: 1,
     name: "高级作战记录",
     day: [1, 2, 3, 4, 5, 6, 0],
-    src: '/assets/image/60px-道具_高级作战记录.png'
+    src: '/assets/image/LS.png'
   },
   {
     type: 2,
     name: "龙门币",
     day: [2, 4, 6, 0],
-    src: '/assets/image/60px-道具_龙门币.png'
+    src: '/assets/image/CE.png'
   },
   {
     type: 3,
     name: "采购凭证",
     day: [1, 4, 6, 0],
-    src: '/assets/image/60px-道具_采购凭证.png'
+    src: '/assets/image/AP.png'
   },
   {
     type: 4,
     name: "碳素",
     day: [1, 3, 5, 6],
-    src: '/assets/image/60px-道具_碳素.png'
+    src: '/assets/image/SK.png'
   },
   {
     type: 5,
     name: "技巧概要",
     day: [2, 3, 5, 0],
-    src: '/assets/image/40px-道具_技巧概要·卷3.png'
+    src: '/assets/image/CA.png'
   },
   {
     type: 6,
     name: "摧枯拉朽",
     day: [1, 2, 5, 6],
-    src: '/assets/image/60px-摧枯拉朽_缩略.png'
+    src: '/assets/image/PRB.png'
   },
   {
     type: 7,
     name: "身先士卒",
     day: [2, 3, 6, 0],
-    src: '/assets/image/60px-身先士卒_缩略.png'
+    src: '/assets/image/PRD.png'
   },
   {
     type: 8,
     name: "固若金汤",
     day: [1, 4, 5, 0],
-    src: '/assets/image/60px-固若金汤_缩略.png'
+    src: '/assets/image/PRA.png'
   },
   {
     type: 9,
     name: "势不可当",
     day: [3, 4, 6, 0],
-    src: '/assets/image/60px-势不可挡_缩略.png'
+    src: '/assets/image/PRC.png'
   },
 ];
 
