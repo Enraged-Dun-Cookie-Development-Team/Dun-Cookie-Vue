@@ -27,12 +27,12 @@ export class BilibiliDataSource extends DataSource {
           .timeForSort(x.desc.timestamp * 1000)
           .timeForDisplay(TimeUtil.format(new Date(x.desc.timestamp * 1000), 'yyyy-MM-dd hh:mm:ss'))
           .jumpUrl(`https://t.bilibili.com/${x.desc.dynamic_id_str}`)
-          .imageList(dynamicInfo.item.pictures && dynamicInfo.item.pictures.map(x => x.img_src));
 
         switch (parseInt(x.desc.type)) {
           // 普通动态
           case 2: {
             builder
+              .imageList(dynamicInfo.item.pictures && dynamicInfo.item.pictures.map(x => x.img_src))
               .coverImage((dynamicInfo.item.pictures && dynamicInfo.item.pictures.length > 0) ? dynamicInfo.item.pictures[0].img_src : null)
               .content(dynamicInfo.item.description);
             break;
@@ -40,12 +40,14 @@ export class BilibiliDataSource extends DataSource {
           // 无图片动态
           case 4: {
             builder
+              .imageList(null)
               .content(dynamicInfo.item.content);
             break;
           }
           // 视频
           case 8: {
             builder
+              .imageList(null)
               .coverImage(dynamicInfo.pic)
               .content(dynamicInfo.dynamic);
             break;
@@ -53,6 +55,7 @@ export class BilibiliDataSource extends DataSource {
           // 专栏
           case 64: {
             builder
+              .imageList(null)
               .coverImage((dynamicInfo.image_urls && dynamicInfo.image_urls.length > 0) ? dynamicInfo.image_urls[0] : null)
               .content(dynamicInfo.summary);
             break;
