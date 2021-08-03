@@ -47,11 +47,11 @@
             "radius": true
         },
         {
-            "starTime": "2021-7-20 11:00:00",
-            "overTime": "2021-7-30 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1654y1E7om",
-            "name": "【好吃的橘子鸭】复刻·密林悍将归来 速刷+刷信赖+更新打法，语音详解，你必过！",
-            "img": "https://i0.hdslb.com/bfs/archive/c9b99409dd7fb26efeec5f06344ff58552e4fd92.jpg@200w_125h_1c.webp",
+            "starTime": "2021-8-03 15:59:59",
+            "overTime": "2021-8-24 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1Gq4y1n76t",
+            "name": "【好吃的橘子鸭】DH、DH-S系列攻略合集，含中配+速刷+隐藏，语音详解",
+            "img": "https://i1.hdslb.com/bfs/archive/481eb23b3df9123aed8b288efb8a2ada94af58b2.jpg@200w_125h_1c.webp",
             "radius": true
         },
         {
@@ -85,6 +85,14 @@
             "name": "《泰拉就业岗位大全》",
             "img": "https://i2.hdslb.com/bfs/archive/aa63d74cfa07c720bca08aadeaae3c0bff2993ba.jpg@200w_125h_1c.webp",
             "radius": true
+        },
+        {
+            "starTime": "2021-8-03 15:59:59",
+            "overTime": "2021-8-24 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1rQ4y1f7yE",
+            "name": "关卡掉落材料移至无限池！刷哪关效率最优化？明日方舟夏活【多索雷斯假日】活动商店性价比一览！20210803",
+            "img": "https://i1.hdslb.com/bfs/archive/b88fa71a191469b1beba8ba085efcfd268ba5f17.jpg@200w_125h_1c.webp",
+            "radius": true
         }
     ],
     "dayInfo": {
@@ -101,19 +109,13 @@
                 "overTime": "2021-8-05 03:59:59"
             },
             {
-                "text": "公开招募干员更新",
-                "remark": "新增煌，灰喉，苇草，布洛卡，安比尔",
-                "time": "2021-8-03 15:59:59",
-                "starTime": "2021-8-03 04:00:00",
-                "overTime": "2021-8-03 15:59:59"
+                "text": "当前轮换池结束",
+                "remark": "傀影[兑换],泥岩,苇草,吽[兑换],贾维",
+                "time": "2021-8-19 03:59:59",
+                "starTime": "2021-8-05 04:00:00",
+                "overTime": "2021-8-19 03:59:59"
             },
-            {
-                "text": "当前活动池结束",
-                "remark": "森蚺，燧石，陨星，酸糖",
-                "time": "2021-8-03 03:59:59",
-                "starTime": "2021-7-20 16:00:00",
-                "overTime": "2021-8-03 03:59:59"
-            },
+
             {
                 "text": "当前活动池结束",
                 "remark": "假日威龙陈[限定],水月,羽毛笔",
@@ -122,6 +124,21 @@
                 "overTime": "2021-8-17 03:59:59"
             },
             {
+                "text": "下个活动池开启",
+                "remark": "棘刺，安哲拉，普罗旺斯，孑",
+                "time": "2021-8-26 15:59:59",
+                "starTime": "2021-8-17 03:59:59",
+                "overTime": "2021-8-26 15:59:59"
+            },
+            {
+                "text": "当前活动池结束",
+                "remark": "棘刺，安哲拉，普罗旺斯，孑",
+                "time": "2021-9-09 03:59:59",
+                "starTime": "2021-8-26 16:00:00",
+                "overTime": "2021-9-09 03:59:59"
+            },
+           
+            {
                 "text": "SideStory「多索雷斯假日」，活动结束",
                 "remark": "",
                 "time": "2021-8-24 03:59:59",
@@ -129,11 +146,11 @@
                 "overTime": "2021-8-24 03:59:59"
             },
             {
-                "text": "SideStory「多索雷斯假日」，活动开启",
+                "text": "#6「蛮鳞行动」，活动开启",
                 "remark": "",
-                "time": "2021-8-03 15:59:59",
-                "starTime": "2021-7-30 04:00:00",
-                "overTime": "2021-8-03 15:59:59"
+                "time": "2021-9-09 03:59:59",
+                "starTime": "2021-8-26 16:00:00",
+                "overTime": "2021-9-09 03:59:59"
             }
         ]
     },

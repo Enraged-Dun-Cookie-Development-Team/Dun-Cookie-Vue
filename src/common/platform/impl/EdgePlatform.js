@@ -2,6 +2,9 @@ import ChromePlatform from './ChromePlatform';
 import {PLATFORM_EDGE, DEBUG_LOG} from '../../Constants';
 import AbstractPlatform from '../AbstractPlatform';
 
+const IGNORE_MESSAGE_ERROR_1 = 'Could not establish connection. Receiving end does not exist.';
+const IGNORE_MESSAGE_ERROR_2 = 'The message port closed before a response was received.';
+
 // 根据MDN中的兼容性表格中的说明，Edge会将message发给同一个页面的onMessageListener，因此在每个页面生成一个唯一id，接收时过滤掉相同页面的消息
 // https://developer.mozilla.org/zh-CN/docs/Mozilla/Add-ons/WebExtensions/API/runtime/sendMessage#browser_compatibility
 const _pageId = String(Math.floor(Math.random() * 1000000));
@@ -35,7 +38,15 @@ export default class EdgePlatform extends AbstractPlatform {
     return new Promise((resolve, reject) => {
       chrome.runtime.sendMessage(message, (response) => {
         if (chrome.runtime.lastError) {
-          reject(chrome.runtime.lastError);
+          if (chrome.runtime.lastError.message === IGNORE_MESSAGE_ERROR_1
+            || chrome.runtime.lastError.message === IGNORE_MESSAGE_ERROR_2) {
+            if (DEBUG_LOG) {
+              console.log(`response - ${type} - receiver not exists`);
+            }
+            resolve();
+          } else {
+            reject(chrome.runtime.lastError);
+          }
           return;
         }
         if (response === AbstractPlatform.__MESSAGE_WITHOUT_RESPONSE) {
