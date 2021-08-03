@@ -436,7 +436,7 @@ export default {
     openUpdate() {
       PlatformHelper.Tabs.createWithExtensionFile(PAGE_UPDATE);
     },
-    copyTextData() {
+    copyTextData(item) {
       this.$copyText(
           `${item.content.replace(
               /<br\/>/g,
@@ -449,22 +449,22 @@ export default {
 数据由 小刻食堂${CURRENT_VERSION} 收集
 工具介绍链接：https://arknightscommunity.drblack-system.com/2012.html`
       ).then(
-          (e) => {
-            this.$message({
-              offset: 50,
-              center: true,
-              message: "复制成功",
-              type: "success",
-            });
-          },
-          (e) => {
-            this.$message({
-              offset: 50,
-              center: true,
-              message: "复制失败",
-              type: "error",
-            });
-          }
+        (e) => {
+          this.$message({
+            offset: 50,
+            center: true,
+            message: "复制成功",
+            type: "success",
+          });
+        },
+        (e) => {
+          this.$message({
+            offset: 50,
+            center: true,
+            message: "复制失败",
+            type: "error",
+          });
+        }
       );
       return;
     },
