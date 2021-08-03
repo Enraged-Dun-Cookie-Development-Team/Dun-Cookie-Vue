@@ -155,11 +155,11 @@
         ]
     },
     "upgrade": {
-        "v": "2.5.0",
-        "title": "小刻食堂翻新啦 - 2.5.0",
-        "description": "😆 兼容火狐浏览器</br>1.兼容火狐浏览器，火狐浏览器可以使用所用功能</br>2.兼容nodejs，方便之后开发</br>3.微调部分文案</br>4.调整搜索逻辑，搜索更加精准</br>5.修复商店下载的插件没有资源图片的情况",
-        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.5.0/Dun-Cookie-2.5.0.crx",
-        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.5.0/Dun-Cookie-2.5.0.zip",
+        "v": "2.5.2",
+        "title": "小刻食堂翻新啦 - 2.5.2",
+        "description": "💢 本次版本主要是发现B站接口API发生了问题</br>1.B站接口API格式改变，在多索雷斯度假期间加班加点为大家修复</br>2.修复商店下载的插件没有资源图片的情况",
+        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.5.2/Dun-Cookie-2.5.2.crx",
+        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.5.2/Dun-Cookie-2.5.2.zip",
         "downSpare": "https://pan.baidu.com/s/1kzY6kpfYqLcGpuaiwQOGoA",
         "downSpareText": "备用下载（提取码 jzq9）",
         "downChrome": "https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN",
