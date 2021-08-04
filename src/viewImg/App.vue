@@ -13,7 +13,16 @@
       <div>{{ this.info.currentSrc }}</div>
       <div>{{ this.info.naturalWidth }} × {{ this.info.naturalHeight }}</div>
     </div>
-    <img class="img" :src="img" :class="showInfo?'show-info':''" @load="imgOnload($event)"/>
+    <div style="width: 100%;height: 100%;overflow: auto">
+      <img class="img" :src="img" :class="showInfo?'show-info':''" @load="imgOnload($event)"/>
+    </div>
+    <div class="turnPage" v-show="pageShow">
+      <span class="turnPage-btn-area">
+        <span @click.stop="leftPage" class="el-icon-arrow-left"></span>
+        <span @click.stop="rightPage" class="el-icon-arrow-right"></span>
+      </span>
+      <span>第{{ pageNow + 1 }}页，共{{ pageAll }}页</span>
+    </div>
   </div>
 </template>
 
@@ -27,18 +36,39 @@ export default {
       this.item = data.item;
       this.img = data.img;
       this.winId = data.winId;
+      if (this.item.imageList) {
+        this.pageShow = true;
+        this.pageAll = this.item.imageList.length;
+        this.pageNow = this.item.imageList.findIndex(x => x == this.img);
+      }
     });
   },
   mounted() {
+
+    document.addEventListener("keyup", (e) => {
+      if (e.key === "Escape") {
+        // 关闭窗口
+        chrome.windows.remove(this.winId);
+      } else if (e.key === "ArrowLeft") {
+        this.leftPage();
+        // 左翻页
+      } else if (e.key === "ArrowRight") {
+        this.rightPage();
+        // 右翻页
+      }
+    });
   },
 
   data() {
     return {
       load: true,
-      item: null,
+      item: {},
       img: null,
       info: {},
       showInfo: false,
+      pageNow: 0,
+      pageAll: 0,
+      pageShow: false
     };
   },
   computed: {},
@@ -47,12 +77,23 @@ export default {
       this.load = false;
       this.info.currentSrc = this.img;
       this.info.naturalHeight = data.target.height;
-      this.info.naturalWidth = data.target.width;
+      this.info.naturalWidth = data.target.width + 32;
+      chrome.windows.update(this.winId, {
+        width: this.info.naturalWidth,
+        height: this.info.naturalHeight
+      });
     },
-    // 查看图片信息
-    viewInfo() {
-      this.showInfo = !this.showInfo;
-    }
+    leftPage() {
+      if (this.pageNow > 0) {
+        this.img = this.item.imageList[--this.pageNow];
+      }
+    },
+    rightPage() {
+      if (this.pageNow < (this.pageAll - 1)) {
+        this.img = this.item.imageList[++this.pageNow];
+      }
+    },
+
   },
 };
 </script>
@@ -83,6 +124,47 @@ export default {
       transform: rotateX(50deg);
       box-shadow: 0 0 30px -5px #23ade5;
     }
+  }
+
+  .turnPage {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    opacity: 0.6;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    color: #23ade5;
+    font-size: 1rem;
+    align-items: center;
+    align-content: space-around;
+    width: 110px;
+    height: 70px;
+    font-weight: bold;
+    transition: all 0.5s;
+    background: #fff;
+    border-radius: 3px;
+    user-select: none;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    .turnPage-btn-area {
+      display: flex;
+      width: 100%;
+      justify-content: space-around;
+    }
+
+    .el-icon-arrow-left, .el-icon-arrow-right {
+      font-size: 25px;
+      border-radius: 50%;
+      background: #23ade5;
+      color: #ffffff;
+      padding: 5px;
+      cursor: pointer;
+    }
+
   }
 }
 </style>

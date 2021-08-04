@@ -399,7 +399,7 @@ export default {
     // 监听键盘
     listenKeyBord() {
       document.addEventListener("keyup", (e) => {
-        if (e.keyCode === 13) {
+        if (e.key === "Enter") {
           this.searchShow = !this.searchShow;
           if (!this.searchShow) {
             this.changeInsider();
