@@ -22,9 +22,12 @@ let sanTimerId = null;
 
 function sanRecovery(san) {
   san.currentSan++;
+  if (Settings.san.maxValue - san.currentSan == 3) {
+    NotificationUtil.SendNotice(`理智快满啦`, `博士！！博士！！理智还差不到18分钟就满啦！快点上线清理智噢！`, null, new Date().getTime());
+  }
   if (san.currentSan >= Settings.san.maxValue) {
     san.currentSan = Settings.san.maxValue;
-    NotificationUtil.SendNotice(`理智已满`, `理智已经满了，请博士赶快上线清理智！`, null, new Date().getTime());
+    NotificationUtil.SendNotice(`理智已满`, `理智已经满了！！请博士赶快上线清理智，不要浪费啦！`, null, new Date().getTime());
     clearTimeout(sanTimerId);
     sanTimerId = null;
   }
@@ -103,7 +106,7 @@ function tryReload(san, settings) {
       } else if ((newSan - settings.san.maxValue) <= 5) {
         // 插件被关闭的那段时间中理智已经完全恢复了并且不超过半小时(5 * 6分钟), 则直接推送提醒且不启动计时器
         san.currentSan = settings.san.maxValue;
-        NotificationUtil.SendNotice(`理智已满`, `理智已经满了，请博士赶快上线清理智！`, null, new Date().getTime());
+        NotificationUtil.SendNotice(`理智已满`, `理智已经满了！！请博士赶快上线清理智，不要浪费啦！`, null, new Date().getTime());
       }
     } else {
       // 插件被关闭的那段时间中一点理智都没恢复(被关闭的时间小于理智恢复间隔)，正常启动计时器继续计时

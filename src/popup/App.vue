@@ -491,7 +491,7 @@ export default {
     top: 0;
     z-index: 9999;
     display: flex;
-    padding: 0 18px;
+    padding: 0 14px 0 18px;
     justify-content: space-between;
     align-items: center;
     font-size: 1rem;
