@@ -76,8 +76,8 @@ export default {
     imgOnload(data) {
       this.load = false;
       this.info.currentSrc = this.img;
-      this.info.naturalHeight = data.target.height;
-      this.info.naturalWidth = data.target.width + 32;
+      this.info.naturalHeight = data.target.height + 40 > 750 ? 750 : data.target.height + 40;
+      this.info.naturalWidth = data.target.width + 16 > 1100 ? 1100 : data.target.width + 16;
       chrome.windows.update(this.winId, {
         width: this.info.naturalWidth,
         height: this.info.naturalHeight

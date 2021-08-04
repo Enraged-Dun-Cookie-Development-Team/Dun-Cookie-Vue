@@ -1,7 +1,7 @@
 {
     "list": [
         {
-            "html": "<div class='online-area'> <img class='online-title-img' src='/assets/image/icon.ico'> <div> <div><span class='online-red'>重要紧急公告！！！！！！！！</span></div> <div>因为B站更改接口的格式，导致目前所有版本<span class='online-red'>无法获取B站的饼</span></div>  <div>目前开发者在<span class='online-blue'>多索雷斯的享受假日</span></div> <div>将在之后尽快更新出下个版本并<span class='online-yellow'>修复此问题</span></div><div>还请各位博士<span class='online-red'>持续关注公告版本更新</span>并耐心等待噢</div> </div>  </div>",
+            "html": "<div class='online-area'> <img class='online-title-img' src='/assets/image/icon.ico'> <div> <div><span class='online-red'>重要紧急公告！！！！！！！！</span></div> <div>因为B站更改接口的格式，导致2.5.0前所有版本<span class='online-red'>无法获取B站的饼</span></div>  <div>开发者在<span class='online-blue'>多索雷斯的享受假日</span>的同时，加班加点为博士修复了这个问题</div> <div>博士记得升级到<span class='online-yellow'>最新版本</span>噢！！！！</div><div>感谢各位博士支持，<span class='online-red'>持续关注公告版本更新</span>来获得更好的蹲饼体验噢~</div> </div>  </div>",
             "starTime": "2021-08-03 19:41:44",
             "overTime": "2023-08-03 19:41:50"
         },
@@ -31,19 +31,19 @@
             "radius": true
         },
         {
-            "starTime": "2021-7-20 11:00:00",
-            "overTime": "2021-7-30 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1nV411p7Ug",
-            "name": "【魔法zc目录】“密林悍将归来”RI平民攻略合集！阵容平民+低练度+语音详解的愉悦攻略！",
-            "img": "https://i1.hdslb.com/bfs/archive/17cedede72da428acd810faa0364e9a6385cba49.jpg@200w_125h_1c.webp",
+            "starTime": "2021-8-03 15:59:59",
+            "overTime": "2021-8-24 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1eh411q7NT",
+            "name": "【魔法zc目录】“多索雷斯假日”DH-S/EX平民全关卡低配攻略！阵容平民+低练度+语音详解的愉悦攻略！",
+            "img": "https://i1.hdslb.com/bfs/archive/e2cbf136295f46b46393263a543bb32853ac430b.jpg@200w_125h_1c.webp",
             "radius": true
         },
         {
-            "starTime": "2021-7-13 11:00:00",
-            "overTime": "2021-7-20 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1MX4y1A7zh",
-            "name": "【小狼XF】VI-全关卡+突袭 平民单6星攻略/ VI-5 VI-6 VI-7《明日方舟》如我所见",
-            "img": "https://i0.hdslb.com/bfs/archive/00f661181cc4e126e3297e2e466907a35c1c66ee.jpg@200w_125h_1c.webp",
+            "starTime": "2021-8-03 15:59:59",
+            "overTime": "2021-8-24 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1Av411K7mV",
+            "name": "【小狼XF】DH-全关卡+突袭 平民无6星攻略",
+            "img": "https://i2.hdslb.com/bfs/archive/c6c44f2843f4fed719ba29e748fe8bb9156c8a68.jpg@200w_125h_1c.webp",
             "radius": true
         },
         {
@@ -52,6 +52,14 @@
             "url": "https://www.bilibili.com/video/BV1Gq4y1n76t",
             "name": "【好吃的橘子鸭】DH、DH-S系列攻略合集，含中配+速刷+隐藏，语音详解",
             "img": "https://i1.hdslb.com/bfs/archive/481eb23b3df9123aed8b288efb8a2ada94af58b2.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-8-03 15:59:59",
+            "overTime": "2021-8-24 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1RQ4y1f7Qr",
+            "name": "【萧然Q】DH1至DH-S-2突袭 摆完挂机 简单好抄",
+            "img": "https://i2.hdslb.com/bfs/archive/8d2132170cff91d8f6f336ae7b0567e26f75806f.jpg@200w_125h_1c.webp",
             "radius": true
         },
         {
@@ -115,7 +123,6 @@
                 "starTime": "2021-8-05 04:00:00",
                 "overTime": "2021-8-19 03:59:59"
             },
-
             {
                 "text": "当前活动池结束",
                 "remark": "假日威龙陈[限定],水月,羽毛笔",
@@ -137,7 +144,6 @@
                 "starTime": "2021-8-26 16:00:00",
                 "overTime": "2021-9-09 03:59:59"
             },
-           
             {
                 "text": "SideStory「多索雷斯假日」，活动结束",
                 "remark": "",
