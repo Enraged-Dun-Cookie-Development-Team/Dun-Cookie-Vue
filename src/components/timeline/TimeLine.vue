@@ -174,6 +174,13 @@
       </MyElTimelineItem>
     </el-timeline>
     <div v-else style="height: 300px" v-loading="loading"></div>
+    <el-dialog
+        :modal-append-to-body="false"
+        title="图片自动复制出错，请于图片右键复制图片"
+        :visible.sync="imageError"
+        width="80%">
+      <img :src="errorImageUrl" style="width:100%"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -192,6 +199,7 @@ import PlatformHelper from '../../common/platform/PlatformHelper';
 import html2canvas from 'html2canvas'
 import janvas from '../../common/util/janvas.min.js'
 import QRCode from 'qrcode'
+
 
 export default {
   name: "TimeLine",
@@ -215,7 +223,8 @@ export default {
       LazyLoaded: false,
       insiderCode: null, // 储存内部密码
       janvas: null, //菜单模块icon
-      test: null
+      imageError: false,
+      errorImageUrl: ""
     };
   },
   mounted() {
@@ -449,22 +458,22 @@ export default {
 数据由 小刻食堂${CURRENT_VERSION} 收集
 工具介绍链接：https://arknightscommunity.drblack-system.com/2012.html`
       ).then(
-        (e) => {
-          this.$message({
-            offset: 50,
-            center: true,
-            message: "复制成功",
-            type: "success",
-          });
-        },
-        (e) => {
-          this.$message({
-            offset: 50,
-            center: true,
-            message: "复制失败",
-            type: "error",
-          });
-        }
+          (e) => {
+            this.$message({
+              offset: 50,
+              center: true,
+              message: "复制成功",
+              type: "success",
+            });
+          },
+          (e) => {
+            this.$message({
+              offset: 50,
+              center: true,
+              message: "复制失败",
+              type: "error",
+            });
+          }
       );
       return;
     },
@@ -482,19 +491,30 @@ export default {
         toolQrCode: "/assets/image/ToolQrCode.png",
       };
       if (item.coverImage) {
-        item.imgObj.image = item.coverImage;
+        item.imgObj.headFigure = item.coverImage;
       }
 
       setTimeout(() => {
-        QRCode.toCanvas(item.jumpUrl)
+        new QRCode.toCanvas(item.jumpUrl)
             .then(canvas => {
               item.jumpQrCode = canvas;
               this.generatePicture(item);
             })
-      }, 10);
+      }, 100);
     },
 
+    // timeout() {
+    //   return new Promise((resolve, reject) => {
+    //     setTimeout(() => {
+    //       resolve(new Date(), 1);
+    //     }, 1000);
+    //   })
+    // },
+    // async
     generatePicture(item) {
+      // let time = await this.timeout();
+      // console.log(time);
+      // console.log(new Date(), 2);
       let that = this;
       html2canvas(document.querySelector(`.wrapper[data-id='${item.id}'] .wrapper-content`)).then(function (textCanvas) {
         janvas.Utils.loadImages(item.imgObj, function (data) {
@@ -503,9 +523,9 @@ export default {
           // 判断是图片大还是文字大 根据这两个来判断canvas宽度 但最少要600宽度
           let canvasWidth = textCanvas.width;
           let canvasHeight = textCanvas.height;
-          if (data.image != undefined) {
-            canvasWidth = (textCanvas.width > data.image.width ? textCanvas.width : data.image.width);
-            canvasHeight = textCanvas.height + data.image.height;
+          if (data.headFigure != undefined) {
+            canvasWidth = (textCanvas.width > data.headFigure.width ? textCanvas.width : data.headFigure.width);
+            canvasHeight = textCanvas.height + data.headFigure.height;
           }
           if (canvasWidth < 580) {
             canvasWidth = 580
@@ -537,18 +557,25 @@ export default {
             ctx.font = "20px Microsoft Yahei";
             ctx.fillText(item.content, 10, 160);
           }
-          if (item.coverImage) {
-            ctx.drawImage(data.image, (canvas.width - data.image.width) / 2, textCanvas.height + 160, data.image.width, data.image.height);
+          if (data.headFigure) {
+            ctx.drawImage(data.headFigure, (canvas.width - data.headFigure.width) / 2, textCanvas.height + 160, data.headFigure.width, data.headFigure.height);
           }
           canvas.toBlob(function (blob) {
-            const item = new ClipboardItem({"image/png": blob});
-            navigator.clipboard.write([item]);
-            that.$message({
-              offset: 50,
-              center: true,
-              message: "已复制到剪切板",
-              type: "success",
-            });
+            navigator.clipboard.write([
+              new ClipboardItem({
+                [blob.type]: blob
+              })
+            ]).then(() => {
+              that.$message({
+                offset: 50,
+                center: true,
+                message: "已复制到剪切板",
+                type: "success",
+              });
+            }).catch(() => {
+              that.errorImageUrl = canvas.toDataURL('image/jpeg');
+              that.imageError = true;
+            })
           });
         })
       });
@@ -875,6 +902,10 @@ img[lazy="error"] {
 
       .to-copy-share {
         right: 100px;
+        // 需要特殊显示的数据源只提供复制按钮，跳转由数据源自行实现
+        &.special-source {
+          right: 50px;
+        }
       }
 
       // 需要特殊显示的数据源

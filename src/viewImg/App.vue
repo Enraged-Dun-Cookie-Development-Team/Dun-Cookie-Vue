@@ -61,7 +61,7 @@ export default {
 #app {
   height: 100vh;
   width: 100vw;
-  overflow: hidden;
+  //overflow: hidden;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
