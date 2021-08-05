@@ -30,7 +30,10 @@
             >
           </el-form-item>
           <el-form-item label="理智满后是否推送">
-            <el-switch v-model="settings.san.noticeWhenFull"></el-switch>
+            <el-switch 
+              v-model="settings.san.noticeWhenFull" 
+              @change='settings.saveSettings()'
+            ></el-switch>
           </el-form-item>
           <el-form-item>
             <el-button @click="saveSan">开始计算</el-button>
