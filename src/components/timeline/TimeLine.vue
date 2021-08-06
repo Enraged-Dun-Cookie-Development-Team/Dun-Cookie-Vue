@@ -494,30 +494,27 @@ export default {
         item.imgObj.headFigure = item.coverImage;
       }
 
-      setTimeout(() => {
-        new QRCode.toCanvas(item.jumpUrl)
-            .then(canvas => {
-              item.jumpQrCode = canvas;
-              this.generatePicture(item);
-            })
-      }, 100);
-    },
 
-    // timeout() {
-    //   return new Promise((resolve, reject) => {
-    //     setTimeout(() => {
-    //       resolve(new Date(), 1);
-    //     }, 1000);
-    //   })
-    // },
-    // async
-    generatePicture(item) {
-      // let time = await this.timeout();
-      // console.log(time);
-      // console.log(new Date(), 2);
-      let that = this;
-      html2canvas(document.querySelector(`.wrapper[data-id='${item.id}'] .wrapper-content`)).then(function (textCanvas) {
-        janvas.Utils.loadImages(item.imgObj, function (data) {
+      setTimeout(() => {
+        new Promise((resolve, reject) => {
+          new QRCode.toCanvas(item.jumpUrl)
+              .then(canvas => {
+                item.jumpQrCode = canvas;
+                resolve(item);
+              })
+        }).then(item => {
+          return new Promise((resolve, reject) => {
+            return html2canvas(document.querySelector(`.wrapper[data-id='${item.id}'] .wrapper-content`)).then(function (textCanvas) {
+              resolve({textCanvas, item});
+            });
+          });
+        }).then(({textCanvas, item}) => {
+          return new Promise((resolve, reject) => {
+            janvas.Utils.loadImages(item.imgObj, function (data) {
+              resolve({textCanvas, item, data});
+            });
+          });
+        }).then(({textCanvas, item, data}) => {
           let canvas = document.createElement('canvas');
           let ctx = canvas.getContext('2d');
           // 判断是图片大还是文字大 根据这两个来判断canvas宽度 但最少要600宽度
@@ -560,6 +557,8 @@ export default {
           if (data.headFigure) {
             ctx.drawImage(data.headFigure, (canvas.width - data.headFigure.width) / 2, textCanvas.height + 160, data.headFigure.width, data.headFigure.height);
           }
+
+          let that = this;
           canvas.toBlob(function (blob) {
             navigator.clipboard.write([
               new ClipboardItem({
@@ -577,9 +576,9 @@ export default {
               that.imageError = true;
             })
           });
-        })
-      });
-    }
+        });
+      }, 100);
+    },
   },
 };
 </script>
