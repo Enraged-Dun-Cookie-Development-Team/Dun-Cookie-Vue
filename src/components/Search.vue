@@ -76,7 +76,7 @@ export default {
     // color: #23ade5;
   }
   &.show {
-    top: 25px;
+    top: 32px;
     opacity: 1;
   }
 }

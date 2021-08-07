@@ -324,7 +324,7 @@ export default {
         }
 
         // 是否最新
-        this.isNew = data.upgrade.v !== CURRENT_VERSION;
+        this.isNew = Settings.JudgmentVersion(data.upgrade.v, CURRENT_VERSION);
 
         // 资源获取
         this.onlineDayInfo = data.dayInfo;

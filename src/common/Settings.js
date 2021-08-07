@@ -1,8 +1,8 @@
-import {CURRENT_SETTING_VERSION, MESSAGE_SETTINGS_UPDATE, PAGE_POPUP_WINDOW, PLATFORM_UNKNOWN} from './Constants';
-import {deepAssign} from './util/CommonFunctions';
-import {defaultDataSources, defaultDataSourcesNames} from './datasource/DefaultDataSources';
-import {customDataSourceTypes} from './datasource/CustomDataSources';
-import {updateSettings} from './SettingsUpdater';
+import { CURRENT_SETTING_VERSION, MESSAGE_SETTINGS_UPDATE, PAGE_POPUP_WINDOW, PLATFORM_UNKNOWN } from './Constants';
+import { deepAssign } from './util/CommonFunctions';
+import { defaultDataSources, defaultDataSourcesNames } from './datasource/DefaultDataSources';
+import { customDataSourceTypes } from './datasource/CustomDataSources';
+import { updateSettings } from './SettingsUpdater';
 import PlatformHelper from './platform/PlatformHelper';
 
 /**
@@ -218,6 +218,33 @@ class Settings {
       return 'dark';
     } else {
       return 'light';
+    }
+  }
+
+  /**
+   * 判断版本号大小
+   */
+  JudgmentVersion(v1, v2) {
+    if (v1 == v2) {
+      return false;
+    }
+
+    const vs1 = v1.split(".").map(a => parseInt(a));
+    const vs2 = v2.split(".").map(a => parseInt(a));
+
+    const digit = Math.min(vs1.length, vs2.length);
+    for (let i = 0; i < digit; i++) {
+      if (vs1[i] > vs2[i]) {
+        return true;
+      } else if (vs1[i] < vs2[i]) {
+        return false;
+      }
+    }
+
+    if (digit == vs1.length) {
+      return false;
+    } else {
+      return true;
     }
   }
 

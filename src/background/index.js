@@ -11,10 +11,13 @@ import {
     MESSAGE_SAN_GET,
     PAGE_POPUP_WINDOW,
     PAGE_WELCOME,
+    PAGE_UPDATE,
     TEST_DATA_REFRESH_TIME
 } from '../common/Constants';
 import DataSourceUtil from '../common/util/DataSourceUtil';
+import HttpUtil from '../common/util/HttpUtil';
 import PlatformHelper from '../common/platform/PlatformHelper';
+import { CURRENT_VERSION } from '../common/Constants';
 
 // 重构完成后的其它优化：
 // TODO 多个提取出来的类要考虑能否合并(指互相通信的那部分)
@@ -90,6 +93,18 @@ function startDunTimer() {
     }, delay * 1000);
 }
 
+// 判断更新和公告是否需要推送提醒
+function announcementMention() {
+    HttpUtil.GET_Json(
+        "http://cdn.liuziyang.vip/Dun-Cookies-Info.json?t=" +
+        new Date().getTime()
+    ).then((data) => {
+        if (Settings.JudgmentVersion(data.upgrade.v, CURRENT_VERSION)) {
+            NotificationUtil.SendNotice("小刻食堂翻新啦！！", "快来使用新的小刻食堂噢！一定有很多好玩的新功能啦！！", null, "update");
+        }
+    });
+}
+
 // 通用方法
 const kazeFun = {
     //判断是否为最新 并且在此推送
@@ -125,6 +140,9 @@ const kazeFun = {
         // 开始蹲饼！
         Settings.doAfterInit(() => {
             startDunTimer();
+            setTimeout(() => {
+                announcementMention();
+            }, 300000);
         });
 
         Settings.doAfterUpdate(() => {
@@ -161,6 +179,8 @@ const kazeFun = {
             let item = DataSourceUtil.mergeAllData(cardListCache, false).find(x => x.id === id);
             if (item) {
                 PlatformHelper.Tabs.create(item.jumpUrl);
+            } else if( id === "update") {
+                PlatformHelper.Tabs.createWithExtensionFile(PAGE_UPDATE);
             } else {
                 alert('o(╥﹏╥)o 时间过于久远...最近列表内没有找到该网站');
             }
@@ -180,8 +200,8 @@ const kazeFun = {
                     PlatformHelper.Windows.remove(popupWindowId);
                 }
                 PlatformHelper.Windows
-                  .createPanelWindow(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW), 800, 950)
-                  .then(tab => popupWindowId = tab.id);
+                    .createPanelWindow(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW), 800, 950)
+                    .then(tab => popupWindowId = tab.id);
             }
         });
     }
