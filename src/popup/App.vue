@@ -266,6 +266,11 @@ export default {
       setTimeout(() => {
         // 计算高度
         // this.calcHeight();
+        let head = navigator.userAgent;
+        if (head.indexOf("Firefox") > 1) {
+          let div=document.getElementById("app");
+          div.style.fontFamily = "Microsoft yahei";
+        }
         this.getCardList();
         // 图片卡 先加载dom后加载图片内容
         this.LazyLoaded = true;
