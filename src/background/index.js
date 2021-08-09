@@ -199,9 +199,17 @@ const kazeFun = {
                 if (popupWindowId != null) {
                     PlatformHelper.Windows.remove(popupWindowId);
                 }
-                PlatformHelper.Windows
+                let head = navigator.userAgent;
+                if (head.indexOf("Firefox") > 1) {
+                    PlatformHelper.Windows
+                    .createPanelWindow(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW), 800, 850)
+                    .then(tab => popupWindowId = tab.id);
+                } else {
+                    PlatformHelper.Windows
                     .createPanelWindow(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW), 800, 950)
                     .then(tab => popupWindowId = tab.id);
+                }
+                
             }
         });
     }

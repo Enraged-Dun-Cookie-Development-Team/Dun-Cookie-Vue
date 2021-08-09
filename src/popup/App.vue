@@ -730,7 +730,8 @@ body {
 }
 
 .el-timeline,
-.drawer-btn-area-quickJump {
+.drawer-btn-area-quickJump,
+.content-card-episodes {
   scrollbar-width: none;
 }
 
