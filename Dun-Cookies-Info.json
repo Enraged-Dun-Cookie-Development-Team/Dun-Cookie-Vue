@@ -3,22 +3,26 @@
         {
             "html": "<div class='online-area'> <img class='online-title-img' src='/assets/image/icon.ico'> <div> <div><span class='online-red'>重要紧急公告！！！！！！！！</span></div> <div>因为B站更改接口的格式，导致2.5.0前所有版本<span class='online-red'>无法获取B站的饼</span></div>  <div>开发者在<span class='online-blue'>多索雷斯的享受假日</span>的同时，加班加点为博士修复了这个问题</div> <div>博士记得升级到<span class='online-yellow'>最新版本</span>噢！！！！</div><div>感谢各位博士支持，<span class='online-red'>持续关注公告版本更新</span>来获得更好的蹲饼体验噢~</div> </div>  </div>",
             "starTime": "2021-08-03 19:41:44",
-            "overTime": "2023-08-03 19:41:50"
+            "overTime": "2023-08-03 19:41:50",
+            "notice": false
         },
         {
             "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20210723/97677d4072e316d7f834b9470736f21d.JPG'> <div> <div>SideStory「多索雷斯假日」将于<span class='online-blue'>8月3号</span>开启</div> <div>开启时间为周二下午4点</div> <div>建议在活动开启前刷完本周的<span class='online-red'>剿灭任务</span></div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>处更新<span class='online-blue'>作业视频</span></div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
             "starTime": "2021-07-27 00:23:18",
-            "overTime": "2021-08-24 03:59:59"
+            "overTime": "2021-08-24 03:59:59",
+            "notice": true
         },
         {
             "html": "<div class='online-area'> <img class='online-title-img radius' src='https://wx1.sinaimg.cn/mw1024/006QZngZgy1gt2gik67e8j31hc0u07ht.jpg'> <div> <div>各位博士，</div> <div>记得参与<span class='online-yellow'>网页活动</span></div><div>领取合成玉，龙门币，家具等奖励</div><div>活动时间为<span class='online-blue'> 2021年7月26日16:00~8月5日15:59</span></div> <div>点击 <a class='webOpen' href=\"https://ak.hypergryph.com/activity/dossoles-holiday\">这里</a> 快速跳转活动网页</div> ",
             "starTime": "2021-07-25 00:58:57",
-            "overTime": "2021-08-05 15:59:59"
+            "overTime": "2021-08-05 15:59:59",
+            "notice": true
         },
         {
             "html": "<div class='online-area'> <img class='online-title-img' src='/assets/image/icon.ico'> <div> <div>博士，谢谢你使用蹲饼。</div> <div>如果觉得好用的话，希望能去<a class='webOpen' href='https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue'>GitHub</a>上点个<span class='online-red'>Star</span>或者</div> <div>去<a class='webOpen' href='https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN'>Chrome商店</a>，<a class='webOpen' href='https://microsoftedge.microsoft.com/addons/detail/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknight/jimmfliacfpeabcifcghmdankmdnmfmn?hl=zh-CN'>Edge商店</a>或<a class='webOpen' href='https://addons.mozilla.org/zh-CN/firefox/addon/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cookies/'>Firefox商店</a>里面给个<span class='online-red'>好评</span></div> <div>也可以去<a class='webOpen' href='https://arknightscommunity.drblack-system.com/2012.html'>泰拉通讯枢纽</a>里面<span class='online-red'>回复我们</span></div> <div>欢迎加群 <a class='webOpen' href='https://jq.qq.com/?_wv=1027&k=Vod1uO13'>【蹲饼测试群】</a> 一起聊天，蹲饼！</div> </div> </div>",
             "starTime": "2021-5-01 12:00:00",
-            "overTime": "2099-12-31 04:00:00"
+            "overTime": "2099-12-31 04:00:00",
+            "notice": false
         }
     ],
     "btnList": [
