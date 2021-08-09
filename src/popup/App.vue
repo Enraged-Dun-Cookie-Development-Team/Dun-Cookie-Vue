@@ -492,7 +492,7 @@ export default {
     color: #23ade5;
   }
   .title-area {
-    position: absolute;
+    position: fixed;
     width: calc(100% - 32px);
     height: 40px;
     line-height: 40px;
