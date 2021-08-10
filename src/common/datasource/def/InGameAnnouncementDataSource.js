@@ -55,7 +55,15 @@ export class InGameAnnouncementDataSource extends DataSource {
   JudgmentNewFocusAnnounceId(data) {
     if (data) {
       if (this.FocusAnnounceId && data.focusAnnounceId && this.FocusAnnounceId != data.focusAnnounceId && this.FocusAnnounceId < data.focusAnnounceId) {
-        NotificationUtil.SendNotice(`【通讯组预告】小刻貌似闻到了饼的味道！`, '检测到游戏出现公告弹窗，可能马上发饼！', null, new Date().getTime())
+        let announceIdExist = false;
+        data.announceList.forEach(x => {
+          if (data.focusAnnounceId == x.announceId) {
+            announceIdExist = true;
+          }
+        })
+        if (!announceIdExist) {
+          NotificationUtil.SendNotice(`【通讯组预告】小刻貌似闻到了饼的味道！`, '检测到游戏出现公告弹窗，可能马上发饼！', null, new Date().getTime())
+        }
       }
       this.FocusAnnounceId = data.focusAnnounceId;
     }

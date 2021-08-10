@@ -119,7 +119,6 @@ function announcementMention() {
                 let content = x.html.replace(/\s+/g, '');
                 content = content.replace(divReg, '\n');
                 content = content.replace(removeTagReg, '');
-                console.log(content);
                 NotificationUtil.SendNotice("博士，重要公告，记得开列表看噢！", content, imgUrl, new Date().getTime());
             }
         })
@@ -163,7 +162,7 @@ const kazeFun = {
             startDunTimer();
             setTimeout(() => {
                 announcementMention();
-            }, 1);
+            }, 600000);
         });
 
         Settings.doAfterUpdate(() => {
