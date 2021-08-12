@@ -249,7 +249,7 @@ export default {
   },
   methods: {
     openWeb: PlatformHelper.Tabs.create,
-    openUrl(url, w = 1024, h = 950) {
+    openUrl(url, w = 1024, h = window.screen.height) {
       PlatformHelper.Windows
           .createPanelWindow(url, w, h);
     },

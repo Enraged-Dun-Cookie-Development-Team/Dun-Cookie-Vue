@@ -70,29 +70,13 @@ export default {
       }
     },
     ViewImg(item, img, refName) {
-      // 舍弃 会把列表关闭
-      // chrome.tabs.create(
-      //   {
-      //     url: chrome.extension.getURL("viewImg.html"),
-      //     active: true,
-      //   },
-      //   function (_tab) {
-      //    setTimeout(() => {
-      //       chrome.tabs.sendMessage(_tab.id, {
-      //       message: "some custom message",
-      //       arg: "some arg",
-      //     });
-      //    }, 1000);
-      //   }
-      // );
-
       // 直接打开 我也不知道为什么要加上这个神奇的数字 希望在非Chrome能兼容
       let ref = this.$refs[refName];
       if (Array.isArray(ref)) {
         ref = ref[0];
       }
-      let width = ref.naturalWidth + 16 || 1100;
-      let height = ref.naturalHeight + 39 || 750;
+      let width = ref.naturalWidth + 31 > window.screen.width ? window.screen.width : ref.naturalWidth + 31;
+      let height = ref.naturalHeight + 39 > window.screen.height ? window.screen.height : ref.naturalHeight + 39;
       if (this.windowTabId != null) {
         PlatformHelper.Windows.remove(this.windowTabId)
             .catch(err => console.log(err));
