@@ -119,7 +119,7 @@ function announcementMention() {
                 let content = x.html.replace(/\s+/g, '');
                 content = content.replace(divReg, '\n');
                 content = content.replace(removeTagReg, '');
-                NotificationUtil.SendNotice("博士，重要公告，记得开列表看噢！", content, imgUrl, new Date().getTime());
+                NotificationUtil.SendNotice("博士，重要公告，记得开列表看噢！", content, imgUrl, "announcement" + new Date().getTime());
             }
         })
     });
@@ -199,8 +199,10 @@ const kazeFun = {
             let item = DataSourceUtil.mergeAllData(cardListCache, false).find(x => x.id === id);
             if (item) {
                 PlatformHelper.Tabs.create(item.jumpUrl);
-            } else if( id === "update") {
+            } else if (id === "update") {
                 PlatformHelper.Tabs.createWithExtensionFile(PAGE_UPDATE);
+            } else if (id.slice(0, 12) === "announcement") {
+                alert('博士，你点下去的是条重要公告噢，打开列表就可以看到啦');
             } else {
                 alert('o(╥﹏╥)o 时间过于久远...最近列表内没有找到该网站');
             }
