@@ -37,6 +37,14 @@
         {
             "starTime": "2021-8-03 15:59:59",
             "overTime": "2021-8-24 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1kh411q7Vb",
+            "name": "【小狼XF】DH-EX/DH-S全关卡+突袭 单6星攻略",
+            "img": "https://i2.hdslb.com/bfs/archive/9ff81419690e1786e13e18508cb2ec4d24319e4c.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-8-03 15:59:59",
+            "overTime": "2021-8-24 03:59:59",
             "url": "https://www.bilibili.com/video/BV1eh411q7NT",
             "name": "【魔法zc目录】“多索雷斯假日”DH-S/EX平民全关卡低配攻略！阵容平民+低练度+语音详解的愉悦攻略！",
             "img": "https://i1.hdslb.com/bfs/archive/e2cbf136295f46b46393263a543bb32853ac430b.jpg@200w_125h_1c.webp",
@@ -54,7 +62,7 @@
             "starTime": "2021-8-03 15:59:59",
             "overTime": "2021-8-24 03:59:59",
             "url": "https://www.bilibili.com/video/BV1Gq4y1n76t",
-            "name": "【好吃的橘子鸭】DH、DH-S系列攻略合集，含中配+速刷+隐藏，语音详解",
+            "name": "【好吃的橘子鸭】已更新DH-EX系列攻略合集，含DH+S系列中配+速刷+隐藏",
             "img": "https://i1.hdslb.com/bfs/archive/481eb23b3df9123aed8b288efb8a2ada94af58b2.jpg@200w_125h_1c.webp",
             "radius": true
         },
@@ -127,6 +135,7 @@
                 "starTime": "2021-8-05 04:00:00",
                 "overTime": "2021-8-19 03:59:59"
             },
+            
             {
                 "text": "当前活动池结束",
                 "remark": "假日威龙陈[限定],水月,羽毛笔",
@@ -148,6 +157,7 @@
                 "starTime": "2021-8-26 16:00:00",
                 "overTime": "2021-9-09 03:59:59"
             },
+
             {
                 "text": "SideStory「多索雷斯假日」，活动结束",
                 "remark": "",
@@ -157,6 +167,13 @@
             },
             {
                 "text": "#6「蛮鳞行动」，活动开启",
+                "remark": "",
+                "time": "2021-8-26 03:59:59",
+                "starTime": "2021-8-24 16:00:00",
+                "overTime": "2021-8-26 15:59:59"
+            },
+            {
+                "text": "#6「蛮鳞行动」，活动结束",
                 "remark": "",
                 "time": "2021-9-09 03:59:59",
                 "starTime": "2021-8-26 16:00:00",
