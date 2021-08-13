@@ -13,38 +13,42 @@
       <div>{{ this.info.currentSrc }}</div>
       <div>{{ this.info.naturalWidth }} × {{ this.info.naturalHeight }}</div>
     </div>
-    <div style="width: 100%;height: 100%;overflow: auto">
-      <img class="img" :src="img" :class="showInfo?'show-info':''" @load="imgOnload($event)"/>
+    <div style="width: 100%; height: 100%; overflow: auto">
+      <img
+        class="img"
+        :src="img"
+        :class="showInfo ? 'show-info' : ''"
+        @load="imgOnload($event)"
+      />
     </div>
     <div class="turnPage" v-show="pageShow">
       <span class="turnPage-btn-area">
         <span @click.stop="leftPage" class="el-icon-arrow-left"></span>
         <span @click.stop="rightPage" class="el-icon-arrow-right"></span>
       </span>
-      <span>第{{ pageNow + 1 }}页，共{{ pageAll }}页</span>
+      <span class="turnNumber">第{{ pageNow + 1 }}页，共{{ pageAll }}页</span>
     </div>
   </div>
 </template>
 
 <script>
-import PlatformHelper from '../common/platform/PlatformHelper';
+import PlatformHelper from "../common/platform/PlatformHelper";
 
 export default {
   name: "ViewImg",
   created() {
-    PlatformHelper.Message.registerListener('view-img', 'view-img', data => {
+    PlatformHelper.Message.registerListener("view-img", "view-img", (data) => {
       this.item = data.item;
       this.img = data.img;
       this.winId = data.winId;
       if (this.item.imageList) {
         this.pageShow = true;
         this.pageAll = this.item.imageList.length;
-        this.pageNow = this.item.imageList.findIndex(x => x == this.img);
+        this.pageNow = this.item.imageList.findIndex((x) => x == this.img);
       }
     });
   },
   mounted() {
-
     document.addEventListener("keyup", (e) => {
       if (e.key === "Escape") {
         // 关闭窗口
@@ -68,7 +72,7 @@ export default {
       showInfo: false,
       pageNow: 0,
       pageAll: 0,
-      pageShow: false
+      pageShow: false,
     };
   },
   computed: {},
@@ -76,11 +80,17 @@ export default {
     imgOnload(data) {
       this.load = false;
       this.info.currentSrc = this.img;
-      this.info.naturalHeight = data.target.height + 39 > window.screen.height ? window.screen.height : data.target.height + 39;
-      this.info.naturalWidth = data.target.width + 31 > window.screen.width ? window.screen.width : data.target.width + 31;
-      chrome.windows.update(thsis.winId, {
+      this.info.naturalHeight =
+        data.target.height + 39 > window.screen.height
+          ? window.screen.height
+          : data.target.height + 39;
+      this.info.naturalWidth =
+        data.target.width + 31 > window.screen.width
+          ? window.screen.width
+          : data.target.width + 31;
+      chrome.windows.update(this.winId, {
         width: this.info.naturalWidth,
-        height: this.info.naturalHeight
+        height: this.info.naturalHeight,
       });
     },
     leftPage() {
@@ -89,11 +99,10 @@ export default {
       }
     },
     rightPage() {
-      if (this.pageNow < (this.pageAll - 1)) {
+      if (this.pageNow < this.pageAll - 1) {
         this.img = this.item.imageList[++this.pageNow];
       }
     },
-
   },
 };
 </script>
@@ -127,22 +136,11 @@ export default {
   }
 
   .turnPage {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    opacity: 0.6;
     position: fixed;
-    top: 10px;
-    left: 10px;
     color: #23ade5;
     font-size: 1rem;
-    align-items: center;
-    align-content: space-around;
-    width: 110px;
-    height: 70px;
     font-weight: bold;
-    transition: all 0.5s;
-    background: #fff;
+    background: transparent;
     border-radius: 3px;
     user-select: none;
 
@@ -156,15 +154,40 @@ export default {
       justify-content: space-around;
     }
 
-    .el-icon-arrow-left, .el-icon-arrow-right {
+    .el-icon-arrow-left,
+    .el-icon-arrow-right {
+      position: fixed;
+      top: 0;
+      height: 100vh;
+      width: 10vw;
+      min-width: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       font-size: 25px;
-      border-radius: 50%;
-      background: #23ade5;
+      border-radius: 5px;
+      background: rgba(111, 111, 111, 0);
       color: #ffffff;
-      padding: 5px;
       cursor: pointer;
+      transition: all 0.5s;
+      &:hover {
+        background: rgba(111, 111, 111, 0.7);
+      }
+    }
+    .el-icon-arrow-left {
+      left: 0;
+    }
+    .el-icon-arrow-right {
+      right: 0;
     }
 
+    .turnNumber {
+      position: fixed;
+      bottom: 30px;
+      text-align: center;
+      transform: translate(-50%, -25%);
+      left: 50%;
+    }
   }
 }
 </style>
