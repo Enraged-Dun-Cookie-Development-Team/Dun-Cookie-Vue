@@ -13,7 +13,7 @@
       <div>{{ this.info.currentSrc }}</div>
       <div>{{ this.info.naturalWidth }} × {{ this.info.naturalHeight }}</div>
     </div>
-    <div style="width: 100%; height: 100%; overflow: auto">
+    <div ref="imgScroll" style="width: 100%; height: 100%; overflow: auto">
       <img
         class="img"
         :src="img"
@@ -96,11 +96,15 @@ export default {
     leftPage() {
       if (this.pageNow > 0) {
         this.img = this.item.imageList[--this.pageNow];
+        let scrollArea = this.$refs.imgScroll;
+        scrollArea.scrollTop = 0;
       }
     },
     rightPage() {
       if (this.pageNow < this.pageAll - 1) {
         this.img = this.item.imageList[++this.pageNow];
+        let scrollArea = this.$refs.imgScroll;
+        scrollArea.scrollTop = 0;
       }
     },
   },
@@ -144,10 +148,6 @@ export default {
     border-radius: 3px;
     user-select: none;
 
-    &:hover {
-      opacity: 1;
-    }
-
     .turnPage-btn-area {
       display: flex;
       width: 100%;
@@ -185,9 +185,15 @@ export default {
       position: fixed;
       bottom: 30px;
       text-align: center;
+      opacity: 0.3;
       transform: translate(-50%, -25%);
+      transition: all 0.5s;
       left: 50%;
     }
+  }
+
+  &:hover .turnNumber {
+    opacity: 1;
   }
 }
 </style>
