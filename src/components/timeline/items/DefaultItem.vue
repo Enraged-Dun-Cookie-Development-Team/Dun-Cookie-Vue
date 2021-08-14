@@ -76,25 +76,30 @@ export default {
         ref = ref[0];
       }
       let width = ref.naturalWidth + 31 > window.screen.width ? window.screen.width : ref.naturalWidth + 31;
-      let height = ref.naturalHeight + 39 > window.screen.height ? window.screen.height : ref.naturalHeight + 39;
-      if (this.windowTabId != null) {
-        PlatformHelper.Windows.remove(this.windowTabId)
-            .catch(err => console.log(err));
-      }
-      // TODO viewImg.html、view-img 改为常量
-      PlatformHelper.Windows.createPanelWindow(PlatformHelper.Extension.getURL('viewImg.html'), width, height)
-          .then(window => {
-            this.windowTabId = window.id;
-            setTimeout(() => {
-              PlatformHelper.Message.send('view-img', {
-                item: item,
-                img: img,
-                winId: window.id,
-              })
-            }, 1000);
-          })
-          .catch(err => console.log(err));
+      let height = ref.naturalHeight + 39 > (window.screen.height - 50) ? window.screen.height - 50 : ref.naturalHeight + 39;
+
+      this.saveWindowInfoAndOpenWindow({item, img}, {width, height})
     },
+    async saveWindowInfoAndOpenWindow(info, size) {
+      let windowTabId = await PlatformHelper.Storage.getLocalStorage('windowTabId');
+      if (windowTabId != undefined && windowTabId != 0) {
+        let allWindow = await PlatformHelper.Windows.getAllWindow();
+        if (allWindow.findIndex(x => x.id == windowTabId) > 0) {
+          await PlatformHelper.Windows.remove(windowTabId);
+        }
+        await PlatformHelper.Storage.saveLocalStorage('windowTabId', 0);
+      }
+      ;
+      let window = await PlatformHelper.Windows.createPanelWindow(PlatformHelper.Extension.getURL('viewImg.html'), size.width, size.height);
+      await PlatformHelper.Storage.saveLocalStorage('windowTabId', window.id);
+      setTimeout(() => {
+        PlatformHelper.Message.send('view-img', {
+          item: info.item,
+          img: info.img,
+          winId: window.id,
+        })
+      }, 1000);
+    }
   }
 }
 </script>

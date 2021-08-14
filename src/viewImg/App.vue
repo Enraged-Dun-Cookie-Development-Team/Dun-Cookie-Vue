@@ -15,10 +15,10 @@
     </div>
     <div ref="imgScroll" style="width: 100%; height: 100%; overflow: auto">
       <img
-        class="img"
-        :src="img"
-        :class="showInfo ? 'show-info' : ''"
-        @load="imgOnload($event)"
+          class="img"
+          :src="img"
+          :class="showInfo ? 'show-info' : ''"
+          @load="imgOnload($event)"
       />
     </div>
     <div class="turnPage" v-show="pageShow">
@@ -81,13 +81,13 @@ export default {
       this.load = false;
       this.info.currentSrc = this.img;
       this.info.naturalHeight =
-        data.target.height + 39 > window.screen.height
-          ? window.screen.height
-          : data.target.height + 39;
+          data.target.height + 39 > (window.screen.height - 50)
+              ? window.screen.height - 50
+              : data.target.height + 39;
       this.info.naturalWidth =
-        data.target.width + 31 > window.screen.width
-          ? window.screen.width
-          : data.target.width + 31;
+          data.target.width + 31 > window.screen.width
+              ? window.screen.width
+              : data.target.width + 31;
       chrome.windows.update(this.winId, {
         width: this.info.naturalWidth,
         height: this.info.naturalHeight,
@@ -170,13 +170,16 @@ export default {
       color: #ffffff;
       cursor: pointer;
       transition: all 0.5s;
+
       &:hover {
         background: rgba(111, 111, 111, 0.7);
       }
     }
+
     .el-icon-arrow-left {
       left: 0;
     }
+
     .el-icon-arrow-right {
       right: 0;
     }
