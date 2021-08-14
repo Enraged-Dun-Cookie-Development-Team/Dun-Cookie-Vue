@@ -1,5 +1,5 @@
 import ChromePlatform from './ChromePlatform';
-import {PLATFORM_EDGE, DEBUG_LOG} from '../../Constants';
+import { PLATFORM_EDGE, DEBUG_LOG } from '../../Constants';
 import AbstractPlatform from '../AbstractPlatform';
 
 const IGNORE_MESSAGE_ERROR_1 = 'Could not establish connection. Receiving end does not exist.';
@@ -14,150 +14,154 @@ const _pageId = String(Math.floor(Math.random() * 1000000));
  */
 export default class EdgePlatform extends AbstractPlatform {
 
-  defPlatform;
+    defPlatform;
 
-  constructor() {
-    super();
-    this.defPlatform = new ChromePlatform();
-  }
-
-  get PlatformType() {
-    return PLATFORM_EDGE;
-  }
-
-  sendMessage(type, data) {
-    if (DEBUG_LOG) {
-      console.log(`sendMessage - ${type}`);
-      console.log(data || 'no-data');
-    }
-    const message = {type: type, page: _pageId};
-    if (data) {
-      message.data = data;
+    constructor() {
+        super();
+        this.defPlatform = new ChromePlatform();
     }
 
-    return new Promise((resolve, reject) => {
-      chrome.runtime.sendMessage(message, (response) => {
-        if (chrome.runtime.lastError) {
-          if (chrome.runtime.lastError.message === IGNORE_MESSAGE_ERROR_1
-            || chrome.runtime.lastError.message === IGNORE_MESSAGE_ERROR_2) {
-            if (DEBUG_LOG) {
-              console.log(`response - ${type} - receiver not exists`);
+    get PlatformType() {
+        return PLATFORM_EDGE;
+    }
+
+    sendMessage(type, data) {
+        if (DEBUG_LOG) {
+            console.log(`sendMessage - ${type}`);
+            console.log(data || 'no-data');
+        }
+        const message = { type: type, page: _pageId };
+        if (data) {
+            message.data = data;
+        }
+
+        return new Promise((resolve, reject) => {
+            chrome.runtime.sendMessage(message, (response) => {
+                if (chrome.runtime.lastError) {
+                    if (chrome.runtime.lastError.message === IGNORE_MESSAGE_ERROR_1
+                        || chrome.runtime.lastError.message === IGNORE_MESSAGE_ERROR_2) {
+                        if (DEBUG_LOG) {
+                            console.log(`response - ${type} - receiver not exists`);
+                        }
+                        resolve();
+                    } else {
+                        reject(chrome.runtime.lastError);
+                    }
+                    return;
+                }
+                if (response === AbstractPlatform.__MESSAGE_WITHOUT_RESPONSE) {
+                    resolve();
+                    return;
+                }
+                if (DEBUG_LOG) {
+                    console.log(`response - ${type}`);
+                    console.log(response);
+                }
+                resolve(response);
+            });
+        });
+    }
+
+    addMessageListener(id, type, listener) {
+        return chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+            let value;
+
+            if (message.page !== _pageId && (!type || message.type === type)) {
+                if (DEBUG_LOG) {
+                    console.log(`${id} - ${type} - receiverMessage`);
+                    console.log(message);
+                }
+                if (!type) {
+                    value = listener(message);
+                } else {
+                    value = listener(message.data);
+                }
+
+                if (value !== null && value !== undefined) {
+                    if (DEBUG_LOG) {
+                        console.log(`${id} - ${type}|${message.type} - receiverMessage - response`);
+                        console.log(value);
+                    }
+                    // Chromium内核中必须用return true的方式进行异步返回，不支持直接返回Promise
+                    // 参考兼容性表格：https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onMessage
+                    sendResponse(value);
+                    if (value.constructor === Promise) {
+                        return true;
+                    }
+                } else {
+                    if (DEBUG_LOG) {
+                        console.log(`${id} - ${type}|${message.type} - receiverMessage - responseEmpty`);
+                    }
+                    // 必须要返回点什么东西来避免报错
+                    sendResponse(AbstractPlatform.__MESSAGE_WITHOUT_RESPONSE);
+                }
             }
-            resolve();
-          } else {
-            reject(chrome.runtime.lastError);
-          }
-          return;
-        }
-        if (response === AbstractPlatform.__MESSAGE_WITHOUT_RESPONSE) {
-          resolve();
-          return;
-        }
-        if (DEBUG_LOG) {
-          console.log(`response - ${type}`);
-          console.log(response);
-        }
-        resolve(response);
-      });
-    });
-  }
+        });
+    }
 
-  addMessageListener(id, type, listener) {
-    return chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-      let value;
+    // 以下为defPlatform的代理方法
 
-      if (message.page !== _pageId && (!type || message.type === type)) {
-        if (DEBUG_LOG) {
-          console.log(`${id} - ${type} - receiverMessage`);
-          console.log(message);
-        }
-        if (!type) {
-          value = listener(message);
-        } else {
-          value = listener(message.data);
-        }
+    get isBackground() {
+        return this.defPlatform.isBackground;
+    }
 
-        if (value !== null && value !== undefined) {
-          if (DEBUG_LOG) {
-            console.log(`${id} - ${type}|${message.type} - receiverMessage - response`);
-            console.log(value);
-          }
-          // Chromium内核中必须用return true的方式进行异步返回，不支持直接返回Promise
-          // 参考兼容性表格：https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onMessage
-          sendResponse(value);
-          if (value.constructor === Promise) {
-            return true;
-          }
-        } else {
-          if (DEBUG_LOG) {
-            console.log(`${id} - ${type}|${message.type} - receiverMessage - responseEmpty`);
-          }
-          // 必须要返回点什么东西来避免报错
-          sendResponse(AbstractPlatform.__MESSAGE_WITHOUT_RESPONSE);
-        }
-      }
-    });
-  }
+    get isMobile() {
+        return this.defPlatform.isMobile;
+    }
 
-  // 以下为defPlatform的代理方法
+    getAllWindow() {
+        return this.defPlatform.getAllWindow();
+    }
 
-  get isBackground() {
-    return this.defPlatform.isBackground;
-  }
+    getLocalStorage(name) {
+        return this.defPlatform.getLocalStorage(name);
+    }
 
-  get isMobile() {
-    return this.defPlatform.isMobile;
-  }
+    saveLocalStorage(name, data) {
+        return this.defPlatform.saveLocalStorage(name, data);
+    }
 
-  getLocalStorage(name) {
-    return this.defPlatform.getLocalStorage(name);
-  }
+    setPopup(url) {
+        return this.defPlatform.setPopup(url);
+    }
 
-  saveLocalStorage(name, data) {
-    return this.defPlatform.saveLocalStorage(name, data);
-  }
+    getURLForExtensionFile(file) {
+        return this.defPlatform.getURLForExtensionFile(file);
+    }
 
-  setPopup(url) {
-    return this.defPlatform.setPopup(url);
-  }
+    createNotifications(id, iconUrl, title, message, imageUrl) {
+        return this.defPlatform.createNotifications(id, iconUrl, title, message, imageUrl);
+    }
 
-  getURLForExtensionFile(file) {
-    return this.defPlatform.getURLForExtensionFile(file);
-  }
+    addNotificationClickListener(listener) {
+        return this.defPlatform.addNotificationClickListener(listener);
+    }
 
-  createNotifications(id, iconUrl, title, message, imageUrl) {
-    return this.defPlatform.createNotifications(id, iconUrl, title, message, imageUrl);
-  }
+    addIconClickListener(listener) {
+        return this.defPlatform.addIconClickListener(listener);
+    }
 
-  addNotificationClickListener(listener) {
-    return this.defPlatform.addNotificationClickListener(listener);
-  }
+    createTab(url) {
+        return this.defPlatform.createTab(url);
+    }
 
-  addIconClickListener(listener) {
-    return this.defPlatform.addIconClickListener(listener);
-  }
+    createWindow(url, type, width, height) {
+        return this.defPlatform.createWindow(url, type, width, height);
+    }
 
-  createTab(url) {
-    return this.defPlatform.createTab(url);
-  }
+    removeWindow(windowId) {
+        return this.defPlatform.removeWindow(windowId);
+    }
 
-  createWindow(url, type, width, height) {
-    return this.defPlatform.createWindow(url, type, width, height);
-  }
+    download(url, filename, saveAs) {
+        return this.defPlatform.download(url, filename, saveAs);
+    }
 
-  removeWindow(windowId) {
-    return this.defPlatform.removeWindow(windowId);
-  }
+    addInstallListener(listener) {
+        return this.defPlatform.addInstallListener(listener);
+    }
 
-  download(url, filename, saveAs) {
-    return this.defPlatform.download(url, filename, saveAs);
-  }
-
-  addInstallListener(listener) {
-    return this.defPlatform.addInstallListener(listener);
-  }
-
-  sendHttpRequest(url, method) {
-    return this.defPlatform.sendHttpRequest(url, method);
-  }
+    sendHttpRequest(url, method) {
+        return this.defPlatform.sendHttpRequest(url, method);
+    }
 }

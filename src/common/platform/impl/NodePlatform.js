@@ -36,6 +36,10 @@ export default class NodePlatform extends AbstractPlatform {
     return PLATFORM_NODE;
   }
 
+  getAllWindow() {
+    return Promise.reslove([]);
+  }
+
   async getLocalStorage(name) {
     const file = await this.fs.open(storageFile, 'w+');
     const content = await file.readFile('UTF-8') || '{}';

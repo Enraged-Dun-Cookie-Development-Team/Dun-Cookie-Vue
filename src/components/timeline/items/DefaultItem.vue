@@ -88,8 +88,7 @@ export default {
           await PlatformHelper.Windows.remove(windowTabId);
         }
         await PlatformHelper.Storage.saveLocalStorage('windowTabId', 0);
-      }
-      ;
+      };
       let window = await PlatformHelper.Windows.createPanelWindow(PlatformHelper.Extension.getURL('viewImg.html'), size.width, size.height);
       await PlatformHelper.Storage.saveLocalStorage('windowTabId', window.id);
       setTimeout(() => {

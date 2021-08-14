@@ -28,6 +28,10 @@ export default class UnknownPlatform extends AbstractPlatform {
     return this.defPlatform.isMobile;
   }
 
+  getAllWindow() {
+    return this.defPlatform.getAllWindow();
+  }
+
   getLocalStorage(name) {
     return this.defPlatform.getLocalStorage(name);
   }
