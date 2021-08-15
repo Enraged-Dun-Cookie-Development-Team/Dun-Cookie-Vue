@@ -1,6 +1,9 @@
 import { PLATFORM_FIREFOX, DEBUG_LOG } from '../../Constants';
 import AbstractPlatform from '../AbstractPlatform';
 
+const IGNORE_MESSAGE_ERROR_1 = 'Could not establish connection. Receiving end does not exist.';
+const IGNORE_MESSAGE_ERROR_2 = 'The message port closed before a response was received.';
+
 let _isBackground;
 let _isMobile;
 
@@ -59,6 +62,18 @@ export default class FirefoxPlatform extends AbstractPlatform {
         }
 
         return browser.runtime.sendMessage(message).then(response => {
+            if (browser.runtime.lastError) {
+                if (browser.runtime.lastError.message === IGNORE_MESSAGE_ERROR_1
+                    || browser.runtime.lastError.message === IGNORE_MESSAGE_ERROR_2) {
+                    if (DEBUG_LOG) {
+                        console.log(`response - ${type} - receiver not exists`);
+                    }
+                    return;
+                } else {
+                    return(browser.runtime.lastError);
+                }
+                return;
+            }
             if (response === AbstractPlatform.__MESSAGE_WITHOUT_RESPONSE) {
                 return;
             }

@@ -219,7 +219,11 @@ const kazeFun = {
         PlatformHelper.BrowserAction.addIconClickListener(() => {
             if (Settings.display.windowMode) {
                 if (popupWindowId != null) {
-                    PlatformHelper.Windows.remove(popupWindowId);
+                    PlatformHelper.Windows.getAllWindow().then(allWindow => {
+                        if (allWindow.findIndex(x => x.id == popupWindowId) > 0) {
+                            PlatformHelper.Windows.remove(popupWindowId);
+                        }
+                    })
                 }
                 let head = navigator.userAgent;
                 if (head.indexOf("Firefox") > 1) {
