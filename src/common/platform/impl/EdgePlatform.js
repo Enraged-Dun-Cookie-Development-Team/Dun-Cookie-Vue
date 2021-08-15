@@ -153,6 +153,10 @@ export default class EdgePlatform extends AbstractPlatform {
         return this.defPlatform.removeWindow(windowId);
     }
 
+    updateWindow(winId, width, height) {
+        return this.defPlatform.updateWindow(winId, width, height);
+    }
+
     download(url, filename, saveAs) {
         return this.defPlatform.download(url, filename, saveAs);
     }

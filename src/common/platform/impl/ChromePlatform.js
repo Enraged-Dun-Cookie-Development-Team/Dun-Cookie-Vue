@@ -223,6 +223,18 @@ export default class ChromePlatform extends AbstractPlatform {
         });
     }
 
+    updateWindow(winId, width, height) {
+        return new Promise((resolve, reject) => {
+            chrome.windows.update(winId, {width, height}, window => {
+                if (chrome.runtime.lastError) {
+                    reject(chrome.runtime.lastError);
+                    return;
+                }
+                resolve(window);
+            });
+        });
+    }
+
     removeWindow(windowId) {
         return new Promise((resolve, reject) => {
             chrome.windows.remove(windowId, () => {

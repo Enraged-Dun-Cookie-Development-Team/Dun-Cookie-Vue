@@ -1,11 +1,3 @@
-<!--
- * @Author: your name
- * @Date: 2021-06-26 15:14:20
- * @LastEditTime: 2021-06-27 21:30:45
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \Dun-Cookie-Vue\src\viewImg\App.vue
--->
 <template>
   <div id="app" @click="showInfo = !showInfo" v-loading="load">
     <div class="img-info" v-show="!load">
@@ -15,10 +7,10 @@
     </div>
     <div ref="imgScroll" style="width: 100%; height: 100%; overflow: auto">
       <img
-          class="img"
-          :src="img"
-          :class="showInfo ? 'show-info' : ''"
-          @load="imgOnload($event)"
+        class="img"
+        :src="img"
+        :class="showInfo ? 'show-info' : ''"
+        @load="imgOnload($event)"
       />
     </div>
     <div class="turnPage" v-show="pageShow">
@@ -81,17 +73,18 @@ export default {
       this.load = false;
       this.info.currentSrc = this.img;
       this.info.naturalHeight =
-          data.target.height + 39 > (window.screen.height - 50)
-              ? window.screen.height - 50
-              : data.target.height + 39;
+        data.target.height + 39 > window.screen.height - 50
+          ? window.screen.height - 50
+          : data.target.height + 39;
       this.info.naturalWidth =
-          data.target.width + 31 > window.screen.width
-              ? window.screen.width
-              : data.target.width + 31;
-      chrome.windows.update(this.winId, {
-        width: this.info.naturalWidth,
-        height: this.info.naturalHeight,
-      });
+        data.target.width + 31 > window.screen.width
+          ? window.screen.width
+          : data.target.width + 31;
+      PlatformHelper.Windows.update(
+        this.winId, 
+        this.info.naturalWidth,
+        this.info.naturalHeight,
+      );
     },
     leftPage() {
       if (this.pageNow > 0) {

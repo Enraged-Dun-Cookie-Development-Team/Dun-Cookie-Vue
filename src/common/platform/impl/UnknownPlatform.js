@@ -1,5 +1,5 @@
 import ChromePlatform from './ChromePlatform';
-import {PLATFORM_UNKNOWN} from '../../Constants';
+import { PLATFORM_UNKNOWN } from '../../Constants';
 import AbstractPlatform from '../AbstractPlatform';
 
 /**
@@ -7,88 +7,92 @@ import AbstractPlatform from '../AbstractPlatform';
  */
 export default class UnknownPlatform extends AbstractPlatform {
 
-  defPlatform;
+    defPlatform;
 
-  constructor() {
-    super();
-    this.defPlatform = new ChromePlatform();
-  }
+    constructor() {
+        super();
+        this.defPlatform = new ChromePlatform();
+    }
 
-  get PlatformType() {
-    return PLATFORM_UNKNOWN;
-  }
+    get PlatformType() {
+        return PLATFORM_UNKNOWN;
+    }
 
-  // 以下为defPlatform的代理方法
+    // 以下为defPlatform的代理方法
 
-  get isBackground() {
-    return this.defPlatform.isBackground;
-  }
+    get isBackground() {
+        return this.defPlatform.isBackground;
+    }
 
-  get isMobile() {
-    return this.defPlatform.isMobile;
-  }
+    get isMobile() {
+        return this.defPlatform.isMobile;
+    }
 
-  getAllWindow() {
-    return this.defPlatform.getAllWindow();
-  }
+    getAllWindow() {
+        return this.defPlatform.getAllWindow();
+    }
 
-  getLocalStorage(name) {
-    return this.defPlatform.getLocalStorage(name);
-  }
+    getLocalStorage(name) {
+        return this.defPlatform.getLocalStorage(name);
+    }
 
-  saveLocalStorage(name, data) {
-    return this.defPlatform.saveLocalStorage(name, data);
-  }
+    saveLocalStorage(name, data) {
+        return this.defPlatform.saveLocalStorage(name, data);
+    }
 
-  sendMessage(type, data) {
-    return this.defPlatform.sendMessage(type, data);
-  }
+    sendMessage(type, data) {
+        return this.defPlatform.sendMessage(type, data);
+    }
 
-  addMessageListener(id, type, listener) {
-    return this.defPlatform.addMessageListener(id, type, listener);
-  }
+    addMessageListener(id, type, listener) {
+        return this.defPlatform.addMessageListener(id, type, listener);
+    }
 
-  setPopup(url) {
-    return this.defPlatform.setPopup(url);
-  }
+    setPopup(url) {
+        return this.defPlatform.setPopup(url);
+    }
 
-  getURLForExtensionFile(file) {
-    return this.defPlatform.getURLForExtensionFile(file);
-  }
+    getURLForExtensionFile(file) {
+        return this.defPlatform.getURLForExtensionFile(file);
+    }
 
-  createNotifications(id, iconUrl, title, message, imageUrl) {
-    return this.defPlatform.createNotifications(id, iconUrl, title, message, imageUrl);
-  }
+    createNotifications(id, iconUrl, title, message, imageUrl) {
+        return this.defPlatform.createNotifications(id, iconUrl, title, message, imageUrl);
+    }
 
-  addNotificationClickListener(listener) {
-    return this.defPlatform.addNotificationClickListener(listener);
-  }
+    addNotificationClickListener(listener) {
+        return this.defPlatform.addNotificationClickListener(listener);
+    }
 
-  addIconClickListener(listener) {
-    return this.defPlatform.addIconClickListener(listener);
-  }
+    addIconClickListener(listener) {
+        return this.defPlatform.addIconClickListener(listener);
+    }
 
-  createTab(url) {
-    return this.defPlatform.createTab(url);
-  }
+    createTab(url) {
+        return this.defPlatform.createTab(url);
+    }
 
-  createWindow(url, type, width, height) {
-    return this.defPlatform.createWindow(url, type, width, height);
-  }
+    createWindow(url, type, width, height) {
+        return this.defPlatform.createWindow(url, type, width, height);
+    }
 
-  removeWindow(windowId) {
-    return this.defPlatform.removeWindow(windowId);
-  }
+    removeWindow(windowId) {
+        return this.defPlatform.removeWindow(windowId);
+    }
 
-  download(url, filename, saveAs) {
-    return this.defPlatform.download(url, filename, saveAs);
-  }
+    updateWindow(winId, width, height) {
+        return this.defPlatform.updateWindow(winId, width, height);
+    }
 
-  addInstallListener(listener) {
-    return this.defPlatform.addInstallListener(listener);
-  }
+    download(url, filename, saveAs) {
+        return this.defPlatform.download(url, filename, saveAs);
+    }
 
-  sendHttpRequest(url, method) {
-    return this.defPlatform.sendHttpRequest(url, method);
-  }
+    addInstallListener(listener) {
+        return this.defPlatform.addInstallListener(listener);
+    }
+
+    sendHttpRequest(url, method) {
+        return this.defPlatform.sendHttpRequest(url, method);
+    }
 }

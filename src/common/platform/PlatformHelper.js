@@ -197,6 +197,10 @@ class WindowsHelper {
         return currentPlatform.removeWindow(windowId);
     }
 
+    update(winId, width, height) {
+        return currentPlatform.updateWindow(winId, width, height);
+    }
+
     getAllWindow() {
         return currentPlatform.getAllWindow();
     }

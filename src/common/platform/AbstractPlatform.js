@@ -163,6 +163,17 @@ export default class AbstractPlatform {
     };
 
     /**
+     * 更新窗口信息
+     * @param winId 窗口id
+     * @param width 窗口宽度
+     * @param height 窗口高度
+     * @return {Promise} reslove接收一个参数(新窗口的tab对象)
+     */
+    updateWindow(winId, width, height) {
+        throw unsupportedTip;
+    };
+
+    /**
      * 关闭指定窗口
      * @param windowId 要关闭的窗口ID
      * @return {Promise}

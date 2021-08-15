@@ -160,6 +160,10 @@ export default class FirefoxPlatform extends AbstractPlatform {
         return browser.windows.remove(windowId);
     }
 
+    updateWindow(winId, width, height) {
+        return browser.windows.update(winId, {width, height});
+    }
+
     download(url, filename, saveAs) {
         var options = {
             url: url
