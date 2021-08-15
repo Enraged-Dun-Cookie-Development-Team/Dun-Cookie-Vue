@@ -81,9 +81,9 @@ export default {
           ? window.screen.width
           : data.target.width + 31;
       PlatformHelper.Windows.update(
-        this.winId, 
+        this.winId,
         this.info.naturalWidth,
-        this.info.naturalHeight,
+        this.info.naturalHeight
       );
     },
     leftPage() {
