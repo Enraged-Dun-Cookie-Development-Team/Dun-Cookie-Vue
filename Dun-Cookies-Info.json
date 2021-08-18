@@ -37,6 +37,30 @@
         {
             "starTime": "2021-8-03 15:59:59",
             "overTime": "2021-8-24 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1wL4y1v7PL",
+            "name": "【自在道爷】DH-MO-1挂机流，大剿灭摆完就过！精二31快乐讲解，轻松解放双手|明日方舟-多索雷斯北郊400杀镀层",
+            "img": "https://i2.hdslb.com/bfs/archive/82ccc74fc68a1cd726c1b64ee705b6a38a18bfd2.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-8-03 15:59:59",
+            "overTime": "2021-8-24 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1g341167FE",
+            "name": "【巴别塔攻略组】单核低配作业，单水陈+三四星精一大队，顺便镀层",
+            "img": "https://i0.hdslb.com/bfs/archive/cbe0aba6986cd2d85410770161da1d760f7cc79b.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-8-03 15:59:59",
+            "overTime": "2021-8-24 03:59:59",
+            "url": "https://www.bilibili.com/video/BV13A411A7j2",
+            "name": "【萧然Q】DH-MO-1镀层 摆完挂机 简单好抄",
+            "img": "https://i1.hdslb.com/bfs/archive/2c2a824451b84be1f714babe820e2f2e2c925315.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-8-03 15:59:59",
+            "overTime": "2021-8-24 03:59:59",
             "url": "https://www.bilibili.com/video/BV1kh411q7Vb",
             "name": "【小狼XF】DH-EX/DH-S全关卡+突袭 单6星攻略",
             "img": "https://i2.hdslb.com/bfs/archive/9ff81419690e1786e13e18508cb2ec4d24319e4c.jpg@200w_125h_1c.webp",
@@ -123,10 +147,10 @@
         "countdown": [
             {
                 "text": "当前轮换池结束",
-                "remark": "安洁莉娜[兑换],早露,普罗旺斯,梅尔[兑换],乌有",
-                "time": "2021-8-05 03:59:59",
-                "starTime": "2021-7-22 04:00:00",
-                "overTime": "2021-8-05 03:59:59"
+                "remark": "闪灵[兑换],异客,天火,守林人[兑换],卡夫卡",
+                "time": "2021-9-02  03:59:59",
+                "starTime": "2021-8-19 04:00:00",
+                "overTime": "2021-9-02 03:59:59"
             },
             {
                 "text": "当前轮换池结束",
