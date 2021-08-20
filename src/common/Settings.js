@@ -175,6 +175,10 @@ class Settings {
      * 是否启用理智计算(自动提醒)
      */
     san: true,
+    /**
+     * 是否推送重要公告
+     */
+    announcementNotice: true,
   }
 
   /**

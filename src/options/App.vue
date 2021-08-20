@@ -124,7 +124,18 @@
                 :open-delay="1000"
                 class="item"
                 effect="dark"
-                content="时间段内蹲饼的攻速降低100%，用来节省流量和性能，降低打开后数据请看蹲饼频率后面的文字说明"
+                content="关闭后不会在电脑右下角和通知栏收到重要公告推送，如刷活动前刷剿灭提醒与因不明原因导致小刻食堂崩溃！"
+                placement="bottom"
+              >
+                <el-form-item label="重要公告推送">
+                  <el-switch v-model="settings.feature.announcementNotice"></el-switch>
+                </el-form-item>
+              </el-tooltip>
+              <el-tooltip
+                :open-delay="1000"
+                class="item"
+                effect="dark"
+                content="时间段内蹲饼的攻速降低，用来节省流量和性能，降低打开后数据请看蹲饼频率后面的文字说明"
                 placement="bottom"
               >
                 <el-form-item label="低频模式">
