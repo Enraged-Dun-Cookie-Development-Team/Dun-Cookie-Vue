@@ -193,6 +193,10 @@ class WindowsHelper {
         return this.create(url, 'popup', width, height);
     }
 
+    createMaxPopupWindow(url) {
+        return currentPlatform.createMaxWindow(url, 'popup', 'maximized');
+    }
+
     remove(windowId) {
         return currentPlatform.removeWindow(windowId);
     }

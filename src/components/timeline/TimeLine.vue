@@ -169,7 +169,7 @@
             :class="[`font-size-${settings.display.fontSize}`, {'special-source': item.componentData}]"
             shadow="never"
         >
-          <component :is="resolveComponent(item)" :item="item" :show-image="imgShow"></component>
+          <component :is="resolveComponent(item)" :item="item" :show-image="imgShow" :link-Max="settings.feature.linkMax"></component>
         </el-card>
       </MyElTimelineItem>
     </el-timeline>
@@ -250,8 +250,13 @@ export default {
   methods: {
     openWeb: PlatformHelper.Tabs.create,
     openUrl(url, w = 1024, h = window.screen.height) {
-      PlatformHelper.Windows
+      if(this.settings.feature.linkMax) {
+        PlatformHelper.Windows
+          .createMaxPopupWindow(url);
+      } else {
+        PlatformHelper.Windows
           .createPanelWindow(url, w, h);
+      }
     },
     getDataSourceByName: DataSourceUtil.getByName,
     transformToSortList: DataSourceUtil.transformToSortList,

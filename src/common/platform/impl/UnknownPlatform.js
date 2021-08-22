@@ -76,6 +76,10 @@ export default class UnknownPlatform extends AbstractPlatform {
         return this.defPlatform.createWindow(url, type, width, height);
     }
 
+    createMaxWindow(url, type, state) {
+        return this.defPlatform.createMaxWindow(url, type, state);
+    }
+
     removeWindow(windowId) {
         return this.defPlatform.removeWindow(windowId);
     }

@@ -28,15 +28,25 @@
 <script>
 // 用于TerraHistoricusDataSource的特殊组件
 import PlatformHelper from '../../../common/platform/PlatformHelper';
-import {PAGE_POPUP_WINDOW} from "@/common/Constants";
+import Settings from '../../../common/Settings';
 
 export default {
   name: "TerraHistoricusItem",
   props: ["item", "showImage"],
+  data() {
+    return {
+      settings: Settings,
+    };
+  },
   methods: {
     openUrl(url) {
-      PlatformHelper.Windows
+      if(this.settings.feature.linkMax) {
+        PlatformHelper.Windows
+          .createMaxPopupWindow(url);
+      } else {
+        PlatformHelper.Windows
           .createPanelWindow(url, 900, 1000);
+      }
     }
   }
 }

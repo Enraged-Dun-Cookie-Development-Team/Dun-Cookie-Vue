@@ -163,6 +163,17 @@ export default class AbstractPlatform {
     };
 
     /**
+     * 打开新窗口
+     * @param url 新窗口显示的url
+     * @param type 窗口类型
+     * @param state 窗口状态
+     * @return {Promise} reslove接收一个参数(新窗口的tab对象)
+     */
+    createMaxWindow(url, type, state) {
+        throw unsupportedTip;
+    };
+
+    /**
      * 更新窗口信息
      * @param winId 窗口id
      * @param width 窗口宽度

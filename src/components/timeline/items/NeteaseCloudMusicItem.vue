@@ -24,14 +24,25 @@
 <script>
 // 用于NeteaseCloudMusicDataSource的特殊组件
 import PlatformHelper from '../../../common/platform/PlatformHelper';
+import Settings from '../../../common/Settings';
 
 export default {
   name: "NeteaseCloudMusicItem",
   props: ["item", "showImage"],
+  data() {
+    return {
+      settings: Settings,
+    };
+  },
   methods: {
     openUrl(url) {
-      PlatformHelper.Windows
+      if(this.settings.feature.linkMax) {
+        PlatformHelper.Windows
+          .createMaxPopupWindow(url);
+      } else {
+        PlatformHelper.Windows
           .createPanelWindow(url, 1400, 800);
+      }
     }
   }
 }

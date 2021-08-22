@@ -178,6 +178,14 @@ export default class NodePlatform extends AbstractPlatform {
         return new Promise((resolve, _) => resolve());
     }
 
+    createMaxWindow(url, type, state) {
+        if (DEBUG_LOG) {
+            console.log('Node环境不支持Window');
+        }
+        // 无事发生
+        return new Promise((resolve, _) => resolve());
+    }
+
     removeWindow(windowId) {
         if (DEBUG_LOG) {
             console.log('Node环境不支持Window');

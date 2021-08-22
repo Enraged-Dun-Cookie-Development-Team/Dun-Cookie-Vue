@@ -223,6 +223,23 @@ export default class ChromePlatform extends AbstractPlatform {
         });
     }
 
+    createMaxWindow(url, type, state) {
+        var createData = {
+            url: url,
+            type: type,
+            state: state
+        };
+        return new Promise((resolve, reject) => {
+            chrome.windows.create(createData, window => {
+                if (chrome.runtime.lastError) {
+                    reject(chrome.runtime.lastError);
+                    return;
+                }
+                resolve(window);
+            });
+        });
+    }
+
     updateWindow(winId, width, height) {
         return new Promise((resolve, reject) => {
             chrome.windows.update(winId, {width, height}, window => {

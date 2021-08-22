@@ -179,6 +179,10 @@ class Settings {
      * 是否推送重要公告
      */
     announcementNotice: true,
+    /**
+     * 列表链接自动最大化
+     */
+    linkMax: false,
   }
 
   /**

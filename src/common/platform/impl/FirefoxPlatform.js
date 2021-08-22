@@ -156,6 +156,15 @@ export default class FirefoxPlatform extends AbstractPlatform {
         return browser.windows.create(createData);
     }
 
+    createMaxWindow(url, type, state) {
+        var createData = {
+            url: url,
+            type: type,
+            state: state
+        };
+        return browser.windows.create(createData);
+    }
+
     removeWindow(windowId) {
         return browser.windows.remove(windowId);
     }

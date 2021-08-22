@@ -207,6 +207,19 @@
                 </el-form-item>
               </el-tooltip>
               <el-tooltip
+                  :open-delay="1000"
+                  class="item"
+                  effect="dark"
+                  placement="left"
+              >
+                <div slot="content">
+                  列表打开快速跳转链接时，自动最大窗口并打开链接
+                </div>
+                <el-form-item label="窗口最大化">
+                  <el-switch v-model="settings.feature.linkMax"></el-switch>
+                </el-form-item>
+              </el-tooltip>
+              <el-tooltip
                 :open-delay="1000"
                 class="item"
                 effect="dark"
