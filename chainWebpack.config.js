@@ -35,6 +35,9 @@ const chainWebpack = config => {
             cleanStaleWebpackAssets: false,
         }]);
     }
+    config.performance
+      .maxEntrypointSize(2_000_000)
+      .maxAssetSize(2_000_000)
 
     config.optimization.clear();
     

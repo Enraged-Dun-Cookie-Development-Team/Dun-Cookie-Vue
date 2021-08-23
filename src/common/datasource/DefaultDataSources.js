@@ -15,14 +15,14 @@ import {IS_DEBUG} from '../Constants';
  */
 const defaultDataSourcesList = [
   new BilibiliDataSource(
-    '/assets/image/bili.ico',
+    '/assets/image/icon/bili.ico',
     '官方B站动态',
     '哔哩哔哩',
     'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=161775300&offset_dynamic_id=0&need_top=0&platform=web',
     0
   ),
   new WeiboDataSource(
-    '/assets/image/weibo.ico',
+    '/assets/image/icon/weibo.ico',
     '官方微博',
     '微博',
     'https://m.weibo.cn/api/container/getIndex?type=uid&value=6279793937&containerid=1076036279793937',
@@ -36,14 +36,14 @@ const defaultDataSourcesList = [
     2
   ),
   new WeiboDataSource(
-    '/assets/image/cho3Weibo.jpg',
+    '/assets/image/icon/cho3Weibo.jpg',
     '朝陇山微博',
     '朝陇山',
     'https://m.weibo.cn/api/container/getIndex?type=uid&value=6441489862&containerid=1076036441489862',
     3
   ),
   new WeiboDataSource(
-    '/assets/image/ys3Weibo.jpg',
+    '/assets/image/icon/ys3Weibo.jpg',
     '一拾山微博',
     '一拾山',
     'https://m.weibo.cn/api/container/getIndex?type=uid&value=7506039414&containerid=1076037506039414',
@@ -57,21 +57,21 @@ const defaultDataSourcesList = [
     5
   ),
   new WeiboDataSource(
-    '/assets/image/tlWeibo.jpg',
+    '/assets/image/icon/tlWeibo.jpg',
     '泰拉记事社微博',
     '泰拉记事社微博',
     'https://m.weibo.cn/api/container/getIndex?type=uid&value=7499841383&containerid=1076037499841383',
     6
   ),
   new ArknightsOfficialWebDataSource(
-    '/assets/image/mrfz.ico',
+    '/assets/image/icon/mrfz.ico',
     '官网',
     '官网网站',
     'https://ak.hypergryph.com/',
     7
   ),
   new TerraHistoricusDataSource(
-    '/assets/image/tl.jpg',
+    '/assets/image/icon/tl.jpg',
     '泰拉记事社官网',
     '泰拉记事社官网',
     ['https://terra-historicus.hypergryph.com/api/comic/7748', 'https://terra-historicus.hypergryph.com/api/comic/2865', 'https://terra-historicus.hypergryph.com/api/comic/9382'],
