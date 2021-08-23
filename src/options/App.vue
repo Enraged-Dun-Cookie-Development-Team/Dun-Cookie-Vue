@@ -4,7 +4,7 @@
       <el-image class="loading-image" src="../assets/image/icon.png"></el-image>
       <div class="loading-title">欢迎使用小刻食堂 V{{ currentVersion }}</div>
     </div>
-    <div v-show="bodyIsShow" >
+    <div v-show="bodyIsShow">
       <el-row>
         <div class="head-area" ref="head-area">
           <div class="head">
@@ -698,6 +698,7 @@ export default {
         padding: 10px;
         opacity: 0;
         transition: all 0.5s;
+        z-index: 999;
 
         .info-time {
           margin-top: 10px;
