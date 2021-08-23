@@ -64,7 +64,7 @@
 import Feedback from '../components/Feedback';
 import {CURRENT_VERSION} from '../common/Constants';
 import PlatformHelper from '../common/platform/PlatformHelper';
-import {checkOnlineInfo} from '../common/util/CommonFunctions';
+import ServerUtil from "../common/util/ServerUtil";
 
 export default {
   name: "update",
@@ -87,7 +87,7 @@ export default {
     openUrl: PlatformHelper.Tabs.create,
     // 检查一次更新
     getUpdateInfo() {
-      checkOnlineInfo(false).then((responseText) => {
+      ServerUtil.checkOnlineInfo(false).then((responseText) => {
         this.updateInfo = JSON.parse(responseText).upgrade;
       });
     },

@@ -16,7 +16,7 @@ import {
 } from '../common/Constants';
 import DataSourceUtil from '../common/util/DataSourceUtil';
 import PlatformHelper from '../common/platform/PlatformHelper';
-import {checkOnlineInfo} from '../common/util/CommonFunctions';
+import ServerUtil from "../common/util/ServerUtil";
 
 // 重构完成后的其它优化：
 // TODO 多个提取出来的类要考虑能否合并(指互相通信的那部分)
@@ -131,7 +131,7 @@ const kazeFun = {
         Settings.doAfterInit(() => {
             startDunTimer();
             setTimeout(() => {
-                checkOnlineInfo(true);
+                ServerUtil.checkOnlineInfo(true);
             }, 600000);
         });
 

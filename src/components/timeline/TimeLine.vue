@@ -193,12 +193,13 @@ import Settings from '../../common/Settings';
 import SanInfo from '../../common/sync/SanInfo';
 import TimeUtil from '../../common/util/TimeUtil';
 import Search from '../Search';
-import {checkOnlineInfo, deepAssign} from '../../common/util/CommonFunctions';
+import {deepAssign} from '../../common/util/CommonFunctions';
 import PlatformHelper from '../../common/platform/PlatformHelper';
 import html2canvas from 'html2canvas'
 import janvas from '../../common/util/janvas.min.js'
 import QRCode from 'qrcode'
 import InsiderUtil from '../../common/util/InsiderUtil';
+import ServerUtil from "../../common/util/ServerUtil";
 
 
 export default {
@@ -305,7 +306,7 @@ export default {
     },
     // 获取在线信息
     getOnlineSpeak() {
-      checkOnlineInfo(false).then((data) => {
+      ServerUtil.checkOnlineInfo(false).then((data) => {
         // 头部公告
         let filterList = data.list.filter(
             (x) =>
