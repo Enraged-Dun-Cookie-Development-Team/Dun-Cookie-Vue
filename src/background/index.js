@@ -116,7 +116,7 @@ function announcementMention() {
                     let imgUrl = x.html.match(imgReg)[1];
                     let removeTagReg = /<\/?.+?\/?>/g;
                     let divReg = /<\/div>/g;
-                    
+
                     let content = x.html.replace(/\s+/g, '');
                     content = content.replace(divReg, '\n');
                     content = content.replace(removeTagReg, '');
@@ -157,8 +157,8 @@ const kazeFun = {
 
     // 初始化
     Init() {
-        // chrome.browserAction.setBadgeText({ text: 'Beta' });
-        // chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
+        chrome.browserAction.setBadgeText({ text: 'Beta' });
+        chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
         // 开始蹲饼！
         Settings.doAfterInit(() => {
             startDunTimer();
@@ -237,7 +237,7 @@ const kazeFun = {
                     .createPanelWindow(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW), 800, 950)
                     .then(tab => popupWindowId = tab.id);
                 }
-                
+
             }
         });
     }
