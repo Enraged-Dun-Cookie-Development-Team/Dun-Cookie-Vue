@@ -82,6 +82,7 @@ export default {
     },
     async saveWindowInfoAndOpenWindow(info, size) {
       let windowTabId = await PlatformHelper.Storage.getLocalStorage('windowTabId');
+      console.log(windowTabId)
       if (windowTabId != undefined && windowTabId != 0) {
         let allWindow = await PlatformHelper.Windows.getAllWindow();
         if (allWindow.findIndex(x => x.id == windowTabId) > 0) {
@@ -91,13 +92,8 @@ export default {
       };
       let window = await PlatformHelper.Windows.createPanelWindow(PlatformHelper.Extension.getURL('viewImg.html'), size.width, size.height);
       await PlatformHelper.Storage.saveLocalStorage('windowTabId', window.id);
-      setTimeout(() => {
-        PlatformHelper.Message.send('view-img', {
-          item: info.item,
-          img: info.img,
-          winId: window.id,
-        })
-      }, 1000);
+      await PlatformHelper.Storage.saveLocalStorage('imageList', info.item.imageList);
+      await PlatformHelper.Storage.saveLocalStorage('imgNow', info.img);
     }
   }
 }

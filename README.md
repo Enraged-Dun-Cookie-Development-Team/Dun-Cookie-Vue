@@ -361,7 +361,6 @@
 
     火狐用户相当建议使用应用商店下载，因为更新方便
 > - 推荐 [火狐应用商店](https://addons.mozilla.org/zh-CN/firefox/addon/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cookies/)
-> - PS: 火狐查看大图需要在窗口模式下才能使用，弹窗模式打开二级菜单按钮会出现偏移，将在之后逐步修复
 
 ## QQ浏览器安装方法
 

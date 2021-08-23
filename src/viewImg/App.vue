@@ -29,16 +29,7 @@ import PlatformHelper from "../common/platform/PlatformHelper";
 export default {
   name: "ViewImg",
   created() {
-    PlatformHelper.Message.registerListener("view-img", "view-img", (data) => {
-      this.item = data.item;
-      this.img = data.img;
-      this.winId = data.winId;
-      if (this.item.imageList) {
-        this.pageShow = true;
-        this.pageAll = this.item.imageList.length;
-        this.pageNow = this.item.imageList.findIndex((x) => x == this.img);
-      }
-    });
+    this.init();
   },
   mounted() {
     document.addEventListener("keyup", (e) => {
@@ -58,7 +49,7 @@ export default {
   data() {
     return {
       load: true,
-      item: {},
+      imageList: [],
       img: null,
       info: {},
       showInfo: false,
@@ -69,6 +60,16 @@ export default {
   },
   computed: {},
   methods: {
+    async init() {
+      this.winId = await PlatformHelper.Storage.getLocalStorage('windowTabId');
+      this.imageList = await PlatformHelper.Storage.getLocalStorage('imageList');
+      this.img = await PlatformHelper.Storage.getLocalStorage('imgNow');
+      if (this.imageList) {
+        this.pageShow = true;
+        this.pageAll = this.imageList.length;
+        this.pageNow = this.imageList.findIndex((x) => x == this.img);
+      };
+    },
     imgOnload(data) {
       this.load = false;
       this.info.currentSrc = this.img;
@@ -88,14 +89,14 @@ export default {
     },
     leftPage() {
       if (this.pageNow > 0) {
-        this.img = this.item.imageList[--this.pageNow];
+        this.img = this.imageList[--this.pageNow];
         let scrollArea = this.$refs.imgScroll;
         scrollArea.scrollTop = 0;
       }
     },
     rightPage() {
       if (this.pageNow < this.pageAll - 1) {
-        this.img = this.item.imageList[++this.pageNow];
+        this.img = this.imageList[++this.pageNow];
         let scrollArea = this.$refs.imgScroll;
         scrollArea.scrollTop = 0;
       }
