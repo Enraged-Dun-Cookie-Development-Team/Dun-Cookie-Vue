@@ -58,6 +58,10 @@ function tryDun(settings) {
                     cardListCache[dataName] = newCardList;
                     hasUpdated = true;
                 }
+            }).finally(() => {
+                if (!cardListCache[dataName]) {
+                    cardListCache[dataName] = [];
+                }
             }));
         }
     }
