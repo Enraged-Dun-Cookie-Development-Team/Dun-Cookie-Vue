@@ -146,23 +146,14 @@ export default class FirefoxPlatform extends AbstractPlatform {
         return browser.tabs.create({url: url});
     }
 
-    createWindow(url, type, width, height) {
-        var createData = {
-            url: url,
-            type: type,
-            width: width,
-            height: height
-        };
-        return browser.windows.create(createData);
-    }
-
-    createMaxWindow(url, type, state) {
-        var createData = {
-            url: url,
-            type: type,
-            state: state
-        };
-        return browser.windows.create(createData);
+    createWindow(url, type, width, height, state) {
+        const $this = this;
+        return new Promise((resolve, reject) => {
+            browser.windows.getCurrent().then(win => {
+                const createData = $this.__buildCreateData(win, url, type, width, height, state);
+                browser.windows.create(createData).then(resolve).catch(reject);
+            });
+        });
     }
 
     removeWindow(windowId) {

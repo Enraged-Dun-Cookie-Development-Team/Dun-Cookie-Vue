@@ -11,7 +11,7 @@ import {
     MESSAGE_SAN_GET,
     PAGE_POPUP_WINDOW,
     PAGE_UPDATE,
-    PAGE_WELCOME,
+    PAGE_WELCOME, PLATFORM_FIREFOX,
     TEST_DATA_REFRESH_TIME
 } from '../common/Constants';
 import DataSourceUtil from '../common/util/DataSourceUtil';
@@ -193,19 +193,16 @@ const kazeFun = {
                         if (allWindow.findIndex(x => x.id == popupWindowId) > 0) {
                             PlatformHelper.Windows.remove(popupWindowId);
                         }
-                    })
+                    });
                 }
-                let head = navigator.userAgent;
-                if (head.indexOf("Firefox") > 1) {
-                    PlatformHelper.Windows
-                    .createPanelWindow(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW), 800, 850)
-                    .then(tab => popupWindowId = tab.id);
-                } else {
-                    PlatformHelper.Windows
-                    .createPanelWindow(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW), 800, 950)
-                    .then(tab => popupWindowId = tab.id);
+                const width = 800;
+                let height = 950;
+                if (PlatformHelper.PlatformType === PLATFORM_FIREFOX) {
+                    height = 850;
                 }
-
+                PlatformHelper.Windows
+                    .createPopupWindow(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW), width, height)
+                    .then(tab => popupWindowId = tab.id);
             }
         });
     }

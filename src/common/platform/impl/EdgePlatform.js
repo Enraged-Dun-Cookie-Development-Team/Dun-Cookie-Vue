@@ -145,12 +145,8 @@ export default class EdgePlatform extends AbstractPlatform {
         return this.defPlatform.createTab(url);
     }
 
-    createWindow(url, type, width, height) {
-        return this.defPlatform.createWindow(url, type, width, height);
-    }
-
-    createMaxWindow(url, type, state) {
-        return this.defPlatform.createMaxWindow(url, type, state);
+    createWindow(url, type, width, height, state) {
+        return this.defPlatform.createWindow(url, type, width, height, state);
     }
 
     removeWindow(windowId) {

@@ -205,44 +205,25 @@ export default class ChromePlatform extends AbstractPlatform {
         });
     }
 
-    createWindow(url, type, width, height) {
-        var createData = {
-            url: url,
-            type: type,
-            width: width,
-            height: height
-        };
+    createWindow(url, type, width, height, state) {
+        const $this = this;
         return new Promise((resolve, reject) => {
-            chrome.windows.create(createData, window => {
-                if (chrome.runtime.lastError) {
-                    reject(chrome.runtime.lastError);
-                    return;
-                }
-                resolve(window);
-            });
-        });
-    }
-
-    createMaxWindow(url, type, state) {
-        var createData = {
-            url: url,
-            type: type,
-            state: state
-        };
-        return new Promise((resolve, reject) => {
-            chrome.windows.create(createData, window => {
-                if (chrome.runtime.lastError) {
-                    reject(chrome.runtime.lastError);
-                    return;
-                }
-                resolve(window);
+            chrome.windows.getCurrent(function(win) {
+                const createData = $this.__buildCreateData(win, url, type, width, height, state);
+                chrome.windows.create(createData, window => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                        return;
+                    }
+                    resolve(window);
+                });
             });
         });
     }
 
     updateWindow(winId, width, height) {
         return new Promise((resolve, reject) => {
-            chrome.windows.update(winId, {width, height}, window => {
+            chrome.windows.update(winId, {width: width, height: height}, window => {
                 if (chrome.runtime.lastError) {
                     reject(chrome.runtime.lastError);
                     return;

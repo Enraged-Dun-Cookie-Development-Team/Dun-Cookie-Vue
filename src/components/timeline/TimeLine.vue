@@ -256,7 +256,7 @@ export default {
           .createMaxPopupWindow(url);
       } else {
         PlatformHelper.Windows
-          .createPanelWindow(url, w, h);
+          .createPopupWindow(url, w, h);
       }
     },
     getDataSourceByName: DataSourceUtil.getByName,

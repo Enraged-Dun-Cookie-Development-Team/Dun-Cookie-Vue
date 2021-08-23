@@ -189,13 +189,8 @@ class NotificationHelper {
  * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/windows
  */
 class WindowsHelper {
-    create(url, type, width, height) {
-        return currentPlatform.createWindow(url, type, width, height);
-    }
-
-    // TODO Chrome已经将panel标记为弃用，Edge也不支持panel，需要尝试是否可以删除该方法，改用createPopupWindow完成需求
-    createPanelWindow(url, width, height) {
-        return this.create(url, 'panel', width, height);
+    create(url, type, width, height, state) {
+        return currentPlatform.createWindow(url, type, width, height, state);
     }
 
     createPopupWindow(url, width, height) {
@@ -203,7 +198,7 @@ class WindowsHelper {
     }
 
     createMaxPopupWindow(url) {
-        return currentPlatform.createMaxWindow(url, 'popup', 'maximized');
+        return this.create(url, 'popup', 0, 0, 'maximized');
     }
 
     remove(windowId) {
