@@ -223,5 +223,22 @@ export default class AbstractPlatform {
         throw unsupportedTip;
     };
 
+    /**
+     * 设置扩展图标的标记文字
+     * @param text {string}
+     * @return {Promise}
+     */
+    setBadgeText(text) {
+        throw unsupportedTip;
+    }
+    /**
+     * 设置扩展图标的标记背景色
+     * @param color {[number,number,number,number]} rgba(range 0-255)
+     * @return {Promise}
+     */
+    setBadgeBackgroundColor(color) {
+        throw unsupportedTip;
+    }
+
 }
 

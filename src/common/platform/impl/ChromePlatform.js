@@ -308,4 +308,28 @@ export default class ChromePlatform extends AbstractPlatform {
             xhr.send();
         });
     }
+
+    setBadgeText(text) {
+        return new Promise((resolve, reject) => {
+            chrome.browserAction.setBadgeText({ text:text }, () => {
+                if (chrome.runtime.lastError) {
+                    reject(chrome.runtime.lastError);
+                    return;
+                }
+                resolve();
+            });
+        });
+    }
+
+    setBadgeBackgroundColor(color) {
+        return new Promise((resolve, reject) => {
+            chrome.browserAction.setBadgeBackgroundColor({ color: color }, () => {
+                if (chrome.runtime.lastError) {
+                    reject(chrome.runtime.lastError);
+                    return;
+                }
+                resolve();
+            });
+        });
+    }
 }

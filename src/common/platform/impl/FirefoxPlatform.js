@@ -1,4 +1,4 @@
-import { PLATFORM_FIREFOX, DEBUG_LOG } from '../../Constants';
+import {PLATFORM_FIREFOX, DEBUG_LOG} from '../../Constants';
 import AbstractPlatform from '../AbstractPlatform';
 
 let _isBackground;
@@ -53,7 +53,7 @@ export default class FirefoxPlatform extends AbstractPlatform {
             console.log(`sendMessage - ${type}`);
             console.log(data || 'no-data');
         }
-        const message = { type: type };
+        const message = {type: type};
         if (data) {
             message.data = data;
         }
@@ -111,7 +111,7 @@ export default class FirefoxPlatform extends AbstractPlatform {
     setPopup(url) {
         return new Promise((resolve, reject) => {
             // 虽然不知道为啥Firefox这个不返回Promise，但是Firefox文档里这个确实没写返回值
-            browser.browserAction.setPopup({ popup: url });
+            browser.browserAction.setPopup({popup: url});
             resolve();
         });
     }
@@ -143,7 +143,7 @@ export default class FirefoxPlatform extends AbstractPlatform {
     }
 
     createTab(url) {
-        return browser.tabs.create({ url: url });
+        return browser.tabs.create({url: url});
     }
 
     createWindow(url, type, width, height) {
@@ -211,5 +211,13 @@ export default class FirefoxPlatform extends AbstractPlatform {
             }
             xhr.send();
         });
+    }
+
+    setBadgeText(text) {
+        return browser.browserAction.setBadgeText({text: text});
+    }
+
+    setBadgeBackgroundColor(color) {
+        return browser.browserAction.setBadgeBackgroundColor({color: color});
     }
 }

@@ -126,9 +126,7 @@ const kazeFun = {
 
     // 初始化
     Init() {
-        // TODO 跨平台兼容
-        chrome.browserAction.setBadgeText({ text: 'Beta' });
-        chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
+        PlatformHelper.BrowserAction.setBadge('Beta', [255, 0, 0, 255]);
         // 开始蹲饼！
         Settings.doAfterInit(() => {
             startDunTimer();

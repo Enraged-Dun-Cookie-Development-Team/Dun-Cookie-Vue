@@ -250,4 +250,20 @@ export default class NodePlatform extends AbstractPlatform {
             req.end();
         });
     }
+
+    setBadgeText(text) {
+        if (DEBUG_LOG) {
+            console.log('Node环境不支持Badge');
+        }
+        // 无事发生
+        return new Promise((resolve, _) => resolve());
+    }
+
+    setBadgeBackgroundColor(color) {
+        if (DEBUG_LOG) {
+            console.log('Node环境不支持Badge');
+        }
+        // 无事发生
+        return new Promise((resolve, _) => resolve());
+    }
 }

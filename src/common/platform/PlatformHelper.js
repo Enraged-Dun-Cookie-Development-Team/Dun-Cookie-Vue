@@ -137,6 +137,15 @@ class BrowserActionHelper {
     addIconClickListener(listener) {
         return currentPlatform.addIconClickListener(listener);
     }
+
+    /**
+     * @param text {string}
+     * @param color {[number,number,number,number]} rgba(range 0-255)
+     */
+    setBadge(text, color) {
+        currentPlatform.setBadgeText(text);
+        currentPlatform.setBadgeBackgroundColor(color);
+    }
 }
 
 class ExtensionHelper {

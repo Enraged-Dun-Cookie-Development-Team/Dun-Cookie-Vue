@@ -99,4 +99,12 @@ export default class UnknownPlatform extends AbstractPlatform {
     sendHttpRequest(url, method) {
         return this.defPlatform.sendHttpRequest(url, method);
     }
+
+    setBadgeText(text) {
+        return this.defPlatform.setBadgeText(text);
+    }
+
+    setBadgeBackgroundColor(color) {
+        return this.defPlatform.setBadgeBackgroundColor(color);
+    }
 }
