@@ -1,6 +1,7 @@
 import HttpUtil from '../util/HttpUtil';
 import {DEBUG_LOG} from '../Constants';
 import DataSourceUtil from '../util/DataSourceUtil';
+import PlatformHelper from '../platform/PlatformHelper';
 
 /**
  * 表示一个数据源
@@ -16,17 +17,17 @@ class DataSource {
   icon;
   /**
    * 关于dataType：<br/>
-   * 用于代表一个数据源(比如官网、朝陇山，泰拉记事社等)，每个数据源必须有一个唯一的dataType，不能重复<br/>
+   * 用于代表一种数据源(比如微博、B站等)，每种数据源必须有一个唯一的dataType，不能重复<br/>
    * 实际值建议使用域名/品牌名等不易变化的值，有必要的话长一点也没关系<br/>
    * <strong>注意：子类需要用一个<code>static get typeName() {}</code>函数来定义类型数据源类型名称</strong>，
    *              实例化的时候会自动解析(使用静态是为了便于其它文件获取)<br/>
-   * <strong>注意：dataType用于在储存中标识数据源类型，非必要请不要修改，否则会导致数据解析错误。</strong>
+   * <strong>注意：dataType用于在储存中标识数据源类型，非必要请不要修改，修改后会导致数据解析错误。</strong>
    */
   dataType;
   /**
    * 数据名称(比如朝陇山，泰拉记事社等)，每个数据源必须有一个唯一的dataName，不能重复
    * <p>
-   * <strong>注意：该字段用于在储存中标识数据源，非必要请不要修改，否则会导致用户储存的(该数据源的)旧配置失效。</strong>
+   * <strong>注意：该字段用于在储存中标识数据源，非必要请不要修改，修改后会导致用户储存的(该数据源的)旧配置失效。</strong>
    */
   dataName;
   /**
@@ -93,6 +94,22 @@ class DataSource {
     console.error('未实现processData方法！');
   }
 
+  /**
+   * @return {Promise<UserInfo|null>}
+   */
+  static async getOrFetchUserInfo(uid, type) {
+    const cacheKey = "cache_" + type.typeName + '_' + uid;
+    let data = await PlatformHelper.Storage.getLocalStorage(cacheKey);
+    if (!data) {
+      data = await type.fetchUserInfo(uid);
+    }
+    if (!data) {
+      return null;
+    }
+    await PlatformHelper.Storage.saveLocalStorage(cacheKey, data);
+    return data;
+  }
+
   __appendTimeStamp(url) {
     // 此处是为了兼容有queryString的url和没有queryString的url，用?判断应该大概没问题吧
     if (url.indexOf('?') >= 0) {
@@ -103,4 +120,19 @@ class DataSource {
   }
 }
 
-export {DataSource};
+class UserInfo {
+  dataName;
+  username;
+  avatarUrl;
+  version = 1;
+  timestamp;
+
+  constructor(dataName, username, avatarUrl) {
+    this.dataName = dataName;
+    this.username = username;
+    this.avatarUrl = avatarUrl;
+    this.timestamp = new Date().getTime();
+  }
+}
+
+export {DataSource, UserInfo};
