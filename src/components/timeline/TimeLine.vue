@@ -193,12 +193,12 @@ import Settings from '../../common/Settings';
 import SanInfo from '../../common/sync/SanInfo';
 import TimeUtil from '../../common/util/TimeUtil';
 import Search from '../Search';
-import HttpUtil from '../../common/util/HttpUtil';
-import {deepAssign, testSync} from '../../common/util/CommonFunctions';
+import {checkOnlineInfo, deepAssign} from '../../common/util/CommonFunctions';
 import PlatformHelper from '../../common/platform/PlatformHelper';
 import html2canvas from 'html2canvas'
 import janvas from '../../common/util/janvas.min.js'
 import QRCode from 'qrcode'
+import InsiderUtil from '../../common/util/InsiderUtil';
 
 
 export default {
@@ -221,7 +221,7 @@ export default {
       filterText: '',
       filterCardList: [],
       LazyLoaded: false,
-      insiderCode: null, // 储存内部密码
+      insiderCodeMap: null, // 储存内部密码
       janvas: null, //菜单模块icon
       imageError: false,
       errorImageUrl: ""
@@ -305,10 +305,7 @@ export default {
     },
     // 获取在线信息
     getOnlineSpeak() {
-      HttpUtil.GET_Json(
-          "http://cdn.liuziyang.vip/Dun-Cookies-Info.json?t=" +
-          new Date().getTime()
-      ).then((data) => {
+      checkOnlineInfo(false).then((data) => {
         // 头部公告
         let filterList = data.list.filter(
             (x) =>
@@ -341,11 +338,7 @@ export default {
         );
 
         // 内部密码
-        this.insiderCode = data.insider.insiderCode;
-        if (this.insiderCode !== this.settings.insider.code) {
-          this.settings.insider.level = 0;
-          this.settings.saveSettings();
-        }
+        this.insiderCodeMap = data.insider;
         this.resourcesNotToday();
         this.loading = false;
       });
@@ -362,7 +355,7 @@ export default {
     calcResourceOpenDay(days) {
       return days.map(x => TimeUtil.numberToWeek(x)).join();
     },
-    // 调整过滤文字
+    // 调整过滤文字，该方法由Search子组件调用
     changeFilterText(text) {
       if (text != null) {
         text = text.trim();
@@ -390,13 +383,14 @@ export default {
       }
     },
     changeInsider() {
-      if (this.filterText === this.insiderCode) {
-        this.settings.insider.code = this.insiderCode;
-        this.settings.insider.level = 1;
+      const [newLevel, validCode] = InsiderUtil.calcInsiderLevel(this.filterText, this.insiderCodeMap);
+      if (validCode) {
+        this.settings.insider.code = this.filterText;
+        this.settings.insider.level = newLevel;
         this.settings.saveSettings();
         this.$message({
           center: true,
-          message: "成功进入隐藏模式",
+          message: "成功启用高级功能",
           type: "success",
         });
       }

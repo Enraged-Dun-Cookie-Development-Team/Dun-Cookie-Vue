@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "crypto-js": "^4.1.1",
     "element-ui": "^2.15.1",
     "html2canvas": "^1.1.5",
     "npm": "^7.21.0",

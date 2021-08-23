@@ -10,14 +10,13 @@ import {
     MESSAGE_FORCE_REFRESH,
     MESSAGE_SAN_GET,
     PAGE_POPUP_WINDOW,
-    PAGE_WELCOME,
     PAGE_UPDATE,
+    PAGE_WELCOME,
     TEST_DATA_REFRESH_TIME
 } from '../common/Constants';
 import DataSourceUtil from '../common/util/DataSourceUtil';
-import HttpUtil from '../common/util/HttpUtil';
 import PlatformHelper from '../common/platform/PlatformHelper';
-import { CURRENT_VERSION } from '../common/Constants';
+import {checkOnlineInfo} from '../common/util/CommonFunctions';
 
 // 重构完成后的其它优化：
 // TODO 多个提取出来的类要考虑能否合并(指互相通信的那部分)
@@ -97,40 +96,6 @@ function startDunTimer() {
     }, delay * 1000);
 }
 
-// 判断更新和公告是否需要推送提醒
-function announcementMention() {
-    HttpUtil.GET_Json(
-        "http://cdn.liuziyang.vip/Dun-Cookies-Info.json?t=" +
-        new Date().getTime()
-    ).then((data) => {
-        if (Settings.JudgmentVersion(data.upgrade.v, CURRENT_VERSION) && Settings.dun.enableNotice) {
-            NotificationUtil.SendNotice("小刻食堂翻新啦！！", "快来使用新的小刻食堂噢！一定有很多好玩的新功能啦！！", null, "update");
-        }
-
-        if (Settings.feature.announcementNotice) {
-            let filterList = data.list.filter(
-                (x) =>
-                    new Date(x.starTime) <= new Date() &&
-                    new Date(x.overTime) >= new Date()
-            );
-
-            filterList.map(x => {
-                if (x.notice) {
-                    let imgReg = /<img.*?src='(.*?)'/;
-                    let imgUrl = x.html.match(imgReg)[1];
-                    let removeTagReg = /<\/?.+?\/?>/g;
-                    let divReg = /<\/div>/g;
-                    
-                    let content = x.html.replace(/\s+/g, '');
-                    content = content.replace(divReg, '\n');
-                    content = content.replace(removeTagReg, '');
-                    NotificationUtil.SendNotice("博士，重要公告，记得开列表看噢！", content, imgUrl, "announcement" + new Date().getTime());
-                }
-            })
-        }
-    });
-}
-
 // 通用方法
 const kazeFun = {
     //判断是否为最新 并且在此推送
@@ -167,7 +132,7 @@ const kazeFun = {
         Settings.doAfterInit(() => {
             startDunTimer();
             setTimeout(() => {
-                announcementMention();
+                checkOnlineInfo(true);
             }, 600000);
         });
 

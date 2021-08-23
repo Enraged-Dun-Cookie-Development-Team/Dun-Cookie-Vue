@@ -319,7 +319,7 @@
             <el-tab-pane label="反馈通道" name="2">
               <Feedback></Feedback>
             </el-tab-pane>
-            <el-tab-pane v-if="false" label="高级设置" name="4">
+            <el-tab-pane v-if="settings.insider.level > 0" label="高级设置" name="4">
               <div>
                 <span>自定义数据源</span>
                 <el-table

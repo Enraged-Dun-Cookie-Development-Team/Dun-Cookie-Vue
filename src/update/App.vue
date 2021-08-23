@@ -61,10 +61,10 @@
 </template>
 
 <script>
-import HttpUtil from '../common/util/HttpUtil';
 import Feedback from '../components/Feedback';
 import {CURRENT_VERSION} from '../common/Constants';
 import PlatformHelper from '../common/platform/PlatformHelper';
+import {checkOnlineInfo} from '../common/util/CommonFunctions';
 
 export default {
   name: "update",
@@ -87,10 +87,7 @@ export default {
     openUrl: PlatformHelper.Tabs.create,
     // 检查一次更新
     getUpdateInfo() {
-      HttpUtil.GET(
-        "http://cdn.liuziyang.vip/Dun-Cookies-Info.json?t=" +
-          new Date().getTime()
-      ).then((responseText) => {
+      checkOnlineInfo(false).then((responseText) => {
         this.updateInfo = JSON.parse(responseText).upgrade;
       });
     },
