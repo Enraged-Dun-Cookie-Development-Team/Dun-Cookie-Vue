@@ -21,29 +21,34 @@
           </div>
           <div class="info">
             <div class="info-title">
-              <div class="has-cookie">小刻已经成功找到
+              <div class="has-cookie">
+                小刻已经成功找到
                 <countTo
-                    :startVal="0"
-                    :endVal="dunInfo.cookieCount"
-                    :duration="1000"
+                  :startVal="0"
+                  :endVal="dunInfo.cookieCount"
+                  :duration="1000"
                 ></countTo>
                 个饼
               </div>
-              <div class="look-cookie"> 进入食堂后找了
+              <div class="look-cookie">
+                进入食堂后找了
                 <countTo
-                    :startVal="oldDunCount"
-                    :endVal="dunInfo.counter"
-                    :duration="1000"
+                  :startVal="oldDunCount"
+                  :endVal="dunInfo.counter"
+                  :duration="1000"
                 ></countTo>
                 次
               </div>
-              <div class="more-cookie" ref="more-cookie">
-                <div>
-                  小刻在 {{ formatTime(settings.initTime, 'yyyy-MM-dd hh:mm:ss') }} 进入食堂
-                </div>
-                <div class="info-time">
-                  小刻在 {{ formatTime(dunInfo.lastDunTime, 'hh:mm:ss') }} 翻箱倒柜一次
-                </div>
+            </div>
+            <div class="more-cookie" ref="more-cookie">
+              <div>
+                小刻在
+                {{ formatTime(settings.initTime, "yyyy-MM-dd hh:mm:ss") }}
+                进入食堂
+              </div>
+              <div class="info-time">
+                小刻在
+                {{ formatTime(dunInfo.lastDunTime, "hh:mm:ss") }} 翻箱倒柜一次
               </div>
             </div>
           </div>
@@ -51,14 +56,22 @@
       </el-row>
       <div class="body-area" ref="body-area">
         <div class="body-menu-big">
-          <div class="body-menu-big-left" ref="body-menu-big-left" @click="changeMenu(0)">
+          <div
+            class="body-menu-big-left"
+            ref="body-menu-big-left"
+            @click="changeMenu(0)"
+          >
             <div @click.stop="changeMenu()">back</div>
             <div class="menu-card system">
               <span>系统</span>
               <span>设置</span>
             </div>
           </div>
-          <div class="body-menu-big-right" ref="body-menu-big-right" @click="changeMenu(1)">
+          <div
+            class="body-menu-big-right"
+            ref="body-menu-big-right"
+            @click="changeMenu(1)"
+          >
             <div @click.stop="changeMenu()">back</div>
             <div class="menu-card view">
               <span>界面</span>
@@ -74,24 +87,25 @@
 <script>
 import countTo from "vue-count-to";
 
-import Settings from '../common/Settings';
-import DunInfo from '../common/sync/DunInfo';
-import Feedback from '../components/Feedback';
-import {MESSAGE_DUN_INFO_UPDATE, SHOW_VERSION} from '../common/Constants';
-import {defaultDataSourcesList} from '../common/datasource/DefaultDataSources';
-import TimeUtil from '../common/util/TimeUtil';
-import {customDataSourceTypes, customDataSourceTypesByName} from '../common/datasource/CustomDataSources';
-import {deepAssign} from '../common/util/CommonFunctions';
-import PlatformHelper from '../common/platform/PlatformHelper';
-import "animate.css"
+import Settings from "../common/Settings";
+import DunInfo from "../common/sync/DunInfo";
+import Feedback from "../components/Feedback";
+import { MESSAGE_DUN_INFO_UPDATE, SHOW_VERSION } from "../common/Constants";
+import { defaultDataSourcesList } from "../common/datasource/DefaultDataSources";
+import TimeUtil from "../common/util/TimeUtil";
+import {
+  customDataSourceTypes,
+  customDataSourceTypesByName,
+} from "../common/datasource/CustomDataSources";
+import { deepAssign } from "../common/util/CommonFunctions";
+import PlatformHelper from "../common/platform/PlatformHelper";
+import "animate.css";
 
 export default {
   name: "app",
-  components: {countTo},
+  components: { countTo },
   // Feedback
-  created() {
-
-  },
+  created() {},
   mounted() {
     this.init();
     // this.initAnimate();
@@ -115,7 +129,7 @@ export default {
       customData: [],
       bodyIsShow: false,
       activeMenu: -1,
-      menuList: ['body-menu-big-left', 'body-menu-big-right']
+      menuList: ["body-menu-big-left", "body-menu-big-right"],
     };
   },
   computed: {},
@@ -124,37 +138,42 @@ export default {
     openUrl: PlatformHelper.Tabs.create,
     init() {
       this.settings.doAfterInit((settings) => {
-        this.customData = settings.customDataSources.map(item => {
-          const type = customDataSourceTypesByName[item.type];
-          if (type) {
-            return {
-              type: type.typeName,
-              builder: type,
-              arg: item.arg
-            };
-          }
-        }).filter(item => !!item);
+        this.customData = settings.customDataSources
+          .map((item) => {
+            const type = customDataSourceTypesByName[item.type];
+            if (type) {
+              return {
+                type: type.typeName,
+                builder: type,
+                arg: item.arg,
+              };
+            }
+          })
+          .filter((item) => !!item);
         global.customData = this.customData;
       });
-      PlatformHelper.Message.registerListener('options', MESSAGE_DUN_INFO_UPDATE, data => {
-        this.oldDunCount = data.counter;
-      });
+      PlatformHelper.Message.registerListener(
+        "options",
+        MESSAGE_DUN_INFO_UPDATE,
+        (data) => {
+          this.oldDunCount = data.counter;
+        }
+      );
     },
     initAnimate() {
-      this.animateCSS('loading-title', 'zoomInDown', () => {
+      this.animateCSS("loading-title", "zoomInDown", () => {
         setTimeout(() => {
-          this.animateCSS('loading-title', 'zoomOut', () => {
+          this.animateCSS("loading-title", "zoomOut", () => {
             this.bodyIsShow = true;
-            this.animateCSS('head-area', 'slideInDown')
+            this.animateCSS("head-area", "slideInDown");
             // this.animateCSS('body-area', 'fadeInUp')
-            this.$refs['loading-title'].style.display = 'none';
-
+            this.$refs["loading-title"].style.display = "none";
           });
         }, 500);
       });
     },
     addCustomData() {
-      this.customData.push({type: ''});
+      this.customData.push({ type: "" });
     },
     handleChangeCustomDataType(index, newType) {
       this.customData[index].builder = customDataSourceTypesByName[newType];
@@ -167,10 +186,10 @@ export default {
       if (data) {
         deepAssign(this.settings, data);
       }
-      this.settings.customDataSources = this.customData.map(item => {
+      this.settings.customDataSources = this.customData.map((item) => {
         return {
           type: item.type,
-          arg: item.arg
+          arg: item.arg,
         };
       });
       this.$refs[formName].validate((valid) => {
@@ -193,28 +212,31 @@ export default {
       const blob = new Blob([JSON.stringify(this.settings)], {
         type: "application/json",
       });
-      PlatformHelper.Downloads.downloadURL(URL.createObjectURL(blob), undefined, true)
-          .then(data => {
-            console.log(data);
-          });
+      PlatformHelper.Downloads.downloadURL(
+        URL.createObjectURL(blob),
+        undefined,
+        true
+      ).then((data) => {
+        console.log(data);
+      });
     },
     // 导入设置
     settingImport(file) {
       const reader = new FileReader();
       reader.onload = (res) => {
-        const {result} = res.target; // 得到字符串
+        const { result } = res.target; // 得到字符串
         const data = JSON.parse(result); // 解析成json对象
         this.$confirm("解析文件成功，是否覆盖当前设置?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
         })
-            .then(() => {
-              this.saveSetting("form", data);
-            })
-            .catch(() => {
-              this.$message("你决定了不覆盖当前设置项");
-            });
+          .then(() => {
+            this.saveSetting("form", data);
+          })
+          .catch(() => {
+            this.$message("你决定了不覆盖当前设置项");
+          });
       }; // 成功回调
       reader.onerror = (err) => {
         this.$message.error("没有导入成功，心态崩了啊！");
@@ -239,7 +261,7 @@ export default {
 
     // 以下为动画使用 后期移动到通用类
     animateCSS(element, animation, callback) {
-      let prefix = 'animate__';
+      let prefix = "animate__";
       new Promise((resolve, reject) => {
         const animationName = `${prefix}${animation}`;
         const node = this.$refs[element];
@@ -249,41 +271,39 @@ export default {
         function handleAnimationEnd(event) {
           event.stopPropagation();
           node.classList.remove(`${prefix}animated`, animationName);
-          resolve('Animation ended');
+          resolve("Animation ended");
         }
 
-        node.addEventListener('animationend', handleAnimationEnd, {once: true});
+        node.addEventListener("animationend", handleAnimationEnd, {
+          once: true,
+        });
       }).then(() => {
         if (callback) {
-          callback()
+          callback();
         }
       });
     },
     changeMenu(className = -1) {
       if (className == -1) {
         this.menuList.forEach((item) => {
-          this.$refs[item].classList.remove('hide');
-          this.$refs[item].classList.remove('active');
-        })
+          this.$refs[item].classList.remove("hide");
+          this.$refs[item].classList.remove("active");
+        });
       } else {
         this.menuList.forEach((item, index) => {
           if (index == className) {
-            this.$refs[item].classList.add('active');
+            this.$refs[item].classList.add("active");
           } else {
-            this.$refs[item].classList.add('hide');
+            this.$refs[item].classList.add("hide");
           }
-        })
-
+        });
       }
-
-    }
+    },
   },
 };
 </script>
 
 <style lang="less" scoped>
-
-
 .loading-title-area {
   height: 100vh;
   display: flex;
@@ -349,10 +369,8 @@ export default {
       align-items: flex-end;
       user-select: none;
 
-      &:hover {
-        .more-cookie {
-          opacity: 1;
-        }
+      &:hover + .more-cookie {
+        opacity: 1;
       }
 
       .has-cookie {
@@ -363,27 +381,25 @@ export default {
         margin-top: 5px;
         font-size: 1.2rem;
       }
+    }
+    .more-cookie {
+      border-radius: 3px;
+      position: absolute;
+      right: -10px;
+      background: #23ade5;
+      color: #ffffff;
+      top: 90px;
+      text-align: right;
+      font-size: 0.95rem;
+      padding: 10px;
+      opacity: 0;
+      transition: all 0.5s;
+      z-index: 999;
 
-      .more-cookie {
-        border-radius: 3px;
-        position: absolute;
-        right: -10px;
-        background: #23ade5;
-        color: #ffffff;
-        top: 90px;
-        text-align: right;
-        font-size: 0.95rem;
-        padding: 10px;
-        opacity: 0;
-        transition: all 0.5s;
-        z-index: 999;
-
-        .info-time {
-          margin-top: 10px;
-        }
+      .info-time {
+        margin-top: 10px;
       }
     }
-
   }
 }
 
@@ -392,7 +408,8 @@ export default {
     height: calc(100vh - 100px);
     position: relative;
 
-    .body-menu-big-left, .body-menu-big-right {
+    .body-menu-big-left,
+    .body-menu-big-right {
       position: absolute;
       left: calc(25vw - 150px);
       top: calc(50vh - 100px - 150px);
@@ -424,7 +441,8 @@ export default {
             left: 123px;
           }
 
-          &.system:after, &.view:after {
+          &.system:after,
+          &.view:after {
             font-size: 4rem;
             right: 6px;
             top: 6px;
@@ -453,7 +471,8 @@ export default {
         transition: all 1s;
         box-sizing: border-box;
 
-        &.system:after, &.view:after {
+        &.system:after,
+        &.view:after {
           font-family: element-icons !important;
           content: "\e6ca";
           font-size: 15rem;
@@ -469,10 +488,13 @@ export default {
           content: "\e775";
         }
 
-        span:first-child, span:last-child {
+        span:first-child,
+        span:last-child {
           font-size: 5.5rem;
           color: #fff;
-          font-family: "SimHei", -apple-system, BlinkMacSystemFont, "Microsoft YaHei", "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+          font-family: "SimHei", -apple-system, BlinkMacSystemFont,
+            "Microsoft YaHei", "Segoe UI", "Roboto", "Helvetica Neue", Arial,
+            sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
           text-shadow: 0 0 1rem #312f2f, 0 0 0.5rem #312f2f, 0 0 0.25rem #312f2f;
           position: absolute;
           bottom: 90px;
@@ -487,7 +509,6 @@ export default {
           bottom: 20px;
           z-index: 1;
         }
-
       }
     }
 
@@ -524,18 +545,15 @@ export default {
         }
       }
     }
-
   }
-
 }
-
 
 .info-animate {
   border-radius: 3px;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background: #312F2F;
+  background: #312f2f;
   color: #fff;
   padding: 16px 30px;
   font-size: 1.6rem;
@@ -548,7 +566,7 @@ export default {
 
     &::after {
       position: absolute;
-      content: ' ';
+      content: " ";
       width: 40px;
       height: 40px;
       border: 3px #fff;
