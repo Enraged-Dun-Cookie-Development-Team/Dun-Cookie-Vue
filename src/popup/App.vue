@@ -169,7 +169,7 @@
         <!-- <span class="menu-btn el-icon-menu" @click.stop="drawer = !drawer"></span> -->
         <!--        <span id="menu-btn" @click.stop="drawer = !drawer;" style="width:30px;height:30px;"></span>-->
         <span @click.stop="drawer = !drawer;"
-              :class="[drawer?'menu-btn-open':'menu-btn-close','menu-btn','el-icon-menu']"></span>
+              :class="[drawer?'menu-btn-open':'menu-btn-close', firefox ? 'menu-btn-firefox' : '','menu-btn','el-icon-menu']"></span>
       </div>
       <div id="content">
         <time-line
@@ -209,7 +209,6 @@ export default {
   name: "app",
   components: {countTo, TimeLine},
   created() {
-    console.log()
   },
   mounted() {
     this.init();
@@ -248,6 +247,7 @@ export default {
       loading: true, // 初始化加载
       onlineDayInfo: {},
       scrollShow: false,
+      firefox: false
       // allHeight: 0,
     };
   },
@@ -272,6 +272,7 @@ export default {
         if (head.indexOf("Firefox") > 1) {
           let div = document.getElementById("app");
           div.style.fontFamily = "Microsoft yahei";
+          this.firefox = true;
         }
         this.getCardList();
         // 图片卡 先加载dom后加载图片内容
@@ -523,11 +524,16 @@ export default {
         content: ' ';
         width: 24px;
         height: 24px;
-        background: #ffffff;
+        background: @@bgColor;
         position: absolute;
         top: 3px;
         left: 3px;
         transition: all 0.5s;
+      }
+
+      &.menu-btn-firefox::after {
+        top: 3.7px;
+        left: 3.6px;
       }
 
       &::before {
@@ -548,7 +554,7 @@ export default {
 
         &::before {
           transform: rotate(495deg);
-          color: #fff;
+          color: @@bgColor;
         }
       }
     }
