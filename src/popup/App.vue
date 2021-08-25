@@ -169,7 +169,12 @@
         <!--        <span @click.stop="drawer = !drawer;"-->
         <!--              :class="[drawer?'menu-btn-open':'menu-btn-close', firefox ? 'menu-btn-firefox' : '','menu-btn','el-icon-menu']"></span>-->
 
-        <Menu-Icon class="menu-btn-icon" @handleIconClick="handleIconClick"></Menu-Icon>
+        <Menu-Icon @handleIconClick="handleIconClick()"
+          :class="[
+            drawer ? 'menu-btn-open' : 'menu-btn-close',
+            firefox ? 'menu-btn-firefox' : '',
+            'menu-btn',
+          ]"></Menu-Icon>
       </div>
       <div id="content">
         <time-line
@@ -516,12 +521,6 @@ export default {
 
     .version {
       text-align: left;
-    }
-
-    .menu-btn-icon {
-      width: 40px;
-      height: 40px;
-      position: relative;
     }
   }
 
