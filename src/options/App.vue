@@ -83,6 +83,26 @@
           v-show="showBack"
           @click.stop="changeMenu()"
         ></i>
+        <div class="config-btn" v-show="showBack">
+          <el-button class="green" @click.stop="saveSetting('form')">
+            <i class="el-icon-circle-check"></i>保存
+          </el-button>
+          <el-button class="blue" @click.stop="settingExport">
+            <i class="el-icon-download"></i>导出配置
+          </el-button>
+          <el-upload
+            action="aaa"
+            :auto-upload="false"
+            :on-change="settingImport"
+            ref="upload"
+            accept="application/json"
+            :show-file-list="false"
+          >
+            <el-button class="pink">
+              <i class="el-icon-upload2"></i>导入配置
+            </el-button>
+          </el-upload>
+        </div>
         <div class="body-menu-content">
           <el-form
             ref="form"
@@ -643,7 +663,9 @@ export default {
           }
         });
       } else {
-        this.showBack = true;
+        setTimeout(()=> {
+          this.showBack = true;
+        }, 300); 
         this.menuList.forEach((item, index) => {
           if (index == className) {
             this.$refs[item].classList.add("active");
@@ -898,6 +920,89 @@ export default {
     position: absolute;
     left: 20px;
     top: 130px;
+  }
+
+  .config-btn {
+    position: absolute;
+    right: 30px;
+    bottom: 10px;
+
+    div {
+      display: inline;
+    }
+
+    button{
+      font-size: 20px;
+      font-family: Raleway;
+      line-height: 20px;
+      padding: .618em 1em;
+      border-radius: 10px 10px 12px 12px;
+      box-shadow:
+        0px 8px 0px 0px #2980b9, /* button thickness */
+        0px 0 20px rgba(255,255,255,.2) inset, /* inner glow */
+        2px 30px 0px rgba(255,255,255,.1) inset, /* sublte reflection */
+        5px 15px 30px -10px #000; /* dark shadow underneath */
+      border: 1px solid #2980b9;
+      cursor: pointer;
+      background: #3498db;
+      color: #ecf0f1;
+      text-shadow: 1px 1px 1px #34495e;
+      transform: rotateX(5deg);
+      margin: 10px 10px;
+      width: 180px;
+      text-align: left;
+    }
+    button i{
+      padding-right: 17px;
+      transform: scale(1.1) translate(0,-1px);
+    }
+    button:hover{
+      margin-top: 15px;
+      margin-bottom: 5px;
+      box-shadow:
+        0px 5px 0px 0px #2980b9, /* button thickness */
+        0px 0 50px rgba(134, 243, 255, 1) inset, /* inner glow */
+        5px 28px 0px rgba(255,255,255,.15) inset, /* sublte reflection */
+        0px 0px 30px rgba(134,243,255,.2), /* outer glow */
+        5px 15px 30px -10px #000; /* dark shadow underneath */
+      color: #fff;
+      filter: saturate(1.5);
+    }
+    button:hover i{
+      transform: scale(1.1) translate(1px, -3px) scale(1.2);
+    }
+    button:active{
+      margin-top: 18px;
+      margin-bottom: 2px;
+      box-shadow:
+        0px 2px 0px 0px #2980b9, /* button thickness */
+        0px 0 100px 10px rgba(134, 243, 255, 1) inset, /* inner glow */
+        5px 25px 0px rgba(255,255,255,.1) inset, /* sublte reflection */
+        0px 0px 30px rgba(134,243,255,.5), /* outer glow */
+        5px 15px 30px -10px #000; /* dark shadow underneath */
+      filter: saturate(1.7);
+    }
+    button:active i{
+      transform: scale(1.2) translate(2px, -5px) scale(1.3);
+    }
+    .pink{
+      filter: hue-rotate(100deg);
+    }
+    .pink:hover{
+      filter: hue-rotate(100deg) saturate(1.2);
+    }
+    .pink:active{
+      filter: hue-rotate(100deg) saturate(1.4);
+    }
+    .green{
+      filter: hue-rotate(255deg) saturate(.8);
+    }
+    .green:hover{
+      filter: hue-rotate(255deg) saturate(1);
+    }
+    .green:active{
+      filter: hue-rotate(255deg) saturate(1.2);
+    }
   }
 
   // 内容样式
