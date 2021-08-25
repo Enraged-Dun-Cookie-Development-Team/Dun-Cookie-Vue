@@ -166,10 +166,10 @@
             <span v-if="settings.checkLowFrequency()"> 【低频蹲饼时段】 </span>
           </span>
         </div>
-        <!-- <span class="menu-btn el-icon-menu" @click.stop="drawer = !drawer"></span> -->
-        <!--        <span id="menu-btn" @click.stop="drawer = !drawer;" style="width:30px;height:30px;"></span>-->
-        <span @click.stop="drawer = !drawer;"
-              :class="[drawer?'menu-btn-open':'menu-btn-close', firefox ? 'menu-btn-firefox' : '','menu-btn','el-icon-menu']"></span>
+        <!--        <span @click.stop="drawer = !drawer;"-->
+        <!--              :class="[drawer?'menu-btn-open':'menu-btn-close', firefox ? 'menu-btn-firefox' : '','menu-btn','el-icon-menu']"></span>-->
+
+        <Menu-Icon class="menu-btn-icon" @handleIconClick="handleIconClick"></Menu-Icon>
       </div>
       <div id="content">
         <time-line
@@ -189,6 +189,7 @@ import TimeLine from "../components/timeline/TimeLine";
 import Settings from "../common/Settings";
 import SanInfo from "../common/sync/SanInfo";
 import DunInfo from "../common/sync/DunInfo";
+import MenuIcon from "@/popup/MenuIcon";
 import {
   dayInfo,
   MESSAGE_CARD_LIST_GET,
@@ -207,7 +208,7 @@ import janvas from "../common/util/janvas.min.js";
 
 export default {
   name: "app",
-  components: {countTo, TimeLine},
+  components: {countTo, TimeLine, MenuIcon},
   created() {
   },
   mounted() {
@@ -279,6 +280,9 @@ export default {
         this.LazyLoaded = true;
         this.listenerWindowSize();
       }, 1);
+    },
+    handleIconClick() {
+      this.drawer = !this.drawer;
     },
     // 初始化菜单图标
     menuIconInit() {
@@ -514,49 +518,10 @@ export default {
       text-align: left;
     }
 
-    .menu-btn {
-      width: 30px;
-      height: 30px;
+    .menu-btn-icon {
+      width: 40px;
+      height: 40px;
       position: relative;
-
-
-      &::after {
-        content: ' ';
-        width: 24px;
-        height: 24px;
-        background: @@bgColor;
-        position: absolute;
-        top: 3px;
-        left: 3px;
-        transition: all 0.5s;
-      }
-
-      &.menu-btn-firefox::after {
-        top: 3.7px;
-        left: 3.6px;
-      }
-
-      &::before {
-        font-size: 30px;
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 1;
-        transition: all 0.5s;
-      }
-
-      &.menu-btn-open {
-        &::after {
-          transition: all 0.5s;
-          transform: rotate(495deg) scale(0.8);
-          background: #23ade5;
-        }
-
-        &::before {
-          transform: rotate(495deg);
-          color: @@bgColor;
-        }
-      }
     }
   }
 
