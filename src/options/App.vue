@@ -42,9 +42,7 @@
             <div class="more-cookie" ref="more-cookie">
               <div>
                 小刻在
-                {{
-                  formatTime(settings.initTime, "yyyy-MM-dd hh:mm:ss")
-                }}
+                {{ formatTime(settings.initTime, "yyyy-MM-dd hh:mm:ss") }}
                 进入食堂
               </div>
               <div class="info-time">
@@ -80,10 +78,10 @@
         </div>
         <i
           class="el-icon-back back-btn"
-          v-show="showBack"
+          :class="showBack ? '' : 'btn-hide'"
           @click.stop="changeMenu()"
         ></i>
-        <div class="config-btn" v-show="showBack">
+        <div class="config-btn" :class="showBack ? '' : 'btn-hide'">
           <el-button class="green" @click.stop="saveSetting('form')">
             <i class="el-icon-circle-check"></i>保存
           </el-button>
@@ -423,7 +421,9 @@
                     </div>
                     <div class="content-line-content flex-between">
                       <div></div>
-                      <el-switch v-model="settings.display.windowMode"></el-switch>
+                      <el-switch
+                        v-model="settings.display.windowMode"
+                      ></el-switch>
                     </div>
                   </div>
                   <div class="body-menu-content-line">
@@ -433,9 +433,7 @@
                     </div>
                     <div class="content-line-content flex-between">
                       <div></div>
-                      <el-switch
-                        v-model="settings.feature.linkMax"
-                      ></el-switch>
+                      <el-switch v-model="settings.feature.linkMax"></el-switch>
                     </div>
                   </div>
                 </div>
@@ -663,9 +661,9 @@ export default {
           }
         });
       } else {
-        setTimeout(()=> {
+        setTimeout(() => {
           this.showBack = true;
-        }, 300); 
+        }, 300);
         this.menuList.forEach((item, index) => {
           if (index == className) {
             this.$refs[item].classList.add("active");
@@ -822,7 +820,7 @@ export default {
         left: 0;
         width: 100%;
         height: 100%;
-        pointer-events:none;
+        pointer-events: none;
 
         .menu-card {
           border: 2px solid #fff;
@@ -920,28 +918,39 @@ export default {
     position: absolute;
     left: 20px;
     top: 130px;
+    opacity: 1;
+    transition: all 0.7s;
+    
+    &.btn-hide {
+      opacity: 0;
+    }
   }
 
   .config-btn {
     position: absolute;
     right: 30px;
     bottom: 10px;
+    opacity: 1;
+    transition: all 0.7s;
+    
+    &.btn-hide {
+      opacity: 0;
+    }
 
     div {
       display: inline;
     }
 
-    button{
+    button {
       font-size: 20px;
       font-family: Raleway;
       line-height: 20px;
-      padding: .618em 1em;
+      padding: 0.618em 1em;
       border-radius: 10px 10px 12px 12px;
-      box-shadow:
-        0px 8px 0px 0px #2980b9, /* button thickness */
-        0px 0 20px rgba(255,255,255,.2) inset, /* inner glow */
-        2px 30px 0px rgba(255,255,255,.1) inset, /* sublte reflection */
-        5px 15px 30px -10px #000; /* dark shadow underneath */
+      box-shadow: 0px 8px 0px 0px #2980b9,
+        /* button thickness */ 0px 0 20px rgba(255, 255, 255, 0.2) inset,
+        /* inner glow */ 2px 30px 0px rgba(255, 255, 255, 0.1) inset,
+        /* sublte reflection */ 5px 15px 30px -10px #000; /* dark shadow underneath */
       border: 1px solid #2980b9;
       cursor: pointer;
       background: #3498db;
@@ -952,55 +961,53 @@ export default {
       width: 180px;
       text-align: left;
     }
-    button i{
+    button i {
       padding-right: 17px;
-      transform: scale(1.1) translate(0,-1px);
+      transform: scale(1.1) translate(0, -1px);
     }
-    button:hover{
+    button:hover {
       margin-top: 15px;
       margin-bottom: 5px;
-      box-shadow:
-        0px 5px 0px 0px #2980b9, /* button thickness */
-        0px 0 50px rgba(134, 243, 255, 1) inset, /* inner glow */
-        5px 28px 0px rgba(255,255,255,.15) inset, /* sublte reflection */
-        0px 0px 30px rgba(134,243,255,.2), /* outer glow */
-        5px 15px 30px -10px #000; /* dark shadow underneath */
+      box-shadow: 0px 5px 0px 0px #2980b9,
+        /* button thickness */ 0px 0 50px rgba(134, 243, 255, 1) inset,
+        /* inner glow */ 5px 28px 0px rgba(255, 255, 255, 0.15) inset,
+        /* sublte reflection */ 0px 0px 30px rgba(134, 243, 255, 0.2),
+        /* outer glow */ 5px 15px 30px -10px #000; /* dark shadow underneath */
       color: #fff;
       filter: saturate(1.5);
     }
-    button:hover i{
+    button:hover i {
       transform: scale(1.1) translate(1px, -3px) scale(1.2);
     }
-    button:active{
+    button:active {
       margin-top: 18px;
       margin-bottom: 2px;
-      box-shadow:
-        0px 2px 0px 0px #2980b9, /* button thickness */
-        0px 0 100px 10px rgba(134, 243, 255, 1) inset, /* inner glow */
-        5px 25px 0px rgba(255,255,255,.1) inset, /* sublte reflection */
-        0px 0px 30px rgba(134,243,255,.5), /* outer glow */
-        5px 15px 30px -10px #000; /* dark shadow underneath */
+      box-shadow: 0px 2px 0px 0px #2980b9,
+        /* button thickness */ 0px 0 100px 10px rgba(134, 243, 255, 1) inset,
+        /* inner glow */ 5px 25px 0px rgba(255, 255, 255, 0.1) inset,
+        /* sublte reflection */ 0px 0px 30px rgba(134, 243, 255, 0.5),
+        /* outer glow */ 5px 15px 30px -10px #000; /* dark shadow underneath */
       filter: saturate(1.7);
     }
-    button:active i{
+    button:active i {
       transform: scale(1.2) translate(2px, -5px) scale(1.3);
     }
-    .pink{
+    .pink {
       filter: hue-rotate(100deg);
     }
-    .pink:hover{
+    .pink:hover {
       filter: hue-rotate(100deg) saturate(1.2);
     }
-    .pink:active{
+    .pink:active {
       filter: hue-rotate(100deg) saturate(1.4);
     }
-    .green{
-      filter: hue-rotate(255deg) saturate(.8);
+    .green {
+      filter: hue-rotate(255deg) saturate(0.8);
     }
-    .green:hover{
+    .green:hover {
       filter: hue-rotate(255deg) saturate(1);
     }
-    .green:active{
+    .green:active {
       filter: hue-rotate(255deg) saturate(1.2);
     }
   }
@@ -1189,7 +1196,6 @@ export default {
     }
   }
 }
-
 
 .body-menu-content {
   scrollbar-width: none;
