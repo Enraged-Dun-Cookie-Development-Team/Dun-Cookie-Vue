@@ -341,7 +341,7 @@
                     </div>
                     <div>
                       <el-switch
-                        v-model="settings.display.showImage"
+                        v-model="settings.dun.showRetweet"
                       ></el-switch>
                     </div>
                   </div>
