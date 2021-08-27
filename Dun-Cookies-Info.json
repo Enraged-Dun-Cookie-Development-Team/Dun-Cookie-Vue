@@ -23,11 +23,19 @@
             "radius": true
         },
         {
-            "starTime": "2021-8-03 15:59:59",
-            "overTime": "2021-8-24 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1eh411q7NT",
-            "name": "【魔法zc目录】“多索雷斯假日”DH-S/EX平民全关卡低配攻略！阵容平民+低练度+语音详解的愉悦攻略！",
-            "img": "https://i1.hdslb.com/bfs/archive/e2cbf136295f46b46393263a543bb32853ac430b.jpg@200w_125h_1c.webp",
+            "starTime": "2021-8-26 15:59:59",
+            "overTime": "2021-9-09 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1yf4y1n77a",
+            "name": "【巅峰计划】25级首杀  “当时我距离成功只有零点零一公分”",
+            "img": "https://i2.hdslb.com/bfs/archive/334c0cd6fbdaf7debc9babc41913e055a3f41f74.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-8-26 15:59:59",
+            "overTime": "2021-9-09 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1y64y1e78y",
+            "name": "【魔法zc目录】“蛮鳞行动”狂嚎沙原18+日替 全关卡平民攻略大合集！阵容平民+低练度+语音详解的愉悦攻略！《明日方舟》",
+            "img": "https://i2.hdslb.com/bfs/archive/7898d4cf1efb4c75c3b84fd98468898f771c23e9.jpg@200w_125h_1c.webp",
             "radius": true
         },
         {
@@ -47,11 +55,27 @@
             "radius": true
         },
         {
-            "starTime": "2021-8-03 15:59:59",
-            "overTime": "2021-8-24 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1RQ4y1f7Qr",
-            "name": "【萧然Q】DH1至DH-S-2突袭 摆完挂机 简单好抄",
-            "img": "https://i2.hdslb.com/bfs/archive/8d2132170cff91d8f6f336ae7b0567e26f75806f.jpg@200w_125h_1c.webp",
+            "starTime": "2021-8-26 15:59:59",
+            "overTime": "2021-9-09 03:59:59",
+            "url": "https://www.bilibili.com/video/BV12L411b7mf",
+            "name": "【萧然Q】狂嚎沙原18 超简单好抄的打法",
+            "img": "https://i2.hdslb.com/bfs/archive/2df1049dd6e7c113eb4ec6b9b0bc22aff38459ab.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-8-26 15:59:59",
+            "overTime": "2021-9-09 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1uf4y1N7ff",
+            "name": "【小鬼卡比】狂嚎沙原18 【乱杀】非常简单",
+            "img": "https://i2.hdslb.com/bfs/archive/8ca006b47805b204309797083300aab12d062c69.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-8-26 15:59:59",
+            "overTime": "2021-9-09 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1Pq4y1U7FL",
+            "name": "【野桥霜滑】旧约 7人18 重术yyds",
+            "img": "https://i1.hdslb.com/bfs/archive/5207933457885c9cc2b35c7021d7a705ab7f7910.jpg@200w_125h_1c.webp",
             "radius": true
         },
 
@@ -163,11 +187,11 @@
         ]
     },
     "upgrade": {
-        "v": "2.9.3.1",
-        "title": "小刻食堂翻新啦 - 2.9.3.1",
-        "description": "😆 本次更新为大更新，更新许多新功能与修复许多BUG,具体如下。目前已知还存在两个BUG,也欢迎前来反馈</br>1.添加列表一键回顶部</br>2.添加查看图片详细信息</br>3.修复理智提醒</br>4.更改打开二级菜单按钮到右上角，减少了移动鼠标的距离</br>5.新增大图翻页，阅读漫画跟方便</br>6.优化火狐泰拉记事社官网的界面样式</br>7.添加启动插件后10分钟弹出更新提醒，再也不用担心错过版本</br>8.添加启动插件后10分钟弹出公告提醒，一有问题我们将可以第一时间通知你</br>9.优化闻到饼的逻辑，不会出现吃到饼后又闻到的情况</br>10.新增一键生成图片并复制，更轻易的与朋友分享吃饼的快乐</br>11.优化弹窗高度算法</br>12.新增满理智前18分钟提醒，让你理智安排得从容不迫</br>13.调整火狐字体</br>14.消除部分没必要的报错</br>15.优化检测更新逻辑",
-        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.9.3.1/Dun-Cookie-2.9.3.1.crx",
-        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.9.3.1/Dun-Cookie-2.9.3.1.zip",
+        "v": "2.9.5",
+        "title": "小刻食堂翻新啦 - 2.9.5",
+        "description": "🚀 本次版本主要更换设置界面，更符合电脑端体验</br>1.1.添加按钮，重要公告弹出可选择</br>2.添加按钮，列表链接打开可自动最大化</br>3.替换列表菜单按钮</br>4.整体修改设置界面</br>5.优化资源开放文本显示逻辑",
+        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.9.5/Dun-Cookie-2.9.5.crx",
+        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.9.5/Dun-Cookie-2.9.5.zip",
         "downSpare": "https://pan.baidu.com/s/1kzY6kpfYqLcGpuaiwQOGoA",
         "downSpareText": "备用下载（提取码 jzq9）",
         "downChrome": "https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN",

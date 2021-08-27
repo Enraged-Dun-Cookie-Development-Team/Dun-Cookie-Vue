@@ -157,8 +157,8 @@ const kazeFun = {
 
     // 初始化
     Init() {
-        chrome.browserAction.setBadgeText({ text: 'Beta' });
-        chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
+        // chrome.browserAction.setBadgeText({ text: 'Beta' });
+        // chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
         // 开始蹲饼！
         Settings.doAfterInit(() => {
             startDunTimer();
