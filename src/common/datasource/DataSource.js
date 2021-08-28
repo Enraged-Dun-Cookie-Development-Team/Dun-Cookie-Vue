@@ -37,19 +37,36 @@ class DataSource {
    * 优先级，用于在显示时排序，越小越靠前
    */
   priority;
-
   /**
    * 用于获取数据的URL，可以是string或array
    */
   dataUrl;
+    /**
+   * 用于根数据接口，获取详细接口
+   */
+  rootUrl;
 
-  constructor(icon, dataName, title, dataUrl, priority = 100) {
+  constructor(icon, dataName, title, dataUrl, rootUrl='', priority = 100) {
     this.icon = icon;
     this.dataName = dataName;
     this.dataType = this.constructor.typeName;
     this.title = title;
     this.dataUrl = dataUrl;
+    this.rootUrl = rootUrl;
     this.priority = priority;
+    this.fetchRootData();
+  }
+
+  fetchRootData() {
+    if (this.dataName === '泰拉记事社官网') {
+      let promise = HttpUtil.GET(this.rootUrl);
+      promise.then(value => {
+        let data = JSON.parse(value);
+        data.data.forEach(module => {
+          this.dataUrl.push(`https://terra-historicus.hypergryph.com/api/comic/${module.cid}`)
+        });
+      })
+    }
   }
 
   fetchData() {

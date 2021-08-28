@@ -25,9 +25,9 @@
         {
             "starTime": "2021-8-26 15:59:59",
             "overTime": "2021-9-09 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1yf4y1n77a",
-            "name": "【巅峰计划】25级首杀  “当时我距离成功只有零点零一公分”",
-            "img": "https://i2.hdslb.com/bfs/archive/334c0cd6fbdaf7debc9babc41913e055a3f41f74.jpg@200w_125h_1c.webp",
+            "url": "https://www.bilibili.com/video/BV1y3411B7tT",
+            "name": "【黑蓑影卫攻略组】全网首杀 旧约登顶26 - 枪火燎原  铁域镇砂",
+            "img": "https://i1.hdslb.com/bfs/archive/6c478b0a8a42410c1f7f8663a2cddb5453ecf67d.jpg@200w_125h_1c.webp",
             "radius": true
         },
         {
@@ -41,9 +41,9 @@
         {
             "starTime": "2021-8-03 15:59:59",
             "overTime": "2021-8-24 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1Av411K7mV",
-            "name": "【小狼XF】DH-全关卡+突袭 平民无6星攻略",
-            "img": "https://i2.hdslb.com/bfs/archive/c6c44f2843f4fed719ba29e748fe8bb9156c8a68.jpg@200w_125h_1c.webp",
+            "url": "https://www.bilibili.com/video/BV1M3411B7Ej",
+            "name": "【小狼XF】狂哮沙原危机18单6+每日更新危机8《明日方舟》蛮鳞行动",
+            "img": "https://i1.hdslb.com/bfs/archive/cbec0d734506a69748921a089af43b1e6e599860.jpg@200w_125h_1c.webp",
             "radius": true
         },
         {
@@ -189,7 +189,7 @@
     "upgrade": {
         "v": "2.9.5",
         "title": "小刻食堂翻新啦 - 2.9.5",
-        "description": "🚀 本次版本主要更换设置界面，更符合电脑端体验</br>1.1.添加按钮，重要公告弹出可选择</br>2.添加按钮，列表链接打开可自动最大化</br>3.替换列表菜单按钮</br>4.整体修改设置界面</br>5.优化资源开放文本显示逻辑",
+        "description": "🚀 本次版本主要更换设置界面，更符合电脑端体验</br>1.添加按钮，重要公告弹出可选择</br>2.添加按钮，列表链接打开可自动最大化</br>3.替换列表菜单按钮</br>4.整体修改设置界面</br>5.优化资源开放文本显示逻辑",
         "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.9.5/Dun-Cookie-2.9.5.crx",
         "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.9.5/Dun-Cookie-2.9.5.zip",
         "downSpare": "https://pan.baidu.com/s/1kzY6kpfYqLcGpuaiwQOGoA",
