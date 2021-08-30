@@ -429,7 +429,7 @@
 # 开发人员
 
 > - [蓝芷怡](https://github.com/LiuZiYang1)
-> - [@lwt-414](https://github.com/lwt-414)
+> - [洛梧藤](https://github.com/lwt-414)
 > - [云闪](https://github.com/Yun-Shan) 
 
 <br/>

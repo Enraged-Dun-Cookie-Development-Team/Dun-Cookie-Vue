@@ -101,6 +101,11 @@
             </el-button>
           </el-upload>
         </div>
+        <div class="feedback-btn" :class="showBack ? 'btn-hide' : ''">
+          <el-button class="green" @click.stop="alertFeedback()">
+            <i class="el-icon-circle-check"></i>反馈
+          </el-button>
+        </div>
         <div class="body-menu-content">
           <el-form
             ref="form"
@@ -340,9 +345,7 @@
                       调整此开关会导致源数据改变，可能会有错误的推送！
                     </div>
                     <div>
-                      <el-switch
-                        v-model="settings.dun.showRetweet"
-                      ></el-switch>
+                      <el-switch v-model="settings.dun.showRetweet"></el-switch>
                     </div>
                   </div>
                 </div>
@@ -681,6 +684,11 @@ export default {
         });
       }
     },
+    alertFeedback() {
+      this.$alert('<span>如果有意见或建议或者是反馈问题或者是发现程序出现bug<br/>可以添加<a href="https://jq.qq.com/?_wv=1027&k=Vod1uO13" target="_blank">【蹲饼组】</a>反馈或<a href="Mailto:kaze.liu@qq.com.com" target="_blank">给我发邮件</a>反馈<br/>更新可以去github上查看<a href="https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue" target="_blank">Dun-Cookie-Vue</a><br/>也可以去Chrome，Firefox和Edge应用商店查看更新，但是因为审核机制，更新速度不确定<br/></span>', '反馈与更新渠道', {
+        dangerouslyUseHTMLString: true
+      });
+    }
   },
 };
 </script>
@@ -920,19 +928,20 @@ export default {
     top: 130px;
     opacity: 1;
     transition: all 0.7s;
-    
+
     &.btn-hide {
       opacity: 0;
     }
   }
 
-  .config-btn {
+  .config-btn,
+  .feedback-btn {
     position: absolute;
     right: 30px;
     bottom: 10px;
     opacity: 1;
     transition: all 0.7s;
-    
+
     &.btn-hide {
       opacity: 0;
     }
@@ -942,74 +951,124 @@ export default {
     }
 
     button {
-      font-size: 20px;
-      font-family: Raleway;
-      line-height: 20px;
-      padding: 0.618em 1em;
-      border-radius: 10px 10px 12px 12px;
-      box-shadow: 0px 8px 0px 0px #2980b9,
-        /* button thickness */ 0px 0 20px rgba(255, 255, 255, 0.2) inset,
-        /* inner glow */ 2px 30px 0px rgba(255, 255, 255, 0.1) inset,
-        /* sublte reflection */ 5px 15px 30px -10px #000; /* dark shadow underneath */
-      border: 1px solid #2980b9;
+      width: 240px;
+      height: 60px;
+      margin: auto 3px;
+      padding: 5px 10px;
       cursor: pointer;
-      background: #3498db;
-      color: #ecf0f1;
-      text-shadow: 1px 1px 1px #34495e;
-      transform: rotateX(5deg);
-      margin: 10px 10px;
-      width: 180px;
-      text-align: left;
+
+      font-size: 1.6em;
+      letter-spacing: 1px;
+      color: #222;
+      border-radius: 0;
+
+      position: relative;
+      &.blue {
+        background: #7aa6da;
+      }
+      &.green {
+        background: #b9ca4a;
+      }
+      &.pink {
+        background: #febbbb;
+      }
+      &:after {
+        content: "";
+        background: linear-gradient(
+          to right,
+          #222 0%,
+          #222 50%,
+          #fff 50%,
+          #fff 100%
+        );
+        background-position: 100% 0;
+        background-size: 200% 100%;
+        width: 100%;
+        height: 5px;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        transition: all 0.5s;
+      }
+      &:hover {
+        &:after {
+          background-position: 0 0;
+        }
+      }
+      &:active {
+        font-size: 1.8em;
+      }
     }
-    button i {
-      padding-right: 17px;
-      transform: scale(1.1) translate(0, -1px);
-    }
-    button:hover {
-      margin-top: 15px;
-      margin-bottom: 5px;
-      box-shadow: 0px 5px 0px 0px #2980b9,
-        /* button thickness */ 0px 0 50px rgba(134, 243, 255, 1) inset,
-        /* inner glow */ 5px 28px 0px rgba(255, 255, 255, 0.15) inset,
-        /* sublte reflection */ 0px 0px 30px rgba(134, 243, 255, 0.2),
-        /* outer glow */ 5px 15px 30px -10px #000; /* dark shadow underneath */
-      color: #fff;
-      filter: saturate(1.5);
-    }
-    button:hover i {
-      transform: scale(1.1) translate(1px, -3px) scale(1.2);
-    }
-    button:active {
-      margin-top: 18px;
-      margin-bottom: 2px;
-      box-shadow: 0px 2px 0px 0px #2980b9,
-        /* button thickness */ 0px 0 100px 10px rgba(134, 243, 255, 1) inset,
-        /* inner glow */ 5px 25px 0px rgba(255, 255, 255, 0.1) inset,
-        /* sublte reflection */ 0px 0px 30px rgba(134, 243, 255, 0.5),
-        /* outer glow */ 5px 15px 30px -10px #000; /* dark shadow underneath */
-      filter: saturate(1.7);
-    }
-    button:active i {
-      transform: scale(1.2) translate(2px, -5px) scale(1.3);
-    }
-    .pink {
-      filter: hue-rotate(100deg);
-    }
-    .pink:hover {
-      filter: hue-rotate(100deg) saturate(1.2);
-    }
-    .pink:active {
-      filter: hue-rotate(100deg) saturate(1.4);
-    }
-    .green {
-      filter: hue-rotate(255deg) saturate(0.8);
-    }
-    .green:hover {
-      filter: hue-rotate(255deg) saturate(1);
-    }
-    .green:active {
-      filter: hue-rotate(255deg) saturate(1.2);
-    }
+
+    // button {
+    //   font-size: 20px;
+    //   font-family: Raleway;
+    //   line-height: 20px;
+    //   padding: 0.618em 1em;
+    //   border-radius: 10px 10px 12px 12px;
+    //   box-shadow: 0px 8px 0px 0px #2980b9,
+    //     /* button thickness */ 0px 0 20px rgba(255, 255, 255, 0.2) inset,
+    //     /* inner glow */ 2px 30px 0px rgba(255, 255, 255, 0.1) inset,
+    //     /* sublte reflection */ 5px 15px 30px -10px #000; /* dark shadow underneath */
+    //   border: 1px solid #2980b9;
+    //   cursor: pointer;
+    //   background: #3498db;
+    //   color: #ecf0f1;
+    //   text-shadow: 1px 1px 1px #34495e;
+    //   transform: rotateX(5deg);
+    //   margin: 10px 10px;
+    //   width: 180px;
+    //   text-align: left;
+    // }
+    // button i {
+    //   padding-right: 17px;
+    //   transform: scale(1.1) translate(0, -1px);
+    // }
+    // button:hover {
+    //   margin-top: 15px;
+    //   margin-bottom: 5px;
+    //   box-shadow: 0px 5px 0px 0px #2980b9,
+    //     /* button thickness */ 0px 0 50px rgba(134, 243, 255, 1) inset,
+    //     /* inner glow */ 5px 28px 0px rgba(255, 255, 255, 0.15) inset,
+    //     /* sublte reflection */ 0px 0px 30px rgba(134, 243, 255, 0.2),
+    //     /* outer glow */ 5px 15px 30px -10px #000; /* dark shadow underneath */
+    //   color: #fff;
+    //   filter: saturate(1.5);
+    // }
+    // button:hover i {
+    //   transform: scale(1.1) translate(1px, -3px) scale(1.2);
+    // }
+    // button:active {
+    //   margin-top: 18px;
+    //   margin-bottom: 2px;
+    //   box-shadow: 0px 2px 0px 0px #2980b9,
+    //     /* button thickness */ 0px 0 100px 10px rgba(134, 243, 255, 1) inset,
+    //     /* inner glow */ 5px 25px 0px rgba(255, 255, 255, 0.1) inset,
+    //     /* sublte reflection */ 0px 0px 30px rgba(134, 243, 255, 0.5),
+    //     /* outer glow */ 5px 15px 30px -10px #000; /* dark shadow underneath */
+    //   filter: saturate(1.7);
+    // }
+    // button:active i {
+    //   transform: scale(1.2) translate(2px, -5px) scale(1.3);
+    // }
+    // .pink {
+    //   filter: hue-rotate(100deg);
+    // }
+    // .pink:hover {
+    //   filter: hue-rotate(100deg) saturate(1.2);
+    // }
+    // .pink:active {
+    //   filter: hue-rotate(100deg) saturate(1.4);
+    // }
+    // .green {
+    //   filter: hue-rotate(255deg) saturate(0.8);
+    // }
+    // .green:hover {
+    //   filter: hue-rotate(255deg) saturate(1);
+    // }
+    // .green:active {
+    //   filter: hue-rotate(255deg) saturate(1.2);
+    // }
   }
 
   // 内容样式
