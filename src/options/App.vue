@@ -686,7 +686,8 @@ export default {
     },
     alertFeedback() {
       this.$alert('<span>如果有意见或建议或者是反馈问题或者是发现程序出现bug<br/>可以添加<a href="https://jq.qq.com/?_wv=1027&k=Vod1uO13" target="_blank">【蹲饼组】</a>反馈或<a href="Mailto:kaze.liu@qq.com.com" target="_blank">给我发邮件</a>反馈<br/>更新可以去github上查看<a href="https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue" target="_blank">Dun-Cookie-Vue</a><br/>也可以去Chrome，Firefox和Edge应用商店查看更新，但是因为审核机制，更新速度不确定<br/></span>', '反馈与更新渠道', {
-        dangerouslyUseHTMLString: true
+        dangerouslyUseHTMLString: true,
+        showConfirmButton: false
       });
     }
   },
@@ -931,6 +932,7 @@ export default {
 
     &.btn-hide {
       opacity: 0;
+      pointer-events: none;
     }
   }
 
@@ -944,6 +946,7 @@ export default {
 
     &.btn-hide {
       opacity: 0;
+      pointer-events: none;
     }
 
     div {
