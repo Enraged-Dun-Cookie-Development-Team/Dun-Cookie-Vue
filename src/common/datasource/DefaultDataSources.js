@@ -19,6 +19,7 @@ const defaultDataSourcesList = [
     '官方B站动态',
     '哔哩哔哩',
     'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=161775300&offset_dynamic_id=0&need_top=0&platform=web',
+    '',
     0
   ),
   new WeiboDataSource(
@@ -26,6 +27,7 @@ const defaultDataSourcesList = [
     '官方微博',
     '微博',
     'https://m.weibo.cn/api/container/getIndex?type=uid&value=6279793937&containerid=1076036279793937',
+    '',
     1
   ),
   new InGameAnnouncementDataSource(
@@ -33,6 +35,7 @@ const defaultDataSourcesList = [
     '游戏内公告',
     '通讯组',
     'https://ak-conf.hypergryph.com/config/prod/announce_meta/Android/announcement.meta.json',
+    '',
     2
   ),
   new WeiboDataSource(
@@ -40,6 +43,7 @@ const defaultDataSourcesList = [
     '朝陇山微博',
     '朝陇山',
     'https://m.weibo.cn/api/container/getIndex?type=uid&value=6441489862&containerid=1076036441489862',
+    '',
     3
   ),
   new WeiboDataSource(
@@ -47,6 +51,7 @@ const defaultDataSourcesList = [
     '一拾山微博',
     '一拾山',
     'https://m.weibo.cn/api/container/getIndex?type=uid&value=7506039414&containerid=1076037506039414',
+    '',
     4
   ),
   new MonsterSirenDataSource(
@@ -54,6 +59,7 @@ const defaultDataSourcesList = [
     '塞壬唱片官网',
     '塞壬唱片',
     'https://monster-siren.hypergryph.com/api/news',
+    '',
     5
   ),
   new WeiboDataSource(
@@ -61,6 +67,7 @@ const defaultDataSourcesList = [
     '泰拉记事社微博',
     '泰拉记事社微博',
     'https://m.weibo.cn/api/container/getIndex?type=uid&value=7499841383&containerid=1076037499841383',
+    '',
     6
   ),
   new ArknightsOfficialWebDataSource(
@@ -68,13 +75,15 @@ const defaultDataSourcesList = [
     '官网',
     '官网网站',
     'https://ak.hypergryph.com/',
+    '',
     7
   ),
   new TerraHistoricusDataSource(
     '/assets/image/icon/tl.jpg',
     '泰拉记事社官网',
     '泰拉记事社官网',
-    ['https://terra-historicus.hypergryph.com/api/comic/7748', 'https://terra-historicus.hypergryph.com/api/comic/2865', 'https://terra-historicus.hypergryph.com/api/comic/9382'],
+    [],
+    'https://terra-historicus.hypergryph.com/api/comic',
     8
   ),
   new NeteaseCloudMusicDataSource(
@@ -82,6 +91,7 @@ const defaultDataSourcesList = [
     '塞壬唱片网易云音乐',
     '网易云音乐',
     'http://music.163.com/api/artist/albums/32540734',
+    '',
     9
   ),
   new WeiboDataSource(
@@ -89,6 +99,7 @@ const defaultDataSourcesList = [
     '鹰角网络微博',
     '鹰角网络微博',
     'https://m.weibo.cn/api/container/getIndex?type=uid&value=7461423907&containerid=1076037461423907',
+    '',
     10
   ),
 ];

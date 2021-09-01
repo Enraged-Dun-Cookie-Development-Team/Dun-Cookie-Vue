@@ -138,7 +138,7 @@
           >
         </el-row>
         <div style="position: absolute; bottom: 10px; right: 10px" class="sign">
-          Power By 蓝芷怡 & lwt & 云闪
+          Power By 蓝芷怡 & 洛梧藤 & 云闪
         </div>
       </el-drawer>
       <!-- 置顶按钮 -->
@@ -166,10 +166,15 @@
             <span v-if="settings.checkLowFrequency()"> 【低频蹲饼时段】 </span>
           </span>
         </div>
-        <!-- <span class="menu-btn el-icon-menu" @click.stop="drawer = !drawer"></span> -->
-        <!--        <span id="menu-btn" @click.stop="drawer = !drawer;" style="width:30px;height:30px;"></span>-->
-        <span @click.stop="drawer = !drawer;"
-              :class="[drawer?'menu-btn-open':'menu-btn-close','menu-btn','el-icon-menu']"></span>
+        <!--        <span @click.stop="drawer = !drawer;"-->
+        <!--              :class="[drawer?'menu-btn-open':'menu-btn-close', firefox ? 'menu-btn-firefox' : '','menu-btn','el-icon-menu']"></span>-->
+
+        <Menu-Icon @handleIconClick="handleIconClick()"
+          :class="[
+            drawer ? 'menu-btn-open' : 'menu-btn-close',
+            firefox ? 'menu-btn-firefox' : '',
+            'menu-btn',
+          ]"></Menu-Icon>
       </div>
       <div id="content">
         <time-line
@@ -189,6 +194,7 @@ import TimeLine from "../components/timeline/TimeLine";
 import Settings from "../common/Settings";
 import SanInfo from "../common/sync/SanInfo";
 import DunInfo from "../common/sync/DunInfo";
+import MenuIcon from "@/popup/MenuIcon";
 import {
   dayInfo,
   MESSAGE_CARD_LIST_GET,
@@ -207,9 +213,8 @@ import janvas from "../common/util/janvas.min.js";
 
 export default {
   name: "app",
-  components: {countTo, TimeLine},
+  components: {countTo, TimeLine, MenuIcon},
   created() {
-    console.log()
   },
   mounted() {
     this.init();
@@ -248,6 +253,7 @@ export default {
       loading: true, // 初始化加载
       onlineDayInfo: {},
       scrollShow: false,
+      firefox: false
       // allHeight: 0,
     };
   },
@@ -272,12 +278,16 @@ export default {
         if (head.indexOf("Firefox") > 1) {
           let div = document.getElementById("app");
           div.style.fontFamily = "Microsoft yahei";
+          this.firefox = true;
         }
         this.getCardList();
         // 图片卡 先加载dom后加载图片内容
         this.LazyLoaded = true;
         this.listenerWindowSize();
       }, 1);
+    },
+    handleIconClick() {
+      this.drawer = !this.drawer;
     },
     // 初始化菜单图标
     menuIconInit() {
@@ -511,46 +521,6 @@ export default {
 
     .version {
       text-align: left;
-    }
-
-    .menu-btn {
-      width: 30px;
-      height: 30px;
-      position: relative;
-
-
-      &::after {
-        content: ' ';
-        width: 24px;
-        height: 24px;
-        background: #ffffff;
-        position: absolute;
-        top: 3px;
-        left: 3px;
-        transition: all 0.5s;
-      }
-
-      &::before {
-        font-size: 30px;
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 1;
-        transition: all 0.5s;
-      }
-
-      &.menu-btn-open {
-        &::after {
-          transition: all 0.5s;
-          transform: rotate(495deg) scale(0.8);
-          background: #23ade5;
-        }
-
-        &::before {
-          transform: rotate(495deg);
-          color: #fff;
-        }
-      }
     }
   }
 

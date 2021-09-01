@@ -225,7 +225,8 @@ export default {
       insiderCodeMap: null, // 储存内部密码
       janvas: null, //菜单模块icon
       imageError: false,
-      errorImageUrl: ""
+      errorImageUrl: "",
+      openResources: false
     };
   },
   mounted() {
@@ -293,6 +294,7 @@ export default {
         this.dayInfo.forEach((item) => {
           item.notToday = false;
         });
+        this.openResources = true;
         return;
       }
       // 如果不在里面
@@ -303,6 +305,7 @@ export default {
       this.dayInfo.forEach((item) => {
         item.notToday = !item.day.includes(week);
       });
+      this.openResources = false;
     },
     // 获取在线信息
     getOnlineSpeak() {
@@ -354,7 +357,11 @@ export default {
     },
     // 计算资源关卡开启时间
     calcResourceOpenDay(days) {
-      return days.map(x => TimeUtil.numberToWeek(x)).join();
+      if(this.openResources) {
+        return '活动期间，“资源收集”限时全天开放'
+      } else {
+        return days.map(x => TimeUtil.numberToWeek(x)).join();
+      }
     },
     // 调整过滤文字，该方法由Search子组件调用
     changeFilterText(text) {

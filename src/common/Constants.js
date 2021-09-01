@@ -16,7 +16,7 @@ const CURRENT_SETTING_VERSION = 1;
 /**
  * 当前插件版本号
  */
-const CURRENT_VERSION = '2.9.3.1';
+const CURRENT_VERSION = '3.0';
 /**
  * 展示用的版本号
  */
@@ -123,6 +123,12 @@ const quickJump = {
       url: "https://terra-historicus.hypergryph.com/",
       name: "泰拉记事社官网",
       img: '/assets/image/icon/tl.jpg',
+      radius: true,
+    },
+    {
+      url: "https://weibo.com/u/7461423907",
+      name: "鹰角网络微博",
+      img: '/assets/image/yjwb.jpg',
       radius: true,
     },
   ],
