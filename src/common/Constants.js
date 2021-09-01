@@ -125,6 +125,12 @@ const quickJump = {
       img: '/assets/image/tl.jpg',
       radius: true,
     },
+    {
+      url: "https://weibo.com/u/7461423907",
+      name: "鹰角网络微博",
+      img: '/assets/image/yjwb.jpg',
+      radius: true,
+    },
   ],
   tool: [
     {
