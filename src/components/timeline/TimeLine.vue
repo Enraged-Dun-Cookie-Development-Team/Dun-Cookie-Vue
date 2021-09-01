@@ -285,7 +285,7 @@ export default {
     },
     // 今天有没有该资源可以刷
     resourcesNotToday() {
-      let date = new Date();
+      let date = TimeUtil.changeToCCT(new Date());
       // 如果日期在里面
       let starTime = new Date(this.onlineDayInfo.resources.starTime);
       let overTime = new Date(this.onlineDayInfo.resources.overTime);
@@ -297,7 +297,7 @@ export default {
         return;
       }
       // 如果不在里面
-      let week = new Date().getDay();
+      let week = date.getDay();
       // 判断4点更新
       week = date.getHours() >= 4 ? week : week - 1;
       week = week == -1 ? 6 : week;
@@ -315,8 +315,8 @@ export default {
         // 头部公告
         let filterList = data.list.filter(
             (x) =>
-                new Date(x.starTime) <= new Date() &&
-                new Date(x.overTime) >= new Date()
+                new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
+                new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
         );
 
         this.onlineSpeakList.push(...filterList);
@@ -324,8 +324,8 @@ export default {
         // 快捷连接
         let btnList = data.btnList.filter(
             (x) =>
-                new Date(x.starTime) <= new Date() &&
-                new Date(x.overTime) >= new Date()
+                new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
+                new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
         );
         if (btnList.length > 0) {
           this.quickJump.url.push(...btnList);
@@ -339,8 +339,8 @@ export default {
         // 倒计时
         this.onlineDayInfo.countdown = this.onlineDayInfo.countdown.filter(
             (x) =>
-                new Date(x.starTime) <= new Date() &&
-                new Date(x.overTime) >= new Date()
+                new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
+                new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
         );
 
         // 内部密码
@@ -354,7 +354,8 @@ export default {
       });
     },
     calcActivityDiff(endDate) {
-      const diff = TimeUtil.calcDiff(endDate);
+      let startDate = TimeUtil.changeToCCT(new Date());
+      const diff = TimeUtil.calcDiff(endDate, startDate);
       if (diff) {
         return '剩' + diff;
       } else {

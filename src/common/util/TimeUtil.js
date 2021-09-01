@@ -72,6 +72,18 @@ class TimeUtil {
         return text || '0分钟';
     }
 
+    /**
+     * 将时间转换为中国时区 GMT+8
+     */
+    static changeToCCT(date) {
+        let localTime = date.getTime();
+        let localOffset = date.getTimezoneOffset()*60000;  
+        let utc = localTime + localOffset;
+        let cct = utc + (3600000*8);
+        let cctDate = new Date(cct);
+        return cctDate;
+    }
+
     static numberToWeek(x) {
         switch (x) {
             case 0:

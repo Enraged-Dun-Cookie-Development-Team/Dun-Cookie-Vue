@@ -18,6 +18,7 @@ import DataSourceUtil from '../common/util/DataSourceUtil';
 import HttpUtil from '../common/util/HttpUtil';
 import PlatformHelper from '../common/platform/PlatformHelper';
 import { CURRENT_VERSION } from '../common/Constants';
+import TimeUtil from '../common/util/TimeUtil';
 
 // 重构完成后的其它优化：
 // TODO 多个提取出来的类要考虑能否合并(指互相通信的那部分)
@@ -95,6 +96,7 @@ function startDunTimer() {
 
 // 判断更新和公告是否需要推送提醒
 function announcementMention() {
+    console.log()
     HttpUtil.GET_Json(
         "http://cdn.liuziyang.vip/Dun-Cookies-Info.json?t=" +
         new Date().getTime()
@@ -106,8 +108,8 @@ function announcementMention() {
         if (Settings.feature.announcementNotice) {
             let filterList = data.list.filter(
                 (x) =>
-                    new Date(x.starTime) <= new Date() &&
-                    new Date(x.overTime) >= new Date()
+                    new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
+                    new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
             );
 
             filterList.map(x => {
