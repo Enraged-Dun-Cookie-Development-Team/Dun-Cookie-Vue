@@ -74,6 +74,9 @@ class DataSource {
     if (typeof this.dataUrl === 'string') {
       promise = HttpUtil.GET(this.__appendTimeStamp(this.dataUrl));
     } else if (Array.isArray(this.dataUrl)) {
+      if(this.dataUrl < 1) {
+        this.fetchRootData();
+      }
       promise = Promise.all(
         this.dataUrl.map(url =>
           HttpUtil.GET(this.__appendTimeStamp(url))
