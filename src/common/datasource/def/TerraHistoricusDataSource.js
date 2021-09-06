@@ -13,8 +13,8 @@ export class TerraHistoricusDataSource extends DataSource {
     return 'terra-historicus.hypergryph.com';
   };
 
-  constructor(icon, dataName, title, dataUrl, priority) {
-    super(icon, dataName, title, dataUrl, priority);
+  constructor(icon, dataName, title, dataUrl, rootUrl, priority) {
+    super(icon, dataName, title, dataUrl, rootUrl, priority);
   }
 
   processData(opt) {

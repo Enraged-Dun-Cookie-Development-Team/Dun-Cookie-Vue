@@ -31,6 +31,22 @@
             "radius": true
         },
         {
+            "starTime": "2021-9-06 04:00:00",
+            "overTime": "2021-9-13 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1cy4y1V7hF",
+            "name": "【刘老黑/仅4人】全自动挂机脚打长泉镇郊野",
+            "img": "https://i0.hdslb.com/bfs/archive/92ab777d36e46b370f0ea97bc23ed7612ac2f9c6.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-9-06 04:00:00",
+            "overTime": "2021-9-13 03:59:59",
+            "url": "https://www.bilibili.com/video/BV18f4y1A7v2",
+            "name": "【自在道爷】长泉镇郊野挂机流，新剿灭摆完就过！精二31快乐讲解，轻松解放双手~|剿灭委托400杀",
+            "img": "https://i2.hdslb.com/bfs/archive/724e5169fe0c44d9da878d6b99f1b1d607a92b3f.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
             "starTime": "2021-8-26 15:59:59",
             "overTime": "2021-9-09 03:59:59",
             "url": "https://www.bilibili.com/video/BV1y64y1e78y",
@@ -79,22 +95,6 @@
             "radius": true
         },
 
-        {
-            "starTime": "2021-9-03 04:00:00",
-            "overTime": "2021-9-06 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1bL4y1h79m",
-            "name": "【Terra233】剿灭作战 长泉镇郊野 完整关卡流程预览（地图+敌人）",
-            "img": "https://i1.hdslb.com/bfs/archive/5318ee105b31278cf6988da2b11a31fd2ac87960.jpg@200w_125h_1c.webp",
-            "radius": true
-        },
-        {
-            "starTime": "2021-9-03 04:00:00",
-            "overTime": "2021-9-06 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1LM4y1G7Le",
-            "name": "【悠悠前辈】9月6日剿灭：长泉镇郊野，全敌人路线图（分2P）",
-            "img": "https://i1.hdslb.com/bfs/archive/652a5c9194feecf24f529baf9c9e965fc3d18323.jpg@200w_125h_1c.webp",
-            "radius": true
-        },
         {
             "starTime": "2021-9-03 04:00:00",
             "overTime": "2021-9-14 15:59:59",
@@ -164,18 +164,18 @@
             },
 
             {
-                "text": "SideStory「多索雷斯假日」，活动结束",
+                "text": "SideStory「玛利亚·临光」，复刻活动开启",
                 "remark": "",
-                "time": "2021-8-24 03:59:59",
+                "time": "2021-10-24 03:59:59",
                 "starTime": "2021-8-03 16:00:00",
                 "overTime": "2021-8-24 03:59:59"
             },
             {
-                "text": "#6「蛮鳞行动」，活动开启",
-                "remark": "",
-                "time": "2021-8-26 15:59:59",
-                "starTime": "2021-8-24 04:00:00",
-                "overTime": "2021-8-26 15:59:59"
+                "text": "第九章「风暴瞭望」，主线开启",
+                "remark": "时间很不确定，应该吧，也可能16号",
+                "time": "2021-9-14 15:59:59",
+                "starTime": "2021-9-09 03:59:59",
+                "overTime": "2021-9-30 15:59:59"
             },
             {
                 "text": "#6「蛮鳞行动」，活动结束",

@@ -13,8 +13,8 @@ export class WeiboDataSource extends DataSource {
     return 'weibo';
   };
 
-  constructor(icon, dataName, title, dataUrl, priority) {
-    super(icon, dataName, title, dataUrl, priority);
+  constructor(icon, dataName, title, dataUrl, rootUrl, priority) {
+    super(icon, dataName, title, dataUrl, rootUrl, priority);
   }
 
   processData(opt) {
