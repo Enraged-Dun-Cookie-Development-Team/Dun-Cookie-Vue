@@ -54,7 +54,6 @@ class DataSource {
     this.dataUrl = dataUrl;
     this.rootUrl = rootUrl;
     this.priority = priority;
-    this.fetchRootData();
   }
 
   fetchRootData() {
@@ -62,21 +61,22 @@ class DataSource {
       let promise = HttpUtil.GET(this.rootUrl);
       promise.then(value => {
         let data = JSON.parse(value);
+        this.dataUrl = [];
         data.data.forEach(module => {
           this.dataUrl.push(`https://terra-historicus.hypergryph.com/api/comic/${module.cid}`)
         });
       })
+      return promise;
     }
+    return Promise.reslove();
   }
 
-  fetchData() {
+  async fetchData() {
     let promise;
     if (typeof this.dataUrl === 'string') {
       promise = HttpUtil.GET(this.__appendTimeStamp(this.dataUrl));
     } else if (Array.isArray(this.dataUrl)) {
-      if(this.dataUrl < 1) {
-        this.fetchRootData();
-      }
+      await this.fetchRootData();
       promise = Promise.all(
         this.dataUrl.map(url =>
           HttpUtil.GET(this.__appendTimeStamp(url))
@@ -90,7 +90,7 @@ class DataSource {
         reject(this.dataUrl);
       });
     }
-    return promise.then(value => {
+    return await promise.then(value => {
       if (!value) {
         console.error(`${this.dataName}获取数据失败`);
         return null;
