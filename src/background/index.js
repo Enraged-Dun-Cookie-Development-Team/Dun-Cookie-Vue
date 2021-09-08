@@ -96,9 +96,10 @@ function startDunTimer() {
 
 // 判断更新和公告是否需要推送提醒
 function announcementMention() {
-    console.log()
     HttpUtil.GET_Json(
         "http://cdn.liuziyang.vip/Dun-Cookies-Info.json?t=" +
+        new Date().getTime(),
+        "http://liuziyang.vip/Dun-Cookies-Info.json?t=" +
         new Date().getTime()
     ).then((data) => {
         if (Settings.JudgmentVersion(data.upgrade.v, CURRENT_VERSION) && Settings.dun.enableNotice) {
@@ -232,12 +233,12 @@ const kazeFun = {
                 let head = navigator.userAgent;
                 if (head.indexOf("Firefox") > 1) {
                     PlatformHelper.Windows
-                    .createPanelWindow(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW), 800, 850)
-                    .then(tab => popupWindowId = tab.id);
+                        .createPanelWindow(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW), 800, 850)
+                        .then(tab => popupWindowId = tab.id);
                 } else {
                     PlatformHelper.Windows
-                    .createPanelWindow(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW), 800, 950)
-                    .then(tab => popupWindowId = tab.id);
+                        .createPanelWindow(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW), 800, 950)
+                        .then(tab => popupWindowId = tab.id);
                 }
 
             }
