@@ -214,7 +214,9 @@ import {
   dayInfo,
   PAGE_UPDATE,
   quickJump,
-  toolQrUrl
+  TOOL_QR_URL, 
+  CANTEEN_INTERFACE, 
+  CANTEEN_INTERFACE_STANDBY
 } from "../../common/Constants";
 import MyElTimelineItem from "./MyTimeLineItem";
 import DefaultItem from "./items/DefaultItem";
@@ -244,7 +246,6 @@ export default {
       isNew: false,
       dayInfo,
       quickJump,
-      toolQrUrl,
       loading: true, // 初始化加载
       cardList: [],
       cardListAll: {},
@@ -339,8 +340,8 @@ export default {
     // 获取在线信息
     getOnlineSpeak() {
       HttpUtil.GET_Json(
-          "http://cdn.liuziyang.vip/Dun-Cookies-Info.json?t=" + new Date().getTime(),
-          "http://liuziyang.vip/Dun-Cookies-Info.json?t=" + new Date().getTime()
+        CANTEEN_INTERFACE + "?t=" + new Date().getTime(),
+        CANTEEN_INTERFACE_STANDBY + "?t=" + new Date().getTime()
       ).then((data) => {
         // 头部公告
         let filterList = data.list.filter(
@@ -544,7 +545,7 @@ export default {
       }
 
       setTimeout(async () => {
-        item.toolQrCode = await new QRCode.toCanvas(toolQrUrl)
+        item.toolQrCode = await new QRCode.toCanvas(TOOL_QR_URL)
         item.jumpQrCode = await new QRCode.toCanvas(item.jumpUrl)
         let textCanvas = await html2canvas(document.querySelector(`.wrapper[data-id='${item.id}'] .wrapper-content`))
         let janvasData = await this.loadImages(item.imgObj)

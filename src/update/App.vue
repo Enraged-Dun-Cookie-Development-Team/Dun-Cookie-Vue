@@ -72,7 +72,7 @@
 <script>
 import HttpUtil from "../common/util/HttpUtil";
 import Feedback from "../components/Feedback";
-import { CURRENT_VERSION } from "../common/Constants";
+import { CURRENT_VERSION, CANTEEN_INTERFACE, CANTEEN_INTERFACE_STANDBY } from "../common/Constants";
 import PlatformHelper from "../common/platform/PlatformHelper";
 
 export default {
@@ -97,8 +97,8 @@ export default {
     // 检查一次更新
     getUpdateInfo() {
       HttpUtil.GET_Json(
-        "http://cdn.liuziyang.vip/Dun-Cookies-Info.json?t=" + new Date().getTime(),
-        "http://liuziyang.vip/Dun-Cookies-Info.json?t=" + new Date().getTime()
+        CANTEEN_INTERFACE + "?t=" + new Date().getTime(),
+        CANTEEN_INTERFACE_STANDBY + "?t=" + new Date().getTime()
       ).then((responseText) => {
         this.updateInfo = responseText.upgrade;
       });

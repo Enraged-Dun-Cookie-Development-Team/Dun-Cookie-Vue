@@ -12,7 +12,9 @@ import {
     PAGE_POPUP_WINDOW,
     PAGE_WELCOME,
     PAGE_UPDATE,
-    TEST_DATA_REFRESH_TIME
+    TEST_DATA_REFRESH_TIME,
+    CANTEEN_INTERFACE,
+    CANTEEN_INTERFACE_STANDBY
 } from '../common/Constants';
 import DataSourceUtil from '../common/util/DataSourceUtil';
 import HttpUtil from '../common/util/HttpUtil';
@@ -97,10 +99,8 @@ function startDunTimer() {
 // 判断更新和公告是否需要推送提醒
 function announcementMention() {
     HttpUtil.GET_Json(
-        "http://cdn.liuziyang.vip/Dun-Cookies-Info.json?t=" +
-        new Date().getTime(),
-        "http://liuziyang.vip/Dun-Cookies-Info.json?t=" +
-        new Date().getTime()
+        CANTEEN_INTERFACE + "?t=" + new Date().getTime(),
+        CANTEEN_INTERFACE_STANDBY + "?t=" + new Date().getTime()
     ).then((data) => {
         if (Settings.JudgmentVersion(data.upgrade.v, CURRENT_VERSION) && Settings.dun.enableNotice) {
             NotificationUtil.SendNotice("小刻食堂翻新啦！！", "快来使用新的小刻食堂噢！一定有很多好玩的新功能啦！！", null, "update");
