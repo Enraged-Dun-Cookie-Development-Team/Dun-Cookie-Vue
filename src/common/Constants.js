@@ -16,7 +16,7 @@ const CURRENT_SETTING_VERSION = 1;
 /**
  * 当前插件版本号
  */
-const CURRENT_VERSION = '3.0';
+const CURRENT_VERSION = '3.0.2';
 /**
  * 展示用的版本号
  */
@@ -77,6 +77,8 @@ export {PAGE_WELCOME, PAGE_POPUP_WINDOW, PAGE_OPTIONS, PAGE_DONATE, PAGE_UPDATE,
 // endregion
 
 // region 杂项
+const TOOL_QR_URL = 'https://arknightscommunity.drblack-system.com/15386.html';
+const CANTEEN_INTERFACE_LIST = ['http://cdn.liuziyang.vip/', 'http://info.ceobecanteen.top/'];
 // TODO 直接从common.js里面copy过来的，等待优化重构
 const quickJump = {
   source: [
@@ -248,5 +250,5 @@ const dayInfo = [
   },
 ];
 
-export {quickJump, dayInfo};
+export {quickJump, dayInfo, TOOL_QR_URL, CANTEEN_INTERFACE_LIST};
 // endregion

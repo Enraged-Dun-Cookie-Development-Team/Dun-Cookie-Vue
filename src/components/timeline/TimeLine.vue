@@ -42,9 +42,7 @@
                       >
                         <span class="online-blue">{{ item.text }}</span>
                       </el-tooltip>
-                      <span v-else class="online-blue">{{
-                          item.text
-                        }}</span>
+                      <span v-else class="online-blue">{{ item.text }}</span>
                       <span title="国服 UTC-8">{{
                           " " + calcActivityDiff(item.time)
                         }}</span>
@@ -122,7 +120,10 @@
     <el-timeline
         ref="elTimelineArea"
         v-if="LazyLoaded"
-        :class="[settings.display.windowMode ? 'window' : '', settings.display.showByTag ? 'tag' : '']"
+        :class="[
+            settings.display.windowMode ? 'window' : '',
+            settings.display.showByTag ? 'tag' : ''
+        ]"
     >
       <MyElTimelineItem
           v-for="(item, index) in filterCardList"
@@ -169,7 +170,12 @@
             :class="[`font-size-${settings.display.fontSize}`, {'special-source': item.componentData}]"
             shadow="never"
         >
-          <component :is="resolveComponent(item)" :item="item" :show-image="imgShow" :link-Max="settings.feature.linkMax"></component>
+          <component
+              :is="resolveComponent(item)"
+              :item="item"
+              :show-image="imgShow"
+              :link-Max="settings.feature.linkMax"
+          ></component>
         </el-card>
       </MyElTimelineItem>
     </el-timeline>
@@ -178,29 +184,29 @@
         :modal-append-to-body="false"
         title="图片自动复制出错，请于图片右键复制图片"
         :visible.sync="imageError"
-        width="80%">
-      <img :src="errorImageUrl" style="width:100%"/>
+        width="80%"
+    >
+      <img :src="errorImageUrl" style="width: 100%"/>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import {CURRENT_VERSION, dayInfo, PAGE_UPDATE, quickJump} from '../../common/Constants';
-import MyElTimelineItem from './MyTimeLineItem';
-import DefaultItem from './items/DefaultItem';
-import DataSourceUtil from '../../common/util/DataSourceUtil';
-import Settings from '../../common/Settings';
-import SanInfo from '../../common/sync/SanInfo';
-import TimeUtil from '../../common/util/TimeUtil';
-import Search from '../Search';
-import {deepAssign} from '../../common/util/CommonFunctions';
-import PlatformHelper from '../../common/platform/PlatformHelper';
-import html2canvas from 'html2canvas'
-import janvas from '../../common/util/janvas.min.js'
-import QRCode from 'qrcode'
-import InsiderUtil from '../../common/util/InsiderUtil';
+import {CURRENT_VERSION, dayInfo, PAGE_UPDATE, quickJump, TOOL_QR_URL} from "../../common/Constants";
+import MyElTimelineItem from "./MyTimeLineItem";
+import DefaultItem from "./items/DefaultItem";
+import DataSourceUtil from "../../common/util/DataSourceUtil";
+import Settings from "../../common/Settings";
+import SanInfo from "../../common/sync/SanInfo";
+import TimeUtil from "../../common/util/TimeUtil";
+import Search from "../Search";
+import {deepAssign} from "../../common/util/CommonFunctions";
+import PlatformHelper from "../../common/platform/PlatformHelper";
+import html2canvas from "html2canvas";
+import janvas from "../../common/util/janvas.min.js";
+import QRCode from "qrcode";
+import InsiderUtil from "../../common/util/InsiderUtil";
 import ServerUtil from "../../common/util/ServerUtil";
-
 
 export default {
   name: "TimeLine",
@@ -219,14 +225,14 @@ export default {
       loading: true, // 初始化加载
       cardList: [],
       cardListAll: {},
-      filterText: '',
+      filterText: "",
       filterCardList: [],
       LazyLoaded: false,
       insiderCodeMap: null, // 储存内部密码
       janvas: null, //菜单模块icon
       imageError: false,
       errorImageUrl: "",
-      openResources: false
+      openResources: false,
     };
   },
   mounted() {
@@ -247,17 +253,15 @@ export default {
     },
     cardList() {
       this.filterList();
-    }
+    },
   },
   methods: {
     openWeb: PlatformHelper.Tabs.create,
     openUrl(url, w = 1024, h = window.screen.height) {
-      if(this.settings.feature.linkMax) {
-        PlatformHelper.Windows
-          .createMaxPopupWindow(url);
+      if (this.settings.feature.linkMax) {
+        PlatformHelper.Windows.createMaxPopupWindow(url);
       } else {
-        PlatformHelper.Windows
-          .createPopupWindow(url, w, h);
+        PlatformHelper.Windows.createPopupWindow(url, w, h);
       }
     },
     getDataSourceByName: DataSourceUtil.getByName,
@@ -286,7 +290,7 @@ export default {
     },
     // 今天有没有该资源可以刷
     resourcesNotToday() {
-      let date = new Date();
+      let date = TimeUtil.changeToCCT(new Date());
       // 如果日期在里面
       let starTime = new Date(this.onlineDayInfo.resources.starTime);
       let overTime = new Date(this.onlineDayInfo.resources.overTime);
@@ -298,7 +302,7 @@ export default {
         return;
       }
       // 如果不在里面
-      let week = new Date().getDay();
+      let week = date.getDay();
       // 判断4点更新
       week = date.getHours() >= 4 ? week : week - 1;
       week = week == -1 ? 6 : week;
@@ -313,8 +317,8 @@ export default {
         // 头部公告
         let filterList = data.list.filter(
             (x) =>
-                new Date(x.starTime) <= new Date() &&
-                new Date(x.overTime) >= new Date()
+                new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
+                new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
         );
 
         this.onlineSpeakList.push(...filterList);
@@ -322,8 +326,8 @@ export default {
         // 快捷连接
         let btnList = data.btnList.filter(
             (x) =>
-                new Date(x.starTime) <= new Date() &&
-                new Date(x.overTime) >= new Date()
+                new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
+                new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
         );
         if (btnList.length > 0) {
           this.quickJump.url.push(...btnList);
@@ -337,8 +341,8 @@ export default {
         // 倒计时
         this.onlineDayInfo.countdown = this.onlineDayInfo.countdown.filter(
             (x) =>
-                new Date(x.starTime) <= new Date() &&
-                new Date(x.overTime) >= new Date()
+                new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
+                new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
         );
 
         // 内部密码
@@ -348,17 +352,18 @@ export default {
       });
     },
     calcActivityDiff(endDate) {
-      const diff = TimeUtil.calcDiff(endDate);
+      let startDate = TimeUtil.changeToCCT(new Date());
+      const diff = TimeUtil.calcDiff(endDate, startDate);
       if (diff) {
-        return '剩' + diff;
+        return "剩" + diff;
       } else {
-        return '已结束';
+        return "已结束";
       }
     },
     // 计算资源关卡开启时间
     calcResourceOpenDay(days) {
-      if(this.openResources) {
-        return '活动期间，“资源收集”限时全天开放'
+      if (this.openResources) {
+        return "活动期间，“资源收集”限时全天开放";
       } else {
         return days.map(x => TimeUtil.numberToWeek(x)).join();
       }
@@ -463,7 +468,7 @@ export default {
 蜜饼来源：${item.jumpUrl}
 
 数据由 小刻食堂${CURRENT_VERSION} 收集
-工具介绍链接：https://arknightscommunity.drblack-system.com/2012.html`
+工具介绍链接：https://arknightscommunity.drblack-system.com/15386.html`
       ).then(
           (e) => {
             this.$message({
@@ -495,96 +500,104 @@ export default {
       item.imgObj = {
         icon: "/assets/image/icon.png",
         sourceIcon: this.getDataSourceByName(item.dataSource).icon,
-        toolQrCode: "/assets/image/ToolQrCode.png",
       };
       if (item.coverImage) {
         item.imgObj.headFigure = item.coverImage;
       }
 
-
-      setTimeout(() => {
-        new Promise((resolve, reject) => {
-          new QRCode.toCanvas(item.jumpUrl)
-              .then(canvas => {
-                item.jumpQrCode = canvas;
-                resolve(item);
-              })
-        }).then(item => {
-          return new Promise((resolve, reject) => {
-            return html2canvas(document.querySelector(`.wrapper[data-id='${item.id}'] .wrapper-content`)).then(function (textCanvas) {
-              resolve({textCanvas, item});
-            });
-          });
-        }).then(({textCanvas, item}) => {
-          return new Promise((resolve, reject) => {
-            janvas.Utils.loadImages(item.imgObj, function (data) {
-              resolve({textCanvas, item, data});
-            });
-          });
-        }).then(({textCanvas, item, data}) => {
-          let canvas = document.createElement('canvas');
-          let ctx = canvas.getContext('2d');
-          // 判断是图片大还是文字大 根据这两个来判断canvas宽度 但最少要600宽度
-          let canvasWidth = textCanvas.width;
-          let canvasHeight = textCanvas.height;
-          if (data.headFigure != undefined) {
-            canvasWidth = (textCanvas.width > data.headFigure.width ? textCanvas.width : data.headFigure.width);
-            canvasHeight = textCanvas.height + data.headFigure.height;
-          }
-          if (canvasWidth < 580) {
-            canvasWidth = 580
-          }
-          canvas.width = canvasWidth + 20;
-          canvas.height = canvasHeight + 180;
-          ctx.fillStyle = "#ffffff";
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(data.icon, 10, 10, 100, 100);
-          ctx.drawImage(data.sourceIcon, 120, 70, 40, 40);
-          ctx.fillStyle = "#23ade5";
-          ctx.font = "36px Microsoft Yahei";
-          ctx.fillText(`小刻食堂 V${CURRENT_VERSION}`, 120, 50);
+      setTimeout(async () => {
+        item.toolQrCode = await new QRCode.toCanvas(TOOL_QR_URL)
+        item.jumpQrCode = await new QRCode.toCanvas(item.jumpUrl)
+        let textCanvas = await html2canvas(document.querySelector(`.wrapper[data-id='${item.id}'] .wrapper-content`))
+        let janvasData = await this.loadImages(item.imgObj)
+        let canvas = document.createElement("canvas");
+        let ctx = canvas.getContext("2d");
+        // 判断是图片大还是文字大 根据这两个来判断canvas宽度 但最少要600宽度
+        let canvasWidth = textCanvas.width;
+        let canvasHeight = textCanvas.height;
+        if (janvasData.headFigure != undefined) {
+          canvasWidth =
+              textCanvas.width > janvasData.headFigure.width
+                  ? textCanvas.width
+                  : janvasData.headFigure.width;
+          canvasHeight = textCanvas.height + janvasData.headFigure.height;
+        }
+        if (canvasWidth < 580) {
+          canvasWidth = 580;
+        }
+        canvas.width = canvasWidth + 20;
+        canvas.height = canvasHeight + 180;
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(janvasData.icon, 10, 10, 100, 100);
+        ctx.drawImage(janvasData.sourceIcon, 120, 70, 40, 40);
+        ctx.fillStyle = "#23ade5";
+        ctx.font = "36px Microsoft Yahei";
+        ctx.fillText(`小刻食堂 V${CURRENT_VERSION}`, 120, 50);
+        ctx.fillStyle = "#848488";
+        ctx.font = "20px Microsoft Yahei";
+        ctx.fillText(`${item.dataSource}`, 170, 90);
+        ctx.fillStyle = "#909399";
+        ctx.font = "14px Microsoft Yahei";
+        ctx.fillText(`${item.timeForDisplay}`, 170, 110);
+        ctx.drawImage(item.jumpQrCode, canvas.width - 200, 10, 90, 90);
+        ctx.drawImage(item.toolQrCode, canvas.width - 100, 10, 90, 90);
+        ctx.fillStyle = "#23ade5";
+        ctx.fillText(`数据来源`, canvas.width - 183, 110);
+        ctx.fillText(`食堂介绍`, canvas.width - 83, 110);
+        if (textCanvas.width != 0) {
+          ctx.drawImage(
+              textCanvas,
+              10,
+              140,
+              textCanvas.width,
+              textCanvas.height
+          );
+        } else {
           ctx.fillStyle = "#848488";
           ctx.font = "20px Microsoft Yahei";
-          ctx.fillText(`${item.dataSource}`, 170, 90);
-          ctx.fillStyle = "#909399";
-          ctx.font = "14px Microsoft Yahei";
-          ctx.fillText(`${item.timeForDisplay}`, 170, 110);
-          ctx.drawImage(item.jumpQrCode, canvas.width - 200, 10, 90, 90);
-          ctx.drawImage(data.toolQrCode, canvas.width - 100, 10, 90, 90);
-          ctx.fillStyle = "#23ade5";
-          ctx.fillText(`数据来源`, canvas.width - 183, 110);
-          ctx.fillText(`食堂介绍`, canvas.width - 83, 110);
-          if (textCanvas.width != 0) {
-            ctx.drawImage(textCanvas, 10, 140, textCanvas.width, textCanvas.height);
-          } else {
-            ctx.fillStyle = "#848488";
-            ctx.font = "20px Microsoft Yahei";
-            ctx.fillText(item.content, 10, 160);
-          }
-          if (data.headFigure) {
-            ctx.drawImage(data.headFigure, (canvas.width - data.headFigure.width) / 2, textCanvas.height + 160, data.headFigure.width, data.headFigure.height);
-          }
+          ctx.fillText(item.content, 10, 160);
+        }
+        if (janvasData.headFigure) {
+          ctx.drawImage(
+              janvasData.headFigure,
+              (canvas.width - janvasData.headFigure.width) / 2,
+              textCanvas.height + 160,
+              janvasData.headFigure.width,
+              janvasData.headFigure.height
+          );
+        }
 
-          let that = this;
-          canvas.toBlob(function (blob) {
-            navigator.clipboard.write([
-              new ClipboardItem({
-                [blob.type]: blob
+        let that = this;
+        canvas.toBlob(function (blob) {
+          navigator.clipboard
+              .write([
+                new ClipboardItem({
+                  [blob.type]: blob,
+                }),
+              ])
+              .then(() => {
+                that.$message({
+                  offset: 50,
+                  center: true,
+                  message: "已复制到剪切板",
+                  type: "success",
+                });
               })
-            ]).then(() => {
-              that.$message({
-                offset: 50,
-                center: true,
-                message: "已复制到剪切板",
-                type: "success",
+              .catch(() => {
+                that.errorImageUrl = canvas.toDataURL("image/jpeg");
+                that.imageError = true;
               });
-            }).catch(() => {
-              that.errorImageUrl = canvas.toDataURL('image/jpeg');
-              that.imageError = true;
-            })
-          });
         });
       }, 100);
+    },
+    // 加载图片
+    loadImages(obj) {
+      return new Promise(resolve => {
+        janvas.Utils.loadImages(obj, (data) => {
+          resolve(data);
+        });
+      })
     },
   },
 };
@@ -659,7 +672,6 @@ img[lazy="error"] {
     &.font-size-2 {
       font-size: 1.5rem;
     }
-
 
     .time {
       margin-left: 10px;

@@ -225,7 +225,7 @@
                   <div class="body-menu-content-line">
                     <div class="content-line-title">频率调节</div>
                     <div class="content-line-description">
-                      低频模式下的蹲饼时间
+                      低频模式下的蹲饼时间(基于正常模式的时间倍率)
                     </div>
                     <div class="content-line-content flex-between">
                       <div>

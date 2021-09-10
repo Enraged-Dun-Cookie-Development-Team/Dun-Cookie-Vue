@@ -48,6 +48,7 @@
 >     - 官方网站
 >     - 泰拉记事社官网
 >     - 网易云音乐
+>     - 鹰角网络微博
 > - 一键跳转以上网站
 > - 一键跳转详细内容界面
 > - 一键复制饼内容文本
@@ -63,8 +64,8 @@
 <br/>
 
 # 2.0对比与1.0功能的升级
-
-    以下升级内容未排序，想到啥说啥的那种
+<details>
+  <summary>以下升级内容未排序，想到啥说啥的那种</summary>
 
 > - 新版的界面采用了elementUI，UI统一更好看了
 > - 现在使用的底层是Vue，在添加功能和绑数据方面比V1版本更加方便了
@@ -78,49 +79,55 @@
 > - 安装的时候添加了欢迎页面，可以引导大家去设置里面进行个性化调整
 > - 在没经过网站所有者允许的情况下添加了部分我觉得很有用的链接
 > - 预留了很多接口，包括文本自动翻译，国际化，更新提示 微信推送（待定）
-
-<details>
-  <summary>知道我们的更新内容后，现在可以点击这里来看看我们的界面了</summary>
-
-    图片收起与展开
-
-![avatar](https://img.nga.178.com/attachments/mon_202106/06/-klbw3Q2o-8kfnK2eT3cSoi-l3.jpg)
-![avatar](https://img.nga.178.com/attachments/mon_202106/06/-klbw3Q2o-9pgeZaT3cSol-l1.jpg)
-
-    图片九宫格
-
-![avatar](https://img.nga.178.com/attachments/mon_202106/06/-klbw3Q2o-9pgeZaT3cSol-l1.jpg)
-
-
-    内容快捷复制
-
-![avatar](https://img.nga.178.com/attachments/mon_202106/06/-klbw3Q2o-gozbK1wT3cSo8-d0.jpg)
-
-    分类显示
-![avatar](https://img.nga.178.com/attachments/mon_202106/06/-klbw3Q2o-256aZcT3cSoj-kz.jpg)
-
-    菜单界面
-
-![avatar](https://img.nga.178.com/attachments/mon_202106/06/-klbw3Q2o-4k70K2iT3cSoi-ky.jpg)
-
-    设置界面
-
-![avatar](https://img.nga.178.com/attachments/mon_202106/06/-klbw3Q2o-ivkuK1iT1kSgy-q8.jpg)
-
-    夜间模式
-
-![avatar](https://img.nga.178.com/attachments/mon_202106/06/-klbw3Q2o-1oabZaT3cSoc-kv.jpg)
-![avatar](https://img.nga.178.com/attachments/mon_202106/06/-klbw3Q2o-7udoK1fT1kSh2-pv.jpg) 
-
-    窗口模式
-![avatar](https://img.nga.178.com/attachments/mon_202106/06/-klbw3Q2o-cyecZbT3cS11w-pz.jpg)
-![avatar](https://img.nga.178.com/attachments/mon_202106/06/-klbw3Q2o-gydaZbT3cS11z-q0.jpg)
-
 </details>
 
 
+# 界面样式
+<details>
+  <summary>图片收起、展开与九宫格</summary>
+
+![avatar](https://i0.hdslb.com/bfs/article/51afb68124c8a30550e19fb8953c2b4ebdab558d.jpg@942w_807h_progressive.webp)
+![avatar](https://i0.hdslb.com/bfs/article/9f76c1d059ced41e572947e2caa6465498ee03e6.png@942w_810h_progressive.webp)
+</details>
+<details>
+  <summary>生成图片快捷复制</summary>
+
+![avatar](https://i0.hdslb.com/bfs/article/668fc802967a667f66fe9d4c9cf6c54089d9bbe2.png@942w_800h_progressive.webp)
+</details>
+<details>
+  <summary>分类显示</summary>
+
+![avatar](https://i0.hdslb.com/bfs/article/5e9e545b4783ec75fb1f7c98ac0968f734fa7517.png@942w_800h_progressive.webp)
+</details>
+<details>
+  <summary>菜单界面</summary>
+
+![avatar](https://i0.hdslb.com/bfs/article/8b1c086bc8887e79490b056bf930b051792b46c0.png@942w_806h_progressive.webp)
+</details>
+<details>
+  <summary>设置界面</summary>
+
+![avatar](https://i0.hdslb.com/bfs/article/5adeac71f06e6b19878a9f4a074b3d5770ce3f86.png@942w_468h_progressive.webp)
+![avatar](https://i0.hdslb.com/bfs/article/d9bb4eec5a0a8d5aebeee24e6476f1ed969dd6a4.png@942w_467h_progressive.webp)
+![avatar](https://i0.hdslb.com/bfs/article/93ca26b623e2f8ca3ff6f5d6bd08cc42629f7c64.png@942w_467h_progressive.webp)
+</details>
+<details>
+  <summary>夜间模式</summary>
+
+![avatar](https://i0.hdslb.com/bfs/article/acf2cfedd0824bb5ec3aecab4b41caa3da39ed65.png@942w_809h_progressive.webp)
+</details>
+<details>
+  <summary>窗口模式</summary>
+
+![avatar](https://i0.hdslb.com/bfs/article/6444805c9609e16c4eca3d977dc28211cd5ad1e5.png@942w_1028h_progressive.webp)
+</details>
 
 <br/>
+
+# 演示视频
+记得给个三连，转发支持一下，让更多人看到呀
+
+[![Watch the video](https://i1.hdslb.com/bfs/archive/028990e686ff322f6b3b0712478cfd3655062adc.png@200w_125h_1c.webp)](https://www.bilibili.com/video/BV1jv411P7bR)
 
 # 更新内容
 
@@ -329,7 +336,24 @@
     3.替换列表菜单按钮
     4.整体修改设置界面
     5.优化资源开放文本显示逻辑
-    
+
+## V3.0.0
+
+    🐛 修复几个Bug，优化插件逻辑，提升用户体验
+
+    1.设置添加反馈按钮
+    2.优化泰拉记事社官网获取逻辑，解决新出刊物没有蹲到的情况
+    3.添加鹰角网络微博快速跳转链接
+    4.修复出国党因为时差导致倒计时等时间不对
+
+## V3.0.2
+
+    🏘️ 添加备用接口及修改一些小细节
+
+    1.优化泰拉记事社官网获取逻辑
+    2.添加备用接口
+    3.修改部分文案
+    4.更换生成图片的二维码
 
 <br/>
 
@@ -411,8 +435,6 @@
 # 可以预见的下一步
 
     我没有更多的好点子了。博士，你呢？
-> 列表搜索
-> 复制带图片
 
 <br/>
 

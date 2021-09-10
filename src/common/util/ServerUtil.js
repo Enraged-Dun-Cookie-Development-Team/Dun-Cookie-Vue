@@ -5,15 +5,16 @@ import HttpUtil from "./HttpUtil";
 import PlatformHelper from "../platform/PlatformHelper";
 import InsiderUtil from "./InsiderUtil";
 import Settings from "../Settings";
-import {CURRENT_VERSION} from "../Constants";
+import {CANTEEN_INTERFACE_LIST, CURRENT_VERSION} from "../Constants";
 import NotificationUtil from "./NotificationUtil";
+import TimeUtil from "./TimeUtil";
+import PromiseUtil from "./PromiseUtil";
 
 export default class ServerUtil {
     static async checkOnlineInfo(shouldNotice) {
         let data;
         try {
-            const url = "http://cdn.liuziyang.vip/Dun-Cookies-Info.json?t=" + new Date().getTime();
-            data = await HttpUtil.GET_Json(url);
+            data = await PromiseUtil.any(CANTEEN_INTERFACE_LIST.map(api => HttpUtil.GET_Json(HttpUtil.appendTimeStamp(api + "Dun-Cookies-Info.json"))));
         } catch (e) {
             console.log(e);
         }
@@ -33,8 +34,8 @@ export default class ServerUtil {
             if (Settings.feature.announcementNotice) {
                 let filterList = data.list.filter(
                     (x) =>
-                        new Date(x.starTime) <= new Date() &&
-                        new Date(x.overTime) >= new Date()
+                        new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
+                        new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
                 );
 
                 filterList.map(x => {

@@ -7,13 +7,21 @@
             "notice": false
         },
         {
-            "html": "<div class='online-area'> <img class='online-title-img' src='/assets/image/icon.ico'> <div> <div>博士，谢谢你使用蹲饼。</div> <div>如果觉得好用的话，希望能去<a class='webOpen' href='https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue'>GitHub</a>上点个<span class='online-red'>Star</span>或者</div> <div>去<a class='webOpen' href='https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN'>Chrome商店</a>，<a class='webOpen' href='https://microsoftedge.microsoft.com/addons/detail/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknight/jimmfliacfpeabcifcghmdankmdnmfmn?hl=zh-CN'>Edge商店</a>或<a class='webOpen' href='https://addons.mozilla.org/zh-CN/firefox/addon/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cookies/'>Firefox商店</a>里面给个<span class='online-red'>好评</span></div> <div>也可以去<a class='webOpen' href='https://arknightscommunity.drblack-system.com/2012.html'>泰拉通讯枢纽</a>里面<span class='online-red'>回复我们</span></div> <div>欢迎加群 <a class='webOpen' href='https://jq.qq.com/?_wv=1027&k=Vod1uO13'>【蹲饼测试群】</a> 一起聊天，蹲饼！</div> </div> </div>",
+            "html": "<div class='online-area'> <img class='online-title-img' src='/assets/image/icon.ico'> <div> <div>博士，谢谢你使用蹲饼。</div> <div>如果觉得好用的话，希望能去<a class='webOpen' href='https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue'>GitHub</a>上点个<span class='online-red'>Star</span>或者</div> <div>去<a class='webOpen' href='https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN'>Chrome商店</a>，<a class='webOpen' href='https://microsoftedge.microsoft.com/addons/detail/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknight/jimmfliacfpeabcifcghmdankmdnmfmn?hl=zh-CN'>Edge商店</a>或<a class='webOpen' href='https://addons.mozilla.org/zh-CN/firefox/addon/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cookies/'>Firefox商店</a>里面给个<span class='online-red'>好评</span></div> <div>也可以去<a class='webOpen' href='https://arknightscommunity.drblack-system.com/15386.html'>泰拉通讯枢纽</a>里面<span class='online-red'>回复我们</span>，或者去<a class='webOpen' href='https://www.bilibili.com/video/BV1jv411P7bR/'>b站视频</a>给个<span class='online-red'>三连</span></div> <div>欢迎加群 <a class='webOpen' href='https://jq.qq.com/?_wv=1027&k=Vod1uO13'>【蹲饼测试群】</a> 一起聊天，蹲饼！</div> </div> </div>",
             "starTime": "2021-5-01 12:00:00",
             "overTime": "2099-12-31 04:00:00",
             "notice": false
         }
     ],
     "btnList": [
+        {
+            "starTime": "2021-8-26 15:59:59",
+            "overTime": "2021-9-16 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1jv411P7bR",
+            "name": "【小刻食堂3.0宣传视频，给个三连支持一下吧】找饼，超速了!",
+            "img": "https://i1.hdslb.com/bfs/archive/028990e686ff322f6b3b0712478cfd3655062adc.png@200w_125h_1c.webp",
+            "radius": true
+        },
         {
             "starTime": "2021-07-20 04:00:00",
             "overTime": "2021-12-31 23:59:59",
@@ -24,10 +32,34 @@
         },
         {
             "starTime": "2021-8-26 15:59:59",
-            "overTime": "2021-9-09 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1y3411B7tT",
-            "name": "【黑蓑影卫攻略组】全网首杀 旧约登顶26 - 枪火燎原  铁域镇砂",
-            "img": "https://i1.hdslb.com/bfs/archive/6c478b0a8a42410c1f7f8663a2cddb5453ecf67d.jpg@200w_125h_1c.webp",
+            "overTime": "2021-9-16 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1dq4y1U7V1",
+            "name": "【黑蓑影卫攻略组】全网首杀 蛮鳞行动登顶33 剑起风沙水漫漠 止战秽壤锤定音",
+            "img": "https://i1.hdslb.com/bfs/archive/0e929d7602b4bb4b62444b212a22fe6696f7e669.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-8-26 15:59:59",
+            "overTime": "2021-9-16 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1S64y1Y7VF",
+            "name": "【柏喙攻略组】双人长泉镇郊野剿灭 除恶务尽 血浆翻腾",
+            "img": "https://i0.hdslb.com/bfs/archive/5e8a98d62f11b1b6d2000fc78f9f33622cc183d9.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-9-06 04:00:00",
+            "overTime": "2021-9-13 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1cy4y1V7hF",
+            "name": "【刘老黑/仅4人】全自动挂机脚打长泉镇郊野",
+            "img": "https://i0.hdslb.com/bfs/archive/92ab777d36e46b370f0ea97bc23ed7612ac2f9c6.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-9-06 04:00:00",
+            "overTime": "2021-9-13 03:59:59",
+            "url": "https://www.bilibili.com/video/BV18f4y1A7v2",
+            "name": "【自在道爷】长泉镇郊野挂机流，新剿灭摆完就过！精二31快乐讲解，轻松解放双手~|剿灭委托400杀",
+            "img": "https://i2.hdslb.com/bfs/archive/724e5169fe0c44d9da878d6b99f1b1d607a92b3f.jpg@200w_125h_1c.webp",
             "radius": true
         },
         {
@@ -80,35 +112,19 @@
         },
 
         {
-            "starTime": "2021-8-24 04:00:00",
-            "overTime": "2021-8-27 15:59:59",
-            "url": "https://www.bilibili.com/video/BV1Jq4y1D7M7",
-            "name": "【小凡的小耗子/红/MEME】红也想去海边玩(大尾巴)(●ˇ∀ˇ●)",
-            "img": "https://i1.hdslb.com/bfs/archive/92c9d97eb3d9914d97149bb3bf2c2dea3682855c.jpg@200w_125h_1c.webp",
+            "starTime": "2021-9-03 04:00:00",
+            "overTime": "2021-9-16 15:59:59",
+            "url": "https://www.bilibili.com/video/BV1664y1Y7bg",
+            "name": "【杨颜同学】新主线倒计时+炎客复刻？秋季活动前瞻。",
+            "img": "https://i0.hdslb.com/bfs/archive/82b8191c01ac910fa6207eaa29debd6d48aa9ef4.jpg@200w_125h_1c.webp",
             "radius": true
         },
         {
-            "starTime": "2021-8-24 04:00:00",
-            "overTime": "2021-8-27 15:59:59",
-            "url": "https://www.bilibili.com/video/BV1Po4y1D7Km",
-            "name": "【小凡的小耗子/多人泳装】抓住夏天的尾巴！来蹦迪！《热爱105℃的你》",
-            "img": "https://i0.hdslb.com/bfs/archive/3043cd5dd40d2e1208eea1e919a2bca408421935.jpg@200w_125h_1c.webp",
-            "radius": true
-        },
-        {
-            "starTime": "2021-8-24 04:00:00",
-            "overTime": "2021-8-27 15:59:59",
-            "url": "https://www.bilibili.com/video/BV1sg411L7pv",
-            "name": "【杨颜同学】风暴瞭望，深池怒焰。维多利亚战争将至？",
-            "img": "https://i0.hdslb.com/bfs/archive/fd6c60ed9128e325fc87e87fb65ffd4e31de4244.jpg@200w_125h_1c.webp",
-            "radius": true
-        },
-        {
-            "starTime": "2021-8-24 04:00:00",
-            "overTime": "2021-8-27 15:59:59",
-            "url": "https://www.bilibili.com/video/BV1Rq4y1Q7HA",
-            "name": "【让你爱上学习】风暴将至，方舟新主线前瞻【风暴哨兵·上】",
-            "img": "https://i2.hdslb.com/bfs/archive/6fe16b8f61d996d57b3e41f24a486e82456ceff8.jpg@200w_125h_1c.webp",
+            "starTime": "2021-9-03 04:00:00",
+            "overTime": "2021-9-16 15:59:59",
+            "url": "https://www.bilibili.com/video/BV12g411V7Pr",
+            "name": "【柞木不朽】关键角色会死？小丘郡化为火海？主线第九章终于要来了",
+            "img": "https://i1.hdslb.com/bfs/archive/a7fde6d32c014a08528a2d3d501cb100265e2e6f.jpg@200w_125h_1c.webp",
             "radius": true
         },
         {
@@ -135,10 +151,10 @@
             },
             {
                 "text": "当前轮换池结束",
-                "remark": "傀影[兑换],泥岩,苇草,吽[兑换],贾维",
-                "time": "2021-8-19 03:59:59",
-                "starTime": "2021-8-05 04:00:00",
-                "overTime": "2021-8-19 03:59:59"
+                "remark": "麦哲伦[兑换]、刻俄柏、絮雨、慑砂[兑换]、熔泉",
+                "time": "2021-9-16 03:59:59",
+                "starTime": "2021-9-02 04:00:00",
+                "overTime": "2021-9-16 03:59:59"
             },
             
             {
@@ -150,10 +166,10 @@
             },
             {
                 "text": "下个活动池开启",
-                "remark": "棘刺，安哲拉，普罗旺斯，孑",
-                "time": "2021-8-26 15:59:59",
-                "starTime": "2021-8-17 03:59:59",
-                "overTime": "2021-8-26 15:59:59"
+                "remark": "罗比菈塔",
+                "time": "2021-9-16 15:59:59",
+                "starTime": "2021-9-09 03:59:59",
+                "overTime": "2021-9-16 15:59:59"
             },
             {
                 "text": "当前活动池结束",
@@ -164,18 +180,18 @@
             },
 
             {
-                "text": "SideStory「多索雷斯假日」，活动结束",
+                "text": "SideStory「玛利亚·临光」，复刻活动开启",
                 "remark": "",
-                "time": "2021-8-24 03:59:59",
+                "time": "2021-10-24 03:59:59",
                 "starTime": "2021-8-03 16:00:00",
                 "overTime": "2021-8-24 03:59:59"
             },
             {
-                "text": "#6「蛮鳞行动」，活动开启",
-                "remark": "",
-                "time": "2021-8-26 15:59:59",
-                "starTime": "2021-8-24 04:00:00",
-                "overTime": "2021-8-26 15:59:59"
+                "text": "第九章「风暴瞭望」，主线开启",
+                "remark": "时间很不确定，应该吧，也可能14号",
+                "time": "2021-9-16 15:59:59",
+                "starTime": "2021-9-09 03:59:59",
+                "overTime": "2021-9-30 15:59:59"
             },
             {
                 "text": "#6「蛮鳞行动」，活动结束",
@@ -188,10 +204,10 @@
     },
     "upgrade": {
         "v": "2.9.5",
-        "title": "小刻食堂翻新啦 - 2.9.5",
-        "description": "🚀 本次版本主要更换设置界面，更符合电脑端体验</br>1.添加按钮，重要公告弹出可选择</br>2.添加按钮，列表链接打开可自动最大化</br>3.替换列表菜单按钮</br>4.整体修改设置界面</br>5.优化资源开放文本显示逻辑",
-        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.9.5/Dun-Cookie-2.9.5.crx",
-        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/2.9.5/Dun-Cookie-2.9.5.zip",
+        "title": "小刻食堂翻新啦 - 3.0",
+        "description": "🐛 修复几个Bug，优化插件逻辑，提升用户体验</br>1.设置添加反馈按钮</br>2.优化泰拉记事社官网获取逻辑，解决新出刊物没有蹲到的情况</br>3.添加鹰角网络微博快速跳转链接</br>4.修复出国党因为时差导致倒计时等时间不对",
+        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/3.0/Dun-Cookie-3.0.crx",
+        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/3.0/Dun-Cookie-3.0.zip",
         "downSpare": "https://pan.baidu.com/s/1kzY6kpfYqLcGpuaiwQOGoA",
         "downSpareText": "备用下载（提取码 jzq9）",
         "downChrome": "https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN",
