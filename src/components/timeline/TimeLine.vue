@@ -152,6 +152,16 @@
         </span>
 
         <span class="card-btn-area">
+           <el-button
+               v-if="item.dataSource=='官方微博'"
+               class="to-get-text"
+               :class="{ 'special-source': item.componentData }"
+               size="small"
+               @click="getWeiboData(item)"
+               title="尝试获取全文，需要重新访问微博一次"
+           >
+            <i class="el-icon-tickets"></i>
+          </el-button>
           <el-button
               class="to-copy-share"
               :class="{ 'special-source': item.componentData }"
@@ -214,9 +224,10 @@ import {
   dayInfo,
   PAGE_UPDATE,
   quickJump,
-  TOOL_QR_URL, 
-  CANTEEN_INTERFACE, 
-  CANTEEN_INTERFACE_STANDBY
+  TOOL_QR_URL,
+  CANTEEN_INTERFACE,
+  CANTEEN_INTERFACE_STANDBY,
+  MESSAGE_WEIBO_DETAIL
 } from "../../common/Constants";
 import MyElTimelineItem from "./MyTimeLineItem";
 import DefaultItem from "./items/DefaultItem";
@@ -340,8 +351,8 @@ export default {
     // 获取在线信息
     getOnlineSpeak() {
       HttpUtil.GET_Json(
-        CANTEEN_INTERFACE + "?t=" + new Date().getTime(),
-        CANTEEN_INTERFACE_STANDBY + "?t=" + new Date().getTime()
+          CANTEEN_INTERFACE + "?t=" + new Date().getTime(),
+          CANTEEN_INTERFACE_STANDBY + "?t=" + new Date().getTime()
       ).then((data) => {
         // 头部公告
         let filterList = data.list.filter(
@@ -528,6 +539,16 @@ export default {
       );
       return;
     },
+    // 获取微博详细文章数据
+    getWeiboData(item) {
+      PlatformHelper.Message.send({MESSAGE_WEIBO_DETAIL, item});
+      this.$message({
+        offset: 50,
+        center: true,
+        message: "正在获取文章内容",
+        type: "warning",
+      });
+    },
     // 复制
     copyData(item) {
       this.$message({
@@ -628,7 +649,7 @@ export default {
                 that.imageError = true;
               });
         });
-      },100);
+      }, 100);
     },
     // 加载图片
     loadImages(obj) {
@@ -963,6 +984,21 @@ img[lazy="error"] {
         // 需要特殊显示的数据源只提供复制按钮，跳转由数据源自行实现
         &.special-source {
           right: 50px;
+        }
+      }
+
+      .to-get-text {
+        position: absolute;
+        top: -8px;
+        right: 150px;
+        background-color: @@bgColor;
+        color: @@content;
+        border: @@btnBorder 1px solid;
+
+        &:hover {
+          color: #409eff;
+          border-color: #c6e2ff;
+          background-color: @@hover;
         }
       }
 

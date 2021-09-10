@@ -14,12 +14,12 @@ import {
     PAGE_UPDATE,
     TEST_DATA_REFRESH_TIME,
     CANTEEN_INTERFACE,
-    CANTEEN_INTERFACE_STANDBY
+    CANTEEN_INTERFACE_STANDBY, MESSAGE_WEIBO_DETAIL
 } from '../common/Constants';
 import DataSourceUtil from '../common/util/DataSourceUtil';
 import HttpUtil from '../common/util/HttpUtil';
 import PlatformHelper from '../common/platform/PlatformHelper';
-import { CURRENT_VERSION } from '../common/Constants';
+import {CURRENT_VERSION} from '../common/Constants';
 import TimeUtil from '../common/util/TimeUtil';
 
 // 重构完成后的其它优化：
@@ -72,6 +72,7 @@ function tryDun(settings) {
 }
 
 let dunTimeoutId = null;
+
 /**
  * 启动蹲饼timer，会立刻请求一次然后按Settings.dun.intervalTime的值进行延时轮询
  */
@@ -130,6 +131,12 @@ function announcementMention() {
     });
 }
 
+function getWeiboDelite(item) {
+    // HttpUtil.GET_Json(`https://weibo.com/ajax/statuses/longtext?id=` + item.jumpUrl.split('/').pop()).then(data => {
+    //     console.log(data);
+    // })
+}
+
 // 通用方法
 const kazeFun = {
     //判断是否为最新 并且在此推送
@@ -151,8 +158,7 @@ const kazeFun = {
                 NotificationUtil.SendNotice(`小刻在【${title}】里面找到了一个饼！`, notice, newInfo.coverImage, newInfo.id)
             }
             return true;
-        }
-        else if (newList && newList.length > (oldList ? oldList.length : 0)) {
+        } else if (newList && newList.length > (oldList ? oldList.length : 0)) {
             return true;
         }
         return false
@@ -183,18 +189,24 @@ const kazeFun = {
         // 监听前台事件
         PlatformHelper.Message.registerListener('background', null, (message) => {
             if (message.type) {
-                switch (message.type) {
-                    case MESSAGE_FORCE_REFRESH:
-                        tryDun(Settings);
-                        return;
-                    case MESSAGE_DUN_INFO_GET:
-                        return DunInfo;
-                    case MESSAGE_CARD_LIST_GET:
-                        return cardListCache;
-                    case MESSAGE_SAN_GET:
-                        return SanInfo;
-                    default:
-                        return;
+                if (message.type.hasOwnProperty('MESSAGE_WEIBO_DETAIL')) {
+                    return getWeiboDelite(message.type.item);
+                } else {
+                    switch (message.type) {
+                        case MESSAGE_FORCE_REFRESH:
+                            tryDun(Settings);
+                            return;
+                        case MESSAGE_DUN_INFO_GET:
+                            return DunInfo;
+                        case MESSAGE_CARD_LIST_GET:
+                            return cardListCache;
+                        case MESSAGE_SAN_GET:
+                            return SanInfo;
+                        case MESSAGE_WEIBO_DETAIL:
+                            return SanInfo;
+                        default:
+                            return;
+                    }
                 }
             }
         });
