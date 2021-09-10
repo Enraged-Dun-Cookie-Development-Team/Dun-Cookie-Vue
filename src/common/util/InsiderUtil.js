@@ -5,7 +5,8 @@ export default class InsiderUtil {
   static resetInsiderLevel(codeMap) {
     const [newLevel, _] = InsiderUtil.calcInsiderLevel(Settings.insider.code, codeMap);
     Settings.insider.level = newLevel;
-    Settings.saveSettings();
+    Settings.saveSettings().then();
+    console.log(`用户等级被设为：${newLevel}`);
   }
 
   static calcInsiderLevel(code, codeMap) {
@@ -18,7 +19,6 @@ export default class InsiderUtil {
         validCode = true;
       }
     }
-    console.log(newLevel);
     return [newLevel, validCode];
   }
 }

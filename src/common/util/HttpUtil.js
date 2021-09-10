@@ -1,4 +1,5 @@
 import PlatformHelper from '../platform/PlatformHelper';
+import {DEBUG_LOG} from "../Constants";
 
 class HttpUtil {
 
@@ -16,11 +17,10 @@ class HttpUtil {
    * @param url 想要请求的url
    * @return {Promise}
    */
-  static GET_Json(url) {
-    try {
-      return HttpUtil.GET(url).then(response => JSON.parse(response));
-    } catch (error) {
-      console.error(error);
+  static async GET_Json(url) {
+    const response = await HttpUtil.GET(url);
+    if (response) {
+      return JSON.parse(response);
     }
   }
 
@@ -29,8 +29,15 @@ class HttpUtil {
    * @param url 想要请求的url
    * @return {Promise}
    */
-  static GET(url) {
-    return PlatformHelper.Http.sendGet(url).catch(error => console.error(error));
+  static async GET(url) {
+    if (DEBUG_LOG) {
+      console.log(`正在请求URL：${url}`);
+    }
+    try {
+      return await PlatformHelper.Http.sendGet(url);
+    } catch (e) {
+      console.error(e);
+    }
   }
 }
 

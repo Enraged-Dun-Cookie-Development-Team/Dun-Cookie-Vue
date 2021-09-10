@@ -50,18 +50,22 @@ function tryDun(settings) {
         if (settings.currentDataSources.hasOwnProperty(dataName)) {
             const source = settings.currentDataSources[dataName];
             DunInfo.counter++;
-            promiseList.push(source.fetchData().then(newCardList => {
+            const promise = source.fetchData()
+              .then(newCardList => {
                 let oldCardList = cardListCache[dataName];
                 let isNew = kazeFun.JudgmentNew(oldCardList, newCardList, source.title);
                 if (isNew) {
                     cardListCache[dataName] = newCardList;
                     hasUpdated = true;
                 }
-            }).finally(() => {
+              })
+              .catch(e => console.error(e))
+              .finally(() => {
                 if (!cardListCache[dataName]) {
                     cardListCache[dataName] = [];
                 }
-            }));
+              });
+            promiseList.push(promise);
         }
     }
     Promise.allSettled(promiseList).then(() => {
