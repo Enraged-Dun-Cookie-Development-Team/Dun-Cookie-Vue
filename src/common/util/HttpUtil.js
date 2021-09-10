@@ -36,7 +36,7 @@ class HttpUtil {
     try {
       return await PlatformHelper.Http.sendGet(url);
     } catch (e) {
-      console.error(e);
+      console.warn(e);
     }
   }
 }

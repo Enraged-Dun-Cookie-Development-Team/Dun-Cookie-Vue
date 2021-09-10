@@ -253,5 +253,31 @@ export default class AbstractPlatform {
         throw unsupportedTip;
     }
 
+    // 由于XHR是浏览器标准，故提取到抽象类中
+    // 为避免出现依赖循环的隐患，故不放在HttpUtil中
+    __sendXhrRequest(url, method) {
+        return new Promise((resolve, reject) => {
+            let xhr = new XMLHttpRequest();
+            xhr.open(method, url, true);
+            let err;
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    resolve(xhr.responseText);
+                } else {
+                    err = xhr;
+                }
+            }
+            xhr.onerror = () => {
+                err = `请求URL时发生异常：${url}`;
+            }
+            xhr.onloadend = () => {
+                if (!!err) {
+                    reject(err);
+                }
+            }
+            xhr.send();
+        });
+    }
+
 }
 
