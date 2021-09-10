@@ -70,7 +70,6 @@ const configList = [
         '游戏内公告',
         '通讯组',
         'https://ak-conf.hypergryph.com/config/prod/announce_meta/Android/announcement.meta.json',
-        '',
         2
     ),
     buildDatasource(WeiboDataSource.withUid(6441489862, 3), '/assets/image/icon/cho3Weibo.jpg', '朝陇山微博', '朝陇山'),
@@ -80,7 +79,6 @@ const configList = [
         '塞壬唱片官网',
         '塞壬唱片',
         'https://monster-siren.hypergryph.com/api/news',
-        '',
         5
     ),
     buildDatasource(WeiboDataSource.withUid(7499841383, 6), '/assets/image/icon/tlWeibo.jpg', '泰拉记事社微博', '泰拉记事社微博'),
@@ -89,7 +87,6 @@ const configList = [
         '官网',
         '官网网站',
         'https://ak.hypergryph.com/',
-        '',
         7
     ),
     buildDatasource(TerraHistoricusDataSource.newInstance(8), '/assets/image/icon/tl.jpg', '泰拉记事社官网', '泰拉记事社官网'),
@@ -98,7 +95,6 @@ const configList = [
         '塞壬唱片网易云音乐',
         '网易云音乐',
         'http://music.163.com/api/artist/albums/32540734',
-        '',
         9
     ),
     buildDatasource(WeiboDataSource.withUid(7461423907, 10), '/assets/image/icon/yjwb.jpg', '鹰角网络微博', '鹰角网络微博'),
