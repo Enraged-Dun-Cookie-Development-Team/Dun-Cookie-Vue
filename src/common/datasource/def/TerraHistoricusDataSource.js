@@ -2,6 +2,7 @@ import {DataSource} from '../DataSource';
 import TimeUtil from '../../util/TimeUtil';
 import {DataItem} from '../../DataItem';
 import Settings from '../../Settings';
+import HttpUtil from "../../util/HttpUtil";
 
 /**
  * 泰拉记事社(官网)数据源。
@@ -13,8 +14,17 @@ export class TerraHistoricusDataSource extends DataSource {
     return 'terra-historicus.hypergryph.com';
   };
 
-  constructor(icon, dataName, title, dataUrl, rootUrl, priority) {
-    super(icon, dataName, title, dataUrl, rootUrl, priority);
+  static async newInstance(priority) {
+    const data = await HttpUtil.GET_Json('https://terra-historicus.hypergryph.com/api/comic')
+    const dataUrl = [];
+    for (const comic of data.data) {
+      dataUrl.push(`https://terra-historicus.hypergryph.com/api/comic/${comic.cid}`)
+    }
+    return new TerraHistoricusDataSource('/assets/image/icon/tl.jpg', TerraHistoricusDataSource.typeName, '泰拉记事社', dataUrl, priority);
+  }
+
+  constructor(icon, dataName, title, dataUrl, priority) {
+    super(icon, dataName, title, dataUrl, priority);
   }
 
   processData(opt) {

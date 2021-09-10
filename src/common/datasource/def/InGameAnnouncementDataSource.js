@@ -24,8 +24,8 @@ export class InGameAnnouncementDataSource extends DataSource {
 
   FocusAnnounceId = null;
 
-  constructor(icon, dataName, title, dataUrl, rootUrl, priority) {
-    super(icon, dataName, title, dataUrl, rootUrl, priority);
+  constructor(icon, dataName, title, dataUrl, priority) {
+    super(icon, dataName, title, dataUrl, priority);
   }
 
   processData(opt) {

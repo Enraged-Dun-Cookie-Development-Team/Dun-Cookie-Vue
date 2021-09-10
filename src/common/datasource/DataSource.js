@@ -42,18 +42,13 @@ class DataSource {
    * 用于获取数据的URL，可以是string或array
    */
   dataUrl;
-    /**
-   * 用于根数据接口，获取详细接口
-   */
-  rootUrl;
 
-  constructor(icon, dataName, title, dataUrl, rootUrl='', priority = 100) {
+  constructor(icon, dataName, title, dataUrl, priority = 100) {
     this.icon = icon;
     this.dataName = dataName;
     this.dataType = this.constructor.typeName;
     this.title = title;
     this.dataUrl = dataUrl;
-    this.rootUrl = rootUrl;
     this.priority = priority;
   }
 

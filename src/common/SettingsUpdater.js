@@ -1,7 +1,7 @@
 import {CURRENT_SETTING_VERSION} from './Constants';
-import {defaultDataSourcesList} from './datasource/DefaultDataSources';
+import {getDefaultDataSourcesList} from './datasource/DefaultDataSources';
 
-function updateLegacyToV1(oldSettings) {
+async function updateLegacyToV1(oldSettings) {
   console.log("从旧配置升级：");
   console.log(oldSettings);
   const newSettings = {
@@ -11,7 +11,8 @@ function updateLegacyToV1(oldSettings) {
   };
   if (oldSettings.hasOwnProperty('time')) newSettings.dun.intervalTime = oldSettings.time;
   if (oldSettings.hasOwnProperty('source')) {
-    newSettings.enableDataSources = oldSettings.source.map(idx => defaultDataSourcesList[idx].dataName);
+    const list = await getDefaultDataSourcesList();
+    newSettings.enableDataSources = oldSettings.source.map(idx => list[idx].dataName);
   }
   if (oldSettings.hasOwnProperty('fontsize')) newSettings.display.fontSize = oldSettings.fontsize;
   if (oldSettings.hasOwnProperty('imgshow')) newSettings.display.showImage = oldSettings.imgshow;
@@ -31,14 +32,14 @@ function updateLegacyToV1(oldSettings) {
   return newSettings;
 }
 
-function updateSettings(oldSettings) {
+async function updateSettings(oldSettings) {
   // 版本号一致直接返回
   if (parseInt(oldSettings.version) === CURRENT_SETTING_VERSION) {
     return oldSettings;
   }
   // 无版本号的旧配置文件升级
   if (!oldSettings.version) {
-    return updateLegacyToV1(oldSettings);
+    return await updateLegacyToV1(oldSettings);
   }
 }
 
