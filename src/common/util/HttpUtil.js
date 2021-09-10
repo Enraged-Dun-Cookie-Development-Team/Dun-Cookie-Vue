@@ -36,7 +36,8 @@ class HttpUtil {
     try {
       return await PlatformHelper.Http.sendGet(url);
     } catch (e) {
-      console.warn(e);
+      // 为避免出现错误提示使用户迷惑，故仅使用log而不使用warn或error
+      console.log(e);
     }
   }
 }
