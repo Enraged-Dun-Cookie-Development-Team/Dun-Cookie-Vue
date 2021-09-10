@@ -52,27 +52,11 @@ class DataSource {
     this.priority = priority;
   }
 
-  fetchRootData() {
-    if (this.dataName === '泰拉记事社官网') {
-      let promise = HttpUtil.GET(this.rootUrl);
-      promise.then(value => {
-        let data = JSON.parse(value);
-        this.dataUrl = [];
-        data.data.forEach(module => {
-          this.dataUrl.push(`https://terra-historicus.hypergryph.com/api/comic/${module.cid}`)
-        });
-      })
-      return promise;
-    }
-    return Promise.reslove();
-  }
-
   async fetchData() {
     let promise;
     if (typeof this.dataUrl === 'string') {
       promise = HttpUtil.GET(HttpUtil.appendTimeStamp(this.dataUrl));
     } else if (Array.isArray(this.dataUrl)) {
-      await this.fetchRootData();
       promise = Promise.all(
         this.dataUrl.map(url =>
           HttpUtil.GET(HttpUtil.appendTimeStamp(url))
