@@ -1,5 +1,6 @@
 import {PLATFORM_CHROME, DEBUG_LOG} from '../../Constants';
 import AbstractPlatform from '../AbstractPlatform';
+import $ from "jquery";
 
 const IGNORE_MESSAGE_ERROR_1 = 'Could not establish connection. Receiving end does not exist.';
 const IGNORE_MESSAGE_ERROR_2 = 'The message port closed before a response was received.';
@@ -296,5 +297,9 @@ export default class ChromePlatform extends AbstractPlatform {
                 resolve();
             });
         });
+    }
+
+    getHtmlParser() {
+        return $;
     }
 }

@@ -253,6 +253,15 @@ export default class AbstractPlatform {
         throw unsupportedTip;
     }
 
+    /**
+     * 返回的对象可以当成jQuery的$来使用
+     *
+     * @return {jQuery}
+     */
+    getHtmlParser() {
+        throw unsupportedTip;
+    }
+
     // 由于XHR是浏览器标准，故提取到抽象类中
     // 为避免出现依赖循环的隐患，故不放在HttpUtil中
     __sendXhrRequest(url, method) {

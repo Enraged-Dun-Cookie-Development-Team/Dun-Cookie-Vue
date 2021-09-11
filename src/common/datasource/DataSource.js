@@ -77,7 +77,7 @@ class DataSource {
       const data = await this.processData(response);
       return DataSourceUtil.sortData(data);
     } catch (e) {
-      console.error(`${this.dataName}解析数据失败：${e.message}`);
+      console.error(`数据源[${this.dataName}]解析失败：${e.message}`);
       return null;
     }
   }

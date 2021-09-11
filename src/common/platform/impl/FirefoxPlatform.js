@@ -1,5 +1,6 @@
 import {PLATFORM_FIREFOX, DEBUG_LOG} from '../../Constants';
 import AbstractPlatform from '../AbstractPlatform';
+import $ from "jquery";
 
 let _isBackground;
 let _isMobile;
@@ -194,5 +195,9 @@ export default class FirefoxPlatform extends AbstractPlatform {
 
     setBadgeBackgroundColor(color) {
         return browser.browserAction.setBadgeBackgroundColor({color: color});
+    }
+
+    getHtmlParser() {
+        return $;
     }
 }
