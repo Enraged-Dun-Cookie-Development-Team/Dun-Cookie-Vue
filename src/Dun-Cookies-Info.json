@@ -1,9 +1,21 @@
 {
     "list": [
         {
-            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://i1.hdslb.com/bfs/archive/dde83fc257c3d8b9ca128c905283f850d0b07e17.jpg'> <div> <div><span class='online-blue'>危急合约#6「蛮鳞行动」</span>将于<span class='online-blue'>8月26号</span>开启</div> <div>开启时间为周四下午4点</div> <div>同时全天开放所有<span class='online-red'>资源关卡</span></div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>处更新<span class='online-blue'>作业视频</span></div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
-            "starTime": "2021-08-24 03:59:59",
-            "overTime": "2021-09-09 03:59:59",
+            "html": "<div class='online-area'> <img class='online-title-img' src='/assets/image/icon.ico'> <div> <div>博士，最近我们在宣发小刻食堂V3.0版本。</div> <div>还劳烦各位博士能去<a class='webOpen' href='https://ngabbs.com/read.php?tid=28449723&_ff=-34587507'>NGA论坛</a>和<a class='webOpen' href='https://arknightscommunity.drblack-system.com/15386.html'>泰拉通讯枢纽</a>帮我们<span class='online-red'>顶顶帖子</span></div> <div>去<a class='webOpen' href='https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN'>B站视频</a>给个<span class='online-red'>三连，转发</span>给更多玩方舟的博士们看到</div> <div>感谢大家长期以来的使用与支持</div> <div>我们还会继续努力越做越好的</div> </div> </div>",
+            "starTime":"2021-09-12 04:00:00",
+            "overTime":"2021-09-17 03:59:59",
+            "notice": false
+        },
+        {
+            "html": "<div class='online-area'> <img class='online-title-img' src='/assets/image/icon.ico'> <div> <div>博士，最近我们再宣发小刻食堂V3.0版本。</div> <div>还劳烦各位博士能去<a class='webOpen' href='https://ngabbs.com/read.php?tid=28449723&_ff=-34587507'>NGA论坛</a>和<a class='webOpen' href='https://arknightscommunity.drblack-system.com/15386.html'>泰拉通讯枢纽</a>帮我们<span class='online-red'>顶顶帖子</span></div> <div>去<a class='webOpen' href='https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN'>B站视频</a>给个<span class='online-red'>三连，转发</span>给更多玩方舟的博士们看到</div> <div>感谢大家长期以来的使用与支持</div> <div>我们还会继续努力越做越好的</div> </div> </div>",
+            "starTime":"2021-09-10 11:26:57",
+            "overTime":"2021-09-12 03:59:59",
+            "notice": true
+        },
+        {
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20210910/b35fabcb65a25644aec721d0926702fa.JPG'> <div> <div><span class='online-blue'>主线EP09【风暴瞭望】</span>将于<span class='online-blue'>9月17号</span>开启</div> <div>开启时间为周五下午4点</div> <div>届时开启<span class='online-red'>签到活动</span>与<span class='online-red'>限时掉落活动</span></div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频</span>与<span class='online-blue'>剧情捧读</span></div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
+            "starTime":"2021-09-10 11:26:57",
+            "overTime":"2021-09-24 03:59:59",
             "notice": false
         },
         {
@@ -114,17 +126,17 @@
         {
             "starTime": "2021-9-03 04:00:00",
             "overTime": "2021-9-16 15:59:59",
-            "url": "https://www.bilibili.com/video/BV1664y1Y7bg",
-            "name": "【杨颜同学】新主线倒计时+炎客复刻？秋季活动前瞻。",
-            "img": "https://i0.hdslb.com/bfs/archive/82b8191c01ac910fa6207eaa29debd6d48aa9ef4.jpg@200w_125h_1c.webp",
+            "url": "https://www.bilibili.com/video/BV1Wf4y1P7Kn",
+            "name": "【杨颜同学】影武者苇草的宿命，“贞德”竟在不列颠？。",
+            "img": "https://i0.hdslb.com/bfs/archive/aee89739f0c7b40b22d24a988b4c602daeba5d64.jpg@200w_125h_1c.webp",
             "radius": true
         },
         {
             "starTime": "2021-9-03 04:00:00",
             "overTime": "2021-9-16 15:59:59",
-            "url": "https://www.bilibili.com/video/BV12g411V7Pr",
-            "name": "【柞木不朽】关键角色会死？小丘郡化为火海？主线第九章终于要来了",
-            "img": "https://i1.hdslb.com/bfs/archive/a7fde6d32c014a08528a2d3d501cb100265e2e6f.jpg@200w_125h_1c.webp",
+            "url": "https://www.bilibili.com/video/BV1s64y1h7ZA",
+            "name": "【柞木不朽】罗德岛内鬼终于现身！小丘郡化为人间炼狱，第九章PV分析",
+            "img": "https://i2.hdslb.com/bfs/archive/6dd93c02c70c8216feaed6573f643cb12698c61a.jpg@200w_125h_1c.webp",
             "radius": true
         },
         {
@@ -159,17 +171,17 @@
             
             {
                 "text": "当前活动池结束",
-                "remark": "假日威龙陈[限定],水月,羽毛笔",
-                "time": "2021-8-17 03:59:59",
-                "starTime": "2021-8-03 16:00:00",
-                "overTime": "2021-8-17 03:59:59"
+                "remark": "琴柳，桑葚，雷蛇，罗比菈塔",
+                "time": "2021-10-1 03:59:59",
+                "starTime": "2021-9-17 16:00:00",
+                "overTime": "2021-10-1 03:59:59"
             },
             {
                 "text": "下个活动池开启",
-                "remark": "罗比菈塔",
-                "time": "2021-9-16 15:59:59",
+                "remark": "琴柳，桑葚，雷蛇，罗比菈塔",
+                "time": "2021-9-17 15:59:59",
                 "starTime": "2021-9-09 03:59:59",
-                "overTime": "2021-9-16 15:59:59"
+                "overTime": "2021-9-17 15:59:59"
             },
             {
                 "text": "当前活动池结束",
@@ -182,28 +194,28 @@
             {
                 "text": "SideStory「玛利亚·临光」，复刻活动开启",
                 "remark": "",
-                "time": "2021-10-24 03:59:59",
-                "starTime": "2021-8-03 16:00:00",
-                "overTime": "2021-8-24 03:59:59"
+                "time": "2021-10-01 15:59:59",
+                "starTime": "2021-9-24 16:00:00",
+                "overTime": "2021-10-01 15:59:59"
             },
             {
                 "text": "第九章「风暴瞭望」，主线开启",
-                "remark": "时间很不确定，应该吧，也可能14号",
-                "time": "2021-9-16 15:59:59",
+                "remark": "",
+                "time": "2021-9-17 15:59:59",
                 "starTime": "2021-9-09 03:59:59",
-                "overTime": "2021-9-30 15:59:59"
+                "overTime": "2021-9-24 15:59:59"
             },
             {
-                "text": "#6「蛮鳞行动」，活动结束",
+                "text": "SideStory「玛利亚·临光」，复刻活动结束",
                 "remark": "",
-                "time": "2021-9-09 03:59:59",
-                "starTime": "2021-8-26 16:00:00",
-                "overTime": "2021-9-09 03:59:59"
+                "time": "2021-10-15 03:59:59",
+                "starTime": "2021-10-01 16:00:00",
+                "overTime": "2021-10-15 03:59:59"
             }
         ]
     },
     "upgrade": {
-        "v": "2.9.5",
+        "v": "3.0",
         "title": "小刻食堂翻新啦 - 3.0",
         "description": "🐛 修复几个Bug，优化插件逻辑，提升用户体验</br>1.设置添加反馈按钮</br>2.优化泰拉记事社官网获取逻辑，解决新出刊物没有蹲到的情况</br>3.添加鹰角网络微博快速跳转链接</br>4.修复出国党因为时差导致倒计时等时间不对",
         "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/3.0/Dun-Cookie-3.0.crx",
