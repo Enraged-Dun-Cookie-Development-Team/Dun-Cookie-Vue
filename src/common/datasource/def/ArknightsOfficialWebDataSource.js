@@ -17,11 +17,10 @@ export class ArknightsOfficialWebDataSource extends DataSource {
     super(icon, dataName, title, dataUrl, priority);
   }
 
-  processData(opt) {
+  async processData(rawDataText) {
     let list = [];
-    let str = opt.responseText;
     let gw = document.createElement('div');
-    gw.innerHTML = str;
+    gw.innerHTML = rawDataText;
     let articleItem = gw.querySelectorAll(".articleList[data-category-key='ANNOUNCEMENT'] .articleItem,.articleList[data-category-key='ACTIVITY'] .articleItem,.articleList[data-category-key='NEWS'] .articleItem");
     articleItem.forEach((item, index) => {
       try {
@@ -30,7 +29,7 @@ export class ArknightsOfficialWebDataSource extends DataSource {
         let url = item.getElementsByClassName('articleItemLink')[0].pathname;
         let time = new Date(`${date} ${Settings.getTimeBySortMode()}`);
         let judgment = url.match(/\d+/g);
-        list.push(DataItem.builder(opt.dataName)
+        list.push(DataItem.builder(this.dataName)
           .id(judgment.length > 0 ? parseInt(judgment[0]) : index)
           .timeForSort(time.getTime())
           .timeForDisplay(TimeUtil.format(time, 'yyyy-MM-dd'))

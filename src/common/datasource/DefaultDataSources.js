@@ -89,7 +89,13 @@ const configList = [
         'https://ak.hypergryph.com/',
         7
     ),
-    buildDatasource(TerraHistoricusDataSource.newInstance(8), '/assets/image/icon/tl.jpg', '泰拉记事社官网', '泰拉记事社官网'),
+    new TerraHistoricusDataSource(
+      '/assets/image/icon/tl.jpg',
+      '泰拉记事社官网',
+      '泰拉记事社官网',
+      'https://terra-historicus.hypergryph.com/api/comic',
+      8
+    ),
     new NeteaseCloudMusicDataSource(
         '/assets/image/wyyyy.ico',
         '塞壬唱片网易云音乐',

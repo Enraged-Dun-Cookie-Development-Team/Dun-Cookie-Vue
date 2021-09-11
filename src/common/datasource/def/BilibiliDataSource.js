@@ -31,13 +31,13 @@ export class BilibiliDataSource extends DataSource {
     super(icon, dataName, title, dataUrl, priority);
   }
 
-  processData(opt) {
+  async processData(rawDataText) {
     let list = [];
-    let data = JSON.parse(opt.responseText);
+    let data = JSON.parse(rawDataText);
     if (data.code == 0 && data.data != null && data.data.cards != null && data.data.cards.length > 0) {
       data.data.cards.forEach(x => {
         const dynamicInfo = JSON.parse(x.card);
-        const builder = DataItem.builder(opt.dataName)
+        const builder = DataItem.builder(this.dataName)
           .id(x.desc.timestamp)
           .timeForSort(x.desc.timestamp * 1000)
           .timeForDisplay(TimeUtil.format(new Date(x.desc.timestamp * 1000), 'yyyy-MM-dd hh:mm:ss'))

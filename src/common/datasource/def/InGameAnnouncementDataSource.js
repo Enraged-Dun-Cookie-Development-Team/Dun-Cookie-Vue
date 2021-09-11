@@ -28,15 +28,15 @@ export class InGameAnnouncementDataSource extends DataSource {
     super(icon, dataName, title, dataUrl, priority);
   }
 
-  processData(opt) {
+  async processData(rawDataText) {
     let list = [];
-    let data = JSON.parse(opt.responseText);
+    let data = JSON.parse(rawDataText);
     data.announceList.forEach(x => {
       if (ignoreAnnounces.includes(parseInt(x.announceId))) {
         return;
       }
       const time = new Date(`${new Date().getFullYear()}-${x.month}-${x.day} ${Settings.getTimeBySortMode()}`);
-      list.push(DataItem.builder(opt.dataName)
+      list.push(DataItem.builder(this.dataName)
         .id(x.announceId)
         .timeForSort(time.getTime())
         .timeForDisplay(TimeUtil.format(time, 'yyyy-MM-dd'))

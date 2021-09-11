@@ -32,9 +32,9 @@ export class WeiboDataSource extends DataSource {
     super(icon, dataName, title, dataUrl, priority);
   }
 
-  processData(opt) {
+  async processData(rawDataText) {
     let list = [];
-    let data = JSON.parse(opt.responseText);
+    let data = JSON.parse(rawDataText);
     if (data.ok == 1 && data.data != null && data.data.cards != null && data.data.cards.length > 0) {
       data.data.cards.forEach(x => {
         // 是否显示转发内容
@@ -47,7 +47,7 @@ export class WeiboDataSource extends DataSource {
           let weiboId = containerId.substring((containerId.length - 10), containerId.length) + '/' + x.mblog.bid;
           let time = new Date(dynamicInfo.created_at);
 
-          const builder = DataItem.builder(opt.dataName)
+          const builder = DataItem.builder(this.dataName)
             .id(weiboId)
             .timeForSort(time.getTime())
             .timeForDisplay(TimeUtil.format(new Date(time), 'yyyy-MM-dd hh:mm:ss'))
@@ -63,7 +63,7 @@ export class WeiboDataSource extends DataSource {
           if (x.mblog.hasOwnProperty('retweeted_status')) {
             builder.retweeted(new RetweetedInfo(
               x.mblog.retweeted_status.user.screen_name,
-              x.mblog.retweeted_status.raw_text || x.mblog.retweeted_status.text.replace(/<\a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<span class="url-icon">|<\img.*?>|全文|网页链接/g, '').replace(/<br \/>/g, '\n')
+              x.mblog.retweeted_status.raw_text || x.mblog.retweeted_status.text.replace(/<\a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<span class="url-icon">|<\/img.*?>|全文|网页链接/g, '').replace(/<br \/>/g, '\n')
             ));
           }
           list.push(builder.build());

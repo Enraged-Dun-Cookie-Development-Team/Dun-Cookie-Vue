@@ -70,26 +70,21 @@ class DataSource {
         reject(this.dataUrl);
       });
     }
-    return await promise.then(value => {
-      if (!value) {
-        console.error(`${this.dataName}获取数据失败`);
-        return null;
-      }
-      let opt = {
-        dataName: this.dataName, // 数据源名称
-        responseText: value,
-      };
-      try {
-        const data = this.processData(opt);
-        return DataSourceUtil.sortData(data);
-      } catch (e) {
-        console.error(`${this.dataName}解析数据失败：${e.message}`);
-        return null;
-      }
-    });
+    const response = await promise;
+    if (!response) {
+      console.error(`${this.dataName}获取数据失败`);
+      return null;
+    }
+    try {
+      const data = await this.processData(response);
+      return DataSourceUtil.sortData(data);
+    } catch (e) {
+      console.error(`${this.dataName}解析数据失败：${e.message}`);
+      return null;
+    }
   }
 
-  processData(opt) {
+  async processData(rawDataText) {
     console.error('未实现processData方法！');
   }
 
