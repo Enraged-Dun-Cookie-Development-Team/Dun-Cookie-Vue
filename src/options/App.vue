@@ -474,7 +474,7 @@ export default {
   watch: {},
   data() {
     getDefaultDataSourcesList().then(res => {
-      this.defSourcesList.push(res);
+      this.defSourcesList.push(...res);
     });
     return {
       currentVersion: SHOW_VERSION,

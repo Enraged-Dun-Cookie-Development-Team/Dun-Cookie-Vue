@@ -120,7 +120,7 @@ const initPromise = buildDefaultDataSourcesList().then(res => {
     }
     list.sort((a, b) => a.priority - b.priority);
     defaultDataSourcesList.splice(0);
-    defaultDataSourcesList.push(list);
+    defaultDataSourcesList.push(...list);
 });
 
 async function getDefaultDataSources() {
