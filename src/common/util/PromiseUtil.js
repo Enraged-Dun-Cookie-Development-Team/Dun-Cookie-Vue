@@ -16,12 +16,14 @@ export default class PromiseUtil {
         promise.then(res => {
           if (typeof filter !== "function" || filter(res)) {
             reject(res);
+          } else {
+            resolve(res);
           }
         }).catch(res => resolve(res));
       }));
     }
     return new Promise((resolve, reject) => {
-      Promise.all(WrapperPromiseList).then(res => reject(res)).catch(res => resolve(res));
+      Promise.all(WrapperPromiseList).then(() => reject('PromiseUtil.any: 所有promise都执行失败！')).catch(res => resolve(res));
     });
   }
 }
