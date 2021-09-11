@@ -150,26 +150,39 @@ export default class AbstractPlatform {
         throw unsupportedTip;
     };
 
+    __buildCreateData(window, url, type, width, height, state) {
+        const createData = {
+            url: url,
+            type: type,
+        };
+        let canUsePosition = true;
+        if (state) {
+            createData.state = state;
+            if (['minimized', 'maximized', 'fullscreen'].indexOf(state) >= 0) {
+                canUsePosition = false;
+            }
+        }
+        if (canUsePosition) {
+            createData.width = width;
+            createData.height = height;
+            const left = Math.round((window.width - width) * 0.5 + window.left);
+            const top = Math.round((window.height - height) * 0.5 + window.top);
+            createData.top = Math.round(top);
+            createData.left = Math.round(left);
+        }
+        return createData;
+    }
+
     /**
      * 打开新窗口
      * @param url 新窗口显示的url
      * @param type 窗口类型
      * @param width 窗口宽度
      * @param height 窗口高度
+     * @param state 窗口的初始状态，可以不提供，当该值为minimized/maximized/fullscreen时width、height参数无效
      * @return {Promise} reslove接收一个参数(新窗口的tab对象)
      */
-    createWindow(url, type, width, height) {
-        throw unsupportedTip;
-    };
-
-    /**
-     * 打开新窗口
-     * @param url 新窗口显示的url
-     * @param type 窗口类型
-     * @param state 窗口状态
-     * @return {Promise} reslove接收一个参数(新窗口的tab对象)
-     */
-    createMaxWindow(url, type, state) {
+    createWindow(url, type, width, height, state) {
         throw unsupportedTip;
     };
 
@@ -222,6 +235,49 @@ export default class AbstractPlatform {
     sendHttpRequest(url, method) {
         throw unsupportedTip;
     };
+
+    /**
+     * 设置扩展图标的标记文字
+     * @param text {string}
+     * @return {Promise}
+     */
+    setBadgeText(text) {
+        throw unsupportedTip;
+    }
+    /**
+     * 设置扩展图标的标记背景色
+     * @param color {[number,number,number,number]} rgba(range 0-255)
+     * @return {Promise}
+     */
+    setBadgeBackgroundColor(color) {
+        throw unsupportedTip;
+    }
+
+    // 由于XHR是浏览器标准，故提取到抽象类中
+    // 为避免出现依赖循环的隐患，故不放在HttpUtil中
+    __sendXhrRequest(url, method) {
+        return new Promise((resolve, reject) => {
+            let xhr = new XMLHttpRequest();
+            xhr.open(method, url, true);
+            let err;
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    resolve(xhr.responseText);
+                } else {
+                    err = xhr;
+                }
+            }
+            xhr.onerror = () => {
+                err = `请求URL时发生异常：${url}`;
+            }
+            xhr.onloadend = () => {
+                if (!!err) {
+                    reject(err);
+                }
+            }
+            xhr.send();
+        });
+    }
 
 }
 

@@ -1,8 +1,8 @@
-import { CURRENT_SETTING_VERSION, MESSAGE_SETTINGS_UPDATE, PAGE_POPUP_WINDOW, PLATFORM_UNKNOWN } from './Constants';
-import { deepAssign } from './util/CommonFunctions';
-import { defaultDataSources, defaultDataSourcesNames } from './datasource/DefaultDataSources';
-import { customDataSourceTypes } from './datasource/CustomDataSources';
-import { updateSettings } from './SettingsUpdater';
+import {CURRENT_SETTING_VERSION, MESSAGE_SETTINGS_UPDATE, PAGE_POPUP_WINDOW, PLATFORM_UNKNOWN} from './Constants';
+import {deepAssign} from './util/CommonFunctions';
+import {getDefaultDataSources} from './datasource/DefaultDataSources';
+import {customDataSourceTypes} from './datasource/CustomDataSources';
+import {updateSettings} from './SettingsUpdater';
 import PlatformHelper from './platform/PlatformHelper';
 
 /**
@@ -19,10 +19,11 @@ const updateListeners = [];
 /**
  * 将配置信息转化成可以用于蹲饼的数据源
  */
-function transformDataSource(settings) {
+async function transformDataSource(settings) {
   const list = {};
+  const defList = await getDefaultDataSources();
   for (const dataName of settings.enableDataSources) {
-    list[dataName] = defaultDataSources[dataName];
+    list[dataName] = defList[dataName];
   }
   const promiseList = [];
   for (const info of settings.customDataSources) {
@@ -34,7 +35,7 @@ function transformDataSource(settings) {
       }
     }
   }
-  return Promise.allSettled(promiseList).then(results => {
+  return await Promise.allSettled(promiseList).then(results => {
     for (const result of results) {
       if (result.status) {
         if (result.value) {
@@ -327,10 +328,13 @@ class Settings {
 
         // 必须在后台执行的只执行一次的内容
         if (PlatformHelper.isBackground) {
+          let promise;
           // 如果一个启用的都没有说明是新安装或者旧数据被清除，此时将默认数据源全部启用
           if (this.enableDataSources.length === 0) {
-            this.enableDataSources = defaultDataSourcesNames;
+            promise = getDefaultDataSources().then(sources => this.enableDataSources = Object.keys(sources))
             console.log("未启用任何默认数据源，将自动启用全部默认数据源");
+          } else {
+            promise = Promise.resolve();
           }
 
           this.currentDataSources = {};
@@ -339,7 +343,9 @@ class Settings {
           this.__updateWindowMode();
 
           // 只需要在后台进行保存，其它页面不需要保存
-          this.saveSettings().then(() => resolve(this));
+          promise.finally(() => {
+            this.saveSettings().finally(() => resolve(this));
+          });
         } else {
           resolve(this);
         }
@@ -381,19 +387,17 @@ class Settings {
    * 返回的Promise可以不调用then()
    * @return {Promise<Settings>}
    */
-  reloadSettings() {
-    return PlatformHelper.Storage.getLocalStorage('settings')
-      .then(value => {
-        if (PlatformHelper.isBackground) {
-          console.log("从储存中读取配置：");
-          console.log(this);
-          console.log('============');
-        }
-        if (value != null) {
-          deepAssign(this, updateSettings(value));
-        }
-        return this;
-      });
+  async reloadSettings() {
+    const value = await PlatformHelper.Storage.getLocalStorage('settings');
+    if (PlatformHelper.isBackground) {
+      console.log("从储存中读取配置：");
+      console.log(this);
+      console.log('============');
+    }
+    if (value != null) {
+      deepAssign(this, await updateSettings(value));
+    }
+    return this;
   }
 }
 

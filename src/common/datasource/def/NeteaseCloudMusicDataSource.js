@@ -13,18 +13,18 @@ export class NeteaseCloudMusicDataSource extends DataSource {
     return 'music.163.com';
   };
 
-  constructor(icon, dataName, title, dataUrl, rootUrl, priority) {
-    super(icon, dataName, title, dataUrl, rootUrl, priority);
+  constructor(icon, dataName, title, dataUrl, priority) {
+    super(icon, dataName, title, dataUrl, priority);
   }
 
-  processData(opt) {
+  async processData(rawDataText) {
     let list = [];
-    let data = JSON.parse(opt.responseText);
+    let data = JSON.parse(rawDataText);
     if (data && data.hotAlbums && data.hotAlbums.length > 0) {
       data.hotAlbums.forEach(x => {
         const date = TimeUtil.format(new Date(x.publishTime), 'yyyy-MM-dd');
         const time = new Date(`${date} ${Settings.getTimeBySortMode()}`);
-        list.push(DataItem.builder(opt.dataName)
+        list.push(DataItem.builder(this.dataName)
           .id(x.id)
           .timeForSort(time.getTime())
           .timeForDisplay(date)

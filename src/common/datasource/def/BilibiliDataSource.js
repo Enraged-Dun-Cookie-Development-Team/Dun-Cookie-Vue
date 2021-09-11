@@ -1,6 +1,7 @@
-import {DataSource} from '../DataSource';
+import {DataSource, UserInfo} from '../DataSource';
 import TimeUtil from '../../util/TimeUtil';
 import {DataItem} from '../../DataItem';
+import HttpUtil from '../../util/HttpUtil';
 
 /**
  * 哔哩哔哩数据源。
@@ -12,17 +13,31 @@ export class BilibiliDataSource extends DataSource {
     return 'bilibili_dynamic';
   };
 
-  constructor(icon, dataName, title, dataUrl, rootUrl, priority) {
-    super(icon, dataName, title, dataUrl, rootUrl, priority);
+  static async withUid(uid, priority) {
+    try {
+      const data = await DataSource.getOrFetchUserInfo(uid, BilibiliDataSource);
+      if (!data) {
+        return null;
+      }
+      const dataUrl = `https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=${uid}&offset_dynamic_id=0&need_top=0&platform=web`;
+      return new BilibiliDataSource(data.avatarUrl, data.dataName, data.username, dataUrl, priority);
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   }
 
-  processData(opt) {
+  constructor(icon, dataName, title, dataUrl, priority) {
+    super(icon, dataName, title, dataUrl, priority);
+  }
+
+  async processData(rawDataText) {
     let list = [];
-    let data = JSON.parse(opt.responseText);
+    let data = JSON.parse(rawDataText);
     if (data.code == 0 && data.data != null && data.data.cards != null && data.data.cards.length > 0) {
       data.data.cards.forEach(x => {
         const dynamicInfo = JSON.parse(x.card);
-        const builder = DataItem.builder(opt.dataName)
+        const builder = DataItem.builder(this.dataName)
           .id(x.desc.timestamp)
           .timeForSort(x.desc.timestamp * 1000)
           .timeForDisplay(TimeUtil.format(new Date(x.desc.timestamp * 1000), 'yyyy-MM-dd hh:mm:ss'))
@@ -68,5 +83,14 @@ export class BilibiliDataSource extends DataSource {
       });
       return list;
     }
+  }
+
+  static async fetchUserInfo(uid) {
+    const json = await HttpUtil.GET_Json(`https://api.bilibili.com/x/space/acc/info?mid=${uid}&jsonp=jsonp`);
+    if (json.code != 0) {
+      throw 'request fail: ' + JSON.stringify(json);
+    }
+    const dataName = BilibiliDataSource.typeName + '_' + uid;
+    return new UserInfo(dataName, json.data.name, json.data.face);
   }
 }

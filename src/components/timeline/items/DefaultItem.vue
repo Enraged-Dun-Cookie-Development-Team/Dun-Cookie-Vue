@@ -90,7 +90,7 @@ export default {
         }
         await PlatformHelper.Storage.saveLocalStorage('windowTabId', 0);
       };
-      let window = await PlatformHelper.Windows.createPanelWindow(PlatformHelper.Extension.getURL('viewImg.html'), size.width, size.height);
+      let window = await PlatformHelper.Windows.createPopupWindow(PlatformHelper.Extension.getURL('viewImg.html'), size.width, size.height);
       await PlatformHelper.Storage.saveLocalStorage('windowTabId', window.id);
       await PlatformHelper.Storage.saveLocalStorage('imageList', info.item.imageList);
       await PlatformHelper.Storage.saveLocalStorage('imgNow', info.img);

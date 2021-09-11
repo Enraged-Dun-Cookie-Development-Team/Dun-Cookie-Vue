@@ -1,22 +1,22 @@
 <template>
-  <div id="app" @click="showInfo = !showInfo" v-loading="load">
-    <div class="img-info" v-show="!load">
+  <div id="app" v-loading="load" @click="showInfo = !showInfo">
+    <div v-show="!load" class="img-info">
       <h3>图片信息</h3>
       <div>{{ this.info.currentSrc }}</div>
       <div>{{ this.info.naturalWidth }} × {{ this.info.naturalHeight }}</div>
     </div>
-    <div ref="imgScroll" style="width: 100%; height: 100%; overflow: auto">
+    <div ref="imgScroll" :class="overflow ? 'imgScrollOverflow' : 'imgScroll'">
       <img
-        class="img"
-        :src="img"
-        :class="showInfo ? 'show-info' : ''"
-        @load="imgOnload($event)"
+          :class="showInfo ? 'show-info' : ''"
+          :src="img"
+          class="img"
+          @load="imgOnload($event)"
       />
     </div>
-    <div class="turnPage" v-show="pageShow">
+    <div v-show="pageShow" class="turnPage">
       <span class="turnPage-btn-area">
-        <span @click.stop="leftPage" class="el-icon-arrow-left"></span>
-        <span @click.stop="rightPage" class="el-icon-arrow-right"></span>
+        <span class="el-icon-arrow-left" @click.stop="leftPage"></span>
+        <span class="el-icon-arrow-right" @click.stop="rightPage"></span>
       </span>
       <span class="turnNumber">第{{ pageNow + 1 }}页，共{{ pageAll }}页</span>
     </div>
@@ -35,7 +35,7 @@ export default {
     document.addEventListener("keyup", (e) => {
       if (e.key === "Escape") {
         // 关闭窗口
-        chrome.windows.remove(this.winId);
+        PlatformHelper.Windows.remove(this.winId);
       } else if (e.key === "ArrowLeft") {
         this.leftPage();
         // 左翻页
@@ -56,6 +56,7 @@ export default {
       pageNow: 0,
       pageAll: 0,
       pageShow: false,
+      overflow: false,
     };
   },
   computed: {},
@@ -67,25 +68,29 @@ export default {
       if (this.imageList) {
         this.pageShow = true;
         this.pageAll = this.imageList.length;
-        this.pageNow = this.imageList.findIndex((x) => x == this.img);
-      };
+        this.pageNow = this.imageList.findIndex((x) => x === this.img);
+      }
     },
     imgOnload(data) {
       this.load = false;
       this.info.currentSrc = this.img;
-      this.info.naturalHeight =
-        data.target.height + 39 > window.screen.height - 50
-          ? window.screen.height - 50
-          : data.target.height + 39;
-      this.info.naturalWidth =
-        data.target.width + 31 > window.screen.width
-          ? window.screen.width
-          : data.target.width + 31;
-      PlatformHelper.Windows.update(
-        this.winId,
-        this.info.naturalWidth,
-        this.info.naturalHeight
-      );
+      this.info.naturalHeight = data.target.naturalHeight;
+      this.info.naturalWidth = data.target.naturalWidth;
+
+      this.overflow = false;
+      const appendHeight = (window.outerHeight - window.innerHeight);
+      const appendWidth = (window.outerWidth - window.innerWidth);
+      let newWidth = this.info.naturalWidth + appendWidth;
+      if (newWidth > window.screen.width) {
+        newWidth = window.screen.width - 100;
+        this.overflow = true;
+      }
+      let newHeight = this.info.naturalHeight + appendHeight;
+      if (newHeight > window.screen.height) {
+        newHeight = window.screen.height - 100;
+        this.overflow = true;
+      }
+      PlatformHelper.Windows.update(this.winId, newWidth, newHeight);
     },
     leftPage() {
       if (this.pageNow > 0) {
@@ -109,7 +114,7 @@ export default {
 #app {
   height: 100vh;
   width: 100vw;
-  //overflow: hidden;
+  overflow: hidden;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
@@ -191,6 +196,18 @@ export default {
 
   &:hover .turnNumber {
     opacity: 1;
+  }
+
+  .imgScroll {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .imgScrollOverflow {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
   }
 }
 </style>

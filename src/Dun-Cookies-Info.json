@@ -215,7 +215,7 @@
         "downFirefox": "https://addons.mozilla.org/zh-CN/firefox/addon/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cookies/"
     },
     "insider": {
-        "insiderCode": "5rDg42jQ",
-        "insiderOpen": false
+        "f6e9fa6d782cfb7781cee67c0a188637d44ef761af74e0bfff02e1f53786b90e78fcbe3bb31a602f405c37491fc6fb7b5f8dd4df0e76132f8886a6b7846dfa6b": 1,
+        "71add0d3edb7f188abf850643eeeca13b5cc266254b4d6bf1369e9889c584f658a21f6e110a509d5775c406b022839613196dc16db07677626208c2f5e4f77cc": 2
     }
 }

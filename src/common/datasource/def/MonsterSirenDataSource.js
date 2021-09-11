@@ -13,17 +13,17 @@ export class MonsterSirenDataSource extends DataSource {
     return 'monster-siren.hypergryph.com';
   };
 
-  constructor(icon, dataName, title, dataUrl, rootUrl, priority) {
-    super(icon, dataName, title, dataUrl, rootUrl, priority);
+  constructor(icon, dataName, title, dataUrl, priority) {
+    super(icon, dataName, title, dataUrl, priority);
   }
 
-  processData(opt) {
+  async processData(rawDataText) {
     let list = [];
-    let data = JSON.parse(opt.responseText);
+    let data = JSON.parse(rawDataText);
     if (data && data.data && data.data.list) {
       data.data.list.forEach(x => {
         const time = new Date(`${x.date} ${Settings.getTimeBySortMode()}`);
-        list.push(DataItem.builder(opt.dataName)
+        list.push(DataItem.builder(this.dataName)
           .id(x.cid)
           .timeForSort(time.getTime())
           .timeForDisplay(TimeUtil.format(time, 'yyyy-MM-dd'))

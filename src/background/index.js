@@ -10,17 +10,13 @@ import {
     MESSAGE_FORCE_REFRESH,
     MESSAGE_SAN_GET,
     PAGE_POPUP_WINDOW,
-    PAGE_WELCOME,
     PAGE_UPDATE,
-    TEST_DATA_REFRESH_TIME,
-    CANTEEN_INTERFACE,
-    CANTEEN_INTERFACE_STANDBY
+    PAGE_WELCOME, PLATFORM_FIREFOX,
+    TEST_DATA_REFRESH_TIME
 } from '../common/Constants';
 import DataSourceUtil from '../common/util/DataSourceUtil';
-import HttpUtil from '../common/util/HttpUtil';
 import PlatformHelper from '../common/platform/PlatformHelper';
-import { CURRENT_VERSION } from '../common/Constants';
-import TimeUtil from '../common/util/TimeUtil';
+import ServerUtil from "../common/util/ServerUtil";
 
 // 重构完成后的其它优化：
 // TODO 多个提取出来的类要考虑能否合并(指互相通信的那部分)
@@ -54,14 +50,22 @@ function tryDun(settings) {
         if (settings.currentDataSources.hasOwnProperty(dataName)) {
             const source = settings.currentDataSources[dataName];
             DunInfo.counter++;
-            promiseList.push(source.fetchData().then(newCardList => {
+            const promise = source.fetchData()
+              .then(newCardList => {
                 let oldCardList = cardListCache[dataName];
                 let isNew = kazeFun.JudgmentNew(oldCardList, newCardList, source.title);
                 if (isNew) {
                     cardListCache[dataName] = newCardList;
                     hasUpdated = true;
                 }
-            }));
+              })
+              .catch(e => console.error(e))
+              .finally(() => {
+                if (!cardListCache[dataName]) {
+                    cardListCache[dataName] = [];
+                }
+              });
+            promiseList.push(promise);
         }
     }
     Promise.allSettled(promiseList).then(() => {
@@ -96,40 +100,6 @@ function startDunTimer() {
     }, delay * 1000);
 }
 
-// 判断更新和公告是否需要推送提醒
-function announcementMention() {
-    HttpUtil.GET_Json(
-        CANTEEN_INTERFACE + "?t=" + new Date().getTime(),
-        CANTEEN_INTERFACE_STANDBY + "?t=" + new Date().getTime()
-    ).then((data) => {
-        if (Settings.JudgmentVersion(data.upgrade.v, CURRENT_VERSION) && Settings.dun.enableNotice) {
-            NotificationUtil.SendNotice("小刻食堂翻新啦！！", "快来使用新的小刻食堂噢！一定有很多好玩的新功能啦！！", null, "update");
-        }
-
-        if (Settings.feature.announcementNotice) {
-            let filterList = data.list.filter(
-                (x) =>
-                    new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
-                    new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
-            );
-
-            filterList.map(x => {
-                if (x.notice) {
-                    let imgReg = /<img.*?src='(.*?)'/;
-                    let imgUrl = x.html.match(imgReg)[1];
-                    let removeTagReg = /<\/?.+?\/?>/g;
-                    let divReg = /<\/div>/g;
-
-                    let content = x.html.replace(/\s+/g, '');
-                    content = content.replace(divReg, '\n');
-                    content = content.replace(removeTagReg, '');
-                    NotificationUtil.SendNotice("博士，重要公告，记得开列表看噢！", content, imgUrl, "announcement" + new Date().getTime());
-                }
-            })
-        }
-    });
-}
-
 // 通用方法
 const kazeFun = {
     //判断是否为最新 并且在此推送
@@ -160,13 +130,12 @@ const kazeFun = {
 
     // 初始化
     Init() {
-        // chrome.browserAction.setBadgeText({ text: 'Beta' });
-        // chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
+        PlatformHelper.BrowserAction.setBadge('Beta', [255, 0, 0, 255]);
         // 开始蹲饼！
         Settings.doAfterInit(() => {
             startDunTimer();
             setTimeout(() => {
-                announcementMention();
+                ServerUtil.checkOnlineInfo(true);
             }, 600000);
         });
 
@@ -228,19 +197,16 @@ const kazeFun = {
                         if (allWindow.findIndex(x => x.id == popupWindowId) > 0) {
                             PlatformHelper.Windows.remove(popupWindowId);
                         }
-                    })
+                    });
                 }
-                let head = navigator.userAgent;
-                if (head.indexOf("Firefox") > 1) {
-                    PlatformHelper.Windows
-                        .createPanelWindow(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW), 800, 850)
-                        .then(tab => popupWindowId = tab.id);
-                } else {
-                    PlatformHelper.Windows
-                        .createPanelWindow(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW), 800, 950)
-                        .then(tab => popupWindowId = tab.id);
+                const width = 800;
+                let height = 950;
+                if (PlatformHelper.PlatformType === PLATFORM_FIREFOX) {
+                    height = 850;
                 }
-
+                PlatformHelper.Windows
+                    .createPopupWindow(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW), width, height)
+                    .then(tab => popupWindowId = tab.id);
             }
         });
     }

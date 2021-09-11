@@ -1,6 +1,6 @@
 <template>
   <div id="timeline-area">
-    <Search ref="SearchModel" :searchShow="searchShow"></Search>
+    <Search ref="SearchModel" :searchShow="searchShow" @searchTextChange="changeFilterText"></Search>
     <el-card
         shadow="never"
         class="info-card online-speak"
@@ -55,10 +55,7 @@
                     @click.stop="openToolDrawer"
                 >
                   <div class="sane">
-                    当前理智为<span class="online-blue sane-number">{{
-                      san.currentSan
-                    }}</span
-                  >点
+                    当前理智为<span class="online-blue sane-number">{{ san.currentSan }}</span>点
                   </div>
                   <div class="sane-info">
                     {{ san.remainTime }}
@@ -75,11 +72,7 @@
                       :key="item.type"
                   >
                     <div slot="content">
-                      {{
-                        `${item.name} - 开放日期： ${calcResourceOpenDay(
-                            item.day
-                        )}`
-                      }}
+                      {{ `${item.name} - 开放日期： ${calcResourceOpenDay(item.day)}` }}
                     </div>
                     <div
                         class="day-info-content-bottom-card"
@@ -93,14 +86,17 @@
             </div>
           </div>
         </el-carousel-item>
-        <el-carousel-item v-for="(item, index) in onlineSpeakList" :key="index">
+        <el-carousel-item
+            v-for="(item, index) in onlineSpeakList"
+            :key="index"
+        >
           <div v-html="item.html"></div>
         </el-carousel-item>
       </el-carousel>
     </el-card>
     <el-tabs
         v-if="settings.display.showByTag"
-        v-model="settings.display.defaultTag"
+        v-model="currentTag"
         :stretch="true"
         @tab-click="selectListByTag"
     >
@@ -108,20 +104,16 @@
           v-for="item of transformToSortList(cardListByTag)"
           :key="item.dataName"
           :label="item.dataName"
-          :name="item.dataName"
-      >
-        <span slot="label">
-          <el-tooltip
-              effect="dark"
-              :content="getDataSourceByName(item.dataName).title"
-              placement="top"
-          >
-            <img
-                class="title-img"
-                :src="getDataSourceByName(item.dataName).icon"
-            />
-          </el-tooltip>
-        </span>
+          :name="item.dataName">
+            <span slot="label">
+              <el-tooltip
+                  effect="dark"
+                  :content="getDataSourceByName(item.dataName).title"
+                  placement="top"
+              >
+              <img class="title-img" :src="getDataSourceByName(item.dataName).icon"/>
+              </el-tooltip>
+            </span>
       </el-tab-pane>
     </el-tabs>
     <div class="content-timeline-shadow"></div>
@@ -129,45 +121,39 @@
         ref="elTimelineArea"
         v-if="LazyLoaded"
         :class="[
-        settings.display.windowMode ? 'window' : '',
-        settings.display.showByTag ? 'tag' : '',
-      ]"
+            settings.display.windowMode ? 'window' : '',
+            settings.display.showByTag ? 'tag' : ''
+        ]"
     >
       <MyElTimelineItem
           v-for="(item, index) in filterCardList"
           :key="index"
           :timestamp="item.timeForDisplay"
           placement="top"
-          :icon-style="{
-          '--icon': `url('${getDataSourceByName(item.dataSource).icon}')`,
-        }"
+          :icon-style="{'--icon': `url('${getDataSourceByName(item.dataSource).icon}')`}"
           :icon="'headImg'"
       >
         <span class="is-top-info" v-if="item.isTop">
-          <span class="color-blue"
-          >【当前条目在{{
-              getDataSourceByName(item.dataSource).title
-            }}的时间线内为置顶状态】</span
-          >
+          <span class="color-blue">【当前条目在{{ getDataSourceByName(item.dataSource).title }}的时间线内为置顶状态】</span>
         </span>
 
         <span class="card-btn-area">
           <el-button
               class="to-copy-share"
-              :class="{ 'special-source': item.componentData }"
+              :class="{'special-source': item.componentData}"
               size="small"
               @click="copyData(item)"
               title="生成图片并复制进剪切板"
           >
             <i class="el-icon-share"></i>
           </el-button>
-          <el-button
-              class="to-copy-btn"
-              :class="{ 'special-source': item.componentData }"
-              size="small"
-              @click="copyTextData(item)"
-              title="复制文字进剪切板"
-          >
+         <el-button
+             class="to-copy-btn"
+             :class="{'special-source': item.componentData}"
+             size="small"
+             @click="copyTextData(item)"
+             title="复制文字进剪切板"
+         >
             <i class="el-icon-document-copy"></i>
           </el-button>
           <el-button
@@ -181,17 +167,13 @@
         </span>
         <el-card
             class="card"
-            :class="[
-            `font-size-${settings.display.fontSize}`,
-            { 'special-source': item.componentData },
-          ]"
+            :class="[`font-size-${settings.display.fontSize}`, {'special-source': item.componentData}]"
             shadow="never"
         >
           <component
               :is="resolveComponent(item)"
               :item="item"
               :show-image="imgShow"
-              :link-Max="settings.feature.linkMax"
           ></component>
         </el-card>
       </MyElTimelineItem>
@@ -209,15 +191,7 @@
 </template>
 
 <script>
-import {
-  CURRENT_VERSION,
-  dayInfo,
-  PAGE_UPDATE,
-  quickJump,
-  TOOL_QR_URL, 
-  CANTEEN_INTERFACE, 
-  CANTEEN_INTERFACE_STANDBY
-} from "../../common/Constants";
+import {CURRENT_VERSION, dayInfo, PAGE_UPDATE, quickJump, TOOL_QR_URL} from "../../common/Constants";
 import MyElTimelineItem from "./MyTimeLineItem";
 import DefaultItem from "./items/DefaultItem";
 import DataSourceUtil from "../../common/util/DataSourceUtil";
@@ -225,18 +199,21 @@ import Settings from "../../common/Settings";
 import SanInfo from "../../common/sync/SanInfo";
 import TimeUtil from "../../common/util/TimeUtil";
 import Search from "../Search";
-import HttpUtil from "../../common/util/HttpUtil";
-import {deepAssign, testSync} from "../../common/util/CommonFunctions";
+import {deepAssign} from "../../common/util/CommonFunctions";
 import PlatformHelper from "../../common/platform/PlatformHelper";
 import html2canvas from "html2canvas";
 import janvas from "../../common/util/janvas.min.js";
 import QRCode from "qrcode";
+import InsiderUtil from "../../common/util/InsiderUtil";
+import ServerUtil from "../../common/util/ServerUtil";
 
 export default {
   name: "TimeLine",
   components: {MyElTimelineItem, Search},
   props: ["cardListByTag", "imgShow"],
   data() {
+    Settings.doAfterInit(settings => this.currentTag = settings.display.defaultTag);
+    Settings.doAfterUpdate(settings => this.currentTag = settings.display.defaultTag);
     return {
       settings: Settings,
       san: SanInfo,
@@ -244,15 +221,16 @@ export default {
       onlineDayInfo: {},
       onlineSpeakList: [],
       isNew: false,
-      dayInfo,
-      quickJump,
+      dayInfo: dayInfo,
+      quickJump: quickJump,
       loading: true, // 初始化加载
       cardList: [],
       cardListAll: {},
+      currentTag: Settings.display.defaultTag,
       filterText: "",
       filterCardList: [],
       LazyLoaded: false,
-      insiderCode: null, // 储存内部密码
+      insiderCodeMap: null, // 储存内部密码
       janvas: null, //菜单模块icon
       imageError: false,
       errorImageUrl: "",
@@ -269,13 +247,11 @@ export default {
   },
   watch: {
     cardListByTag() {
-      this.cardListAll = DataSourceUtil.mergeAllData(this.cardListByTag).map(
-          (x) => {
-            x.content = x.content.replace(/\n/g, "<br/>");
-            return x;
-          }
-      );
-      this.selectListByTag();
+      this.cardListAll = DataSourceUtil.mergeAllData(this.cardListByTag).map((x) => {
+        x.content = x.content.replace(/\n/g, "<br/>");
+        return x;
+      });
+      this.selectListByTag(false);
     },
     cardList() {
       this.filterList();
@@ -287,7 +263,7 @@ export default {
       if (this.settings.feature.linkMax) {
         PlatformHelper.Windows.createMaxPopupWindow(url);
       } else {
-        PlatformHelper.Windows.createPanelWindow(url, w, h);
+        PlatformHelper.Windows.createPopupWindow(url, w, h);
       }
     },
     getDataSourceByName: DataSourceUtil.getByName,
@@ -299,11 +275,14 @@ export default {
       }
       return this.getDataSourceByName(item.dataSource).dataType;
     },
-    selectListByTag() {
+    selectListByTag(emitEvent = true) {
       if (this.settings.display.showByTag) {
-        this.cardList = this.cardListByTag[this.settings.display.defaultTag];
+        this.cardList = this.cardListByTag[this.currentTag];
       } else {
         this.cardList = this.cardListAll;
+      }
+      if (emitEvent) {
+        this.$emit('cardListChange');
       }
     },
     // 打开计算小工具
@@ -339,10 +318,7 @@ export default {
     },
     // 获取在线信息
     getOnlineSpeak() {
-      HttpUtil.GET_Json(
-        CANTEEN_INTERFACE + "?t=" + new Date().getTime(),
-        CANTEEN_INTERFACE_STANDBY + "?t=" + new Date().getTime()
-      ).then((data) => {
+      ServerUtil.checkOnlineInfo(false).then((data) => {
         // 头部公告
         let filterList = data.list.filter(
             (x) =>
@@ -375,11 +351,7 @@ export default {
         );
 
         // 内部密码
-        this.insiderCode = data.insider.insiderCode;
-        if (this.insiderCode !== this.settings.insider.code) {
-          this.settings.insider.level = 0;
-          this.settings.saveSettings();
-        }
+        this.insiderCodeMap = data.insider;
         this.resourcesNotToday();
         this.loading = false;
       });
@@ -398,10 +370,9 @@ export default {
       if (this.openResources) {
         return "活动期间，“资源收集”限时全天开放";
       } else {
-        return days.map((x) => TimeUtil.numberToWeek(x)).join();
+        return days.map(x => TimeUtil.numberToWeek(x)).join();
       }
     },
-    // 调整过滤文字
     changeFilterText(text) {
       if (text != null) {
         text = text.trim();
@@ -412,37 +383,33 @@ export default {
     filterList() {
       if (this.filterText) {
         const newFilterList = [];
-        deepAssign([], this.cardList).forEach((item) => {
-          const regex = new RegExp(
-              "(" +
-              this.filterText.replaceAll(/([*.?+$^\[\](){}|\\\/])/g, "\\$1") +
-              ")",
-              "gi"
-          );
-          if (regex.test(item.content.replaceAll(/(<([^>]+)>)/gi, ""))) {
-            let newContent = item.content.replaceAll(/<br\/?>/gi, "\n");
-            newContent = newContent.replaceAll(
-                regex,
-                '<span class="highlight">$1</span>'
-            );
-            newContent = newContent.replaceAll("\n", "<br>");
-            item.content = newContent;
-            newFilterList.push(item);
-          }
-        });
+        deepAssign([], this.cardList)
+            .forEach((item) => {
+              const regex = new RegExp('(' + this.filterText.replaceAll(/([*.?+$^\[\](){}|\\\/])/g, '\\$1') + ')', 'gi');
+              if (regex.test(item.content.replaceAll(/(<([^>]+)>)/gi, ''))) {
+                let newContent = item.content.replaceAll(/<br\/?>/gi, '\n')
+                newContent = newContent.replaceAll(regex, '<span class="highlight">$1</span>');
+                newContent = newContent.replaceAll('\n', '<br>');
+                item.content = newContent;
+                newFilterList.push(item);
+              }
+            });
         this.filterCardList = newFilterList;
       } else {
         this.filterCardList = this.cardList;
       }
     },
     changeInsider() {
-      if (this.filterText === this.insiderCode) {
-        this.settings.insider.code = this.insiderCode;
-        this.settings.insider.level = 1;
+      console.log(this.filterText);
+      console.log(this.filterText);
+      const [newLevel, validCode] = InsiderUtil.calcInsiderLevel(this.filterText, this.insiderCodeMap);
+      if (validCode) {
+        this.settings.insider.code = this.filterText;
+        this.settings.insider.level = newLevel;
         this.settings.saveSettings();
         this.$message({
           center: true,
-          message: "成功进入隐藏模式",
+          message: "成功启用高级功能",
           type: "success",
         });
       }
@@ -456,8 +423,7 @@ export default {
             this.changeInsider();
             this.$refs.SearchModel.clearText();
             this.filterText = null;
-            // 同时滚动条回到最顶上
-            this.$refs["el-timeline-area"].$el.scrollTop = 0;
+            this.$emit('cardListChange');
           }
         }
       });
@@ -628,7 +594,7 @@ export default {
                 that.imageError = true;
               });
         });
-      },100);
+      }, 100);
     },
     // 加载图片
     loadImages(obj) {
@@ -938,8 +904,7 @@ img[lazy="error"] {
         background-color: @@hover;
       }
 
-      .to-copy-btn,
-      .to-copy-share {
+      .to-copy-btn, .to-copy-share {
         position: absolute;
         top: -8px;
         right: 50px;
