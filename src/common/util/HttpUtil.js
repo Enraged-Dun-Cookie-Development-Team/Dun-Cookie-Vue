@@ -1,24 +1,22 @@
 import PlatformHelper from '../platform/PlatformHelper';
 import {DEBUG_LOG} from "../Constants";
 
-class HttpUtil {
+function appendTimeStamp(urlStr) {
+  const url = new URL(urlStr);
+  url.searchParams.set('t', new Date().getTime().toString())
+  return url.toString()
+}
 
-  static appendTimeStamp(url) {
-    // 此处是为了兼容有queryString的url和没有queryString的url，用?判断应该大概没问题吧
-    if (url.indexOf('?') >= 0) {
-      return `${url}&t=${new Date().getTime()}`;
-    } else {
-      return `${url}?t=${new Date().getTime()}`;
-    }
-  }
+class HttpUtil {
 
   /**
    * 向指定的url发送get请求并解析为JSON
    * @param url 想要请求的url
+   * @param appendTimestamp 是否要增加时间戳参数以避免缓存，默认为true
    * @return {Promise}
    */
-  static async GET_Json(url) {
-    const response = await HttpUtil.GET(url);
+  static async GET_Json(url, appendTimestamp = true) {
+    const response = await HttpUtil.GET(url, appendTimestamp);
     if (response) {
       return JSON.parse(response);
     }
@@ -27,9 +25,13 @@ class HttpUtil {
   /**
    * 向指定的url发送get请求
    * @param url 想要请求的url
+   * @param appendTimestamp 是否要增加时间戳参数以避免缓存，默认为true
    * @return {Promise}
    */
-  static async GET(url) {
+  static async GET(url, appendTimestamp = true) {
+    if (appendTimestamp) {
+      url = appendTimeStamp(url);
+    }
     if (DEBUG_LOG) {
       console.log(`正在请求URL：${url}`);
     }

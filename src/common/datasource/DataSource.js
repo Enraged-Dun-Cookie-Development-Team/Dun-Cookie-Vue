@@ -55,12 +55,10 @@ class DataSource {
   async fetchData() {
     let promise;
     if (typeof this.dataUrl === 'string') {
-      promise = HttpUtil.GET(HttpUtil.appendTimeStamp(this.dataUrl));
+      promise = HttpUtil.GET(this.dataUrl);
     } else if (Array.isArray(this.dataUrl)) {
       promise = Promise.all(
-        this.dataUrl.map(url =>
-          HttpUtil.GET(HttpUtil.appendTimeStamp(url))
-        )
+        this.dataUrl.map(url => HttpUtil.GET(url))
       );
     } else {
       if (DEBUG_LOG) {

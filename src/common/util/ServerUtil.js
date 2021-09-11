@@ -14,7 +14,7 @@ export default class ServerUtil {
     static async checkOnlineInfo(shouldNotice) {
         let data;
         try {
-            data = await PromiseUtil.any(CANTEEN_INTERFACE_LIST.map(api => HttpUtil.GET_Json(HttpUtil.appendTimeStamp(api + "Dun-Cookies-Info.json"))), res => !!res);
+            data = await PromiseUtil.any(CANTEEN_INTERFACE_LIST.map(api => HttpUtil.GET_Json(api + "Dun-Cookies-Info.json")), res => !!res);
         } catch (e) {
             console.log(e);
         }
