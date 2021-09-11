@@ -190,7 +190,10 @@ class NotificationHelper {
  */
 class WindowsHelper {
     create(url, type, width, height, state) {
-        return currentPlatform.createWindow(url, type, width, height, state);
+        return currentPlatform.createWindow(url, type, width, height, state).catch(err => {
+            console.warn("创建窗口失败！")
+            console.error(err);
+        });
     }
 
     createPopupWindow(url, width, height) {

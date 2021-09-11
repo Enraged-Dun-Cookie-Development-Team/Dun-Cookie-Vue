@@ -159,7 +159,7 @@ export default class AbstractPlatform {
         if (state) {
             createData.state = state;
             if (['minimized', 'maximized', 'fullscreen'].indexOf(state) >= 0) {
-                canUsePosition = true;
+                canUsePosition = false;
             }
         }
         if (canUsePosition) {
