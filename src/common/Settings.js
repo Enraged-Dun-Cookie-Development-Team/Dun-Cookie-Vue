@@ -377,8 +377,8 @@ class Settings {
     const promise = PlatformHelper.Storage.saveLocalStorage('settings', this);
     promise.then(() => {
       PlatformHelper.Message.send(MESSAGE_SETTINGS_UPDATE, this);
-      // console.log('update settings: ');
-      // console.log(this);
+      console.log('update settings: ');
+      console.log(this);
     });
     return promise;
   }
