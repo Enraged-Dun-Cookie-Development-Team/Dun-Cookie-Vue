@@ -181,6 +181,7 @@
             ref="timeline"
             :imgShow="LazyLoaded"
             :cardListByTag="cardList"
+            @cardListChange="goTop(1, 0)"
         >
         </time-line>
       </div>
@@ -440,16 +441,19 @@ export default {
     },
 
     // 回顶部
-    goTop() {
+    goTop(step = 10, interval = 10) {
       let scrollArea = this.$refs.timeline.$refs.elTimelineArea.$el;
       let top = scrollArea.scrollTop;
-      let changeTop = top / 10;
+      if (step < 1) {
+        step = 1;
+      }
+      let changeTop = top / step;
       const timeTop = setInterval(() => {
         scrollArea.scrollTop = top -= changeTop;
         if (top <= 0) {
           clearInterval(timeTop);
         }
-      }, 10);
+      }, interval);
     },
 
     openSetting() {

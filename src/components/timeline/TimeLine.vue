@@ -1,6 +1,6 @@
 <template>
   <div id="timeline-area">
-    <Search ref="SearchModel" :searchShow="searchShow"></Search>
+    <Search ref="SearchModel" :searchShow="searchShow" @searchTextChange="changeFilterText"></Search>
     <el-card
         shadow="never"
         class="info-card online-speak"
@@ -96,7 +96,7 @@
     </el-card>
     <el-tabs
         v-if="settings.display.showByTag"
-        v-model="settings.display.defaultTag"
+        v-model="currentTag"
         :stretch="true"
         @tab-click="selectListByTag"
     >
@@ -174,7 +174,6 @@
               :is="resolveComponent(item)"
               :item="item"
               :show-image="imgShow"
-              :link-Max="settings.feature.linkMax"
           ></component>
         </el-card>
       </MyElTimelineItem>
@@ -213,6 +212,8 @@ export default {
   components: {MyElTimelineItem, Search},
   props: ["cardListByTag", "imgShow"],
   data() {
+    Settings.doAfterInit(settings => this.currentTag = settings.display.defaultTag);
+    Settings.doAfterUpdate(settings => this.currentTag = settings.display.defaultTag);
     return {
       settings: Settings,
       san: SanInfo,
@@ -225,6 +226,7 @@ export default {
       loading: true, // 初始化加载
       cardList: [],
       cardListAll: {},
+      currentTag: Settings.display.defaultTag,
       filterText: "",
       filterCardList: [],
       LazyLoaded: false,
@@ -249,7 +251,7 @@ export default {
         x.content = x.content.replace(/\n/g, "<br/>");
         return x;
       });
-      this.selectListByTag();
+      this.selectListByTag(false);
     },
     cardList() {
       this.filterList();
@@ -273,11 +275,14 @@ export default {
       }
       return this.getDataSourceByName(item.dataSource).dataType;
     },
-    selectListByTag() {
+    selectListByTag(emitEvent = true) {
       if (this.settings.display.showByTag) {
-        this.cardList = this.cardListByTag[this.settings.display.defaultTag];
+        this.cardList = this.cardListByTag[this.currentTag];
       } else {
         this.cardList = this.cardListAll;
+      }
+      if (emitEvent) {
+        this.$emit('cardListChange');
       }
     },
     // 打开计算小工具
@@ -368,7 +373,6 @@ export default {
         return days.map(x => TimeUtil.numberToWeek(x)).join();
       }
     },
-    // 调整过滤文字，该方法由Search子组件调用
     changeFilterText(text) {
       if (text != null) {
         text = text.trim();
@@ -396,6 +400,8 @@ export default {
       }
     },
     changeInsider() {
+      console.log(this.filterText);
+      console.log(this.filterText);
       const [newLevel, validCode] = InsiderUtil.calcInsiderLevel(this.filterText, this.insiderCodeMap);
       if (validCode) {
         this.settings.insider.code = this.filterText;
@@ -417,8 +423,7 @@ export default {
             this.changeInsider();
             this.$refs.SearchModel.clearText();
             this.filterText = null;
-            // 同时滚动条回到最顶上
-            this.$refs["el-timeline-area"].$el.scrollTop = 0;
+            this.$emit('cardListChange');
           }
         }
       });
