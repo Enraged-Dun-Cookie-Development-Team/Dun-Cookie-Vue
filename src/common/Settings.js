@@ -4,6 +4,10 @@ import {getDefaultDataSources} from './datasource/DefaultDataSources';
 import {customDataSourceTypes} from './datasource/CustomDataSources';
 import {updateSettings} from './SettingsUpdater';
 import PlatformHelper from './platform/PlatformHelper';
+import DebugUtil from "./util/DebugUtil";
+
+// 随便调用一个无影响的东西来导入调试工具类
+DebugUtil.constructor;
 
 /**
  * 这个可以确保代码在settings初始化完毕之后再执行
@@ -373,8 +377,8 @@ class Settings {
     const promise = PlatformHelper.Storage.saveLocalStorage('settings', this);
     promise.then(() => {
       PlatformHelper.Message.send(MESSAGE_SETTINGS_UPDATE, this);
-      // console.log('update settings: ');
-      // console.log(this);
+      console.log('update settings: ');
+      console.log(this);
     });
     return promise;
   }

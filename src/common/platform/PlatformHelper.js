@@ -98,6 +98,10 @@ export default class PlatformHelper {
     static get Http() {
         return httpHelper;
     }
+
+    static get HtmlParser() {
+        return currentPlatform.getHtmlParser();
+    }
 }
 
 // 以下为分类API Helper

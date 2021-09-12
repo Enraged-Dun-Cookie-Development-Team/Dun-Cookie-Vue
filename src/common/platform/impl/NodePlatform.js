@@ -1,6 +1,6 @@
 import AbstractPlatform from '../AbstractPlatform';
-import { DEBUG_LOG, PLATFORM_NODE } from '../../Constants';
-import { deepAssign } from '../../util/CommonFunctions';
+import {DEBUG_LOG, PLATFORM_NODE} from '../../Constants';
+import {deepAssign} from '../../util/CommonFunctions';
 
 const storageFile = 'storage.json';
 
@@ -257,5 +257,11 @@ export default class NodePlatform extends AbstractPlatform {
         }
         // 无事发生
         return new Promise((resolve, _) => resolve());
+    }
+
+    getHtmlParser() {
+        const {JSDOM} = node_require('jsdom');
+        const {window} = new JSDOM("");
+        return node_require('jquery')(window);
     }
 }
