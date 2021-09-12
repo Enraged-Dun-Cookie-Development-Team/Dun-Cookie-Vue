@@ -88,7 +88,7 @@ export default {
     // 检查一次更新
     getUpdateInfo() {
       ServerUtil.checkOnlineInfo(false).then((responseText) => {
-        this.updateInfo = JSON.parse(responseText).upgrade;
+        this.updateInfo = responseText.upgrade;
       });
     },
   },
