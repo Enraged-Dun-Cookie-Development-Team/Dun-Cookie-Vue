@@ -18,7 +18,7 @@
         <el-carousel-item v-if="isNew">
           <div class="new-info-area" @click="openUpdate">
             <img
-                src="http://prts.wiki/images/b/be/%E9%81%93%E5%85%B7_%E5%B8%A6%E6%A1%86_%E8%B5%84%E6%B7%B1%E5%B9%B2%E5%91%98%E7%89%B9%E8%AE%AD%E9%82%80%E8%AF%B7%E5%87%BD.png"
+                src="/assets/image/update.png"
             />
             博士，检测到了新版本，点击这里进入更新页面
           </div>
