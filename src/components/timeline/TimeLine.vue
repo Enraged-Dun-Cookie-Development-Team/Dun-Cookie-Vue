@@ -143,7 +143,8 @@
               :class="{'special-source': item.componentData}"
               size="small"
               @click="copyData(item)"
-              title="生成图片并复制进剪切板"
+              @contextmenu.prevent.native="rightCopyData(item)"
+              title="左键生成图片分享，右键九宫格分享"
           >
             <i class="el-icon-share"></i>
           </el-button>
@@ -187,6 +188,9 @@
     >
       <img :src="errorImageUrl" style="width: 100%"/>
     </el-dialog>
+    <select-image-to-copy ref="SelectImageToCopy" @copyData="copyData">
+
+    </select-image-to-copy>
   </div>
 </template>
 
@@ -206,10 +210,11 @@ import janvas from "../../common/util/janvas.min.js";
 import QRCode from "qrcode";
 import InsiderUtil from "../../common/util/InsiderUtil";
 import ServerUtil from "../../common/util/ServerUtil";
+import SelectImageToCopy from "@/components/SelectImageToCopy";
 
 export default {
   name: "TimeLine",
-  components: {MyElTimelineItem, Search},
+  components: {MyElTimelineItem, Search, SelectImageToCopy},
   props: ["cardListByTag", "imgShow"],
   data() {
     Settings.doAfterInit(settings => this.currentTag = settings.display.defaultTag);
@@ -400,8 +405,6 @@ export default {
       }
     },
     changeInsider() {
-      console.log(this.filterText);
-      console.log(this.filterText);
       const [newLevel, validCode] = InsiderUtil.calcInsiderLevel(this.filterText, this.insiderCodeMap);
       if (validCode) {
         this.settings.insider.code = this.filterText;
@@ -494,19 +497,27 @@ export default {
       );
       return;
     },
-    // 复制
-    copyData(item) {
+    /**
+     * 复制
+     * @param item
+     * @param 从高级分享内传来的canvas对象，用于展示图片
+     */
+    copyData(item, imageSrc) {
       this.$message({
         offset: 50,
         center: true,
         message: "生成图片中，请稍后",
         type: "info",
       });
+      // 头图 图标 资源文件
       item.imgObj = {
         icon: "/assets/image/icon.png",
         sourceIcon: this.getDataSourceByName(item.dataSource).icon,
       };
-      if (item.coverImage) {
+      // 单图或者多图  selectImage大于1走多图 等于1就直接变成头图
+      if (imageSrc) {
+        item.imgObj.headFigure = imageSrc;
+      } else if (item.coverImage) {
         item.imgObj.headFigure = item.coverImage;
       }
 
@@ -514,12 +525,13 @@ export default {
         item.toolQrCode = await new QRCode.toCanvas(TOOL_QR_URL)
         item.jumpQrCode = await new QRCode.toCanvas(item.jumpUrl)
         let textCanvas = await html2canvas(document.querySelector(`.wrapper[data-id='${item.id}'] .wrapper-content`))
-        let janvasData = await this.loadImages(item.imgObj)
+        let janvasData = await this.loadImages(item.imgObj);
         let canvas = document.createElement("canvas");
         let ctx = canvas.getContext("2d");
         // 判断是图片大还是文字大 根据这两个来判断canvas宽度 但最少要600宽度
         let canvasWidth = textCanvas.width;
         let canvasHeight = textCanvas.height;
+
         if (janvasData.headFigure != undefined) {
           canvasWidth =
               textCanvas.width > janvasData.headFigure.width
@@ -563,6 +575,7 @@ export default {
           ctx.font = "20px Microsoft Yahei";
           ctx.fillText(item.content, 10, 160);
         }
+        // headFigure 这里面有值 代表有一张图或者九宫格选图选了一张
         if (janvasData.headFigure) {
           ctx.drawImage(
               janvasData.headFigure,
@@ -572,6 +585,10 @@ export default {
               janvasData.headFigure.height
           );
         }
+
+        // this.errorImageUrl = canvas.toDataURL("image/jpeg");
+        // this.imageError = true;
+        // return;
 
         let that = this;
         canvas.toBlob(function (blob) {
@@ -595,6 +612,22 @@ export default {
               });
         });
       }, 100);
+    },
+
+    // 高级复制
+    rightCopyData(item) {
+      if(item.imageList.length>0){
+        let selectImageToCopy = this.$refs.SelectImageToCopy;
+        selectImageToCopy.item = item;
+        selectImageToCopy.copyImageToImage = true;
+      }else{
+        this.$message({
+          offset: 50,
+          center: true,
+          message: "当前图片不足2张",
+          type: "warning",
+        });
+      }
     },
     // 加载图片
     loadImages(obj) {

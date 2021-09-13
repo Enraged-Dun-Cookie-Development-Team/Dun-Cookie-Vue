@@ -82,7 +82,6 @@ export default {
     },
     async saveWindowInfoAndOpenWindow(info, size) {
       let windowTabId = await PlatformHelper.Storage.getLocalStorage('windowTabId');
-      console.log(windowTabId)
       if (windowTabId != undefined && windowTabId != 0) {
         let allWindow = await PlatformHelper.Windows.getAllWindow();
         if (allWindow.findIndex(x => x.id == windowTabId) > 0) {
