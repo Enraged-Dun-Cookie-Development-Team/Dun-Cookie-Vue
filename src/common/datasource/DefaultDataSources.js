@@ -90,11 +90,11 @@ const configList = [
         7
     ),
     new TerraHistoricusDataSource(
-      '/assets/image/icon/tl.jpg',
-      '泰拉记事社官网',
-      '泰拉记事社官网',
-      'https://terra-historicus.hypergryph.com/api/comic',
-      8
+        '/assets/image/icon/tl.jpg',
+        '泰拉记事社官网',
+        '泰拉记事社官网',
+        'https://terra-historicus.hypergryph.com/api/comic',
+        8
     ),
     new NeteaseCloudMusicDataSource(
         '/assets/image/wyyyy.ico',
