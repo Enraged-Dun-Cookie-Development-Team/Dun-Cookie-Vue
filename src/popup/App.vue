@@ -148,7 +148,7 @@
           circle
           class="top-btn"
           :class="(!drawer && scrollShow)?'top-btn-show':''"
-          @click.stop="goTop"
+          @click.stop="goTop()"
       ></el-button>
       <div class="title-area">
         <div class="version">

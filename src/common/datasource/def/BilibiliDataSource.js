@@ -48,6 +48,7 @@ export class BilibiliDataSource extends DataSource {
           case 2: {
             builder
               .imageList(dynamicInfo.item.pictures && dynamicInfo.item.pictures.map(x => x.img_src))
+              .imageHttpList(dynamicInfo.item.pictures && dynamicInfo.item.pictures.map(x => x.img_src.replace("https", "http")))
               .coverImage((dynamicInfo.item.pictures && dynamicInfo.item.pictures.length > 0) ? dynamicInfo.item.pictures[0].img_src : null)
               .content(dynamicInfo.item.description);
             break;

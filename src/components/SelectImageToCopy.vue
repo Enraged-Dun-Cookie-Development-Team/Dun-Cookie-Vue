@@ -73,11 +73,8 @@ export default {
     copyData() {
       this.isPrint = true;
       this.hideNoImage = true;
-      if (this.selectImg.length == 1) {
+      if (this.selectImg.length == 1 || this.selectImg.length == 2) {
         this.spanNumber = 24;
-      }
-      if (this.selectImg.length == 2) {
-        this.spanNumber = 12;
       }
       this.$nextTick(async () => {
         let imageCanvas = await html2canvas(document.querySelector('.image-area'), {
