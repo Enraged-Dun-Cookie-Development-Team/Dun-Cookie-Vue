@@ -24,7 +24,7 @@ export default {
       }
     },
     searchText(value) {
-      this.$parent.changeFilterText(value);
+      this.$emit('searchTextChange', value);
     },
   },
   data() {

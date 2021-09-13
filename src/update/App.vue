@@ -25,42 +25,33 @@
       <div style="text-align: center; margin-bottom: 10px">
         <el-button
           size="mini"
-          type="success"
+           type="success"
           @click="openUrl(updateInfo.downChrome)"
           >Chrome应用商店</el-button
         >
         <el-button
-          size="mini"
-          type="success"
-          @click="openUrl(updateInfo.downEdge)"
-          >Edge应用商店</el-button
+            size="mini"
+            type="success"
+            @click="openUrl(updateInfo.downEdge)"
+        >Edge应用商店</el-button
         >
         <el-button
-          size="mini"
-          type="success"
-          @click="openUrl(updateInfo.downFirefox)"
-          >Firefox应用商店</el-button
+            size="mini"
+            type="success"
+            @click="openUrl(updateInfo.downFirefox)"
+        >Firefox应用商店</el-button
         >
       </div>
       <div style="text-align: center">
-        <el-button
-          type="success"
-          @click="openUrl(updateInfo.downCrx)"
-          size="mini"
+      <el-button type="success" @click="openUrl(updateInfo.downCrx)" size="mini"
           >下载Crx</el-button
         >
-        <el-button
-          type="success"
-          @click="openUrl(updateInfo.downZip)"
-          size="mini"
+        <el-button type="success" @click="openUrl(updateInfo.downZip)" size="mini"
           >下载Zip</el-button
         >
-
-        <el-button
-          v-if="updateInfo.downSpareText"
-          @click="openUrl(updateInfo.downSpare)"
-          size="mini"
-          >{{ updateInfo.downSpareText }}</el-button
+        
+        <el-button v-if="updateInfo.downSpareText" @click="openUrl(updateInfo.downSpare)" size="mini"
+          >{{updateInfo.downSpareText}}</el-button
         >
       </div>
       <el-divider></el-divider>
@@ -70,14 +61,14 @@
 </template>
 
 <script>
-import HttpUtil from "../common/util/HttpUtil";
-import Feedback from "../components/Feedback";
-import { CURRENT_VERSION, CANTEEN_INTERFACE, CANTEEN_INTERFACE_STANDBY } from "../common/Constants";
-import PlatformHelper from "../common/platform/PlatformHelper";
+import Feedback from '../components/Feedback';
+import {CURRENT_VERSION} from '../common/Constants';
+import PlatformHelper from '../common/platform/PlatformHelper';
+import ServerUtil from "../common/util/ServerUtil";
 
 export default {
   name: "update",
-  components: { Feedback },
+  components: {Feedback},
   mounted() {
     this.init();
   },
@@ -96,10 +87,7 @@ export default {
     openUrl: PlatformHelper.Tabs.create,
     // 检查一次更新
     getUpdateInfo() {
-      HttpUtil.GET_Json(
-        CANTEEN_INTERFACE + "?t=" + new Date().getTime(),
-        CANTEEN_INTERFACE_STANDBY + "?t=" + new Date().getTime()
-      ).then((responseText) => {
+      ServerUtil.checkOnlineInfo(false).then((responseText) => {
         this.updateInfo = responseText.upgrade;
       });
     },

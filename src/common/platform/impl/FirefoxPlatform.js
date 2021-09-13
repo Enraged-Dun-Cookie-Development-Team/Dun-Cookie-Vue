@@ -1,5 +1,6 @@
-import { PLATFORM_FIREFOX, DEBUG_LOG } from '../../Constants';
+import {PLATFORM_FIREFOX, DEBUG_LOG} from '../../Constants';
 import AbstractPlatform from '../AbstractPlatform';
+import $ from "jquery";
 
 let _isBackground;
 let _isMobile;
@@ -53,7 +54,7 @@ export default class FirefoxPlatform extends AbstractPlatform {
             console.log(`sendMessage - ${type}`);
             console.log(data || 'no-data');
         }
-        const message = { type: type };
+        const message = {type: type};
         if (data) {
             message.data = data;
         }
@@ -111,7 +112,7 @@ export default class FirefoxPlatform extends AbstractPlatform {
     setPopup(url) {
         return new Promise((resolve, reject) => {
             // 虽然不知道为啥Firefox这个不返回Promise，但是Firefox文档里这个确实没写返回值
-            browser.browserAction.setPopup({ popup: url });
+            browser.browserAction.setPopup({popup: url});
             resolve();
         });
     }
@@ -143,26 +144,17 @@ export default class FirefoxPlatform extends AbstractPlatform {
     }
 
     createTab(url) {
-        return browser.tabs.create({ url: url });
+        return browser.tabs.create({url: url});
     }
 
-    createWindow(url, type, width, height) {
-        var createData = {
-            url: url,
-            type: type,
-            width: width,
-            height: height
-        };
-        return browser.windows.create(createData);
-    }
-
-    createMaxWindow(url, type, state) {
-        var createData = {
-            url: url,
-            type: type,
-            state: state
-        };
-        return browser.windows.create(createData);
+    createWindow(url, type, width, height, state) {
+        const $this = this;
+        return new Promise((resolve, reject) => {
+            browser.windows.getCurrent().then(win => {
+                const createData = $this.__buildCreateData(win, url, type, width, height, state);
+                browser.windows.create(createData).then(resolve).catch(reject);
+            });
+        });
     }
 
     removeWindow(windowId) {
@@ -194,22 +186,18 @@ export default class FirefoxPlatform extends AbstractPlatform {
     }
 
     sendHttpRequest(url, method) {
-        return new Promise((resolve, reject) => {
-            let xhr = new XMLHttpRequest();
-            xhr.open(method, url, true);
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        resolve(xhr.responseText);
-                    } else {
-                        reject(`status: ${xhr.status}, response: ` + xhr.responseText);
-                    }
-                }
-            }
-            xhr.onerror = () => {
-                reject('request error');
-            }
-            xhr.send();
-        });
+        return super.__sendXhrRequest(url, method);
+    }
+
+    setBadgeText(text) {
+        return browser.browserAction.setBadgeText({text: text});
+    }
+
+    setBadgeBackgroundColor(color) {
+        return browser.browserAction.setBadgeBackgroundColor({color: color});
+    }
+
+    getHtmlParser() {
+        return $;
     }
 }

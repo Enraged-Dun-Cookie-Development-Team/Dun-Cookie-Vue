@@ -1,43 +1,46 @@
 import PlatformHelper from '../platform/PlatformHelper';
+import {DEBUG_LOG} from "../Constants";
+
+function appendTimeStamp(urlStr) {
+  const url = new URL(urlStr);
+  url.searchParams.set('t', new Date().getTime().toString())
+  return url.toString()
+}
 
 class HttpUtil {
 
   /**
    * 向指定的url发送get请求并解析为JSON
    * @param url 想要请求的url
+   * @param appendTimestamp 是否要增加时间戳参数以避免缓存，默认为true
    * @return {Promise}
    */
-  static GET_Json(url, urlStandby='') {
-    try {
-      if (urlStandby === '') {
-        return HttpUtil.GET(url).then(response => JSON.parse(response));
-      } else {
-        return HttpUtil.Get_Two(url, urlStandby).then(response => JSON.parse(response));
-      }
-    } catch (error) {
-      console.error(error);
+  static async GET_Json(url, appendTimestamp = true) {
+    const response = await HttpUtil.GET(url, appendTimestamp);
+    if (response) {
+      return JSON.parse(response);
     }
-  }
-
-  /**
-   * 向指定的两个url发送get请求
-   * @param url 想要请求的url
-   * @param urlStandby 想要请求的备用url
-   * @return {Promise}
-   */
-  static Get_Two(url, urlStandby) {
-    return PlatformHelper.Http.sendGet(url).catch(() => {
-      return PlatformHelper.Http.sendGet(urlStandby).catch(error => console.error(error))
-    });
   }
 
   /**
    * 向指定的url发送get请求
    * @param url 想要请求的url
+   * @param appendTimestamp 是否要增加时间戳参数以避免缓存，默认为true
    * @return {Promise}
    */
-  static GET(url) {
-    return PlatformHelper.Http.sendGet(url).catch(error => console.error(error));
+  static async GET(url, appendTimestamp = true) {
+    if (appendTimestamp) {
+      url = appendTimeStamp(url);
+    }
+    if (DEBUG_LOG) {
+      console.log(`正在请求URL：${url}`);
+    }
+    try {
+      return await PlatformHelper.Http.sendGet(url);
+    } catch (e) {
+      // 为避免出现错误提示使用户迷惑，故仅使用log而不使用warn或error
+      console.log(e);
+    }
   }
 }
 

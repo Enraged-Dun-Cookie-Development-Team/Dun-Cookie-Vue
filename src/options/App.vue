@@ -454,15 +454,11 @@ import countTo from "vue-count-to";
 
 import Settings from "../common/Settings";
 import DunInfo from "../common/sync/DunInfo";
-import Feedback from "../components/Feedback";
-import { MESSAGE_DUN_INFO_UPDATE, SHOW_VERSION } from "../common/Constants";
-import { defaultDataSourcesList } from "../common/datasource/DefaultDataSources";
+import {MESSAGE_DUN_INFO_UPDATE, SHOW_VERSION} from "../common/Constants";
+import {getDefaultDataSourcesList} from "../common/datasource/DefaultDataSources";
 import TimeUtil from "../common/util/TimeUtil";
-import {
-  customDataSourceTypes,
-  customDataSourceTypesByName,
-} from "../common/datasource/CustomDataSources";
-import { deepAssign } from "../common/util/CommonFunctions";
+import {customDataSourceTypes, customDataSourceTypesByName,} from "../common/datasource/CustomDataSources";
+import {deepAssign} from "../common/util/CommonFunctions";
 import PlatformHelper from "../common/platform/PlatformHelper";
 import "animate.css";
 
@@ -477,12 +473,15 @@ export default {
   },
   watch: {},
   data() {
+    getDefaultDataSourcesList().then(res => {
+      this.defSourcesList.push(...res);
+    });
     return {
       currentVersion: SHOW_VERSION,
       oldDunCount: 0,
       dunInfo: DunInfo,
       settings: Settings,
-      defSourcesList: defaultDataSourcesList,
+      defSourcesList: [],
       customTypes: customDataSourceTypes,
       customTypesByName: customDataSourceTypesByName,
       marks: {

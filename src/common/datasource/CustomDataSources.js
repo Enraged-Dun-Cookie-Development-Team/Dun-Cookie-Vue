@@ -1,5 +1,4 @@
 import {BilibiliDataSource} from './def/BilibiliDataSource';
-import HttpUtil from '../util/HttpUtil';
 import {WeiboDataSource} from './def/WeiboDataSource';
 
 class CustomDataSourceBuilder {
@@ -7,6 +6,7 @@ class CustomDataSourceBuilder {
    * 必须是类constructor
    */
   type;
+
   get typeName() {
     return this.type.typeName;
   }
@@ -48,19 +48,7 @@ const customDataSourceTypes = [
       if (!/^\d+$/.test(arg)) {
         return null;
       }
-      const uid = arg;
-      return HttpUtil.GET_Json(`https://api.bilibili.com/x/space/acc/info?mid=${uid}&jsonp=jsonp`).then(json => {
-        if (json.code != 0) {
-          throw 'request fail: ' + JSON.stringify(json);
-        }
-        const iconUrl = json.data.face;
-        const dataName = this.type.typeName + '_' + uid;
-        const title = json.data.name;
-        const dataUrl = `https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=${uid}&offset_dynamic_id=0&need_top=0&platform=web`;
-        return new this.type(iconUrl, dataName, title, dataUrl, BASE_PRIORITY);
-      }).catch(error => {
-        console.log(error);
-      });
+      return BilibiliDataSource.withUid(arg, BASE_PRIORITY);
     })
   },
   {
@@ -69,19 +57,7 @@ const customDataSourceTypes = [
       if (!/^\d+$/.test(arg)) {
         return null;
       }
-      const uid = arg;
-      return HttpUtil.GET_Json(`https://m.weibo.cn/api/container/getIndex?type=uid&value=${uid}&containerid=100505${uid}`).then(json => {
-        if (json.ok != 1) {
-          throw 'request fail: ' + JSON.stringify(json);
-        }
-        const iconUrl = json.data.userInfo.avatar_hd;
-        const dataName = this.type.typeName + '_' + uid;
-        const title = json.data.userInfo.screen_name;
-        const dataUrl = `https://m.weibo.cn/api/container/getIndex?type=uid&value=${uid}&containerid=107603${uid}`;
-        return new this.type(iconUrl, dataName, title, dataUrl, BASE_PRIORITY);
-      }).catch(error => {
-        console.log(error);
-      });
+      return WeiboDataSource.withUid(arg, BASE_PRIORITY);
     })
   },
 ];

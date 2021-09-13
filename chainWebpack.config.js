@@ -17,6 +17,7 @@ const chainWebpack = config => {
     config.plugin('CopyWebpackPlugin').use(CopyWebpackPlugin, [[
         { from: 'src/assets', to: 'assets' },
         { from: 'src/manifest.json', to: 'manifest.json', flatten: true },
+        { from: 'src/Dun-Cookies-Info.json', to: 'Dun-Cookies-Info.json', flatten: true },
         { from: 'src/test', to: 'test' },
     ]]);
 
@@ -35,6 +36,9 @@ const chainWebpack = config => {
             cleanStaleWebpackAssets: false,
         }]);
     }
+    config.performance
+      .maxEntrypointSize(2_000_000)
+      .maxAssetSize(2_000_000)
 
     config.optimization.clear();
     

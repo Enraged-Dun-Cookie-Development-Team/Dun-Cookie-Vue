@@ -1,6 +1,6 @@
 import AbstractPlatform from '../AbstractPlatform';
-import { DEBUG_LOG, PLATFORM_NODE } from '../../Constants';
-import { deepAssign } from '../../util/CommonFunctions';
+import {DEBUG_LOG, PLATFORM_NODE} from '../../Constants';
+import {deepAssign} from '../../util/CommonFunctions';
 
 const storageFile = 'storage.json';
 
@@ -170,15 +170,7 @@ export default class NodePlatform extends AbstractPlatform {
         return new Promise((resolve, _) => resolve());
     }
 
-    createWindow(url, type, width, height) {
-        if (DEBUG_LOG) {
-            console.log('Node环境不支持Window');
-        }
-        // 无事发生
-        return new Promise((resolve, _) => resolve());
-    }
-
-    createMaxWindow(url, type, state) {
+    createWindow(url, type, width, height, state) {
         if (DEBUG_LOG) {
             console.log('Node环境不支持Window');
         }
@@ -249,5 +241,27 @@ export default class NodePlatform extends AbstractPlatform {
             req.on('error', reject);
             req.end();
         });
+    }
+
+    setBadgeText(text) {
+        if (DEBUG_LOG) {
+            console.log('Node环境不支持Badge');
+        }
+        // 无事发生
+        return new Promise((resolve, _) => resolve());
+    }
+
+    setBadgeBackgroundColor(color) {
+        if (DEBUG_LOG) {
+            console.log('Node环境不支持Badge');
+        }
+        // 无事发生
+        return new Promise((resolve, _) => resolve());
+    }
+
+    getHtmlParser() {
+        const {JSDOM} = node_require('jsdom');
+        const {window} = new JSDOM("");
+        return node_require('jquery')(window);
     }
 }

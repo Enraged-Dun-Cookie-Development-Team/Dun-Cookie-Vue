@@ -1,5 +1,6 @@
 import {PLATFORM_CHROME, DEBUG_LOG} from '../../Constants';
 import AbstractPlatform from '../AbstractPlatform';
+import $ from "jquery";
 
 const IGNORE_MESSAGE_ERROR_1 = 'Could not establish connection. Receiving end does not exist.';
 const IGNORE_MESSAGE_ERROR_2 = 'The message port closed before a response was received.';
@@ -205,44 +206,25 @@ export default class ChromePlatform extends AbstractPlatform {
         });
     }
 
-    createWindow(url, type, width, height) {
-        var createData = {
-            url: url,
-            type: type,
-            width: width,
-            height: height
-        };
+    createWindow(url, type, width, height, state) {
+        const $this = this;
         return new Promise((resolve, reject) => {
-            chrome.windows.create(createData, window => {
-                if (chrome.runtime.lastError) {
-                    reject(chrome.runtime.lastError);
-                    return;
-                }
-                resolve(window);
-            });
-        });
-    }
-
-    createMaxWindow(url, type, state) {
-        var createData = {
-            url: url,
-            type: type,
-            state: state
-        };
-        return new Promise((resolve, reject) => {
-            chrome.windows.create(createData, window => {
-                if (chrome.runtime.lastError) {
-                    reject(chrome.runtime.lastError);
-                    return;
-                }
-                resolve(window);
+            chrome.windows.getCurrent(function(win) {
+                const createData = $this.__buildCreateData(win, url, type, width, height, state);
+                chrome.windows.create(createData, window => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                        return;
+                    }
+                    resolve(window);
+                });
             });
         });
     }
 
     updateWindow(winId, width, height) {
         return new Promise((resolve, reject) => {
-            chrome.windows.update(winId, {width, height}, window => {
+            chrome.windows.update(winId, {width: width, height: height}, window => {
                 if (chrome.runtime.lastError) {
                     reject(chrome.runtime.lastError);
                     return;
@@ -290,22 +272,34 @@ export default class ChromePlatform extends AbstractPlatform {
     }
 
     sendHttpRequest(url, method) {
+        return super.__sendXhrRequest(url, method);
+    }
+
+    setBadgeText(text) {
         return new Promise((resolve, reject) => {
-            let xhr = new XMLHttpRequest();
-            xhr.open(method, url, true);
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        resolve(xhr.responseText);
-                    } else {
-                        reject(xhr.responseText);
-                    }
+            chrome.browserAction.setBadgeText({ text:text }, () => {
+                if (chrome.runtime.lastError) {
+                    reject(chrome.runtime.lastError);
+                    return;
                 }
-            }
-            xhr.onerror = () => {
-                reject('request error');
-            }
-            xhr.send();
+                resolve();
+            });
         });
+    }
+
+    setBadgeBackgroundColor(color) {
+        return new Promise((resolve, reject) => {
+            chrome.browserAction.setBadgeBackgroundColor({ color: color }, () => {
+                if (chrome.runtime.lastError) {
+                    reject(chrome.runtime.lastError);
+                    return;
+                }
+                resolve();
+            });
+        });
+    }
+
+    getHtmlParser() {
+        return $;
     }
 }

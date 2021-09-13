@@ -72,12 +72,8 @@ export default class UnknownPlatform extends AbstractPlatform {
         return this.defPlatform.createTab(url);
     }
 
-    createWindow(url, type, width, height) {
-        return this.defPlatform.createWindow(url, type, width, height);
-    }
-
-    createMaxWindow(url, type, state) {
-        return this.defPlatform.createMaxWindow(url, type, state);
+    createWindow(url, type, width, height, state) {
+        return this.defPlatform.createWindow(url, type, width, height, state);
     }
 
     removeWindow(windowId) {
@@ -98,5 +94,13 @@ export default class UnknownPlatform extends AbstractPlatform {
 
     sendHttpRequest(url, method) {
         return this.defPlatform.sendHttpRequest(url, method);
+    }
+
+    setBadgeText(text) {
+        return this.defPlatform.setBadgeText(text);
+    }
+
+    setBadgeBackgroundColor(color) {
+        return this.defPlatform.setBadgeBackgroundColor(color);
     }
 }

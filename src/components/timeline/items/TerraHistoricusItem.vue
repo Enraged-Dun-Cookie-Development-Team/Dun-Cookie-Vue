@@ -45,7 +45,7 @@ export default {
           .createMaxPopupWindow(url);
       } else {
         PlatformHelper.Windows
-          .createPanelWindow(url, 900, 1000);
+          .createPopupWindow(url, 900, 1000);
       }
     }
   }
