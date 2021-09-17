@@ -124,10 +124,10 @@ export default {
       color: #fff;
       width: 380px;
       text-align: center;
-      right: 0;
       position: absolute;
       top: 60px;
       padding: 10px 0;
+      right: 10px;
     }
 
     .record-size {
@@ -184,6 +184,7 @@ export default {
         background: #454545;
         text-align: center;
         top: 30px;
+        right: -10px;
         border-radius: 4px 0 0 4px;
       }
 
