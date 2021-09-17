@@ -17,16 +17,13 @@
            class="img-area"
            @click="changeShowAllImage(item.coverImage)">
         <div v-if="item.imageList && item.imageList.length > 1" class="multi-img">
-          <el-row :gutter="5">
-            <el-col v-for="(img, index) in item.imageList" :key="img" :span="8" class="multi-img-area">
-              <img :ref="item.id + '_' + index" v-lazy="img" class="img"/>
-              <span class="img-btn img-look-btn"
-                    @click.stop="ViewImg(item, img, item.id + '_' + index)"
-              >
-                <i class="el-icon-view"></i>
-              </span>
-            </el-col>
-          </el-row>
+          <div v-for="(img, index) in item.imageList" :key="img" class="multi-img-area">
+            <img :ref="item.id + '_' + index" v-lazy="img" class="img"/>
+            <span class="img-btn img-look-btn"
+                  @click.stop="ViewImg(item, img, item.id + '_' + index)">
+                       <i class="el-icon-view"></i>
+            </span>
+          </div>
         </div>
         <div v-else class="one-img">
           <img :ref="item.id" v-lazy="item.coverImage" class="img"/>
@@ -88,7 +85,8 @@ export default {
           await PlatformHelper.Windows.remove(windowTabId);
         }
         await PlatformHelper.Storage.saveLocalStorage('windowTabId', 0);
-      };
+      }
+      ;
       let window = await PlatformHelper.Windows.createPopupWindow(PlatformHelper.Extension.getURL('viewImg.html'), size.width, size.height);
       await PlatformHelper.Storage.saveLocalStorage('windowTabId', window.id);
       await PlatformHelper.Storage.saveLocalStorage('imageList', info.item.imageList);
@@ -123,9 +121,16 @@ export default {
       max-width: 700px;
       width: 100%;
       margin: auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      flex-direction: row;
+      justify-content: space-between;
 
       .multi-img-area {
         position: relative;
+        width: 33%;
+        max-width: 33%;
       }
     }
 

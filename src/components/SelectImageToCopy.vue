@@ -6,19 +6,20 @@
       @closed="closeDialog"
       width="80%">
     <div class="title-area">
-      <span>选择需要粘贴到分享内的图片，点击复制即可生成图片</span>
+      <span>
+        <span>选择需要粘贴到分享内的图片，点击复制即可生成图片</span>
+        <br/>
+        <span>如果长时间没反应，请刷新页面</span>
+      </span>
       <el-button size="small" type="primary" @click="copyData" :disabled="isPrint">复制</el-button>
     </div>
     <div class="image-area" :class="hideNoImage?'hideNoImage':''">
-      <div v-if="item.imageHttpList && item.imageHttpList.length > 1" class="multi-img">
-        <el-row :gutter="5">
-          <el-col v-for="img in item.imageHttpList" :class="selectImg.some(x=>x==img)?'':'noImage'" :key="img"
-                  :span="spanNumber">
-            <div class="multi-img-area" :class="selectImg.some(x=>x==img)?'hasImage':''">
-              <img v-lazy="img" class="img" @click="addImage(img)"/>
-            </div>
-          </el-col>
-        </el-row>
+      <div v-if="item.imageList && item.imageList.length > 1" class="multi-img">
+        <div v-for="img in item.imageHttpList" class="multi-img-area"
+             :style="{'width':spanNumber+'%','max-width':spanNumber+'%'}"
+             :class="selectImg.some(x=>x==img)?'hasImage':'noImage'" :key="img">
+          <img v-lazy="img" class="img" @click="addImage(img)"/>
+        </div>
       </div>
     </div>
   </el-dialog>
@@ -42,7 +43,7 @@ export default {
       // 石头隐藏未被选中的图片
       hideNoImage: false,
       // 图片宽度
-      spanNumber: 8,
+      spanNumber: 33,
       isPrint: true
     }
   },
@@ -51,7 +52,7 @@ export default {
       this.item = {};
       this.copyImageToImage = false;
       this.hideNoImage = false;
-      this.spanNumber = 8;
+      this.spanNumber = 33;
       this.selectImg = [];
       this.isPrint = true;
     },
@@ -74,7 +75,7 @@ export default {
       this.isPrint = true;
       this.hideNoImage = true;
       if (this.selectImg.length == 1 || this.selectImg.length == 2) {
-        this.spanNumber = 24;
+        this.spanNumber = 100;
       }
       this.$nextTick(async () => {
         let imageCanvas = await html2canvas(document.querySelector('.image-area'), {
@@ -113,11 +114,19 @@ export default {
 }
 
 .multi-img {
+  max-width: 700px;
   width: 100%;
   margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  flex-direction: row;
+  justify-content: space-between;
 
   .multi-img-area {
     position: relative;
+    width: 33%;
+    max-width: 33%;
 
     &.hasImage::after {
       content: "\e6da";
