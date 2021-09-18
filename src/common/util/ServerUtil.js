@@ -14,7 +14,12 @@ export default class ServerUtil {
     static async checkOnlineInfo(shouldNotice) {
         let data;
         try {
-            data = await PromiseUtil.any(CANTEEN_INTERFACE_LIST.map(api => HttpUtil.GET_Json(api + "Dun-Cookies-Info.json")), res => !!res);
+            data = await PromiseUtil.any(CANTEEN_INTERFACE_LIST.map(api => HttpUtil.GET_Json(api + "canteen/info")), res => !!res);
+        } catch (e) {
+            console.log(e);
+        }
+        try {
+            data = await HttpUtil.GET_Json("http://cdn.liuziyang.vip/Dun-Cookies-Info.json");
         } catch (e) {
             console.log(e);
         }
