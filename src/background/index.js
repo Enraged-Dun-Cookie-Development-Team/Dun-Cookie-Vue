@@ -54,8 +54,10 @@ function tryDun(settings) {
               .then(newCardList => {
                 let oldCardList = cardListCache[dataName];
                 let isNew = kazeFun.JudgmentNew(oldCardList, newCardList, source.title);
-                if (isNew) {
+                if (newCardList && newCardList.length > 0) {
                     cardListCache[dataName] = newCardList;
+                }
+                if (isNew) {
                     hasUpdated = true;
                 }
               })
