@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-      title="九宫格分享【实验性功能】【暂不支持图片排序】"
+      title="九宫格分享"
       :modal-append-to-body="false"
       :visible.sync="copyImageToImage"
       @closed="closeDialog"
