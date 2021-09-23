@@ -368,11 +368,13 @@ export default {
       // this.janvas.start();
     },
     listenerWindowSize() {
-      window.onresize = (data) => {
-        if (window.innerWidth <= 699) {
-          alert("窗口太小,可能显示出现问题");
-        }
-      };
+      if (!PlatformHelper.isMobile) {
+        window.onresize = () => {
+          if (window.innerWidth <= 699) {
+            alert("窗口太小,可能显示出现问题");
+          }
+        };
+      }
     },
     scrollHandler() {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
