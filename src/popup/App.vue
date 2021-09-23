@@ -108,7 +108,7 @@
           </el-tooltip>
         </div>
         <el-divider content-position="left">调整蹲饼器</el-divider>
-        <el-row type="flex" justify="center">
+        <el-row class="menu-button-area" type="flex" justify="center">
           <el-button type="primary" @click="openGithub" icon="el-icon-star-off"
           >点个star
           </el-button
@@ -369,10 +369,14 @@ export default {
     },
     listenerWindowSize() {
       if (!PlatformHelper.isMobile) {
+        // 只在从大窗口缩小的时候提示(第一次除外)
+        let fromLarge = true;
         window.onresize = () => {
-          if (window.innerWidth <= 699) {
+          // 425和348两个魔法值来源于：https://discourse.mozilla.org/t/can-add-ons-webextensions-popups-determinate-whether-they-are-shown-in-the-overflow-menu-or-not/27937/6
+          if (fromLarge && window.innerWidth <= 699 && window.innerWidth !== 425 && window.innerWidth !== 348) {
             alert("窗口太小,可能显示出现问题");
           }
+          fromLarge = window.innerWidth > 699;
         };
       }
     },
@@ -738,6 +742,52 @@ export default {
 </style>
 
 <style lang="less">
+@media (max-width: 699px) {
+  .online-area {
+    align-items: flex-start !important;
+    font-size: xx-small;
+  }
+  .online-title-img,.sane-area,.day-info-content-bottom {
+    display: none !important;
+  }
+  .el-loading-spinner {
+    top: 0 !important;
+    margin-top: 0 !important;
+  }
+  .el-timeline {
+    padding-left: 20px !important;
+    padding-right: 10px !important;
+  }
+  .el-timeline-item__timestamp {
+    margin-left: 13px !important;
+  }
+  .el-timeline-item__wrapper {
+    padding-left: 14px !important;
+  }
+  .el-divider--horizontal {
+    display: flex !important;
+    justify-content: center !important;
+    .el-divider__text.is-left {
+      left: unset !important;
+    }
+  }
+  .el-drawer {
+    width: 100% !important;
+  }
+  .drawer-btn-area {
+    flex-wrap: wrap;
+    .el-button {
+      margin: 3px !important;
+    }
+  }
+  .menu-button-area {
+    flex-wrap: wrap;
+    .el-button {
+      width: 40% !important;
+      margin: 3px !important;
+    }
+  }
+}
 body {
   margin: 0;
 }
