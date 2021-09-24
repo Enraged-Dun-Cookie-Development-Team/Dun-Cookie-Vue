@@ -205,7 +205,7 @@ import {
   PAGE_DONATE,
   PAGE_GITHUB_REPO,
   PAGE_OPTIONS,
-  PAGE_UPDATE,
+  PAGE_UPDATE, PLATFORM_FIREFOX,
   quickJump,
   SHOW_VERSION,
 } from "../common/Constants";
@@ -367,14 +367,51 @@ export default {
     menuIconClick() {
       // this.janvas.start();
     },
+    async firefoxWarning() {
+      const flagKey = "firefox-collapse-warning-flag";
+      const flagDisableValue = "disabled";
+      const flag = await PlatformHelper.Storage.getLocalStorage(flagKey);
+      if (flag === flagDisableValue) {
+        return;
+      }
+      const warningCountKey = "firefox-collapse-warning";
+      const tip = "窗口太小,可能显示出现问题，您可以通过以下任意一种办法解决该问题：<br/>1.右键扩展图标并点击\"移出折叠菜单\"<br/>2.进入小刻食堂设置页面-界面设置-列表窗口化-启用";
+      let count = parseInt(String(await PlatformHelper.Storage.getLocalStorage(warningCountKey)));
+      if (!count) {
+        count = 0;
+      }
+      count++;
+      PlatformHelper.Storage.saveLocalStorage(warningCountKey, count).then();
+      if (count < 3) {
+        this.$alert(tip, '提示',  {
+          dangerouslyUseHTMLString: true,
+        }).then();
+      } else {
+        this.$alert(tip + '<br/><span id="firefox-collapse-warning-tip" style="color: red">点击<button id="btn-disable-firefox-warning">此处</button>以后都不再提示</span>', '提示',  {
+          dangerouslyUseHTMLString: true,
+        }).then();
+        setTimeout(() => {
+          document.getElementById('btn-disable-firefox-warning').addEventListener('click', () => {
+            PlatformHelper.Storage.saveLocalStorage(flagKey, flagDisableValue).then(() => {
+              document.getElementById('firefox-collapse-warning-tip').innerHTML = "以后将不会再提示该信息";
+            });
+          });
+        }, 10);
+      }
+    },
     listenerWindowSize() {
       if (!PlatformHelper.isMobile) {
         // 只在从大窗口缩小的时候提示(第一次除外)
         let fromLarge = true;
         window.onresize = () => {
-          // 425和348两个魔法值来源于：https://discourse.mozilla.org/t/can-add-ons-webextensions-popups-determinate-whether-they-are-shown-in-the-overflow-menu-or-not/27937/6
-          if (fromLarge && window.innerWidth <= 699 && window.innerWidth !== 425 && window.innerWidth !== 348) {
-            alert("窗口太小,可能显示出现问题");
+          if (fromLarge && window.innerWidth <= 699) {
+            if (PlatformHelper.PlatformType === PLATFORM_FIREFOX
+              && (window.innerWidth === 425 || window.innerWidth === 348)) {
+              // 425和348两个魔法值来源于：https://discourse.mozilla.org/t/can-add-ons-webextensions-popups-determinate-whether-they-are-shown-in-the-overflow-menu-or-not/27937/6
+              this.firefoxWarning();
+            } else {
+              alert("窗口太小,可能显示出现问题");
+            }
           }
           fromLarge = window.innerWidth > 699;
         };
@@ -745,7 +782,7 @@ export default {
 @media (max-width: 699px) {
   .online-area {
     align-items: flex-start !important;
-    font-size: xx-small;
+    font-size: x-small;
   }
   .online-title-img,.sane-area,.day-info-content-bottom {
     display: none !important;
@@ -786,6 +823,9 @@ export default {
       width: 40% !important;
       margin: 3px !important;
     }
+  }
+  .el-message-box {
+    width: 100% !important;
   }
 }
 body {
