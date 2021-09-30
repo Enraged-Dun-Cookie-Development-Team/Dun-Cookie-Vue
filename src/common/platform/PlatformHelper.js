@@ -48,6 +48,9 @@ export default class PlatformHelper {
         return currentPlatform.isMobile;
     }
 
+    /**
+     * @return {string}
+     */
     static get PlatformType() {
         return currentPlatform.PlatformType;
     }
