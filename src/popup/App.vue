@@ -782,7 +782,7 @@ export default {
 @media (max-width: 699px) {
   .online-area {
     align-items: flex-start !important;
-    font-size: x-small;
+    font-size: small;
   }
   .online-title-img,.sane-area,.day-info-content-bottom {
     display: none !important;
@@ -826,6 +826,11 @@ export default {
   }
   .el-message-box {
     width: 100% !important;
+  }
+}
+@media (max-width: 525px) {
+  .online-area {
+    font-size: x-small;
   }
 }
 body {
