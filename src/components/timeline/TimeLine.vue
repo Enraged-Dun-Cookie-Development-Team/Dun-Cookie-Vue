@@ -438,15 +438,16 @@ export default {
           .addEventListener("click", () => {
             const target = event.target || event.srcElement;
             // 是否为a标签
-            if (target.nodeName.toLocaleLowerCase() === "a") {
+            debugger;
+            if (target.nodeName.toLocaleLowerCase() === "a" || target.parentNode.nodeName.toLocaleLowerCase() === "a") {
               // 对捕获到的 a 标签进行处理，需要先禁止它的跳转行为
               if (event.preventDefault) {
                 event.preventDefault();
               } else {
                 window.event.returnValue = true;
               }
-              const url = target.getAttribute("href");
-              if (target.className === "webOpen") {
+              const url = target.getAttribute("href") || target.parentNode.getAttribute("href");
+              if (target.className === "webOpen" || target.parentNode.className === "webOpen") {
                 this.openWeb(url);
               } else {
                 this.openUrl(url, 1400, 950);
