@@ -51,22 +51,22 @@ function tryDun(settings) {
             const source = settings.currentDataSources[dataName];
             DunInfo.counter++;
             const promise = source.fetchData()
-              .then(newCardList => {
-                let oldCardList = cardListCache[dataName];
-                let isNew = kazeFun.JudgmentNew(oldCardList, newCardList, source.title);
-                if (newCardList && newCardList.length > 0) {
-                    cardListCache[dataName] = newCardList;
-                }
-                if (isNew) {
-                    hasUpdated = true;
-                }
-              })
-              .catch(e => console.error(e))
-              .finally(() => {
-                if (!cardListCache[dataName]) {
-                    cardListCache[dataName] = [];
-                }
-              });
+                .then(newCardList => {
+                    let oldCardList = cardListCache[dataName];
+                    let isNew = kazeFun.JudgmentNew(oldCardList, newCardList, source.title);
+                    if (newCardList && newCardList.length > 0) {
+                        cardListCache[dataName] = newCardList;
+                    }
+                    if (isNew) {
+                        hasUpdated = true;
+                    }
+                })
+                .catch(e => console.error(e))
+                .finally(() => {
+                    if (!cardListCache[dataName]) {
+                        cardListCache[dataName] = [];
+                    }
+                });
             promiseList.push(promise);
         }
     }
@@ -111,23 +111,31 @@ const kazeFun = {
             && newList
             && oldList.length > 0
             && newList.length > 0
-            && oldList[0].id != newList[0].id
         ) {
-            let newInfo = newList[0];
-            let timeNow = new Date()
-            let notice = newInfo.content.replace(/\n/g, "");
-            DunInfo.cookieCount++;
-            console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
-            // 是否推送
-            if (Settings.dun.enableNotice) {
-                NotificationUtil.SendNotice(`小刻在【${title}】里面找到了一个饼！`, notice, newInfo.coverImage, newInfo.id)
+            let newAnnouncement = true;
+            for (let i = 0; i < oldList.length; i++) {
+                if(oldList[i].id == newList[0].id) {
+                    newAnnouncement = false;
+                }
             }
-            return true;
+            if (newAnnouncement) {
+                let newInfo = newList[0];
+                let timeNow = new Date()
+                let notice = newInfo.content.replace(/\n/g, "");
+                DunInfo.cookieCount++;
+                console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
+                // 是否推送
+                if (Settings.dun.enableNotice) {
+                    NotificationUtil.SendNotice(`小刻在【${title}】里面找到了一个饼！`, notice, newInfo.coverImage, newInfo.id)
+                }
+                return true;
+            }
+            else if (newList && newList.length > (oldList ? oldList.length : 0)) {
+                return true;
+            }
+            return false;
         }
-        else if (newList && newList.length > (oldList ? oldList.length : 0)) {
-            return true;
-        }
-        return false
+        return false;
     },
 
     // 初始化
@@ -193,6 +201,7 @@ const kazeFun = {
 
         // 监听扩展图标被点击，用于打开窗口化的弹出页面
         PlatformHelper.BrowserAction.addIconClickListener(() => {
+            debugger;
             if (Settings.display.windowMode) {
                 if (popupWindowId != null) {
                     PlatformHelper.Windows.getAllWindow().then(allWindow => {
