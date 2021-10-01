@@ -111,32 +111,57 @@ const kazeFun = {
             && newList
             && oldList.length > 0
             && newList.length > 0
+            && oldList[0].id != newList[0].id
         ) {
-            let newAnnouncement = true;
-            for (let i = 0; i < oldList.length; i++) {
-                if(oldList[i].id == newList[0].id) {
-                    newAnnouncement = false;
-                }
+            let newInfo = newList[0];
+            let timeNow = new Date()
+            let notice = newInfo.content.replace(/\n/g, "");
+            DunInfo.cookieCount++;
+            console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
+            // 是否推送
+            if (Settings.dun.enableNotice) {
+                NotificationUtil.SendNotice(`小刻在【${title}】里面找到了一个饼！`, notice, newInfo.coverImage, newInfo.id)
             }
-            if (newAnnouncement) {
-                let newInfo = newList[0];
-                let timeNow = new Date()
-                let notice = newInfo.content.replace(/\n/g, "");
-                DunInfo.cookieCount++;
-                console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
-                // 是否推送
-                if (Settings.dun.enableNotice) {
-                    NotificationUtil.SendNotice(`小刻在【${title}】里面找到了一个饼！`, notice, newInfo.coverImage, newInfo.id)
-                }
-                return true;
-            }
-            else if (newList && newList.length > (oldList ? oldList.length : 0)) {
-                return true;
-            }
-            return false;
+            return true;
         }
-        return false;
+        else if (newList && newList.length > (oldList ? oldList.length : 0)) {
+            return true;
+        }
+        return false
     },
+    // 考虑删除公告推送的情况，但是因为泰拉通讯枢纽的cid保持一致，会导致无法检测到泰拉通讯枢纽，之后解决再换
+    // JudgmentNew(oldList, newList, title) {
+    //     //判断方法 取每条的第一个判定字段  如果新的字段不等于旧的且大于旧的 判定为新条目
+    //     if (oldList
+    //         && newList
+    //         && oldList.length > 0
+    //         && newList.length > 0
+    //     ) {
+    //         let newAnnouncement = true;
+    //         for (let i = 0; i < oldList.length; i++) {
+    //             if(oldList[i].id == newList[0].id) {
+    //                 newAnnouncement = false;
+    //             }
+    //         }
+    //         if (newAnnouncement) {
+    //             let newInfo = newList[0];
+    //             let timeNow = new Date()
+    //             let notice = newInfo.content.replace(/\n/g, "");
+    //             DunInfo.cookieCount++;
+    //             console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
+    //             // 是否推送
+    //             if (Settings.dun.enableNotice) {
+    //                 NotificationUtil.SendNotice(`小刻在【${title}】里面找到了一个饼！`, notice, newInfo.coverImage, newInfo.id)
+    //             }
+    //             return true;
+    //         }
+    //         else if (newList && newList.length > (oldList ? oldList.length : 0)) {
+    //             return true;
+    //         }
+    //         return false;
+    //     }
+    //     return false;
+    // },
 
     // 初始化
     Init() {
@@ -201,7 +226,6 @@ const kazeFun = {
 
         // 监听扩展图标被点击，用于打开窗口化的弹出页面
         PlatformHelper.BrowserAction.addIconClickListener(() => {
-            debugger;
             if (Settings.display.windowMode) {
                 if (popupWindowId != null) {
                     PlatformHelper.Windows.getAllWindow().then(allWindow => {

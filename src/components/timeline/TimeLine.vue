@@ -438,7 +438,6 @@ export default {
           .addEventListener("click", () => {
             const target = event.target || event.srcElement;
             // 是否为a标签
-            debugger;
             if (target.nodeName.toLocaleLowerCase() === "a" || target.parentNode.nodeName.toLocaleLowerCase() === "a") {
               // 对捕获到的 a 标签进行处理，需要先禁止它的跳转行为
               if (event.preventDefault) {
