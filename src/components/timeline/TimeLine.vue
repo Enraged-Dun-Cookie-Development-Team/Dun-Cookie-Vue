@@ -1,5 +1,5 @@
 <template>
-  <div id="timeline-area">
+  <div id="timeline-area" :class="settings.display.announcementScroll ? 'scrollTimeline' : ''">
     <Search ref="SearchModel" :searchShow="searchShow" @searchTextChange="changeFilterText"></Search>
     <el-card
         shadow="never"
@@ -684,6 +684,8 @@ img[lazy="error"] {
     color: #23ade5;
   }
 
+
+
   .card {
     width: 100%;
     background-color: @@bgColor;
@@ -733,6 +735,14 @@ img[lazy="error"] {
     margin-top: 40px;
     position: fixed;
     width: 100%;
+
+    .scrollTimeline {
+      overflow: scroll;
+
+      .el-timeline {
+        overflow: unset;
+      }
+    }
 
     #timeline-area {
       position: relative;

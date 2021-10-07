@@ -161,6 +161,10 @@ class Settings {
      * 默认显示的标签
      */
     defaultTag: null,
+    /**
+     * 公告是否跟时间线滚动
+     */
+     announcementScroll: false,
   }
 
   /**

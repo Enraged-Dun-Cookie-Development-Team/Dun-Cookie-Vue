@@ -479,13 +479,13 @@ export default {
 
     // 检测滚动条高度，大于600出现回顶部按钮
     handleScroll() {
-      let scrollArea = this.$refs.timeline.$refs.elTimelineArea.$el;
+      let scrollArea = this.$refs.timeline.$el.scrollTop == 0 ? this.$refs.timeline.$refs.elTimelineArea.$el : this.$refs.timeline.$el;
       this.scrollShow = scrollArea.scrollTop > 600 ? true : false;
     },
 
     // 回顶部
     goTop(step = 10, interval = 10) {
-      let scrollArea = this.$refs.timeline.$refs.elTimelineArea.$el;
+      let scrollArea = this.$refs.timeline.$el.scrollTop == 0 ? this.$refs.timeline.$refs.elTimelineArea.$el : this.$refs.timeline.$el;
       let top = scrollArea.scrollTop;
       if (step < 1) {
         step = 1;
