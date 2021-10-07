@@ -31,7 +31,7 @@ export class TerraHistoricusDataSource extends DataSource {
       const date = TimeUtil.format(new Date(info.updateTime * 1000), 'yyyy-MM-dd');
       const time = new Date(`${date} ${Settings.getTimeBySortMode()}`);
       list.push(DataItem.builder(this.dataName)
-        .id(info.cid)
+        .id(`Terra${info.cid}_${info.episodes[0].cid}`)
         .timeForSort(time.getTime())
         .timeForDisplay(date)
         .content(`泰拉记事社${info.title}已更新`)
