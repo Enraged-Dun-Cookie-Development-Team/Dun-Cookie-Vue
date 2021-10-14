@@ -40,7 +40,7 @@
     "btnList": [
         {
             "starTime": "2021-10-11 04:00:00",
-            "overTime": "2021-10-15 15:59:59",
+            "overTime": "2021-10-12 15:59:59",
             "url": "https://www.bilibili.com/video/BV1Yf4y1c7o5",
             "name": "《明日方舟》全新故事「红松林」活动宣传PV",
             "img": "https://i1.hdslb.com/bfs/archive/504f67fcf14c1858109032c7e5a7a6af8f1661dd.jpg@200w_125h_1c.webp",
@@ -91,6 +91,30 @@
         {
             "starTime": "2021-10-11 04:00:00",
             "overTime": "2021-10-16 15:59:59",
+            "url": "https://www.bilibili.com/video/BV1G44y1x73S",
+            "name": "【柞木不朽】瑕光大魔王皮肤上架！远牙骑士落地！",
+            "img": "https://i1.hdslb.com/bfs/archive/365592196549cca615050fbe236fd83506b16ba6.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-10-11 04:00:00",
+            "overTime": "2021-10-16 15:59:59",
+            "url": "https://www.bilibili.com/video/BV143411C7nt",
+            "name": "【杨颜同学】玛莉娅·临光变玛莉娅·暗黑？马克维茨整容？",
+            "img": "https://i1.hdslb.com/bfs/archive/10ac2650b9a94abedb16e42f5f30cebd900bc0bd.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-10-11 04:00:00",
+            "overTime": "2021-10-16 15:59:59",
+            "url": "https://www.bilibili.com/video/BV1HU4y1w7sw",
+            "name": "【哈米伦的弄笛者】Yes & No 琴柳个人向 meme",
+            "img": "https://i1.hdslb.com/bfs/archive/2086b0b859979800e914064c0b427087bcc79665.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-10-11 04:00:00",
+            "overTime": "2021-10-16 15:59:59",
             "url": "https://www.bilibili.com/video/BV1eQ4y1X7pP",
             "name": "【DAIRIN/宅叔马克斯转载】Cover Girls2!",
             "img": "https://i2.hdslb.com/bfs/archive/b63a8423b830594305647385060c9c594b6e0c43.jpg@200w_125h_1c.webp",
@@ -129,10 +153,10 @@
         "countdown": [
             {
                 "text": "当前轮换池结束",
-                "remark": "温蒂[兑换],空弦,拉普兰德,格劳克斯[兑换],空",
-                "time": "2021-9-30 03:59:59",
-                "starTime": "2021-9-16 04:00:00",
-                "overTime": "2021-9-30 03:59:59"
+                "remark": "斯卡蒂[兑换],伊芙利特,赤东,白面鸮[兑换],莱因哈特",
+                "time": "2021-10-28 03:59:59",
+                "starTime": "2021-10-14 04:00:00",
+                "overTime": "2021-10-28 03:59:59"
             },
             {
                 "text": "当前轮换池结束",

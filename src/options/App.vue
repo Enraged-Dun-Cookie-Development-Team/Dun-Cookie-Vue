@@ -8,7 +8,9 @@
       <el-row>
         <div class="head-area" ref="head-area">
           <div class="head">
-            <el-image class="img" src="../assets/image/icon.png"></el-image>
+            <a href="http://www.ceobecanteen.top/" target="_blank">
+              <el-image class="img" src="../assets/image/icon.png"></el-image>
+            </a>
             <div class="name-area">
               <div class="name">小刻食堂</div>
               <div class="version">V {{ currentVersion }}</div>
