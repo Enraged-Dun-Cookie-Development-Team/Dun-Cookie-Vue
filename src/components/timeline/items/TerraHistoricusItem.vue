@@ -108,6 +108,7 @@ export default {
       overflow: auto;
 
       .content-card-episodes-btn {
+        text-align:center;
         display: flex;
         align-items: center;
         justify-content: center;
