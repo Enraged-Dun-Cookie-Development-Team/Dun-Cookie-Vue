@@ -1,21 +1,15 @@
 {
     "list": [
         {
-            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20211019/25051e9634d5119596f827d358f87174.jpg'> <div> <div><span class='online-red'>注意啦！！！注意啦！！！</span></div> <div><span class='online-blue'>2021感谢庆典直播</span></div><div>将于<span class='online-blue'>10月24号20:00开始</span></div> <div>博士们别错过了直播呀</div> <div>或者点击 </a class='webOpen' href='https://live.bilibili.com/5555734'> <span class='online-blue'>这里</span>快速跳转直播间呀</div> </div> </div>",
-            "starTime":"2021-10-19 16:00:00",
-            "overTime":"2021-10-23 03:59:59",
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://i0.hdslb.com/bfs/album/0f6d249a3f82a2fcf5ddb2d7c3377e75b06ffab2.png'> <div> <div><span class='online-blue'>卡西米尔骑士锦标赛预热活动现已正式开启！</span></div> <div>活动时间为<span class='online-red'>10月24日 22:00 ~ 11月09日 03:59</span></div> <div>参与活动解锁<span class='online-yellow'>限定专属家具【承翼库兰塔吊灯】</span>，</div> <div>获得<span class='online-yellow'>合成玉</span>与<span class='online-yellow'>龙门币</span>奖励</div> <div>点击 <a class='webOpen' href='https://ak.hypergryph.com/activity/kazimierz-major> <span class='online-blue'>这里</span> </a> 快速跳转</div> </div> </div>",
+            "starTime":"2021-10-24 22:00:00",
+            "overTime":"2021-11-09 03:59:59",
             "notice": false
         },
         {
-            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20211019/25051e9634d5119596f827d358f87174.jpg'> <div> <div><span class='online-red'>注意啦！！！注意啦！！！</span></div> <div><span class='online-blue'>2021感谢庆典直播</span></div><div>将于<span class='online-blue'>10月24号20:00开始</span></div> <div>博士们别错过了直播呀</div> <div>或者点击 </a class='webOpen' href='https://live.bilibili.com/5555734'> <span class='online-blue'>这里</span>快速跳转直播间呀</div> </div> </div>",
-            "starTime":"2021-10-23 04:00:00",
-            "overTime":"2021-10-24 21:59:59",
-            "notice": true
-        },
-        {
-            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20211009/34f58d8dd6302a0f579841de4272d5d5.jpg'> <div> <div><span class='online-blue'>故事集【红松林】</span>将于<span class='online-blue'>10月22号</span>结束</div> <div>本次活动掉落<span class='online-red'>晶体元件、异铁组</span></div> <div>普通关卡也会掉落<span class='online-blue'>红松叶彩券</span>，也可选择</div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频</span>与<span class='online-blue'>剧情捧读</span></div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
-            "starTime":"2021-10-15 16:00:00",
-            "overTime":"2021-10-22 03:59:59",
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://i2.hdslb.com/bfs/archive/6c230eee5b6ad3db811d932c9313603c73172c9a.jpg'> <div> <div><span class='online-blue'>SideStory「长夜临光」</span>将于<span class='online-blue'>11月01号</span>开启</div> <div>开启时间为<span class='online-red'>周一下午16:00</span></div> <div>本次活动持续三周，分三部分开放</div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频</span>与<span class='online-blue'>剧情捧读</span></div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
+            "starTime":"2021-10-24 22:00:00",
+            "overTime":"2021-11-01 15:59:59",
             "notice": false
         },
         {
@@ -33,11 +27,35 @@
     ],
     "btnList": [
         {
-            "starTime": "2021-10-11 04:00:00",
-            "overTime": "2021-10-12 15:59:59",
-            "url": "https://www.bilibili.com/video/BV1Yf4y1c7o5",
-            "name": "《明日方舟》全新故事「红松林」活动宣传PV",
-            "img": "https://i1.hdslb.com/bfs/archive/504f67fcf14c1858109032c7e5a7a6af8f1661dd.jpg@200w_125h_1c.webp",
+            "starTime": "2021-10-26 04:00:00",
+            "overTime": "2021-11-02 15:59:59",
+            "url": "https://www.bilibili.com/video/BV1gQ4y1Q7qM",
+            "name": "《鲤氏侦探事务所》迷你剧先行短片",
+            "img": "https://i1.hdslb.com/bfs/archive/4e83a4b43889201b4bb405e26e708e9283a65f26.jpg@160w_100h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-10-26 04:00:00",
+            "overTime": "2021-11-02 15:59:59",
+            "url": "https://www.bilibili.com/video/BV1wq4y1R7Kt",
+            "name": "再探泰拉  DISCOVERED TERRA 2.0",
+            "img": "https://i1.hdslb.com/bfs/archive/ef09131c8f1ed1c0d0dcddaf1405a7260b8c5292.jpg@160w_100h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-10-22 04:00:00",
+            "overTime": "2021-11-01 15:59:59",
+            "url": "https://www.bilibili.com/video/BV1vT4y1R7D8",
+            "name": "《明日方舟》SideStory「长夜临光」活动先导PV",
+            "img": "https://i2.hdslb.com/bfs/archive/cf64e213ac0be8e207d59b69e4288d3991c12c6a.jpg@160w_100h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-10-22 04:00:00",
+            "overTime": "2021-11-01 15:59:59",
+            "url": "https://www.bilibili.com/video/BV13L4y1z7nB",
+            "name": "《明日方舟》2021「感谢庆典」限时活动宣传PV",
+            "img": "https://i2.hdslb.com/bfs/archive/6c230eee5b6ad3db811d932c9313603c73172c9a.jpg@160w_100h_1c.webp",
             "radius": true
         },
         
@@ -47,14 +65,6 @@
             "url": "https://www.bilibili.com/video/BV15Q4y1D74Q?p=3",
             "name": "【魔法zc目录】“红松林”PS平民关卡低配攻略(含突袭)！阵容平民+低练度+语音详解的愉悦攻略！",
             "img": "https://i1.hdslb.com/bfs/archive/1176744c34dd86fc371da409806ec25dd8aa99a7.jpg@200w_125h_1c.webp",
-            "radius": true
-        },
-        {
-            "starTime": "2021-10-16 16:00:00",
-            "overTime": "2021-10-22 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1xU4y1F78J",
-            "name": "【小狼XF】明日方舟PS-全关卡+突袭 平民单6星攻略/ PS-6 PS-5 PS-4 红松林",
-            "img": "https://i0.hdslb.com/bfs/archive/d6438a0a4412871da161904b41a2871c16cb8899.jpg@200w_125h_1c.webp",
             "radius": true
         },
         {
@@ -84,23 +94,7 @@
 
         {
             "starTime": "2021-10-19 04:00:00",
-            "overTime": "2021-10-24 19:59:59",
-            "url": "https://www.bilibili.com/video/BV1xT4y1o7d4",
-            "name": "【柞木不朽】2.5周年庆来了，卡西米尔的大坑要填了，限定会是谁呢？",
-            "img": "https://i1.hdslb.com/bfs/archive/ad53c563495b36bf9114f66a1d8002dcf2e9b54b.jpg@200w_125h_1c.webp",
-            "radius": true
-        },
-        {
-            "starTime": "2021-10-19 04:00:00",
-            "overTime": "2021-10-24 19:59:59",
-            "url": "https://www.bilibili.com/video/BV1QL4y1B7tj",
-            "name": "【杨颜同学】2.5周年活动将至，卡西米尔大坑要填？",
-            "img": "https://i1.hdslb.com/bfs/archive/8c91382e59a99f9c3b6d304d1b6805abd9ed1fda.jpg@200w_125h_1c.webp",
-            "radius": true
-        },
-        {
-            "starTime": "2021-10-19 04:00:00",
-            "overTime": "2021-10-26 16:59:59",
+            "overTime": "2021-10-26 03:59:59",
             "url": "https://www.bilibili.com/video/BV16L4y1B7pD",
             "name": "【柞木不朽/明日方舟细节63】故事集，红松林，究竟讲了什么？",
             "img": "https://i1.hdslb.com/bfs/archive/c0f9dd409ad40cd9211833bced54faa8c8b9a897.jpg@200w_125h_1c.webp",
@@ -108,65 +102,33 @@
         },
         {
             "starTime": "2021-10-19 04:00:00",
-            "overTime": "2021-10-26 16:59:59",
+            "overTime": "2021-10-26 03:59:59",
             "url": "https://www.bilibili.com/video/BV1RQ4y1i7Sy",
             "name": "【杨颜同学/方舟剧情说1】有些衣服穿上了，便再也脱不下来。",
             "img": "https://i0.hdslb.com/bfs/archive/712553036f27e30cfcdd3baafed8bae850f75e29.jpg@200w_125h_1c.webp",
             "radius": true
         },
         {
-            "starTime": "2021-10-11 04:00:00",
-            "overTime": "2021-10-18 15:59:59",
-            "url": "https://www.bilibili.com/video/BV1gf4y1g7Wx",
-            "name": "【RockyRoo】“你能穿下这件衣服吗？” ",
-            "img": "https://i1.hdslb.com/bfs/archive/3bb921c6431ad629c09a8269bb5f394f4b7231d7.jpg@200w_125h_1c.webp",
+            "starTime": "2021-10-22 04:00:00",
+            "overTime": "2021-11-02 15:59:59",
+            "url": "https://www.bilibili.com/video/BV183411y7AU",
+            "name": "【加菲卷卷喵/填词】THE BADDEST 一首歌带你看完方舟强者编年史，势不可挡，看我炫耀！ ",
+            "img": "https://i1.hdslb.com/bfs/archive/75e6b808b1b3a92b743193ed2ae59fdabde4b95e.jpg@160w_100h_1c.webp",
             "radius": true
         },
         {
-            "starTime": "2021-10-11 04:00:00",
-            "overTime": "2021-10-18 15:59:59",
-            "url": "https://www.bilibili.com/video/BV1HU4y1w7sw",
-            "name": "【哈米伦的弄笛者】Yes & No 琴柳个人向 meme",
-            "img": "https://i1.hdslb.com/bfs/archive/2086b0b859979800e914064c0b427087bcc79665.jpg@200w_125h_1c.webp",
-            "radius": true
-        },
-        {
-            "starTime": "2021-10-11 04:00:00",
-            "overTime": "2021-10-16 15:59:59",
-            "url": "https://www.bilibili.com/video/BV1eQ4y1X7pP",
-            "name": "【DAIRIN/宅叔马克斯转载】Cover Girls2!",
-            "img": "https://i2.hdslb.com/bfs/archive/b63a8423b830594305647385060c9c594b6e0c43.jpg@200w_125h_1c.webp",
-            "radius": true
-        },
-        {
-            "starTime": "2021-10-11 04:00:00",
-            "overTime": "2021-10-16 15:59:59",
-            "url": "https://www.bilibili.com/video/BV1DL4y1z77c",
-            "name": "【RockyRoo】博士家的龙女仆",
-            "img": "https://i1.hdslb.com/bfs/archive/8c270a56fb89d32c927f0c48d3dd0f0ac26ff09a.jpg@200w_125h_1c.webp",
-            "radius": true
-        },
-        {
-            "starTime": "2021-10-11 04:00:00",
-            "overTime": "2021-10-16 15:59:59",
-            "url": "https://www.bilibili.com/video/BV1hb4y1Y7f4",
-            "name": "【赤风NK】42姐扭呀扭~",
-            "img": "https://i2.hdslb.com/bfs/archive/6bc97c8b769eb32b0ccec2678e19ab45acf6499c.jpg@200w_125h_1c.webp",
-            "radius": true
-        },
-        {
-            "starTime": "2021-10-11 04:00:00",
-            "overTime": "2021-10-16 15:59:59",
-            "url": "https://www.bilibili.com/video/BV1GP4y1875s",
-            "name": "【怀里有猫的萌萌】方舟裂开虎克 考据一下理智药剂",
-            "img": "https://i2.hdslb.com/bfs/archive/34815f77602be984cec46c65124f148f3963d540.jpg@200w_125h_1c.webp",
+            "starTime": "2021-10-22 04:00:00",
+            "overTime": "2021-11-02 15:59:59",
+            "url": "https://www.bilibili.com/video/BV11f4y1F7qE",
+            "name": "【贪婪大陆工作室】TERRA明日方舟塔罗主题印象PV",
+            "img": "https://i2.hdslb.com/bfs/archive/9a398bca6d03700f6fe19a940b9a01cedd544496.jpg@160w_100h_1c.webp",
             "radius": true
         }
     ],
     "dayInfo": {
         "resources": {
-            "starTime": "2021-8-26 16:00:00",
-            "overTime": "2021-9-09 03:59:59"
+            "starTime": "2021-11-22 16:00:00",
+            "overTime": "2021-12-06 03:59:59"
         },
         "countdown": [
             {
@@ -178,10 +140,10 @@
             },
             {
                 "text": "当前轮换池结束",
-                "remark": "能天使[兑换]、凯尔希、惊蛰、巫恋[兑换]、送葬人",
-                "time": "2021-10-14 03:59:59",
-                "starTime": "2021-9-30 04:00:00",
-                "overTime": "2021-10-14 03:59:59"
+                "remark": "早露[兑换]、陈、布洛卡、极境[兑换]、可颂",
+                "time": "2021-11-11 03:59:59",
+                "starTime": "2021-10-28 04:00:00",
+                "overTime": "2021-11-11 03:59:59"
             },
             
             {
@@ -193,39 +155,39 @@
             },
             {
                 "text": "下个活动池开启",
-                "remark": "远牙，灰毫，狮蝎",
-                "time": "2021-10-15 15:59:59",
-                "starTime": "2021-10-15 04:00:00",
-                "overTime": "2021-10-15 15:59:59"
+                "remark": "耀骑士临光 [限定]，焰尾，蚀清 (W，迷迭香[5倍概率])",
+                "time": "2021-11-01 15:59:59",
+                "starTime": "2021-10-29 04:00:00",
+                "overTime": "2021-11-01 15:59:59"
             },
             {
                 "text": "当前活动池结束",
-                "remark": "瑕光，奥斯塔，白金，泡泡",
-                "time": "2021-10-15 03:59:59",
-                "starTime": "2021-10-1 16:00:00",
-                "overTime": "2021-10-15 03:59:59"
+                "remark": "耀骑士临光 [限定]，焰尾，蚀清 (W，迷迭香[5倍概率])",
+                "time": "2021-11-15 03:59:59",
+                "starTime": "2021-11-01 16:00:00",
+                "overTime": "2021-11-15 03:59:59"
             },
 
             {
-                "text": "SideStory「玛莉娅·临光」，复刻活动开启",
+                "text": "第7赛季「松烟行动」开启",
                 "remark": "",
-                "time": "2021-10-01 15:59:59",
-                "starTime": "2021-9-24 16:00:00",
-                "overTime": "2021-10-01 15:59:59"
+                "time": "2021-11-22 15:59:59",
+                "starTime": "2021-11-22 04:00:00",
+                "overTime": "2021-11-22 15:59:59"
             },
             {
-                "text": "故事集「红松林」，活动开启",
+                "text": "SideStory「长夜临光」，活动开启",
                 "remark": "",
-                "time": "2021-10-15 15:59:59",
-                "starTime": "2021-10-11 04:00:00",
-                "overTime": "2021-10-15 15:59:59"
+                "time": "2021-11-01 15:59:59",
+                "starTime": "2021-10-24 22:00:00",
+                "overTime": "2021-11-01 15:59:59"
             },
             {
-                "text": "故事集「红松林」，活动结束",
+                "text": "SideStory「长夜临光」，活动结束",
                 "remark": "",
-                "time": "2021-10-22 03:59:59",
-                "starTime": "2021-10-15 16:00:00",
-                "overTime": "2021-10-22 03:59:59"
+                "time": "2021-11-22 03:59:59",
+                "starTime": "2021-11-01 16:00:00",
+                "overTime": "2021-11-22 03:59:59"
             }
         ]
     },
