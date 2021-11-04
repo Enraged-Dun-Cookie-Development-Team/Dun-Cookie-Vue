@@ -19,7 +19,7 @@
             "notice": false
         },
         {
-            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://i2.hdslb.com/bfs/archive/6c230eee5b6ad3db811d932c9313603c73172c9a.jpg'> <div> <div><span class='online-blue'>SideStory「长夜临光」</span>将于<span class='online-blue'>11月22号</span>结束</div> <div>结束时间为<span class='online-red'>周一凌晨3点59分</span></div> <div>本次活动持续三周，分三部分开放</div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频</span>与<span class='online-blue'>剧情捧读</span></div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://i2.hdslb.com/bfs/archive/6c230eee5b6ad3db811d932c9313603c73172c9a.jpg'> <div> <div><span class='online-blue'>SideStory「长夜临光」</span>将于<span class='online-blue'>11月22号</span>结束</div> <div>结束时间为<span class='online-red'>周一凌晨3点59分</span></div> <div>本次活动掉落<span class='online-blue'>糖组，晶体元件，扭转醇</span></div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频</span>与<span class='online-blue'>剧情捧读</span></div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
             "starTime":"2021-11-01 16:00:00",
             "overTime":"2021-11-22 03:59:59",
             "notice": false
@@ -48,19 +48,19 @@
         },
         
         {
-            "starTime": "2021-10-16 16:00:00",
-            "overTime": "2021-10-22 03:59:59",
-            "url": "https://www.bilibili.com/video/BV15Q4y1D74Q?p=3",
-            "name": "【魔法zc目录】“红松林”PS平民关卡低配攻略(含突袭)！阵容平民+低练度+语音详解的愉悦攻略！",
-            "img": "https://i1.hdslb.com/bfs/archive/1176744c34dd86fc371da409806ec25dd8aa99a7.jpg@200w_125h_1c.webp",
+            "starTime": "2021-11-01 04:00:00",
+            "overTime": "2021-11-02 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1yu411o7m4",
+            "name": "【魔法zc目录】“长夜临光”NL平民全关卡低配攻略！阵容平民+低练度+语音详解的愉悦攻略！",
+            "img": "https://i1.hdslb.com/bfs/archive/a0217d4d206f55c25a83400e5d89204f79b2efeb.jpg@200w_125h_1c.webp",
             "radius": true
         },
         {
-            "starTime": "2021-10-16 16:00:00",
-            "overTime": "2021-10-22 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1jL411G7D4",
-            "name": "【好吃的橘子鸭】 PS系列平民攻略+突袭合集，语音详解！",
-            "img": "https://i2.hdslb.com/bfs/archive/ee8b9d40139a5eb92a2d4da5b2d26126e438f5de.jpg@200w_125h_1c.webp",
+            "starTime": "2021-11-01 04:00:00",
+            "overTime": "2021-11-08 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1xf4y1u79Q",
+            "name": "【好吃的橘子鸭】多索雷斯换水口单核+解手/挂机流，语音详解，阵容平民，你必过！！",
+            "img": "https://i2.hdslb.com/bfs/archive/0b19bbec4206df10b8920f7541de2d7618f5e2fa.jpg@160w_100h_1c.webp",
             "radius": true
         },
         {
@@ -77,6 +77,38 @@
             "url": "https://www.bilibili.com/video/BV1R3411k7Je",
             "name": "【自在道爷】多索雷斯换水口挂机流，新剿灭摆完就过！精二31快乐讲解，轻松解放双手|剿灭委托400杀",
             "img": "https://i2.hdslb.com/bfs/archive/b957dda8bfca033d6694833fedb96c0243b2725e.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-11-01 04:00:00",
+            "overTime": "2021-11-22 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1yu411o7m4",
+            "name": "【魔法zc目录】“长夜临光”NL平民全关卡低配攻略！阵容平民+低练度+语音详解的愉悦攻略！",
+            "img": "https://i1.hdslb.com/bfs/archive/a0217d4d206f55c25a83400e5d89204f79b2efeb.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-11-01 04:00:00",
+            "overTime": "2021-11-22 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1wr4y1C7tF",
+            "name": "【好吃的橘子鸭】 NL1-10平民攻略合集，单核+挂机流，语音详解，有手就行！必过！！",
+            "img": "https://i1.hdslb.com/bfs/archive/1e44471f706b2b48dbcd802053e977e71ea87a60.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-11-01 04:00:00",
+            "overTime": "2021-11-22 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1VP4y1j77g",
+            "name": "【萧然Q】NL-1至NL-10 摆完挂机 简单好抄",
+            "img": "https://i0.hdslb.com/bfs/archive/17cf94181b320a3e41fda4ae8d9af5674003f826.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-11-01 04:00:00",
+            "overTime": "2021-11-22 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1pP4y1j7vn",
+            "name": "【自在道爷】NL挂机流，轻松解放双手！精二31快乐讲解，懒人低保不用愁|长夜临光全关卡合集(持续更新中)",
+            "img": "https://i2.hdslb.com/bfs/archive/6b08e60aa1f2e2829c61a2250f2e811c918e21e5.jpg@200w_125h_1c.webp",
             "radius": true
         },
 
@@ -135,18 +167,18 @@
             },
             
             {
-                "text": "当前活动池结束",
-                "remark": "远牙，灰毫，狮蝎",
+                "text": "联合行动结束",
+                "remark": "傀影，嵯峨，黑，史尔特尔，断崖，四月，燧石，陨星，蜜蜡，爱丽丝",
                 "time": "2021-10-29 03:59:59",
-                "starTime": "2021-10-15 16:00:00",
-                "overTime": "2021-10-29 03:59:59"
+                "starTime": "2021-11-15 16:00:00",
+                "overTime": "2021-11-29 03:59:59"
             },
             {
-                "text": "下个活动池开启",
-                "remark": "耀骑士临光 [限定]，焰尾，蚀清 (W，迷迭香[5倍概率])",
+                "text": "联合行动开启",
+                "remark": "傀影，嵯峨，黑，史尔特尔，断崖，四月，燧石，陨星，蜜蜡，爱丽丝",
                 "time": "2021-11-01 15:59:59",
-                "starTime": "2021-10-29 04:00:00",
-                "overTime": "2021-11-01 15:59:59"
+                "starTime": "2021-11-15 04:00:00",
+                "overTime": "2021-11-15 15:59:59"
             },
             {
                 "text": "当前活动池结束",
@@ -157,22 +189,22 @@
             },
 
             {
-                "text": "第7赛季「松烟行动」开启",
-                "remark": "",
+                "text": "第7赛季「松烟行动」危机合约开启",
+                "remark": "解锁条件：通关主线2-10",
                 "time": "2021-11-22 15:59:59",
                 "starTime": "2021-11-22 04:00:00",
                 "overTime": "2021-11-22 15:59:59"
             },
             {
-                "text": "SideStory「长夜临光」，活动开启",
-                "remark": "",
-                "time": "2021-11-01 15:59:59",
-                "starTime": "2021-10-24 22:00:00",
-                "overTime": "2021-11-01 15:59:59"
+                "text": "第7赛季「松烟行动」，危机合约结束",
+                "remark": "解锁条件：通关主线2-10",
+                "time": "2021-12-06 03:59:59",
+                "starTime": "2021-11-22 16:00:00",
+                "overTime": "2021-12-06 03:59:59"
             },
             {
                 "text": "SideStory「长夜临光」，活动结束",
-                "remark": "",
+                "remark": "解锁条件：通关主线1-10",
                 "time": "2021-11-22 03:59:59",
                 "starTime": "2021-11-01 16:00:00",
                 "overTime": "2021-11-22 03:59:59"
@@ -180,11 +212,11 @@
         ]
     },
     "upgrade": {
-        "v": "3.0.8",
-        "title": "小刻食堂翻新啦 - 3.0.8",
-        "description": "🐛 修复了各种小bug，优化部分功能</br>1.与游戏内同步修改设置界面运行中样式</br>2.添加点击logo跳转小刻食堂官网</br>3.排除删除公告跳饼的情况</br>4.公告区域设定可滚动</br>5.优化火狐浏览器折叠面板时的提示信息</br>6.优化窄窗口样式</br>7.修复列表顺序功能失效",
-        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/3.0.8/Dun-Cookie-3.0.8.crx",
-        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/3.0.8/Dun-Cookie-3.0.8.zip",
+        "v": "3.0.9",
+        "title": "小刻食堂翻新啦 - 3.0.9",
+        "description": "🐛 修复无法正常获取新接口的情况（务必更新到这个版本后）</br>1.修复无法正常获取新接口</br>2.微调泰拉记事社官网显示样式",
+        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/3.0.9/Dun-Cookie-3.0.9.crx",
+        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/3.0.9/Dun-Cookie-3.0.9.zip",
         "downSpare": "https://pan.baidu.com/s/1kzY6kpfYqLcGpuaiwQOGoA",
         "downSpareText": "备用下载（提取码 jzq9）",
         "downChrome": "https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN",

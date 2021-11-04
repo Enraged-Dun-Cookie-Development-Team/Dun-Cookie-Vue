@@ -264,7 +264,7 @@ export default {
   },
   methods: {
     openWeb: PlatformHelper.Tabs.create,
-    openUrl(url, w = 1024, h = window.screen.height) {
+    openUrl(url, w = 1024, h = window.screen.height-100) {
       if (this.settings.feature.linkMax) {
         PlatformHelper.Windows.createMaxPopupWindow(url);
       } else {
