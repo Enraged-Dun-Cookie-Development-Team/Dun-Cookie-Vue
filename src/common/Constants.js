@@ -71,10 +71,11 @@ const PAGE_WELCOME = 'welcome.html';
 const PAGE_OPTIONS = 'options.html';
 const PAGE_DONATE = 'donate.html';
 const PAGE_UPDATE = 'update.html';
+const PAGE_TIME = 'time.html';
 const PAGE_POPUP_WINDOW = 'popup.html';
 const PAGE_GITHUB_REPO = 'https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue';
 
-export {PAGE_WELCOME, PAGE_POPUP_WINDOW, PAGE_OPTIONS, PAGE_DONATE, PAGE_UPDATE, PAGE_GITHUB_REPO};
+export {PAGE_WELCOME, PAGE_POPUP_WINDOW, PAGE_OPTIONS, PAGE_DONATE, PAGE_UPDATE, PAGE_GITHUB_REPO,PAGE_TIME};
 // endregion
 
 // region 杂项
