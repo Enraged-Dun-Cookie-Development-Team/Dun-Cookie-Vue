@@ -77,7 +77,7 @@ class TimeUtil {
      */
     static changeToCCT(date) {
         let localTime = date.getTime();
-        let localOffset = date.getTimezoneOffset()*60000;  
+        let localOffset = date.getTimezoneOffset()*60000;
         let utc = localTime + localOffset;
         let cct = utc + (3600000*8);
         let cctDate = new Date(cct);
@@ -103,6 +103,20 @@ class TimeUtil {
             default:
                 return '无效';
         }
+    }
+
+    /**
+     * 时间相加 不支持负数
+     * @param h
+     * @param m
+     * @param s
+     */
+    static dateAddTime(h,m,s){
+        let date = new Date()
+        date.setHours(date.getHours() + parseInt(h))
+        date.setMinutes(date.getMinutes() + parseInt(m))
+        date.setSeconds(date.getSeconds() + parseInt(s))
+        return new Date(date)
     }
 }
 
