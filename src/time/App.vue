@@ -2,12 +2,12 @@
   <div id="app">
     <div class="title-area">
       <div class="title">
-        <a href="http://www.ceobecanteen.top/" target="_blank">
-          <el-image class="img" src="../assets/image/icon.png"></el-image>
-        </a>
-        <div class="name-area">
-          小刻食堂倒计时模块
-        </div>
+<!--        <a href="http://www.ceobecanteen.top/" target="_blank">-->
+<!--          <el-image class="img" src="../assets/image/icon.png"></el-image>-->
+<!--        </a>-->
+<!--        <div class="name-area">-->
+<!--          小刻食堂倒计时模块-->
+<!--        </div>-->
       </div>
       <el-card class="card-form">
         <el-input v-model="form.title" width="300px"  maxlength="15" placeholder="倒计时名称"></el-input>
@@ -28,7 +28,7 @@
 
     <el-divider></el-divider>
     <div class="card-area countdown-area">
-      <el-card :key="index" class="card" v-for="(item,index) in countDownList" :class="item.isClose?'is-close':''">
+      <el-card :key="item.id" class="card" v-for="(item) in countDownList" :class="item.isClose?'is-close':''">
         <div class="close" @click="removeCountDown(item)"><i class="el-icon-circle-close"></i></div>
         <div class="title">{{item.name}}</div>
         <div class="start-time">Start time : {{stringToFormat(item.data.startTime)}}</div>
@@ -75,25 +75,28 @@ export default {
         remark:`将于${TimeUtil.format(endTime,'MM-dd hh:mm')}进行提醒`
       }).then(_=>{
         this.getAllCountDownLocalStorage();
+        this.form = {};
       })
     },
 
     removeCountDown(item){
-      CountDown.removeCountDown(item)
-      this.$notify({
-        title: `已删除 ${item.name}`,
-        duration: 3000
-      });
-      this.getAllCountDownLocalStorage();
+      CountDown.removeCountDown(item).then(_=>{
+        this.$notify({
+          title: `已删除 ${item.name}`,
+          duration: 3000
+        });
+        this.getAllCountDownLocalStorage();
+      })
     },
 
     getAllCountDownLocalStorage(){
       CountDown.getCountDownLocalStorage().then(data=>{
-        this.countDownList = JSON.parse(data)
-        this.countDownList.forEach(item => {
-           if(TimeUtil.calcDiff(item.data.endTime) == ''){
-             item.isClose = true
-           }
+        this.countDownList = JSON.parse(data).map(item => {
+          return {
+            ...item,
+            isClose: TimeUtil.calcDiff(item.data.endTime) == '' ? true : false,
+            id: parseInt(Math.random() * 10000)
+          }
         })
       })
     },
