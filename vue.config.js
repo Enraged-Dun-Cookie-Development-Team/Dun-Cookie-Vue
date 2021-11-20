@@ -60,6 +60,13 @@ const config = {
             title: '博士，感谢您为我提供帮助',
             chunks: ['chunk-vendors', 'chunk-common', 'donate'],
         },
+        time: {
+            entry: 'src/time/index.js',
+            template: 'public/index.html',
+            filename: 'time.html',
+            title: '倒计时',
+            chunks: ['chunk-vendors', 'chunk-common', 'time'],
+        },
     },
     css: {
         extract: true,
