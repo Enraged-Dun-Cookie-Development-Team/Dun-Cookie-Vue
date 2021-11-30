@@ -252,5 +252,52 @@ const dayInfo = [
   },
 ];
 
-export {quickJump, dayInfo, TOOL_QR_URL, CANTEEN_INTERFACE_LIST};
+const countDown = [
+  {
+    index:1,
+    name: '公招倒计时1',
+    selectableRange: '00:00:00 - 09:00:00',
+    pickerTime:new Date(2021,1,1,9,0,0),
+    stopTime:null,
+  },
+  {index:2,
+    name: '公招倒计时2',
+    selectableRange: '00:00:00 - 09:00:00',
+    pickerTime:new Date(2021,1,1,9,0,0)
+  },
+  {
+    index:3,
+    name: '公招倒计时3',
+    selectableRange: '00:00:00 - 09:00:00',
+    pickerTime:new Date(2021,1,1,9,0,0)
+  },
+  {
+    index:4,
+    name: '公招倒计时4',
+    selectableRange: '00:00:00 - 09:00:00',
+    pickerTime:new Date(2021,1,1,9,0,0)
+  },
+  {
+    index:5,
+    name: '线索交流倒计时',
+    pickerTime:new Date(2021,1,1,23,59,59)
+  },
+  {
+    index:6,
+    name: '专精倒计时',
+    pickerTime:new Date(2021,1,1,23,59,59)
+  },
+  {
+    index:7,
+    name: '办公室倒计时',
+    pickerTime:new Date(2021,1,1,23,59,59)
+  },
+  {
+    index:8,
+    name: '备用',
+    pickerTime:new Date(2021,1,1,23,59,59)
+  }
+];
+
+export {quickJump, dayInfo,countDown, TOOL_QR_URL, CANTEEN_INTERFACE_LIST};
 // endregion
