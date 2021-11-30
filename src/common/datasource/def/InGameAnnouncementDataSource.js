@@ -3,6 +3,7 @@ import Settings from '../../Settings';
 import NotificationUtil from '../../util/NotificationUtil';
 import TimeUtil from '../../util/TimeUtil';
 import {DataItem} from '../../DataItem';
+import HttpUtil from "../../util/HttpUtil";
 
 /**
  * 需要被忽略的公告列表，一般是常驻活动/用户协议公告之类的
@@ -23,6 +24,8 @@ export class InGameAnnouncementDataSource extends DataSource {
   };
 
   FocusAnnounceId = null;
+  ClientVersion = null;
+  ResVersion = null;
 
   constructor(icon, dataName, title, dataUrl, priority) {
     super(icon, dataName, title, dataUrl, priority);
@@ -47,7 +50,11 @@ export class InGameAnnouncementDataSource extends DataSource {
     });
     if (Settings.dun.enableNotice) {
       this.JudgmentNewFocusAnnounceId(data);
+
+      let versionData = await HttpUtil.GET_Json(`https://ak-conf.hypergryph.com/config/prod/official/${Settings.dun.gamePlatform}/version`);
+      this.JudgmentVersionRelease(versionData);
     }
+    
     return list;
   }
 
@@ -62,10 +69,32 @@ export class InGameAnnouncementDataSource extends DataSource {
           }
         })
         if (!announceIdExist) {
-          NotificationUtil.SendNotice(`【通讯组预告】小刻貌似闻到了饼的味道！`, '检测到游戏出现公告弹窗，可能马上发饼！', null, new Date().getTime())
+          NotificationUtil.SendNotice(`【通讯组预告】小刻貌似闻到了饼的味道！`, '检测到游戏出现公告弹窗，可能马上发饼！', null, new Date().getTime());
         }
       }
       this.FocusAnnounceId = data.focusAnnounceId;
+    }
+  }
+
+  // 判断版本号时候更新
+  JudgmentVersionRelease(versionData) {
+    debugger;
+    if (versionData) {
+      if (this.ClientVersion && versionData.clientVersion && this.ClientVersion != versionData.clientVersion)
+      {
+        const nowVersion = versionData.clientVersion.split(".").map(a => parseInt(a));
+        const pastVersion = this.ClientVersion.split(".").map(a => parseInt(a));
+    
+        if(nowVersion[0] > pastVersion[0]) {
+          NotificationUtil.SendNotice(`【${Settings.dun.gamePlatform}/超大版本】更新包已经准备好啦`, '博士，这可是难遇的超大版本更新诶！！！\n相信博士已经等不及了吧，快去下载呦~', null, new Date().getTime());
+        } else if (nowVersion[1] > pastVersion[1] || nowVersion[2] > pastVersion[2]) {
+          NotificationUtil.SendNotice(`【${Settings.dun.gamePlatform}/大版本】更新包已经准备好啦`, '博士，更新包已经给你准备好啦！\n先下载更新包，等等进游戏快人一部噢！', null, new Date().getTime());
+        } 
+      } else if (this.ResVersion && versionData.resVersion && this.ResVersion != versionData.resVersion) {
+        NotificationUtil.SendNotice(`【${Settings.dun.gamePlatform}/闪断更新】已经完成闪断更新`, '博士，快去重启进入游戏吧！', null, new Date().getTime());
+      }
+      this.ClientVersion = versionData.clientVersion;
+      this.ResVersion = versionData.resVersion;
     }
   }
 }

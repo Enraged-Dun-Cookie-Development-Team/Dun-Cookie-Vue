@@ -122,6 +122,10 @@ class Settings {
      * 2 将饼视为23:59:59发送的处理
      */
     sortModeForOnlyDate: 1,
+    /**
+     * 游戏内平台
+     */
+    gamePlatform: "Android",
   }
 
   /**
