@@ -10,6 +10,7 @@ const config = {
         disableHostCheck: true,
     },
     filenameHashing: false,
+    lintOnSave:false, //关闭eslint检查
     pages: {
         options: {
             entry: 'src/options/index.js',
@@ -64,7 +65,7 @@ const config = {
             entry: 'src/time/index.js',
             template: 'public/index.html',
             filename: 'time.html',
-            title: '倒计时',
+            title: '倒计时模块',
             chunks: ['chunk-vendors', 'chunk-common', 'time'],
         },
     },

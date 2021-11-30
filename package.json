@@ -17,10 +17,11 @@
     "jquery": "^3.6.0",
     "jsdom": "^17.0.0",
     "qrcode": "^1.4.4",
+    "sass": "^1.32.0",
+    "sass-loader": "^10.1.0",
     "vue": "^2.6.11",
     "vue-clipboard2": "^0.3.1",
-    "vue-count-to": "^1.0.13",
-    "vue2-flip-countdown": "^0.11.2"
+    "vue-count-to": "^1.0.13"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
