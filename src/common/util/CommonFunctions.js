@@ -25,4 +25,32 @@ function deepAssign(target, obj) {
     return target;
 }
 
-export {deepAssign};
+
+function animateCSS(element, animation, callback) {
+    let prefix = "animate__";
+    new Promise((resolve, reject) => {
+        const animationName = `${prefix}${animation}`;
+        const node = document.querySelector(element);
+        if(!node){
+            return;
+        }
+        node.classList.add(`${prefix}animated`, animationName);
+
+        function handleAnimationEnd(event) {
+            event.stopPropagation();
+            node.classList.remove(`${prefix}animated`, animationName);
+            resolve("Animation ended");
+        }
+
+        node.addEventListener("animationend", handleAnimationEnd, {
+            once: true,
+        });
+    }).then(() => {
+        if (callback) {
+            callback();
+        }
+    });
+}
+
+
+export {deepAssign,animateCSS};

@@ -29,7 +29,8 @@ import CountDown from '../common/sync/CountDownInfo';
 import PlatformHelper from "@/common/platform/PlatformHelper";
 import TimeUtil from "@/common/util/TimeUtil";
 import CountDownFlipClock from "../components/countdown/FlipClock";
-import {countDown} from "../common/Constants";
+import {countDown, MESSAGE_CHANGE_COUNTDOWN, MESSAGE_SAN_GET} from "../common/Constants";
+import {deepAssign} from "@/common/util/CommonFunctions";
 
 export default {
   name: "countDownTime",
@@ -57,10 +58,15 @@ export default {
         ...item,
         ...data
       }
-      CountDown.addCountDownLocalStorage(info)
+      CountDown.addCountDownLocalStorage(info).then(_=>{
+        PlatformHelper.Message.send(MESSAGE_CHANGE_COUNTDOWN)
+      })
     },
+
     endTime(data){
-      CountDown.removeCountDown(data)
+      CountDown.removeCountDown(data).then(_=>{
+        PlatformHelper.Message.send(MESSAGE_CHANGE_COUNTDOWN);
+      })
     },
 
     getAllCountDownLocalStorage() {

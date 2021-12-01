@@ -12,11 +12,15 @@ import {
     PAGE_POPUP_WINDOW,
     PAGE_UPDATE,
     PAGE_WELCOME, PLATFORM_FIREFOX,
-    TEST_DATA_REFRESH_TIME
+    TEST_DATA_REFRESH_TIME,
+    MESSAGE_CHANGE_COUNTDOWN,
+    MESSAGE_GET_COUNTDOWN
 } from '../common/Constants';
 import DataSourceUtil from '../common/util/DataSourceUtil';
 import PlatformHelper from '../common/platform/PlatformHelper';
 import ServerUtil from "../common/util/ServerUtil";
+import CountDown from '../common/sync/CountDownInfo';
+import TimeUtil from "@/common/util/TimeUtil";
 
 // 重构完成后的其它优化：
 // TODO 多个提取出来的类要考虑能否合并(指互相通信的那部分)
@@ -78,6 +82,7 @@ function tryDun(settings) {
 }
 
 let dunTimeoutId = null;
+
 /**
  * 启动蹲饼timer，会立刻请求一次然后按Settings.dun.intervalTime的值进行延时轮询
  */
@@ -139,7 +144,7 @@ const kazeFun = {
         ) {
             let newAnnouncement = true;
             for (let i = 0; i < oldList.length; i++) {
-                if(oldList[i].id == newList[0].id) {
+                if (oldList[i].id == newList[0].id) {
                     newAnnouncement = false;
                 }
             }
@@ -154,8 +159,7 @@ const kazeFun = {
                     NotificationUtil.SendNotice(`小刻在【${title}】里面找到了一个饼！`, notice, newInfo.coverImage, newInfo.id)
                 }
                 return true;
-            }
-            else if (newList && newList.length > (oldList ? oldList.length : 0)) {
+            } else if (newList && newList.length > (oldList ? oldList.length : 0)) {
                 return true;
             }
             return false;
@@ -197,6 +201,11 @@ const kazeFun = {
                         return cardListCache;
                     case MESSAGE_SAN_GET:
                         return SanInfo;
+                    case MESSAGE_CHANGE_COUNTDOWN:
+                        countDown.Change();
+                        return;
+                    case MESSAGE_GET_COUNTDOWN:
+                        return countDown.GetAllCountDown();
                     default:
                         return;
                 }
@@ -244,7 +253,44 @@ const kazeFun = {
                     .then(tab => popupWindowId = tab.id);
             }
         });
+    },
+}
+
+const countDown = {
+    sendNoticeList: [],
+    countDownList: [],
+    Start() {
+        CountDown.getCountDownLocalStorage().then(data => {
+            data = JSON.parse(data);
+            if (data) {
+                this.countDownList = [];
+                data.map(x => x.data).forEach(item => {
+                    this.countDownList.push(item);
+                    this.sendNoticeList.push(setTimeout(_ => {
+                        NotificationUtil.SendNotice(`倒计时完毕`, `${item.name} 到点了！`, null, new Date().getTime());
+                    }, new Date(item.stopTime) - new Date()));
+                })
+            }
+        })
+    },
+    Change() {
+        this.sendNoticeList.forEach(id => {
+            clearTimeout(id)
+        });
+        this.Start();
+    },
+    GetAllCountDown() {
+        let list = [];
+        this.countDownList.forEach(item => {
+            let value = TimeUtil.calcDiff(new Date(item.stopTime), new Date())
+            if (value != '') {
+                list.push({...item, timeStr: value, stopTime: TimeUtil.format(item.stopTime, 'yyyy-MM-dd hh:mm:ss')});
+            }
+        })
+        return list;
     }
+
 }
 
 kazeFun.Init();
+countDown.Start();
