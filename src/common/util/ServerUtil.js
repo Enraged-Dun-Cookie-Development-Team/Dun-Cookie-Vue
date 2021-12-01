@@ -33,6 +33,8 @@ export default class ServerUtil {
             return data;
         }
         InsiderUtil.resetInsiderLevel(data.insider);
+        Settings.logo = data.logo;
+        Settings.saveSettings().then();
         if (shouldNotice) {
             if (Settings.JudgmentVersion(data.upgrade.v, CURRENT_VERSION) && Settings.dun.enableNotice) {
                 NotificationUtil.SendNotice("小刻食堂翻新啦！！", "快来使用新的小刻食堂噢！一定有很多好玩的新功能啦！！", null, "update");

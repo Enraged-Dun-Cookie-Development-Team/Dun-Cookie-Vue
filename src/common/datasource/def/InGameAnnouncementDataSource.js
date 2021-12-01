@@ -78,7 +78,6 @@ export class InGameAnnouncementDataSource extends DataSource {
 
   // 判断版本号时候更新
   JudgmentVersionRelease(versionData) {
-    debugger;
     if (versionData) {
       if (this.ClientVersion && versionData.clientVersion && this.ClientVersion != versionData.clientVersion)
       {
