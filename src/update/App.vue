@@ -2,7 +2,7 @@
   <div id="app">
     <el-card class="box-card">
       <el-row type="flex" align="middle" justify="space-around">
-        <el-image class="img" src="../assets/image/icon.png"></el-image>
+        <el-image class="img" :src="logo"></el-image>
         <div class="version">欢迎使用小刻食堂 V{{ currentVersion }}</div>
       </el-row>
       <el-divider></el-divider>
@@ -65,6 +65,7 @@ import Feedback from '../components/Feedback';
 import {CURRENT_VERSION} from '../common/Constants';
 import PlatformHelper from '../common/platform/PlatformHelper';
 import ServerUtil from "../common/util/ServerUtil";
+import Settings from "../common/Settings"
 
 export default {
   name: "update",
@@ -75,6 +76,7 @@ export default {
 
   data() {
     return {
+      logo: "../assets/image/" + Settings.logo,
       currentVersion: CURRENT_VERSION,
       updateInfo: {},
     };

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="loading-title-area" ref="loading-title-area">
-      <el-image class="loading-image" src="../assets/image/icon.png"></el-image>
+      <el-image class="loading-image" :src="logo"></el-image>
       <div class="loading-title">欢迎使用小刻食堂 V{{ currentVersion }}</div>
     </div>
     <div v-show="bodyIsShow">
@@ -9,7 +9,7 @@
         <div class="head-area" ref="head-area">
           <div class="head">
             <a href="http://www.ceobecanteen.top/" target="_blank">
-              <el-image class="img" src="../assets/image/icon.png"></el-image>
+              <el-image class="img" :src="logo"></el-image>
             </a>
             <div class="name-area">
               <div class="name">小刻食堂</div>
@@ -517,6 +517,7 @@ export default {
       this.defSourcesList.push(...res);
     });
     return {
+      logo: "../assets/image/" + Settings.logo,
       currentVersion: SHOW_VERSION,
       oldDunCount: 0,
       dunInfo: DunInfo,

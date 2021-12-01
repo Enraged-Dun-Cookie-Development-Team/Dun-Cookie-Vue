@@ -3,7 +3,7 @@
     <div class="title-area">
             <div class="title">
               <a href="http://www.ceobecanteen.top/" target="_blank">
-                <el-image class="img" src="../assets/image/icon.png"></el-image>
+                <el-image class="img" :src="logo"></el-image>
               </a>
               <div class="name-area">
                 小刻食堂倒计时模块
@@ -31,6 +31,7 @@ import TimeUtil from "@/common/util/TimeUtil";
 import CountDownFlipClock from "../components/countdown/FlipClock";
 import {countDown, MESSAGE_CHANGE_COUNTDOWN, MESSAGE_SAN_GET} from "../common/Constants";
 import {deepAssign} from "@/common/util/CommonFunctions";
+import Settings from "../common/Settings"
 
 export default {
   name: "countDownTime",
@@ -43,6 +44,7 @@ export default {
   },
   data() {
     return {
+      logo: "../assets/image/" + Settings.logo,
       form: {},
       countDownList: []
     };

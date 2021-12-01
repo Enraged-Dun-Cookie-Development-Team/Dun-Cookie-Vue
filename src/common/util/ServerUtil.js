@@ -56,7 +56,7 @@ export default class ServerUtil {
                         content = content.replace(divReg, '\n');
                         content = content.replace(removeTagReg, '');
 
-                        imgUrl =  imgUrl == "/assets/image/icon.ico" ? "/assets/image/announcement.png" : imgUrl;
+                        imgUrl =  imgUrl == "/assets/image/" + Settings.logo ? "/assets/image/announcement.png" : imgUrl;
 
                         NotificationUtil.SendNotice("博士，重要公告，记得开列表看噢！", content, imgUrl, "announcement" + new Date().getTime());
                     }

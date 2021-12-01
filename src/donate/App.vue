@@ -3,7 +3,7 @@
     <div id="app">
       <el-card class="box-card" shadow="never">
         <el-row type="flex" align="middle" justify="space-around">
-          <el-image class="img" src="../assets/image/icon.png"></el-image>
+          <el-image class="img" :src="logo"></el-image>
           <div class="version">小刻食堂 V{{currentVersion}}</div>
         </el-row>
         <el-divider>感谢</el-divider>
@@ -57,6 +57,7 @@ export default {
   watch: {},
   data() {
     return {
+      logo: "../assets/image/" + Settings.logo,
       currentVersion: CURRENT_VERSION,
       settings: Settings,
     };

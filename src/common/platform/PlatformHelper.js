@@ -173,7 +173,7 @@ class TabsHelper {
 
 class NotificationHelper {
     create(id, title, message, imageUrl) {
-        return this.createWithSpecialIcon(id, PlatformHelper.Extension.getURL('/assets/image/icon.png'), title, message, imageUrl);
+        return this.createWithSpecialIcon(id, PlatformHelper.Extension.getURL('/assets/image/'+ Settings.logo), title, message, imageUrl);
     }
 
     /**

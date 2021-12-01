@@ -511,7 +511,7 @@ export default {
       });
       // 头图 图标 资源文件
       item.imgObj = {
-        icon: "/assets/image/icon.png",
+        icon: "/assets/image/" + Settings.logo,
         sourceIcon: this.getDataSourceByName(item.dataSource).icon,
       };
       // 单图或者多图  selectImage大于1走多图 等于1就直接变成头图

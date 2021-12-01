@@ -66,6 +66,8 @@ class Settings {
   initTime = new Date().getTime();
   // 插件版本号
   version = CURRENT_SETTING_VERSION;
+  // Logo
+  logo = "icon.png"
 
   /**
    * 启用的默认数据源，储存dataName
