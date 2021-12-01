@@ -168,13 +168,23 @@
         </div>
         <!--        <span @click.stop="drawer = !drawer;"-->
         <!--              :class="[drawer?'menu-btn-open':'menu-btn-close', firefox ? 'menu-btn-firefox' : '','menu-btn','el-icon-menu']"></span>-->
-
-        <Menu-Icon @handleIconClick="handleIconClick()"
-          :class="[
+        <div class="countdown-and-btn">
+          <div class="count-down-area" v-show="countDownList.length>0" @click="openCountDown()">
+            <div v-for="(item) in countDownList"
+                 :title="'到点时间：' + item.stopTime">
+              {{ item.name }}:剩余约{{
+                item.timeStr
+              }}
+            </div>
+            <div>【本数据仅会在打开列表时刷新】</div>
+          </div>
+          <Menu-Icon @handleIconClick="handleIconClick()"
+                     :class="[
             drawer ? 'menu-btn-open' : 'menu-btn-close',
             firefox ? 'menu-btn-firefox' : '',
             'menu-btn',
           ]"></Menu-Icon>
+        </div>
       </div>
       <div id="content">
         <time-line
@@ -201,16 +211,18 @@ import {
   MESSAGE_CARD_LIST_GET,
   MESSAGE_CARD_LIST_UPDATE,
   MESSAGE_DUN_INFO_UPDATE,
-  MESSAGE_FORCE_REFRESH,
+  MESSAGE_FORCE_REFRESH, MESSAGE_GET_COUNTDOWN,
   PAGE_DONATE,
   PAGE_GITHUB_REPO,
-  PAGE_OPTIONS,
+  PAGE_OPTIONS, PAGE_TIME,
   PAGE_UPDATE, PLATFORM_FIREFOX,
   quickJump,
   SHOW_VERSION,
 } from "../common/Constants";
 import PlatformHelper from "../common/platform/PlatformHelper";
+import {animateCSS} from "../common/util/CommonFunctions";
 import janvas from "../common/util/janvas.min.js";
+import "animate.css";
 
 export default {
   name: "app",
@@ -254,7 +266,8 @@ export default {
       loading: true, // 初始化加载
       onlineDayInfo: {},
       scrollShow: false,
-      firefox: false
+      firefox: false,
+      countDownList: []
       // allHeight: 0,
     };
   },
@@ -285,6 +298,7 @@ export default {
         // 图片卡 先加载dom后加载图片内容
         this.LazyLoaded = true;
         this.listenerWindowSize();
+        this.getCountDownList();
       }, 1);
     },
     handleIconClick() {
@@ -383,11 +397,11 @@ export default {
       count++;
       PlatformHelper.Storage.saveLocalStorage(warningCountKey, count).then();
       if (count < 3) {
-        this.$alert(tip, '提示',  {
+        this.$alert(tip, '提示', {
           dangerouslyUseHTMLString: true,
         }).then();
       } else {
-        this.$alert(tip + '<br/><span id="firefox-collapse-warning-tip" style="color: red">点击<button id="btn-disable-firefox-warning">此处</button>以后都不再提示</span>', '提示',  {
+        this.$alert(tip + '<br/><span id="firefox-collapse-warning-tip" style="color: red">点击<button id="btn-disable-firefox-warning">此处</button>以后都不再提示</span>', '提示', {
           dangerouslyUseHTMLString: true,
         }).then();
         setTimeout(() => {
@@ -406,7 +420,7 @@ export default {
         window.onresize = () => {
           if (fromLarge && window.innerWidth <= 699) {
             if (PlatformHelper.PlatformType === PLATFORM_FIREFOX
-              && (window.innerWidth === 425 || window.innerWidth === 348)) {
+                && (window.innerWidth === 425 || window.innerWidth === 348)) {
               // 425和348两个魔法值来源于：https://discourse.mozilla.org/t/can-add-ons-webextensions-popups-determinate-whether-they-are-shown-in-the-overflow-menu-or-not/27937/6
               this.firefoxWarning();
             } else {
@@ -441,6 +455,13 @@ export default {
       PlatformHelper.Message.send(MESSAGE_CARD_LIST_GET).then((data) => {
         this.cardList = data;
       });
+    },
+    // 获取倒计时数据
+    getCountDownList() {
+      PlatformHelper.Message.send(MESSAGE_GET_COUNTDOWN).then(data => {
+        this.countDownList = data.sort((x, y) => new Date(x.stopTime) > new Date(y.stopTime) ? 1 : -1);
+        console.log(this.countDownList)
+      })
     },
     // 设置数据
     saveSan() {
@@ -503,6 +524,10 @@ export default {
       PlatformHelper.Tabs.createWithExtensionFile(PAGE_OPTIONS);
     },
 
+    openCountDown() {
+      PlatformHelper.Tabs.createWithExtensionFile(PAGE_TIME);
+    },
+
     openDonate() {
       PlatformHelper.Tabs.createWithExtensionFile(PAGE_DONATE);
     },
@@ -520,6 +545,7 @@ export default {
 
 <style lang="less" scoped>
 @import "../theme/theme.less";
+
 
 .styleChange(@theme) {
   @bgColor: "bgColor-@{theme}"; // 背景颜色
@@ -560,7 +586,7 @@ export default {
     display: flex;
     padding: 0 14px 0 18px;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     font-size: 1rem;
     color: #23ade5;
     user-select: none;
@@ -568,6 +594,32 @@ export default {
 
     .version {
       text-align: left;
+    }
+
+    .countdown-and-btn {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+
+      .menu-btn {
+        margin-top: 5px;
+      }
+
+      .count-down-area {
+        cursor: pointer;
+        margin-right: 10px;
+        text-align: right;
+        height: 40px;
+        overflow: hidden;
+        background:  @@bgColor;
+        padding: 0 10px;
+        border-radius: 3px;
+        transition: all 0.5s;
+        &:hover {
+          height: auto;
+          box-shadow: 0 0 20px 0px;
+        }
+      }
     }
   }
 
@@ -784,55 +836,70 @@ export default {
     align-items: flex-start !important;
     font-size: small;
   }
-  .online-title-img,.sane-area,.day-info-content-bottom {
+
+  .online-title-img, .sane-area, .day-info-content-bottom {
     display: none !important;
   }
+
   .el-loading-spinner {
     top: 0 !important;
     margin-top: 0 !important;
   }
+
   .el-timeline {
     padding-left: 20px !important;
     padding-right: 10px !important;
   }
+
   .el-timeline-item__timestamp {
     margin-left: 13px !important;
   }
+
   .el-timeline-item__wrapper {
     padding-left: 14px !important;
   }
+
   .el-divider--horizontal {
     display: flex !important;
     justify-content: center !important;
+
     .el-divider__text.is-left {
       left: unset !important;
     }
   }
+
   .el-drawer {
     width: 100% !important;
   }
+
   .drawer-btn-area {
     flex-wrap: wrap;
+
     .el-button {
       margin: 3px !important;
     }
   }
+
   .menu-button-area {
     flex-wrap: wrap;
+
     .el-button {
       width: 40% !important;
       margin: 3px !important;
     }
   }
+
   .el-message-box {
     width: 100% !important;
   }
 }
+
 @media (max-width: 525px) {
   .online-area {
     font-size: x-small;
   }
 }
+
 body {
   margin: 0;
 }
