@@ -355,6 +355,10 @@ export default {
                 new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
         );
 
+        if(data.iconName){
+          PlatformHelper.Storage.saveLocalStorage('iconName', data.iconName);
+        }
+
         // 内部密码
         this.insiderCodeMap = data.insider;
         this.resourcesNotToday();
