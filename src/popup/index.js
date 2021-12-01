@@ -9,10 +9,11 @@ import TerraHistoricusItem from '../components/timeline/items/TerraHistoricusIte
 import NeteaseCloudMusicItem from '../components/timeline/items/NeteaseCloudMusicItem';
 import {TerraHistoricusDataSource} from '../common/datasource/def/TerraHistoricusDataSource';
 import {NeteaseCloudMusicDataSource} from '../common/datasource/def/NeteaseCloudMusicDataSource';
+import Settings from "../common/Settings"
 
 Vue.use(VueLazyload, {
-    loading: '/assets/image/icon.png',
-    error: '/assets/image/icon.png',
+    loading: '/assets/image/' + Settings.logo,
+    error: '/assets/image/' + Settings.logo,
 })
 
 Vue.config.productionTip = false

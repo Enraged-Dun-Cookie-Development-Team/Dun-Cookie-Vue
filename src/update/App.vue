@@ -76,7 +76,8 @@ export default {
 
   data() {
     return {
-      logo: "../assets/image/" + Settings.logo,
+      settings: Settings,
+      logo: "",
       currentVersion: CURRENT_VERSION,
       updateInfo: {},
     };
@@ -85,6 +86,9 @@ export default {
   methods: {
     init() {
       this.getUpdateInfo();
+      this.settings.doAfterInit((settings) => {
+        this.logo = "../assets/image/" + settings.logo;
+      });
     },
     openUrl: PlatformHelper.Tabs.create,
     // 检查一次更新

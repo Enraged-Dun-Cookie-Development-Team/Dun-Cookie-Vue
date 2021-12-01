@@ -40,17 +40,25 @@ export default {
     CountDownFlipClock
   },
   mounted() {
+    this.init();
     this.getAllCountDownLocalStorage();
   },
   data() {
     return {
-      logo: "../assets/image/" + Settings.logo,
+      logo: "",
+      settings: Settings,
       form: {},
       countDownList: []
     };
   },
   computed: {},
   methods: {
+    init () {
+      this.settings.doAfterInit((settings) => {
+        this.logo = "../assets/image/" + settings.logo;
+      });
+    },
+
     start() {
 
     },

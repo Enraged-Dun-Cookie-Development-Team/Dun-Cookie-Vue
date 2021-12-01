@@ -68,7 +68,7 @@ export default {
 
   data() {
     return {
-      logo: "../assets/image/" + Settings.logo,
+      logo: "",
       currentVersion: CURRENT_VERSION,
       settings: Settings,
       activeNames: [1],
@@ -77,6 +77,9 @@ export default {
   computed: {},
   methods: {
     init() {
+      this.settings.doAfterInit((settings) => {
+        this.logo = "../assets/image/" + settings.logo;
+      });
     },
     toSetting() {
       PlatformHelper.Tabs.createWithExtensionFile(PAGE_OPTIONS);

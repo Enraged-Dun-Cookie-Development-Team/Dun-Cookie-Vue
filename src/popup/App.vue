@@ -171,6 +171,7 @@
         <div class="countdown-and-btn">
           <div class="count-down-area" v-show="countDownList.length>0" @click="openCountDown()">
             <div v-for="(item) in countDownList"
+                 :key="item"
                  :title="'到点时间：' + item.stopTime">
               {{ item.name }}:剩余约{{
                 item.timeStr

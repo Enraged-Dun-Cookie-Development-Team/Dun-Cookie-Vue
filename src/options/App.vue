@@ -517,7 +517,7 @@ export default {
       this.defSourcesList.push(...res);
     });
     return {
-      logo: "../assets/image/" + Settings.logo,
+      logo: "",
       currentVersion: SHOW_VERSION,
       oldDunCount: 0,
       dunInfo: DunInfo,
@@ -558,6 +558,7 @@ export default {
             })
             .filter((item) => !!item);
         global.customData = this.customData;
+        this.logo = "../assets/image/" + settings.logo;
       });
       PlatformHelper.Message.registerListener(
           "options",

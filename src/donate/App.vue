@@ -57,7 +57,7 @@ export default {
   watch: {},
   data() {
     return {
-      logo: "../assets/image/" + Settings.logo,
+      logo: "",
       currentVersion: CURRENT_VERSION,
       settings: Settings,
     };
@@ -65,7 +65,11 @@ export default {
   computed: {
   },
   methods: {
-    init() {},
+    init() {
+      this.settings.doAfterInit((settings) => {
+        this.logo = "../assets/image/" + settings.logo;
+      });
+    },
   },
 };
 </script>
