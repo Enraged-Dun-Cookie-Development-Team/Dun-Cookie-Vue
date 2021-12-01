@@ -266,9 +266,11 @@ const countDown = {
                 this.countDownList = [];
                 data.map(x => x.data).forEach(item => {
                     this.countDownList.push(item);
-                    this.sendNoticeList.push(setTimeout(_ => {
-                        NotificationUtil.SendNotice(`倒计时完毕`, `${item.name} 到点了！`, null, new Date().getTime());
-                    }, new Date(item.stopTime) - new Date()));
+                    this.sendNoticeList.push(
+                        setTimeout(_ => {
+                            NotificationUtil.SendNotice(`倒计时完毕`, `${item.name} 到点了！`, null, new Date().getTime());
+                        }, new Date(item.stopTime) - new Date())
+                    );
                 })
             }
         })
@@ -277,6 +279,7 @@ const countDown = {
         this.sendNoticeList.forEach(id => {
             clearTimeout(id)
         });
+        this.sendNoticeList = [];
         this.Start();
     },
     GetAllCountDown() {
