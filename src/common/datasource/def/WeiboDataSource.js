@@ -62,10 +62,17 @@ export class WeiboDataSource extends DataSource {
           }
           // 转发内容
           if (x.mblog.hasOwnProperty('retweeted_status')) {
-            builder.retweeted(new RetweetedInfo(
-              x.mblog.retweeted_status.user.screen_name,
-              x.mblog.retweeted_status.raw_text || x.mblog.retweeted_status.text.replace(/<\a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<span class="url-icon">|<\/img.*?>|全文|网页链接/g, '').replace(/<br \/>/g, '\n')
-            ));
+            if (x.mblog.retweeted_status.user == null) {
+              builder.retweeted(new RetweetedInfo(
+                "未知",
+                "抱歉，作者已设置仅展示半年内微博，此微博已不可见。"
+              ));
+            } else {
+              builder.retweeted(new RetweetedInfo(
+                x.mblog.retweeted_status.user.screen_name,
+                x.mblog.retweeted_status.raw_text || x.mblog.retweeted_status.text.replace(/<\a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<span class="url-icon">|<\/img.*?>|全文|网页链接/g, '').replace(/<br \/>/g, '\n')
+              ));
+            }
           }
           list.push(builder.build());
         }

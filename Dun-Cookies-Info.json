@@ -29,9 +29,17 @@
         {
             "starTime": "2021-11-22 04:00:00",
             "overTime": "2021-12-06 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1uR4y147Mh",
-            "name": "【SWEEP分遣队/新约32级首杀】气 定 神 闲",
-            "img": "https://i0.hdslb.com/bfs/archive/74f3e9f19631351a0d6e00646798133ca20c97a9.jpg@200w_125h_1c.webp",
+            "url": "https://www.bilibili.com/video/BV14r4y1Q71E",
+            "name": "【SWEEP分遣队】全网首杀 忽隐忽现 纵横四方32级无漏“活着的火焰会净化你们污浊的内在”",
+            "img": "https://i1.hdslb.com/bfs/archive/edbbb3349033bd1276b324eb37ecf3ddea21bcba.jpg@160w_100h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2021-11-22 04:00:00",
+            "overTime": "2021-12-06 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1bQ4y1i7zs",
+            "name": "【幽幽子才不是吃货呢】纬地经天隐身得意危机32级 银灰：听说你会隐身？",
+            "img": "https://i2.hdslb.com/bfs/archive/19c77f98d72e65428a2fca69b68733616da6baaf.jpg@160w_100h_1c.webp",
             "radius": true
         },
         {
@@ -53,7 +61,7 @@
         {
             "starTime": "2021-11-22 04:00:00",
             "overTime": "2021-12-06 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1N3411b7RT?p=2",
+            "url": "https://www.bilibili.com/video/BV1N3411b7RT",
             "name": "【龙门作战组】9人32级新约登顶",
             "img": "https://i2.hdslb.com/bfs/archive/9fc7ffb9347b4ac2941223661288a53260c248c9.jpg@200w_125h_1c.webp",
             "radius": true
