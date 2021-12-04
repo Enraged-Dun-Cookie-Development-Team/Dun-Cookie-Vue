@@ -134,7 +134,7 @@ const kazeFun = {
     //     }
     //     return false
     // },
-    // 考虑删除公告推送的情况，但是因为泰拉通讯枢纽的cid保持一致，会导致无法检测到泰拉通讯枢纽，之后解决再换
+    // 考虑删除公告推送的情况
     JudgmentNew(oldList, newList, title) {
         //判断方法 取每条的第一个判定字段  如果新的字段不等于旧的且大于旧的 判定为新条目
         if (oldList

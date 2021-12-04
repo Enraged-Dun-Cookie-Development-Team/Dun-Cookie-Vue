@@ -170,8 +170,8 @@
         <!--              :class="[drawer?'menu-btn-open':'menu-btn-close', firefox ? 'menu-btn-firefox' : '','menu-btn','el-icon-menu']"></span>-->
         <div class="countdown-and-btn">
           <div class="count-down-area" v-show="countDownList.length>0" @click="openCountDown()">
-            <div v-for="(item) in countDownList"
-                 :key="item"
+            <div v-for="(item, index) in countDownList"
+                 :key="index"
                  :title="'到点时间：' + item.stopTime">
               {{ item.name }}:剩余约{{
                 item.timeStr
