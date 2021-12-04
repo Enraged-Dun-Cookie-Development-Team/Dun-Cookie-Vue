@@ -269,6 +269,8 @@ const countDown = {
                     this.sendNoticeList.push(
                         setTimeout(_ => {
                             NotificationUtil.SendNotice(`倒计时完毕`, `${item.name} 到点了！`, null, new Date().getTime());
+                            // 有过通知后从内存中删除计时器数据
+                            CountDown.removeCountDown(item);
                         }, new Date(item.stopTime) - new Date())
                     );
                 })
@@ -287,12 +289,11 @@ const countDown = {
         this.countDownList.forEach(item => {
             let value = TimeUtil.calcDiff(new Date(item.stopTime), new Date())
             if (value != '') {
-                list.push({...item, timeStr: value, stopTime: TimeUtil.format(item.stopTime, 'yyyy-MM-dd hh:mm:ss')});
+                list.push({ ...item, timeStr: value, stopTime: TimeUtil.format(item.stopTime, 'yyyy-MM-dd hh:mm:ss') });
             }
         })
         return list;
     }
-
 }
 
 kazeFun.Init();
