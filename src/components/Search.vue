@@ -1,20 +1,42 @@
 <template>
-  <div class="search-area" :class="searchShow ? 'show' : ''">
-    <input
-      type="text"
-      class="input-border"
-      v-model="searchText"
-      ref="searchText"
-    />
+  <div>
+    <div class="search-area" :class="searchShow ? 'show' : ''">
+      <input
+          type="text"
+          class="input-border"
+          v-model="searchText"
+          placeholder="输入两次@查找企鹅物流数据"
+          ref="searchText"
+      />
+    </div>
+
+    <el-card class="search-area-penguin" :class="penguinShow ? 'show' : ''">
+     <div style="text-align: right;width: 100%;cursor: pointer;margin: 10px" @click="openUrl('https://penguin-stats.cn/')">【数据支持：企鹅物流】</div>
+      <el-collapse v-model="activeNames" v-for="(item,index) in penguinSearchList" @change="getPenguinDate(index)">
+        <el-collapse-item :title="item.name">
+          <div v-if="item.loading">查找中……</div>
+          <el-tag class="matrix-tag" v-for="info in item.matrix" :title="'近期掉落：'+info.times+' 掉落数量：'+info.quantity">
+            {{ stageIdToName(info.stageId) }} ：{{ info.p+"%" }}
+          </el-tag>
+        </el-collapse-item>
+      </el-collapse>
+    </el-card>
   </div>
 </template>
 <script>
+
+
+import PenguinStatistics from "@/common/sync/PenguinStatisticsInfo";
+import PlatformHelper from '@/common/platform/PlatformHelper';;
+
 export default {
   name: "search",
   props: ["searchShow"],
   components: {},
-  created() {},
-  mounted() {},
+  created() {
+  },
+  mounted() {
+  },
   watch: {
     searchShow(value) {
       if (value) {
@@ -24,20 +46,56 @@ export default {
       }
     },
     searchText(value) {
+      this.loadPenguin(value);
       this.$emit('searchTextChange', value);
     },
   },
   data() {
     return {
       searchText: "",
+      penguinShow: false,
+      activeNames: "",
+      penguinSearchList: [],
+      penguin: new PenguinStatistics().penguinStatisticsInfo
     };
   },
   computed: {},
-  beforeDestroy() {},
+  beforeDestroy() {
+  },
   methods: {
+    openUrl:PlatformHelper.Tabs.create,
     clearText() {
       this.searchText = null;
     },
+    loadPenguin(text) {
+      if (text && text.split('@@').length > 1) {
+        this.penguinShow = true;
+        this.activeNames = "";
+        this.penguinSearchList = PenguinStatistics.GetItemByText(text.split('@@')[1]);
+      } else {
+        this.penguinShow = false;
+        this.penguinSearchList = [];
+      }
+    },
+    getPenguinDate(index) {
+      let item = this.penguinSearchList[index];
+      if (item.matrix) {
+        return;
+      }
+      item.loading = true;
+      PenguinStatistics.GetItemInfo(item.itemId).then(data => {
+        let matrix = JSON.parse(data)?.matrix;
+        matrix.forEach(item=>{
+          item.p = Math.round(item.quantity / item.times * 10000) / 100.00
+        })
+        matrix.sort((x, y) => x.p > y.p ? -1 : 1);
+        this.$set(item, 'matrix', matrix);
+        this.$set(item, 'loading', false);
+      });
+    },
+    stageIdToName(id) {
+      return PenguinStatistics.GetStageInfo(id);
+    }
   },
 };
 </script>
@@ -52,6 +110,7 @@ export default {
   align-items: center;
   transition: 0.5s top;
   top: -180px;
+
   .input-border {
     outline: none;
     width: 80%;
@@ -67,9 +126,30 @@ export default {
     // box-shadow: 0 0 40px 0px #23ade5;
     // color: #23ade5;
   }
+
   &.show {
     top: 32px;
     opacity: 1;
+  }
+
+}
+
+.search-area-penguin {
+  width: 90%;
+  left: 5%;
+  position: fixed;
+  top: -180px;
+  z-index: 11;
+  max-height: 75%;
+  overflow: scroll;
+
+  &.show {
+    top: 190px;
+    opacity: 1;
+  }
+
+  .matrix-tag {
+    margin: 0 5px 5px 0;
   }
 }
 
@@ -92,4 +172,4 @@ export default {
     color: #010fcb;
   }
 }
-</style> 
+</style>
