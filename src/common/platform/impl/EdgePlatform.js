@@ -176,4 +176,7 @@ export default class EdgePlatform extends AbstractPlatform {
     setBadgeBackgroundColor(color) {
         return this.defPlatform.setBadgeBackgroundColor(color);
     }
+    getHtmlParser() {
+        return this.defPlatform.getHtmlParser();
+    }
 }
