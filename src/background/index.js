@@ -21,6 +21,7 @@ import PlatformHelper from '../common/platform/PlatformHelper';
 import ServerUtil from "../common/util/ServerUtil";
 import CountDown from '../common/sync/CountDownInfo';
 import TimeUtil from "@/common/util/TimeUtil";
+import PenguinStatistics from "@/common/sync/PenguinStatisticsInfo";
 
 // 重构完成后的其它优化：
 // TODO 多个提取出来的类要考虑能否合并(指互相通信的那部分)
@@ -296,5 +297,12 @@ const countDown = {
     }
 }
 
+const penguinStatistics = {
+    Init(){
+        new PenguinStatistics();
+    }
+};
+
 kazeFun.Init();
 countDown.Start();
+// penguinStatistics.Init();
