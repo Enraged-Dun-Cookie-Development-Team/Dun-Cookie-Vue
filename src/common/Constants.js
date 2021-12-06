@@ -193,6 +193,12 @@ const quickJump = {
       img: "/assets/image/link/tltxsn.png",
       radius: false,
     },
+    {
+      url: "../time.html",
+      name: "小刻食堂计时器",
+      img: "/assets/image/icon.png",
+      radius: false,
+    },
   ],
   url: []
 };
