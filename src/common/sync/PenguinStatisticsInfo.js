@@ -53,7 +53,7 @@ export default class PenguinStatistics {
     }
 
     static GetItemByText(text) {
-        return this.penguinStatisticsInfo.items.filter(item => item.pron.zh.some(x => x.replaceAll('`', '').indexOf(text) != -1));
+        return this.penguinStatisticsInfo.items.filter(item => item.pron.zh.some(x => x.replaceAll('`', '').indexOf(text) != -1) || item.alias.zh.some(x => x.replaceAll('`', '').indexOf(text) != -1));
     }
 }
 
