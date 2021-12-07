@@ -4,15 +4,18 @@ import HttpUtil from '../util/HttpUtil';
 
 export default class PenguinStatistics {
     constructor() {
-        return PenguinStatistics.GetItems();
+        return PenguinStatistics.GetNewItems();
     }
 
     penguinStatisticsInfo = {};
 
     static GetItems() {
-        PlatformHelper.Storage.getLocalStorage("PenguinStatistics").then(data => {
-            this.penguinStatisticsInfo = JSON.parse(data);
-        })
+        return new Promise((resolve) => {
+            PlatformHelper.Storage.getLocalStorage("PenguinStatistics").then(data => {
+                this.penguinStatisticsInfo = JSON.parse(data);
+                resolve(this.penguinStatisticsInfo);
+            })
+        });
     }
 
     static GetNewItems() {
@@ -27,11 +30,11 @@ export default class PenguinStatistics {
                 resolve(data);
             });
         }))
-
         Promise.all(promiseList).then(data => {
-            this.penguinStatisticsInfo.items = JSON.parse(data[0]);
-            this.penguinStatisticsInfo.stages = JSON.parse(data[1]);
-            PlatformHelper.Storage.saveLocalStorage("PenguinStatistics", JSON.stringify(this.penguinStatisticsInfo)).then(_ => {
+            let penguinStatisticsInfo = {};
+            penguinStatisticsInfo.items = JSON.parse(data[0]);
+            penguinStatisticsInfo.stages = JSON.parse(data[1]);
+            PlatformHelper.Storage.saveLocalStorage("PenguinStatistics", JSON.stringify(penguinStatisticsInfo)).then(_ => {
                 NotificationUtil.SendNotice(`企鹅物流基础数据已更新完毕`, '', null, new Date().getTime());
             })
         })

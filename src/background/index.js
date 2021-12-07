@@ -305,4 +305,4 @@ const penguinStatistics = {
 
 kazeFun.Init();
 countDown.Start();
-// penguinStatistics.Init();
+penguinStatistics.Init();

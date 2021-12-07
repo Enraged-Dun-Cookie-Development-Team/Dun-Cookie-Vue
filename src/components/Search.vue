@@ -36,6 +36,7 @@ export default {
   created() {
   },
   mounted() {
+    this.init();
   },
   watch: {
     searchShow(value) {
@@ -56,7 +57,7 @@ export default {
       penguinShow: false,
       activeNames: "",
       penguinSearchList: [],
-      penguin: new PenguinStatistics().penguinStatisticsInfo
+      penguin: {}
     };
   },
   computed: {},
@@ -64,6 +65,11 @@ export default {
   },
   methods: {
     openUrl:PlatformHelper.Tabs.create,
+    init() {
+      PenguinStatistics.GetItems().then(penguinStatisticsInfo => {
+        this.penguin = penguinStatisticsInfo;
+      })
+    },
     clearText() {
       this.searchText = null;
     },
@@ -78,6 +84,7 @@ export default {
       }
     },
     getPenguinDate(index) {
+      console.log(this.penguin)
       let item = this.penguinSearchList[index];
       if (item.matrix) {
         return;
