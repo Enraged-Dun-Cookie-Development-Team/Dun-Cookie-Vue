@@ -19,13 +19,6 @@ export default class ServerUtil {
             console.log(e);
         }
         if (!data) {
-            try {
-                data = await HttpUtil.GET_Json("http://cdn.liuziyang.vip/Dun-Cookies-Info.json");
-            } catch (e) {
-                console.log(e);
-            }
-        }
-        if (!data) {
             const fallbackUrl = PlatformHelper.Extension.getURL("Dun-Cookies-Info.json");
             data = await HttpUtil.GET_Json(fallbackUrl);
         }
