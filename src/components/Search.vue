@@ -9,15 +9,19 @@
           ref="searchText"
       />
     </div>
-
+    <div class="search-area-penguin-name" v-show="penguinShow" @click="openUrl('https://penguin-stats.cn/')">
+      【数据支持：企鹅物流】
+    </div>
     <el-card class="search-area-penguin" :class="penguinShow ? 'show' : ''">
-     <div style="text-align: right;width: 100%;cursor: pointer;margin: 10px" @click="openUrl('https://penguin-stats.cn/')">【数据支持：企鹅物流】</div>
       <el-collapse v-model="activeNames" v-for="(item,index) in penguinSearchList" @change="getPenguinDate(index)">
         <el-collapse-item :title="item.name">
           <div v-if="item.loading">查找中……</div>
-          <el-tag class="matrix-tag" v-for="info in item.matrix" :title="'近期掉落：'+info.times+' 掉落数量：'+info.quantity">
-            {{ stageIdToName(info.stageId) }} ：{{ info.p+"%" }}
-          </el-tag>
+          <div v-if="!item.matrix">没有相关数据</div>
+          <div v-else>
+            <el-tag class="matrix-tag" v-for="info in item.matrix" :title="'近期掉落：'+info.times+' 掉落数量：'+info.quantity">
+              {{ tagText(info) }}
+            </el-tag>
+          </div>
         </el-collapse-item>
       </el-collapse>
     </el-card>
@@ -27,7 +31,10 @@
 
 
 import PenguinStatistics from "@/common/sync/PenguinStatisticsInfo";
-import PlatformHelper from '@/common/platform/PlatformHelper';;
+import PlatformHelper from '@/common/platform/PlatformHelper';
+import TimeUtil from "@/common/util/TimeUtil";
+
+;
 
 export default {
   name: "search",
@@ -64,7 +71,7 @@ export default {
   beforeDestroy() {
   },
   methods: {
-    openUrl:PlatformHelper.Tabs.create,
+    openUrl: PlatformHelper.Tabs.create,
     init() {
       PenguinStatistics.GetItems().then(penguinStatisticsInfo => {
         this.penguin = penguinStatisticsInfo;
@@ -84,7 +91,6 @@ export default {
       }
     },
     getPenguinDate(index) {
-      console.log(this.penguin)
       let item = this.penguinSearchList[index];
       if (item.matrix) {
         return;
@@ -92,16 +98,24 @@ export default {
       item.loading = true;
       PenguinStatistics.GetItemInfo(item.itemId).then(data => {
         let matrix = JSON.parse(data)?.matrix;
-        matrix.forEach(item=>{
-          item.p = Math.round(item.quantity / item.times * 10000) / 100.00
+        matrix.forEach(item => {
+          let stage = PenguinStatistics.GetStageInfo(item.stageId);
+          let zone = PenguinStatistics.GetZonesInfo(stage.zoneId);
+          item.stage = stage;
+          item.zone = zone;
+          item.per = Math.round(item.quantity / item.times * 10000) / 100.00
+          let p = item.quantity / item.times;
+          item.cost = Math.ceil(stage.apCost / p);
+          item.time = TimeUtil.secondToDate((stage.minClearTime / 1000) / p);
+          item.isGacha = stage.isGacha ? true : false;
         })
         matrix.sort((x, y) => x.p > y.p ? -1 : 1);
         this.$set(item, 'matrix', matrix);
         this.$set(item, 'loading', false);
       });
     },
-    stageIdToName(id) {
-      return PenguinStatistics.GetStageInfo(id);
+    tagText(item) {
+      return `${item.stage.code}：${item.per}%；期望理智：${item.cost};期望时间：${item.time}`;
     }
   },
 };
@@ -141,6 +155,15 @@ export default {
 
 }
 
+.search-area-penguin-name {
+  bottom: 10px;
+  width: 100%;
+  position: absolute;
+  text-align: center;
+  opacity: 0.3;
+  cursor: pointer;
+}
+
 .search-area-penguin {
   width: 90%;
   left: 5%;
@@ -151,7 +174,7 @@ export default {
   overflow: scroll;
 
   &.show {
-    top: 190px;
+    top: 180px;
     opacity: 1;
   }
 

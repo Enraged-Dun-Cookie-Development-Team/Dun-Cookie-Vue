@@ -299,7 +299,7 @@ const countDown = {
 
 const penguinStatistics = {
     Init(){
-        new PenguinStatistics();
+        // PenguinStatistics.GetNewItems()
     }
 };
 

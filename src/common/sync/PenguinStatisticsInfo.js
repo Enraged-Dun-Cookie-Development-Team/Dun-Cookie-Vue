@@ -4,7 +4,7 @@ import HttpUtil from '../util/HttpUtil';
 
 export default class PenguinStatistics {
     constructor() {
-        return PenguinStatistics.GetNewItems();
+        // return PenguinStatistics.GetNewItems();
     }
 
     penguinStatisticsInfo = {};
@@ -30,10 +30,16 @@ export default class PenguinStatistics {
                 resolve(data);
             });
         }))
+        promiseList.push(new Promise(resolve => {
+            HttpUtil.GET("https://penguin-stats.io/PenguinStats/api/v2/zones").then(data => {
+                resolve(data);
+            });
+        }))
         Promise.all(promiseList).then(data => {
             let penguinStatisticsInfo = {};
             penguinStatisticsInfo.items = JSON.parse(data[0]);
             penguinStatisticsInfo.stages = JSON.parse(data[1]);
+            penguinStatisticsInfo.zones = JSON.parse(data[2]);
             PlatformHelper.Storage.saveLocalStorage("PenguinStatistics", JSON.stringify(penguinStatisticsInfo)).then(_ => {
                 NotificationUtil.SendNotice(`企鹅物流基础数据已更新完毕`, '', null, new Date().getTime());
             })
@@ -48,8 +54,12 @@ export default class PenguinStatistics {
         })
     }
 
-    static GetStageInfo(id){
-       return this.penguinStatisticsInfo.stages.find(x=>x.stageId == id)?.code;
+    static GetStageInfo(id) {
+        return this.penguinStatisticsInfo.stages.find(x => x.stageId == id);
+    }
+
+    static GetZonesInfo(id) {
+        return this.penguinStatisticsInfo.zones.find(x => x.zoneId == id);
     }
 
     static GetItemByText(text) {
