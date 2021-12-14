@@ -18,9 +18,10 @@
           <div v-if="item.loading">查找中……</div>
           <div v-if="!item.matrix">没有相关数据</div>
           <div v-else>
-            <el-tag class="matrix-tag" v-for="info in item.matrix" :title="'近期掉落：'+info.times+' 掉落数量：'+info.quantity">
-              {{ tagText(info) }}
-            </el-tag>
+           <el-card v-for="info in item.matrix">
+             <div><span>{{item.stage.code}}</span><span>{{item/per}}%</span></div>
+             <div><span>期望理智：{{item.cost}}</span><span>期望时间：{{item.time}}</span></div>
+           </el-card>
           </div>
         </el-collapse-item>
       </el-collapse>
@@ -113,9 +114,6 @@ export default {
         this.$set(item, 'matrix', matrix);
         this.$set(item, 'loading', false);
       });
-    },
-    tagText(item) {
-      return `${item.stage.code}：${item.per}%；期望理智：${item.cost};期望时间：${item.time}`;
     }
   },
 };
