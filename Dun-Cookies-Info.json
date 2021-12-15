@@ -1,21 +1,15 @@
 {
     "list": [
         {
-            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20211019/9270f982d1d67a15623e0fc64fb8b9b0.jpg'> <div> <div><span class='online-blue'>复刻活动「孤岛风云」</span>将于<span class='online-blue'>12月7号</span>开启</div> <div>开启时间为<span class='online-red'>周二4点</span></div> <div>记得提前<span class='online-blue'>囤理智液、刷剿灭</span></div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频</span> </div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
-            "starTime":"2021-12-01 16:00:00",
-            "overTime":"2021-12-07 15:59:59",
-            "notice": false
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20211207/c60412582c2aaf035db954201dbe7ae3.JPG'> <div> <div><span class='online-blue'>SideStory【风雪过境】</span>将于<span class='online-blue'>12月21号</span>开启</div> <div><span class='online-red'>本周过期的理智液</span>可用于刷<span class='online-blue'>复刻活动</span></div> <div><span class='online-blue'>别急着刷剿灭</span>，理智尽量刷活动材料</div> <div>剿灭留到<span class='online-yellow'>复刻活动</span>结束再刷 </div> <div>不要提早刷了噢</div> </div> </div>",
+            "starTime":"2021-12-12 16:00:00",
+            "overTime":"2021-12-17 03:59:59",
+            "notice": true
         },
         {
             "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20211019/9270f982d1d67a15623e0fc64fb8b9b0.jpg'> <div> <div><span class='online-blue'>复刻活动「孤岛风云」</span>将于<span class='online-blue'>12月17号</span>结束</div> <div>本次活动掉落<span class='online-red'> 糖组、酮凝集组、异铁组</span></div> <div>博士们尽情刷材料吧</div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频</span> </div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
             "starTime":"2021-12-07 16:00:00",
             "overTime":"2021-12-17 03:59:59",
-            "notice": false
-        },
-        {
-            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://i2.hdslb.com/bfs/archive/5792924858d18a310eb90474fcd37765017de24e.jpg'> <div> <div><span class='online-blue'>第7赛季「松烟行动」</span>将于<span class='online-blue'>12月06号</span>结束</div> <div>结束时间为<span class='online-red'>周一凌晨3点59分</span></div> <div>别忘了完成每日合约<span class='online-blue'>拿到奖励</span></div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频</span>和<span class='online-blue'>高难攻略</span> </div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
-            "starTime":"2021-11-24 04:00:00",
-            "overTime":"2021-12-05 03:59:59",
             "notice": false
         },
         {
@@ -80,7 +74,7 @@
             "starTime": "2021-12-11 04:00:00",
             "overTime": "2021-12-19 15:59:59",
             "url": "https://www.bilibili.com/video/BV1WL4y1W7jw",
-            "name": "【“博士……不要走……”|MAV】“博士……不要走……”",
+            "name": "【Mr诺-亚|MAV】“博士……不要走……”",
             "img": "https://i1.hdslb.com/bfs/archive/bcbf26781f22803ce5395afa947c9e95c7902daf.jpg@200w_125h_1c.webp",
             "radius": true
         },
@@ -167,13 +161,13 @@
             }
         ]
     },
-    "logo": "icon_Christmas.png",
+    "logo": "icon.png",
     "upgrade": {
-        "v": "3.0.9",
-        "title": "小刻食堂翻新啦 - 3.0.9",
-        "description": "🐛 修复无法正常获取新接口的情况（务必更新到这个版本后）</br>1.修复无法正常获取新接口</br>2.微调泰拉记事社官网显示样式",
-        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/3.0.9/Dun-Cookie-3.0.9.crx",
-        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/3.0.9/Dun-Cookie-3.0.9.zip",
+        "v": "3.0.10",
+        "title": "小刻食堂翻新啦 - 3.0.10",
+        "description": "🚀 检测游戏版本更新，添加企鹅物流数据查询 </br>1.修复高度超出屏幕的bug</br>2.添加倒计时功能（在快捷工具处打开，或者点击倒计时时间处）</br>3.检测游戏版本更新</br>4.添加企鹅物流掉率查询（回车键激活搜索框后，@@+材料拼音或文字）【感谢企鹅物流数据统计！！！！】</br>5.部分logo图片变为可变的</br>6.修复微博转发仅显示半年之类导致接口无法正常获取数据的bug</br>7.修复Edge浏览器无法蹲到官网的饼",
+        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/3.0.10/Dun-Cookie-3.0.10.crx",
+        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/3.0.10/Dun-Cookie-3.0.10.zip",
         "downSpare": "https://pan.baidu.com/s/1kzY6kpfYqLcGpuaiwQOGoA",
         "downSpareText": "备用下载（提取码 jzq9）",
         "downChrome": "https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN",
