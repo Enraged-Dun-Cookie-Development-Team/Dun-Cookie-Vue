@@ -26,10 +26,9 @@
       <el-collapse v-model="activeNames" v-for="(item,index) in penguinSearchList" @change="getPenguinDate(index)">
         <el-collapse-item>
           <template slot="title">
-            <span >{{ item.name }}</span>
-<!--            <span class="search-area-penguin-penguin-title" :style="{'background-position':`-${45 * index}px -${45 * index}px`}"></span>
-            <span style="margin-left: 10px">{{ item.name }}</span>-->
-          </template>
+            <span v-if="item.spriteCoord" class="search-area-penguin-penguin-title" :style="{'background-position':`-${45 * item.spriteCoord[0]}px -${45 * item.spriteCoord[1]}px`}"></span>       
+            <span>{{ item.name }}</span>
+            </template>
           <div v-if="item.loading">查找中……</div>
           <div class="info-card-area">
             <el-card class="info-card" v-show="info.isOpen || showCloseStage" v-for="info in item.matrix">
@@ -184,6 +183,7 @@ export default {
 }
 
 .search-area-penguin-penguin-title {
+  margin-right: 10px;
   height: 45px;
   width: 45px;
   background-size: 270px 720px;

@@ -41,7 +41,7 @@ export default class PenguinStatistics {
             penguinStatisticsInfo.stages = JSON.parse(data[1]);
             penguinStatisticsInfo.zones = JSON.parse(data[2]);
             PlatformHelper.Storage.saveLocalStorage("PenguinStatistics", JSON.stringify(penguinStatisticsInfo)).then(_ => {
-                NotificationUtil.SendNotice(`企鹅物流基础数据已更新完毕`, '', null, new Date().getTime());
+                // NotificationUtil.SendNotice(`企鹅物流基础数据已更新完毕`, '', null, new Date().getTime());
             })
         })
     }
