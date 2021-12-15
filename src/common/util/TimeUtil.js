@@ -6,7 +6,6 @@ function transformDate(dateValue) {
 }
 
 
-
 /**
  * 时间相关工具类
  */
@@ -77,9 +76,9 @@ class TimeUtil {
      */
     static changeToCCT(date) {
         let localTime = date.getTime();
-        let localOffset = date.getTimezoneOffset()*60000;
+        let localOffset = date.getTimezoneOffset() * 60000;
         let utc = localTime + localOffset;
-        let cct = utc + (3600000*8);
+        let cct = utc + (3600000 * 8);
         let cctDate = new Date(cct);
         return cctDate;
     }
@@ -111,12 +110,19 @@ class TimeUtil {
      * @param m
      * @param s
      */
-    static dateAddTime(h,m,s){
+    static dateAddTime(h, m, s) {
         let date = new Date()
         date.setHours(date.getHours() + parseInt(h))
         date.setMinutes(date.getMinutes() + parseInt(m))
         date.setSeconds(date.getSeconds() + parseInt(s))
         return new Date(date)
+    }
+
+
+    static secondToDate(result) {
+        let m = Math.floor((result / 60 % 60));
+        let s = Math.floor((result % 60));
+        return m + ":" + s ;
     }
 }
 

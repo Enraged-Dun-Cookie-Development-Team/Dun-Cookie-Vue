@@ -9,15 +9,42 @@
           ref="searchText"
       />
     </div>
-
+    <div class="search-area-penguin-name" v-show="penguinShow">
+      <div class="cursor: pointer;" @click="openUrl('https://penguin-stats.cn/')">
+        数据支持：企鹅物流
+      </div>
+      <div>
+        <el-switch
+            v-model="showCloseStage"
+            active-color="#13ce66"
+            inactive-color="#ff4949">
+        </el-switch>
+        显示/隐藏已关闭关卡
+      </div>
+    </div>
     <el-card class="search-area-penguin" :class="penguinShow ? 'show' : ''">
-     <div style="text-align: right;width: 100%;cursor: pointer;margin: 10px" @click="openUrl('https://penguin-stats.cn/')">【数据支持：企鹅物流】</div>
       <el-collapse v-model="activeNames" v-for="(item,index) in penguinSearchList" @change="getPenguinDate(index)">
-        <el-collapse-item :title="item.name">
+        <el-collapse-item>
+          <template slot="title">
+            <span >{{ item.name }}</span>
+<!--            <span class="search-area-penguin-penguin-title" :style="{'background-position':`-${45 * index}px -${45 * index}px`}"></span>
+            <span style="margin-left: 10px">{{ item.name }}</span>-->
+          </template>
           <div v-if="item.loading">查找中……</div>
-          <el-tag class="matrix-tag" v-for="info in item.matrix" :title="'近期掉落：'+info.times+' 掉落数量：'+info.quantity">
-            {{ stageIdToName(info.stageId) }} ：{{ info.p+"%" }}
-          </el-tag>
+          <div class="info-card-area">
+            <el-card class="info-card" v-show="info.isOpen || showCloseStage" v-for="info in item.matrix">
+              <div class="info-card-title info-card-title-isOpen"
+                   :class="info.isOpen?'':'info-card-title-close'" :title="info.isOpen?'关卡开启中':'关卡未开启'">
+                <span class="info-card-title-left" :title="info.stage.code">{{ info.stage.code }}</span>
+                <span class="info-card-title-right" :title="info.zone.zoneName">{{ info.zone.zoneName }}</span>
+              </div>
+              <div class="info-card-body" v-show="!info.isGacha">
+                <span title="单件掉率">{{ info.per }}%</span>
+                <span title="单件期望理智">{{ info.cost == Infinity ? '' : info.cost }}</span>
+                <span title="单件期望时间">{{ info.cost == Infinity ? '不建议本关卡' : info.time }}</span>
+              </div>
+            </el-card>
+          </div>
         </el-collapse-item>
       </el-collapse>
     </el-card>
@@ -27,7 +54,10 @@
 
 
 import PenguinStatistics from "@/common/sync/PenguinStatisticsInfo";
-import PlatformHelper from '@/common/platform/PlatformHelper';;
+import PlatformHelper from '@/common/platform/PlatformHelper';
+import TimeUtil from "@/common/util/TimeUtil";
+
+;
 
 export default {
   name: "search",
@@ -57,14 +87,15 @@ export default {
       penguinShow: false,
       activeNames: "",
       penguinSearchList: [],
-      penguin: {}
+      penguin: {},
+      showCloseStage: false
     };
   },
   computed: {},
   beforeDestroy() {
   },
   methods: {
-    openUrl:PlatformHelper.Tabs.create,
+    openUrl: PlatformHelper.Tabs.create,
     init() {
       PenguinStatistics.GetItems().then(penguinStatisticsInfo => {
         this.penguin = penguinStatisticsInfo;
@@ -84,7 +115,6 @@ export default {
       }
     },
     getPenguinDate(index) {
-      console.log(this.penguin)
       let item = this.penguinSearchList[index];
       if (item.matrix) {
         return;
@@ -92,16 +122,28 @@ export default {
       item.loading = true;
       PenguinStatistics.GetItemInfo(item.itemId).then(data => {
         let matrix = JSON.parse(data)?.matrix;
-        matrix.forEach(item=>{
-          item.p = Math.round(item.quantity / item.times * 10000) / 100.00
+        matrix.forEach(item => {
+          let stage = PenguinStatistics.GetStageInfo(item.stageId);
+          let zone = PenguinStatistics.GetZonesInfo(stage.zoneId);
+          item.stage = stage;
+          item.zone = zone;
+          item.per = Math.round(item.quantity / item.times * 10000) / 100.00
+          let p = item.quantity / item.times;
+          item.cost = Math.ceil(stage.apCost / p);
+          item.time = TimeUtil.secondToDate((stage.minClearTime / 1000) / p);
+          item.isGacha = !stage.minClearTime || (stage.isGacha ? true : false);
+          item.isOpen = zone.existence.CN.hasOwnProperty("closeTime") ? new Date().getTime() >= zone.existence.CN.openTime && new Date().getTime() <= zone.existence.CN.closeTime : true;
         })
-        matrix.sort((x, y) => x.p > y.p ? -1 : 1);
+
+        matrix.sort((x, y) => {
+          return y.per - x.per;
+        }).sort((x, y) => {
+          if (y.isGacha && !x.isGacha) return -1;
+        })
+
         this.$set(item, 'matrix', matrix);
         this.$set(item, 'loading', false);
       });
-    },
-    stageIdToName(id) {
-      return PenguinStatistics.GetStageInfo(id);
     }
   },
 };
@@ -141,23 +183,83 @@ export default {
 
 }
 
+.search-area-penguin-penguin-title {
+  height: 45px;
+  width: 45px;
+  background-size: 270px 720px;
+  background-image: url("https://penguin-stats.s3.amazonaws.com/sprite/sprite.202109171627.small.png");
+}
+
+.search-area-penguin-name {
+  bottom: 10px;
+  width: 100%;
+  position: absolute;
+  text-align: center;
+  display: flex;
+  justify-content: space-around;
+}
+
 .search-area-penguin {
   width: 90%;
   left: 5%;
   position: fixed;
   top: -180px;
   z-index: 11;
-  max-height: 75%;
+  max-height: 62vh;
   overflow: scroll;
 
   &.show {
-    top: 190px;
+    top: 180px;
     opacity: 1;
   }
 
-  .matrix-tag {
-    margin: 0 5px 5px 0;
+  .info-card-area {
+    user-select: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px;
+
+    .info-card {
+      min-width: 30%;
+      margin: 5px;
+      flex: 1;
+
+      .info-card-title, .info-card-body {
+        display: flex;
+        justify-content: space-between;
+        position: relative;;
+
+        &.info-card-title-isOpen::after {
+          position: absolute;
+          content: ' ';
+          top: -30px;
+          right: -30px;
+          border: 17px transparent solid;
+          border-color: transparent transparent transparent #23ade5;
+          transform: rotate(310deg);
+        }
+
+        &.info-card-title-close::after {
+          border-color: transparent transparent transparent red;
+        }
+
+        .info-card-title-left {
+          text-align: left;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .info-card-title-right {
+          text-align: right;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+    }
   }
+
 }
 
 @keyframes textAnimate {
