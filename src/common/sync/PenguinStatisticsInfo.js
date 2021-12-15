@@ -48,7 +48,7 @@ export default class PenguinStatistics {
 
     static GetItemInfo(id) {
         return new Promise(resolve => {
-            HttpUtil.GET(`https://penguin-stats.io/PenguinStats/api/v2/result/matrix?is_personal=false&itemFilter=${id}&server=CN&show_closed_zones=false`).then(data => {
+            HttpUtil.GET(`https://penguin-stats.io/PenguinStats/api/v2/result/matrix?is_personal=false&itemFilter=${id}&server=CN&show_closed_zones=true`).then(data => {
                 resolve(data)
             })
         })

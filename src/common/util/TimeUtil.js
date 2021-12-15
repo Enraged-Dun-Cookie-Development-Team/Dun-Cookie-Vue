@@ -122,7 +122,7 @@ class TimeUtil {
     static secondToDate(result) {
         let m = Math.floor((result / 60 % 60));
         let s = Math.floor((result % 60));
-        return m + "分钟" + s + "秒";
+        return m + ":" + s ;
     }
 }
 
