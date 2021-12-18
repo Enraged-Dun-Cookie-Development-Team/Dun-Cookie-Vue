@@ -113,9 +113,9 @@ export default class NodePlatform extends AbstractPlatform {
                         console.log(value);
                     }
                     if (value.constructor === Promise) {
-                        value.then(result => this.workerParent.postMessage(result));
+                        value.then(result => this.workerParent.postMessage({type: message.type, data: result}));
                     } else {
-                        this.workerParent.postMessage(value);
+                        this.workerParent.postMessage({type: message.type, data: value});
                     }
                 } else {
                     if (DEBUG_LOG) {
