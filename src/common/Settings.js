@@ -326,46 +326,40 @@ class Settings {
         }
       });
     });
-    initPromise = new Promise((resolve) => {
-      this.reloadSettings().then(() => {
-        // 这部分主要是初始化一些固定的配置信息，只需要初始化的时候执行一次
+    initPromise = (async () => {
+      await this.reloadSettings();
+      // 这部分主要是初始化一些固定的配置信息，只需要初始化的时候执行一次
 
-        // 未知平台或移动端强制禁用窗口化
-        if (PlatformHelper.PlatformType === PLATFORM_UNKNOWN || PlatformHelper.isMobile) {
-          this.feature.window = false;
-        }
-        // 根据被禁用的功能强行关闭配置
-        // 虽然理论上应该保证被禁用的功能不会被用户开启，但是保险起见这里还是再设置一下
-        if (!this.feature.window) {
-          this.display.windowMode = false;
-        }
+      // 未知平台或移动端强制禁用窗口化
+      if (PlatformHelper.PlatformType === PLATFORM_UNKNOWN || PlatformHelper.isMobile) {
+        this.feature.window = false;
+      }
+      // 根据被禁用的功能强行关闭配置
+      // 虽然理论上应该保证被禁用的功能不会被用户开启，但是保险起见这里还是再设置一下
+      if (!this.feature.window) {
+        this.display.windowMode = false;
+      }
 
-        // 必须在后台执行的只执行一次的内容
-        if (PlatformHelper.isBackground) {
-          let promise;
+      // 必须在后台执行的只执行一次的内容
+      if (PlatformHelper.isBackground) {
+        try {
           // 如果一个启用的都没有说明是新安装或者旧数据被清除，此时将默认数据源全部启用
           if (this.enableDataSources.length === 0) {
-            promise = getDefaultDataSources().then(sources => this.enableDataSources = Object.keys(sources))
+            const sources = await getDefaultDataSources();
+            this.enableDataSources = Object.keys(sources)
             console.log("未启用任何默认数据源，将自动启用全部默认数据源");
-          } else {
-            promise = Promise.resolve();
           }
 
           this.currentDataSources = {};
-          transformDataSource(this);
+          await transformDataSource(this);
 
           this.__updateWindowMode();
-
+        } finally {
           // 只需要在后台进行保存，其它页面不需要保存
-          promise.finally(() => {
-            this.saveSettings().finally(() => resolve(this));
-          });
-        } else {
-          resolve(this);
+          this.saveSettings().finally(() => resolve(this));
         }
-
-      });
-    });
+      }
+    })()
   }
 
   __updateWindowMode() {
