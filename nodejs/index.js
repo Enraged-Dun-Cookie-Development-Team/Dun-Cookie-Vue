@@ -32,9 +32,11 @@ worker.on('message', msg => {
 let http = require("http");
 http.createServer(function (req, res) {
     // json文件 utf-8解析及写入cardList
-    res.writeHeader(200, { 'Content-Type': 'application/json;charset:utf-8' });
-    res.write(JSON.stringify(cardList));
-    res.end();
+    if (url.parse(req.url).pathname == "/canteen/cardList") {
+        res.writeHeader(200, { 'Content-Type': 'application/json;charset:utf-8' });
+        res.write(JSON.stringify(cardList));
+        res.end();
+    }
 }).listen(3000);
 
 // 在控制台执行此命令即可测试：node --require "./index.js"
