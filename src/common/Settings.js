@@ -354,9 +354,10 @@ class Settings {
           await transformDataSource(this);
 
           this.__updateWindowMode();
-        } finally {
           // 只需要在后台进行保存，其它页面不需要保存
-          this.saveSettings().finally(() => resolve(this));
+          await this.saveSettings();
+        } catch (e) {
+          console.log(e);
         }
       }
     })()
