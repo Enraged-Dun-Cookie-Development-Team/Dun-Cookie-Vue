@@ -12,6 +12,7 @@ function node_require(module) {
 export default class NodePlatform extends AbstractPlatform {
     // 这部分放在类里面的原因是放在外面会被意外执行导致报错
     fs = node_require('fs/promises');
+    fs_callback = node_require('fs');
     path = node_require('path');
     http = node_require('http');
     https = node_require('https');
@@ -44,7 +45,7 @@ export default class NodePlatform extends AbstractPlatform {
     }
 
     async getLocalStorage(name) {
-        const file = await this.fs.open(storageFile, 'w+');
+        const file = await this.fs.open(storageFile, this.fs_callback.constants.O_RDONLY|this.fs_callback.constants.O_CREAT);
         const content = await file.readFile('UTF-8') || '{}';
         await file.close();
         const json = JSON.parse(content);
@@ -73,10 +74,18 @@ export default class NodePlatform extends AbstractPlatform {
         }
     }
 
+    storageSaveLock = false
+
     async saveLocalStorage(name, data) {
         const current = await this.getLocalStorage();
         current[name] = data;
-        return await this.fs.writeFile(storageFile, JSON.stringify(current), 'UTF-8');
+        while (this.storageSaveLock) {
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
+        this.storageSaveLock = true;
+        const result = await this.fs.writeFile(storageFile, JSON.stringify(current), 'UTF-8');
+        this.storageSaveLock = false;
+        return result;
     }
 
     sendMessage(type, data) {

@@ -52,7 +52,7 @@ export default class CountDown {
     }
 
     static async getCountDownLocalStorage(){
-       return await PlatformHelper.Storage.getLocalStorage('CountDown')
+       return await PlatformHelper.Storage.getLocalStorage('CountDown') || "[]"
     }
 
     static removeCountDown(item){
