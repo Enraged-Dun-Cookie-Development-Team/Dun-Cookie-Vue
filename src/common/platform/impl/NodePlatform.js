@@ -18,10 +18,13 @@ export default class NodePlatform extends AbstractPlatform {
     worker_threads;
     workerParent;
 
+    weiboCookie;
+
     constructor() {
         super();
         this.worker_threads = node_require('worker_threads');
         this.workerParent = this.worker_threads.parentPort;
+        this.getLocalStorage("weiboCookie").then(value => this.weiboCookie = value);
     }
 
     get isBackground() {
@@ -213,6 +216,11 @@ export default class NodePlatform extends AbstractPlatform {
             const options = {
                 method: method,
             };
+            if (this.weiboCookie && url.indexOf("weibo") !== -1) {
+                options.headers = {
+                    'Cookie': this.weiboCookie
+                }
+            }
             let web;
             if (url.indexOf('https') === 0) {
                 web = this.https;
