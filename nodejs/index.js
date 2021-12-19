@@ -1,36 +1,40 @@
-const {Worker} = require('worker_threads');
+const { Worker } = require('worker_threads');
 
 let worker;
 let cardList;
-let currentRes;
+let getList = true;
 
 function getCardList() {
-  worker.postMessage({type: 'cardList-get'});
+    worker.postMessage({ type: 'cardList-get' });
 }
 global.getCardList = getCardList;
 
 function stopWorker() {
-  worker.terminate();
+    worker.terminate();
 }
 global.stopWorker = stopWorker;
 
 worker = new Worker('../dist/background.js', {
-  execArgv: []
+    execArgv: []
 });
+
 // 简单地输出收到的消息，不进行任何处理
 worker.on('message', msg => {
-  if(msg.type == 'cardList-get') {
-    currentRes.writeHeader(200, {'Content-Type' : 'application/json;charset:utf-8'});
-    currentRes.write(JSON.stringify(msg));
-    currentRes.end();
-    currentRes = null;
-  }
+    if (msg.type == 'cardList-get' || msg.type == 'cardList-update') { // 收到cardlist的get或者update的时候更新nodejs的cardlist
+        cardList = msg;
+    } else if (msg.type == 'dunInfo-update' && getList) {   // 第一次获取信息后，获取CradList
+        getCardList();
+        getList = false;
+    }
 });
 
-// 在控制台执行此命令即可测试：node --require "./index.js"
-
+// 建立与3000端口连接
 let http = require("http");
-http.createServer(function(req,res) {
-  currentRes = res;
-  getCardList();
+http.createServer(function (req, res) {
+    // json文件 utf-8解析及写入cardList
+    res.writeHeader(200, { 'Content-Type': 'application/json;charset:utf-8' });
+    res.write(JSON.stringify(cardList));
+    res.end();
 }).listen(3000);
+
+// 在控制台执行此命令即可测试：node --require "./index.js"
