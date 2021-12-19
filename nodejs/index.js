@@ -1,7 +1,7 @@
 const { Worker } = require('worker_threads');
 
 let worker;
-let cardList;
+let cardList = {"error": "还没有获得饼列表，再等等就有了"};
 let getList = true;
 
 function getCardList() {
