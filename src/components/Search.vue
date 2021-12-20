@@ -17,8 +17,13 @@
         数据支持：企鹅物流
       </div>
       <div>
-        <el-button class="type-button" type="primary" plain @click="changeSort()">
-          {{this.sortType == 0 ? "按掉落百分比排序" : "按单件理智排序"}}
+        <el-button
+          class="type-button"
+          type="primary"
+          plain
+          @click="changeSort()"
+        >
+          {{ this.sortType == 0 ? "按掉落百分比排序" : "按单件理智排序" }}
         </el-button>
       </div>
       <div>
@@ -54,8 +59,38 @@
           <div class="info-card-area">
             <el-card
               class="info-card"
-              v-show="info.isOpen || showCloseStage"
-              v-for="info in item.matrix"
+              v-if="sortType == 0"
+              v-show="(info.isOpen || showCloseStage) && sortType == 0"
+              v-for="info in item.matrix_per"
+            >
+              <div
+                class="info-card-title info-card-title-isOpen"
+                :class="info.isOpen ? '' : 'info-card-title-close'"
+                :title="info.isOpen ? '关卡开启中' : '关卡未开启'"
+              >
+                <span class="info-card-title-left" :title="info.stage.code">{{
+                  info.stage.code
+                }}</span>
+                <span
+                  class="info-card-title-right"
+                  :title="info.zone.zoneName"
+                  >{{ info.zone.zoneName }}</span
+                >
+              </div>
+              <div class="info-card-body" v-show="!info.isGacha">
+                <span title="单件掉率">{{ info.per }}%</span>
+                <span title="单件期望理智">{{
+                  info.cost == Infinity ? "" : info.cost
+                }}</span>
+                <span title="单件期望时间">{{
+                  info.cost == Infinity ? "不建议本关卡" : info.time
+                }}</span>
+              </div>
+            </el-card>
+            <el-card
+              class="info-card"
+              v-show="(info.isOpen || showCloseStage) && sortType == 1"
+              v-for="info in item.matrix_cost"
             >
               <div
                 class="info-card-title info-card-title-isOpen"
@@ -150,9 +185,9 @@ export default {
     },
     getPenguinDate(index) {
       let item = this.penguinSearchList[index];
-      // if (item.matrix) {
-      //   return;
-      // }
+      if (item.matrix_per && item.matrix_cost) {
+        return;
+      }
       item.loading = true;
       PenguinStatistics.GetItemInfo(item.itemId).then((data) => {
         let matrix = JSON.parse(data)?.matrix;
@@ -171,26 +206,26 @@ export default {
               new Date().getTime() <= zone.existence.CN.closeTime
             : true;
         });
-        if (this.sortType == 0) {
-          matrix
-            .sort((x, y) => {
-              return y.per - x.per;
-            })
-            .sort((x, y) => {
-              if (y.isGacha && !x.isGacha) return -1;
-            });
-        } else {
-          matrix
-            .sort((x, y) => {
-              return x.cost - y.cost;
-            })
-            .sort((x, y) => {
-              if (y.isGacha && !x.isGacha) return -1;
-            });
-        }
-
-        this.$set(item, "matrix", matrix);
+        let matrix_per = JSON.parse(JSON.stringify(matrix));
+        let matrix_cost = JSON.parse(JSON.stringify(matrix));
+        matrix_per
+          .sort((x, y) => {
+            return y.per - x.per;
+          })
+          .sort((x, y) => {
+            if (y.isGacha && !x.isGacha) return -1;
+          });
+        matrix_cost
+          .sort((x, y) => {
+            return (y.cost != '' && y.cost != null) - (x.cost != '' && x.cost != null) || x.cost - y.cost;
+          })
+          .sort((x, y) => {
+            if (y.isGacha && !x.isGacha) return -1;
+          });
+        this.$set(item, "matrix_per", matrix_per);
+        this.$set(item, "matrix_cost", matrix_cost);
         this.$set(item, "loading", false);
+        console.log(item);
       });
     },
     changeSort() {
