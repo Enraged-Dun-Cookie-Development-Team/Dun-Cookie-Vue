@@ -34,6 +34,9 @@ let popupWindowId = null;
 // 缓存获取到的饼
 const cardListCache = {};
 
+// 蹲饼的轮次
+let dunTime = 0;
+
 /**
  * 蹲饼！
  */
@@ -51,7 +54,14 @@ function tryDun(settings) {
             }
         }
     }
+    dunTime++;
     for (const dataName in settings.currentDataSources) {
+        // 减小不重要饼的频率
+        if (dataName == "朝陇山微博" || dataName == "泰拉记事社微博" || dataName == "一拾山微博" || dataName == "鹰角网络微博") {
+            if ((settings.dun.intervalTime <= 15 && dunTime % 3 != 1) || (settings.dun.intervalTime <= 30 && dunTime % 2 != 1)) {
+                continue;
+            }
+        }
         if (settings.currentDataSources.hasOwnProperty(dataName)) {
             const source = settings.currentDataSources[dataName];
             DunInfo.counter++;
