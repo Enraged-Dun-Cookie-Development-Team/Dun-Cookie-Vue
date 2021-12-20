@@ -360,6 +360,7 @@ class Settings {
           console.log(e);
         }
       }
+      return this;
     })()
   }
 
