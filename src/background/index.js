@@ -59,7 +59,10 @@ function tryDun(settings) {
     for (const dataName in settings.currentDataSources) {
         // 减小不重要饼的频率
         if (dataName == "朝陇山微博" || dataName == "泰拉记事社微博" || dataName == "一拾山微博" || dataName == "鹰角网络微博") {
-            if ((settings.dun.intervalTime <= 15 && dunTime % 3 != 1) || (settings.dun.intervalTime > 15 && settings.dun.intervalTime <= 30 && dunTime % 2 != 1)) {
+            if ((settings.dun.intervalTime <= 13 && dunTime % 5 != 1) || 
+                (settings.dun.intervalTime > 13 && settings.dun.intervalTime <= 15 && dunTime % 4 != 1) ||
+                (settings.dun.intervalTime > 15 && settings.dun.intervalTime <= 20 && dunTime % 3 != 1) || 
+                (settings.dun.intervalTime > 20 && settings.dun.intervalTime <= 45 && dunTime % 2 != 1)) {
                 continue;
             }
         }

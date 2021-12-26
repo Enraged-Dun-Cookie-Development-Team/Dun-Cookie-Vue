@@ -182,7 +182,7 @@
                           controls-position="right"
                           size="small"
                           v-model="settings.dun.intervalTime"
-                          :min="10"
+                          :min="12"
                           :max="3600"
                       ></el-input-number>
                     </div>
