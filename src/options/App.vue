@@ -610,7 +610,6 @@ export default {
             });
           });
         } else {
-          console.log("form invalid and can't submit!");
           return false;
         }
       });

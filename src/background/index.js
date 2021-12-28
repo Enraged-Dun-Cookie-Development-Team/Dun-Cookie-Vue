@@ -55,7 +55,6 @@ function tryDun(settings) {
         }
     }
     dunTime++;
-    debugger;
     for (const dataName in settings.currentDataSources) {
         // 减小不重要饼的频率
         if (dataName == "朝陇山微博" || dataName == "泰拉记事社微博" || dataName == "一拾山微博" || dataName == "鹰角网络微博") {
