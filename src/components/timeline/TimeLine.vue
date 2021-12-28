@@ -550,7 +550,9 @@ export default {
         canvas.height = canvasHeight + 180;
         ctx.fillStyle = "#ffffff";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+        janvasData.icon.setAttribute('crossOrigin', 'anonymous');
         ctx.drawImage(janvasData.icon, 10, 10, 100, 100);
+        janvasData.sourceIcon.setAttribute('crossOrigin', 'anonymous');
         ctx.drawImage(janvasData.sourceIcon, 120, 70, 40, 40);
         ctx.fillStyle = "#23ade5";
         ctx.font = "36px Microsoft Yahei";
@@ -581,6 +583,7 @@ export default {
         }
         // headFigure 这里面有值 代表有一张图或者九宫格选图选了一张
         if (janvasData.headFigure) {
+          janvasData.headFigure.setAttribute('crossOrigin', 'anonymous');
           ctx.drawImage(
               janvasData.headFigure,
               (canvas.width - janvasData.headFigure.width) / 2,
