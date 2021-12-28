@@ -32,7 +32,7 @@ worker.on('message', msg => {
 let http = require("http");
 http.createServer(function (req, res) {
     // json文件 utf-8解析及写入cardList
-    if (url.parse(req.url).pathname == "/canteen/cardList") {
+    if (req.url == "/canteen/cardList") {
         res.writeHeader(200, { 'Content-Type': 'application/json;charset:utf-8' });
         res.write(JSON.stringify(cardList));
         res.end();
