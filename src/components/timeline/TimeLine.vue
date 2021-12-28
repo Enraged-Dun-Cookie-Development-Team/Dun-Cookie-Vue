@@ -551,9 +551,13 @@ export default {
         ctx.fillStyle = "#ffffff";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         janvasData.icon.setAttribute('crossOrigin', 'anonymous');
-        ctx.drawImage(janvasData.icon, 10, 10, 100, 100);
+        janvasData.icon.onload = () => {
+          ctx.drawImage(janvasData.icon, 10, 10, 100, 100);
+        }
         janvasData.sourceIcon.setAttribute('crossOrigin', 'anonymous');
-        ctx.drawImage(janvasData.sourceIcon, 120, 70, 40, 40);
+        janvasData.sourceIcon.onload = () => {
+          ctx.drawImage(janvasData.sourceIcon, 120, 70, 40, 40);
+        }
         ctx.fillStyle = "#23ade5";
         ctx.font = "36px Microsoft Yahei";
         ctx.fillText(`小刻食堂 V${CURRENT_VERSION}`, 120, 50);
@@ -583,14 +587,17 @@ export default {
         }
         // headFigure 这里面有值 代表有一张图或者九宫格选图选了一张
         if (janvasData.headFigure) {
+          console.log(janvasData.headFigure);
           janvasData.headFigure.setAttribute('crossOrigin', 'anonymous');
-          ctx.drawImage(
-              janvasData.headFigure,
-              (canvas.width - janvasData.headFigure.width) / 2,
-              textCanvas.height + 160,
-              janvasData.headFigure.width,
-              janvasData.headFigure.height
-          );
+          janvasData.headFigure.onload = () => {
+            ctx.drawImage(
+                janvasData.headFigure,
+                (canvas.width - janvasData.headFigure.width) / 2,
+                textCanvas.height + 160,
+                janvasData.headFigure.width,
+                janvasData.headFigure.height
+            );
+          };
         }
 
         // this.errorImageUrl = canvas.toDataURL("image/jpeg");
@@ -598,26 +605,28 @@ export default {
         // return;
 
         let that = this;
-        canvas.toBlob(function (blob) {
-          navigator.clipboard
-              .write([
-                new ClipboardItem({
-                  [blob.type]: blob,
-                }),
-              ])
-              .then(() => {
-                that.$message({
-                  offset: 50,
-                  center: true,
-                  message: "已复制到剪切板",
-                  type: "success",
+        setTimeout(() => {
+          canvas.toBlob(function (blob) {
+            navigator.clipboard
+                .write([
+                  new ClipboardItem({
+                    [blob.type]: blob,
+                  }),
+                ])
+                .then(() => {
+                  that.$message({
+                    offset: 50,
+                    center: true,
+                    message: "已复制到剪切板",
+                    type: "success",
+                  });
+                })
+                .catch(() => {
+                  that.errorImageUrl = canvas.toDataURL("image/jpeg");
+                  that.imageError = true;
                 });
-              })
-              .catch(() => {
-                that.errorImageUrl = canvas.toDataURL("image/jpeg");
-                that.imageError = true;
-              });
-        });
+          });
+        }, 500)
       }, 100);
     },
 
