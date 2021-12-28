@@ -1,6 +1,6 @@
 import AbstractPlatform from '../AbstractPlatform';
-import {DEBUG_LOG, PLATFORM_NODE} from '../../Constants';
-import {deepAssign} from '../../util/CommonFunctions';
+import { DEBUG_LOG, PLATFORM_NODE } from '../../Constants';
+import { deepAssign } from '../../util/CommonFunctions';
 
 const storageFile = 'storage.json';
 
@@ -45,7 +45,7 @@ export default class NodePlatform extends AbstractPlatform {
     }
 
     async getLocalStorage(name) {
-        const file = await this.fs.open(storageFile, this.fs_callback.constants.O_RDONLY|this.fs_callback.constants.O_CREAT);
+        const file = await this.fs.open(storageFile, this.fs_callback.constants.O_RDONLY | this.fs_callback.constants.O_CREAT);
         const content = await file.readFile('UTF-8') || '{}';
         await file.close();
         const json = JSON.parse(content);
@@ -125,9 +125,9 @@ export default class NodePlatform extends AbstractPlatform {
                         console.log(value);
                     }
                     if (value.constructor === Promise) {
-                        value.then(result => this.workerParent.postMessage({type: message.type, data: result}));
+                        value.then(result => this.workerParent.postMessage({ type: message.type, data: result }));
                     } else {
-                        this.workerParent.postMessage({type: message.type, data: value});
+                        this.workerParent.postMessage({ type: message.type, data: value });
                     }
                 } else {
                     if (DEBUG_LOG) {
@@ -277,8 +277,16 @@ export default class NodePlatform extends AbstractPlatform {
     }
 
     getHtmlParser() {
-        const {JSDOM} = node_require('jsdom');
-        const {window} = new JSDOM("");
+        const { JSDOM } = node_require('jsdom');
+        const { window } = new JSDOM("");
         return node_require('jquery')(window);
+    }
+
+    loadImages(obj) {
+        if (DEBUG_LOG) {
+            console.log('Node环境不支持Load Images');
+        }
+        // 无事发生
+        return new Promise((resolve, _) => resolve());
     }
 }

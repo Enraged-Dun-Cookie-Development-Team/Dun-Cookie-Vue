@@ -529,7 +529,7 @@ export default {
         item.toolQrCode = await new QRCode.toCanvas(TOOL_QR_URL)
         item.jumpQrCode = await new QRCode.toCanvas(item.jumpUrl)
         let textCanvas = await html2canvas(document.querySelector(`.wrapper[data-id='${item.id}'] .wrapper-content`))
-        let janvasData = await this.loadImages(item.imgObj);
+        let janvasData = await PlatformHelper.Img.loadImages(item.imgObj);
         let canvas = document.createElement("canvas");
         let ctx = canvas.getContext("2d");
         // 判断是图片大还是文字大 根据这两个来判断canvas宽度 但最少要600宽度
@@ -632,14 +632,6 @@ export default {
           type: "warning",
         });
       }
-    },
-    // 加载图片
-    loadImages(obj) {
-      return new Promise(resolve => {
-        janvas.Utils.loadImages(obj, (data) => {
-          resolve(data);
-        });
-      })
     },
   },
 };

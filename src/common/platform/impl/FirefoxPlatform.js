@@ -1,6 +1,7 @@
 import {PLATFORM_FIREFOX, DEBUG_LOG} from '../../Constants';
 import AbstractPlatform from '../AbstractPlatform';
 import $ from "jquery";
+import janvas from "../../util/janvas.min.js";
 
 let _isBackground;
 let _isMobile;
@@ -199,5 +200,9 @@ export default class FirefoxPlatform extends AbstractPlatform {
 
     getHtmlParser() {
         return $;
+    }
+
+    loadImages(obj) {
+        return janvas.Utils.loadImages(obj);
     }
 }

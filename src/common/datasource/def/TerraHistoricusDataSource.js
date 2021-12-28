@@ -34,7 +34,7 @@ export class TerraHistoricusDataSource extends DataSource {
         .id(`Terra${info.cid}_${info.episodes[0].cid}`)
         .timeForSort(time.getTime())
         .timeForDisplay(date)
-        .content(`泰拉记事社${info.title}已更新`)
+        .content(`泰拉记事社${info.title}已更新——${info.episodes[0].title}`)
         .jumpUrl(`https://terra-historicus.hypergryph.com/comic/${info.cid}`)
         .coverImage(info.cover)
         .componentData(Object.assign({name: info.title}, info))

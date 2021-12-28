@@ -1,6 +1,7 @@
-import {PLATFORM_CHROME, DEBUG_LOG} from '../../Constants';
+import { PLATFORM_CHROME, DEBUG_LOG } from '../../Constants';
 import AbstractPlatform from '../AbstractPlatform';
 import $ from "jquery";
+import janvas from "../../util/janvas.min.js";
 
 const IGNORE_MESSAGE_ERROR_1 = 'Could not establish connection. Receiving end does not exist.';
 const IGNORE_MESSAGE_ERROR_2 = 'The message port closed before a response was received.';
@@ -76,7 +77,7 @@ export default class ChromePlatform extends AbstractPlatform {
             console.log(`sendMessage - ${type}`);
             console.log(data || 'no-data');
         }
-        const message = {type: type};
+        const message = { type: type };
         if (data) {
             message.data = data;
         }
@@ -150,7 +151,7 @@ export default class ChromePlatform extends AbstractPlatform {
 
     setPopup(url) {
         return new Promise((resolve, reject) => {
-            chrome.browserAction.setPopup({popup: url}, () => {
+            chrome.browserAction.setPopup({ popup: url }, () => {
                 if (chrome.runtime.lastError) {
                     reject(chrome.runtime.lastError);
                     return;
@@ -196,7 +197,7 @@ export default class ChromePlatform extends AbstractPlatform {
 
     createTab(url) {
         return new Promise((resolve, reject) => {
-            chrome.tabs.create({url: url}, () => {
+            chrome.tabs.create({ url: url }, () => {
                 if (chrome.runtime.lastError) {
                     reject(chrome.runtime.lastError);
                     return;
@@ -209,7 +210,7 @@ export default class ChromePlatform extends AbstractPlatform {
     createWindow(url, type, width, height, state) {
         const $this = this;
         return new Promise((resolve, reject) => {
-            chrome.windows.getCurrent(function(win) {
+            chrome.windows.getCurrent(function (win) {
                 const createData = $this.__buildCreateData(win, url, type, width, height, state);
                 chrome.windows.create(createData, window => {
                     if (chrome.runtime.lastError) {
@@ -224,7 +225,7 @@ export default class ChromePlatform extends AbstractPlatform {
 
     updateWindow(winId, width, height) {
         return new Promise((resolve, reject) => {
-            chrome.windows.update(winId, {width: width, height: height}, window => {
+            chrome.windows.update(winId, { width: width, height: height }, window => {
                 if (chrome.runtime.lastError) {
                     reject(chrome.runtime.lastError);
                     return;
@@ -277,7 +278,7 @@ export default class ChromePlatform extends AbstractPlatform {
 
     setBadgeText(text) {
         return new Promise((resolve, reject) => {
-            chrome.browserAction.setBadgeText({ text:text }, () => {
+            chrome.browserAction.setBadgeText({ text: text }, () => {
                 if (chrome.runtime.lastError) {
                     reject(chrome.runtime.lastError);
                     return;
@@ -301,5 +302,13 @@ export default class ChromePlatform extends AbstractPlatform {
 
     getHtmlParser() {
         return $;
+    }
+
+    loadImages(obj) {
+        return new Promise(resolve => {
+            janvas.Utils.loadImages(obj, (data) => {
+                resolve(data);
+            });
+        })
     }
 }

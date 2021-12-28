@@ -105,6 +105,10 @@ export default class PlatformHelper {
     static get HtmlParser() {
         return currentPlatform.getHtmlParser();
     }
+
+    static get Img() {
+        return imgHelper;
+    }
 }
 
 // 以下为分类API Helper
@@ -242,6 +246,12 @@ class HttpHelper {
     }
 }
 
+class ImgHelper {
+    loadImages(obj) {
+        return currentPlatform.loadImages(obj);
+    }
+}
+
 const messageHelper = new MessageHelper();
 const storageHelper = new StorageHelper();
 const browserActionHelper = new BrowserActionHelper();
@@ -252,3 +262,4 @@ const windowsHelper = new WindowsHelper();
 const downloadsHelper = new DownloadsHelper();
 const lifecycleHelper = new LifecycleHelper();
 const httpHelper = new HttpHelper();
+const imgHelper = new ImgHelper();

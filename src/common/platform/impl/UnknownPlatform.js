@@ -103,4 +103,8 @@ export default class UnknownPlatform extends AbstractPlatform {
     setBadgeBackgroundColor(color) {
         return this.defPlatform.setBadgeBackgroundColor(color);
     }
+
+    loadImages(obj) {
+        return this.defPlatform.loadImages(obj);
+    }
 }
