@@ -18,7 +18,7 @@
         <div v-for="img in item.imageHttpList" class="multi-img-area"
              :style="{'width':spanNumber+'%','max-width':spanNumber+'%'}"
              :class="selectImg.some(x=>x==img)?'hasImage':'noImage'" :key="img">
-          <img v-lazy="img" class="img" @click="addImage(img)"/>
+          <img v-lazy="img" class="img" @click="addImage(img)" crossorigin="anonymous"/>
         </div>
       </div>
     </div>
@@ -80,6 +80,7 @@ export default {
       this.$nextTick(async () => {
         let imageCanvas = await html2canvas(document.querySelector('.image-area'), {
           allowTaint: true,
+          useCORS: true,
           imageTimeout: 10000
         })
         this.successImageUrl = imageCanvas.toDataURL("image/jpeg");

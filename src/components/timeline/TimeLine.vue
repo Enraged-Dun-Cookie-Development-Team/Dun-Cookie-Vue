@@ -513,20 +513,37 @@ export default {
 
       PlatformHelper.Img.generateShareImage(item, imageUrl).then(canvas => {
         canvas.toBlob(blob => {
-          navigator.clipboard.write([new ClipboardItem({[blob.type]: blob})])
-              .then(() => {
-                this.$message({
-                  offset: 50,
-                  center: true,
-                  message: "已复制到剪切板",
-                  type: "success",
-                });
-              })
-              .catch((e) => {
-                console.log(e);
-                this.errorImageUrl = canvas.toDataURL("image/jpeg");
-                this.imageError = true;
+          try {
+            if (typeof ClipboardItem === 'undefined') {
+              this.$message({
+                offset: 50,
+                center: true,
+                message: "当前环境不支持自动复制到剪贴板",
+                type: "info",
               });
+              this.errorImageUrl = canvas.toDataURL("image/jpeg");
+              this.imageError = true;
+            } else {
+              navigator.clipboard.write([new ClipboardItem({[blob.type]: blob})])
+                  .then(() => {
+                    this.$message({
+                      offset: 50,
+                      center: true,
+                      message: "已复制到剪切板",
+                      type: "success",
+                    });
+                  })
+                  .catch((e) => {
+                    console.log(e);
+                    this.errorImageUrl = canvas.toDataURL("image/jpeg");
+                    this.imageError = true;
+                  });
+            }
+          } catch (e) {
+            console.log(e);
+            this.errorImageUrl = canvas.toDataURL("image/jpeg");
+            this.imageError = true;
+          }
         });
       }).catch((e) => {
         console.log(e);

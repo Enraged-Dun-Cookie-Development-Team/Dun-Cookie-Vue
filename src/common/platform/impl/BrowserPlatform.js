@@ -47,9 +47,12 @@ export default class BrowserPlatform extends AbstractPlatform {
     if (typeof imageUrl !== 'string') {
       imageUrl = dataItem.coverImage;
     }
-    const image = await this.__loadImage(imageUrl);
+    let image;
+    if (imageUrl) {
+      image = await this.__loadImage(imageUrl);
+    }
     // 整体宽度以图片宽度为准，至少680，左右再各加10的边距
-    const canvasWidth = Math.max(680, image.width) + 20;
+    const canvasWidth = Math.max(680, image ? image.width : 0) + 20;
 
     const wrapper = document.createElement('div');
     wrapper.style.position = "absolute";
@@ -80,7 +83,10 @@ export default class BrowserPlatform extends AbstractPlatform {
     const headerCanvasPromise = this.__generateImageHeader(canvasWidth - 20, dataItem);
 
     const [headerCanvas, textCanvas] = await Promise.all([headerCanvasPromise, textCanvasPromise]);
-    const canvasHeight = headerCanvas.height + 10 + textCanvas.height + 10 + image.height;
+    let canvasHeight = headerCanvas.height + 10 + textCanvas.height + 10;
+    if (image) {
+      canvasHeight += image.height;
+    }
 
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
@@ -90,7 +96,9 @@ export default class BrowserPlatform extends AbstractPlatform {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(headerCanvas, 10, 0);
     ctx.drawImage(textCanvas, 10, headerCanvas.height + 10);
-    ctx.drawImage(image, (canvasWidth - image.width) / 2, headerCanvas.height + 10 + textCanvas.height + 10);
+    if (image) {
+      ctx.drawImage(image, (canvasWidth - image.width) / 2, headerCanvas.height + 10 + textCanvas.height + 10);
+    }
     return canvas;
   }
 
