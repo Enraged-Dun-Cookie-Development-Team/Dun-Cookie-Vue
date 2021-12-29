@@ -1,8 +1,6 @@
 import AbstractPlatform from '../AbstractPlatform';
 import $ from "jquery";
 import {CURRENT_VERSION, TOOL_QR_URL} from "../../Constants";
-import Settings from "../../Settings";
-import DataSourceUtil from "../../util/DataSourceUtil";
 import QRCode from "qrcode";
 import html2canvas from "html2canvas";
 
@@ -43,7 +41,7 @@ export default class BrowserPlatform extends AbstractPlatform {
     return "Browser";
   }
 
-  async generateShareImage(dataItem, imageUrl) {
+  async generateShareImage(dataItem, iconUrl, sourceIconUrl, imageUrl) {
     if (typeof imageUrl !== 'string') {
       imageUrl = dataItem.coverImage;
     }
@@ -80,7 +78,7 @@ export default class BrowserPlatform extends AbstractPlatform {
     });
 
     // 减掉左右边距
-    const headerCanvasPromise = this.__generateImageHeader(canvasWidth - 20, dataItem);
+    const headerCanvasPromise = this.__generateImageHeader(canvasWidth - 20, dataItem, iconUrl, sourceIconUrl);
 
     const [headerCanvas, textCanvas] = await Promise.all([headerCanvasPromise, textCanvasPromise]);
     let canvasHeight = headerCanvas.height + 10 + textCanvas.height + 10;
@@ -107,16 +105,18 @@ export default class BrowserPlatform extends AbstractPlatform {
    *
    * @param width {number}
    * @param dataItem {DataItem}
+   * @param iconUrl {string}
+   * @param sourceIconUrl {string}
    * @return {Promise<HTMLCanvasElement>}
    * @private
    */
-  async __generateImageHeader(width, dataItem) {
+  async __generateImageHeader(width, dataItem, iconUrl, sourceIconUrl) {
     let canvas = document.createElement("canvas");
     let ctx = canvas.getContext("2d");
     canvas.width = width;
     canvas.height = 120;
-    const iconPromise = this.__loadImage("/assets/image/" + Settings.logo);
-    const sourceIconPromise = this.__loadImage(DataSourceUtil.getByName(dataItem.dataSource).icon);
+    const iconPromise = this.__loadImage(iconUrl);
+    const sourceIconPromise = this.__loadImage(sourceIconUrl);
     const jumpQrCodePromise = this.__generateQrcode(dataItem.jumpUrl);
     const toolQrCodePromise = this.__generateQrcode(TOOL_QR_URL);
     /**

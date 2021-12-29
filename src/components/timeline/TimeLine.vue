@@ -511,7 +511,11 @@ export default {
         type: "info",
       });
 
-      PlatformHelper.Img.generateShareImage(item, imageUrl).then(canvas => {
+      PlatformHelper.Img.generateShareImage(item,
+          "/assets/image/" + Settings.logo,
+          DataSourceUtil.getByName(item.dataSource).icon,
+          imageUrl
+      ).then(canvas => {
         canvas.toBlob(blob => {
           try {
             if (typeof ClipboardItem === 'undefined') {
