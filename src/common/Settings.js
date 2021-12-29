@@ -318,6 +318,7 @@ class Settings {
 
   constructor() {
     PlatformHelper.Message.registerListener('settings', MESSAGE_SETTINGS_UPDATE, data => {
+      if (PlatformHelper.isBackground) delete data.currentDataSources;
       deepAssign(this, data);
       this.__updateWindowMode();
       transformDataSource(this).finally(() => {
