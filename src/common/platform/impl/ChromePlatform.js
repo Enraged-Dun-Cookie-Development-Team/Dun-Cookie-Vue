@@ -1,33 +1,10 @@
-import { PLATFORM_CHROME, DEBUG_LOG } from '../../Constants';
-import AbstractPlatform from '../AbstractPlatform';
-import $ from "jquery";
-import janvas from "../../util/janvas.min.js";
+import {DEBUG_LOG, PLATFORM_CHROME} from '../../Constants';
+import BrowserPlatform from "./BrowserPlatform";
 
-const IGNORE_MESSAGE_ERROR_1 = 'Could not establish connection. Receiving end does not exist.';
-const IGNORE_MESSAGE_ERROR_2 = 'The message port closed before a response was received.';
-
-let _isBackground;
-let _isMobile;
-
-export default class ChromePlatform extends AbstractPlatform {
+export default class ChromePlatform extends BrowserPlatform {
 
     constructor() {
         super();
-        // 这部分放在类里面的原因是放在外面会被意外执行导致报错
-        // 判断当前url中是否包含background(已知的其它方法都是Promise，都不能保证在isBackground被使用之前完成判断)
-        _isBackground = window.document.URL.indexOf('background') !== -1;
-        console.log(`Current isBackground: ${_isBackground}`);
-
-        const head = navigator.userAgent;
-        _isMobile = head.indexOf("Android") > 1 || head.indexOf("iPhone") > 1;
-    }
-
-    get isBackground() {
-        return _isBackground;
-    }
-
-    get isMobile() {
-        return _isMobile;
     }
 
     get PlatformType() {
@@ -73,22 +50,14 @@ export default class ChromePlatform extends AbstractPlatform {
     }
 
     sendMessage(type, data) {
-        if (DEBUG_LOG) {
-            console.log(`sendMessage - ${type}`);
-            console.log(data || 'no-data');
-        }
-        const message = { type: type };
-        if (data) {
-            message.data = data;
-        }
+        const message = super.__buildMessageToSend(type, data);
 
         return new Promise((resolve, reject) => {
             chrome.runtime.sendMessage(message, (response) => {
                 if (chrome.runtime.lastError) {
-                    if (chrome.runtime.lastError.message === IGNORE_MESSAGE_ERROR_1
-                        || chrome.runtime.lastError.message === IGNORE_MESSAGE_ERROR_2) {
+                    if (super.__shouldIgnoreMessageError(chrome.runtime.lastError.message)) {
                         if (DEBUG_LOG) {
-                            console.log(`response - ${type} - receiver not exists`);
+                            console.log(`response - ${type} - ignore error: ${chrome.runtime.lastError.message}`);
                         }
                         resolve();
                     } else {
@@ -96,54 +65,20 @@ export default class ChromePlatform extends AbstractPlatform {
                     }
                     return;
                 }
-                if (response === AbstractPlatform.__MESSAGE_WITHOUT_RESPONSE) {
-                    if (DEBUG_LOG) {
-                        console.log(`response - ${type} - empty`);
-                    }
-                    resolve();
-                    return;
-                }
-                if (DEBUG_LOG) {
-                    console.log(`response - ${type}`);
-                    console.log(response);
-                }
-                resolve(response);
+                resolve(super.__transformResponseMessage(response));
             });
         });
     }
 
     addMessageListener(id, type, listener) {
         return chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-            let value;
-
-            if (!type || message.type === type) {
-                if (DEBUG_LOG) {
-                    console.log(`${id} - ${type}|${message.type} - receiverMessage`);
-                    console.log(message);
-                }
-                if (!type) {
-                    value = listener(message);
-                } else {
-                    value = listener(message.data);
-                }
-
-                if (value !== null && value !== undefined) {
-                    if (DEBUG_LOG) {
-                        console.log(`${id} - ${type}|${message.type} - receiverMessage - response`);
-                        console.log(value);
-                    }
-                    // Chromium内核中必须用return true的方式进行异步返回，不支持直接返回Promise
-                    // 参考兼容性表格：https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onMessage
-                    sendResponse(value);
-                    if (value.constructor === Promise) {
-                        return true;
-                    }
-                } else {
-                    if (DEBUG_LOG) {
-                        console.log(`${id} - ${type}|${message.type} - receiverMessage - responseEmpty`);
-                    }
-                    // 必须要返回点什么东西来避免报错
-                    sendResponse(AbstractPlatform.__MESSAGE_WITHOUT_RESPONSE);
+            const value = super.__handleReceiverMessage(type, message, listener);
+            if (value !== undefined) {
+                // Chromium内核中必须用return true的方式进行异步返回，不支持直接返回Promise
+                // 参考兼容性表格：https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onMessage
+                sendResponse(value);
+                if (value.constructor === Promise) {
+                    return true;
                 }
             }
         });
@@ -272,10 +207,6 @@ export default class ChromePlatform extends AbstractPlatform {
         return chrome.runtime.onInstalled.addListener(listener);
     }
 
-    sendHttpRequest(url, method) {
-        return super.__sendXhrRequest(url, method);
-    }
-
     setBadgeText(text) {
         return new Promise((resolve, reject) => {
             chrome.browserAction.setBadgeText({ text: text }, () => {
@@ -300,15 +231,4 @@ export default class ChromePlatform extends AbstractPlatform {
         });
     }
 
-    getHtmlParser() {
-        return $;
-    }
-
-    loadImages(obj) {
-        return new Promise(resolve => {
-            janvas.Utils.loadImages(obj, (data) => {
-                resolve(data);
-            });
-        })
-    }
 }

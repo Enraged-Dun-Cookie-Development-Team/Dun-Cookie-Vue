@@ -89,14 +89,7 @@ export default class NodePlatform extends AbstractPlatform {
     }
 
     sendMessage(type, data) {
-        if (DEBUG_LOG) {
-            console.log(`sendMessage - ${type}`);
-            console.log(data || 'no-data');
-        }
-        const message = { type: type };
-        if (data) {
-            message.data = data;
-        }
+        const message = super.__buildMessageToSend(type, data);
 
         return new Promise((resolve, reject) => {
             this.workerParent.postMessage(message);
@@ -106,33 +99,12 @@ export default class NodePlatform extends AbstractPlatform {
 
     addMessageListener(id, type, listener) {
         this.workerParent.on('message', (message) => {
-            let value;
-
-            if (!type || message.type === type) {
-                if (DEBUG_LOG) {
-                    console.log(`${id} - ${type}|${message.type} - receiverMessage`);
-                    console.log(message);
-                }
-                if (!type) {
-                    value = listener(message);
+            const value = super.__handleReceiverMessage(type, message, listener);
+            if (value !== undefined) {
+                if (value.constructor === Promise) {
+                    value.then(result => this.workerParent.postMessage({ type: message.type, data: result }));
                 } else {
-                    value = listener(message.data);
-                }
-
-                if (value !== null && value !== undefined) {
-                    if (DEBUG_LOG) {
-                        console.log(`${id} - ${type}|${message.type} - receiverMessage - response`);
-                        console.log(value);
-                    }
-                    if (value.constructor === Promise) {
-                        value.then(result => this.workerParent.postMessage({ type: message.type, data: result }));
-                    } else {
-                        this.workerParent.postMessage({ type: message.type, data: value });
-                    }
-                } else {
-                    if (DEBUG_LOG) {
-                        console.log(`${id} - ${type}|${message.type} - receiverMessage - responseEmpty`);
-                    }
+                    this.workerParent.postMessage({ type: message.type, data: value });
                 }
             }
         });

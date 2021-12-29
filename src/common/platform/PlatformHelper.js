@@ -263,3 +263,4 @@ const downloadsHelper = new DownloadsHelper();
 const lifecycleHelper = new LifecycleHelper();
 const httpHelper = new HttpHelper();
 const imgHelper = new ImgHelper();
+globalThis.PlatformHelper = PlatformHelper
