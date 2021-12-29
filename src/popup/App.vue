@@ -212,17 +212,18 @@ import {
   MESSAGE_CARD_LIST_GET,
   MESSAGE_CARD_LIST_UPDATE,
   MESSAGE_DUN_INFO_UPDATE,
-  MESSAGE_FORCE_REFRESH, MESSAGE_GET_COUNTDOWN,
+  MESSAGE_FORCE_REFRESH,
+  MESSAGE_GET_COUNTDOWN,
   PAGE_DONATE,
   PAGE_GITHUB_REPO,
-  PAGE_OPTIONS, PAGE_TIME,
-  PAGE_UPDATE, PLATFORM_FIREFOX,
+  PAGE_OPTIONS,
+  PAGE_TIME,
+  PAGE_UPDATE,
+  PLATFORM_FIREFOX,
   quickJump,
   SHOW_VERSION,
 } from "../common/Constants";
 import PlatformHelper from "../common/platform/PlatformHelper";
-import {animateCSS} from "../common/util/CommonFunctions";
-import janvas from "../common/util/janvas.min.js";
 import "animate.css";
 
 export default {

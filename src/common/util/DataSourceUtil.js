@@ -7,6 +7,10 @@ import Settings from '../Settings';
 
 class DataSourceUtil {
 
+  /**
+   * @param dataName {string}
+   * @return {DataSource|undefined}
+   */
   static getByName(dataName) {
     return Settings.currentDataSources[dataName];
   }

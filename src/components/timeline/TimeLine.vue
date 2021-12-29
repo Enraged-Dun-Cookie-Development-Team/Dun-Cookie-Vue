@@ -195,7 +195,7 @@
 </template>
 
 <script>
-import {CURRENT_VERSION, dayInfo, PAGE_UPDATE, quickJump, TOOL_QR_URL} from "../../common/Constants";
+import {CURRENT_VERSION, dayInfo, PAGE_UPDATE, quickJump} from "../../common/Constants";
 import MyElTimelineItem from "./MyTimeLineItem";
 import DefaultItem from "./items/DefaultItem";
 import DataSourceUtil from "../../common/util/DataSourceUtil";
@@ -205,9 +205,6 @@ import TimeUtil from "../../common/util/TimeUtil";
 import Search from "../Search";
 import {deepAssign} from "../../common/util/CommonFunctions";
 import PlatformHelper from "../../common/platform/PlatformHelper";
-import html2canvas from "html2canvas";
-import janvas from "../../common/util/janvas.min.js";
-import QRCode from "qrcode";
 import InsiderUtil from "../../common/util/InsiderUtil";
 import ServerUtil from "../../common/util/ServerUtil";
 import SelectImageToCopy from "@/components/SelectImageToCopy";
@@ -504,130 +501,42 @@ export default {
     /**
      * 复制
      * @param item
-     * @param 从高级分享内传来的canvas对象，用于展示图片
+     * @param imageUrl {string?} 用于展示图片
      */
-    copyData(item, imageSrc) {
+    copyData(item, imageUrl) {
       this.$message({
         offset: 50,
         center: true,
         message: "生成图片中，请稍后",
         type: "info",
       });
-      // 头图 图标 资源文件
-      item.imgObj = {
-        icon: "/assets/image/" + Settings.logo,
-        sourceIcon: this.getDataSourceByName(item.dataSource).icon,
-      };
-      // 单图或者多图  selectImage大于1走多图 等于1就直接变成头图
-      if (imageSrc) {
-        item.imgObj.headFigure = imageSrc;
-      } else if (item.coverImage) {
-        item.imgObj.headFigure = item.coverImage;
-      }
 
-      setTimeout(async () => {
-        item.toolQrCode = await new QRCode.toCanvas(TOOL_QR_URL)
-        item.jumpQrCode = await new QRCode.toCanvas(item.jumpUrl)
-        let textCanvas = await html2canvas(document.querySelector(`.wrapper[data-id='${item.id}'] .wrapper-content`))
-        let janvasData = await PlatformHelper.Img.loadImages(item.imgObj);
-        let canvas = document.createElement("canvas");
-        let ctx = canvas.getContext("2d");
-        // 判断是图片大还是文字大 根据这两个来判断canvas宽度 但最少要600宽度
-        let canvasWidth = textCanvas.width;
-        let canvasHeight = textCanvas.height;
-
-        if (janvasData.headFigure != undefined) {
-          canvasWidth =
-              textCanvas.width > janvasData.headFigure.width
-                  ? textCanvas.width
-                  : janvasData.headFigure.width;
-          canvasHeight = textCanvas.height + janvasData.headFigure.height;
-        }
-        if (canvasWidth < 580) {
-          canvasWidth = 580;
-        }
-        canvas.width = canvasWidth + 20;
-        canvas.height = canvasHeight + 180;
-        ctx.fillStyle = "#ffffff";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        janvasData.icon.setAttribute('crossOrigin', 'anonymous');
-        janvasData.icon.onload = () => {
-          ctx.drawImage(janvasData.icon, 10, 10, 100, 100);
-        }
-        janvasData.sourceIcon.setAttribute('crossOrigin', 'anonymous');
-        janvasData.sourceIcon.onload = () => {
-          ctx.drawImage(janvasData.sourceIcon, 120, 70, 40, 40);
-        }
-        ctx.fillStyle = "#23ade5";
-        ctx.font = "36px Microsoft Yahei";
-        ctx.fillText(`小刻食堂 V${CURRENT_VERSION}`, 120, 50);
-        ctx.fillStyle = "#848488";
-        ctx.font = "20px Microsoft Yahei";
-        ctx.fillText(`${item.dataSource}`, 170, 90);
-        ctx.fillStyle = "#909399";
-        ctx.font = "14px Microsoft Yahei";
-        ctx.fillText(`${item.timeForDisplay}`, 170, 110);
-        ctx.drawImage(item.jumpQrCode, canvas.width - 200, 10, 90, 90);
-        ctx.drawImage(item.toolQrCode, canvas.width - 100, 10, 90, 90);
-        ctx.fillStyle = "#23ade5";
-        ctx.fillText(`数据来源`, canvas.width - 183, 110);
-        ctx.fillText(`食堂介绍`, canvas.width - 83, 110);
-        if (textCanvas.width != 0) {
-          ctx.drawImage(
-              textCanvas,
-              10,
-              140,
-              textCanvas.width,
-              textCanvas.height
-          );
-        } else {
-          ctx.fillStyle = "#848488";
-          ctx.font = "20px Microsoft Yahei";
-          ctx.fillText(item.content, 10, 160);
-        }
-        // headFigure 这里面有值 代表有一张图或者九宫格选图选了一张
-        if (janvasData.headFigure) {
-          console.log(janvasData.headFigure);
-          janvasData.headFigure.setAttribute('crossOrigin', 'anonymous');
-          janvasData.headFigure.onload = () => {
-            ctx.drawImage(
-                janvasData.headFigure,
-                (canvas.width - janvasData.headFigure.width) / 2,
-                textCanvas.height + 160,
-                janvasData.headFigure.width,
-                janvasData.headFigure.height
-            );
-          };
-        }
-
-        // this.errorImageUrl = canvas.toDataURL("image/jpeg");
-        // this.imageError = true;
-        // return;
-
-        let that = this;
-        setTimeout(() => {
-          canvas.toBlob(function (blob) {
-            navigator.clipboard
-                .write([
-                  new ClipboardItem({
-                    [blob.type]: blob,
-                  }),
-                ])
-                .then(() => {
-                  that.$message({
-                    offset: 50,
-                    center: true,
-                    message: "已复制到剪切板",
-                    type: "success",
-                  });
-                })
-                .catch(() => {
-                  that.errorImageUrl = canvas.toDataURL("image/jpeg");
-                  that.imageError = true;
+      PlatformHelper.Img.generateShareImage(item, imageUrl).then(canvas => {
+        canvas.toBlob(blob => {
+          navigator.clipboard.write([new ClipboardItem({[blob.type]: blob})])
+              .then(() => {
+                this.$message({
+                  offset: 50,
+                  center: true,
+                  message: "已复制到剪切板",
+                  type: "success",
                 });
-          });
-        }, 500)
-      }, 100);
+              })
+              .catch((e) => {
+                console.log(e);
+                this.errorImageUrl = canvas.toDataURL("image/jpeg");
+                this.imageError = true;
+              });
+        });
+      }).catch((e) => {
+        console.log(e);
+        this.$message({
+          offset: 50,
+          center: true,
+          message: "图片生成失败",
+          type: "error",
+        });
+      });
     },
 
     // 高级复制

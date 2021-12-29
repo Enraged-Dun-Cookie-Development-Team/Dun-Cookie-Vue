@@ -247,8 +247,8 @@ class HttpHelper {
 }
 
 class ImgHelper {
-    loadImages(obj) {
-        return currentPlatform.loadImages(obj);
+    generateShareImage(dataItem, imageUrl) {
+        return currentPlatform.generateShareImage(dataItem, imageUrl);
     }
 }
 
@@ -263,3 +263,4 @@ const downloadsHelper = new DownloadsHelper();
 const lifecycleHelper = new LifecycleHelper();
 const httpHelper = new HttpHelper();
 const imgHelper = new ImgHelper();
+globalThis.PlatformHelper = PlatformHelper

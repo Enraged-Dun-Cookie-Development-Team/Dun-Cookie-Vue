@@ -1,30 +1,10 @@
-import {PLATFORM_FIREFOX, DEBUG_LOG} from '../../Constants';
-import AbstractPlatform from '../AbstractPlatform';
-import $ from "jquery";
-import janvas from "../../util/janvas.min.js";
+import {PLATFORM_FIREFOX} from '../../Constants';
+import BrowserPlatform from "./BrowserPlatform";
 
-let _isBackground;
-let _isMobile;
-
-export default class FirefoxPlatform extends AbstractPlatform {
+export default class FirefoxPlatform extends BrowserPlatform {
 
     constructor() {
         super();
-        // 这部分放在类里面的原因是放在外面会被意外执行导致报错
-        // 判断当前url中是否包含background(已知的其它方法都是Promise，都不能保证在isBackground被使用之前完成判断)
-        _isBackground = window.document.URL.indexOf('background') !== -1;
-        console.log(`Current isBackground: ${_isBackground}`);
-
-        const head = navigator.userAgent;
-        _isMobile = head.indexOf("Android") > 1 || head.indexOf("iPhone") > 1;
-    }
-
-    get isBackground() {
-        return _isBackground;
-    }
-
-    get isMobile() {
-        return _isMobile;
     }
 
     get PlatformType() {
@@ -51,60 +31,28 @@ export default class FirefoxPlatform extends AbstractPlatform {
     }
 
     sendMessage(type, data) {
-        if (DEBUG_LOG) {
-            console.log(`sendMessage - ${type}`);
-            console.log(data || 'no-data');
-        }
-        const message = {type: type};
-        if (data) {
-            message.data = data;
-        }
+        const message = super.__buildMessageToSend(type, data);
 
         return browser.runtime.sendMessage(message).then(response => {
-            if (response === AbstractPlatform.__MESSAGE_WITHOUT_RESPONSE) {
+            return super.__transformResponseMessage(response);
+        }).catch(err => {
+            if (super.__shouldIgnoreMessageError(err.message)) {
                 return;
             }
-            if (DEBUG_LOG) {
-                console.log(`response - ${type}`);
-                console.log(response);
-            }
-            return response;
+            return Promise.reject(err);
         });
     }
 
     addMessageListener(id, type, listener) {
         return browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-            let value;
-
-            if (!type || message.type === type) {
-                if (DEBUG_LOG) {
-                    console.log(`${id} - ${type} - receiverMessage`);
-                    console.log(message);
-                }
-                if (!type) {
-                    value = listener(message);
+            const value = super.__handleReceiverMessage(type, message, listener);
+            if (value !== undefined) {
+                // 根据W3C规范，异步回复消息应该直接返回Promise
+                // 参考文档：https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onMessage
+                if (value.constructor === Promise) {
+                    return value;
                 } else {
-                    value = listener(message.data);
-                }
-
-                if (value !== null && value !== undefined) {
-                    if (DEBUG_LOG) {
-                        console.log(`${id} - ${type}|${message.type} - receiverMessage - response`);
-                        console.log(value);
-                    }
-                    // 根据W3C规范，异步回复消息应该直接返回Promise
-                    // 参考文档：https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onMessage
-                    if (value.constructor === Promise) {
-                        return value;
-                    } else {
-                        sendResponse(value);
-                    }
-                } else {
-                    if (DEBUG_LOG) {
-                        console.log(`${id} - ${type}|${message.type} - receiverMessage - responseEmpty`);
-                    }
-                    // 必须要返回点什么东西来避免报错
-                    sendResponse(AbstractPlatform.__MESSAGE_WITHOUT_RESPONSE);
+                    sendResponse(value);
                 }
             }
         });
@@ -186,10 +134,6 @@ export default class FirefoxPlatform extends AbstractPlatform {
         return browser.runtime.onInstalled.addListener(listener);
     }
 
-    sendHttpRequest(url, method) {
-        return super.__sendXhrRequest(url, method);
-    }
-
     setBadgeText(text) {
         return browser.browserAction.setBadgeText({text: text});
     }
@@ -198,11 +142,4 @@ export default class FirefoxPlatform extends AbstractPlatform {
         return browser.browserAction.setBadgeBackgroundColor({color: color});
     }
 
-    getHtmlParser() {
-        return $;
-    }
-
-    loadImages(obj) {
-        return janvas.Utils.loadImages(obj);
-    }
 }

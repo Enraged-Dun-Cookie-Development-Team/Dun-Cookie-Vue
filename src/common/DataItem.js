@@ -4,6 +4,7 @@
 class DataItem {
     /**
      * 【必填】标识这个饼来自哪个数据源，值为数据源的dataName
+     * @type {string}
      */
     dataSource;
     /**
@@ -12,28 +13,34 @@ class DataItem {
      * 加数据源类型名是为了避免不同数据源内部的id重复。
      * 对于没有内部id的数据源，应使用时间戳作为id。
      * <strong>注意：使用builder方法会自动加上数据源类型名，子类无需操心</strong>
+     * @type {string}
      */
     id;
     /**
      * 【必填】用于在时间线上排序的字段，值为Unix时间戳
      * <p>
      * 应统一使用饼发布的时间，对于只有日期没有具体时间的按照用户设置将具体时间设为00:00:00或23:59:59
+     * @type {string}
      */
     timeForSort;
     /**
      * 【必填】用于显示在时间线上的时间，格式应该统一为<code>yyyy-MM-dd hh:mm:ss</code>，其中hh:mm:ss是可选的
+     * @type {string}
      */
     timeForDisplay;
     /**
      * 【必填】饼的内容，这里的值应该是转换后可以直接显示在页面上的，并且可以直接复制的
+     * @type {string}
      */
     content;
     /**
      * 【必填】跳转链接，用于点击跳转到对应的饼
+     * @type {string}
      */
     jumpUrl;
     /**
      * 封面图，用于在页面/通知上显示的饼的图片
+     * @type {string}
      */
     coverImage;
     /**

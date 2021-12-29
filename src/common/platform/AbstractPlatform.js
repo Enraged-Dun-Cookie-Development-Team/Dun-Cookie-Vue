@@ -1,4 +1,6 @@
 // 其实这玩意不是很有必要提取成常量，但是提取了也没坏处(至少修改起来比较方便)
+import {DEBUG_LOG} from "../Constants";
+
 const unsupportedTip = "该平台未实现该接口！请联系[小刻食堂]开发者解决该问题";
 
 // TODO 实现子类时，如果是callback的方法(Chrome v2)，务必检查runtime.lastError。如果是Promise的方法(Chrome v3、Firefox)，务必catch。
@@ -263,38 +265,81 @@ export default class AbstractPlatform {
     }
 
     /**
-     * 等待加载图片
-     * @param obj 图片对象
+     * 生成某条数据的分享图片
+     * @param dataItem {DataItem}
+     * @param imageUrl {string?}
      * @return {Promise}
      */
-    loadImages(obj) {
+    generateShareImage(dataItem, imageUrl) {
         throw unsupportedTip;
     }
 
-    // 由于XHR是浏览器标准，故提取到抽象类中
-    // 为避免出现依赖循环的隐患，故不放在HttpUtil中
-    __sendXhrRequest(url, method) {
-        return new Promise((resolve, reject) => {
-            let xhr = new XMLHttpRequest();
-            xhr.open(method, url, true);
-            let err;
-            xhr.onload = () => {
-                if (xhr.status === 200) {
-                    resolve(xhr.responseText);
-                } else {
-                    err = xhr;
+    /**
+     * 统一的message接收处理逻辑
+     * @protected
+     */
+    __handleReceiverMessage(type, message, listener) {
+        let value;
+
+        if (!type || message.type === type) {
+            if (DEBUG_LOG) {
+                console.log(`${id} - ${type}|${message.type} - receiverMessage`);
+                console.log(message);
+            }
+            if (!type) {
+                value = listener(message);
+            } else {
+                value = listener(message.data);
+            }
+
+            if (value !== null && value !== undefined) {
+                if (DEBUG_LOG) {
+                    console.log(`${id} - ${type}|${message.type} - receiverMessage - response`);
+                    console.log(value);
                 }
-            }
-            xhr.onerror = () => {
-                err = `请求URL时发生异常：${url}`;
-            }
-            xhr.onloadend = () => {
-                if (!!err) {
-                    reject(err);
+                return value;
+            } else {
+                if (DEBUG_LOG) {
+                    console.log(`${id} - ${type}|${message.type} - receiverMessage - responseEmpty`);
                 }
+                // 必须要返回点什么东西来避免报错
+                return AbstractPlatform.__MESSAGE_WITHOUT_RESPONSE;
             }
-            xhr.send();
-        });
+        }
+    }
+
+    /**
+     * 统一的message构建逻辑
+     * @protected
+     */
+    __buildMessageToSend(type, data) {
+        if (DEBUG_LOG) {
+            console.log(`sendMessage - ${type}`);
+            console.log(data || 'no-data');
+        }
+        const message = { type: type };
+        if (data) {
+            message.data = data;
+        }
+        return message;
+    }
+
+    /**
+     * 统一的message响应处理逻辑
+     * @protected
+     */
+    __transformResponseMessage(response) {
+        if (response === AbstractPlatform.__MESSAGE_WITHOUT_RESPONSE) {
+            if (DEBUG_LOG) {
+                console.log(`response - ${type} - empty`);
+            }
+            return;
+        }
+        if (DEBUG_LOG) {
+            console.log(`response - ${type}`);
+            console.log(response);
+        }
+        return response;
     }
 
 }
