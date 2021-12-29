@@ -247,8 +247,8 @@ class HttpHelper {
 }
 
 class ImgHelper {
-    loadImages(obj) {
-        return currentPlatform.loadImages(obj);
+    generateShareImage(dataItem, imageUrl) {
+        return currentPlatform.generateShareImage(dataItem, imageUrl);
     }
 }
 

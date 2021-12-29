@@ -265,11 +265,12 @@ export default class AbstractPlatform {
     }
 
     /**
-     * 等待加载图片
-     * @param obj 图片对象
+     * 生成某条数据的分享图片
+     * @param dataItem {DataItem}
+     * @param imageUrl {string?}
      * @return {Promise}
      */
-    loadImages(obj) {
+    generateShareImage(dataItem, imageUrl) {
         throw unsupportedTip;
     }
 

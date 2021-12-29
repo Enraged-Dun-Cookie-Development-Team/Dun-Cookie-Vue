@@ -254,9 +254,9 @@ export default class NodePlatform extends AbstractPlatform {
         return node_require('jquery')(window);
     }
 
-    loadImages(obj) {
+    generateShareImage(dataItem, imageUrl) {
         if (DEBUG_LOG) {
-            console.log('Node环境不支持Load Images');
+            console.log('Node环境暂不支持生成图片');
         }
         // 无事发生
         return new Promise((resolve, _) => resolve());
