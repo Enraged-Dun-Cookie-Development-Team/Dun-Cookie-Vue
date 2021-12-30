@@ -258,7 +258,7 @@
                   </div>
                 </div>
                 <div class="body-menu-content-card">
-                  <div class="content-card-title">推送常规消息</div>
+                  <div class="content-card-title">推送重要公告</div>
                   <div class="content-card-description">推送我们的消息</div>
                   <div class="content-card-content flex-between">
                     <div>
