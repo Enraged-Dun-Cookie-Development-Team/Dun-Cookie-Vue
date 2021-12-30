@@ -78,9 +78,9 @@ export class InGameAnnouncementDataSource extends DataSource {
 
   // 判断版本号时候更新
   JudgmentVersionRelease(versionData) {
-    // 避免切换平台弹出更新通知
-    if (this.gamePlatform == Settings.dun.gamePlatform) {
-      if (versionData) {
+    if (versionData) {
+      // 避免切换平台弹出更新通知
+      if (this.gamePlatform == Settings.dun.gamePlatform) {
         if (this.ClientVersion && versionData.clientVersion && this.ClientVersion != versionData.clientVersion) {
           const nowVersion = versionData.clientVersion.split(".").map(a => parseInt(a));
           const pastVersion = this.ClientVersion.split(".").map(a => parseInt(a));
@@ -93,11 +93,11 @@ export class InGameAnnouncementDataSource extends DataSource {
         } else if (this.ResVersion && versionData.resVersion && this.ResVersion != versionData.resVersion) {
           NotificationUtil.SendNotice(`【${Settings.dun.gamePlatform}/闪断更新】已经完成闪断更新`, '博士，快去重启进入游戏吧！', null, new Date().getTime());
         }
-        this.ClientVersion = versionData.clientVersion;
-        this.ResVersion = versionData.resVersion;
+      } else {
+        this.gamePlatform = Settings.dun.gamePlatform
       }
-    } else {
-      this.gamePlatform = Settings.dun.gamePlatform
+      this.ClientVersion = versionData.clientVersion;
+      this.ResVersion = versionData.resVersion;
     }
   }
 }
