@@ -25,12 +25,6 @@ class DataSynchronizer {
   constructor(key, target) {
     this.key = key;
     this.target = target;
-    if (PlatformHelper.isBackground) {
-      PlatformHelper.Message.registerListener(keyGet(key), keyGet(key), () => this.target);
-    } else {
-      PlatformHelper.Message.send(keyGet(key)).then(data => this.__update(data));
-    }
-    PlatformHelper.Message.registerListener(keyUpdate(key), keyUpdate(key), data => this.__update(data));
   }
 
   __update(data) {
@@ -75,14 +69,12 @@ class DataSynchronizer {
       // console.log(`添加属性${_this.key}: ${String(prop)}`);
       return Reflect.defineProperty(...arguments);
     };
-    this.proxy = new Proxy(this.target, handler);
-    return this.proxy;
+    return new Proxy(this.target, handler);
   }
 
   createReadonlyProxy() {
     const handler = this.__createReadonlyProxyHandler();
-    this.proxy = new Proxy(this.target, handler);
-    return this.proxy;
+    return new Proxy(this.target, handler);
   }
 
   __createReadonlyProxyHandler() {
@@ -110,6 +102,7 @@ class DataSynchronizer {
           // console.log(`获取内部属性${_this.key}: ${String(prop)}: ${value}`);
           return value;
         }
+        // noinspection UnnecessaryLocalVariableJS
         const value = Reflect.get(...arguments);
         // console.log(`获取${_this.key}: ${String(prop)}: ${value}`);
         return value;
@@ -123,21 +116,47 @@ class DataSynchronizer {
 
 }
 
+class DataSynchronizerAllWritable extends DataSynchronizer {
+  constructor(key, target) {
+    super(key, target);
+    if (PlatformHelper.isBackground) {
+      PlatformHelper.Message.registerListener(keyGet(key), keyGet(key), () => this.target);
+    } else {
+      PlatformHelper.Message.send(keyGet(key)).then(data => this.__update(data));
+    }
+    PlatformHelper.Message.registerListener(keyUpdate(key), keyUpdate(key), data => this.__update(data));
+    this.proxy = this.createWritableProxy();
+  }
+}
+
+class DataSynchronizerOnlyBackgroundWritable extends DataSynchronizer {
+  constructor(key, target) {
+    super(key, target);
+    if (PlatformHelper.isBackground) {
+      PlatformHelper.Message.registerListener(keyGet(key), keyGet(key), () => this.target);
+      this.proxy = this.createWritableProxy();
+    } else {
+      PlatformHelper.Message.send(keyGet(key)).then(data => this.__update(data));
+      PlatformHelper.Message.registerListener(keyUpdate(key), keyUpdate(key), data => this.__update(data));
+      this.proxy = this.createReadonlyProxy();
+    }
+  }
+}
+
 function createSyncData(target, key, mode) {
-  const synchronizer = new DataSynchronizer(key, target);
-  console.log(`已启用同步数据：${key}`);
+  let synchronizer = new DataSynchronizer(key, target);
   switch (mode) {
     case DataSyncMode.ALL_WRITABLE:
-      return synchronizer.createWritableProxy();
+      synchronizer = new DataSynchronizerAllWritable(key, target);
+      break;
     case DataSyncMode.ONLY_BACKGROUND_WRITABLE:
-      if (PlatformHelper.isBackground) {
-        return synchronizer.createWritableProxy();
-      } else {
-        return synchronizer.createReadonlyProxy();
-      }
+      synchronizer = new DataSynchronizerOnlyBackgroundWritable(key, target);
+      break;
     default:
       throw new Error('unsupported sync mode: ' + mode);
   }
+  console.log(`已启用同步数据：${key}`);
+  return synchronizer.proxy;
 }
 
 class CanSync {
