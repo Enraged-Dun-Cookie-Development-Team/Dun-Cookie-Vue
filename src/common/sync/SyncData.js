@@ -9,6 +9,10 @@ function keyGet(key) {
   return 'sync-get:' + key;
 }
 
+function keyPersist(key) {
+  return 'sync-persist:' + key;
+}
+
 class DataSyncMode {
   static ONLY_BACKGROUND_WRITABLE = 1;
   static ALL_WRITABLE = 2;
@@ -17,19 +21,28 @@ class DataSyncMode {
 class DataSynchronizer {
   key;
   target;
+  shouldPersist;
 
   proxy;
   updateFlag = false;
   updateListeners = [];
+  updateCount = 0;
 
-  constructor(key, target) {
+  constructor(key, target, shouldPersist) {
     this.key = key;
     this.target = target;
+    this.shouldPersist = shouldPersist;
+    PlatformHelper.Storage.getLocalStorage(keyPersist(key)).then(data => {
+      if (this.updateCount === 0) {
+        this.__update(data);
+      }
+    });
   }
 
   __update(data) {
     const changed = {};
     deepAssign(this.target, data, changed);
+    this.updateCount++;
     // console.log(`同步更新${this.key}：`);
     // console.log(changed);
     for (const listener of this.updateListeners) {
@@ -43,9 +56,12 @@ class DataSynchronizer {
 
   sendUpdateAtNextTick() {
     if (!this.updateFlag) {
-      setTimeout(() => {
-        PlatformHelper.Message.send(keyUpdate(this.key), this.target).then();
+      setTimeout(async () => {
         this.updateFlag = false;
+        if (this.shouldPersist) {
+          await PlatformHelper.Storage.saveLocalStorage(keyPersist(this.key), this.target);
+        }
+        PlatformHelper.Message.send(keyUpdate(this.key), this.target).then();
       });
       this.updateFlag = true;
     }
@@ -117,8 +133,8 @@ class DataSynchronizer {
 }
 
 class DataSynchronizerAllWritable extends DataSynchronizer {
-  constructor(key, target) {
-    super(key, target);
+  constructor(key, target, shouldPersist) {
+    super(key, target, shouldPersist);
     if (PlatformHelper.isBackground) {
       PlatformHelper.Message.registerListener(keyGet(key), keyGet(key), () => this.target);
     } else {
@@ -130,8 +146,8 @@ class DataSynchronizerAllWritable extends DataSynchronizer {
 }
 
 class DataSynchronizerOnlyBackgroundWritable extends DataSynchronizer {
-  constructor(key, target) {
-    super(key, target);
+  constructor(key, target, shouldPersist) {
+    super(key, target, shouldPersist);
     if (PlatformHelper.isBackground) {
       PlatformHelper.Message.registerListener(keyGet(key), keyGet(key), () => this.target);
       this.proxy = this.createWritableProxy();
@@ -143,14 +159,14 @@ class DataSynchronizerOnlyBackgroundWritable extends DataSynchronizer {
   }
 }
 
-function createSyncData(target, key, mode) {
+function createSyncData(target, key, mode, shouldPersist = false) {
   let synchronizer = new DataSynchronizer(key, target);
   switch (mode) {
     case DataSyncMode.ALL_WRITABLE:
-      synchronizer = new DataSynchronizerAllWritable(key, target);
+      synchronizer = new DataSynchronizerAllWritable(key, target, shouldPersist);
       break;
     case DataSyncMode.ONLY_BACKGROUND_WRITABLE:
-      synchronizer = new DataSynchronizerOnlyBackgroundWritable(key, target);
+      synchronizer = new DataSynchronizerOnlyBackgroundWritable(key, target, shouldPersist);
       break;
     default:
       throw new Error('unsupported sync mode: ' + mode);
