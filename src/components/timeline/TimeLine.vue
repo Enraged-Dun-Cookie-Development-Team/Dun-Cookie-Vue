@@ -215,7 +215,11 @@ export default {
   props: ["cardListByTag", "imgShow"],
   data() {
     Settings.doAfterInit(settings => this.currentTag = settings.display.defaultTag);
-    Settings.doAfterUpdate(settings => this.currentTag = settings.display.defaultTag);
+    Settings.doAfterUpdate((settings, changed) => {
+      if (changed.display && changed.display.defaultTag) {
+        this.currentTag = settings.display.defaultTag;
+      }
+    });
     return {
       settings: Settings,
       san: SanInfo,

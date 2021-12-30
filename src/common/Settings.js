@@ -319,11 +319,14 @@ class Settings {
   constructor() {
     PlatformHelper.Message.registerListener('settings', MESSAGE_SETTINGS_UPDATE, data => {
       if (PlatformHelper.isBackground) delete data.currentDataSources;
-      deepAssign(this, data);
+      const changed = {};
+      deepAssign(this, data, changed);
+      console.log('配置已更新：');
+      console.log(changed);
       this.__updateWindowMode();
       transformDataSource(this).finally(() => {
         for (const listener of updateListeners) {
-          listener(this);
+          listener(this, changed);
         }
       });
     });
