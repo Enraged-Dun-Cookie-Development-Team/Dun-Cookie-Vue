@@ -58,9 +58,9 @@ function tryDun(settings) {
     for (const dataName in settings.currentDataSources) {
         // 减小不重要饼的频率
         if (dataName == "朝陇山微博" || dataName == "泰拉记事社微博" || dataName == "一拾山微博" || dataName == "鹰角网络微博") {
-            if ((settings.dun.intervalTime <= 13 && dunTime % 5 != 1) || 
+            if ((settings.dun.intervalTime <= 13 && dunTime % 5 != 1) ||
                 (settings.dun.intervalTime > 13 && settings.dun.intervalTime <= 15 && dunTime % 4 != 1) ||
-                (settings.dun.intervalTime > 15 && settings.dun.intervalTime <= 20 && dunTime % 3 != 1) || 
+                (settings.dun.intervalTime > 15 && settings.dun.intervalTime <= 20 && dunTime % 3 != 1) ||
                 (settings.dun.intervalTime > 20 && settings.dun.intervalTime <= 45 && dunTime % 2 != 1)) {
                 continue;
             }
@@ -192,9 +192,15 @@ const kazeFun = {
             }, 600000);
         });
 
-        Settings.doAfterUpdate(() => {
-            // 由于更新配置后数据源/蹲饼频率可能改变，所以重启蹲饼timer
-            // TODO 最好能判断配置更新的情况，只有更新了数据源/蹲饼频率的时候才刷新，避免无意义的网络请求
+        Settings.doAfterUpdate((settings, changed) => {
+            // 只有更新了数据源/蹲饼频率的时候才刷新，避免无意义的网络请求
+            if (!changed.enableDataSources
+              && !changed.customDataSources
+              && !changed.currentDataSources
+              && !changed.dun
+            ) {
+                return;
+            }
             if (dunTimeoutId) {
                 clearTimeout(dunTimeoutId);
                 dunTimeoutId = null;
