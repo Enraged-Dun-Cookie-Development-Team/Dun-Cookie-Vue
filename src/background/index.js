@@ -6,15 +6,15 @@ import {
     IS_DEBUG,
     MESSAGE_CARD_LIST_GET,
     MESSAGE_CARD_LIST_UPDATE,
-    MESSAGE_DUN_INFO_GET,
+    MESSAGE_CHANGE_COUNTDOWN,
     MESSAGE_FORCE_REFRESH,
+    MESSAGE_GET_COUNTDOWN,
     MESSAGE_SAN_GET,
     PAGE_POPUP_WINDOW,
     PAGE_UPDATE,
-    PAGE_WELCOME, PLATFORM_FIREFOX,
-    TEST_DATA_REFRESH_TIME,
-    MESSAGE_CHANGE_COUNTDOWN,
-    MESSAGE_GET_COUNTDOWN
+    PAGE_WELCOME,
+    PLATFORM_FIREFOX,
+    TEST_DATA_REFRESH_TIME
 } from '../common/Constants';
 import DataSourceUtil from '../common/util/DataSourceUtil';
 import PlatformHelper from '../common/platform/PlatformHelper';
@@ -92,7 +92,7 @@ function tryDun(settings) {
         if (hasUpdated) {
             PlatformHelper.Message.send(MESSAGE_CARD_LIST_UPDATE, cardListCache);
         }
-    }).finally(() => DunInfo.saveUpdate());
+    });
 }
 
 let dunTimeoutId = null;
@@ -215,8 +215,6 @@ const kazeFun = {
                     case MESSAGE_FORCE_REFRESH:
                         tryDun(Settings);
                         return;
-                    case MESSAGE_DUN_INFO_GET:
-                        return DunInfo;
                     case MESSAGE_CARD_LIST_GET:
                         return cardListCache;
                     case MESSAGE_SAN_GET:

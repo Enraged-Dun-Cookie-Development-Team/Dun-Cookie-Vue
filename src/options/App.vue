@@ -490,13 +490,10 @@ import countTo from "vue-count-to";
 
 import Settings from "../common/Settings";
 import DunInfo from "../common/sync/DunInfo";
-import {MESSAGE_DUN_INFO_UPDATE, SHOW_VERSION} from "../common/Constants";
+import {SHOW_VERSION} from "../common/Constants";
 import {getDefaultDataSourcesList} from "../common/datasource/DefaultDataSources";
 import TimeUtil from "../common/util/TimeUtil";
-import {
-  customDataSourceTypes,
-  customDataSourceTypesByName,
-} from "../common/datasource/CustomDataSources";
+import {customDataSourceTypes, customDataSourceTypesByName,} from "../common/datasource/CustomDataSources";
 import {animateCSS, deepAssign} from "../common/util/CommonFunctions";
 import PlatformHelper from "../common/platform/PlatformHelper";
 import "animate.css";
@@ -560,13 +557,9 @@ export default {
         global.customData = this.customData;
         this.logo = "../assets/image/" + settings.logo;
       });
-      PlatformHelper.Message.registerListener(
-          "options",
-          MESSAGE_DUN_INFO_UPDATE,
-          (data) => {
-            this.oldDunCount = data.counter;
-          }
-      );
+      DunInfo.registerUpdateListener((data) => {
+        this.oldDunCount = data.counter;
+      });
     },
     initAnimate() {
       animateCSS(".loading-title-area", "zoomInDown", () => {
