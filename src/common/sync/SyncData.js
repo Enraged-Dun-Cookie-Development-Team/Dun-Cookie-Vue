@@ -67,17 +67,20 @@ class DataSynchronizer {
       // console.log(`更新${_this.key}: ${String(prop)}: ${value}`);
       return Reflect.set(...arguments);
     };
+    handler.deleteProperty = function (target, prop) {
+      // console.log(`删除属性${_this.key}: ${String(prop)}`);
+      return Reflect.deleteProperty(...arguments);
+    };
+    handler.defineProperty = function (target, prop, descriptor) {
+      // console.log(`添加属性${_this.key}: ${String(prop)}`);
+      return Reflect.defineProperty(...arguments);
+    };
     this.proxy = new Proxy(this.target, handler);
     return this.proxy;
   }
 
   createReadonlyProxy() {
-    const _this = this;
     const handler = this.__createReadonlyProxyHandler();
-    handler.set = function (target, prop, value, receiver) {
-      // console.log(`禁止更新${_this.key}: ${String(prop)}: ${value}`);
-      return false;
-    };
     this.proxy = new Proxy(this.target, handler);
     return this.proxy;
   }
@@ -85,6 +88,18 @@ class DataSynchronizer {
   __createReadonlyProxyHandler() {
     const _this = this;
     return {
+      deleteProperty(target, prop) {
+        // console.log(`禁止删除属性${_this.key}: ${String(prop)}`);
+        return false;
+      },
+      defineProperty(target, prop, descriptor) {
+        // console.log(`禁止添加属性${_this.key}: ${String(prop)}`);
+        return false;
+      },
+      set(target, prop, value, receiver) {
+        // console.log(`禁止更新${_this.key}: ${String(prop)}: ${value}`);
+        return false;
+      },
       get(target, prop, receiver) {
         let flag = _this.isSyncProperty(prop);
         if (flag) {

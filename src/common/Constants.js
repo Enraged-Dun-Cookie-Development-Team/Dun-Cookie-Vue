@@ -12,7 +12,7 @@ const DEBUG_LOG = IS_DEBUG && true;
 /**
  * 当前配置文件版本号
  */
-const CURRENT_SETTING_VERSION = 1;
+const CURRENT_SETTING_VERSION = 2;
 /**
  * 当前插件版本号
  */

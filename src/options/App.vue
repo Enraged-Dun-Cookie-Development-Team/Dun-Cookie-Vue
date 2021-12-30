@@ -390,7 +390,7 @@
                           placeholder="选择默认标签"
                       >
                         <el-option
-                            v-for="source in settings.currentDataSources"
+                            v-for="source in currentDataSource"
                             :key="source.dataName"
                             :label="source.title"
                             :value="source.dataName"
@@ -497,6 +497,7 @@ import {customDataSourceTypes, customDataSourceTypesByName,} from "../common/dat
 import {animateCSS, deepAssign} from "../common/util/CommonFunctions";
 import PlatformHelper from "../common/platform/PlatformHelper";
 import "animate.css";
+import CurrentDataSource from "../common/sync/CurrentDataSource";
 
 export default {
   name: "app",
@@ -519,6 +520,7 @@ export default {
       oldDunCount: 0,
       dunInfo: DunInfo,
       settings: Settings,
+      currentDataSource: CurrentDataSource,
       defSourcesList: [],
       customTypes: customDataSourceTypes,
       customTypesByName: customDataSourceTypesByName,

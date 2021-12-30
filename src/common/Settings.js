@@ -5,6 +5,7 @@ import {customDataSourceTypes} from './datasource/CustomDataSources';
 import {updateSettings} from './SettingsUpdater';
 import PlatformHelper from './platform/PlatformHelper';
 import DebugUtil from "./util/DebugUtil";
+import CurrentDataSource from "./sync/CurrentDataSource";
 
 // 随便调用一个无影响的东西来导入调试工具类
 DebugUtil.constructor;
@@ -51,11 +52,14 @@ async function transformDataSource(settings) {
         console.error(result.reason);
       }
     }
-    settings.currentDataSources = list;
+    for (const key in list) {
+      if (list.hasOwnProperty(key)) {
+        CurrentDataSource[key] = list[key];
+      }
+    }
     if (PlatformHelper.isBackground) {
-      settings.saveSettings();
       console.log('new datasource list: ');
-      console.log(settings.currentDataSources);
+      console.log(CurrentDataSource);
     }
     return true;
   });
@@ -77,10 +81,6 @@ class Settings {
    * 自定义数据源
    */
   customDataSources = [];
-  /**
-   * 当前启用的数据源，由后台进行更新其它页面可以直接读取
-   */
-  currentDataSources = {};
 
   /**
    * 蹲饼相关配置
@@ -318,13 +318,20 @@ class Settings {
 
   constructor() {
     PlatformHelper.Message.registerListener('settings', MESSAGE_SETTINGS_UPDATE, data => {
-      if (PlatformHelper.isBackground) delete data.currentDataSources;
       const changed = {};
       deepAssign(this, data, changed);
       console.log('配置已更新：');
       console.log(changed);
       this.__updateWindowMode();
-      transformDataSource(this).finally(() => {
+      let promise;
+      if (PlatformHelper.isBackground
+        && (changed.enableDataSources || changed.customDataSources)
+      ) {
+        promise = transformDataSource(this);
+      } else {
+        promise = Promise.resolve();
+      }
+      promise.finally(() => {
         for (const listener of updateListeners) {
           listener(this, changed);
         }
@@ -354,7 +361,11 @@ class Settings {
             console.log("未启用任何默认数据源，将自动启用全部默认数据源");
           }
 
-          this.currentDataSources = {};
+          for (const key in CurrentDataSource) {
+            if (CurrentDataSource.hasOwnProperty(key)) {
+              delete CurrentDataSource[key];
+            }
+          }
           await transformDataSource(this);
 
           this.__updateWindowMode();

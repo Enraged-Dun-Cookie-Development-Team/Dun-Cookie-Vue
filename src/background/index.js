@@ -22,6 +22,7 @@ import ServerUtil from "../common/util/ServerUtil";
 import CountDown from '../common/sync/CountDownInfo';
 import TimeUtil from "@/common/util/TimeUtil";
 import PenguinStatistics from "@/common/sync/PenguinStatisticsInfo";
+import CurrentDataSource from "../common/sync/CurrentDataSource";
 
 // 重构完成后的其它优化：
 // TODO 多个提取出来的类要考虑能否合并(指互相通信的那部分)
@@ -48,14 +49,14 @@ function tryDun(settings) {
     for (const key in cardListCache) {
         if (cardListCache.hasOwnProperty(key)) {
             // 如果缓存的key不在启用列表中则删除缓存
-            if (!settings.currentDataSources[key]) {
+            if (!CurrentDataSource[key]) {
                 delete cardListCache[key];
                 hasUpdated = true;
             }
         }
     }
     dunTime++;
-    for (const dataName in settings.currentDataSources) {
+    for (const dataName in CurrentDataSource) {
         // 减小不重要饼的频率
         if (dataName == "朝陇山微博" || dataName == "泰拉记事社微博" || dataName == "一拾山微博" || dataName == "鹰角网络微博") {
             if ((settings.dun.intervalTime <= 13 && dunTime % 5 != 1) ||
@@ -65,8 +66,8 @@ function tryDun(settings) {
                 continue;
             }
         }
-        if (settings.currentDataSources.hasOwnProperty(dataName)) {
-            const source = settings.currentDataSources[dataName];
+        if (CurrentDataSource.hasOwnProperty(dataName)) {
+            const source = CurrentDataSource[dataName];
             DunInfo.counter++;
             const promise = source.fetchData()
                 .then(newCardList => {
@@ -113,7 +114,7 @@ function startDunTimer() {
         delay *= Settings.dun.timeOfLowFrequency;
     }
     // 数据源尚未准备好的时候0.5秒刷新一次
-    if (Object.keys(cardListCache).length === 0 && Object.keys(Settings.currentDataSources).length === 0) {
+    if (Object.keys(cardListCache).length === 0 && Object.keys(CurrentDataSource).length === 0) {
         delay = 0.5;
     }
     dunTimeoutId = setTimeout(() => {
@@ -196,7 +197,6 @@ const kazeFun = {
             // 只有更新了数据源/蹲饼频率的时候才刷新，避免无意义的网络请求
             if (!changed.enableDataSources
               && !changed.customDataSources
-              && !changed.currentDataSources
               && !changed.dun
             ) {
                 return;
