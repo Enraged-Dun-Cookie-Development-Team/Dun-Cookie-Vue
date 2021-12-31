@@ -10,7 +10,7 @@ import HttpUtil from "../../util/HttpUtil";
  * <p>
  * <strong>注意：这里只设置了IOS公告的值，Android的值是不同的，如果以后要获取Android的公告需要把那边的忽略列表也加上去</strong>
  */
-const ignoreAnnounces = [94, 95, 97, 98, 192];
+const ignoreAnnounces = [94, 95, 97, 98, 192, 112];
 
 /**
  * 游戏内公告数据源。
@@ -39,7 +39,8 @@ export class InGameAnnouncementDataSource extends DataSource {
       if (ignoreAnnounces.includes(parseInt(x.announceId))) {
         return;
       }
-      const time = new Date(`${new Date().getFullYear()}-${x.month}-${x.day} ${Settings.getTimeBySortMode()}`);
+      let year = new Date(`${new Date().getFullYear()}-${x.month}-${x.day} 00:00:00`) <= new Date() ? new Date().getFullYear() : new Date().getFullYear() - 1;
+      const time = new Date(`${year}-${x.month}-${x.day} ${Settings.getTimeBySortMode()}`);
       list.push(DataItem.builder(this.dataName)
         .id(x.announceId)
         .timeForSort(time.getTime())
