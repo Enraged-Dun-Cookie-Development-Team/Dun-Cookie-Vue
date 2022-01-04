@@ -19,6 +19,12 @@
             "notice": false
         },
         {
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='http://api.ceobecanteen.top/canteen/info/arkNewYear.jpg'> <div> <div><span class='online-blue'>方舟拜年纪「流光启明」</span>将于<span class='online-blue'>1月23号晚上18:30</span>开始直播</div> <div>正片放送时间为<span class='online-blue'>当晚23:00</span></div> <div><span class='online-red'>感谢所有二创作者们的付出</span></div> <div>也相信这次流光启明拜年纪会给全体博士带来一个美好的回忆！！！</div> <div>点击 <a class='webOpen online-red' href='https://www.bilibili.com/blackboard/activity-4FXc3HQ2KF.html'><span class='online-red'>这里</span></a> 快速跳转预约界面</div> </div> </div>",
+            "starTime":"2022-01-03 16:00:00",
+            "overTime":"2022-01-23 22:59:59",
+            "notice": false
+        },
+        {
             "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20211207/c60412582c2aaf035db954201dbe7ae3.JPG'> <div> <div><span class='online-blue'>SideStory【风雪过境】</span>将于<span class='online-blue'>1月4号</span>结束</div> <div>本次活动掉落<span class='online-red'> 炽合金、聚酸酯组、研磨石</span></div> <div>博士们尽情刷材料吧</div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频</span> </div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
             "starTime":"2021-12-21 16:00:00",
             "overTime":"2022-01-04 03:59:59",
@@ -175,6 +181,14 @@
             "url": "https://www.bilibili.com/video/BV1ba411z7NG",
             "name": "【盐鱼料理长】教你做【东方馅挂炒饭】",
             "img": "https://i0.hdslb.com/bfs/archive/8a0da3a7992712807586723e479685739d4a6d7b.jpg@160w_100h.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2022-01-03 04:00:00",
+            "overTime": "2022-01-23 22:59:59",
+            "url": "https://www.bilibili.com/blackboard/activity-4FXc3HQ2KF.html",
+            "name": "【明日方舟拜年纪】流光启明预约界面",
+            "img": "http://api.ceobecanteen.top/canteen/info/arkNewYear.jpg",
             "radius": true
         }
     ],
