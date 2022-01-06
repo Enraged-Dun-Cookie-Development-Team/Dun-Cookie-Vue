@@ -30,7 +30,7 @@ export class NeteaseCloudMusicDataSource extends DataSource {
           .timeForDisplay(date)
           .content(`塞壬唱片发布新专辑《${x.name}》，共${x.size}首歌曲`)
           .jumpUrl(`https://music.163.com/#/album?id=${x.id}`)
-          .coverImage(x.picUrl + '?param=130y130')
+          .coverImage(x.picUrl)
           .componentData({
             size: x.size,
             name: x.name,
