@@ -52,11 +52,13 @@ export default class BrowserPlatform extends AbstractPlatform {
     // 整体宽度以图片宽度为准，至少680，左右再各加10的边距
     const canvasWidth = Math.max(680, image ? image.width : 0) + 20;
 
+    const textWidth = canvasWidth - 20;
     const wrapper = document.createElement('div');
     wrapper.style.position = "absolute";
-    wrapper.style.minWidth = canvasWidth + "px";
-    wrapper.style.maxWidth = canvasWidth + "px";
-    wrapper.style.whiteSpace = "break-all";
+    wrapper.style.minWidth = textWidth + "px";
+    wrapper.style.maxWidth = textWidth + "px";
+    wrapper.style.whiteSpace = "break-spaces";
+    wrapper.style.wordBreak = "break-all";
     wrapper.style.font = "16px Microsoft Yahei";
     wrapper.style.color = "#848488";
     let html = dataItem.content.replace('\n', '<br/>');
@@ -71,7 +73,8 @@ export default class BrowserPlatform extends AbstractPlatform {
     document.body.appendChild(wrapper);
     const textCanvasPromise = html2canvas(wrapper, {
       backgroundColor: null,
-      width: canvasWidth,
+      width: textWidth,
+      scale: 1
     });
     textCanvasPromise.finally(() => {
       document.body.removeChild(wrapper);
