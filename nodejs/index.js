@@ -2,7 +2,7 @@ const { Worker } = require('worker_threads');
 
 let worker;
 let cardList = {};
-let getList = true;
+let getList = false;
 let detailList = {};
 
 function getCardList() {
@@ -24,10 +24,11 @@ worker.on('message', msg => {
     if (msg.type == 'cardList-get' || msg.type == 'cardList-update') { // 收到cardlist的get或者update的时候更新nodejs的cardlist
         cardList.type = msg.type;
         cardList.data = {};
+        // 将各数据源信息存到detailList
         for (let source in msg.data) {
-            detailList[source] = msg.data[source];
+            detailList[source] = JSON.parse(JSON.stringify(msg.data[source]));
         }
-    } else if (msg.type == 'dunInfo-update' && getList) {   // 第一次获取信息后，获取CradList
+    } else if (msg.type == 'dunInfo-update' && !getList) {   // 第一次获取信息后，获取cardList
         getCardList();
         getList = false;
     }
@@ -39,11 +40,17 @@ const urlib = require("url");
 http.createServer(function (req, res) {
     // json文件 utf-8解析及写入cardList
     var urlObj = urlib.parse(req.url, true);
+    // 判断路径是否正确
     if (urlObj.pathname == "/canteen/cardList") {
+        // 没蹲饼列表的时候返回
         let userCardList = { "error": "还没有获得饼列表，再等等就有了" };
+        // 判断是否蹲到饼过
         if (cardList.hasOwnProperty('data')) {
+            // 复制基础信息
             userCardList = JSON.parse(JSON.stringify(cardList));
             let sourceList = urlObj.query.source;
+
+            // 确保source参数被赋值
             if (sourceList != undefined) {
                 let sources = sourceList.split("_");
 
@@ -87,6 +94,7 @@ http.createServer(function (req, res) {
                     }
                 }
             }
+            // source无内容自动获取全列表
             if (Object.keys(userCardList.data).length  == 0) {
                 userCardList.data = JSON.parse(JSON.stringify(detailList));
             }
@@ -100,6 +108,6 @@ http.createServer(function (req, res) {
         res.writeHeader(404, { 'Content-Type': 'text/html;charset=utf-8' });
         res.end();
     }
-}).listen(3000);
+}).listen(3000); // 绑定3000端口
 
-// 在控制台执行此命令即可测试：node --require "./index.js"
+// 在控制台执行此命令即可测试：node index.js

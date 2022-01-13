@@ -2,12 +2,6 @@
     "list": [
         {
             "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20220107/77147ef49ee9d0d0822e0267a4ecd001.jpg'> <div> <div><span class='online-blue'>《明日方舟》2022年春节前瞻特辑</span></div> <div>将于<span class='online-blue'>01月15日20:00</span>进行直播</div> <div>将介绍<span class='online-yellow'>春节相关活动</span>，<span class='online-yellow'>全新SideStory</span></div> <div>以及<span class='online-yellow'>后续版本计划</span>等内容为主</div> 点击 <a class='webOpen' href='https://live.bilibili.com/5555734'><span class='online-red'>这里</span></a> 快速跳转直播界面</div> </div> </div>",
-            "starTime":"2022-01-11 04:00:00",
-            "overTime":"2022-01-14 03:59:59",
-            "notice": false
-        },
-        {
-            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20220107/77147ef49ee9d0d0822e0267a4ecd001.jpg'> <div> <div><span class='online-blue'>《明日方舟》2022年春节前瞻特辑</span></div> <div>将于<span class='online-blue'>01月15日20:00</span>进行直播</div> <div>将介绍<span class='online-yellow'>春节相关活动</span>，<span class='online-yellow'>全新SideStory</span></div> <div>以及<span class='online-yellow'>后续版本计划</span>等内容为主</div> 点击 <a class='webOpen' href='https://live.bilibili.com/5555734'><span class='online-red'>这里</span></a> 快速跳转直播界面</div> </div> </div>",
             "starTime":"2022-01-14 04:00:00",
             "overTime":"2022-01-15 20:59:59",
             "notice": true
@@ -19,13 +13,13 @@
             "notice": false
         },
         {
-            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20211207/9c3fc9ff9987949dedcf1f0658b6e020.png'> <div> <div><span class='online-blue'>>SideStory「画中人」复刻</span>将于<span class='online-blue'>1月20号</span>结束</div> <div>本次活动掉落<span class='online-red'> 炽合金、聚酸酯组、固源岩组</span></div> <div>博士们尽情刷材料吧</div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频</span> </div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20211207/9c3fc9ff9987949dedcf1f0658b6e020.png'> <div> <div><span class='online-blue'>SideStory「画中人」复刻</span>将于<span class='online-blue'>1月20号</span>结束</div> <div>本次活动掉落<span class='online-red'> 炽合金、聚酸酯组、固源岩组</span></div> <div>博士们尽情刷材料吧</div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频</span> </div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
             "starTime":"2022-01-10 16:00:00",
             "overTime":"2022-01-20 03:59:59",
             "notice": false
         },
         {
-            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://i0.hdslb.com/bfs/album/c65bbe252a3e751664573da3865b0763623b9972.jpg'> <div> <div><span class='online-blue'>方舟拜年纪「流光启明」</span>将于<span class='online-blue'>1月23号晚上18:30</span>开始直播</div> <div>正片放送时间为<span class='online-blue'>当晚23:00</span></div> <div><span class='online-red'>感谢所有二创作者们的付出</span></div> <div>也相信这次流光启明拜年纪会给全体博士带来一个美好的回忆！！！</div> <div>点击 <a class='webOpen online-red' href='https://www.bilibili.com/blackboard/activity-4FXc3HQ2KF.html'><span class='online-red'>这里</span></a> 快速跳转预约界面</div> </div> </div>",
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://i0.hdslb.com/bfs/album/c65bbe252a3e751664573da3865b0763623b9972.jpg'> <div> <div><span class='online-blue'>方舟新春会「流光启明」</span>将于<span class='online-blue'>1月23号晚上18:30</span>开始直播</div> <div>正片放送时间为<span class='online-blue'>当晚23:00</span>。点击 <a class='webOpen online-red' href='https://www.bilibili.com/blackboard/activity-4FXc3HQ2KF.html'><span class='online-red'>这里</span></a> 快速跳转预约界面</div> <div><span class='online-blue'>方舟新春会「溯梦阑枝」</span>将于<span class='online-blue'>1月28号晚上18:00</span>开始直播</div> <div><span class='online-red'>感谢所有二创作者们的付出</span></div> <div>也相信这次<span class='online-yellow'>明日方舟的新春会</span>会给全体博士带来一个美好的回忆！！！</div>  </div> </div>",
             "starTime":"2022-01-03 16:00:00",
             "overTime":"2022-01-23 22:59:59",
             "notice": false
@@ -38,6 +32,23 @@
         }
     ],
     "btnList": [
+        {
+            "starTime": "2022-01-14 04:00:00",
+            "overTime": "2022-01-23 18:29:59",
+            "url": "https://www.bilibili.com/video/BV1gT4y117Dv",
+            "name": "2022明日方舟新春会「流光启明」庆典宣传PV",
+            "img": "https://i0.hdslb.com/bfs/archive/9315a9911f8af1441854a16c93339926b9c66a8b.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2022-01-14 04:00:00",
+            "overTime": "2022-01-28 17:59:59",
+            "url": "https://www.bilibili.com/video/BV15R4y1g7mG",
+            "name": "明日方舟新春会·溯梦阑枝晚宴 宣传PV",
+            "img": "https://i0.hdslb.com/bfs/archive/37cd942178ecd23f7085e6a46bea6e3e8c085a37.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+
         {
             "starTime": "2021-12-21 04:00:00",
             "overTime": "2022-01-04 03:59:59",
@@ -109,14 +120,6 @@
             "url": "https://www.bilibili.com/video/BV1dR4y1x7dV",
             "name": "【上帝大哥】我在MC中还原了卡西米尔大骑士领竞技场",
             "img": "https://i1.hdslb.com/bfs/archive/0c18ab3e1944cb599d11c4bac56e88ed37605976.jpg@200w_125h.webp",
-            "radius": true
-        },
-        {
-            "starTime": "2022-01-03 04:00:00",
-            "overTime": "2022-01-13 15:59:59",
-            "url": "https://www.bilibili.com/video/BV1ba411z7NG",
-            "name": "【盐鱼料理长】教你做【东方馅挂炒饭】",
-            "img": "https://i0.hdslb.com/bfs/archive/8a0da3a7992712807586723e479685739d4a6d7b.jpg@160w_100h.webp",
             "radius": true
         },
         {
@@ -211,7 +214,9 @@
         "f6e9fa6d782cfb7781cee67c0a188637d44ef761af74e0bfff02e1f53786b90e78fcbe3bb31a602f405c37491fc6fb7b5f8dd4df0e76132f8886a6b7846dfa6b": 1,
         "71add0d3edb7f188abf850643eeeca13b5cc266254b4d6bf1369e9889c584f658a21f6e110a509d5775c406b022839613196dc16db07677626208c2f5e4f77cc": 2
     },
-    "testVersion": 2,
-    "testUpdate": true,
-    "testNotUpdate": false
+    "app": {
+        "version": 0.1,
+        "update": true,
+        "lastFocusVersion": 0.1
+    }
 }
