@@ -4,6 +4,7 @@ let worker;
 let cardList = {};
 let getList = false;
 let detailList = {};
+// let connect;
 
 function getCardList() {
     worker.postMessage({ type: 'cardList-get' });
@@ -28,11 +29,18 @@ worker.on('message', msg => {
         for (let source in msg.data) {
             detailList[source] = JSON.parse(JSON.stringify(msg.data[source]));
         }
+        // connect.sendText(msg);
     } else if (msg.type == 'dunInfo-update' && !getList) {   // 第一次获取信息后，获取cardList
         getCardList();
         getList = false;
     }
 });
+
+// // web socket使用5683链接
+// let ws = require('nodejs-websocket');
+// let server = ws.createServer(connection => {
+//     connect = connection;
+// }).listen(5683); 
 
 // 建立与3000端口连接
 let http = require("http");
@@ -56,37 +64,37 @@ http.createServer(function (req, res) {
 
                 for (let source of sources) {
                     switch (source) {
-                        case "1":
+                        case "0":
                             userCardList.data["官方B站动态"] = JSON.parse(JSON.stringify(detailList["官方B站动态"]));
                             break;
-                        case "2":
+                        case "1":
                             userCardList.data["官方微博"] = JSON.parse(JSON.stringify(detailList["官方微博"]));
                             break;
-                        case "3":
+                        case "2":
                             userCardList.data["游戏内公告"] = JSON.parse(JSON.stringify(detailList["游戏内公告"]));
                             break;
-                        case "4":
+                        case "3":
                             userCardList.data["朝陇山微博"] = JSON.parse(JSON.stringify(detailList["朝陇山微博"]));
                             break;
-                        case "5":
+                        case "4":
                             userCardList.data["一拾山微博"] = JSON.parse(JSON.stringify(detailList["一拾山微博"]));
                             break;
-                        case "6":
+                        case "5":
                             userCardList.data["塞壬唱片官网"] = JSON.parse(JSON.stringify(detailList["塞壬唱片官网"]));
                             break;
-                        case "7":
+                        case "6":
                             userCardList.data["泰拉记事社微博"] = JSON.parse(JSON.stringify(detailList["泰拉记事社微博"]));
                             break;
-                        case "8":
+                        case "7":
                             userCardList.data["官网"] = JSON.parse(JSON.stringify(detailList["官网"]));
                             break;
-                        case "9":
+                        case "8":
                             userCardList.data["泰拉记事社官网"] = JSON.parse(JSON.stringify(detailList["泰拉记事社官网"]));
                             break;
-                        case "10":
+                        case "9":
                             userCardList.data["塞壬唱片网易云音乐"] = JSON.parse(JSON.stringify(detailList["塞壬唱片网易云音乐"]));
                             break;
-                        case "11":
+                        case "10":
                             userCardList.data["鹰角网络微博"] = JSON.parse(JSON.stringify(detailList["鹰角网络微博"]));
                             break;
                         default:

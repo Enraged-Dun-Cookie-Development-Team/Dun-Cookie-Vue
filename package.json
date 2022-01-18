@@ -16,6 +16,7 @@
     "html2canvas": "^1.1.5",
     "jquery": "^3.6.0",
     "jsdom": "^17.0.0",
+    "nodejs-websocket": "^1.7.2",
     "qrcode": "^1.4.4",
     "sass": "^1.32.0",
     "sass-loader": "^10.1.0",
