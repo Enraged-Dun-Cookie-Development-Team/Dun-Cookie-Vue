@@ -11,6 +11,21 @@ let cardList = {};
 let getList = false;
 let detailList = {};
 
+
+let sourceMap = {
+    "0": "官方B站动态",
+    "1": "官方微博",
+    "2": "游戏内公告",
+    "3": "朝陇山微博",
+    "4": "一拾山微博",
+    "5": "塞壬唱片官网",
+    "6": "泰拉记事社微博",
+    "7": "官网",
+    "8": "泰拉记事社官网",
+    "9": "塞壬唱片网易云音乐",
+    "10": "鹰角网络微博",
+};
+
 function getCardList() {
     worker.postMessage({ type: 'cardList-get' });
 }
@@ -81,44 +96,9 @@ http.createServer((req, res) => {
             if (sourceList != undefined) {
                 let sources = sourceList.split("_");
 
-                sources.array.forEach(source => {
-                    switch (source) {
-                        case "0":
-                            userCardList.data["官方B站动态"] = JSON.parse(JSON.stringify(detailList["官方B站动态"]));
-                            break;
-                        case "1":
-                            userCardList.data["官方微博"] = JSON.parse(JSON.stringify(detailList["官方微博"]));
-                            break;
-                        case "2":
-                            userCardList.data["游戏内公告"] = JSON.parse(JSON.stringify(detailList["游戏内公告"]));
-                            break;
-                        case "3":
-                            userCardList.data["朝陇山微博"] = JSON.parse(JSON.stringify(detailList["朝陇山微博"]));
-                            break;
-                        case "4":
-                            userCardList.data["一拾山微博"] = JSON.parse(JSON.stringify(detailList["一拾山微博"]));
-                            break;
-                        case "5":
-                            userCardList.data["塞壬唱片官网"] = JSON.parse(JSON.stringify(detailList["塞壬唱片官网"]));
-                            break;
-                        case "6":
-                            userCardList.data["泰拉记事社微博"] = JSON.parse(JSON.stringify(detailList["泰拉记事社微博"]));
-                            break;
-                        case "7":
-                            userCardList.data["官网"] = JSON.parse(JSON.stringify(detailList["官网"]));
-                            break;
-                        case "8":
-                            userCardList.data["泰拉记事社官网"] = JSON.parse(JSON.stringify(detailList["泰拉记事社官网"]));
-                            break;
-                        case "9":
-                            userCardList.data["塞壬唱片网易云音乐"] = JSON.parse(JSON.stringify(detailList["塞壬唱片网易云音乐"]));
-                            break;
-                        case "10":
-                            userCardList.data["鹰角网络微博"] = JSON.parse(JSON.stringify(detailList["鹰角网络微博"]));
-                            break;
-                        default:
-                            break;
-                    }
+                sources.forEach(source => {
+                    let sourcename = sourceMap[source];
+                    userCardList.data[sourcename] = JSON.parse(JSON.stringify(detailList[sourcename]));
                 });
             }
             // source无内容自动获取全列表
