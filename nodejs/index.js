@@ -4,7 +4,7 @@ let worker;
 let cardList = {};
 let getList = false;
 let detailList = {};
-// let connect;
+let connect;
 
 function getCardList() {
     worker.postMessage({ type: 'cardList-get' });
@@ -29,18 +29,30 @@ worker.on('message', msg => {
         for (let source in msg.data) {
             detailList[source] = JSON.parse(JSON.stringify(msg.data[source]));
         }
-        // connect.sendText(msg);
+        if (connect != undefined) {
+            connect.sendText(JSON.stringify(msg));
+        }
     } else if (msg.type == 'dunInfo-update' && !getList) {   // 第一次获取信息后，获取cardList
         getCardList();
         getList = false;
     }
 });
 
-// // web socket使用5683链接
-// let ws = require('nodejs-websocket');
-// let server = ws.createServer(connection => {
-//     connect = connection;
-// }).listen(5683); 
+// web socket使用5683链接
+let ws = require('nodejs-websocket');
+let server = ws.createServer(function (conn) {
+    connect = conn;
+    // 检测关闭和异常
+    conn.on("close", function (code, reason) {
+        connect = undefined;
+        console.log("关闭连接")
+    });
+    conn.on("error", function (code, reason) {
+        connect = undefined;
+        console.log(code + "---" + reason)
+        console.log("异常关闭")
+    });
+}).listen(5683);
 
 // 建立与3000端口连接
 let http = require("http");
@@ -103,7 +115,7 @@ http.createServer(function (req, res) {
                 }
             }
             // source无内容自动获取全列表
-            if (Object.keys(userCardList.data).length  == 0) {
+            if (Object.keys(userCardList.data).length == 0) {
                 userCardList.data = JSON.parse(JSON.stringify(detailList));
             }
         }
