@@ -1,10 +1,15 @@
 const { Worker } = require('worker_threads');
+const EventEmitter = require("events");
+const ws = require('nodejs-websocket');
+const http = require("http");
+const urlib = require("url");
 
 let worker;
+let emitter;
+let server;
 let cardList = {};
 let getList = false;
 let detailList = {};
-let connect;
 
 function getCardList() {
     worker.postMessage({ type: 'cardList-get' });
@@ -19,47 +24,49 @@ global.stopWorker = stopWorker;
 worker = new Worker('../dist/background.js', {
     execArgv: []
 });
+emitter = new EventEmitter();
 
 // 简单地输出收到的消息，不进行任何处理
 worker.on('message', msg => {
-    if (msg.type == 'cardList-get' || msg.type == 'cardList-update') { // 收到cardlist的get或者update的时候更新nodejs的cardlist
+    if ((msg.type == 'cardList-get' && !getList) || msg.type == 'cardList-update') { // 收到cardlist的get或者update的时候更新nodejs的cardlist
+        getList = true;
         cardList.type = msg.type;
         cardList.data = {};
         // 将各数据源信息存到detailList
         for (let source in msg.data) {
             detailList[source] = JSON.parse(JSON.stringify(msg.data[source]));
         }
-        if (connect != undefined) {
-            connect.sendText(JSON.stringify(msg));
-        }
+        emitter.emit('websocket-get', msg);
     } else if (msg.type == 'dunInfo-update' && !getList) {   // 第一次获取信息后，获取cardList
         getCardList();
-        getList = false;
     }
 });
 
 // web socket使用5683链接
-let ws = require('nodejs-websocket');
-let server = ws.createServer(function (conn) {
-    connect = conn;
-    // 检测关闭和异常
-    conn.on("close", function (code, reason) {
-        connect = undefined;
-        console.log("关闭连接")
+server = ws.createServer(conn => {
+    let firstConnect = true;
+    let firstConnectList = { 'type' :'cardList-get', 'data':{}};
+    firstConnectList.data = JSON.parse(JSON.stringify(detailList));
+    if (firstConnect && Object.keys(detailList).length != 0) {
+        conn.sendText(JSON.stringify(firstConnectList));
+    }
+    emitter.on('websocket-get', msg => {
+        conn.sendText(JSON.stringify(msg));
     });
-    conn.on("error", function (code, reason) {
-        connect = undefined;
+    // 检测连接状态
+    conn.on("close", (code, reason) => {
+        console.log("key："+conn.key+"，状态：关闭连接")
+    });
+    conn.on("error", (code, reason) => {
         console.log(code + "---" + reason)
-        console.log("异常关闭")
+        console.log("key："+conn.key+"，状态：异常关闭")
     });
 }).listen(5683);
 
 // 建立与3000端口连接
-let http = require("http");
-const urlib = require("url");
-http.createServer(function (req, res) {
+http.createServer((req, res) => {
     // json文件 utf-8解析及写入cardList
-    var urlObj = urlib.parse(req.url, true);
+    let urlObj = urlib.parse(req.url, true);
     // 判断路径是否正确
     if (urlObj.pathname == "/canteen/cardList") {
         // 没蹲饼列表的时候返回
@@ -74,7 +81,7 @@ http.createServer(function (req, res) {
             if (sourceList != undefined) {
                 let sources = sourceList.split("_");
 
-                for (let source of sources) {
+                sources.array.forEach(source => {
                     switch (source) {
                         case "0":
                             userCardList.data["官方B站动态"] = JSON.parse(JSON.stringify(detailList["官方B站动态"]));
@@ -112,7 +119,7 @@ http.createServer(function (req, res) {
                         default:
                             break;
                     }
-                }
+                });
             }
             // source无内容自动获取全列表
             if (Object.keys(userCardList.data).length == 0) {
