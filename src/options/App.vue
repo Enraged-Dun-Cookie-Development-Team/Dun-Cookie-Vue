@@ -30,18 +30,18 @@
               <div class="has-cookie">
                 小刻已经成功找到
                 <countTo
-                    :startVal="0"
-                    :endVal="dunInfo.cookieCount"
-                    :duration="1000"
+                  :startVal="0"
+                  :endVal="dunInfo.cookieCount"
+                  :duration="1000"
                 ></countTo>
                 个饼
               </div>
               <div class="look-cookie">
                 进入食堂后找了
                 <countTo
-                    :startVal="oldDunCount"
-                    :endVal="dunInfo.counter"
-                    :duration="1000"
+                  :startVal="oldDunCount"
+                  :endVal="dunInfo.counter"
+                  :duration="1000"
                 ></countTo>
                 次
               </div>
@@ -63,9 +63,9 @@
       <div class="body-area" ref="body-area">
         <div class="body-menu-big">
           <div
-              class="body-menu-big-left"
-              ref="body-menu-big-left"
-              @click="changeMenu(0)"
+            class="body-menu-big-left"
+            ref="body-menu-big-left"
+            @click="changeMenu(0)"
           >
             <div class="menu-card system">
               <span>系统</span>
@@ -73,9 +73,9 @@
             </div>
           </div>
           <div
-              class="body-menu-big-right"
-              ref="body-menu-big-right"
-              @click="changeMenu(1)"
+            class="body-menu-big-right"
+            ref="body-menu-big-right"
+            @click="changeMenu(1)"
           >
             <div class="menu-card view">
               <span>界面</span>
@@ -84,9 +84,9 @@
           </div>
         </div>
         <i
-            class="el-icon-back back-btn"
-            :class="showBack ? '' : 'btn-hide'"
-            @click.stop="changeMenu()"
+          class="el-icon-back back-btn"
+          :class="showBack ? '' : 'btn-hide'"
+          @click.stop="changeMenu()"
         ></i>
         <div class="config-btn" :class="showBack ? '' : 'btn-hide'">
           <el-button class="green" @click.stop="saveSetting('form')">
@@ -96,12 +96,12 @@
             <i class="el-icon-download"></i>导出配置
           </el-button>
           <el-upload
-              action="aaa"
-              :auto-upload="false"
-              :on-change="settingImport"
-              ref="upload"
-              accept="application/json"
-              :show-file-list="false"
+            action="aaa"
+            :auto-upload="false"
+            :on-change="settingImport"
+            ref="upload"
+            accept="application/json"
+            :show-file-list="false"
           >
             <el-button class="pink">
               <i class="el-icon-upload2"></i>导入配置
@@ -115,10 +115,10 @@
         </div>
         <div class="body-menu-content">
           <el-form
-              ref="form"
-              class="form"
-              :model="settings"
-              label-width="100px"
+            ref="form"
+            class="form"
+            :model="settings"
+            label-width="100px"
           >
             <div class="system system-form" ref="system-form">
               <div class="body-menu-content-card">
@@ -128,17 +128,17 @@
                 </div>
                 <div class="content-card-content">
                   <el-checkbox-group
-                      class="checkbox-group-area"
-                      v-model="settings.enableDataSources"
-                      :min="1"
+                    class="checkbox-group-area"
+                    v-model="settings.enableDataSources"
+                    :min="1"
                   >
                     <el-checkbox
-                        v-for="source of defSourcesList"
-                        :key="source.dataName"
-                        :label="source.dataName"
+                      v-for="source of defSourcesList"
+                      :key="source.dataName"
+                      :label="source.dataName"
                     >
                       <span class="checkbox-area">
-                        <img class="icon-img" :src="source.icon"/>
+                        <img class="icon-img" :src="source.icon" />
                         {{ source.title }}
                       </span>
                     </el-checkbox>
@@ -147,19 +147,28 @@
               </div>
               <div class="flex">
                 <div class="body-menu-content-card">
-                  <div class="content-card-title">游戏平台</div>
+                  <div class="content-card-title">微博登录</div>
                   <div class="content-card-description">
-                    明日方舟游戏常用平台
+                    微博端API有些账户需要登录才能查看最新微博
                   </div>
                   <div class="content-card-content flex-between">
-                    <div>分为IOS和安卓，B服同安卓</div>
                     <div>
-                      <el-radio-group
-                          v-model="settings.dun.gamePlatform"
-                      >
-                        <el-radio label="IOS">IOS</el-radio>
-                        <el-radio label="Android">安卓</el-radio>
-                      </el-radio-group>
+                      点击“查看是否登录成功”按钮，如果能看到微博个人信息，则登录成功<br />
+                      如果是登录注册页面，请点击“进入登录页面”按钮重新登录
+                    </div>
+                    <div>
+                      <el-button
+                        size="small"
+                        @click="
+                          openUrl('https://passport.weibo.cn/signin/login')
+                        "
+                        >进入登录页面
+                      </el-button>
+                      <el-button
+                        size="small"
+                        @click="openUrl('https://m.weibo.cn/profile/')"
+                        >查看是否登录成功
+                      </el-button>
                     </div>
                   </div>
                 </div>
@@ -171,7 +180,7 @@
                   <div class="content-card-content flex-between">
                     <div>
                       <span v-if="settings.dun.autoLowFrequency"
-                      >低频模式下为{{
+                        >低频模式下为{{
                           settings.dun.intervalTime *
                           settings.dun.timeOfLowFrequency
                         }}秒刷新一次</span
@@ -179,12 +188,43 @@
                     </div>
                     <div>
                       <el-input-number
-                          controls-position="right"
-                          size="small"
-                          v-model="settings.dun.intervalTime"
-                          :min="12"
-                          :max="3600"
+                        controls-position="right"
+                        size="small"
+                        v-model="settings.dun.intervalTime"
+                        :min="12"
+                        :max="3600"
                       ></el-input-number>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex">
+                <div class="body-menu-content-card">
+                  <div class="content-card-title">游戏平台</div>
+                  <div class="content-card-description">
+                    明日方舟游戏常用平台
+                  </div>
+                  <div class="content-card-content flex-between">
+                    <div>分为IOS和安卓，B服同安卓</div>
+                    <div>
+                      <el-radio-group v-model="settings.dun.gamePlatform">
+                        <el-radio label="IOS">IOS</el-radio>
+                        <el-radio label="Android">安卓</el-radio>
+                      </el-radio-group>
+                    </div>
+                  </div>
+                </div>
+                <div class="body-menu-content-card">
+                  <div class="content-card-title">推送重复的饼</div>
+                  <div class="content-card-description">推送不同平台一样的饼</div>
+                  <div class="content-card-content flex-between">
+                    <div>
+                      关闭后不会推送不同平台同样的饼，列表还是都会显示
+                    </div>
+                    <div>
+                      <el-switch
+                        v-model="settings.dun.repetitionPush"
+                      ></el-switch>
                     </div>
                   </div>
                 </div>
@@ -199,7 +239,7 @@
                     <div>打开以启用时间调控和频率调节</div>
                     <div>
                       <el-switch
-                          v-model="settings.dun.autoLowFrequency"
+                        v-model="settings.dun.autoLowFrequency"
                       ></el-switch>
                     </div>
                   </div>
@@ -210,12 +250,12 @@
                     </div>
                     <div class="content-line-content">
                       <el-slider
-                          v-model="settings.dun.lowFrequencyTime"
-                          show-stops
-                          :max="24"
-                          :marks="marks"
-                          :format-tooltip="lowFrequencyTimeTooltip"
-                          range
+                        v-model="settings.dun.lowFrequencyTime"
+                        show-stops
+                        :max="24"
+                        :marks="marks"
+                        :format-tooltip="lowFrequencyTimeTooltip"
+                        range
                       >
                       </el-slider>
                     </div>
@@ -231,11 +271,11 @@
                       </div>
                       <div>
                         <el-input-number
-                            controls-position="right"
-                            size="small"
-                            v-model="settings.dun.timeOfLowFrequency"
-                            :min="2"
-                            :max="20"
+                          controls-position="right"
+                          size="small"
+                          v-model="settings.dun.timeOfLowFrequency"
+                          :min="2"
+                          :max="20"
                         ></el-input-number>
                       </div>
                     </div>
@@ -252,7 +292,7 @@
                     </div>
                     <div>
                       <el-switch
-                          v-model="settings.dun.enableNotice"
+                        v-model="settings.dun.enableNotice"
                       ></el-switch>
                     </div>
                   </div>
@@ -266,7 +306,7 @@
                     </div>
                     <div>
                       <el-switch
-                          v-model="settings.feature.announcementNotice"
+                        v-model="settings.feature.announcementNotice"
                       ></el-switch>
                     </div>
                   </div>
@@ -279,7 +319,7 @@
                 </div>
                 <div class="content-card-content flex-between">
                   <div>
-                    有些数据比如通讯组是只有日期没有时间的，在数据列表内无法排序，在此统一调整。<br/>保存的时候可能会因为数据排序改变而发送错误的推送，请忽略。
+                    有些数据比如通讯组是只有日期没有时间的，在数据列表内无法排序，在此统一调整。<br />保存的时候可能会因为数据排序改变而发送错误的推送，请忽略。
                   </div>
                   <div>
                     <el-radio-group v-model="settings.dun.sortModeForOnlyDate">
@@ -296,19 +336,19 @@
                 </div>
                 <div class="content-card-content flex-between">
                   <div>
-                    点击“查看是否登录成功”按钮，如果能看到微博个人信息，则登录成功<br/>
+                    点击“查看是否登录成功”按钮，如果能看到微博个人信息，则登录成功<br />
                     如果是登录注册页面，请点击“进入登录页面”按钮重新登录
                   </div>
                   <div>
                     <el-button
-                        size="small"
-                        @click="openUrl('https://passport.weibo.cn/signin/login')"
-                    >进入登录页面
+                      size="small"
+                      @click="openUrl('https://passport.weibo.cn/signin/login')"
+                      >进入登录页面
                     </el-button>
                     <el-button
-                        size="small"
-                        @click="openUrl('https://m.weibo.cn/profile/')"
-                    >查看是否登录成功
+                      size="small"
+                      @click="openUrl('https://m.weibo.cn/profile/')"
+                      >查看是否登录成功
                     </el-button>
                   </div>
                 </div>
@@ -325,7 +365,7 @@
                       <el-radio :label="0">日常模式</el-radio>
                       <el-radio :label="1">夜间模式</el-radio>
                       <el-radio :label="-1" title="18点到06点为夜间模式"
-                      >自动模式
+                        >自动模式
                       </el-radio>
                     </el-radio-group>
                   </div>
@@ -351,7 +391,7 @@
                     <div>不会影响泰拉记事社等特殊的卡片</div>
                     <div>
                       <el-switch
-                          v-model="settings.display.showImage"
+                        v-model="settings.display.showImage"
                       ></el-switch>
                     </div>
                   </div>
@@ -363,7 +403,7 @@
                   </div>
                   <div class="content-card-content flex-between">
                     <div>
-                      转发内容大部分为抽奖结果，为了防止有人吃不了柠檬陷的饼，特意添加此开关。<br/>
+                      转发内容大部分为抽奖结果，为了防止有人吃不了柠檬陷的饼，特意添加此开关。<br />
                       调整此开关会导致源数据改变，可能会有错误的推送！
                     </div>
                     <div>
@@ -386,19 +426,19 @@
                       <!--  -->
                       <!--</el-form-item>-->
                       <el-select
-                          v-model="settings.display.defaultTag"
-                          placeholder="选择默认标签"
+                        v-model="settings.display.defaultTag"
+                        placeholder="选择默认标签"
                       >
                         <el-option
-                            v-for="source in settings.currentDataSources"
-                            :key="source.dataName"
-                            :label="source.title"
-                            :value="source.dataName"
+                          v-for="source in settings.currentDataSources"
+                          :key="source.dataName"
+                          :label="source.title"
+                          :value="source.dataName"
                         >
                           <div style="display: flex; align-items: center">
                             <img
-                                :src="source.icon"
-                                style="width: 25px; margin-right: 10px"
+                              :src="source.icon"
+                              style="width: 25px; margin-right: 10px"
                             />
                             <span>{{ source.title }}</span>
                           </div>
@@ -422,7 +462,7 @@
                     <div class="content-line-content flex-between">
                       <div></div>
                       <el-switch
-                          v-model="settings.display.windowMode"
+                        v-model="settings.display.windowMode"
                       ></el-switch>
                     </div>
                   </div>
@@ -449,7 +489,7 @@
                     <div class="content-line-content flex-between">
                       <div></div>
                       <el-switch
-                          v-model="settings.display.announcementScroll"
+                        v-model="settings.display.announcementScroll"
                       ></el-switch>
                     </div>
                   </div>
@@ -461,13 +501,13 @@
                     <div class="content-line-content flex-between">
                       <div>
                         <el-input-number
-                            v-if="settings.feature.san"
-                            placeholder="理智上限"
-                            controls-position="right"
-                            size="small"
-                            v-model="settings.san.maxValue"
-                            :min="80"
-                            :max="135"
+                          v-if="settings.feature.san"
+                          placeholder="理智上限"
+                          controls-position="right"
+                          size="small"
+                          v-model="settings.san.maxValue"
+                          :min="80"
+                          :max="135"
                         ></el-input-number>
                       </div>
                       <div style="height: 40px; line-height: 40px">
@@ -490,23 +530,22 @@ import countTo from "vue-count-to";
 
 import Settings from "../common/Settings";
 import DunInfo from "../common/sync/DunInfo";
-import {MESSAGE_DUN_INFO_UPDATE, SHOW_VERSION} from "../common/Constants";
-import {getDefaultDataSourcesList} from "../common/datasource/DefaultDataSources";
+import { MESSAGE_DUN_INFO_UPDATE, SHOW_VERSION } from "../common/Constants";
+import { getDefaultDataSourcesList } from "../common/datasource/DefaultDataSources";
 import TimeUtil from "../common/util/TimeUtil";
 import {
   customDataSourceTypes,
   customDataSourceTypesByName,
 } from "../common/datasource/CustomDataSources";
-import {animateCSS, deepAssign} from "../common/util/CommonFunctions";
+import { animateCSS, deepAssign } from "../common/util/CommonFunctions";
 import PlatformHelper from "../common/platform/PlatformHelper";
 import "animate.css";
 
 export default {
   name: "app",
-  components: {countTo},
+  components: { countTo },
   // Feedback
-  created() {
-  },
+  created() {},
   mounted() {
     this.init();
     this.initAnimate();
@@ -546,26 +585,26 @@ export default {
     init() {
       this.settings.doAfterInit((settings) => {
         this.customData = settings.customDataSources
-            .map((item) => {
-              const type = customDataSourceTypesByName[item.type];
-              if (type) {
-                return {
-                  type: type.typeName,
-                  builder: type,
-                  arg: item.arg,
-                };
-              }
-            })
-            .filter((item) => !!item);
+          .map((item) => {
+            const type = customDataSourceTypesByName[item.type];
+            if (type) {
+              return {
+                type: type.typeName,
+                builder: type,
+                arg: item.arg,
+              };
+            }
+          })
+          .filter((item) => !!item);
         global.customData = this.customData;
         this.logo = "../assets/image/" + settings.logo;
       });
       PlatformHelper.Message.registerListener(
-          "options",
-          MESSAGE_DUN_INFO_UPDATE,
-          (data) => {
-            this.oldDunCount = data.counter;
-          }
+        "options",
+        MESSAGE_DUN_INFO_UPDATE,
+        (data) => {
+          this.oldDunCount = data.counter;
+        }
       );
     },
     initAnimate() {
@@ -575,13 +614,14 @@ export default {
             this.bodyIsShow = true;
             animateCSS(".head-area", "slideInDown");
             animateCSS(".body-area", "fadeInUp");
-            document.querySelector(".loading-title-area").style.display = "none";
+            document.querySelector(".loading-title-area").style.display =
+              "none";
           });
         }, 500);
       });
     },
     addCustomData() {
-      this.customData.push({type: ""});
+      this.customData.push({ type: "" });
     },
     handleChangeCustomDataType(index, newType) {
       this.customData[index].builder = customDataSourceTypesByName[newType];
@@ -620,9 +660,9 @@ export default {
         type: "application/json",
       });
       PlatformHelper.Downloads.downloadURL(
-          URL.createObjectURL(blob),
-          undefined,
-          true
+        URL.createObjectURL(blob),
+        undefined,
+        true
       ).then((data) => {
         console.log(data);
       });
@@ -631,19 +671,19 @@ export default {
     settingImport(file) {
       const reader = new FileReader();
       reader.onload = (res) => {
-        const {result} = res.target; // 得到字符串
+        const { result } = res.target; // 得到字符串
         const data = JSON.parse(result); // 解析成json对象
         this.$confirm("解析文件成功，是否覆盖当前设置?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
         })
-            .then(() => {
-              this.saveSetting("form", data);
-            })
-            .catch(() => {
-              this.$message("你决定了不覆盖当前设置项");
-            });
+          .then(() => {
+            this.saveSetting("form", data);
+          })
+          .catch(() => {
+            this.$message("你决定了不覆盖当前设置项");
+          });
       }; // 成功回调
       reader.onerror = (err) => {
         this.$message.error("没有导入成功，心态崩了啊！");
@@ -674,7 +714,7 @@ export default {
         });
         this.contentList.forEach((item) => {
           if (this.$refs[item].style.display != "none") {
-            animateCSS('.' + item, "fadeOutBottomLeft", () => {
+            animateCSS("." + item, "fadeOutBottomLeft", () => {
               this.$refs[item].style.display = "none";
             });
           }
@@ -692,7 +732,7 @@ export default {
         });
         this.contentList.forEach((item, index) => {
           if (index == className) {
-            animateCSS('.' + item , "fadeInBottomLeft");
+            animateCSS("." + item, "fadeInBottomLeft");
             this.$refs[item].style.display = "block";
           } else {
             this.$refs[item].style.display = "none";
@@ -702,12 +742,12 @@ export default {
     },
     alertFeedback() {
       this.$alert(
-          '<span>如果有意见或建议或者是反馈问题或者是发现程序出现bug<br/>可以添加<a href="https://jq.qq.com/?_wv=1027&k=Vod1uO13" target="_blank">【蹲饼组】</a>反馈或<a href="Mailto:kaze.liu@qq.com.com" target="_blank">给我发邮件</a>反馈<br/>更新可以去github上查看<a href="https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue" target="_blank">Dun-Cookie-Vue</a><br/>也可以去Chrome，Firefox和Edge应用商店查看更新，但是因为审核机制，更新速度不确定<br/></span>',
-          "反馈与更新渠道",
-          {
-            dangerouslyUseHTMLString: true,
-            showConfirmButton: false,
-          }
+        '<span>如果有意见或建议或者是反馈问题或者是发现程序出现bug<br/>可以添加<a href="https://jq.qq.com/?_wv=1027&k=Vod1uO13" target="_blank">【蹲饼组】</a>反馈或<a href="Mailto:kaze.liu@qq.com.com" target="_blank">给我发邮件</a>反馈<br/>更新可以去github上查看<a href="https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue" target="_blank">Dun-Cookie-Vue</a><br/>也可以去Chrome，Firefox和Edge应用商店查看更新，但是因为审核机制，更新速度不确定<br/></span>',
+        "反馈与更新渠道",
+        {
+          dangerouslyUseHTMLString: true,
+          showConfirmButton: false,
+        }
       );
     },
   },
@@ -917,8 +957,8 @@ export default {
           font-size: 5.5rem;
           color: #fff;
           font-family: "SimHei", -apple-system, BlinkMacSystemFont,
-          "Microsoft YaHei", "Segoe UI", "Roboto", "Helvetica Neue", Arial,
-          sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            "Microsoft YaHei", "Segoe UI", "Roboto", "Helvetica Neue", Arial,
+            sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
           text-shadow: 0 0 1rem #312f2f, 0 0 0.5rem #312f2f, 0 0 0.25rem #312f2f;
           position: absolute;
           bottom: 90px;
@@ -1002,11 +1042,13 @@ export default {
 
       &:after {
         content: "";
-        background: linear-gradient(to right,
-        #222 0%,
-        #222 50%,
-        #fff 50%,
-        #fff 100%);
+        background: linear-gradient(
+          to right,
+          #222 0%,
+          #222 50%,
+          #fff 50%,
+          #fff 100%
+        );
         background-position: 100% 0;
         background-size: 200% 100%;
         width: 100%;
