@@ -181,7 +181,7 @@ const kazeFun = {
                         NotificationUtil.SendNotice(`小刻在【${title}】里面找到了一个饼！`, notice, newInfo.coverImage, newInfo.id)
                     }
                 }
-                cookieContext = notice;
+                cookieContent = notice;
                 return true;
             } else if (newList && newList.length > (oldList ? oldList.length : 0)) {
                 return true;
