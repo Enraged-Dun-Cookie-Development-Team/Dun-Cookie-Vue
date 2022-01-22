@@ -10,6 +10,7 @@ let server;
 let cardList = {};
 let getList = false;
 let detailList = {};
+let ipList = [];
 
 
 let sourceMap = {
@@ -78,12 +79,26 @@ server = ws.createServer(conn => {
     });
 }).listen(5683);
 
+// 判断是否重复ip，不重复就推入
+function ipPush(ip) {
+    let repeat = false;
+    ipList.forEach((ipAddress, index) => {
+        if(ip == ipAddress) {
+            repeat = true;
+        }
+    })
+    if(!repeat) {
+        ipList.push(ip); 
+    }
+}
+
 // 建立与3000端口连接
 http.createServer((req, res) => {
     // json文件 utf-8解析及写入cardList
     let urlObj = urlib.parse(req.url, true);
     // 判断路径是否正确
     if (urlObj.pathname == "/canteen/cardList") {
+        ipPush(req.socket.remoteAddress)
         // 没蹲饼列表的时候返回
         let userCardList = { "error": "还没有获得饼列表，再等等就有了" };
         // 判断是否蹲到饼过
@@ -109,6 +124,12 @@ http.createServer((req, res) => {
 
         res.writeHeader(200, { 'Content-Type': 'application/json;charset=utf-8' });
         res.write(JSON.stringify(userCardList));
+        res.end();
+        userCardList = {};
+    } else if (urlObj.pathname == "/canteen/userNumber") { // 获取用户总数量
+        let userNumber = {"userNumber": ipList.length};
+        res.writeHeader(200, { 'Content-Type': 'application/json;charset=utf-8' });
+        res.write(JSON.stringify(userNumber));
         res.end();
         userCardList = {};
     } else {
