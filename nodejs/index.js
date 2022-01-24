@@ -132,6 +132,28 @@ http.createServer((req, res) => {
         res.write(JSON.stringify(userNumber));
         res.end();
         userCardList = {};
+    } else if (urlObj.pathname == "/canteen/newCardList") {
+        let userCardList = { "error": "还没有获得饼列表，再等等就有了" };
+        // 判断是否蹲到饼过
+        if (cardList.hasOwnProperty('data')) {
+            // 复制基础信息
+            userCardList = JSON.parse(JSON.stringify(cardList));
+
+            userCardList.data["官方B站动态"] = JSON.parse(JSON.stringify(detailList["官方B站动态"].slice(0,2)));
+            userCardList.data["官方微博"] = JSON.parse(JSON.stringify(detailList["官方微博"].slice(0,1)));
+            userCardList.data["游戏内公告"] = JSON.parse(JSON.stringify(detailList["游戏内公告"].slice(0,4)));
+            userCardList.data["朝陇山微博"] = JSON.parse(JSON.stringify(detailList["朝陇山微博"].slice(0,2)));
+            userCardList.data["一拾山微博"] = JSON.parse(JSON.stringify(detailList["一拾山微博"].slice(0,3)));
+            userCardList.data["塞壬唱片官网"] = JSON.parse(JSON.stringify(detailList["塞壬唱片官网"].slice(0,0)));
+            userCardList.data["泰拉记事社微博"] = JSON.parse(JSON.stringify(detailList["泰拉记事社微博"].slice(0,1)));
+            userCardList.data["官网"] = JSON.parse(JSON.stringify(detailList["官网"].slice(0,1)));
+            userCardList.data["泰拉记事社官网"] = JSON.parse(JSON.stringify(detailList["泰拉记事社官网"].slice(0,2)));
+            userCardList.data["塞壬唱片网易云音乐"] = JSON.parse(JSON.stringify(detailList["塞壬唱片网易云音乐"].slice(0,4)));
+            userCardList.data["鹰角网络微博"] = JSON.parse(JSON.stringify(detailList["鹰角网络微博"].slice(0,1)));
+        }
+        res.writeHeader(200, { 'Content-Type': 'application/json;charset=utf-8' });
+        res.write(JSON.stringify(userCardList));
+        res.end();
     } else {
         res.writeHeader(404, { 'Content-Type': 'text/html;charset=utf-8' });
         res.end();
