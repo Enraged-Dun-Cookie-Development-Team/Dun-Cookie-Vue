@@ -329,30 +329,6 @@
                   </div>
                 </div>
               </div>
-              <div class="body-menu-content-card">
-                <div class="content-card-title">微博登录</div>
-                <div class="content-card-description">
-                  微博端API有些账户需要登录才能查看最新微博
-                </div>
-                <div class="content-card-content flex-between">
-                  <div>
-                    点击“查看是否登录成功”按钮，如果能看到微博个人信息，则登录成功<br />
-                    如果是登录注册页面，请点击“进入登录页面”按钮重新登录
-                  </div>
-                  <div>
-                    <el-button
-                      size="small"
-                      @click="openUrl('https://passport.weibo.cn/signin/login')"
-                      >进入登录页面
-                    </el-button>
-                    <el-button
-                      size="small"
-                      @click="openUrl('https://m.weibo.cn/profile/')"
-                      >查看是否登录成功
-                    </el-button>
-                  </div>
-                </div>
-              </div>
             </div>
             <div class="view view-form" ref="view-form">
               <div class="flex">

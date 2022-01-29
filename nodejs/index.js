@@ -61,13 +61,13 @@ worker.on('message', msg => {
 // web socket使用5683链接
 server = ws.createServer(conn => {
     let firstConnect = true;
-    let firstConnectList = { 'type' :'cardList-get', 'data':{}};
-    firstConnectList.data = JSON.parse(JSON.stringify(detailList));
+    let firstConnectList = {};
+    firstConnectList = JSON.parse(JSON.stringify(detailList));
     if (firstConnect && Object.keys(detailList).length != 0) {
         conn.sendText(JSON.stringify(firstConnectList));
     }
     emitter.on('websocket-get', msg => {
-        conn.sendText(JSON.stringify(msg));
+        conn.sendText(JSON.stringify(msg.data));
     });
     // 检测连接状态
     conn.on("close", (code, reason) => {
