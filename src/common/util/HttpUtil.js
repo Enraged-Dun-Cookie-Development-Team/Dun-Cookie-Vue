@@ -1,5 +1,5 @@
 import PlatformHelper from '../platform/PlatformHelper';
-import {DEBUG_LOG} from "../Constants";
+import DebugUtil from "./DebugUtil";
 
 function appendTimeStamp(urlStr) {
   const url = new URL(urlStr);
@@ -32,9 +32,7 @@ class HttpUtil {
     if (appendTimestamp) {
       url = appendTimeStamp(url);
     }
-    if (DEBUG_LOG) {
-      console.log(`正在请求URL：${url}`);
-    }
+    DebugUtil.debugLog(7, `正在请求URL：${url}`);
     try {
       return await PlatformHelper.Http.sendGet(url);
     } catch (e) {

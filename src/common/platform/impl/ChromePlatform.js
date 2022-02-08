@@ -1,5 +1,6 @@
-import {DEBUG_LOG, PLATFORM_CHROME} from '../../Constants';
+import {PLATFORM_CHROME} from '../../Constants';
 import BrowserPlatform from "./BrowserPlatform";
+import DebugUtil from "../../util/DebugUtil";
 
 export default class ChromePlatform extends BrowserPlatform {
 
@@ -12,7 +13,7 @@ export default class ChromePlatform extends BrowserPlatform {
     }
 
     getAllWindow() {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             chrome.windows.getAll({}, function (data) {
                 resolve(data);
             });
@@ -56,9 +57,7 @@ export default class ChromePlatform extends BrowserPlatform {
             chrome.runtime.sendMessage(message, (response) => {
                 if (chrome.runtime.lastError) {
                     if (this.__shouldIgnoreMessageError(chrome.runtime.lastError.message)) {
-                        if (DEBUG_LOG) {
-                            console.log(`response - ${type} - ignore error: ${chrome.runtime.lastError.message}`);
-                        }
+                        DebugUtil.debugLog(8, `response - ${type} - ignore error: ${chrome.runtime.lastError.message}`);
                         resolve();
                     } else {
                         reject(chrome.runtime.lastError);

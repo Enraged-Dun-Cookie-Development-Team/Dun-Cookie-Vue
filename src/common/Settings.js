@@ -58,8 +58,7 @@ async function transformDataSource(settings) {
       }
     }
     if (PlatformHelper.isBackground) {
-      console.log('new datasource list: ');
-      console.log(CurrentDataSource);
+      DebugUtil.debugLog(0, 'new datasource list: ', CurrentDataSource);
     }
     return true;
   });
@@ -324,8 +323,7 @@ class Settings {
     PlatformHelper.Message.registerListener('settings', MESSAGE_SETTINGS_UPDATE, data => {
       const changed = {};
       deepAssign(this, data, changed);
-      console.log('配置已更新：');
-      console.log(changed);
+      DebugUtil.debugLog(0, '配置已更新：', changed);
       this.__updateWindowMode();
       let promise;
       if (PlatformHelper.isBackground
@@ -362,7 +360,7 @@ class Settings {
           if (this.enableDataSources.length === 0) {
             const sources = await getDefaultDataSources();
             this.enableDataSources = Object.keys(sources)
-            console.log("未启用任何默认数据源，将自动启用全部默认数据源");
+            DebugUtil.debugLog(0, "未启用任何默认数据源，将自动启用全部默认数据源");
           }
 
           for (const key in CurrentDataSource) {
@@ -376,7 +374,7 @@ class Settings {
           // 只需要在后台进行保存，其它页面不需要保存
           await this.saveSettings();
         } catch (e) {
-          console.log(e);
+          DebugUtil.debugLog(0, e);
         }
       }
       return this;
@@ -402,8 +400,7 @@ class Settings {
     const promise = PlatformHelper.Storage.saveLocalStorage('settings', this);
     promise.then(() => {
       PlatformHelper.Message.send(MESSAGE_SETTINGS_UPDATE, this);
-      console.log('update settings: ');
-      console.log(this);
+      DebugUtil.debugLog(0, 'update settings: ', this);
     });
     return promise;
   }
@@ -419,9 +416,7 @@ class Settings {
   async reloadSettings() {
     const value = await PlatformHelper.Storage.getLocalStorage('settings');
     if (PlatformHelper.isBackground) {
-      console.log("从储存中读取配置：");
-      console.log(this);
-      console.log('============');
+      DebugUtil.debugLog(0, "从储存中读取配置：", this);
     }
     if (value != null) {
       deepAssign(this, await updateSettings(value));

@@ -1,6 +1,6 @@
-// 其实这玩意不是很有必要提取成常量，但是提取了也没坏处(至少修改起来比较方便)
-import {DEBUG_LOG} from "../Constants";
+import DebugUtil from "../util/DebugUtil";
 
+// 其实这玩意不是很有必要提取成常量，但是提取了也没坏处(至少修改起来比较方便)
 const unsupportedTip = "该平台未实现该接口！请联系[小刻食堂]开发者解决该问题";
 
 // TODO 实现子类时，如果是callback的方法(Chrome v2)，务必检查runtime.lastError。如果是Promise的方法(Chrome v3、Firefox)，务必catch。
@@ -284,10 +284,7 @@ export default class AbstractPlatform {
         let value;
 
         if (!type || message.type === type) {
-            if (DEBUG_LOG) {
-                console.log(`${id} - ${type}|${message.type} - receiverMessage`);
-                console.log(message);
-            }
+            DebugUtil.debugLog(7, `${id} - ${type}|${message.type} - receiverMessage`, message);
             if (!type) {
                 value = listener(message);
             } else {
@@ -295,15 +292,10 @@ export default class AbstractPlatform {
             }
 
             if (value !== null && value !== undefined) {
-                if (DEBUG_LOG) {
-                    console.log(`${id} - ${type}|${message.type} - receiverMessage - response`);
-                    console.log(value);
-                }
+                DebugUtil.debugLog(7, `${id} - ${type}|${message.type} - receiverMessage - response`, value);
                 return value;
             } else {
-                if (DEBUG_LOG) {
-                    console.log(`${id} - ${type}|${message.type} - receiverMessage - responseEmpty`);
-                }
+                DebugUtil.debugLog(8, `${id} - ${type}|${message.type} - receiverMessage - responseEmpty`);
                 // 必须要返回点什么东西来避免报错
                 return AbstractPlatform.__MESSAGE_WITHOUT_RESPONSE;
             }
@@ -315,10 +307,7 @@ export default class AbstractPlatform {
      * @protected
      */
     __buildMessageToSend(type, data) {
-        if (DEBUG_LOG) {
-            console.log(`sendMessage - ${type}`);
-            console.log(data || 'no-data');
-        }
+        DebugUtil.debugLog(7, `sendMessage - ${type}`, data || 'no-data');
         const message = { type: type };
         if (data) {
             message.data = data;
@@ -332,15 +321,10 @@ export default class AbstractPlatform {
      */
     __transformResponseMessage(type, response) {
         if (response === AbstractPlatform.__MESSAGE_WITHOUT_RESPONSE) {
-            if (DEBUG_LOG) {
-                console.log(`response - ${type} - empty`);
-            }
+            DebugUtil.debugLog(8, `response - ${type} - empty`);
             return;
         }
-        if (DEBUG_LOG) {
-            console.log(`response - ${type}`);
-            console.log(response);
-        }
+        DebugUtil.debugLog(7, `response - ${type}`, response);
         return response;
     }
 

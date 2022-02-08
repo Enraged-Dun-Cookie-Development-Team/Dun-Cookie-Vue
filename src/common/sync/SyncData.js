@@ -34,18 +34,18 @@ class DataSynchronizer {
     this.target = target;
     this.shouldPersist = shouldPersist;
     PlatformHelper.Storage.getLocalStorage(keyPersist(key)).then(data => {
-      if (this.updateCount === 0) {
-        this.__update(data);
+      if (this.updateCount === 0 && data) {
+        DebugUtil.debugLog(6, `从Storage中读取${this.key}: `, data);
+        this.__handleReloadOrReceiveUpdate(data);
       }
     });
   }
 
-  __update(data) {
+  __handleReloadOrReceiveUpdate(data) {
     const changed = {};
     deepAssign(this.target, data, changed);
     this.updateCount++;
-    // console.log(`同步更新${this.key}：`);
-    // console.log(changed);
+    DebugUtil.debugLog(6, `接收更新${this.key}: `, data, 'changed: ', changed);
     for (const listener of this.updateListeners) {
       listener(this.proxy, changed);
     }
@@ -62,6 +62,7 @@ class DataSynchronizer {
         if (this.shouldPersist) {
           await PlatformHelper.Storage.saveLocalStorage(keyPersist(this.key), this.target);
         }
+        DebugUtil.debugLog(6, `发送更新${this.key}: `, this.target);
         PlatformHelper.Message.send(keyUpdate(this.key), this.target).then();
       });
       this.updateFlag = true;
@@ -75,7 +76,7 @@ class DataSynchronizer {
       if (!deepEquals(target[prop], value)) {
         _this.sendUpdateAtNextTick();
       }
-      DebugUtil.debugLog(7, `更新${_this.key}: ${String(prop)}: ${value}`);
+      DebugUtil.debugLog(7, `更新${_this.key}: ${String(prop)}: `, value);
       return Reflect.set(...arguments);
     };
     handler.deleteProperty = function (target, prop) {
@@ -83,7 +84,15 @@ class DataSynchronizer {
       return Reflect.deleteProperty(...arguments);
     };
     handler.defineProperty = function (target, prop, descriptor) {
-      DebugUtil.debugLog(7, `添加属性${_this.key}: ${String(prop)}`);
+      if (target.hasOwnProperty(prop)) {
+        if (Object.keys(descriptor).length === 1 && descriptor.hasOwnProperty('value')) {
+          // ignore 这种情况一般也会触发set的handler，故忽略
+        } else {
+          DebugUtil.debugLog(7, `修改属性${_this.key}: ${String(prop)}`, descriptor);
+        }
+      } else {
+        DebugUtil.debugLog(7, `添加属性${_this.key}: ${String(prop)}`, descriptor);
+      }
       return Reflect.defineProperty(...arguments);
     };
     return new Proxy(this.target, handler);
@@ -99,7 +108,7 @@ class DataSynchronizer {
     // noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
     let handler = {
       set(target, prop, value, receiver) {
-        DebugUtil.debugLog(7, `禁止更新${_this.key}: ${String(prop)}: ${value}`);
+        DebugUtil.debugLog(7, `禁止更新${_this.key}: ${String(prop)}: `, value);
         return false;
       },
       get(target, prop, receiver) {
@@ -109,11 +118,11 @@ class DataSynchronizer {
           if (typeof value === "function") {
             value = value.bind(_this);
           }
-          DebugUtil.debugLog(7, `获取内部属性${_this.key}: ${String(prop)}: ${value}`);
+          DebugUtil.debugLog(7, `获取内部属性${_this.key}: ${String(prop)}: `, value);
           return value;
         }
         const value = Reflect.get(...arguments);
-        DebugUtil.debugLog(7, `获取${_this.key}: ${String(prop)}: ${value}`);
+        DebugUtil.debugLog(8, `获取${_this.key}: ${String(prop)}: `, value);
         return value;
       }
     };
@@ -148,9 +157,9 @@ class DataSynchronizerAllWritable extends DataSynchronizer {
     if (PlatformHelper.isBackground) {
       PlatformHelper.Message.registerListener(keyGet(key), keyGet(key), () => this.target);
     } else {
-      PlatformHelper.Message.send(keyGet(key)).then(data => this.__update(data));
+      PlatformHelper.Message.send(keyGet(key)).then(data => this.__handleReloadOrReceiveUpdate(data));
     }
-    PlatformHelper.Message.registerListener(keyUpdate(key), keyUpdate(key), data => this.__update(data));
+    PlatformHelper.Message.registerListener(keyUpdate(key), keyUpdate(key), data => this.__handleReloadOrReceiveUpdate(data));
     this.proxy = this.createWritableProxy();
   }
 }
@@ -162,8 +171,8 @@ class DataSynchronizerOnlyBackgroundWritable extends DataSynchronizer {
       PlatformHelper.Message.registerListener(keyGet(key), keyGet(key), () => this.target);
       this.proxy = this.createWritableProxy();
     } else {
-      PlatformHelper.Message.send(keyGet(key)).then(data => this.__update(data));
-      PlatformHelper.Message.registerListener(keyUpdate(key), keyUpdate(key), data => this.__update(data));
+      PlatformHelper.Message.send(keyGet(key)).then(data => this.__handleReloadOrReceiveUpdate(data));
+      PlatformHelper.Message.registerListener(keyUpdate(key), keyUpdate(key), data => this.__handleReloadOrReceiveUpdate(data));
       this.proxy = this.createReadonlyProxy();
     }
   }
@@ -182,6 +191,7 @@ function createSyncData(target, key, mode, shouldPersist = false) {
       throw new Error('unsupported sync mode: ' + mode);
   }
   console.log(`已启用同步数据：${key}`);
+  global.SyncData[key] = synchronizer.proxy;
   return synchronizer.proxy;
 }
 
@@ -192,4 +202,5 @@ class CanSync {
   }
 }
 
+global.SyncData = {};
 export {createSyncData, DataSyncMode, CanSync};

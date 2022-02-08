@@ -21,9 +21,9 @@ class DebugUtil {
   }
 
   // 调试输出
-  debugLog(level, msg) {
-    if (level >= DEBUG_LEVEL) {
-      console.log(msg);
+  debugLog(level, ...data) {
+    if (DEBUG_LEVEL >= level || level === 0) {
+      console.log(...data);
     }
   }
 }
