@@ -44,18 +44,19 @@ async function buildDefaultDataSourcesList() {
 }
 
 function setTestUrl(sources) {
+
     // 感觉没必要给DataSource多一个testUrl的属性，测试链接在这里修改吧
-    sources['官方B站动态'].dataUrl = 'test/bJson.json?host_uid=161775300';
-    sources['官方微博'].dataUrl = 'test/wJson.json?type=uid&value=6279793937&containerid=1076036279793937';
-    sources['游戏内公告'].dataUrl = 'test/yJson.json';
-    sources['朝陇山微博'].dataUrl = 'test/cJson.json?type=uid&value=6441489862&containerid=1076036441489862';
-    sources['一拾山微博'].dataUrl = 'test/ysJson.json?type=uid&value=7506039414&containerid=1076037506039414';
-    sources['塞壬唱片官网'].dataUrl = 'test/srJson.json';
-    sources['泰拉记事社微博'].dataUrl = 'test/tlJson.json?type=uid&value=6441489862&containerid=1076037499841383';
-    sources['官网'].dataUrl = 'test/gw.html';
-    sources['泰拉记事社官网'].dataUrl = ['test/xbJson.json', 'test/xgbJson.json'];
-    sources['塞壬唱片网易云音乐'].dataUrl = 'test/wyyJson.json';
-    sources['鹰角网络微博'].dataUrl = 'test/yjwbJson.json?type=uid&value=7461423907&containerid=1076037461423907';
+    sources['官方B站动态'].dataUrl = PlatformHelper.Extension.getURL('test/bJson.json');
+    sources['官方微博'].dataUrl = PlatformHelper.Extension.getURL('test/wJson.json');
+    sources['游戏内公告'].dataUrl = PlatformHelper.Extension.getURL('test/yJson.json');
+    sources['朝陇山微博'].dataUrl = PlatformHelper.Extension.getURL('test/cJson.json');
+    sources['一拾山微博'].dataUrl = PlatformHelper.Extension.getURL('test/ysJson.json');
+    sources['塞壬唱片官网'].dataUrl = PlatformHelper.Extension.getURL('test/srJson.json');
+    sources['泰拉记事社微博'].dataUrl = PlatformHelper.Extension.getURL('test/tlJson.json');
+    sources['官网'].dataUrl = PlatformHelper.Extension.getURL('test/gw.html');
+    sources['泰拉记事社官网'].dataUrl = PlatformHelper.Extension.getURL('test/tljssJson.json');
+    sources['塞壬唱片网易云音乐'].dataUrl = PlatformHelper.Extension.getURL('test/wyyJson.json');
+    sources['鹰角网络微博'].dataUrl = PlatformHelper.Extension.getURL('test/yjwbJson.json');
 }
 
 /**

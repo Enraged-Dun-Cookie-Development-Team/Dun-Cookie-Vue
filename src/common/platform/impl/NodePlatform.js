@@ -89,7 +89,7 @@ export default class NodePlatform extends AbstractPlatform {
     }
 
     sendMessage(type, data) {
-        const message = super.__buildMessageToSend(type, data);
+        const message = this.__buildMessageToSend(type, data);
 
         return new Promise((resolve, reject) => {
             this.workerParent.postMessage(message);
@@ -99,7 +99,7 @@ export default class NodePlatform extends AbstractPlatform {
 
     addMessageListener(id, type, listener) {
         this.workerParent.on('message', (message) => {
-            const value = super.__handleReceiverMessage(type, message, listener);
+            const value = this.__handleReceiverMessage(id, type, message, listener);
             if (value !== undefined) {
                 if (value.constructor === Promise) {
                     value.then(result => this.workerParent.postMessage({ type: message.type, data: result }));

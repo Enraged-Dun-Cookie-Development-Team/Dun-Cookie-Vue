@@ -280,7 +280,7 @@ export default class AbstractPlatform {
      * 统一的message接收处理逻辑
      * @protected
      */
-    __handleReceiverMessage(type, message, listener) {
+    __handleReceiverMessage(id, type, message, listener) {
         let value;
 
         if (!type || message.type === type) {
@@ -330,7 +330,7 @@ export default class AbstractPlatform {
      * 统一的message响应处理逻辑
      * @protected
      */
-    __transformResponseMessage(response) {
+    __transformResponseMessage(type, response) {
         if (response === AbstractPlatform.__MESSAGE_WITHOUT_RESPONSE) {
             if (DEBUG_LOG) {
                 console.log(`response - ${type} - empty`);

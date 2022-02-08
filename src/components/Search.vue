@@ -40,6 +40,7 @@
       <el-collapse
         v-model="activeNames"
         v-for="(item, index) in penguinSearchList"
+        v-bind:key="item.itemId"
         @change="getPenguinDate(index)"
       >
         <el-collapse-item>
@@ -59,9 +60,9 @@
           <div class="info-card-area">
             <el-card
               class="info-card"
-              v-if="sortType == 0"
               v-show="(info.isOpen || showCloseStage) && sortType == 0"
               v-for="info in item.matrix_per"
+              v-bind:key="info.stage.code"
             >
               <div
                 class="info-card-title info-card-title-isOpen"
@@ -91,6 +92,7 @@
               class="info-card"
               v-show="(info.isOpen || showCloseStage) && sortType == 1"
               v-for="info in item.matrix_cost"
+              v-bind:key="info.stage.code"
             >
               <div
                 class="info-card-title info-card-title-isOpen"
