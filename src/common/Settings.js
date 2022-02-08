@@ -128,6 +128,10 @@ class Settings {
      * 游戏内平台
      */
     gamePlatform: "Android",
+    /**
+     * 推送不同平台重复的饼
+     */
+    repetitionPush: true
   }
 
   /**

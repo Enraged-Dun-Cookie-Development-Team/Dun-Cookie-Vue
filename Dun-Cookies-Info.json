@@ -1,27 +1,27 @@
 {
     "list": [
         {
-            "html": "<div class='online-area'> <a class='webOpen' href='http://www.ceobecanteen.top/'><img class='online-title-img' src='/assets/image/icon_NewYear.png'></a> <div> <div>博士们！！收到很多关于<span class='online-yellow'>3.0.10</span>版本的问题反馈<span class='online-blue'></div> <div>其中包括，希望<span class='online-blue'>关掉企鹅物流数据更新提醒</span>与<span class='online-blue'>游戏更新通知弹窗频繁弹出</span></div> <div>临时可以<span class='online-red'>重开一下插件，可以解决频繁弹出问题</span></div> <div>下个版本中，<span class='online-blue'>企鹅物流数据更新提醒</span>将关闭 </div> <div>同时<span class='online-blue'>游戏更新通知也将尽力修复</span>（若没有修复会暂时关闭）</div> </div> </div>",
-            "starTime":"2021-12-28 04:00:00",
-            "overTime":"2021-12-31 15:59:59",
-            "notice": true
-        },
-        {
-            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20211207/c60412582c2aaf035db954201dbe7ae3.JPG'> <div> <div><span class='online-blue'>SideStory【风雪过境】</span>将于<span class='online-blue'>12月21号</span>开启</div> <div>开启时间为<span class='online-red'>周二4:00</span></div> <div>记得提前<span class='online-blue'>刷剿灭</span>，<span class='online-blue'>囤理智</span></div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频</span> </div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
-            "starTime":"2021-12-17 04:00:00",
-            "overTime":"2021-12-21 15:59:59",
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://i0.hdslb.com/bfs/album/c65bbe252a3e751664573da3865b0763623b9972.jpg'> <div> <div><span class='online-blue'>方舟新春会「流光启明」</span>已于<span class='online-blue'>1月23号晚上23:00</span>放出正片</div> <div>点击 <a class='webOpen online-red' href='https://www.bilibili.com/video/BV1C44y1W7F9'><span class='online-red'>这里</span></a> 快速跳转正片界面</div> <div><span class='online-blue'>方舟新春会「溯梦阑枝」</span>将于<span class='online-blue'>1月28号晚上18:00</span>开始直播</div> <div>点击 <a class='webOpen online-red' href='https://live.bilibili.com/21440021'><span class='online-red'>这里</span></a> 快速跳转直播界面</div> <div>也相信这次<span class='online-yellow'>明日方舟的新春会</span>会给全体博士带来一个美好的回忆！！！</div>  </div> </div>",
+            "starTime":"2022-01-23 16:00:00",
+            "overTime":"2022-01-31 22:59:59",
             "notice": false
         },
         {
-            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20211207/c60412582c2aaf035db954201dbe7ae3.JPG'> <div> <div><span class='online-blue'>SideStory【风雪过境】</span>将于<span class='online-blue'>1月4号</span>结束</div> <div>本次活动掉落<span class='online-red'> 炽合金、聚酸酯组、研磨石</span></div> <div>博士们尽情刷材料吧</div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频</span> </div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
-            "starTime":"2021-12-21 16:00:00",
-            "overTime":"2022-01-04 03:59:59",
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://i0.hdslb.com/bfs/album/06257d9120e6926c362a87d76abbf720b6c0a855.jpg'> <div> <div>博士博士！！<span class='online-blue'></span>放出正片</div> <div><span class='online-red'>方舟的兑换码别忘了！！！</span></div> <div><span class='online-blue'>X5V5T2QQBYL2AU5T</span></div> <div>官服点击 <a class='webOpen online-red' href='https://ak.hypergryph.com/user/login'><span class='online-red'>这里</span></a> 进行兑换</div> <div>B服点击 <a class='webOpen online-red' href='https://game.bilibili.com/mrfz/exchange/'><span class='online-red'>这里</span></a> 进行兑换</div>  </div> </div>",
+            "starTime":"2022-01-25 04:00:00",
+            "overTime":"2022-01-31 03:59:59",
             "notice": false
         },
         {
-            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20211019/9270f982d1d67a15623e0fc64fb8b9b0.jpg'> <div> <div><span class='online-blue'>复刻活动「孤岛风云」</span>将于<span class='online-blue'>12月17号</span>结束</div> <div>本次活动掉落<span class='online-red'> 糖组、酮凝集组、异铁组</span></div> <div>博士们尽情刷材料吧</div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频</span> </div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
-            "starTime":"2021-12-07 16:00:00",
-            "overTime":"2021-12-17 03:59:59",
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://i1.hdslb.com/bfs/archive/db9ee58cd7d03d7c3dbfc7bc4d6f7c36660c6a6e.jpg'> <div> <div><span class='online-blue'>SideStory「将进酒」</span>将于<span class='online-blue'>1月25号</span>开启</div> <div>开启时间为<span class='online-red'>周二16:00</span></div> <div>记得周一提前<span class='online-red'>刷剿灭，存理智液</span></div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频</span> </div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
+            "starTime":"2022-01-15 04:00:00",
+            "overTime":"2022-01-25 15:59:59",
+            "notice": false
+        },
+        {
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://i1.hdslb.com/bfs/archive/db9ee58cd7d03d7c3dbfc7bc4d6f7c36660c6a6e.jpg'> <div> <div><span class='online-blue'>SideStory「将进酒」</span>将于<span class='online-blue'>2月8号</span>结束</div> <div>结束时间为<span class='online-red'>周二4:00</span></div> <div>活动期间掉落<span class='online-red'>全新装置、固源岩组、RMA70-12</span></div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频</span> </div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
+            "starTime":"2022-01-25 16:00:00",
+            "overTime":"2022-02-08 03:59:59",
             "notice": false
         },
         {
@@ -33,51 +33,69 @@
     ],
     "btnList": [
         {
-            "starTime": "2021-12-21 04:00:00",
-            "overTime": "2022-01-04 03:59:59",
-            "url": "https://www.bilibili.com/video/BV13Z4y1X76g",
-            "name": "【魔法Zc目录】“风雪过境”BI平民全关卡低配攻略！阵容平民+低练度+语音详解的愉悦攻略！",
-            "img": "https://i0.hdslb.com/bfs/archive/14fec313d3c7a478da6e0c87433132072ceadf5b.jpg@200w_125h_1c.webp",
+            "starTime": "2022-01-24 00:00:00",
+            "overTime": "2022-02-21 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1C44y1W7F9",
+            "name": "2022明日方舟新春会「流光启明」",
+            "img": "https://i2.hdslb.com/bfs/archive/e3dfafb045081803b4032d29d657f35e5f77a235.jpg@200w_125h_1c.webp",
             "radius": true
         },
         {
-            "starTime": "2021-12-21 04:00:00",
-            "overTime": "2022-01-04 03:59:59",
-            "url": "https://www.bilibili.com/video/BV14m4y1X7TN",
-            "name": "【好吃的橘子鸭】BI-1至BI-8，平民攻略合集，速刷+挂机流，最高单核，语音详解，简单攻略！",
-            "img": "https://i2.hdslb.com/bfs/archive/fd338a40ab161193c4be3cd0331a11f47a4ea6cd.jpg@200w_125h_1c.webp",
+            "starTime": "2022-01-14 04:00:00",
+            "overTime": "2022-01-28 17:59:59",
+            "url": "https://www.bilibili.com/video/BV15R4y1g7mG",
+            "name": "明日方舟新春会·溯梦阑枝晚宴 宣传PV",
+            "img": "https://i0.hdslb.com/bfs/archive/37cd942178ecd23f7085e6a46bea6e3e8c085a37.jpg@200w_125h_1c.webp",
             "radius": true
         },
         {
-            "starTime": "2021-12-21 04:00:00",
-            "overTime": "2022-01-04 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1AZ4y1X7Yr",
-            "name": "【小狼XF】明日方舟BI-全关卡 无6星攻略/BI-8 BI-7 风雪过境",
-            "img": "https://i1.hdslb.com/bfs/archive/1c0b4be15c28611b3c96c9da648bf691ef68197b.jpg@200w_125h_1c.webp",
+            "starTime": "2022-01-28 04:00:00",
+            "overTime": "2022-02-20 16:59:59",
+            "url": "https://www.bilibili.com/video/BV1QT4y1C7Nd",
+            "name": "【剧情配音/小刻食堂强推】七百小时倾情呈现！有声连载！《明日方舟》主线有声小说！序章：第一集！",
+            "img": "https://i2.hdslb.com/bfs/archive/74a51e3e87cdc17949ee289b217f4f66ce763183.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+
+
+        {
+            "starTime": "2022-01-26 04:00:00",
+            "overTime": "2022-02-08 03:59:59",
+            "url": "https://www.bilibili.com/video/BV163411h7qD?p=3",
+            "name": "【魔法Zc目录】“将进酒”IW平民全关卡低配攻略！阵容平民+低练度+语音详解的愉悦攻略！",
+            "img": "https://i1.hdslb.com/bfs/archive/cdc4cbdc87c9322861dec7cde1905d75daa053f2.jpg@160w_100h_1c.webp",
             "radius": true
         },
         {
-            "starTime": "2021-12-21 04:00:00",
-            "overTime": "2022-01-04 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1GF41167vA",
-            "name": "【萧然Q】BI-1至BI-8 摆完挂机 简单好抄",
-            "img": "https://i1.hdslb.com/bfs/archive/69188c1f2afc23a910137aadd7dcb20db64bc700.jpg@200w_125h_1c.webp",
+            "starTime": "2022-01-26 04:00:00",
+            "overTime": "2022-02-08 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1er4y1e7zi",
+            "name": "【好吃的橘子鸭/将进酒】IW-1至9 平民攻略合集，挂机流+速刷+单核攻略，语音详解，你必过！！",
+            "img": "https://i2.hdslb.com/bfs/archive/40ed70e2119e2244c8c1c560fdb3682f8ff9d63d.png@160w_100h_1c.webp",
             "radius": true
         },
         {
-            "starTime": "2021-12-21 04:00:00",
-            "overTime": "2022-01-04 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1T44y177fM",
-            "name": "【自在道爷】风雪过境BI-8至1挂机流，刻章不用愁！精二31快乐讲解，轻松解放双手 ",
-            "img": "https://i1.hdslb.com/bfs/archive/f91677db2813a23eab7bcfd05696ebacb17c7a03.jpg@200w_125h_1c.webp",
+            "starTime": "2022-01-26 04:00:00",
+            "overTime": "2022-02-08 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1Uu41117Mi",
+            "name": "【小狼XF】明日方舟IW-全关卡 无6星攻略/ IW-9 IW-8 IW-7 将进酒 lW-",
+            "img": "https://i2.hdslb.com/bfs/archive/aec50570cac943673b21463b10992d24a63e6a7f.png@160w_100h_1c.webp",
             "radius": true
         },
         {
-            "starTime": "2021-12-21 04:00:00",
-            "overTime": "2022-01-04 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1Z7411T7cF",
-            "name": "【年轻型斯卡哈】风雪过境 自动挂机+少人信赖 全关卡攻略合集",
-            "img": "https://i2.hdslb.com/bfs/archive/fa8fba6d749beae7ff1c9f2382c76eeb0343063d.jpg@200w_125h_1c.webp",
+            "starTime": "2022-01-26 04:00:00",
+            "overTime": "2022-02-08 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1iF411n7xe",
+            "name": "【萧然Q/将进酒】IW-1至IW-9 摆完挂机 简单好抄",
+            "img": "https://i1.hdslb.com/bfs/archive/55a92b16434d6b3b5c7ccbf5be2cb74a735552f7.jpg@160w_100h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2022-01-26 04:00:00",
+            "overTime": "2022-02-08 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1u44y1s7ft",
+            "name": "【自在道爷/将进酒】IW-9至1挂机流，轻松解放双手！精二31快乐讲解 | 明日方舟-将进酒关卡合集(持续更新中)",
+            "img": "https://i1.hdslb.com/bfs/archive/0a63105ab43a0e4ac9b015238aebb8c4c4263dc8.png@160w_100h_1c.webp",
             "radius": true
         },
 
@@ -90,43 +108,43 @@
             "radius": true
         },
         {
-            "starTime": "2021-12-17 04:00:00",
-            "overTime": "2021-12-21 15:59:59",
-            "url": "https://www.bilibili.com/video/BV1Xa411r7c5",
-            "name": "【柞木不朽】雪境活动前你需要了解这些！雪境活动前瞻",
-            "img": "https://i0.hdslb.com/bfs/archive/2901f47b60eb3b72a21aba6c1dcb32653059c0e5.jpg@200w_125h_1c.webp",
+            "starTime": "2022-01-27 04:00:00",
+            "overTime": "2022-02-05 15:59:59",
+            "url": "https://www.bilibili.com/video/BV1YS4y1V7yL",
+            "name": "【绯红权杖攻略组】全网首发：令单人全程灾厄傀影，无无度强杀！大人，时代变了！",
+            "img": "https://i1.hdslb.com/bfs/archive/bb00aa218990a8082b4e6cc0c7d7ce9a67a95fef.jpg@160w_100h_1c.webp",
             "radius": true
         },
         {
-            "starTime": "2021-12-21 04:00:00",
-            "overTime": "2021-12-27 15:59:59",
-            "url": "https://www.bilibili.com/video/BV1ta411r7aF",
-            "name": "【究极Nice】⚡方舟的骑士·全速前进⚡【Radiant】超燃混剪",
-            "img": "https://i1.hdslb.com/bfs/archive/c645f88e02e35fccf3db06d62496133dbdd15490.jpg@200w_125h_1c.webp",
+            "starTime": "2022-01-11 04:00:00",
+            "overTime": "2022-01-24 15:59:59",
+            "url": "https://www.bilibili.com/video/BV1qt4y1v7f7",
+            "name": "【梦鼠音乐】明日方舟EP - 滑板天使《My Holiday》【Mons原创】",
+            "img": "https://i1.hdslb.com/bfs/archive/4bd50706c927a393638444592609c96916009ed5.jpg@200w_125h.webp",
             "radius": true
         },
         {
-            "starTime": "2021-12-24 04:00:00",
-            "overTime": "2022-01-06 15:59:59",
-            "url": "https://www.bilibili.com/video/BV1nF411B7DZ",
-            "name": "【织翼之翎】♢ ♠ Amiya in Wonderland ♥ ♧【hacko.】",
-            "img": "https://i0.hdslb.com/bfs/archive/405b15d50bafed3883cece5bffecbda5c9283249.jpg@200w_125h_1c.webp",
+            "starTime": "2022-01-20 04:00:00",
+            "overTime": "2022-01-24 15:59:59",
+            "url": "https://www.bilibili.com/video/BV1r3411a7Kg",
+            "name": "【手书/四木攰】 旅途",
+            "img": "https://i1.hdslb.com/bfs/archive/44d3ab354c59f9549f20925e99ddeb55793e8eef.jpg@200w_125h.webp",
             "radius": true
         },
         {
-            "starTime": "2021-12-20 04:00:00",
-            "overTime": "2021-12-31 15:59:59",
-            "url": "https://www.bilibili.com/video/BV1Ta411k7tM",
-            "name": "【二色彩虹】新模式不知道练谁？肉鸽全职业培养推荐视频",
-            "img": "https://i2.hdslb.com/bfs/archive/a368ee22d93e6d7be726ce5f74e4f56ba3716bb2.jpg@200w_125h_1c.webp",
+            "starTime": "2022-01-20 04:00:00",
+            "overTime": "2022-01-26 15:59:59",
+            "url": "https://www.bilibili.com/video/BV1cm4y1Q768",
+            "name": "【拉普兰德/Winreeze】那你的思想去死就行【手书/明日方舟同人】",
+            "img": "https://i1.hdslb.com/bfs/archive/75fd5c41354ebbff2790c5dc80c48cbcb18a91c9.jpg@200w_125h.webp",
             "radius": true
         },
         {
-            "starTime": "2021-12-23 04:00:00",
-            "overTime": "2021-12-30 15:59:59",
-            "url": "https://www.bilibili.com/video/BV1tL41157wW",
-            "name": "【北绊半球】这是一场极限组间的究极折磨！危机合约S7 松烟行动竞技征召赛（旧约）",
-            "img": "https://i0.hdslb.com/bfs/archive/941941397fd6a69e491dbf59694bd45ab37d18dc.jpg@200w_125h_1c.webp",
+            "starTime": "2022-01-20 04:00:00",
+            "overTime": "2022-01-26 15:59:59",
+            "url": "https://www.bilibili.com/video/BV1XP4y177Gp",
+            "name": "【黎落千夜】伤心的人别玩肉鸽【方舟剧场】",
+            "img": "https://i1.hdslb.com/bfs/archive/c4219e3a801ea06372c5dc45b47e2eba3cd3a13d.jpg@200w_125h.webp",
             "radius": true
         }
     ],
@@ -138,71 +156,71 @@
         "countdown": [
             {
                 "text": "当前轮换池结束",
-                "remark": "铃兰[兑换],帕拉斯,芙兰卡,临光[兑换],夜魔",
-                "time": "2021-12-23 03:59:59",
-                "starTime": "2021-12-09 04:00:00",
-                "overTime": "2021-12-23 03:59:59"
+                "remark": "刻俄柏[兑换],水月,赤冬,莱恩哈特[兑换],安哲拉",
+                "time": "2022-02-17 03:59:59",
+                "starTime": "2022-02-03 04:00:00",
+                "overTime": "2022-02-17 03:59:59"
             },
             {
                 "text": "当前轮换池结束",
-                "remark": "莫斯提马[兑换]、银灰、灰喉、月禾[兑换]、星极",
-                "time": "2022-01-06 03:59:59",
-                "starTime": "2021-12-23 04:00:00",
-                "overTime": "2022-01-06 03:59:59"
+                "remark": "棘刺[兑换]、艾雅法拉、乌有 、诗怀雅[兑换]、雷蛇",
+                "time": "2022-02-03 03:59:59",
+                "starTime": "2022-01-20 04:00:00",
+                "overTime": "2022-02-03 03:59:59"
             },
             
             {
-                "text": "当前活动池结束",
-                "remark": "山，卡夫卡，赫默，松果",
-                "time": "2021-12-21 03:59:59",
-                "starTime": "2021-12-07 16:00:00",
-                "overTime": "2021-12-21 03:59:59"
+                "text": "下个活动池开启",
+                "remark": "令[限定]，老鲤，夜半",
+                "time": "2022-01-14 15:59:59",
+                "starTime": "2022-01-14 04:00:00",
+                "overTime": "2022-01-14 15:59:59"
             },
             {
                 "text": "下个活动池开启",
-                "remark": "灵知，极光，初雪",
-                "time": "2021-12-21 15:59:59",
-                "starTime": "2021-12-21 04:00:00",
-                "overTime": "2021-12-21 15:59:59"
+                "remark": "令[限定]，老鲤，夜半",
+                "time": "2022-01-25 15:59:59",
+                "starTime": "2022-01-15 04:00:00",
+                "overTime": "2022-01-25 15:59:59"
             },
             {
                 "text": "当前活动池结束",
-                "remark": "灵知，极光，初雪",
-                "time": "2022-01-04 03:59:59",
-                "starTime": "2021-12-21 16:00:00",
-                "overTime": "2022-01-04 03:59:59"
+                "remark": "令[限定]，老鲤，夜半",
+                "time": "2022-02-08 03:59:59",
+                "starTime": "2022-01-25 16:00:00",
+                "overTime": "2022-02-08 03:59:59"
             },
 
             {
-                "text": "SideStory【风雪过境】，活动开启",
+                "text": "SideStory「将进酒」，活动开启",
                 "remark": "解锁条件：通关主线1-10",
-                "time": "2021-12-21 15:59:59",
-                "starTime": "2021-12-17 04:00:00",
-                "overTime": "2021-12-21 15:59:59"
+                "time": "2022-01-25 15:59:59",
+                "starTime": "2022-01-20 04:00:00",
+                "overTime": "2022-01-25 15:59:59"
             },
             {
-                "text": "SideStory【风雪过境】，活动结束",
+                "text": "SideStory「画中人」，复刻结束",
                 "remark": "解锁条件：通关主线1-10",
-                "time": "2022-01-04 03:59:59",
-                "starTime": "2021-12-21 16:00:00",
-                "overTime": "2022-01-04 03:59:59"
+                "time": "2022-01-20 03:59:59",
+                "starTime": "2022-01-10 16:00:00",
+                "overTime": "2022-01-20 03:59:59"
             },
             {
-                "text": "SideStory「孤岛风云」限时复刻结束",
-                "remark": "解锁条件：通关主线1-10",
-                "time": "2021-12-17 03:59:59",
-                "starTime": "2021-12-07 16:00:00",
-                "overTime": "2021-12-17 03:59:59"
+                "text": "SideStory「将进酒」，活动结束",
+                "remark": "通关主线1-10",
+                "time": "2022-02-08 03:59:59",
+                "starTime": "2022-01-25 16:00:00",
+                "overTime": "2022-02-08 03:59:59"
             }
         ]
     },
     "logo": "icon_NewYear.png",
     "upgrade": {
-        "v": "3.0.10",
-        "title": "小刻食堂翻新啦 - 3.0.10",
-        "description": "🚀 检测游戏版本更新，添加企鹅物流数据查询 </br>1.修复高度超出屏幕的bug</br>2.添加倒计时功能（在快捷工具处打开，或者点击倒计时时间处）</br>3.检测游戏版本更新</br>4.添加企鹅物流掉率查询（回车键激活搜索框后，@@+材料拼音或文字）【感谢企鹅物流数据统计！！！！】</br>5.部分logo图片变为可变的</br>6.修复微博转发仅显示半年之类导致接口无法正常获取数据的bug</br>7.修复Edge浏览器无法蹲到官网的饼",
-        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/3.0.10/Dun-Cookie-3.0.10.crx",
-        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/3.0.10/Dun-Cookie-3.0.10.zip",
+        "v": "3.0.14",
+        "title": "小刻食堂翻新啦 - 3.0.14",
+        "description": "😭 呜呜呜，跨年导致游戏内通讯组时间错误，熬夜调试加急修复发布 </br>1.修复游戏内通讯组源因为时间错误导致显示在前面",
+        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/3.0.14/Dun-Cookie-3.0.14.crx",
+        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/3.0.14/Dun-Cookie-3.0.14.zip",
         "downSpare": "https://pan.baidu.com/s/1kzY6kpfYqLcGpuaiwQOGoA",
         "downSpareText": "备用下载（提取码 jzq9）",
         "downChrome": "https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN",
@@ -212,5 +230,11 @@
     "insider": {
         "f6e9fa6d782cfb7781cee67c0a188637d44ef761af74e0bfff02e1f53786b90e78fcbe3bb31a602f405c37491fc6fb7b5f8dd4df0e76132f8886a6b7846dfa6b": 1,
         "71add0d3edb7f188abf850643eeeca13b5cc266254b4d6bf1369e9889c584f658a21f6e110a509d5775c406b022839613196dc16db07677626208c2f5e4f77cc": 2
+    },
+    "app": {
+        "version": "0.1",
+        "update": false,
+        "lastFocusVersion": "0.0",
+        "description": "这是第一个版本\n没什么好说的"
     }
 }

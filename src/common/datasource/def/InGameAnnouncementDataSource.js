@@ -10,7 +10,7 @@ import HttpUtil from "../../util/HttpUtil";
  * <p>
  * <strong>注意：这里只设置了IOS公告的值，Android的值是不同的，如果以后要获取Android的公告需要把那边的忽略列表也加上去</strong>
  */
-const ignoreAnnounces = [94, 95, 97, 98, 192];
+const ignoreAnnounces = [94, 95, 97, 98, 192, 112];
 
 /**
  * 游戏内公告数据源。
@@ -39,7 +39,8 @@ export class InGameAnnouncementDataSource extends DataSource {
       if (ignoreAnnounces.includes(parseInt(x.announceId))) {
         return;
       }
-      const time = new Date(`${new Date().getFullYear()}-${x.month}-${x.day} ${Settings.getTimeBySortMode()}`);
+      let year = new Date(`${new Date().getFullYear()}-${x.month}-${x.day} 00:00:00`) <= new Date() ? new Date().getFullYear() : new Date().getFullYear() - 1;
+      const time = new Date(`${year}-${x.month}-${x.day} ${Settings.getTimeBySortMode()}`);
       list.push(DataItem.builder(this.dataName)
         .id(x.announceId)
         .timeForSort(time.getTime())
@@ -78,9 +79,9 @@ export class InGameAnnouncementDataSource extends DataSource {
 
   // 判断版本号时候更新
   JudgmentVersionRelease(versionData) {
-    // 避免切换平台弹出更新通知
-    if (this.gamePlatform == Settings.dun.gamePlatform) {
-      if (versionData) {
+    if (versionData) {
+      // 避免切换平台弹出更新通知
+      if (this.gamePlatform == Settings.dun.gamePlatform) {
         if (this.ClientVersion && versionData.clientVersion && this.ClientVersion != versionData.clientVersion) {
           const nowVersion = versionData.clientVersion.split(".").map(a => parseInt(a));
           const pastVersion = this.ClientVersion.split(".").map(a => parseInt(a));
@@ -93,11 +94,11 @@ export class InGameAnnouncementDataSource extends DataSource {
         } else if (this.ResVersion && versionData.resVersion && this.ResVersion != versionData.resVersion) {
           NotificationUtil.SendNotice(`【${Settings.dun.gamePlatform}/闪断更新】已经完成闪断更新`, '博士，快去重启进入游戏吧！', null, new Date().getTime());
         }
-        this.ClientVersion = versionData.clientVersion;
-        this.ResVersion = versionData.resVersion;
+      } else {
+        this.gamePlatform = Settings.dun.gamePlatform
       }
-    } else {
-      this.gamePlatform = Settings.dun.gamePlatform
+      this.ClientVersion = versionData.clientVersion;
+      this.ResVersion = versionData.resVersion;
     }
   }
 }

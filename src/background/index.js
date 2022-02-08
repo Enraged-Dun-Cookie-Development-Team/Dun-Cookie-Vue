@@ -38,6 +38,9 @@ const cardListCache = {};
 // 蹲饼的轮次
 let dunTime = 0;
 
+// 每次获取的饼内容
+let cookieContent = "init content";
+
 /**
  * 蹲饼！
  */
@@ -171,8 +174,15 @@ const kazeFun = {
                 console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
                 // 是否推送
                 if (Settings.dun.enableNotice) {
-                    NotificationUtil.SendNotice(`小刻在【${title}】里面找到了一个饼！`, notice, newInfo.coverImage, newInfo.id)
+                    if(cookieContent.substr(0,50) == notice.substr(0,50)) {
+                        if(Settings.dun.repetitionPush) {
+                            NotificationUtil.SendNotice(`小刻在【${title}】里面找到了一个饼！`, notice, newInfo.coverImage, newInfo.id)
+                        }
+                    } else {
+                        NotificationUtil.SendNotice(`小刻在【${title}】里面找到了一个饼！`, notice, newInfo.coverImage, newInfo.id)
+                    }
                 }
+                cookieContent = notice;
                 return true;
             } else if (newList && newList.length > (oldList ? oldList.length : 0)) {
                 return true;

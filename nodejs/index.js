@@ -1,8 +1,31 @@
 const { Worker } = require('worker_threads');
+const EventEmitter = require("events");
+const ws = require('nodejs-websocket');
+const http = require("http");
+const urlib = require("url");
 
 let worker;
-let cardList = {"error": "还没有获得饼列表，再等等就有了"};
-let getList = true;
+let emitter;
+let server;
+let cardList = {};
+let getList = false;
+let detailList = {};
+let ipList = [];
+
+
+let sourceMap = {
+    "0": "官方B站动态",
+    "1": "官方微博",
+    "2": "游戏内公告",
+    "3": "朝陇山微博",
+    "4": "一拾山微博",
+    "5": "塞壬唱片官网",
+    "6": "泰拉记事社微博",
+    "7": "官网",
+    "8": "泰拉记事社官网",
+    "9": "塞壬唱片网易云音乐",
+    "10": "鹰角网络微博",
+};
 
 function getCardList() {
     worker.postMessage({ type: 'cardList-get' });
@@ -17,26 +40,124 @@ global.stopWorker = stopWorker;
 worker = new Worker('../dist/background.js', {
     execArgv: []
 });
+emitter = new EventEmitter();
 
 // 简单地输出收到的消息，不进行任何处理
 worker.on('message', msg => {
-    if (msg.type == 'cardList-get' || msg.type == 'cardList-update') { // 收到cardlist的get或者update的时候更新nodejs的cardlist
-        cardList = msg;
-    } else if (msg.type == 'dunInfo-update' && getList) {   // 第一次获取信息后，获取CradList
+    if ((msg.type == 'cardList-get' && !getList) || msg.type == 'cardList-update') { // 收到cardlist的get或者update的时候更新nodejs的cardlist
+        getList = true;
+        cardList.type = msg.type;
+        cardList.data = {};
+        // 将各数据源信息存到detailList
+        for (let source in msg.data) {
+            detailList[source] = JSON.parse(JSON.stringify(msg.data[source]));
+        }
+        emitter.emit('websocket-get', msg);
+    } else if (msg.type == 'dunInfo-update' && !getList) {   // 第一次获取信息后，获取cardList
         getCardList();
-        getList = false;
     }
 });
 
+// web socket使用5683链接
+server = ws.createServer(conn => {
+    let firstConnect = true;
+    let firstConnectList = {};
+    firstConnectList = JSON.parse(JSON.stringify(detailList));
+    if (firstConnect && Object.keys(detailList).length != 0) {
+        conn.sendText(JSON.stringify(firstConnectList));
+    }
+    emitter.on('websocket-get', msg => {
+        conn.sendText(JSON.stringify(msg.data));
+    });
+    // 检测连接状态
+    conn.on("close", (code, reason) => {
+        console.log("key："+conn.key+"，状态：关闭连接")
+    });
+    conn.on("error", (code, reason) => {
+        console.log(code + "---" + reason)
+        console.log("key："+conn.key+"，状态：异常关闭")
+    });
+}).listen(5683);
+
+// 判断是否重复ip，不重复就推入
+function ipPush(ip) {
+    let repeat = false;
+    ipList.forEach((ipAddress, index) => {
+        if(ip == ipAddress) {
+            repeat = true;
+        }
+    })
+    if(!repeat) {
+        ipList.push(ip); 
+    }
+}
+
 // 建立与3000端口连接
-let http = require("http");
-http.createServer(function (req, res) {
+http.createServer((req, res) => {
     // json文件 utf-8解析及写入cardList
-    if (req.url == "/canteen/cardList") {
+    let urlObj = urlib.parse(req.url, true);
+    // 判断路径是否正确
+    if (urlObj.pathname == "/canteen/cardList") {
+        ipPush(req.socket.remoteAddress)
+        // 没蹲饼列表的时候返回
+        let userCardList = { "error": "还没有获得饼列表，再等等就有了" };
+        // 判断是否蹲到饼过
+        if (cardList.hasOwnProperty('data')) {
+            // 复制基础信息
+            userCardList = JSON.parse(JSON.stringify(cardList));
+            let sourceList = urlObj.query.source;
+
+            // 确保source参数被赋值
+            if (sourceList != undefined) {
+                let sources = sourceList.split("_");
+
+                sources.forEach(source => {
+                    let sourcename = sourceMap[source];
+                    userCardList.data[sourcename] = JSON.parse(JSON.stringify(detailList[sourcename]));
+                });
+            }
+            // source无内容自动获取全列表
+            if (Object.keys(userCardList.data).length == 0) {
+                userCardList.data = JSON.parse(JSON.stringify(detailList));
+            }
+        }
+
         res.writeHeader(200, { 'Content-Type': 'application/json;charset=utf-8' });
-        res.write(JSON.stringify(cardList));
+        res.write(JSON.stringify(userCardList));
+        res.end();
+        userCardList = {};
+    } else if (urlObj.pathname == "/canteen/userNumber") { // 获取用户总数量
+        let userNumber = {"userNumber": ipList.length};
+        res.writeHeader(200, { 'Content-Type': 'application/json;charset=utf-8' });
+        res.write(JSON.stringify(userNumber));
+        res.end();
+        userCardList = {};
+    } else if (urlObj.pathname == "/canteen/newCardList") {
+        let userCardList = { "error": "还没有获得饼列表，再等等就有了" };
+        // 判断是否蹲到饼过
+        if (cardList.hasOwnProperty('data')) {
+            // 复制基础信息
+            userCardList = JSON.parse(JSON.stringify(cardList));
+
+            userCardList.data["官方B站动态"] = JSON.parse(JSON.stringify(detailList["官方B站动态"].slice(0,2)));
+            userCardList.data["官方微博"] = JSON.parse(JSON.stringify(detailList["官方微博"].slice(0,1)));
+            userCardList.data["游戏内公告"] = JSON.parse(JSON.stringify(detailList["游戏内公告"].slice(0,4)));
+            userCardList.data["朝陇山微博"] = JSON.parse(JSON.stringify(detailList["朝陇山微博"].slice(0,2)));
+            userCardList.data["一拾山微博"] = JSON.parse(JSON.stringify(detailList["一拾山微博"].slice(0,3)));
+            userCardList.data["塞壬唱片官网"] = JSON.parse(JSON.stringify(detailList["塞壬唱片官网"].slice(0,0)));
+            userCardList.data["泰拉记事社微博"] = JSON.parse(JSON.stringify(detailList["泰拉记事社微博"].slice(0,1)));
+            userCardList.data["官网"] = JSON.parse(JSON.stringify(detailList["官网"].slice(0,1)));
+            userCardList.data["泰拉记事社官网"] = JSON.parse(JSON.stringify(detailList["泰拉记事社官网"].slice(0,2)));
+            userCardList.data["塞壬唱片网易云音乐"] = JSON.parse(JSON.stringify(detailList["塞壬唱片网易云音乐"].slice(0,4)));
+            userCardList.data["鹰角网络微博"] = JSON.parse(JSON.stringify(detailList["鹰角网络微博"].slice(0,1)));
+        }
+        res.writeHeader(200, { 'Content-Type': 'application/json;charset=utf-8' });
+        res.write(JSON.stringify(userCardList));
+        res.end();
+    } else {
+        res.writeHeader(404, { 'Content-Type': 'text/html;charset=utf-8' });
         res.end();
     }
-}).listen(3000);
+}).listen(3000); // 绑定3000端口
 
-// 在控制台执行此命令即可测试：node --require "./index.js"
+// 在控制台执行此命令即可测试：node index.js
