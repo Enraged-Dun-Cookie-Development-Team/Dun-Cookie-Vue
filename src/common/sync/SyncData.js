@@ -1,5 +1,6 @@
 import PlatformHelper from "../platform/PlatformHelper";
 import {deepAssign, deepEquals} from "../util/CommonFunctions";
+import DebugUtil from "../util/DebugUtil";
 
 function keyUpdate(key) {
   return 'sync-update:' + key;
@@ -74,15 +75,15 @@ class DataSynchronizer {
       if (!deepEquals(target[prop], value)) {
         _this.sendUpdateAtNextTick();
       }
-      // console.log(`更新${_this.key}: ${String(prop)}: ${value}`);
+      DebugUtil.debugLog(7, `更新${_this.key}: ${String(prop)}: ${value}`);
       return Reflect.set(...arguments);
     };
     handler.deleteProperty = function (target, prop) {
-      // console.log(`删除属性${_this.key}: ${String(prop)}`);
+      DebugUtil.debugLog(7, `删除属性${_this.key}: ${String(prop)}`);
       return Reflect.deleteProperty(...arguments);
     };
     handler.defineProperty = function (target, prop, descriptor) {
-      // console.log(`添加属性${_this.key}: ${String(prop)}`);
+      DebugUtil.debugLog(7, `添加属性${_this.key}: ${String(prop)}`);
       return Reflect.defineProperty(...arguments);
     };
     return new Proxy(this.target, handler);
@@ -95,17 +96,10 @@ class DataSynchronizer {
 
   __createReadonlyProxyHandler() {
     const _this = this;
-    return {
-      deleteProperty(target, prop) {
-        // console.log(`禁止删除属性${_this.key}: ${String(prop)}`);
-        return false;
-      },
-      defineProperty(target, prop, descriptor) {
-        // console.log(`禁止添加属性${_this.key}: ${String(prop)}`);
-        return false;
-      },
+    // noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
+    let handler = {
       set(target, prop, value, receiver) {
-        // console.log(`禁止更新${_this.key}: ${String(prop)}: ${value}`);
+        DebugUtil.debugLog(7, `禁止更新${_this.key}: ${String(prop)}: ${value}`);
         return false;
       },
       get(target, prop, receiver) {
@@ -115,15 +109,31 @@ class DataSynchronizer {
           if (typeof value === "function") {
             value = value.bind(_this);
           }
-          // console.log(`获取内部属性${_this.key}: ${String(prop)}: ${value}`);
+          DebugUtil.debugLog(7, `获取内部属性${_this.key}: ${String(prop)}: ${value}`);
           return value;
         }
-        // noinspection UnnecessaryLocalVariableJS
         const value = Reflect.get(...arguments);
-        // console.log(`获取${_this.key}: ${String(prop)}: ${value}`);
+        DebugUtil.debugLog(7, `获取${_this.key}: ${String(prop)}: ${value}`);
         return value;
       }
     };
+    // NOTICE 由于vue2使用property的方式做监听，所以不能禁止，否则vue就监听不到了
+    //        但在vue3或者非vue环境中可以考虑禁止property操作
+    let denyPropertyUpdate = false;
+    if (denyPropertyUpdate) {
+      // noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
+      handler = Object.assign(handler, {
+        deleteProperty(target, prop) {
+          DebugUtil.debugLog(7, `禁止删除属性${_this.key}: ${String(prop)}`);
+          return false;
+        },
+        defineProperty(target, prop, descriptor) {
+          DebugUtil.debugLog(7, `禁止添加属性${_this.key}: ${String(prop)}`);
+          return false;
+        },
+      });
+    }
+    return handler;
   }
 
   isSyncProperty(prop) {
@@ -175,6 +185,7 @@ function createSyncData(target, key, mode, shouldPersist = false) {
   return synchronizer.proxy;
 }
 
+// noinspection JSUnusedLocalSymbols
 class CanSync {
   registerUpdateListener(listener) {
     throw new Error('仅用于IDE的友好提示，不应当被调用');

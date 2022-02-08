@@ -1,8 +1,13 @@
 // region 版本号、测试模式等常量
 /**
+ * Debug等级，小于等于0的值为关闭debug
+ * @type {number} Debug等级
+ */
+const DEBUG_LEVEL = 9;
+/**
  * 是否是测试模式
  */
-const IS_DEBUG = false;
+const IS_DEBUG = DEBUG_LEVEL > 0;
 /**
  * 是否输出调试日志
  * <p>
@@ -22,7 +27,7 @@ const CURRENT_VERSION = '3.0.10';
  */
 const SHOW_VERSION = CURRENT_VERSION + (IS_DEBUG ? '【调试模式】' : '');
 
-export {IS_DEBUG, DEBUG_LOG, CURRENT_SETTING_VERSION, CURRENT_VERSION, SHOW_VERSION};
+export {IS_DEBUG, DEBUG_LEVEL, DEBUG_LOG, CURRENT_SETTING_VERSION, CURRENT_VERSION, SHOW_VERSION};
 // endregion
 
 // region 各种参数，主要用于测试模式
