@@ -574,7 +574,7 @@ export default {
         global.customData = this.customData;
         this.logo = "../assets/image/" + settings.logo;
       });
-      DunInfo.registerUpdateListener((data) => {
+      DunInfo.doAfterUpdate((data) => {
         this.oldDunCount = data.counter;
       });
     },

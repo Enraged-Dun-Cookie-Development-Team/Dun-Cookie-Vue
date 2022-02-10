@@ -279,7 +279,7 @@ export default {
     openUrl: PlatformHelper.Tabs.create,
     init() {
       // this.menuIconInit();
-      DunInfo.registerUpdateListener((data) => {
+      DunInfo.doAfterUpdate((data) => {
         this.oldDunCount = data.counter;
       });
       setTimeout(() => {
