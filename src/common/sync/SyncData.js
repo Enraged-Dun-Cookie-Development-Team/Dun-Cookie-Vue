@@ -28,15 +28,24 @@ class DataSynchronizer {
   updateFlag = false;
   updateListeners = [];
   updateCount = 0;
+  inited = false;
+  initListeners = [];
 
   constructor(key, target, shouldPersist) {
     this.key = key;
     this.target = target;
     this.shouldPersist = shouldPersist;
     PlatformHelper.Storage.getLocalStorage(keyPersist(key)).then(data => {
+      // 当且仅当未进行过更新且storage中有数据时才会将storage中的数据设为当前数据
+      // 如果已经接收过数据更新则忽略storage中的数据
       if (this.updateCount === 0 && data) {
         DebugUtil.debugLog(6, `从Storage中读取${this.key}: `, data);
         this.__handleReloadOrReceiveUpdate(data);
+      }
+    }).finally(() => {
+      this.inited = true;
+      for (const listener of this.initListeners) {
+        listener(this.proxy);
       }
     });
   }
@@ -51,8 +60,16 @@ class DataSynchronizer {
     }
   }
 
-  registerUpdateListener(listener) {
+  doAfterUpdate(listener) {
     this.updateListeners.push(listener);
+  }
+
+  doAfterInit(listener) {
+    if (this.inited) {
+      listener(this.proxy);
+    } else {
+      this.initListeners.push(listener);
+    }
   }
 
   sendUpdateAtNextTick() {
@@ -75,8 +92,8 @@ class DataSynchronizer {
     handler.set = function (target, prop, value, receiver) {
       if (!deepEquals(target[prop], value)) {
         _this.sendUpdateAtNextTick();
+        DebugUtil.debugLog(7, `更新${_this.key}: ${String(prop)}: `, value);
       }
-      DebugUtil.debugLog(7, `更新${_this.key}: ${String(prop)}: `, value);
       return Reflect.set(...arguments);
     };
     handler.deleteProperty = function (target, prop) {
@@ -92,6 +109,9 @@ class DataSynchronizer {
         }
       } else {
         DebugUtil.debugLog(7, `添加属性${_this.key}: ${String(prop)}`, descriptor);
+      }
+      if (descriptor && descriptor.hasOwnProperty('value') && !deepEquals(target[prop], descriptor.value)) {
+        _this.sendUpdateAtNextTick();
       }
       return Reflect.defineProperty(...arguments);
     };
@@ -130,23 +150,20 @@ class DataSynchronizer {
     //        但在vue3或者非vue环境中可以考虑禁止property操作
     let denyPropertyUpdate = false;
     if (denyPropertyUpdate) {
-      // noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
-      handler = Object.assign(handler, {
-        deleteProperty(target, prop) {
-          DebugUtil.debugLog(7, `禁止删除属性${_this.key}: ${String(prop)}`);
-          return false;
-        },
-        defineProperty(target, prop, descriptor) {
-          DebugUtil.debugLog(7, `禁止添加属性${_this.key}: ${String(prop)}`);
-          return false;
-        },
-      });
+      handler.deleteProperty = function (target, prop) {
+        DebugUtil.debugLog(7, `禁止删除属性${_this.key}: ${String(prop)}`);
+        return false;
+      }
+      handler.defineProperty = function (target, prop, descriptor) {
+        DebugUtil.debugLog(7, `禁止添加属性${_this.key}: ${String(prop)}`, descriptor);
+        return false;
+      }
     }
     return handler;
   }
 
   isSyncProperty(prop) {
-    return prop === 'registerUpdateListener';
+    return prop === 'doAfterUpdate' || prop === 'doAfterInit';
   }
 
 }
@@ -178,7 +195,21 @@ class DataSynchronizerOnlyBackgroundWritable extends DataSynchronizer {
   }
 }
 
+// 用于储存已注册的key，避免重复注册相同的key
+const keyMap = {};
+
+/**
+ * 创建同步数据
+ * @param target 目标源对象
+ * @param key 同步key，不能重复
+ * @param mode 同步模式
+ * @param shouldPersist 是否需要数据持久化
+ * @return {* & CanSync}
+ */
 function createSyncData(target, key, mode, shouldPersist = false) {
+  if (keyMap[key]) {
+    throw new Error('duplicate key: ' + key);
+  }
   let synchronizer = new DataSynchronizer(key, target);
   switch (mode) {
     case DataSyncMode.ALL_WRITABLE:
@@ -190,14 +221,19 @@ function createSyncData(target, key, mode, shouldPersist = false) {
     default:
       throw new Error('unsupported sync mode: ' + mode);
   }
-  console.log(`已启用同步数据：${key}`);
+  keyMap[key] = true;
   global.SyncData[key] = synchronizer.proxy;
+  console.log(`已启用同步数据：${key}`, synchronizer.proxy);
   return synchronizer.proxy;
 }
 
+// 该类仅用于IDE友好提示
 // noinspection JSUnusedLocalSymbols
 class CanSync {
-  registerUpdateListener(listener) {
+  doAfterUpdate(listener) {
+    throw new Error('仅用于IDE的友好提示，不应当被调用');
+  }
+  doAfterInit(listener) {
     throw new Error('仅用于IDE的友好提示，不应当被调用');
   }
 }
