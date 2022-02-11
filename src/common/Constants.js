@@ -3,7 +3,7 @@
  * Debug等级，小于等于0的值为关闭debug
  * @type {number} Debug等级
  */
-const DEBUG_LEVEL = 9;
+const DEBUG_LEVEL = 0;
 /**
  * 是否是测试模式
  */
