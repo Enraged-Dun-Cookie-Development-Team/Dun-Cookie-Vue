@@ -406,10 +406,10 @@
                         placeholder="选择默认标签"
                       >
                         <el-option
-                          v-for="source in settings.currentDataSources"
-                          :key="source.dataName"
-                          :label="source.title"
-                          :value="source.dataName"
+                            v-for="source in currentDataSource"
+                            :key="source.dataName"
+                            :label="source.title"
+                            :value="source.dataName"
                         >
                           <div style="display: flex; align-items: center">
                             <img
@@ -506,16 +506,14 @@ import countTo from "vue-count-to";
 
 import Settings from "../common/Settings";
 import DunInfo from "../common/sync/DunInfo";
-import { MESSAGE_DUN_INFO_UPDATE, SHOW_VERSION } from "../common/Constants";
-import { getDefaultDataSourcesList } from "../common/datasource/DefaultDataSources";
+import {SHOW_VERSION} from "../common/Constants";
+import {getDefaultDataSourcesList} from "../common/datasource/DefaultDataSources";
 import TimeUtil from "../common/util/TimeUtil";
-import {
-  customDataSourceTypes,
-  customDataSourceTypesByName,
-} from "../common/datasource/CustomDataSources";
-import { animateCSS, deepAssign } from "../common/util/CommonFunctions";
+import {customDataSourceTypes, customDataSourceTypesByName,} from "../common/datasource/CustomDataSources";
+import {animateCSS, deepAssign} from "../common/util/CommonFunctions";
 import PlatformHelper from "../common/platform/PlatformHelper";
 import "animate.css";
+import CurrentDataSource from "../common/sync/CurrentDataSource";
 
 export default {
   name: "app",
@@ -537,6 +535,7 @@ export default {
       oldDunCount: 0,
       dunInfo: DunInfo,
       settings: Settings,
+      currentDataSource: CurrentDataSource,
       defSourcesList: [],
       customTypes: customDataSourceTypes,
       customTypesByName: customDataSourceTypesByName,
@@ -575,13 +574,9 @@ export default {
         global.customData = this.customData;
         this.logo = "../assets/image/" + settings.logo;
       });
-      PlatformHelper.Message.registerListener(
-        "options",
-        MESSAGE_DUN_INFO_UPDATE,
-        (data) => {
-          this.oldDunCount = data.counter;
-        }
-      );
+      DunInfo.doAfterUpdate((data) => {
+        this.oldDunCount = data.counter;
+      });
     },
     initAnimate() {
       animateCSS(".loading-title-area", "zoomInDown", () => {

@@ -24,9 +24,9 @@ export default class EdgePlatform extends ChromePlatform {
         return message;
     }
 
-    __handleReceiverMessage(type, message, listener) {
+    __handleReceiverMessage(id, type, message, listener) {
         if (message.page !== _pageId) {
-            return super.__handleReceiverMessage(type, message, listener);
+            return super.__handleReceiverMessage(id, type, message, listener);
         }
     }
 

@@ -211,7 +211,6 @@ import {
   dayInfo,
   MESSAGE_CARD_LIST_GET,
   MESSAGE_CARD_LIST_UPDATE,
-  MESSAGE_DUN_INFO_UPDATE,
   MESSAGE_FORCE_REFRESH,
   MESSAGE_GET_COUNTDOWN,
   PAGE_DONATE,
@@ -280,13 +279,9 @@ export default {
     openUrl: PlatformHelper.Tabs.create,
     init() {
       // this.menuIconInit();
-      PlatformHelper.Message.registerListener(
-          "popup",
-          MESSAGE_DUN_INFO_UPDATE,
-          (data) => {
-            this.oldDunCount = data.counter;
-          }
-      );
+      DunInfo.doAfterUpdate((data) => {
+        this.oldDunCount = data.counter;
+      });
       setTimeout(() => {
         // 计算高度
         // this.calcHeight();

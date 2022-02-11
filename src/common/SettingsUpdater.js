@@ -1,5 +1,6 @@
 import {CURRENT_SETTING_VERSION} from './Constants';
 import {getDefaultDataSourcesList} from './datasource/DefaultDataSources';
+import {deepAssign} from "./util/CommonFunctions";
 
 async function updateLegacyToV1(oldSettings) {
   console.log("从旧配置升级：");
@@ -9,6 +10,7 @@ async function updateLegacyToV1(oldSettings) {
     display: {},
     san: {}
   };
+
   if (oldSettings.hasOwnProperty('time')) newSettings.dun.intervalTime = oldSettings.time;
   if (oldSettings.hasOwnProperty('source')) {
     const list = await getDefaultDataSourcesList();
@@ -27,6 +29,19 @@ async function updateLegacyToV1(oldSettings) {
   if (oldSettings.hasOwnProperty('sanShow')) newSettings.san.noticeWhenFull = oldSettings.sanShow;
   if (oldSettings.hasOwnProperty('saneMax')) newSettings.san.maxValue = oldSettings.saneMax;
   if (oldSettings.hasOwnProperty('isWindow')) newSettings.display.windowMode = oldSettings.isWindow;
+
+  console.log("升级完毕，新配置：");
+  console.log(newSettings);
+  return newSettings;
+}
+
+async function updateV1ToV2(oldSettings) {
+  console.log("从V1配置升级：");
+  console.log(oldSettings);
+  const newSettings = deepAssign({}, oldSettings);
+
+  Reflect.deleteProperty(newSettings, 'currentDataSources');
+
   console.log("升级完毕，新配置：");
   console.log(newSettings);
   return newSettings;
@@ -40,6 +55,15 @@ async function updateSettings(oldSettings) {
   // 无版本号的旧配置文件升级
   if (!oldSettings.version) {
     return await updateLegacyToV1(oldSettings);
+  }
+  let oldVersion = parseInt(oldSettings.version);
+  while (oldVersion < CURRENT_SETTING_VERSION) {
+    switch (oldVersion) {
+      case 1:
+        oldSettings = updateV1ToV2(oldSettings);
+        break;
+    }
+    oldVersion++;
   }
 }
 

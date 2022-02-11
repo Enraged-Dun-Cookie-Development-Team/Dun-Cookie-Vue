@@ -31,12 +31,12 @@ export default class FirefoxPlatform extends BrowserPlatform {
     }
 
     sendMessage(type, data) {
-        const message = super.__buildMessageToSend(type, data);
+        const message = this.__buildMessageToSend(type, data);
 
         return browser.runtime.sendMessage(message).then(response => {
-            return super.__transformResponseMessage(response);
+            return this.__transformResponseMessage(type, response);
         }).catch(err => {
-            if (super.__shouldIgnoreMessageError(err.message)) {
+            if (this.__shouldIgnoreMessageError(err.message)) {
                 return;
             }
             return Promise.reject(err);
@@ -45,7 +45,7 @@ export default class FirefoxPlatform extends BrowserPlatform {
 
     addMessageListener(id, type, listener) {
         return browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-            const value = super.__handleReceiverMessage(type, message, listener);
+            const value = this.__handleReceiverMessage(id, type, message, listener);
             if (value !== undefined) {
                 // 根据W3C规范，异步回复消息应该直接返回Promise
                 // 参考文档：https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onMessage

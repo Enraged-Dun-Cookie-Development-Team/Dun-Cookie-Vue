@@ -1,5 +1,6 @@
-import {DEBUG_LOG, PLATFORM_CHROME} from '../../Constants';
+import {PLATFORM_CHROME} from '../../Constants';
 import BrowserPlatform from "./BrowserPlatform";
+import DebugUtil from "../../util/DebugUtil";
 
 export default class ChromePlatform extends BrowserPlatform {
 
@@ -12,7 +13,7 @@ export default class ChromePlatform extends BrowserPlatform {
     }
 
     getAllWindow() {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             chrome.windows.getAll({}, function (data) {
                 resolve(data);
             });
@@ -50,29 +51,27 @@ export default class ChromePlatform extends BrowserPlatform {
     }
 
     sendMessage(type, data) {
-        const message = super.__buildMessageToSend(type, data);
+        const message = this.__buildMessageToSend(type, data);
 
         return new Promise((resolve, reject) => {
             chrome.runtime.sendMessage(message, (response) => {
                 if (chrome.runtime.lastError) {
-                    if (super.__shouldIgnoreMessageError(chrome.runtime.lastError.message)) {
-                        if (DEBUG_LOG) {
-                            console.log(`response - ${type} - ignore error: ${chrome.runtime.lastError.message}`);
-                        }
+                    if (this.__shouldIgnoreMessageError(chrome.runtime.lastError.message)) {
+                        DebugUtil.debugLog(8, `response - ${type} - ignore error: ${chrome.runtime.lastError.message}`);
                         resolve();
                     } else {
                         reject(chrome.runtime.lastError);
                     }
                     return;
                 }
-                resolve(super.__transformResponseMessage(response));
+                resolve(this.__transformResponseMessage(type, response));
             });
         });
     }
 
     addMessageListener(id, type, listener) {
         return chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-            const value = super.__handleReceiverMessage(type, message, listener);
+            const value = this.__handleReceiverMessage(id, type, message, listener);
             if (value !== undefined) {
                 // Chromium内核中必须用return true的方式进行异步返回，不支持直接返回Promise
                 // 参考兼容性表格：https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onMessage
