@@ -3,7 +3,7 @@
  * <p>
  * 之所以弄一个工具类出来而不是直接放进DataSource是为了文件避免循环依赖
  */
-import Settings from '../Settings';
+import CurrentDataSource from "../sync/CurrentDataSource";
 
 class DataSourceUtil {
 
@@ -12,7 +12,7 @@ class DataSourceUtil {
    * @return {DataSource|undefined}
    */
   static getByName(dataName) {
-    return Settings.currentDataSources[dataName];
+    return CurrentDataSource[dataName];
   }
 
   /**

@@ -43,7 +43,7 @@ function deepAssign(target, obj, changed) {
     return target;
 }
 
-const scalarTypes = ["string", "number", "boolean"];
+const scalarTypes = ["string", "number", "bigint", "boolean", "undefined", "symbol"];
 
 /**
  * 深度递归比较对象
@@ -76,6 +76,8 @@ function deepEquals(a, b) {
             }
             return true;
         }
+    } else if (typeof a === "function") {
+        return a === b;
     } else {
         console.log("不支持的deepEquals类型：" + typeof a);
         return false;

@@ -1,6 +1,4 @@
-import {MESSAGE_DUN_INFO_GET, MESSAGE_DUN_INFO_UPDATE} from '../Constants';
-import {deepAssign} from '../util/CommonFunctions';
-import PlatformHelper from '../platform/PlatformHelper';
+import {createSyncData, DataSyncMode} from "./SyncData";
 
 /**
  * 蹲饼数据
@@ -14,16 +12,10 @@ class DunInfo {
   cookieCount = 0;
   // 最后一次蹲饼时间
   lastDunTime = -1;
-
-  constructor() {
-    PlatformHelper.Message.send(MESSAGE_DUN_INFO_GET).then(data => deepAssign(this, data));
-    PlatformHelper.Message.registerListener('dunInfo', MESSAGE_DUN_INFO_UPDATE, data => deepAssign(this, data));
-  }
-
-  saveUpdate() {
-    PlatformHelper.Message.send(MESSAGE_DUN_INFO_UPDATE, this);
-  }
 }
 
-const instance = new DunInfo();
+/**
+ * @type {DunInfo & CanSync}
+ */
+const instance = createSyncData(new DunInfo(), 'dun', DataSyncMode.ONLY_BACKGROUND_WRITABLE);
 export default instance;

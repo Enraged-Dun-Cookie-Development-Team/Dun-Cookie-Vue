@@ -1,8 +1,13 @@
 // region 版本号、测试模式等常量
 /**
+ * Debug等级，小于等于0的值为关闭debug
+ * @type {number} Debug等级
+ */
+const DEBUG_LEVEL = 9;
+/**
  * 是否是测试模式
  */
-const IS_DEBUG = false;
+const IS_DEBUG = DEBUG_LEVEL > 0;
 /**
  * 是否输出调试日志
  * <p>
@@ -12,7 +17,7 @@ const DEBUG_LOG = IS_DEBUG && true;
 /**
  * 当前配置文件版本号
  */
-const CURRENT_SETTING_VERSION = 1;
+const CURRENT_SETTING_VERSION = 2;
 /**
  * 当前插件版本号
  */
@@ -22,7 +27,7 @@ const CURRENT_VERSION = '3.0.14';
  */
 const SHOW_VERSION = CURRENT_VERSION + (IS_DEBUG ? '【调试模式】' : '');
 
-export {IS_DEBUG, DEBUG_LOG, CURRENT_SETTING_VERSION, CURRENT_VERSION, SHOW_VERSION};
+export {IS_DEBUG, DEBUG_LEVEL, DEBUG_LOG, CURRENT_SETTING_VERSION, CURRENT_VERSION, SHOW_VERSION};
 // endregion
 
 // region 各种参数，主要用于测试模式
@@ -42,10 +47,8 @@ export {TEST_DATA_REFRESH_TIME, SAN_RECOVERY_SPEED};
 const MESSAGE_SETTINGS_UPDATE = 'settings-update';
 const MESSAGE_SAN_UPDATE = 'san-update';
 const MESSAGE_CARD_LIST_UPDATE = 'cardList-update';
-const MESSAGE_DUN_INFO_UPDATE = 'dunInfo-update';
 
 const MESSAGE_SAN_GET = 'san-get';
-const MESSAGE_DUN_INFO_GET = 'dunInfo-get';
 const MESSAGE_CARD_LIST_GET = 'cardList-get';
 const MESSAGE_CHANGE_COUNTDOWN = 'change-countdown'
 
@@ -53,8 +56,8 @@ const MESSAGE_FORCE_REFRESH = 'force-refresh';
 const MESSAGE_WEIBO_DETAIL = 'weibo-detail';
 const MESSAGE_GET_COUNTDOWN = 'countdown-list';
 
-export {MESSAGE_SETTINGS_UPDATE, MESSAGE_SAN_UPDATE, MESSAGE_CARD_LIST_UPDATE, MESSAGE_DUN_INFO_UPDATE};
-export {MESSAGE_SAN_GET, MESSAGE_DUN_INFO_GET, MESSAGE_CARD_LIST_GET,MESSAGE_CHANGE_COUNTDOWN};
+export {MESSAGE_SETTINGS_UPDATE, MESSAGE_SAN_UPDATE, MESSAGE_CARD_LIST_UPDATE};
+export {MESSAGE_SAN_GET, MESSAGE_CARD_LIST_GET,MESSAGE_CHANGE_COUNTDOWN};
 export {MESSAGE_FORCE_REFRESH, MESSAGE_WEIBO_DETAIL,MESSAGE_GET_COUNTDOWN};
 // endregion
 

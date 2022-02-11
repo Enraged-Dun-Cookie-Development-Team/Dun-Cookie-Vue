@@ -61,17 +61,25 @@ export default class BrowserPlatform extends AbstractPlatform {
     wrapper.style.wordBreak = "break-all";
     wrapper.style.font = "16px Microsoft Yahei";
     wrapper.style.color = "#848488";
-    let html = dataItem.content.replace('\n', '<br/>');
+    let html = dataItem.content;
     if (dataItem.retweeted) {
-      html += `<div>
-          转发自 ${dataItem.retweeted.name}:
-          <br/>
-          <span>${dataItem.retweeted.content}</span>
-        </div>`
+      const retweeted = `<div style="
+font-family: 'Segoe UI', Arial, 'Microsoft Yahei', sans-serif;
+list-style: none;
+font-size: 1rem;
+background-color: #fff;
+border: #e4e7ed solid 1px;
+color: #848488;
+margin: 10px 0 0 0;
+padding: 10px;
+border-radius: 3px;
+width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retweeted.content}</span></div>`
+      html += retweeted;
     }
     wrapper.innerHTML = html;
     document.body.appendChild(wrapper);
     const textCanvasPromise = html2canvas(wrapper, {
+      useCORS: true,
       backgroundColor: null,
       width: textWidth,
       scale: 1
