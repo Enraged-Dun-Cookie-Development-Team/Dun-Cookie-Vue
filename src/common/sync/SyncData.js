@@ -142,7 +142,7 @@ class DataSynchronizer {
           return value;
         }
         const value = Reflect.get(...arguments);
-        DebugUtil.debugLog(8, `获取${_this.key}: ${String(prop)}: `, value);
+        DebugUtil.debugLog(9, `获取${_this.key}: ${String(prop)}: `, value);
         return value;
       }
     };

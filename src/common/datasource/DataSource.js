@@ -74,6 +74,9 @@ class DataSource {
       return null;
     }
     try {
+      if (!this.tmp_cache) this.tmp_cache = [];
+      this.tmp_cache.push(response);
+      if (this.tmp_cache.length > 2) this.tmp_cache.shift();
       const data = await this.processData(response);
       return DataSourceUtil.sortData(data);
     } catch (e) {

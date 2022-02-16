@@ -75,7 +75,7 @@ function tryDun(settings) {
             const promise = source.fetchData()
                 .then(newCardList => {
                     let oldCardList = cardListCache[dataName];
-                    let isNew = kazeFun.JudgmentNew(oldCardList, newCardList, source.title);
+                    let isNew = kazeFun.JudgmentNew(oldCardList, newCardList, source.title, source.tmp_cache);
                     if (newCardList && newCardList.length > 0) {
                         cardListCache[dataName] = newCardList;
                     }
@@ -153,7 +153,7 @@ const kazeFun = {
     //     return false
     // },
     // 考虑删除公告推送的情况
-    JudgmentNew(oldList, newList, title) {
+    JudgmentNew(oldList, newList, title, tmp_cache) {
         //判断方法 取每条的第一个判定字段  如果新的字段不等于旧的且大于旧的 判定为新条目
         if (oldList
             && newList
@@ -167,6 +167,7 @@ const kazeFun = {
                 }
             }
             if (newAnnouncement) {
+                console.log(tmp_cache);
                 let newInfo = newList[0];
                 let timeNow = new Date()
                 let notice = newInfo.content.replace(/\n/g, "");
@@ -174,8 +175,8 @@ const kazeFun = {
                 console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
                 // 是否推送
                 if (Settings.dun.enableNotice) {
-                    if(cookieContent.substr(0,50) == notice.substr(0,50)) {
-                        if(Settings.dun.repetitionPush) {
+                    if (cookieContent.substr(0, 50) == notice.substr(0, 50)) {
+                        if (Settings.dun.repetitionPush) {
                             NotificationUtil.SendNotice(`小刻在【${title}】里面找到了一个饼！`, notice, newInfo.coverImage, newInfo.id)
                         }
                     } else {
@@ -184,10 +185,12 @@ const kazeFun = {
                 }
                 cookieContent = notice;
                 return true;
-            } else if (newList && newList.length > (oldList ? oldList.length : 0)) {
+            } else if (newList.length < oldList.length) { // 判断如果只是删除，则为获取新列表
                 return true;
             }
             return false;
+        } else if (newList && newList.length > (oldList ? oldList.length : 0)) { // 第一次蹲饼可能没有oldList，同样更新列表
+            return true;
         }
         return false;
     },
@@ -206,8 +209,8 @@ const kazeFun = {
         Settings.doAfterUpdate((settings, changed) => {
             // 只有更新了数据源/蹲饼频率的时候才刷新，避免无意义的网络请求
             if (!changed.enableDataSources
-              && !changed.customDataSources
-              && !changed.dun
+                && !changed.customDataSources
+                && !changed.dun
             ) {
                 return;
             }
@@ -325,7 +328,7 @@ const countDown = {
 }
 
 const penguinStatistics = {
-    Init(){
+    Init() {
         PenguinStatistics.GetNewItems()
     }
 };
