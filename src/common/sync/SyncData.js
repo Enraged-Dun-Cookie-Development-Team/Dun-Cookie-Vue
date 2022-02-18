@@ -2,6 +2,22 @@ import PlatformHelper from "../platform/PlatformHelper";
 import {deepAssign, deepEquals} from "../util/CommonFunctions";
 import DebugUtil from "../util/DebugUtil";
 
+// 该类仅用于IDE友好提示
+// noinspection JSUnusedLocalSymbols
+class CanSync {
+  doAfterUpdate(listener) {
+    throw new Error('仅用于IDE的友好提示，不应当被调用');
+  }
+
+  doAfterInit(listener) {
+    throw new Error('仅用于IDE的友好提示，不应当被调用');
+  }
+
+  doAfterFirstUpdate(listener) {
+    throw new Error('仅用于IDE的友好提示，不应当被调用');
+  }
+}
+
 function keyUpdate(key) {
   return 'sync-update:' + key;
 }
@@ -18,6 +34,17 @@ class DataSyncMode {
   static ONLY_BACKGROUND_WRITABLE = 1;
   static ALL_WRITABLE = 2;
 }
+
+const CanSyncMethods = (() => {
+  const obj = new CanSync();
+  const list = [];
+  Object.getOwnPropertyNames(Object.getPrototypeOf(obj)).forEach(methodName => {
+    if (methodName !== 'constructor') {
+      list.push(methodName);
+    }
+  })
+  return list;
+})();
 
 class DataSynchronizer {
   key;
@@ -195,7 +222,7 @@ class DataSynchronizer {
   }
 
   isSyncProperty(prop) {
-    return prop === 'doAfterUpdate' || prop === 'doAfterInit';
+    return CanSyncMethods.indexOf(prop) !== -1;
   }
 
 }
@@ -257,20 +284,6 @@ function createSyncData(target, key, mode, shouldPersist = false) {
   global.SyncData[key] = synchronizer.proxy;
   console.log(`已启用同步数据：${key}`, synchronizer.proxy);
   return synchronizer.proxy;
-}
-
-// 该类仅用于IDE友好提示
-// noinspection JSUnusedLocalSymbols
-class CanSync {
-  doAfterUpdate(listener) {
-    throw new Error('仅用于IDE的友好提示，不应当被调用');
-  }
-  doAfterInit(listener) {
-    throw new Error('仅用于IDE的友好提示，不应当被调用');
-  }
-  doAfterFirstUpdate(listener) {
-    throw new Error('仅用于IDE的友好提示，不应当被调用');
-  }
 }
 
 global.SyncData = {};
