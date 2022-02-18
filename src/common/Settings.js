@@ -52,6 +52,11 @@ async function transformDataSource(settings) {
         console.error(result.reason);
       }
     }
+    for (const key in CurrentDataSource) {
+      if (CurrentDataSource.hasOwnProperty(key)) {
+        delete CurrentDataSource[key];
+      }
+    }
     for (const key in list) {
       if (list.hasOwnProperty(key)) {
         CurrentDataSource[key] = list[key];
