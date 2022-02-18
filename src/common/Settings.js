@@ -420,10 +420,8 @@ class Settings {
    */
   async reloadSettings() {
     const value = await PlatformHelper.Storage.getLocalStorage('settings');
-    if (PlatformHelper.isBackground) {
-      DebugUtil.debugLog(0, "从储存中读取配置：", this);
-    }
     if (value != null) {
+      DebugUtil.debugLog(0, "从储存中读取配置：", value);
       deepAssign(this, await updateSettings(value));
     }
     return this;

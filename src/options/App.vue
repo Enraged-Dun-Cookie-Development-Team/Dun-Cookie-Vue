@@ -577,6 +577,9 @@ export default {
       DunInfo.doAfterUpdate((data) => {
         this.oldDunCount = data.counter;
       });
+      CurrentDataSource.doAfterUpdate(data => {
+        this.currentDataSource = data;
+      });
     },
     initAnimate() {
       animateCSS(".loading-title-area", "zoomInDown", () => {
