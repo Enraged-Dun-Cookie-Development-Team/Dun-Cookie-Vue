@@ -2,6 +2,8 @@ import AbstractPlatform from '../AbstractPlatform';
 import { DEBUG_LOG, PLATFORM_NODE } from '../../Constants';
 import { deepAssign } from '../../util/CommonFunctions';
 
+// NOTE: 该文件使用了node v15新增的实验性api BroadcastChannel
+
 const storageFile = 'storage.json';
 
 function node_require(module) {
@@ -17,19 +19,19 @@ export default class NodePlatform extends AbstractPlatform {
     http = node_require('http');
     https = node_require('https');
     worker_threads;
-    workerParent;
+    broadcastChannel;
 
     weiboCookie;
 
     constructor() {
         super();
         this.worker_threads = node_require('worker_threads');
-        this.workerParent = this.worker_threads.parentPort;
+        this.broadcastChannel = new this.worker_threads.BroadcastChannel('MessageChannel');
         this.getLocalStorage("weiboCookie").then(value => this.weiboCookie = value);
     }
 
     get isBackground() {
-        return true;
+        return !!this.worker_threads.parentPort;
     }
 
     get isMobile() {
@@ -92,22 +94,23 @@ export default class NodePlatform extends AbstractPlatform {
         const message = this.__buildMessageToSend(type, data);
 
         return new Promise((resolve, reject) => {
-            this.workerParent.postMessage(message);
+            this.broadcastChannel.postMessage(message);
             resolve('Node环境暂不支持响应消息');
         });
     }
 
     addMessageListener(id, type, listener) {
-        this.workerParent.on('message', (message) => {
+        this.broadcastChannel.onmessage = (event) => {
+            const message = event.data;
             const value = this.__handleReceiverMessage(id, type, message, listener);
             if (value !== undefined) {
                 if (value.constructor === Promise) {
-                    value.then(result => this.workerParent.postMessage({ type: message.type, data: result }));
+                    value.then(result => this.broadcastChannel.postMessage({ type: message.type, data: result }));
                 } else {
-                    this.workerParent.postMessage({ type: message.type, data: value });
+                    this.broadcastChannel.postMessage({ type: message.type, data: value });
                 }
             }
-        });
+        }
     }
 
     setPopup(url) {
