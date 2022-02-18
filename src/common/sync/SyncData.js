@@ -26,8 +26,9 @@ class DataSynchronizer {
 
   proxy;
   updateFlag = false;
-  updateListeners = [];
   updateCount = 0;
+  updateListeners = [];
+  firstUpdateListeners = [];
   inited = false;
   initListeners = [];
 
@@ -40,28 +41,47 @@ class DataSynchronizer {
       // 如果已经接收过数据更新则忽略storage中的数据
       if (this.updateCount === 0 && data) {
         DebugUtil.debugLog(6, `从Storage中读取${this.key}: `, data);
-        this.__handleReloadOrReceiveUpdate(data);
-      }
-    }).finally(() => {
-      this.inited = true;
-      for (const listener of this.initListeners) {
-        listener(this.proxy);
+        this.__handleReloadOrReceiveUpdate(data, true);
       }
     });
   }
 
-  __handleReloadOrReceiveUpdate(data) {
-    const changed = {};
-    deepAssign(this.target, data, changed);
-    this.updateCount++;
-    DebugUtil.debugLog(6, `接收更新${this.key}: `, data, 'changed: ', changed);
-    for (const listener of this.updateListeners) {
-      listener(this.proxy, changed);
+  __setInited() {
+    if (this.inited) {
+      return;
+    }
+    this.inited = true;
+    for (const listener of this.initListeners) {
+      listener(this.proxy);
     }
   }
 
-  doAfterUpdate(listener) {
-    this.updateListeners.push(listener);
+  __handleFirstUpdateListener() {
+    if (this.updateCount > 0) {
+      for (const listener of this.firstUpdateListeners) {
+        listener(this.proxy);
+      }
+    }
+  }
+
+  __handleUpdateListener() {
+    for (const listener of this.updateListeners) {
+      listener(this.proxy);
+    }
+  }
+
+  __handleReloadOrReceiveUpdate(data, isReload = false) {
+    const changed = {};
+    deepAssign(this.target, data, changed);
+    this.__setInited();
+    if (isReload) {
+      DebugUtil.debugLog(6, `从storage中读取${this.key}: `, data, 'changed: ', changed);
+    } else {
+      this.updateCount++;
+      DebugUtil.debugLog(6, `接收更新${this.key}: `, data, 'changed: ', changed);
+      this.__handleFirstUpdateListener();
+      this.__handleUpdateListener();
+    }
   }
 
   doAfterInit(listener) {
@@ -70,6 +90,18 @@ class DataSynchronizer {
     } else {
       this.initListeners.push(listener);
     }
+  }
+
+  doAfterFirstUpdate(listener) {
+    if (this.updateCount > 0) {
+      listener(this.proxy);
+    } else {
+      this.firstUpdateListeners.push(listener);
+    }
+  }
+
+  doAfterUpdate(listener) {
+    this.updateListeners.push(listener);
   }
 
   sendUpdateAtNextTick() {
@@ -234,6 +266,9 @@ class CanSync {
     throw new Error('仅用于IDE的友好提示，不应当被调用');
   }
   doAfterInit(listener) {
+    throw new Error('仅用于IDE的友好提示，不应当被调用');
+  }
+  doAfterFirstUpdate(listener) {
     throw new Error('仅用于IDE的友好提示，不应当被调用');
   }
 }

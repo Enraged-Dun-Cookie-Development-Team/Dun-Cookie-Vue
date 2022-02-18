@@ -12,6 +12,7 @@ import PromiseUtil from "./PromiseUtil";
 
 export default class ServerUtil {
     static async checkOnlineInfo(shouldNotice) {
+        await new Promise(resolve => Settings.doAfterInit(() => resolve()));
         let data;
         try {
             data = await PromiseUtil.any(CANTEEN_INTERFACE_LIST.map(api => HttpUtil.GET_Json(api + "canteen/info")), res => !!res);

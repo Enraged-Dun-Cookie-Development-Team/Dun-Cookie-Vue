@@ -1,6 +1,9 @@
 import {PLATFORM_FIREFOX} from '../../Constants';
 import BrowserPlatform from "./BrowserPlatform";
 
+// 火狐无法储存被vue监视的对象，故在内部做json编解码
+const _InternalJsonCompatible = '__INTERNAL_JSON__';
+
 export default class FirefoxPlatform extends BrowserPlatform {
 
     constructor() {
@@ -17,6 +20,19 @@ export default class FirefoxPlatform extends BrowserPlatform {
 
     getLocalStorage(name) {
         return browser.storage.local.get(name).then(result => {
+            // 自动解码json
+            const keys = Object.keys(result)
+            for (const key of keys) {
+                if (result.hasOwnProperty(key)) {
+                    const val = result[key];
+                    if (typeof val === 'string') {
+                        let len = _InternalJsonCompatible.length;
+                        if (val.length > len && val.substring(0, len) === _InternalJsonCompatible) {
+                            result[key] = JSON.parse(val.substring(len));
+                        }
+                    }
+                }
+            }
             if (typeof name === 'string') {
                 result = result[name];
             }
@@ -26,6 +42,10 @@ export default class FirefoxPlatform extends BrowserPlatform {
 
     saveLocalStorage(name, data) {
         const val = {};
+        // 自动编码json
+        if (typeof data === 'object') {
+            data = '__INTERNAL_JSON__' + JSON.stringify(data)
+        }
         val[name] = data;
         return browser.storage.local.set(val);
     }

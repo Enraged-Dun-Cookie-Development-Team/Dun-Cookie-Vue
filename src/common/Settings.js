@@ -52,6 +52,11 @@ async function transformDataSource(settings) {
         console.error(result.reason);
       }
     }
+    for (const key in CurrentDataSource) {
+      if (CurrentDataSource.hasOwnProperty(key)) {
+        delete CurrentDataSource[key];
+      }
+    }
     for (const key in list) {
       if (list.hasOwnProperty(key)) {
         CurrentDataSource[key] = list[key];
@@ -415,10 +420,8 @@ class Settings {
    */
   async reloadSettings() {
     const value = await PlatformHelper.Storage.getLocalStorage('settings');
-    if (PlatformHelper.isBackground) {
-      DebugUtil.debugLog(0, "从储存中读取配置：", this);
-    }
     if (value != null) {
+      DebugUtil.debugLog(0, "从储存中读取配置：", value);
       deepAssign(this, await updateSettings(value));
     }
     return this;
