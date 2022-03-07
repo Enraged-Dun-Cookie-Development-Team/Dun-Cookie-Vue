@@ -44,6 +44,10 @@ class DataItem {
      */
     coverImage;
     /**
+     * 预览图片列表，在非大图模式下使用预览图减小流量消耗
+     */
+    previewList;
+    /**
      * 图片列表，对于多图的饼可以把图片全部显示出来
      */
     imageList;
@@ -115,6 +119,13 @@ class DataItem {
                 return _builder;
             },
             /**
+             * @see DataItem.previewList
+             */
+            imageList: (val) => {
+                instance.previewList = val;
+                return _builder;
+            },
+            /**
              * @see DataItem.imageList
              */
             imageList: (val) => {
@@ -171,5 +182,5 @@ class RetweetedInfo {
     }
 }
 
-export {DataItem, RetweetedInfo};
+export { DataItem, RetweetedInfo };
 

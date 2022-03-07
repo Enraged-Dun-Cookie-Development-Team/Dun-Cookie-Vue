@@ -1,6 +1,6 @@
-import {DataSource, UserInfo} from '../DataSource';
+import { DataSource, UserInfo } from '../DataSource';
 import TimeUtil from '../../util/TimeUtil';
-import {DataItem} from '../../DataItem';
+import { DataItem } from '../../DataItem';
 import HttpUtil from '../../util/HttpUtil';
 
 /**
@@ -47,6 +47,7 @@ export class BilibiliDataSource extends DataSource {
           // 普通动态
           case 2: {
             builder
+              .previewList(dynamicInfo.item.pictures && dynamicInfo.item.pictures.map(x => x.img_src + "@320w.webp"))
               .imageList(dynamicInfo.item.pictures && dynamicInfo.item.pictures.map(x => x.img_src))
               .imageHttpList(dynamicInfo.item.pictures && dynamicInfo.item.pictures.map(x => x.img_src))
               .coverImage((dynamicInfo.item.pictures && dynamicInfo.item.pictures.length > 0) ? dynamicInfo.item.pictures[0].img_src : null)
@@ -56,6 +57,7 @@ export class BilibiliDataSource extends DataSource {
           // 无图片动态
           case 4: {
             builder
+              .previewList(null)
               .imageList(null)
               .content(dynamicInfo.item.content);
             break;
@@ -63,6 +65,7 @@ export class BilibiliDataSource extends DataSource {
           // 视频
           case 8: {
             builder
+              .previewList([null])
               .imageList(null)
               .coverImage(dynamicInfo.pic)
               .content(dynamicInfo.dynamic);
@@ -71,6 +74,7 @@ export class BilibiliDataSource extends DataSource {
           // 专栏
           case 64: {
             builder
+              .previewList(null)
               .imageList(null)
               .coverImage((dynamicInfo.image_urls && dynamicInfo.image_urls.length > 0) ? dynamicInfo.image_urls[0] : null)
               .content(dynamicInfo.summary);
