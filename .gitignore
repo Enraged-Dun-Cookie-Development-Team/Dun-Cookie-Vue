@@ -2,6 +2,7 @@
 node_modules
 /dist
 nodejs/storage.json
+nodejs/https/*
 
 
 # local env files

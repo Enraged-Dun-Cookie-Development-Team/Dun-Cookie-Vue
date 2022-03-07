@@ -3,6 +3,13 @@ const EventEmitter = require("events");
 const ws = require('nodejs-websocket');
 const http = require("http");
 const urlib = require("url");
+let https = require("https");
+let fs = require("fs");
+// Configuare https
+const httpsOption = {
+    key : fs.readFileSync("./https/ceobecanteen.top.key", 'utf8'),
+    cert: fs.readFileSync("./https/ceobecanteen.top_bundle.crt", 'utf8')
+}
 
 let worker;
 let emitter;
@@ -132,32 +139,56 @@ http.createServer((req, res) => {
         res.write(JSON.stringify(userNumber));
         res.end();
         userCardList = {};
-    } else if (urlObj.pathname == "/canteen/newCardList") {
-        let userCardList = { "error": "还没有获得饼列表，再等等就有了" };
-        // 判断是否蹲到饼过
-        if (cardList.hasOwnProperty('data')) {
-            // 复制基础信息
-            userCardList = JSON.parse(JSON.stringify(cardList));
-
-            userCardList.data["官方B站动态"] = JSON.parse(JSON.stringify(detailList["官方B站动态"].slice(0,2)));
-            userCardList.data["官方微博"] = JSON.parse(JSON.stringify(detailList["官方微博"].slice(0,1)));
-            userCardList.data["游戏内公告"] = JSON.parse(JSON.stringify(detailList["游戏内公告"].slice(0,4)));
-            userCardList.data["朝陇山微博"] = JSON.parse(JSON.stringify(detailList["朝陇山微博"].slice(0,2)));
-            userCardList.data["一拾山微博"] = JSON.parse(JSON.stringify(detailList["一拾山微博"].slice(0,3)));
-            userCardList.data["塞壬唱片官网"] = JSON.parse(JSON.stringify(detailList["塞壬唱片官网"].slice(0,0)));
-            userCardList.data["泰拉记事社微博"] = JSON.parse(JSON.stringify(detailList["泰拉记事社微博"].slice(0,1)));
-            userCardList.data["官网"] = JSON.parse(JSON.stringify(detailList["官网"].slice(0,1)));
-            userCardList.data["泰拉记事社官网"] = JSON.parse(JSON.stringify(detailList["泰拉记事社官网"].slice(0,2)));
-            userCardList.data["塞壬唱片网易云音乐"] = JSON.parse(JSON.stringify(detailList["塞壬唱片网易云音乐"].slice(0,4)));
-            userCardList.data["鹰角网络微博"] = JSON.parse(JSON.stringify(detailList["鹰角网络微博"].slice(0,1)));
-        }
-        res.writeHeader(200, { 'Content-Type': 'application/json;charset=utf-8' });
-        res.write(JSON.stringify(userCardList));
-        res.end();
     } else {
         res.writeHeader(404, { 'Content-Type': 'text/html;charset=utf-8' });
         res.end();
     }
 }).listen(3000); // 绑定3000端口
+
+// 建立与3001端口连接
+https.createServer(httpsOption, (req, res) => {
+    // json文件 utf-8解析及写入cardList
+    let urlObj = urlib.parse(req.url, true);
+    // 判断路径是否正确
+    if (urlObj.pathname == "/canteen/cardList") {
+        ipPush(req.socket.remoteAddress)
+        // 没蹲饼列表的时候返回
+        let userCardList = { "error": "还没有获得饼列表，再等等就有了" };
+        // 判断是否蹲到饼过
+        if (cardList.hasOwnProperty('data')) {
+            // 复制基础信息
+            userCardList = JSON.parse(JSON.stringify(cardList));
+            let sourceList = urlObj.query.source;
+
+            // 确保source参数被赋值
+            if (sourceList != undefined) {
+                let sources = sourceList.split("_");
+
+                sources.forEach(source => {
+                    let sourcename = sourceMap[source];
+                    userCardList.data[sourcename] = JSON.parse(JSON.stringify(detailList[sourcename]));
+                });
+            }
+            // source无内容自动获取全列表
+            if (Object.keys(userCardList.data).length == 0) {
+                userCardList.data = JSON.parse(JSON.stringify(detailList));
+            }
+        }
+
+        res.writeHeader(200, { 'Content-Type': 'application/json;charset=utf-8' });
+        res.write(JSON.stringify(userCardList));
+        res.end();
+        userCardList = {};
+    } else if (urlObj.pathname == "/canteen/userNumber") { // 获取用户总数量
+        let userNumber = {"userNumber": ipList.length};
+        res.writeHeader(200, { 'Content-Type': 'application/json;charset=utf-8' });
+        res.write(JSON.stringify(userNumber));
+        res.end();
+        userCardList = {};
+    } else {
+        res.writeHeader(404, { 'Content-Type': 'text/html;charset=utf-8' });
+        res.end();
+    }
+}).listen(3001); // 绑定3001端口
 
 // 在控制台执行此命令即可测试：node index.js

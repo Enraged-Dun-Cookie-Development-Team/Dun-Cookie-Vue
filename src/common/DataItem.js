@@ -121,7 +121,7 @@ class DataItem {
             /**
              * @see DataItem.previewList
              */
-            imageList: (val) => {
+            previewList: (val) => {
                 instance.previewList = val;
                 return _builder;
             },
