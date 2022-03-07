@@ -7,7 +7,7 @@ let https = require("https");
 let fs = require("fs");
 // Configuare https
 const httpsOption = {
-    key : fs.readFileSync("./https/ceobecanteen.top.key", 'utf8'),
+    key: fs.readFileSync("./https/ceobecanteen.top.key", 'utf8'),
     cert: fs.readFileSync("./https/ceobecanteen.top_bundle.crt", 'utf8')
 }
 
@@ -78,11 +78,11 @@ server = ws.createServer(conn => {
     });
     // 检测连接状态
     conn.on("close", (code, reason) => {
-        console.log("key："+conn.key+"，状态：关闭连接")
+        console.log("key：" + conn.key + "，状态：关闭连接")
     });
     conn.on("error", (code, reason) => {
         console.log(code + "---" + reason)
-        console.log("key："+conn.key+"，状态：异常关闭")
+        console.log("key：" + conn.key + "，状态：异常关闭")
     });
 }).listen(5683);
 
@@ -90,12 +90,12 @@ server = ws.createServer(conn => {
 function ipPush(ip) {
     let repeat = false;
     ipList.forEach((ipAddress, index) => {
-        if(ip == ipAddress) {
+        if (ip == ipAddress) {
             repeat = true;
         }
     })
-    if(!repeat) {
-        ipList.push(ip); 
+    if (!repeat) {
+        ipList.push(ip);
     }
 }
 
@@ -110,22 +110,26 @@ http.createServer((req, res) => {
         let userCardList = { "error": "还没有获得饼列表，再等等就有了" };
         // 判断是否蹲到饼过
         if (cardList.hasOwnProperty('data')) {
-            // 复制基础信息
-            userCardList = JSON.parse(JSON.stringify(cardList));
-            let sourceList = urlObj.query.source;
+            try {
+                // 复制基础信息
+                userCardList = JSON.parse(JSON.stringify(cardList));
+                let sourceList = urlObj.query.source;
 
-            // 确保source参数被赋值
-            if (sourceList != undefined) {
-                let sources = sourceList.split("_");
+                // 确保source参数被赋值
+                if (sourceList != undefined) {
+                    let sources = sourceList.split("_");
 
-                sources.forEach(source => {
-                    let sourcename = sourceMap[source];
-                    userCardList.data[sourcename] = JSON.parse(JSON.stringify(detailList[sourcename]));
-                });
-            }
-            // source无内容自动获取全列表
-            if (Object.keys(userCardList.data).length == 0) {
-                userCardList.data = JSON.parse(JSON.stringify(detailList));
+                    sources.forEach(source => {
+                        let sourcename = sourceMap[source];
+                        userCardList.data[sourcename] = JSON.parse(JSON.stringify(detailList[sourcename]));
+                    });
+                }
+                // source无内容自动获取全列表
+                if (Object.keys(userCardList.data).length == 0) {
+                    userCardList.data = JSON.parse(JSON.stringify(detailList));
+                }
+            } catch (e) {
+                console.log(e);
             }
         }
 
@@ -134,7 +138,7 @@ http.createServer((req, res) => {
         res.end();
         userCardList = {};
     } else if (urlObj.pathname == "/canteen/userNumber") { // 获取用户总数量
-        let userNumber = {"userNumber": ipList.length};
+        let userNumber = { "userNumber": ipList.length };
         res.writeHeader(200, { 'Content-Type': 'application/json;charset=utf-8' });
         res.write(JSON.stringify(userNumber));
         res.end();
@@ -156,22 +160,26 @@ https.createServer(httpsOption, (req, res) => {
         let userCardList = { "error": "还没有获得饼列表，再等等就有了" };
         // 判断是否蹲到饼过
         if (cardList.hasOwnProperty('data')) {
-            // 复制基础信息
-            userCardList = JSON.parse(JSON.stringify(cardList));
-            let sourceList = urlObj.query.source;
+            try {
+                // 复制基础信息
+                userCardList = JSON.parse(JSON.stringify(cardList));
+                let sourceList = urlObj.query.source;
 
-            // 确保source参数被赋值
-            if (sourceList != undefined) {
-                let sources = sourceList.split("_");
+                // 确保source参数被赋值
+                if (sourceList != undefined) {
+                    let sources = sourceList.split("_");
 
-                sources.forEach(source => {
-                    let sourcename = sourceMap[source];
-                    userCardList.data[sourcename] = JSON.parse(JSON.stringify(detailList[sourcename]));
-                });
-            }
-            // source无内容自动获取全列表
-            if (Object.keys(userCardList.data).length == 0) {
-                userCardList.data = JSON.parse(JSON.stringify(detailList));
+                    sources.forEach(source => {
+                        let sourcename = sourceMap[source];
+                        userCardList.data[sourcename] = JSON.parse(JSON.stringify(detailList[sourcename]));
+                    });
+                }
+                // source无内容自动获取全列表
+                if (Object.keys(userCardList.data).length == 0) {
+                    userCardList.data = JSON.parse(JSON.stringify(detailList));
+                }
+            } catch (e) {
+                console.log(e);
             }
         }
 
@@ -180,7 +188,7 @@ https.createServer(httpsOption, (req, res) => {
         res.end();
         userCardList = {};
     } else if (urlObj.pathname == "/canteen/userNumber") { // 获取用户总数量
-        let userNumber = {"userNumber": ipList.length};
+        let userNumber = { "userNumber": ipList.length };
         res.writeHeader(200, { 'Content-Type': 'application/json;charset=utf-8' });
         res.write(JSON.stringify(userNumber));
         res.end();
