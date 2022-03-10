@@ -170,7 +170,7 @@ const kazeFun = {
                 console.log(tmp_cache);
                 let newInfo = newList[0];
                 let timeNow = new Date()
-                let notice = newInfo.content.replace(/\n/g, "");
+                let notice = newInfo.content.replace(/\s|\n/g, "");
                 DunInfo.cookieCount++;
                 console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
                 // 是否推送
