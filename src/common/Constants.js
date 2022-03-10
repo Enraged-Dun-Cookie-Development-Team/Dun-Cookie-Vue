@@ -105,6 +105,11 @@ const quickJump = {
       img: '/assets/image/icon/weibo.ico'
     },
     {
+      url: "https://space.bilibili.com/1265652806/dynamic",
+      name: "明日方舟终末地",
+      img: '/assets/image/icon/arkzmd.jpg'
+    },
+    {
       url: "https://weibo.com/u/6441489862",
       name: "朝陇山微博",
       img: '/assets/image/icon/cho3Weibo.jpg',

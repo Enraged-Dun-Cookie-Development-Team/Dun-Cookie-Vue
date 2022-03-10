@@ -61,7 +61,7 @@ function tryDun(settings) {
     dunTime++;
     for (const dataName in CurrentDataSource) {
         // 减小不重要饼的频率
-        if (dataName == "朝陇山微博" || dataName == "泰拉记事社微博" || dataName == "一拾山微博" || dataName == "鹰角网络微博") {
+        if (dataName == "朝陇山微博" || dataName == "泰拉记事社微博" || dataName == "一拾山微博" || dataName == "鹰角网络微博" || dataName == "明日方舟终末地") {
             if ((settings.dun.intervalTime <= 13 && dunTime % 5 != 1) ||
                 (settings.dun.intervalTime > 13 && settings.dun.intervalTime <= 15 && dunTime % 4 != 1) ||
                 (settings.dun.intervalTime > 15 && settings.dun.intervalTime <= 20 && dunTime % 3 != 1) ||
