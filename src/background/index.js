@@ -167,7 +167,7 @@ const kazeFun = {
                 }
             }
             if (newAnnouncement) {
-                console.log(tmp_cache);
+                console.log(JSON.stringify(tmp_cache));
                 let newInfo = newList[0];
                 let timeNow = new Date()
                 let notice = newInfo.content.replace(/\s|\n/g, "");
