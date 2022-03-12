@@ -105,6 +105,7 @@ const configList = [
         9
     ),
     buildDatasource(WeiboDataSource.withUid(7461423907, 10), '/assets/image/icon/yjwb.jpg', '鹰角网络微博', '鹰角网络微博'),
+    buildDatasource(BilibiliDataSource.withUid(1265652806, 11), '/assets/image/icon/arkzmd.jpg', '明日方舟终末地', '明日方舟终末地'),
 ];
 
 

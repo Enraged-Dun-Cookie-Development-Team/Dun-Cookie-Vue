@@ -21,7 +21,7 @@ const CURRENT_SETTING_VERSION = 2;
 /**
  * 当前插件版本号
  */
-const CURRENT_VERSION = '3.0.14';
+const CURRENT_VERSION = '3.1.1';
 /**
  * 展示用的版本号
  */
@@ -103,6 +103,11 @@ const quickJump = {
       url: "https://weibo.com/arknights",
       name: "官方微博",
       img: '/assets/image/icon/weibo.ico'
+    },
+    {
+      url: "https://space.bilibili.com/1265652806/dynamic",
+      name: "明日方舟终末地",
+      img: '/assets/image/icon/arkzmd.jpg'
     },
     {
       url: "https://weibo.com/u/6441489862",
