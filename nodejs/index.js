@@ -80,9 +80,6 @@ server = ws.createServer(conn => {
     setInterval(_=>{
         conn.sendPing([data='ping'])
     }, 5*1000)
-    conn.on("close", (code, reason) => {
-        console.log("key：" + conn.key + "，状态：关闭连接")
-    });
     // 检测连接状态
     conn.on("close", (code, reason) => {
         console.log("key：" + conn.key + "，状态：关闭连接")
