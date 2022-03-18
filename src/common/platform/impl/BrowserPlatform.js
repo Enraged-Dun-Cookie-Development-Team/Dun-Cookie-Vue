@@ -70,6 +70,9 @@ export default class BrowserPlatform extends AbstractPlatform {
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(headerCanvas, 10, 0);
+    if (textHeight > 0) {
+      ctx.drawImage(textCanvas, 10, headerCanvas.height + 10);
+    }
     if (image) {
       ctx.drawImage(image, (canvasWidth - image.width) / 2, headerCanvas.height + 10 + textCanvas.height + 10);
     }
