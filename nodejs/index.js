@@ -32,6 +32,7 @@ let sourceMap = {
     "8": "泰拉记事社官网",
     "9": "塞壬唱片网易云音乐",
     "10": "鹰角网络微博",
+    "11": "明日方舟终末地",
 };
 
 function getCardList() {
@@ -76,6 +77,9 @@ server = ws.createServer(conn => {
     emitter.on('websocket-get', msg => {
         conn.sendText(JSON.stringify(msg.data));
     });
+    setInterval(_=>{
+        conn.sendPing([data='ping'])
+    }, 5*1000)
     // 检测连接状态
     conn.on("close", (code, reason) => {
         console.log("key：" + conn.key + "，状态：关闭连接")

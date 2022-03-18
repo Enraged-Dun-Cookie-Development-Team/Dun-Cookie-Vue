@@ -1,6 +1,6 @@
 import AbstractPlatform from '../AbstractPlatform';
 import $ from "jquery";
-import {CURRENT_VERSION, TOOL_QR_URL} from "../../Constants";
+import { CURRENT_VERSION, TOOL_QR_URL } from "../../Constants";
 import QRCode from "qrcode";
 import html2canvas from "html2canvas";
 
@@ -70,7 +70,9 @@ export default class BrowserPlatform extends AbstractPlatform {
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(headerCanvas, 10, 0);
-    ctx.drawImage(textCanvas, 10, headerCanvas.height + 10);
+    if (dataItem.content) {
+      ctx.drawImage(textCanvas, 10, headerCanvas.height + 10);
+    }
     if (image) {
       ctx.drawImage(image, (canvasWidth - image.width) / 2, headerCanvas.height + 10 + textCanvas.height + 10);
     }
@@ -212,7 +214,7 @@ width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retwee
     if (qrcodeCache[text]) {
       return Promise.resolve(qrcodeCache[text]);
     }
-    const qrcode = new QRCode.toCanvas(text, {margin: 0});
+    const qrcode = new QRCode.toCanvas(text, { margin: 0 });
     return qrcode.then(canvas => {
       qrcodeCache[text] = canvas;
       return canvas;
