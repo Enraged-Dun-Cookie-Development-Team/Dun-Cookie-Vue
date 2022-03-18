@@ -18,6 +18,7 @@ export default class NodePlatform extends AbstractPlatform {
     path = node_require('path');
     http = node_require('http');
     https = node_require('https');
+    url = node_require('url');
     worker_threads;
     broadcastChannel;
 
@@ -48,9 +49,18 @@ export default class NodePlatform extends AbstractPlatform {
 
     async getLocalStorage(name) {
         const file = await this.fs.open(storageFile, this.fs_callback.constants.O_RDONLY | this.fs_callback.constants.O_CREAT);
-        const content = await file.readFile('UTF-8') || '{}';
+        const content = (await file.readFile('UTF-8'))?.toString() || '{}';
         await file.close();
-        const json = JSON.parse(content);
+        try {
+            const json = JSON.parse(content);
+            return this._extractJsonValue(json, name);
+        } catch (e) {
+            console.error(e);
+            return null;
+        }
+    }
+
+    _extractJsonValue(json, name) {
         if (!name) {
             return json;
         } else if (typeof name === 'string') {
@@ -122,11 +132,12 @@ export default class NodePlatform extends AbstractPlatform {
     }
 
     getURLForExtensionFile(file) {
-        file = this.path.normalize(file);
-        if (file.indexOf('..') !== -1) {
-            throw 'illegal path: ' + file;
+        if (file[0] !== '/') {
+            file = '/' + file;
         }
-        return this.path.resolve(file);
+        file = '../src' + file;
+        file = this.path.normalize(file);
+        return this.url.pathToFileURL(this.path.resolve(file)).toString();
     }
 
     createNotifications(id, iconUrl, title, message, imageUrl) {
@@ -197,6 +208,24 @@ export default class NodePlatform extends AbstractPlatform {
 
     sendHttpRequest(url, method) {
         return new Promise((resolve, reject) => {
+            if (url.indexOf('file') === 0) {
+                const filePath = this.url.fileURLToPath(url);
+                this.fs.open(filePath, this.fs_callback.constants.O_RDONLY).then(async file => {
+                    try {
+                        const buffer = await file.readFile('UTF-8');
+                        if (buffer) {
+                            resolve(buffer.toString());
+                        } else {
+                            reject("文件不存在")
+                        }
+                    } finally {
+                        file.close();
+                    }
+                }).catch(err => {
+                    console.error(err);
+                });
+                return;
+            }
             const options = {
                 method: method,
             };
