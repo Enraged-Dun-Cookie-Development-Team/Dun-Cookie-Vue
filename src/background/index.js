@@ -4,8 +4,6 @@ import DunInfo from '../common/sync/DunInfo';
 import SanInfo from '../common/sync/SanInfo';
 import {
     IS_DEBUG,
-    MESSAGE_CARD_LIST_GET,
-    MESSAGE_CARD_LIST_UPDATE,
     MESSAGE_CHANGE_COUNTDOWN,
     MESSAGE_FORCE_REFRESH,
     MESSAGE_GET_COUNTDOWN,
@@ -23,6 +21,7 @@ import CountDown from '../common/sync/CountDownInfo';
 import TimeUtil from "@/common/util/TimeUtil";
 import PenguinStatistics from "@/common/sync/PenguinStatisticsInfo";
 import CurrentDataSource from "../common/sync/CurrentDataSource";
+import CardList from "../common/sync/CardList";
 
 // 重构完成后的其它优化：
 // TODO 多个提取出来的类要考虑能否合并(指互相通信的那部分)
@@ -31,9 +30,6 @@ import CurrentDataSource from "../common/sync/CurrentDataSource";
 
 // 开启弹出菜单窗口化时的窗口ID
 let popupWindowId = null;
-
-// 缓存获取到的饼
-const cardListCache = {};
 
 // 蹲饼的轮次
 let dunTime = 0;
@@ -49,11 +45,11 @@ function tryDun(settings) {
     const promiseList = [];
     // 由于删除也算更新，所以用一个flag标记来判断是否有更新，而不能只用promise返回值判断
     let hasUpdated = false;
-    for (const key in cardListCache) {
-        if (cardListCache.hasOwnProperty(key)) {
+    for (const key in CardList) {
+        if (CardList.hasOwnProperty(key)) {
             // 如果缓存的key不在启用列表中则删除缓存
             if (!CurrentDataSource[key]) {
-                delete cardListCache[key];
+                delete CardList[key];
                 hasUpdated = true;
             }
         }
@@ -74,10 +70,10 @@ function tryDun(settings) {
             DunInfo.counter++;
             const promise = source.fetchData()
                 .then(newCardList => {
-                    let oldCardList = cardListCache[dataName];
+                    let oldCardList = CardList[dataName];
                     let isNew = kazeFun.JudgmentNew(oldCardList, newCardList, source.title, source.tmp_cache);
                     if (newCardList && newCardList.length > 0) {
-                        cardListCache[dataName] = newCardList;
+                        CardList[dataName] = newCardList;
                     }
                     if (isNew) {
                         hasUpdated = true;
@@ -85,18 +81,13 @@ function tryDun(settings) {
                 })
                 .catch(e => console.error(e))
                 .finally(() => {
-                    if (!cardListCache[dataName]) {
-                        cardListCache[dataName] = [];
+                    if (!CardList[dataName]) {
+                        CardList[dataName] = [];
                     }
                 });
             promiseList.push(promise);
         }
     }
-    Promise.allSettled(promiseList).then(() => {
-        if (hasUpdated) {
-            PlatformHelper.Message.send(MESSAGE_CARD_LIST_UPDATE, cardListCache);
-        }
-    });
 }
 
 let dunTimeoutId = null;
@@ -117,7 +108,7 @@ function startDunTimer() {
         delay *= Settings.dun.timeOfLowFrequency;
     }
     // 数据源尚未准备好的时候0.5秒刷新一次
-    if (Object.keys(cardListCache).length === 0 && Object.keys(CurrentDataSource).length === 0) {
+    if (Object.keys(CardList).length === 0 && Object.keys(CurrentDataSource).length === 0) {
         delay = 0.5;
     }
     dunTimeoutId = setTimeout(() => {
@@ -228,8 +219,6 @@ const kazeFun = {
                     case MESSAGE_FORCE_REFRESH:
                         tryDun(Settings);
                         return;
-                    case MESSAGE_CARD_LIST_GET:
-                        return cardListCache;
                     case MESSAGE_SAN_GET:
                         return SanInfo;
                     case MESSAGE_CHANGE_COUNTDOWN:
@@ -245,7 +234,7 @@ const kazeFun = {
 
         // 监听标签
         PlatformHelper.Notification.addClickListener(id => {
-            let item = DataSourceUtil.mergeAllData(cardListCache, false).find(x => x.id === id);
+            let item = DataSourceUtil.mergeAllData(CardList, false).find(x => x.id === id);
             if (item) {
                 PlatformHelper.Tabs.create(item.jumpUrl);
             } else if (id === "update") {
