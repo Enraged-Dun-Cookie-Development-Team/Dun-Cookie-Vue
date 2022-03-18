@@ -2,8 +2,6 @@ import {createSyncData, DataSyncMode} from "./SyncData";
 
 /**
  * 蹲饼数据
- * <p>
- * 插件停止后该数据会丢失(目前看来不需要持久化)
  */
 class DunInfo {
   // 蹲饼次数
