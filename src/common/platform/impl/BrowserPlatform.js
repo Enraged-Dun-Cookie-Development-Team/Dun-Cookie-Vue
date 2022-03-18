@@ -69,12 +69,16 @@ export default class BrowserPlatform extends AbstractPlatform {
     canvas.height = canvasHeight;
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(headerCanvas, 10, 0);
+
+    let heightOffset = 0;
+    ctx.drawImage(headerCanvas, 10, heightOffset);
+    heightOffset += headerCanvas.height + 10;
     if (textHeight > 0) {
-      ctx.drawImage(textCanvas, 10, headerCanvas.height + 10);
+      ctx.drawImage(textCanvas, 10, heightOffset);
+      heightOffset += textHeight + 10;
     }
     if (image) {
-      ctx.drawImage(image, (canvasWidth - image.width) / 2, headerCanvas.height + 10 + textCanvas.height + 10);
+      ctx.drawImage(image, (canvasWidth - image.width) / 2, heightOffset);
     }
     return canvas;
   }
