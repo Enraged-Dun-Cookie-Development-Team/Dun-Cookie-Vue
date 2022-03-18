@@ -55,6 +55,7 @@ class DataSynchronizer {
   updateFlag = false;
   updateCount = 0;
   updateListeners = [];
+  firstUpdateCall = false;
   firstUpdateListeners = [];
   inited = false;
   initListeners = [];
@@ -84,10 +85,12 @@ class DataSynchronizer {
   }
 
   __handleFirstUpdateListener() {
-    if (this.updateCount > 0) {
-      for (const listener of this.firstUpdateListeners) {
-        listener(this.proxy);
-      }
+    if (this.firstUpdateCall) {
+      return;
+    }
+    this.firstUpdateCall = true;
+    for (const listener of this.firstUpdateListeners) {
+      listener(this.proxy);
     }
   }
 
@@ -156,7 +159,10 @@ class DataSynchronizer {
       return Reflect.set(...arguments);
     };
     handler.deleteProperty = function (target, prop) {
-      DebugUtil.debugLog(7, `删除属性${_this.key}: ${String(prop)}`);
+      if (target.hasOwnProperty(prop)) {
+        _this.sendUpdateAtNextTick();
+        DebugUtil.debugLog(7, `删除属性${_this.key}: ${String(prop)}`);
+      }
       return Reflect.deleteProperty(...arguments);
     };
     handler.defineProperty = function (target, prop, descriptor) {
