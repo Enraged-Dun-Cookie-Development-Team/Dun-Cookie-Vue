@@ -4,6 +4,8 @@ import {createSyncData, DataSyncMode} from "./SyncData";
  * 蹲饼数据
  */
 class DunInfo {
+  // 蹲饼轮次
+  roundCount = 0;
   // 蹲饼次数
   counter = 0;
   // 蹲到的饼的数量

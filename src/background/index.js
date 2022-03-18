@@ -1,9 +1,7 @@
 import Settings from '../common/Settings';
 import NotificationUtil from '../common/util/NotificationUtil';
-import DunInfo from '../common/sync/DunInfo';
 import SanInfo from '../common/sync/SanInfo';
 import {
-    IS_DEBUG,
     MESSAGE_CHANGE_COUNTDOWN,
     MESSAGE_FORCE_REFRESH,
     MESSAGE_GET_COUNTDOWN,
@@ -11,261 +9,99 @@ import {
     PAGE_POPUP_WINDOW,
     PAGE_UPDATE,
     PAGE_WELCOME,
-    PLATFORM_FIREFOX,
-    TEST_DATA_REFRESH_TIME
+    PLATFORM_FIREFOX
 } from '../common/Constants';
 import DataSourceUtil from '../common/util/DataSourceUtil';
 import PlatformHelper from '../common/platform/PlatformHelper';
 import ServerUtil from "../common/util/ServerUtil";
 import CountDown from '../common/sync/CountDownInfo';
-import TimeUtil from "@/common/util/TimeUtil";
-import PenguinStatistics from "@/common/sync/PenguinStatisticsInfo";
-import CurrentDataSource from "../common/sync/CurrentDataSource";
+import TimeUtil from "../common/util/TimeUtil";
+import PenguinStatistics from "../common/sync/PenguinStatisticsInfo";
 import CardList from "../common/sync/CardList";
-
-// 重构完成后的其它优化：
-// TODO 多个提取出来的类要考虑能否合并(指互相通信的那部分)
-// TODO vue数据更新相关的问题，要确认各个页面的数据能正常更新，并且尽量提高更新相关的可读性
-
+import {restartDunTimer, tryDun} from "./DunController";
 
 // 开启弹出菜单窗口化时的窗口ID
 let popupWindowId = null;
 
-// 蹲饼的轮次
-let dunTime = 0;
+function ExtensionInit() {
+    // PlatformHelper.BrowserAction.setBadge('Beta', [255, 0, 0, 255]);
+    // 开始蹲饼！
+    Settings.doAfterInit(() => {
+        restartDunTimer();
+        setTimeout(() => {
+            ServerUtil.checkOnlineInfo(true);
+        }, 600000);
+    });
 
-// 每次获取的饼内容
-let cookieContent = "init content";
+    Settings.doAfterUpdate((settings, changed) => {
+        // 只有更新了数据源/蹲饼频率的时候才刷新，避免无意义的网络请求
+        if (!changed.enableDataSources && !changed.customDataSources && !changed.dun) {
+            return;
+        }
+        restartDunTimer();
+    });
 
-/**
- * 蹲饼！
- */
-function tryDun(settings) {
-    DunInfo.lastDunTime = new Date().getTime();
-    for (const key in CardList) {
-        if (CardList.hasOwnProperty(key)) {
-            // 如果缓存的key不在启用列表中则删除缓存
-            if (!CurrentDataSource[key]) {
-                delete CardList[key];
+    // 监听前台事件
+    PlatformHelper.Message.registerListener('background', null, (message) => {
+        if (message.type) {
+            switch (message.type) {
+                case MESSAGE_FORCE_REFRESH:
+                    tryDun(Settings);
+                    return;
+                case MESSAGE_SAN_GET:
+                    return SanInfo;
+                case MESSAGE_CHANGE_COUNTDOWN:
+                    countDown.Change();
+                    return;
+                case MESSAGE_GET_COUNTDOWN:
+                    return countDown.GetAllCountDown();
+                default:
+                    return;
             }
         }
-    }
-    dunTime++;
-    for (const dataName in CurrentDataSource) {
-        // 减小不重要饼的频率
-        if (dataName == "朝陇山微博" || dataName == "泰拉记事社微博" || dataName == "一拾山微博" || dataName == "鹰角网络微博" || dataName == "明日方舟终末地") {
-            if ((settings.dun.intervalTime <= 13 && dunTime % 5 != 1) ||
-                (settings.dun.intervalTime > 13 && settings.dun.intervalTime <= 15 && dunTime % 4 != 1) ||
-                (settings.dun.intervalTime > 15 && settings.dun.intervalTime <= 20 && dunTime % 3 != 1) ||
-                (settings.dun.intervalTime > 20 && settings.dun.intervalTime <= 45 && dunTime % 2 != 1)) {
-                continue;
-            }
+    });
+
+    // 监听标签
+    PlatformHelper.Notification.addClickListener(id => {
+        let item = DataSourceUtil.mergeAllData(CardList, false).find(x => x.id === id);
+        if (item) {
+            PlatformHelper.Tabs.create(item.jumpUrl);
+        } else if (id === "update") {
+            PlatformHelper.Tabs.createWithExtensionFile(PAGE_UPDATE);
+        } else if (id.slice(0, 12) === "announcement") {
+            alert('博士，你点下去的是条重要公告噢，打开列表就可以看到啦');
+        } else {
+            alert('o(╥﹏╥)o 时间过于久远...最近列表内没有找到该网站');
         }
-        if (CurrentDataSource.hasOwnProperty(dataName)) {
-            const source = CurrentDataSource[dataName];
-            DunInfo.counter++;
-            source.fetchData()
-                .then(newCardList => {
-                    let oldCardList = CardList[dataName];
-                    let isNew = kazeFun.JudgmentNew(oldCardList, newCardList, source.title, source.tmp_cache);
-                    if (newCardList && newCardList.length > 0) {
-                        CardList[dataName] = newCardList;
-                    }
-                })
-                .catch(e => console.error(e))
-                .finally(() => {
-                    if (!CardList[dataName]) {
-                        CardList[dataName] = [];
+    });
+
+    // 监听安装更新
+    PlatformHelper.Lifecycle.addInstalledListener(details => {
+        if (details.reason === 'install') {
+            PlatformHelper.Tabs.createWithExtensionFile(PAGE_WELCOME);
+        }
+    });
+
+    // 监听扩展图标被点击，用于打开窗口化的弹出页面
+    PlatformHelper.BrowserAction.addIconClickListener(() => {
+        if (Settings.display.windowMode) {
+            if (popupWindowId != null) {
+                PlatformHelper.Windows.getAllWindow().then(allWindow => {
+                    if (allWindow.findIndex(x => x.id == popupWindowId) > 0) {
+                        PlatformHelper.Windows.remove(popupWindowId);
                     }
                 });
+            }
+            const width = 800;
+            let height = 950;
+            if (PlatformHelper.PlatformType === PLATFORM_FIREFOX) {
+                height = 850;
+            }
+            PlatformHelper.Windows
+              .createPopupWindow(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW), width, height)
+              .then(tab => popupWindowId = tab.id);
         }
-    }
-}
-
-let dunTimeoutId = null;
-
-/**
- * 启动蹲饼timer，会立刻请求一次然后按Settings.dun.intervalTime的值进行延时轮询
- */
-function startDunTimer() {
-    try {
-        tryDun(Settings);
-    } catch (e) {
-        console.error(e);
-    }
-
-    let delay = IS_DEBUG ? TEST_DATA_REFRESH_TIME : Settings.dun.intervalTime;
-    // 低频模式
-    if (Settings.checkLowFrequency()) {
-        delay *= Settings.dun.timeOfLowFrequency;
-    }
-    // 数据源尚未准备好的时候0.5秒刷新一次
-    if (Object.keys(CardList).length === 0 && Object.keys(CurrentDataSource).length === 0) {
-        delay = 0.5;
-    }
-    dunTimeoutId = setTimeout(() => {
-        startDunTimer();
-    }, delay * 1000);
-}
-
-// 通用方法
-const kazeFun = {
-    //判断是否为最新 并且在此推送
-    // JudgmentNew(oldList, newList, title) {
-    //     //判断方法 取每条的第一个判定字段  如果新的字段不等于旧的且大于旧的 判定为新条目
-    //     if (oldList
-    //         && newList
-    //         && oldList.length > 0
-    //         && newList.length > 0
-    //         && oldList[0].id != newList[0].id
-    //     ) {
-    //         let newInfo = newList[0];
-    //         let timeNow = new Date()
-    //         let notice = newInfo.content.replace(/\n/g, "");
-    //         DunInfo.cookieCount++;
-    //         console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
-    //         // 是否推送
-    //         if (Settings.dun.enableNotice) {
-    //             NotificationUtil.SendNotice(`小刻在【${title}】里面找到了一个饼！`, notice, newInfo.coverImage, newInfo.id)
-    //         }
-    //         return true;
-    //     }
-    //     else if (newList && newList.length > (oldList ? oldList.length : 0)) {
-    //         return true;
-    //     }
-    //     return false
-    // },
-    // 考虑删除公告推送的情况
-    JudgmentNew(oldList, newList, title, tmp_cache) {
-        //判断方法 取每条的第一个判定字段  如果新的字段不等于旧的且大于旧的 判定为新条目
-        if (oldList
-            && newList
-            && oldList.length > 0
-            && newList.length > 0
-        ) {
-            let newAnnouncement = true;
-            for (let i = 0; i < oldList.length; i++) {
-                if (oldList[i].id == newList[0].id) {
-                    newAnnouncement = false;
-                }
-            }
-            if (newAnnouncement) {
-                console.log(JSON.stringify(tmp_cache));
-                let newInfo = newList[0];
-                let timeNow = new Date()
-                let notice = newInfo.content.replace(/\s|\n/g, "");
-                DunInfo.cookieCount++;
-                console.log(title, `${timeNow.getFullYear()}-${timeNow.getMonth() + 1}-${timeNow.getDate()} ${timeNow.getHours()}：${timeNow.getMinutes()}：${timeNow.getSeconds()}`, newInfo, oldList[0]);
-                // 是否推送
-                if (Settings.dun.enableNotice) {
-                    if (cookieContent.substr(0, 50) == notice.substr(0, 50)) {
-                        if (Settings.dun.repetitionPush) {
-                            NotificationUtil.SendNotice(`小刻在【${title}】里面找到了一个饼！`, notice, newInfo.coverImage, newInfo.id)
-                        }
-                    } else {
-                        NotificationUtil.SendNotice(`小刻在【${title}】里面找到了一个饼！`, notice, newInfo.coverImage, newInfo.id)
-                    }
-                }
-                cookieContent = notice;
-                return true;
-            } else if (newList.length < oldList.length) { // 判断如果只是删除，则为获取新列表
-                return true;
-            }
-            return false;
-        } else if (newList && newList.length > (oldList ? oldList.length : 0)) { // 第一次蹲饼可能没有oldList，同样更新列表
-            return true;
-        }
-        return false;
-    },
-
-    // 初始化
-    Init() {
-        // PlatformHelper.BrowserAction.setBadge('Beta', [255, 0, 0, 255]);
-        // 开始蹲饼！
-        Settings.doAfterInit(() => {
-            startDunTimer();
-            setTimeout(() => {
-                ServerUtil.checkOnlineInfo(true);
-            }, 600000);
-        });
-
-        Settings.doAfterUpdate((settings, changed) => {
-            // 只有更新了数据源/蹲饼频率的时候才刷新，避免无意义的网络请求
-            if (!changed.enableDataSources
-                && !changed.customDataSources
-                && !changed.dun
-            ) {
-                return;
-            }
-            if (dunTimeoutId) {
-                clearTimeout(dunTimeoutId);
-                dunTimeoutId = null;
-            }
-            startDunTimer();
-        });
-
-        // 监听前台事件
-        PlatformHelper.Message.registerListener('background', null, (message) => {
-            if (message.type) {
-                switch (message.type) {
-                    case MESSAGE_FORCE_REFRESH:
-                        tryDun(Settings);
-                        return;
-                    case MESSAGE_SAN_GET:
-                        return SanInfo;
-                    case MESSAGE_CHANGE_COUNTDOWN:
-                        countDown.Change();
-                        return;
-                    case MESSAGE_GET_COUNTDOWN:
-                        return countDown.GetAllCountDown();
-                    default:
-                        return;
-                }
-            }
-        });
-
-        // 监听标签
-        PlatformHelper.Notification.addClickListener(id => {
-            let item = DataSourceUtil.mergeAllData(CardList, false).find(x => x.id === id);
-            if (item) {
-                PlatformHelper.Tabs.create(item.jumpUrl);
-            } else if (id === "update") {
-                PlatformHelper.Tabs.createWithExtensionFile(PAGE_UPDATE);
-            } else if (id.slice(0, 12) === "announcement") {
-                alert('博士，你点下去的是条重要公告噢，打开列表就可以看到啦');
-            } else {
-                alert('o(╥﹏╥)o 时间过于久远...最近列表内没有找到该网站');
-            }
-        });
-
-        // 监听安装更新
-        PlatformHelper.Lifecycle.addInstalledListener(details => {
-            if (details.reason === 'install') {
-                PlatformHelper.Tabs.createWithExtensionFile(PAGE_WELCOME);
-            }
-        });
-
-        // 监听扩展图标被点击，用于打开窗口化的弹出页面
-        PlatformHelper.BrowserAction.addIconClickListener(() => {
-            if (Settings.display.windowMode) {
-                if (popupWindowId != null) {
-                    PlatformHelper.Windows.getAllWindow().then(allWindow => {
-                        if (allWindow.findIndex(x => x.id == popupWindowId) > 0) {
-                            PlatformHelper.Windows.remove(popupWindowId);
-                        }
-                    });
-                }
-                const width = 800;
-                let height = 950;
-                if (PlatformHelper.PlatformType === PLATFORM_FIREFOX) {
-                    height = 850;
-                }
-                PlatformHelper.Windows
-                    .createPopupWindow(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW), width, height)
-                    .then(tab => popupWindowId = tab.id);
-            }
-        });
-    },
+    });
 }
 
 const countDown = {
@@ -314,6 +150,6 @@ const penguinStatistics = {
     }
 };
 
-kazeFun.Init();
+ExtensionInit();
 countDown.Start();
 penguinStatistics.Init();

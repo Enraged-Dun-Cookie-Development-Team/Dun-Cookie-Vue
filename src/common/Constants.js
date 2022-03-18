@@ -32,15 +32,11 @@ export {IS_DEBUG, DEBUG_LEVEL, DEBUG_LOG, CURRENT_SETTING_VERSION, CURRENT_VERSI
 
 // region 各种参数，主要用于测试模式
 /**
- * 测试模式的数据刷新间隔(秒)
- */
-const TEST_DATA_REFRESH_TIME = 5;
-/**
  * 理智恢复速度，非测试模式6分钟，测试模式75秒
  */
 const SAN_RECOVERY_SPEED = IS_DEBUG ? 75 * 1000 : 6 * 60 * 1000;
 
-export {TEST_DATA_REFRESH_TIME, SAN_RECOVERY_SPEED};
+export {SAN_RECOVERY_SPEED};
 // endregion
 
 // region message通信相关常量
