@@ -18,7 +18,7 @@ http.createServer((req, res) => {
   if (urlObj.pathname === "/canteen/cardList") {
     let response = { "error": "还没有获得饼列表，再等等就有了" };
     if (Object.keys(CardList).length > 0) {
-      response = CardList;
+      response = {data: CardList};
     }
     res.writeHeader(200, { 'Content-Type': 'application/json;charset=utf-8' });
     res.write(JSON.stringify(response));
