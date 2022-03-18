@@ -71,6 +71,7 @@ class DataSynchronizer {
         DebugUtil.debugLog(6, `从Storage中读取${this.key}: `, data);
         this.__handleReloadOrReceiveUpdate(data, true);
       }
+      this.__setInited();
     });
   }
 
@@ -103,7 +104,6 @@ class DataSynchronizer {
   __handleReloadOrReceiveUpdate(data, isReload = false) {
     const changed = {};
     deepAssign(this.target, data, changed);
-    this.__setInited();
     if (isReload) {
       DebugUtil.debugLog(6, `从storage中读取${this.key}: `, data, 'changed: ', changed);
     } else {
