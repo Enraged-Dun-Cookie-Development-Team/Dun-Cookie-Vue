@@ -42,15 +42,11 @@ let cookieContent = "init content";
  */
 function tryDun(settings) {
     DunInfo.lastDunTime = new Date().getTime();
-    const promiseList = [];
-    // 由于删除也算更新，所以用一个flag标记来判断是否有更新，而不能只用promise返回值判断
-    let hasUpdated = false;
     for (const key in CardList) {
         if (CardList.hasOwnProperty(key)) {
             // 如果缓存的key不在启用列表中则删除缓存
             if (!CurrentDataSource[key]) {
                 delete CardList[key];
-                hasUpdated = true;
             }
         }
     }
@@ -68,15 +64,12 @@ function tryDun(settings) {
         if (CurrentDataSource.hasOwnProperty(dataName)) {
             const source = CurrentDataSource[dataName];
             DunInfo.counter++;
-            const promise = source.fetchData()
+            source.fetchData()
                 .then(newCardList => {
                     let oldCardList = CardList[dataName];
                     let isNew = kazeFun.JudgmentNew(oldCardList, newCardList, source.title, source.tmp_cache);
                     if (newCardList && newCardList.length > 0) {
                         CardList[dataName] = newCardList;
-                    }
-                    if (isNew) {
-                        hasUpdated = true;
                     }
                 })
                 .catch(e => console.error(e))
@@ -85,7 +78,6 @@ function tryDun(settings) {
                         CardList[dataName] = [];
                     }
                 });
-            promiseList.push(promise);
         }
     }
 }
