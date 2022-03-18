@@ -52,47 +52,13 @@ export default class BrowserPlatform extends AbstractPlatform {
     // 整体宽度以图片宽度为准，至少680，左右再各加10的边距
     const canvasWidth = Math.max(680, image ? image.width : 0) + 20;
 
-    const textWidth = canvasWidth - 20;
-    const wrapper = document.createElement('div');
-    wrapper.style.position = "absolute";
-    wrapper.style.minWidth = textWidth + "px";
-    wrapper.style.maxWidth = textWidth + "px";
-    wrapper.style.whiteSpace = "break-spaces";
-    wrapper.style.wordBreak = "break-all";
-    wrapper.style.font = "16px Microsoft Yahei";
-    wrapper.style.color = "#848488";
-    let html = dataItem.content;
-    if (dataItem.retweeted) {
-      const retweeted = `<div style="
-font-family: 'Segoe UI', Arial, 'Microsoft Yahei', sans-serif;
-list-style: none;
-font-size: 1rem;
-background-color: #fff;
-border: #e4e7ed solid 1px;
-color: #848488;
-margin: 10px 0 0 0;
-padding: 10px;
-border-radius: 3px;
-width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retweeted.content}</span></div>`
-      html += retweeted;
-    }
-    wrapper.innerHTML = html;
-    document.body.appendChild(wrapper);
-    const textCanvasPromise = html2canvas(wrapper, {
-      useCORS: true,
-      backgroundColor: null,
-      width: textWidth,
-      scale: 1
-    });
-    textCanvasPromise.finally(() => {
-      document.body.removeChild(wrapper);
-    });
-
     // 减掉左右边距
     const headerCanvasPromise = this.__generateImageHeader(canvasWidth - 20, dataItem, iconUrl, sourceIconUrl);
+    const textCanvasPromise = this.__generateImageTextContent(canvasWidth - 20, dataItem);
 
     const [headerCanvas, textCanvas] = await Promise.all([headerCanvasPromise, textCanvasPromise]);
-    let canvasHeight = headerCanvas.height + 10 + textCanvas.height + 10;
+    const textHeight = textCanvas ? textCanvas.height : 0;
+    let canvasHeight = headerCanvas.height + 10 + textHeight + 10;
     if (image) {
       canvasHeight += image.height;
     }
@@ -112,7 +78,7 @@ width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retwee
   }
 
   /**
-   * 生成图片头部，不考虑边距
+   * 生成分享图片的头部，不考虑边距
    *
    * @param width {number}
    * @param dataItem {DataItem}
@@ -168,6 +134,56 @@ width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retwee
     ctx.fillText(`食堂介绍`, toolQrCodeOffset + (qrcodeSize / 2), 10 + qrcodeSize + 5);
 
     return canvas;
+  }
+
+  /**
+   * 生成分享图片的文字内容，不考虑边距
+   *
+   * @param width {number}
+   * @param dataItem {DataItem}
+   * @return {Promise<HTMLCanvasElement|null>}
+   * @private
+   */
+  async __generateImageTextContent(width, dataItem) {
+    if (!dataItem.content && !dataItem.retweeted) {
+      return null;
+    }
+    const textWidth = width;
+    const wrapper = document.createElement('div');
+    wrapper.style.position = "absolute";
+    wrapper.style.minWidth = textWidth + "px";
+    wrapper.style.maxWidth = textWidth + "px";
+    wrapper.style.whiteSpace = "break-spaces";
+    wrapper.style.wordBreak = "break-all";
+    wrapper.style.font = "16px Microsoft Yahei";
+    wrapper.style.color = "#848488";
+    let html = dataItem.content;
+    if (dataItem.retweeted) {
+      const retweeted = `<div style="
+font-family: 'Segoe UI', Arial, 'Microsoft Yahei', sans-serif;
+list-style: none;
+font-size: 1rem;
+background-color: #fff;
+border: #e4e7ed solid 1px;
+color: #848488;
+margin: 10px 0 0 0;
+padding: 10px;
+border-radius: 3px;
+width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retweeted.content}</span></div>`
+      html += retweeted;
+    }
+    wrapper.innerHTML = html;
+    document.body.appendChild(wrapper);
+    const textCanvasPromise = html2canvas(wrapper, {
+      useCORS: true,
+      backgroundColor: null,
+      width: textWidth,
+      scale: 1
+    });
+    textCanvasPromise.finally(() => {
+      document.body.removeChild(wrapper);
+    });
+    return await textCanvasPromise;
   }
 
   /**
