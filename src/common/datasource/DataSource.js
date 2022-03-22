@@ -1,5 +1,4 @@
 import HttpUtil from '../util/HttpUtil';
-import {DEBUG_LOG} from '../Constants';
 import DataSourceUtil from '../util/DataSourceUtil';
 import PlatformHelper from '../platform/PlatformHelper';
 
@@ -85,9 +84,9 @@ class DataSource {
     }
     try {
       const data = await this.processData(response);
-      const newCardList = DataSourceUtil.sortData(data);
-      const newCookieList = this._filterNewCookie(newCardList);
-      return [newCardList, newCookieList];
+      const cardList = DataSourceUtil.sortData(data);
+      const newCookieList = this._filterNewCookie(cardList);
+      return [cardList, newCookieList];
     } catch (e) {
       throw new Error(`数据源[${this.dataName}]解析失败：${e.message}`);
     }
