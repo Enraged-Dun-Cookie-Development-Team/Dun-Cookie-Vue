@@ -77,15 +77,15 @@ class DataSource {
         this.dataUrl.map(url => HttpUtil.GET(url))
       );
     } else {
-      throw new Error(`无效的dataUrl：${this.dataUrl}`);
+      throw new Error(`数据源[${this.dataName}]的dataUrl无效：${this.dataUrl}`);
     }
     const response = await promise;
     if (!response) {
-      throw new Error(`${this.dataName}获取数据失败`);
+      throw new Error(`数据源[${this.dataName}]获取数据失败`);
     }
     const data = await this.processData(response);
     if (!data) {
-      DebugUtil.debugLog(1, response);
+      DebugUtil.debugLog(1, `数据源[${this.dataName}]获取的原始数据`, response);
       throw new Error(`数据源[${this.dataName}]解析结果为空`);
     }
     try {
@@ -115,7 +115,7 @@ class DataSource {
   }
 
   async processData(rawDataText) {
-    console.error('未实现processData方法！');
+    console.error(`数据源[${this.dataName}]未实现processData方法！`);
   }
 
   /**
