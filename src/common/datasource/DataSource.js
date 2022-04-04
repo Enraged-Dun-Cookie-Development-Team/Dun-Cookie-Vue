@@ -1,5 +1,6 @@
 import HttpUtil from '../util/HttpUtil';
 import DataSourceUtil from '../util/DataSourceUtil';
+import DebugUtil from '../util/DebugUtil';
 import PlatformHelper from '../platform/PlatformHelper';
 
 /**
@@ -82,13 +83,18 @@ class DataSource {
     if (!response) {
       throw new Error(`${this.dataName}获取数据失败`);
     }
+    const data = await this.processData(response);
+    if (!data) {
+      DebugUtil.debugLog(1, response);
+      throw new Error(`数据源[${this.dataName}]解析结果为空`);
+    }
     try {
-      const data = await this.processData(response);
       const cardList = DataSourceUtil.sortData(data);
       const newCookieList = this._filterNewCookie(cardList);
       return [cardList, newCookieList];
     } catch (e) {
-      throw new Error(`数据源[${this.dataName}]解析失败：${e.message}`);
+      console.warn(`处理数据源[${this.dataName}]的解析结果时发生异常：${e.message}`);
+      throw e;
     }
   }
 
