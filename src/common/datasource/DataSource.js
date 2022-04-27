@@ -1,6 +1,6 @@
 import HttpUtil from '../util/HttpUtil';
-import {DEBUG_LOG} from '../Constants';
 import DataSourceUtil from '../util/DataSourceUtil';
+import DebugUtil from '../util/DebugUtil';
 import PlatformHelper from '../platform/PlatformHelper';
 
 /**
@@ -43,6 +43,14 @@ class DataSource {
    */
   dataUrl;
 
+
+  /**
+   * 缓存旧饼ID
+   * @type {{[key: string]: boolean}}
+   * @private
+   */
+  _cookieIdCache = {};
+
   constructor(icon, dataName, title, dataUrl, priority = 100) {
     this.icon = icon;
     this.dataName = dataName;
@@ -50,8 +58,16 @@ class DataSource {
     this.title = title;
     this.dataUrl = dataUrl;
     this.priority = priority;
+    // 避免私有属性被json序列化传递
+    Object.defineProperty(this, '_cookieIdCache', {
+      enumerable: false
+    });
   }
 
+  /**
+   *
+   * @return {Promise<(DataItem[])[]>}
+   */
   async fetchData() {
     let promise;
     if (typeof this.dataUrl === 'string') {
@@ -61,48 +77,66 @@ class DataSource {
         this.dataUrl.map(url => HttpUtil.GET(url))
       );
     } else {
-      if (DEBUG_LOG) {
-        console.log(`无效的dataUrl：${this.dataUrl}`);
-      }
-      return new Promise((_, reject) => {
-        reject(this.dataUrl);
-      });
+      throw new Error(`数据源[${this.dataName}]的dataUrl无效：${this.dataUrl}`);
     }
     const response = await promise;
     if (!response) {
-      console.error(`${this.dataName}获取数据失败`);
-      return null;
+      throw new Error(`数据源[${this.dataName}]获取数据失败`);
+    }
+    const data = await this.processData(response);
+    if (!data) {
+      DebugUtil.debugLog(1, `数据源[${this.dataName}]获取的原始数据`, response);
+      throw new Error(`数据源[${this.dataName}]解析结果为空`);
     }
     try {
-      if (!this.tmp_cache) this.tmp_cache = [];
-      this.tmp_cache.push(response);
-      if (this.tmp_cache.length > 2) this.tmp_cache.shift();
-      const data = await this.processData(response);
-      return DataSourceUtil.sortData(data);
+      const cardList = DataSourceUtil.sortData(data);
+      const newCookieList = this._filterNewCookie(cardList);
+      return [cardList, newCookieList];
     } catch (e) {
-      console.error(`数据源[${this.dataName}]解析失败：${e.message}`);
-      return null;
+      console.warn(`处理数据源[${this.dataName}]的解析结果时发生异常：${e.message}`);
+      throw e;
     }
   }
 
+  /**
+   * 从饼列表中筛选出新饼(该方法不是幂等的，每次调用都会记录参数提供的饼，下次调用的时候这些就是旧饼了)
+   * @param cardList
+   * @private
+   */
+  _filterNewCookie(cardList) {
+    const newCookieList = [];
+    for (const cookie of cardList) {
+      if (!this._cookieIdCache[cookie.id]) {
+        newCookieList.push(cookie);
+      }
+      this._cookieIdCache[cookie.id] = true;
+    }
+    return newCookieList;
+  }
+
   async processData(rawDataText) {
-    console.error('未实现processData方法！');
+    console.error(`数据源[${this.dataName}]未实现processData方法！`);
   }
 
   /**
    * @return {Promise<UserInfo|null>}
    */
   static async getOrFetchUserInfo(uid, type) {
-    const cacheKey = "cache_" + type.typeName + '_' + uid;
-    let data = await PlatformHelper.Storage.getLocalStorage(cacheKey);
-    if (!data) {
-      data = await type.fetchUserInfo(uid);
-    }
-    if (!data) {
+    try {
+      const cacheKey = "cache_" + type.typeName + '_' + uid;
+      let data = await PlatformHelper.Storage.getLocalStorage(cacheKey);
+      if (!data) {
+        data = await type.fetchUserInfo(uid);
+      }
+      if (!data) {
+        return null;
+      }
+      await PlatformHelper.Storage.saveLocalStorage(cacheKey, data);
+      return data;
+    } catch (e) {
+      console.log(e);
       return null;
     }
-    await PlatformHelper.Storage.saveLocalStorage(cacheKey, data);
-    return data;
   }
 
 }

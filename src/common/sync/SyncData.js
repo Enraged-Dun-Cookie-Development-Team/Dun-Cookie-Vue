@@ -2,6 +2,22 @@ import PlatformHelper from "../platform/PlatformHelper";
 import {deepAssign, deepEquals} from "../util/CommonFunctions";
 import DebugUtil from "../util/DebugUtil";
 
+// 该类仅用于IDE友好提示
+// noinspection JSUnusedLocalSymbols
+class CanSync {
+  doAfterUpdate(listener) {
+    throw new Error('仅用于IDE的友好提示，不应当被调用');
+  }
+
+  doAfterInit(listener) {
+    throw new Error('仅用于IDE的友好提示，不应当被调用');
+  }
+
+  doAfterFirstUpdate(listener) {
+    throw new Error('仅用于IDE的友好提示，不应当被调用');
+  }
+}
+
 function keyUpdate(key) {
   return 'sync-update:' + key;
 }
@@ -19,6 +35,17 @@ class DataSyncMode {
   static ALL_WRITABLE = 2;
 }
 
+const CanSyncMethods = (() => {
+  const obj = new CanSync();
+  const list = [];
+  Object.getOwnPropertyNames(Object.getPrototypeOf(obj)).forEach(methodName => {
+    if (methodName !== 'constructor') {
+      list.push(methodName);
+    }
+  })
+  return list;
+})();
+
 class DataSynchronizer {
   key;
   target;
@@ -28,6 +55,7 @@ class DataSynchronizer {
   updateFlag = false;
   updateCount = 0;
   updateListeners = [];
+  firstUpdateCall = false;
   firstUpdateListeners = [];
   inited = false;
   initListeners = [];
@@ -43,6 +71,7 @@ class DataSynchronizer {
         DebugUtil.debugLog(6, `从Storage中读取${this.key}: `, data);
         this.__handleReloadOrReceiveUpdate(data, true);
       }
+      this.__setInited();
     });
   }
 
@@ -57,10 +86,12 @@ class DataSynchronizer {
   }
 
   __handleFirstUpdateListener() {
-    if (this.updateCount > 0) {
-      for (const listener of this.firstUpdateListeners) {
-        listener(this.proxy);
-      }
+    if (this.firstUpdateCall) {
+      return;
+    }
+    this.firstUpdateCall = true;
+    for (const listener of this.firstUpdateListeners) {
+      listener(this.proxy);
     }
   }
 
@@ -73,7 +104,6 @@ class DataSynchronizer {
   __handleReloadOrReceiveUpdate(data, isReload = false) {
     const changed = {};
     deepAssign(this.target, data, changed);
-    this.__setInited();
     if (isReload) {
       DebugUtil.debugLog(6, `从storage中读取${this.key}: `, data, 'changed: ', changed);
     } else {
@@ -129,7 +159,10 @@ class DataSynchronizer {
       return Reflect.set(...arguments);
     };
     handler.deleteProperty = function (target, prop) {
-      DebugUtil.debugLog(7, `删除属性${_this.key}: ${String(prop)}`);
+      if (target.hasOwnProperty(prop)) {
+        _this.sendUpdateAtNextTick();
+        DebugUtil.debugLog(7, `删除属性${_this.key}: ${String(prop)}`);
+      }
       return Reflect.deleteProperty(...arguments);
     };
     handler.defineProperty = function (target, prop, descriptor) {
@@ -195,7 +228,7 @@ class DataSynchronizer {
   }
 
   isSyncProperty(prop) {
-    return prop === 'doAfterUpdate' || prop === 'doAfterInit';
+    return CanSyncMethods.indexOf(prop) !== -1;
   }
 
 }
@@ -257,20 +290,6 @@ function createSyncData(target, key, mode, shouldPersist = false) {
   global.SyncData[key] = synchronizer.proxy;
   console.log(`已启用同步数据：${key}`, synchronizer.proxy);
   return synchronizer.proxy;
-}
-
-// 该类仅用于IDE友好提示
-// noinspection JSUnusedLocalSymbols
-class CanSync {
-  doAfterUpdate(listener) {
-    throw new Error('仅用于IDE的友好提示，不应当被调用');
-  }
-  doAfterInit(listener) {
-    throw new Error('仅用于IDE的友好提示，不应当被调用');
-  }
-  doAfterFirstUpdate(listener) {
-    throw new Error('仅用于IDE的友好提示，不应当被调用');
-  }
 }
 
 global.SyncData = {};

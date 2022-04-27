@@ -209,8 +209,6 @@ import DunInfo from "../common/sync/DunInfo";
 import MenuIcon from "@/popup/MenuIcon";
 import {
   dayInfo,
-  MESSAGE_CARD_LIST_GET,
-  MESSAGE_CARD_LIST_UPDATE,
   MESSAGE_FORCE_REFRESH,
   MESSAGE_GET_COUNTDOWN,
   PAGE_DONATE,
@@ -224,6 +222,7 @@ import {
 } from "../common/Constants";
 import PlatformHelper from "../common/platform/PlatformHelper";
 import "animate.css";
+import CardList from "../common/sync/CardList";
 
 export default {
   name: "app",
@@ -253,7 +252,7 @@ export default {
       show: false,
       LazyLoaded: false,
       isNew: false,
-      cardList: {},
+      cardList: CardList,
       currentVersion: SHOW_VERSION,
       onlineSpeakList: [],
       oldDunCount: 0,
@@ -282,6 +281,9 @@ export default {
       DunInfo.doAfterUpdate((data) => {
         this.oldDunCount = data.counter;
       });
+      CardList.doAfterUpdate(data => {
+        this.cardList = JSON.parse(JSON.stringify(data));
+      });
       setTimeout(() => {
         // 计算高度
         // this.calcHeight();
@@ -291,7 +293,6 @@ export default {
           div.style.fontFamily = "Microsoft yahei";
           this.firefox = true;
         }
-        this.getCardList();
         // 图片卡 先加载dom后加载图片内容
         this.LazyLoaded = true;
         this.listenerWindowSize();
@@ -441,17 +442,6 @@ export default {
     unbindScrollFun() {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
       scrollDiv.removeEventListener("wheel", this.scrollHandler);
-    },
-    // 获取数据
-    getCardList() {
-      PlatformHelper.Message.registerListener(
-          "popup",
-          MESSAGE_CARD_LIST_UPDATE,
-          (data) => (this.cardList = data)
-      );
-      PlatformHelper.Message.send(MESSAGE_CARD_LIST_GET).then((data) => {
-        this.cardList = data;
-      });
     },
     // 获取倒计时数据
     getCountDownList() {

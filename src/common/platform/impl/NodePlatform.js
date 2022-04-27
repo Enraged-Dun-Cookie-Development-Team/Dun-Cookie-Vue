@@ -2,6 +2,8 @@ import AbstractPlatform from '../AbstractPlatform';
 import { DEBUG_LOG, PLATFORM_NODE } from '../../Constants';
 import { deepAssign } from '../../util/CommonFunctions';
 
+// NOTE: 该文件使用了node v15新增的实验性api BroadcastChannel
+
 const storageFile = 'storage.json';
 
 function node_require(module) {
@@ -16,20 +18,21 @@ export default class NodePlatform extends AbstractPlatform {
     path = node_require('path');
     http = node_require('http');
     https = node_require('https');
+    url = node_require('url');
     worker_threads;
-    workerParent;
+    broadcastChannel;
 
     weiboCookie;
 
     constructor() {
         super();
         this.worker_threads = node_require('worker_threads');
-        this.workerParent = this.worker_threads.parentPort;
+        this.broadcastChannel = new this.worker_threads.BroadcastChannel('MessageChannel');
         this.getLocalStorage("weiboCookie").then(value => this.weiboCookie = value);
     }
 
     get isBackground() {
-        return true;
+        return !!this.worker_threads.parentPort;
     }
 
     get isMobile() {
@@ -46,9 +49,18 @@ export default class NodePlatform extends AbstractPlatform {
 
     async getLocalStorage(name) {
         const file = await this.fs.open(storageFile, this.fs_callback.constants.O_RDONLY | this.fs_callback.constants.O_CREAT);
-        const content = await file.readFile('UTF-8') || '{}';
+        const content = (await file.readFile('UTF-8'))?.toString() || '{}';
         await file.close();
-        const json = JSON.parse(content);
+        try {
+            const json = JSON.parse(content);
+            return this._extractJsonValue(json, name);
+        } catch (e) {
+            console.error(e);
+            return null;
+        }
+    }
+
+    _extractJsonValue(json, name) {
         if (!name) {
             return json;
         } else if (typeof name === 'string') {
@@ -92,22 +104,23 @@ export default class NodePlatform extends AbstractPlatform {
         const message = this.__buildMessageToSend(type, data);
 
         return new Promise((resolve, reject) => {
-            this.workerParent.postMessage(message);
+            this.broadcastChannel.postMessage(message);
             resolve('Node环境暂不支持响应消息');
         });
     }
 
     addMessageListener(id, type, listener) {
-        this.workerParent.on('message', (message) => {
+        this.broadcastChannel.onmessage = (event) => {
+            const message = event.data;
             const value = this.__handleReceiverMessage(id, type, message, listener);
             if (value !== undefined) {
                 if (value.constructor === Promise) {
-                    value.then(result => this.workerParent.postMessage({ type: message.type, data: result }));
+                    value.then(result => this.broadcastChannel.postMessage({ type: message.type, data: result }));
                 } else {
-                    this.workerParent.postMessage({ type: message.type, data: value });
+                    this.broadcastChannel.postMessage({ type: message.type, data: value });
                 }
             }
-        });
+        }
     }
 
     setPopup(url) {
@@ -119,11 +132,12 @@ export default class NodePlatform extends AbstractPlatform {
     }
 
     getURLForExtensionFile(file) {
-        file = this.path.normalize(file);
-        if (file.indexOf('..') !== -1) {
-            throw 'illegal path: ' + file;
+        if (file[0] !== '/') {
+            file = '/' + file;
         }
-        return this.path.resolve(file);
+        file = '../src' + file;
+        file = this.path.normalize(file);
+        return this.url.pathToFileURL(this.path.resolve(file)).toString();
     }
 
     createNotifications(id, iconUrl, title, message, imageUrl) {
@@ -194,6 +208,24 @@ export default class NodePlatform extends AbstractPlatform {
 
     sendHttpRequest(url, method) {
         return new Promise((resolve, reject) => {
+            if (url.indexOf('file') === 0) {
+                const filePath = this.url.fileURLToPath(url);
+                this.fs.open(filePath, this.fs_callback.constants.O_RDONLY).then(async file => {
+                    try {
+                        const buffer = await file.readFile('UTF-8');
+                        if (buffer) {
+                            resolve(buffer.toString());
+                        } else {
+                            reject("文件不存在")
+                        }
+                    } finally {
+                        file.close();
+                    }
+                }).catch(err => {
+                    console.error(err);
+                });
+                return;
+            }
             const options = {
                 method: method,
             };

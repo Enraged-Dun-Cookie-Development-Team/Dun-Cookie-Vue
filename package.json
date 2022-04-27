@@ -13,6 +13,7 @@
     "core-js": "^3.6.5",
     "crypto-js": "^4.1.1",
     "element-ui": "^2.15.1",
+    "fastest-levenshtein": "^1.0.12",
     "html2canvas": "^1.1.5",
     "jquery": "^3.6.0",
     "jsdom": "^17.0.0",
