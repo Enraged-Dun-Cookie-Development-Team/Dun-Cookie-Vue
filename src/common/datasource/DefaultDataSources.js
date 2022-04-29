@@ -101,7 +101,7 @@ const configList = [
         '/assets/image/wyyyy.ico',
         '塞壬唱片网易云音乐',
         '网易云音乐',
-        'http://music.163.com/api/artist/albums/32540734',
+        'https://music.163.com/api/artist/albums/32540734',
         9
     ),
     buildDatasource(WeiboDataSource.withUid(7461423907, 10), '/assets/image/icon/yjwb.jpg', '鹰角网络微博', '鹰角网络微博'),
