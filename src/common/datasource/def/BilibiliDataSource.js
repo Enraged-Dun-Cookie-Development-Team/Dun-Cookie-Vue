@@ -65,7 +65,7 @@ export class BilibiliDataSource extends DataSource {
           // 视频
           case 8: {
             builder
-              .previewList([null])
+              .previewList(null)
               .imageList(null)
               .coverImage(dynamicInfo.pic)
               .content(dynamicInfo.dynamic);
