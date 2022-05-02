@@ -17,12 +17,13 @@ Object.keys(DunInfo);
 // 读取配置文件
 let rawdata = fs.readFileSync("config.json");
 let config = JSON.parse(rawdata);
-let ws_url = "ws://" + config.ws.host + ":" + config.ws.port;
-let intervalTime = config.ws.interval_time;
-let limitConnect = config.ws.limit_connect || -1;
-let heartBeatTime = config.ws.heart_beat_time || 10;
-let timeConnect = 0;
-let aliveInterval;
+let ws_url = "ws://" + config.ws.host + ":" + config.ws.port;   // websocket的地址
+let intervalTime = config.ws.interval_time;                     // 尝试重连时间间隔
+let limitConnect = config.ws.limit_connect || -1;               // 尝试重连次数
+let heartBeatTime = config.ws.heart_beat_time || 5;             // 心跳间隔时间 
+
+let timeConnect = 0;                                            // 重连次数
+let aliveInterval;                                              // websocket心跳检测计时器
 
 wsInit();
 
@@ -31,6 +32,7 @@ function wsInit() {
   let sock = new ws(ws_url);
   sock.on("open", _ => {
     console.log("与服务端建立链接成功")
+    // 初始化重连次数
     timeConnect = 0;
     CardList.doAfterUpdate(data => {
       if (sock.readyState === ws.OPEN) {
@@ -50,7 +52,7 @@ function wsInit() {
   });
 
   sock.on("message", data => {
-    console.log(data)
+    // 添加心跳检测
     if (data === 'ping') {
       clearTimeout(aliveInterval);
       sock.send("pong")
