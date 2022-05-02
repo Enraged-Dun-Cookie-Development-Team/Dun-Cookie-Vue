@@ -85,19 +85,21 @@ class DataSynchronizer {
     }
   }
 
-  __handleFirstUpdateListener() {
+  __handleFirstUpdateListener(changed) {
     if (this.firstUpdateCall) {
       return;
     }
     this.firstUpdateCall = true;
+    const changed_str = JSON.stringify(changed);
     for (const listener of this.firstUpdateListeners) {
-      listener(this.proxy);
+      listener(this.proxy, JSON.parse(changed_str));
     }
   }
 
-  __handleUpdateListener() {
+  __handleUpdateListener(changed) {
+    const changed_str = JSON.stringify(changed);
     for (const listener of this.updateListeners) {
-      listener(this.proxy);
+      listener(this.proxy, JSON.parse(changed_str));
     }
   }
 
@@ -109,8 +111,8 @@ class DataSynchronizer {
     } else {
       this.updateCount++;
       DebugUtil.debugLog(6, `接收更新${this.key}: `, data, 'changed: ', changed);
-      this.__handleFirstUpdateListener();
-      this.__handleUpdateListener();
+      this.__handleFirstUpdateListener(changed);
+      this.__handleUpdateListener(changed);
     }
   }
 
