@@ -20,7 +20,9 @@ let config = JSON.parse(rawdata);
 let ws_url = "ws://" + config.ws.host + ":" + config.ws.port;
 let intervalTime = config.ws.interval_time;
 let limitConnect = config.ws.limit_connect || -1;
+let heartBeatTime = config.ws.heart_beat_time || 10;
 let timeConnect = 0;
+let aliveInterval;
 
 wsInit();
 
@@ -31,7 +33,6 @@ function wsInit() {
     console.log("与服务端建立链接成功")
     timeConnect = 0;
     CardList.doAfterUpdate(data => {
-      console.log(sock.readyState)
       if (sock.readyState === ws.OPEN) {
         sock.send(JSON.stringify(data));
       }
@@ -49,13 +50,19 @@ function wsInit() {
   });
 
   sock.on("message", data => {
-    // console.log(data);
+    console.log(data)
+    if (data === 'ping') {
+      clearTimeout(aliveInterval);
+      sock.send("pong")
+      aliveInterval = setTimeout(_ => {
+        sock.terminate()
+      }, heartBeatTime * 1000 + 3000)
+    }
   });
 }
 
 // 重连
 function reconnect() {
-  // lockReconnect加锁，防止onclose、onerror两次重连
   if (timeConnect <= limitConnect || limitConnect == -1) {
     timeConnect++;
     console.log("第" + timeConnect + "次重连");
@@ -67,4 +74,5 @@ function reconnect() {
     console.log("TCP连接已超时");
   }
 }
+
 // 测试命令: node --experimental-loader ./loader.mjs ./index.js
