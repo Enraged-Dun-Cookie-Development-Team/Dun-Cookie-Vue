@@ -1,4 +1,4 @@
-import SHA512 from 'crypto-js/sha512';
+import SHA512 from 'crypto-js/sha512.js';
 import Settings from '../Settings';
 
 export default class InsiderUtil {

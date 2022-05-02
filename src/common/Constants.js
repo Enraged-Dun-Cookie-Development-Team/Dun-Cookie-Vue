@@ -32,32 +32,26 @@ export {IS_DEBUG, DEBUG_LEVEL, DEBUG_LOG, CURRENT_SETTING_VERSION, CURRENT_VERSI
 
 // region 各种参数，主要用于测试模式
 /**
- * 测试模式的数据刷新间隔(秒)
- */
-const TEST_DATA_REFRESH_TIME = 5;
-/**
  * 理智恢复速度，非测试模式6分钟，测试模式75秒
  */
 const SAN_RECOVERY_SPEED = IS_DEBUG ? 75 * 1000 : 6 * 60 * 1000;
 
-export {TEST_DATA_REFRESH_TIME, SAN_RECOVERY_SPEED};
+export {SAN_RECOVERY_SPEED};
 // endregion
 
 // region message通信相关常量
 const MESSAGE_SETTINGS_UPDATE = 'settings-update';
 const MESSAGE_SAN_UPDATE = 'san-update';
-const MESSAGE_CARD_LIST_UPDATE = 'cardList-update';
 
 const MESSAGE_SAN_GET = 'san-get';
-const MESSAGE_CARD_LIST_GET = 'cardList-get';
 const MESSAGE_CHANGE_COUNTDOWN = 'change-countdown'
 
 const MESSAGE_FORCE_REFRESH = 'force-refresh';
 const MESSAGE_WEIBO_DETAIL = 'weibo-detail';
 const MESSAGE_GET_COUNTDOWN = 'countdown-list';
 
-export {MESSAGE_SETTINGS_UPDATE, MESSAGE_SAN_UPDATE, MESSAGE_CARD_LIST_UPDATE};
-export {MESSAGE_SAN_GET, MESSAGE_CARD_LIST_GET,MESSAGE_CHANGE_COUNTDOWN};
+export {MESSAGE_SETTINGS_UPDATE, MESSAGE_SAN_UPDATE};
+export {MESSAGE_SAN_GET,MESSAGE_CHANGE_COUNTDOWN};
 export {MESSAGE_FORCE_REFRESH, MESSAGE_WEIBO_DETAIL,MESSAGE_GET_COUNTDOWN};
 // endregion
 

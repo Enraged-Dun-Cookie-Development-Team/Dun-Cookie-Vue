@@ -1,5 +1,4 @@
 import PlatformHelper from '../platform/PlatformHelper'
-import NotificationUtil from "@/common/util/NotificationUtil";
 import HttpUtil from '../util/HttpUtil';
 
 export default class PenguinStatistics {
