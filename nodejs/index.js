@@ -1,7 +1,5 @@
 import DunInfo from "../src/common/sync/DunInfo.js";
 import { Worker } from "worker_threads";
-import http from "http";
-import urlib from "url";
 import CardList from "../src/common/sync/CardList";
 import ws from "ws"
 import fs from "fs"
@@ -34,7 +32,7 @@ function wsInit() {
     timeConnect = 0;
     CardList.doAfterUpdate(data => {
       console.log(sock.readyState)
-      if (sock.readyState != 3) {
+      if (sock.readyState === ws.OPEN) {
         sock.send(JSON.stringify(data));
       }
     });
@@ -42,10 +40,10 @@ function wsInit() {
 
   sock.on("error", err => {
     console.log("Error: ", err);
+    sock.terminate();
   });
 
   sock.on("close", _ => {
-    sock.terminate()
     console.log("检测到服务端关闭");
     reconnect();
   });
