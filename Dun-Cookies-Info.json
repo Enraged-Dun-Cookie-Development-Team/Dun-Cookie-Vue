@@ -1,19 +1,19 @@
 {
     "list": [
         {
-            "html": "<div class='online-area'> <a class='webOpen' href='http://www.ceobecanteen.top/'><img class='online-title-img' src='/assets/image/icon.png'></a> <div> <div><span class='online-blue'>小刻的三周年直播</span></div> <div>由<span class='online-red'>小刻食堂</span>出品</div> <div>总结了本次三周年直播内容</div> <div>B站搜索<span class='online-yellow'>小刻食堂官方账号</span>查看</div> <div>或者点击 <span class='online-blue'><a class='webOpen' href='https://www.bilibili.com/read/cv16283234'>这里</a></span> 快速跳转专栏观看</div> </div> </div>",
+            "html": "<div class='online-area'> <img class='online-title-img' src='http://api.ceobecanteen.top/%E9%81%93%E5%85%B7_%E6%8B%9B%E8%81%98%E8%AE%B8%E5%8F%AF.png'><div> <div><span class='online-blue'>公开招募啦！！！</span></div> <div>Tag: </div> <div><span class='online-red'>IOS Flutter开发，视频剪辑与分镜，界面UI设计</span></div> <div>已经拉满九小时啦</div> <div>有兴趣的快来噢，加群 <a class='webOpen' href='https://jq.qq.com/?_wv=1027&k=Vod1uO13'>【蹲饼组】</a> 联系我们呀！</div> </div> </div>",
+            "starTime":"2022-05-07 04:00:00",
+            "overTime":"2022-06-30 15:59:59",
+            "notice": false
+        },
+        {
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20220422/cbf2d65644cfb82613cc07e1845f3b0f.jpg'> <div> <div><span class='online-blue'>SideStory「愚人号」</span>将于<span class='online-blue'>5月1号</span>开启</div> <div>开启时间为<span class='online-red'>周日16:00</span></div> <div>活动前记得<span class='online-red'>刷剿灭，囤理智</span></div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频与剧情捧读</span> </div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
             "starTime":"2022-04-23 04:00:00",
             "overTime":"2022-05-01 15:59:59",
             "notice": false
         },
         {
-            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20220422/cbf2d65644cfb82613cc07e1845f3b0f.jpg'> <div> <div><span class='online-blue'>SideStory「愚人号」</span>将于<span class='online-blue'>5月1号</span>开启</div> <div>开启时间为<span class='online-red'>周日16:00</span></div> <div>活动前记得<span class='online-red'>刷剿灭，囤理智</span></div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频</span> </div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
-            "starTime":"2022-04-23 04:00:00",
-            "overTime":"2022-05-01 15:59:59",
-            "notice": false
-        },
-        {
-            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20220422/cbf2d65644cfb82613cc07e1845f3b0f.jpg'> <div> <div><span class='online-blue'>SideStory「愚人号」</span>将于<span class='online-blue'>5月22号</span>结束</div> <div>结束时间为<span class='online-red'>周日4:00</span></div> <div>活动期间掉落<span class='online-red'>异铁组、轻锰矿、化合切削液</span></div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频</span> </div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20220422/cbf2d65644cfb82613cc07e1845f3b0f.jpg'> <div> <div><span class='online-blue'>SideStory「愚人号」</span>将于<span class='online-blue'>5月22号</span>结束</div> <div>结束时间为<span class='online-red'>周日4:00</span></div> <div>活动期间掉落<span class='online-red'>异铁组、轻锰矿、化合切削液</span></div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频与剧情捧读</span> </div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
             "starTime":"2022-05-01 16:00:00",
             "overTime":"2022-05-15 03:59:59",
             "notice": false
@@ -21,11 +21,17 @@
         {
             "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20220422/cbf2d65644cfb82613cc07e1845f3b0f.jpg'> <div> <div><span class='online-blue'>SideStory「愚人号」</span>将于<span class='online-blue'>5月22号</span>结束</div> <div>结束时间为<span class='online-red'>周日4:00</span></div><div><span class='online-red'>22那周别急着刷剿灭</span>，等活动结束再刷</div> <div>SideStory有着更高的材料掉率</div> <div>可以在活动期间将本周过期的<span class='online-yellow'>理智液</span>刷完 </div> </div> </div>",
             "starTime":"2022-05-15 04:00:00",
+            "overTime":"2022-05-17 03:59:59",
+            "notice": true
+        },
+        {
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20220422/cbf2d65644cfb82613cc07e1845f3b0f.jpg'> <div> <div><span class='online-blue'>SideStory「愚人号」</span>将于<span class='online-blue'>5月22号</span>结束</div> <div>结束时间为<span class='online-red'>周日4:00</span></div> <div>活动期间掉落<span class='online-red'>异铁组、轻锰矿、化合切削液</span></div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频与剧情捧读</span> </div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
+            "starTime":"2022-05-17 16:00:00",
             "overTime":"2022-05-22 03:59:59",
             "notice": false
         },
         {
-            "html": "<div class='online-area'> <a class='webOpen' href='http://www.ceobecanteen.top/'><img class='online-title-img' src='/assets/image/icon.png'></a> <div> <div>博士，谢谢你使用蹲饼。</div> <div>如果觉得好用的话，希望能去<a class='webOpen' href='https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue'>GitHub</a>上点个<span class='online-red'>Star</span>或者</div> <div>去<a class='webOpen' href='https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN'>Chrome商店</a>，<a class='webOpen' href='https://microsoftedge.microsoft.com/addons/detail/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknight/jimmfliacfpeabcifcghmdankmdnmfmn?hl=zh-CN'>Edge商店</a>或<a class='webOpen' href='https://addons.mozilla.org/zh-CN/firefox/addon/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cookies/'>Firefox商店</a>里面给个<span class='online-red'>好评</span></div> <div>也可以去<a class='webOpen' href='https://arknightscommunity.drblack-system.com/15386.html'>泰拉通讯枢纽</a>里面<span class='online-red'>回复我们</span>，或者去<a class='webOpen' href='https://www.bilibili.com/video/BV1jv411P7bR/'>b站视频</a>给个<span class='online-red'>三连</span></div> <div>欢迎加群 <a class='webOpen' href='https://jq.qq.com/?_wv=1027&k=Vod1uO13'>【蹲饼测试群】</a> 一起聊天，蹲饼！</div> </div> </div>",
+            "html": "<div class='online-area'> <a class='webOpen' href='http://www.ceobecanteen.top/'><img class='online-title-img' src='/assets/image/icon.png'></a> <div> <div>博士，谢谢你使用蹲饼。</div> <div>如果觉得好用的话，希望能去<a class='webOpen' href='https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue'>GitHub</a>上点个<span class='online-red'>Star</span>或者</div> <div>去<a class='webOpen' href='https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN'>Chrome商店</a>，<a class='webOpen' href='https://microsoftedge.microsoft.com/addons/detail/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknight/jimmfliacfpeabcifcghmdankmdnmfmn?hl=zh-CN'>Edge商店</a>或<a class='webOpen' href='https://addons.mozilla.org/zh-CN/firefox/addon/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cookies/'>Firefox商店</a>里面给个<span class='online-red'>好评</span></div> <div>也可以去<a class='webOpen' href='https://arknightscommunity.drblack-system.com/15386.html'>泰拉通讯枢纽</a>里面<span class='online-red'>回复我们</span>，或者去<a class='webOpen' href='https://www.bilibili.com/video/BV1R44y1M7s5/'>b站视频</a>给个<span class='online-red'>三连</span></div> <div style='display: flex;align-items: center;'>欢迎加群 <a class='webOpen' href='https://jq.qq.com/?_wv=1027&k=Vod1uO13'>【蹲饼组】</a> 一起all，all叫！<img class='online-title-img' style='height:16px;min-width:auto' src='http://api.ceobecanteen.top/canteen/all'></div> </div> </div>",
             "starTime": "2021-5-01 12:00:00",
             "overTime": "2099-12-31 04:00:00",
             "notice": false
@@ -33,19 +39,19 @@
     ],
     "btnList": [
         {
-            "starTime": "2022-04-14 16:00:00",
-            "overTime": "2022-04-28 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1ma411e7ST",
-            "name": "【魔法Zc目录】第10章 磨难10-X“破碎日冕”平民全关卡低配攻略(含高配懒人打法)！阵容平民+低练度+语音详解的愉悦攻略《明日方舟》主线(更新中)",
-            "img": "https://i1.hdslb.com/bfs/archive/a0e73ff65cd3d83243123efebac453d01e886a50.jpg@200w_125h_1c.webp",
+            "starTime": "2022-05-02 16:00:00",
+            "overTime": "2022-05-22 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1FF41177rE?p=3&spm_id_from=333.880.my_history.page.click",
+            "name": "【魔法Zc目录】愚人号”SN-EX1~8平民全关卡低配攻略！(含突袭)阵容平民+低练度+语音详解的愉悦攻略！（更新中）《明日方舟》|魔法Zc目录",
+            "img": "https://i1.hdslb.com/bfs/archive/424f93b9fdaf04ca21309bf7543a81141a16f860.jpg@200w_125h_1c.webp",
             "radius": true
         },
         {
-            "starTime": "2022-04-14 16:00:00",
-            "overTime": "2022-04-28 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1ka411e7QT",
-            "name": "【好吃的橘子鸭/破碎日冕】主线第十章，中配挂机攻略合集，有手就行，摆完挂机！——《明日方舟》",
-            "img": "https://i1.hdslb.com/bfs/archive/c12cb2db37b63f3ba47ced546cbabd08c136a30d.jpg@200w_125h_1c.webp",
+            "starTime": "2022-05-02 16:00:00",
+            "overTime": "2022-05-22 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1gU4y1S7xy?spm_id_from=333.880.my_history.page.click",
+            "name": "【好吃的橘子鸭/愚人号】SN-EX挂机流，突袭镀层都不愁！语音快乐详解，轻松解放双手 | 明日方舟愚人号EX关合集(含SN-EX-8突袭，1-8任务等)",
+            "img": "https://i2.hdslb.com/bfs/archive/dedbfcea82a4548d5f698f4b71bfe774baf0abf7.jpg@200w_125h_1c.webp",
             "radius": true
         },
         {
@@ -57,11 +63,11 @@
             "radius": true
         },
         {
-            "starTime": "2022-04-14 16:00:00",
-            "overTime": "2022-04-28 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1GY411j72u",
-            "name": "【萧然Q/破碎日冕】明日方舟 主线第十章 磨难险境 摆完挂机 简单好抄（持续更新中）",
-            "img": "https://i2.hdslb.com/bfs/archive/6dcf1f7e79d515682abd47d1060463cfba4b1667.jpg@200w_125h_1c.webp",
+            "starTime": "2022-05-02 16:00:00",
+            "overTime": "2022-05-22 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1uU4y1S7Gj?p=13&spm_id_from=333.880.my_history.page.click",
+            "name": "【萧然Q/愚人号】SN-EX-1至8突袭 摆完挂机 简单好抄",
+            "img": "https://i2.hdslb.com/bfs/archive/2ef97867dba4a134c29944f140f8d3006cee9f94.jpg@200w_125h_1c.webp",
             "radius": true
         },
         {
@@ -73,52 +79,28 @@
             "radius": true
         },
         {
-            "starTime": "2022-04-14 16:00:00",
-            "overTime": "2022-04-28 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1B5411274M",
-            "name": "【自在道爷】第十章挂机流，磨难险地不用愁！精二31快乐讲解，轻松解放双手|破碎日冕合集（含10-7磨难等，分p更新中）",
-            "img": "https://i1.hdslb.com/bfs/archive/8c59f50fdc944be66ac38bdf9a36f90e0abd2677.jpg@200w_125h_1c.webp",
+            "starTime": "2022-05-02 16:00:00",
+            "overTime": "2022-05-22 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1EL4y1F7ND?spm_id_from=333.880.my_history.page.click",
+            "name": "【自在道爷/愚人号】SN-EX挂机流，突袭镀层都不愁！语音快乐详解，轻松解放双手 | 明日方舟愚人号EX关合集(含SN-EX-8突袭，1-8任务等)",
+            "img": "https://i2.hdslb.com/bfs/archive/1c8ac56809ec26a2228aa4b4db7b16766c30f04f.jpg@200w_125h_1c.webp",
             "radius": true
         },
 
         {
-            "starTime": "2022-04-28 04:00:00",
-            "overTime": "2022-05-03 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1BB4y127EL?spm_id_from=333.880.my_history.page.click",
-            "name": "2022明日方舟三周年「生日创作派对」",
-            "img": "https://i1.hdslb.com/bfs/archive/445ba5fb90f052935a1cb2099b34f4ae63f76acd.jpg@200w_125h_1c.webp",
+            "starTime": "2022-05-09 04:00:00",
+            "overTime": "2022-05-15 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1pF411T73h?spm_id_from=333.880.my_history.page.click",
+            "name": "【杨颜同学】愚人号 全流程实况+道具剧情",
+            "img": "https://i2.hdslb.com/bfs/archive/66a569fe91aefed547da50361e4aa370096ddfa8.png@200w_125h_1c.webp",
             "radius": true
         },
         {
-            "starTime": "2022-04-28 04:00:00",
-            "overTime": "2022-05-03 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1aS4y1N7ty?spm_id_from=333.880.my_history.page.click",
-            "name": "【阿哉吃土】余下三朵黄鸢尾",
-            "img": "https://i2.hdslb.com/bfs/archive/79b3a5a41068f091d23a8c85b020d255e44b85a5.jpg@200w_125h_1c.webp",
-            "radius": true
-        },
-        {
-            "starTime": "2022-04-28 04:00:00",
-            "overTime": "2022-05-03 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1QB4y1m7Ex?spm_id_from=333.880.my_history.page.click",
-            "name": "【Enki安奇/异客手书】黄沙与鲜血，飞鸟与火焰",
-            "img": "https://i2.hdslb.com/bfs/archive/76bcfd7bdd0bd8c8d02d3dc956150e643aeac7c9.jpg@200w_125h_1c.webp",
-            "radius": true
-        },
-        {
-            "starTime": "2022-04-28 04:00:00",
-            "overTime": "2022-05-03 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1Qa411Y7sa?spm_id_from=333.880.my_history.page.click",
-            "name": "【柞木不朽】三周年全PV解析，多点开花的周年庆",
-            "img": "https://i1.hdslb.com/bfs/archive/5c4702f7eb03316ebcb26821257165d399d7c647.jpg@200w_125h_1c.webp",
-            "radius": true
-        },
-        {
-            "starTime": "2022-04-28 04:00:00",
-            "overTime": "2022-05-03 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1U34y1Y74m?spm_id_from=333.880.my_history.page.click",
-            "name": "【杨颜同学】三周年全PV解析，多点开花的周年庆",
-            "img": "https://i0.hdslb.com/bfs/archive/92b433e01add0f2627310a7364992050d17c22d8.jpg@200w_125h_1c.webp",
+            "starTime": "2022-05-15 04:00:00",
+            "overTime": "2022-05-22 03:59:59",
+            "url": "https://www.bilibili.com/video/BV18Y411A7mi?spm_id_from=333.880.my_history.page.click",
+            "name": "【杨颜同学】以伊比利亚之名，在此宣读判决。",
+            "img": "https://i1.hdslb.com/bfs/archive/858b0979be1595f8e09c9f3e13eaf541577b4af1.jpg@200w_125h_1c.webp",
             "radius": true
         }
     ],
@@ -130,8 +112,8 @@
         "countdown": [
             {
                 "text": "当前轮换池结束",
-                "remark": "推进之王[兑换]、空弦、守林人、贾维[兑换]、浊清",
-                "time": "2022-04-14 03:59:59",
+                "remark": "推进之王[兑换]、空弦、守林人、贾维[兑换]、蚀清",
+                "time": "2022-05-12 03:59:59",
                 "starTime": "2022-04-28 04:00:00",
                 "overTime": "2022-05-12 03:59:59"
             },
@@ -206,9 +188,9 @@
         "71add0d3edb7f188abf850643eeeca13b5cc266254b4d6bf1369e9889c584f658a21f6e110a509d5775c406b022839613196dc16db07677626208c2f5e4f77cc": 2
     },
     "app": {
-        "version": "0.36",
+        "version": "0.5",
         "update": false,
         "lastFocusVersion": "0.1",
-        "description": "内置预留极光推送模块\n列表界面添加缩略图\n添加终末地数据源\n常用工具长按添加到跳转列表\n限制刷新频率\n优化获取配置\n（因为更改设置逻辑，之前的设置都会重置，需要重新手动调整）"
+        "description": "添加正式版罗德岛蜜饼工坊-饼学大厦数据\n添加wan子姐每周二创推荐栏\n添加阅读漫画页面，可以更方便的看漫画了"
     }
 }
