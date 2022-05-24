@@ -559,6 +559,7 @@ export default {
 .styleChange(@theme) {
   @ceobeLightColor: "ceobeLightColor-@{theme}"; //小刻食堂主题亮色浅色
   @ceobeColor: "ceobeColor-@{theme}"; //小刻食堂主题亮色
+  @ceobeVeryLightColor: "ceobeVeryLightColor-@{theme}"; // 小刻食堂主题亮色非常浅色
   @ceobeDarkColor: "ceobeDarkColor-@{theme}"; //小刻食堂主题暗色
   @bgColor: "bgColor-@{theme}"; // 背景颜色
   @content: "content-@{theme}"; // 文本颜色
@@ -793,9 +794,9 @@ export default {
     }
 
     .el-button:hover {
-      color: @@ceobeDarkColor;
-      border-color: @@ceobeColor;
-      background-color: @@ceobeLightColor;
+      color: @@ceobeColor;
+      border-color: @@ceobeLightColor;
+      background-color: @@ceobeVeryLightColor;
     }
 
     .sign {

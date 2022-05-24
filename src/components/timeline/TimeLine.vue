@@ -12,7 +12,7 @@
       shadow="never"
       class="info-card online-speak"
       :class="searchShow ? 'searching' : ''"
-      v-loading="true"
+      v-loading="loading"
       element-loading-text="【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没有*龙门粗口*正常连接】"
       element-loading-custom-class="page-loading"
     >
@@ -202,7 +202,12 @@
         </el-card>
       </MyElTimelineItem>
     </el-timeline>
-    <div v-else style="height: 300px" v-loading="loading"></div>
+    <div
+      v-else
+      style="height: 300px"
+      v-loading="loading"
+      element-loading-custom-class="page-loading"
+    ></div>
     <el-dialog
       :modal-append-to-body="false"
       title="图片自动复制出错，请于图片右键复制图片"
@@ -640,7 +645,7 @@ export default {
   .el-loading-spinner .el-loading-text {
     color: #ffba4b;
   }
- .el-loading-spinner .path {
+  .el-loading-spinner .path {
     stroke: #ffba4b;
   }
 }
@@ -671,6 +676,8 @@ img[lazy="error"] {
 .styleChange(@theme) {
   @ceobeLightColor: "ceobeLightColor-@{theme}"; //小刻食堂主题亮色浅色
   @ceobeColor: "ceobeColor-@{theme}"; //小刻食堂主题亮色
+  @ceobeVeryLightColor: "ceobeVeryLightColor-@{theme}"; // 小刻食堂主题亮色非常浅色
+
   @ceobeDarkColor: "ceobeDarkColor-@{theme}"; //小刻食堂主题暗色
   @bgColor: "bgColor-@{theme}"; // 背景颜色
   @content: "content-@{theme}"; // 文本颜色
@@ -947,8 +954,8 @@ img[lazy="error"] {
 
       .to-url-btn:hover {
         color: @@ceobeColor;
-        border-color: @@ceobeColor;
-        background-color: @@ceobeLightColor;
+        border-color: @@ceobeLightColor;
+        background-color: @@ceobeVeryLightColor;
       }
 
       .to-copy-btn,
@@ -966,8 +973,8 @@ img[lazy="error"] {
 
         &:hover {
           color: @@ceobeColor;
-          border-color: @@ceobeColor;
-          background-color: @@ceobeLightColor;
+          border-color: @@ceobeLightColor;
+          background-color: @@ceobeVeryLightColor;
         }
       }
 

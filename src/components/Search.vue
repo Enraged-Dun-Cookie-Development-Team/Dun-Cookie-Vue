@@ -11,7 +11,8 @@
     </div>
     <div class="search-area-penguin-name" v-show="penguinShow">
       <div
-        class="cursor: pointer;"
+        class="text-color"
+        style="cursor: pointer"
         @click="openUrl('https://penguin-stats.cn/')"
       >
         数据支持：企鹅物流
@@ -26,7 +27,7 @@
           {{ this.sortType == 0 ? "按掉落百分比排序" : "按单件理智排序" }}
         </el-button>
       </div>
-      <div>
+      <div class="text-color">
         <el-switch
           v-model="showCloseStage"
           active-color="#13ce66"
@@ -249,7 +250,9 @@ export default {
 .styleChange(@theme) {
   @ceobeLightColor: "ceobeLightColor-@{theme}"; //小刻食堂主题亮色浅色
   @ceobeColor: "ceobeColor-@{theme}"; //小刻食堂主题亮色
+  @ceobeVeryLightColor: "ceobeVeryLightColor-@{theme}"; // 小刻食堂主题亮色非常浅色
   @ceobeDarkColor: "ceobeDarkColor-@{theme}"; //小刻食堂主题暗色
+  @setSmall: "setSmall-@{theme}"; // 设置文本颜色
   .search-area {
     height: 120px;
     width: 100%;
@@ -298,12 +301,13 @@ export default {
     text-align: center;
     display: flex;
     justify-content: space-around;
+    color: @@setSmall;
     .type-button {
       padding: 1px 15px;
       width: 150px;
-      color: @@ceobeDarkColor;
-      background: @@ceobeLightColor;
-      border-color: @@ceobeColor;
+      color: @@ceobeColor;
+      background: @@ceobeVeryLightColor;
+      border-color: @@ceobeLightColor;
       &:hover,
       &:focus {
         color: #fff;

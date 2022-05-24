@@ -99,19 +99,23 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+@ceobeLightColor: #fcddab; //小刻食堂主题亮色浅色
+@ceobeVeryLightColor: #fff7ec; //小刻食堂主题非常浅色
+@ceobeColor: #ffba4b; //小刻食堂主题亮色
+@ceobeDarkColor: #353535; // 小刻食堂主题暗色
 .M-Flipper {
   display: inline-block;
   position: relative;
   width: 40px;
   height: 65px;
   line-height: 65px;
-  border: solid 1px #3E81AC;
+  border: solid 1px @ceobeColor;
   border-radius: 10px;
   background: #fff;
   font-size: 50px;
   color: #fff;
-  box-shadow: 0 0 6px rgba(4,51,71, 0.5);
+  box-shadow: 0 0 6px rgba(71,42,4, 0.5);
   text-align: center;
   font-family: 'Helvetica Neue';
 }
@@ -122,7 +126,7 @@ export default {
   position: absolute;
   left: 0;
   right: 0;
-  background: #3E81AC;
+  background: @ceobeColor;
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -131,7 +135,7 @@ export default {
   top: 0;
   bottom: 50%;
   border-radius: 8px 8px 0 0;
-  border-bottom: solid 1px #79B3D8;
+  border-bottom: solid 1px @ceobeLightColor;
 }
 
 .M-Flipper .digital:after {
