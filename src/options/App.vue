@@ -729,6 +729,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@ceobeLightColor: #fcddab;  //小刻食堂主题亮色浅色
+@ceobeColor: #ffba4b;  //小刻食堂主题亮色
+@ceobeDarkColor: #353535; // 小刻食堂主题暗色
 #app {
   height: 100vh;
   width: 100vw;
@@ -759,7 +762,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #23ade5;
+  background: @ceobeColor;
   color: #fff;
   height: 100px;
   padding: 0 20px;
@@ -821,7 +824,7 @@ export default {
       border-radius: 3px;
       position: absolute;
       right: -10px;
-      background: #23ade5;
+      background: @ceobeColor;
       color: #ffffff;
       top: 90px;
       text-align: right;

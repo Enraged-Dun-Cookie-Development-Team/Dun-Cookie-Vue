@@ -219,7 +219,10 @@ export default {
           });
         matrix_cost
           .sort((x, y) => {
-            return (y.cost != '' && y.cost != null) - (x.cost != '' && x.cost != null) || x.cost - y.cost;
+            return (
+              (y.cost != "" && y.cost != null) -
+                (x.cost != "" && x.cost != null) || x.cost - y.cost
+            );
           })
           .sort((x, y) => {
             if (y.isGacha && !x.isGacha) return -1;
@@ -241,128 +244,154 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.search-area {
-  height: 120px;
-  width: 100%;
-  position: fixed;
-  background: transparent;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: 0.5s top;
-  top: -180px;
+@import "../theme/theme.less";
 
-  .input-border {
-    outline: none;
-    width: 80%;
-    height: 50px;
-    font-size: 42px;
-    font-family: "Geometos";
-    padding: 8px;
-    text-align: center;
-    font-weight: bold;
-    border: 0;
-    background: #ffffff5c;
-    animation: 10s textAnimate infinite linear;
-    // box-shadow: 0 0 40px 0px #23ade5;
-    // color: #23ade5;
-  }
-
-  &.show {
-    top: 32px;
-    opacity: 1;
-  }
-}
-
-.search-area-penguin-penguin-title {
-  margin-right: 10px;
-  height: 45px;
-  width: 45px;
-  background-size: 270px 720px;
-  background-image: url("https://penguin-stats.s3.amazonaws.com/sprite/sprite.202109171627.small.png");
-}
-
-.search-area-penguin-name {
-  bottom: 10px;
-  width: 100%;
-  position: absolute;
-  text-align: center;
-  display: flex;
-  justify-content: space-around;
-  .type-button {
-    padding: 1px 15px;
-    width: 150px;
-  }
-}
-
-.search-area-penguin {
-  width: 90%;
-  left: 5%;
-  position: fixed;
-  top: -180px;
-  z-index: 11;
-  max-height: 62vh;
-  overflow: scroll;
-
-  &.show {
-    top: 180px;
-    opacity: 1;
-  }
-
-  .info-card-area {
-    user-select: none;
+.styleChange(@theme) {
+  @ceobeLightColor: "ceobeLightColor-@{theme}"; //小刻食堂主题亮色浅色
+  @ceobeColor: "ceobeColor-@{theme}"; //小刻食堂主题亮色
+  @ceobeDarkColor: "ceobeDarkColor-@{theme}"; //小刻食堂主题暗色
+  .search-area {
+    height: 120px;
+    width: 100%;
+    position: fixed;
+    background: transparent;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    transition: 0.5s top;
+    top: -180px;
 
-    .info-card {
-      min-width: 30%;
-      margin: 5px;
-      flex: 1;
+    .input-border {
+      outline: none;
+      width: 80%;
+      height: 50px;
+      font-size: 42px;
+      font-family: "Geometos";
+      padding: 8px;
+      text-align: center;
+      font-weight: bold;
+      border: 0;
+      background: #ffffff5c;
+      animation: 10s textAnimate infinite linear;
+      // box-shadow: 0 0 40px 0px #23ade5;
+      // color: #23ade5;
+    }
 
-      .info-card-title,
-      .info-card-body {
-        display: flex;
-        justify-content: space-between;
-        position: relative;
+    &.show {
+      top: 32px;
+      opacity: 1;
+    }
+  }
 
-        &.info-card-title-isOpen::after {
-          position: absolute;
-          content: " ";
-          top: -30px;
-          right: -30px;
-          border: 17px transparent solid;
-          border-color: transparent transparent transparent #23ade5;
-          transform: rotate(310deg);
-        }
+  .search-area-penguin-penguin-title {
+    margin-right: 10px;
+    height: 45px;
+    width: 45px;
+    background-size: 270px 720px;
+    background-image: url("https://penguin-stats.s3.amazonaws.com/sprite/sprite.202109171627.small.png");
+  }
 
-        &.info-card-title-close::after {
-          border-color: transparent transparent transparent red;
-        }
+  .search-area-penguin-name {
+    bottom: 10px;
+    width: 100%;
+    position: absolute;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    .type-button {
+      padding: 1px 15px;
+      width: 150px;
+      color: @@ceobeDarkColor;
+      background: @@ceobeLightColor;
+      border-color: @@ceobeColor;
+      &:hover,
+      &:focus {
+        color: #fff;
+        background: @@ceobeColor;
+        border-color: @@ceobeColor;
+      }
+    }
+  }
 
-        .info-card-title-left {
-          text-align: left;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
+  .search-area-penguin {
+    width: 90%;
+    left: 5%;
+    position: fixed;
+    top: -180px;
+    z-index: 11;
+    max-height: 62vh;
+    overflow: scroll;
 
-        .info-card-title-right {
-          text-align: right;
-          text-overflow: ellipsis;
-          white-space: nowrap;
+    &.show {
+      top: 180px;
+      opacity: 1;
+    }
+
+    .info-card-area {
+      user-select: none;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 10px;
+
+      .info-card {
+        min-width: 30%;
+        margin: 5px;
+        flex: 1;
+
+        .info-card-title,
+        .info-card-body {
+          display: flex;
+          justify-content: space-between;
+          position: relative;
+
+          &.info-card-title-isOpen::after {
+            position: absolute;
+            content: " ";
+            top: -30px;
+            right: -30px;
+            border: 17px transparent solid;
+            border-color: transparent transparent transparent @@ceobeColor;
+            transform: rotate(310deg);
+          }
+
+          &.info-card-title-close::after {
+            border-color: transparent transparent transparent red;
+          }
+
+          .info-card-title-left {
+            text-align: left;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+
+          .info-card-title-right {
+            text-align: right;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
         }
       }
     }
   }
 }
 
+.dark {
+  .styleChange(dark);
+  background: #22272e;
+  height: 100vh;
+}
+
+.light {
+  .styleChange(light);
+}
+
 @keyframes textAnimate {
   0%,
   100% {
-    box-shadow: 0 0 40px 0px #23ade5;
-    color: #23ade5;
+    box-shadow: 0 0 40px 0px #ffba4b;
+    color: #ffba4b;
   }
   25% {
     box-shadow: 9px -9px 50px 15px #ff5ea7;
@@ -373,8 +402,8 @@ export default {
     color: #ff6530;
   }
   80% {
-    box-shadow: -9px 5px 60px -10px #010fcb;
-    color: #010fcb;
+    box-shadow: -9px 5px 60px -10px #cb0112;
+    color: #cb0112;
   }
 }
 </style>
