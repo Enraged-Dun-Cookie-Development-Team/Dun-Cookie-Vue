@@ -11,7 +11,6 @@
     </div>
     <div class="search-area-penguin-name" v-show="penguinShow">
       <div
-        class="text-color"
         style="cursor: pointer"
         @click="openUrl('https://penguin-stats.cn/')"
       >
@@ -27,7 +26,7 @@
           {{ this.sortType == 0 ? "按掉落百分比排序" : "按单件理智排序" }}
         </el-button>
       </div>
-      <div class="text-color">
+      <div>
         <el-switch
           v-model="showCloseStage"
           active-color="#13ce66"
@@ -39,6 +38,7 @@
     </div>
     <el-card class="search-area-penguin" :class="penguinShow ? 'show' : ''">
       <el-collapse
+        class="show-area-penguin"
         v-model="activeNames"
         v-for="(item, index) in penguinSearchList"
         v-bind:key="item.itemId"
@@ -57,7 +57,7 @@
             ></span>
             <span>{{ item.name }}</span>
           </template>
-          <div v-if="item.loading">查找中……</div>
+          <div class="seach-process-text" v-if="item.loading">查找中……</div>
           <div class="info-card-area">
             <el-card
               class="info-card"
@@ -251,8 +251,10 @@ export default {
   @ceobeLightColor: "ceobeLightColor-@{theme}"; //小刻食堂主题亮色浅色
   @ceobeColor: "ceobeColor-@{theme}"; //小刻食堂主题亮色
   @ceobeVeryLightColor: "ceobeVeryLightColor-@{theme}"; // 小刻食堂主题亮色非常浅色
-  @ceobeDarkColor: "ceobeDarkColor-@{theme}"; //小刻食堂主题暗色
+  @bgColor: "bgColor-@{theme}"; // 背景颜色
+  @btnBorder: "btnBorder-@{theme}"; // 按钮边框颜色和一些小线条
   @setSmall: "setSmall-@{theme}"; // 设置文本颜色
+  @shadow: "shadow-@{theme}"; // 卡片的阴影
   .search-area {
     height: 120px;
     width: 100%;
@@ -278,6 +280,9 @@ export default {
       animation: 10s textAnimate infinite linear;
       // box-shadow: 0 0 40px 0px #23ade5;
       // color: #23ade5;
+      &::-webkit-input-placeholder {
+        color: @@setSmall;
+      }
     }
 
     &.show {
@@ -325,6 +330,36 @@ export default {
     z-index: 11;
     max-height: 62vh;
     overflow: scroll;
+    background-color: @@bgColor;
+    border: 1px solid @@btnBorder;
+
+    // 消除滚动条
+    &::-webkit-scrollbar {
+      display: none; /* Chrome Safari */
+    }
+
+    scrollbar-width: none; /* firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+
+    .seach-process-text {
+      color: @@setSmall;
+    }
+
+    .show-area-penguin {
+      border-top: 1px solid @@btnBorder;
+      border-bottom: 1px solid @@btnBorder;
+      /deep/ .el-collapse-item__header {
+        color: @@setSmall;
+        background-color: @@bgColor;
+        border-bottom: 1px solid @@btnBorder;
+      }
+      /deep/ .el-collapse-item__content {
+        background-color: @@bgColor;
+      }
+      /deep/ .el-collapse-item__wrap {
+        border-bottom: 1px solid @@btnBorder;
+      }
+    }
 
     &.show {
       top: 180px;
@@ -338,11 +373,19 @@ export default {
       justify-content: space-between;
       align-items: flex-start;
       padding: 10px;
+      background-color: @@bgColor;
 
       .info-card {
         min-width: 30%;
         margin: 5px;
         flex: 1;
+        border: none;
+
+        /deep/ .el-card__body {
+          border: 1px solid @@btnBorder;
+          background-color: @@bgColor;
+          color: @@setSmall;
+        }
 
         .info-card-title,
         .info-card-body {

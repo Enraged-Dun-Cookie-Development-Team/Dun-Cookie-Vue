@@ -912,7 +912,7 @@ img[lazy="error"] {
     transition: all 0.5s;
 
     .highlight {
-      color: #23ade5;
+      color: @@ceobeColor;
       box-shadow: 0 0 10px 0 red;
       transform: scale(1.1);
       padding: 5px;
