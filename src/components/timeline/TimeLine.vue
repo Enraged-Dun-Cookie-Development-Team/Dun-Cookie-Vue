@@ -253,10 +253,7 @@ export default {
   },
   watch: {
     cardListByTag() {
-      this.cardListAll = DataSourceUtil.mergeAllData(this.cardListByTag).map((x) => {
-        x.content = x.content.replace(/\n/g, "<br/>");
-        return x;
-      });
+      this.cardListAll = DataSourceUtil.mergeAllData(this.cardListByTag);
       this.selectListByTag(false);
     },
     cardList() {
@@ -393,17 +390,21 @@ export default {
     filterList() {
       if (this.filterText) {
         const newFilterList = [];
-        deepAssign([], this.cardList)
-            .forEach((item) => {
-              const regex = new RegExp('(' + this.filterText.replaceAll(/([*.?+$^\[\](){}|\\\/])/g, '\\$1') + ')', 'gi');
-              if (regex.test(item.content.replaceAll(/(<([^>]+)>)/gi, ''))) {
-                let newContent = item.content.replaceAll(/<br\/?>/gi, '\n')
-                newContent = newContent.replaceAll(regex, '<span class="highlight">$1</span>');
-                newContent = newContent.replaceAll('\n', '<br>');
-                item.content = newContent;
-                newFilterList.push(item);
-              }
-            });
+        deepAssign([], this.cardList).forEach((item) => {
+          const regex = new RegExp(
+            "(" +
+              this.filterText.replaceAll(/([*.?+$^\[\](){}|\\\/])/g, "\\$1") +
+              ")",
+            "gi"
+          );
+          if (regex.test(item.content.replaceAll(/(<([^>]+)>)/gi, ""))) {
+            item.content = item.content.replaceAll(
+                regex,
+                '<span class="highlight">$1</span>'
+            );
+            newFilterList.push(item);
+          }
+        });
         this.filterCardList = newFilterList;
       } else {
         this.filterCardList = this.cardList;
@@ -472,11 +473,7 @@ export default {
     },
     copyTextData(item) {
       this.$copyText(
-          `${item.content.replace(
-              /<br\/>/g,
-              `
-`
-          )}
+        `${item.content}
 
 蜜饼来源：${item.jumpUrl}
 
@@ -500,7 +497,6 @@ export default {
             });
           }
       );
-      return;
     },
     /**
      * 复制
@@ -706,7 +702,7 @@ img[lazy="error"] {
 
   .online-speak {
     padding: 3px;
-    margin: 0px 18px;
+    margin: 0 18px;
     background-color: @@bgColor;
     border: @@timeline solid 1px;
     color: @@content;
@@ -732,7 +728,6 @@ img[lazy="error"] {
         display: flex;
         flex-direction: row;
         align-items: center;
-        justify-content: center;
         font-size: 1.3rem;
         justify-content: space-evenly;
 
@@ -774,7 +769,7 @@ img[lazy="error"] {
               .sane {
                 font-size: 16px;
                 font-family: Geometos, "Sans-Regular", "SourceHanSansCN-Regular",
-                YaHei;
+                  YaHei,serif;
 
                 .sane-number {
                   font-size: 28px;

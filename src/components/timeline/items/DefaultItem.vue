@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper" :data-id="item.id">
     <el-row>
-      <span class="wrapper-content">
+      <div class="wrapper-content">
         <span v-html="item.content"></span>
         <!-- 如果有转发 -->
       <br/>
@@ -10,7 +10,7 @@
           <br/>
           <span v-html="item.retweeted.content"></span>
         </div>
-      </span>
+      </div>
     </el-row>
     <el-row v-if="showImage && settings.display.showImage && item.coverImage" class="margintb">
       <div :class="{'show-all': showAllImage.includes(item.coverImage)}"
@@ -104,6 +104,9 @@ export default {
 
   .margintb {
     margin: 10px 0 0 0;
+  }
+  .wrapper-content {
+    white-space: break-spaces;
   }
   .card-retweeted {
     padding: 10px;
