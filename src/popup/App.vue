@@ -633,11 +633,11 @@ export default {
         text-align: right;
         height: 40px;
         overflow: hidden;
-        background: @@bgColor;
         padding: 0 10px;
         border-radius: 3px;
         transition: all 0.5s;
         &:hover {
+        background: @@bgColor;
           height: auto;
           box-shadow: 0 0 20px 0px;
         }
