@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper"  :data-id="item.id" @click="openUrl(item.jumpUrl)">
-    <span class="wrapper-content"></span>
+    <div class="wrapper-content"></div>
     <img v-if="showImage" v-lazy="item.coverImage" class="image-back"/>
     <div class="content-card" >
       <div class="record-area">
