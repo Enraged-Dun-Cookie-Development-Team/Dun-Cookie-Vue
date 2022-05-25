@@ -166,12 +166,6 @@ const quickJump = {
       radius: true,
     },
     {
-      url: "https://opssr.net/",
-      name: "源石作战室",
-      img: "/assets/image/link/yszzs.png",
-      radius: true,
-    },
-    {
       url: "https://kokodayo.fun/",
       name: "Kokodayo",
       img: "/assets/image/link/kkdy.png",
