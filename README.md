@@ -49,6 +49,7 @@
 >     - 泰拉记事社官网
 >     - 网易云音乐
 >     - 鹰角网络微博
+>     - 明日方舟终末地
 > - 一键跳转以上网站
 > - 一键跳转详细内容界面
 > - 一键复制饼内容文本
@@ -521,7 +522,11 @@
 
 # 可以预见的下一步
 
-    我没有更多的好点子了。博士，你呢？
+> - 修改UI配色
+> - 修改蹲饼逻辑，加入更多数据源（重力井，乌柯塔，来自星尘，库柏思）
+> - 重要与更新公告弹出存入localStorage
+> - B站生成图片空行
+> - 新版本更新成功后更新内容提示
 
 <br/>
 
@@ -543,21 +548,18 @@
 
 <br/>
 
+# LOGO画师
+
+> - [不画涩图の企鹅](https://pipie457.lofter.com/)
+
+<br/>
+
 # 鸣谢
 
 > - [@Houdou](https://github.com/Houdou) —— 帮我解决了疑难杂症
-> - [不画涩图の企鹅](https://pipie457.lofter.com/) —— 提供了该插件的logo
 > - 蹲饼测试组成员 
 > - [HYPERGRYPH](https://www.hypergryph.com/#/)
 > - 脚手架支持 —— [chrome-extension-cli](https://github.com/SlowSoulWen/chrome-extension-cli)
 
-
-<br/>
-
-# “特别”鸣谢 
-
-    傻嗨，感谢你在百忙之中到我这讨骂。
-
-![avatar](http://github-image.liuziyang.vip/7.webp)
 
 

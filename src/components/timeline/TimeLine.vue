@@ -1,25 +1,31 @@
 <template>
-  <div id="timeline-area" :class="settings.display.announcementScroll ? 'scrollTimeline' : ''">
-    <Search ref="SearchModel" :searchShow="searchShow" @searchTextChange="changeFilterText"></Search>
+  <div
+    id="timeline-area"
+    :class="settings.display.announcementScroll ? 'scrollTimeline' : ''"
+  >
+    <Search
+      ref="SearchModel"
+      :searchShow="searchShow"
+      @searchTextChange="changeFilterText"
+    ></Search>
     <el-card
-        shadow="never"
-        class="info-card online-speak"
-        :class="searchShow ? 'searching' : ''"
-        v-loading="loading"
-        element-loading-text="【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没有*龙门粗口*正常连接】"
+      shadow="never"
+      class="info-card online-speak"
+      :class="searchShow ? 'searching' : ''"
+      v-loading="loading"
+      element-loading-text="【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没有*龙门粗口*正常连接】"
+      element-loading-custom-class="page-loading"
     >
       <el-carousel
-          arrow="never"
-          height="100px"
-          direction="vertical"
-          :interval="3000"
-          :autoplay="true"
+        arrow="never"
+        height="100px"
+        direction="vertical"
+        :interval="3000"
+        :autoplay="true"
       >
         <el-carousel-item v-if="isNew">
           <div class="new-info-area" @click="openUpdate">
-            <img
-                src="/assets/image/update.png"
-            />
+            <img src="/assets/image/update.png" />
             博士，检测到了新版本，点击这里进入更新页面
           </div>
         </el-carousel-item>
@@ -29,33 +35,36 @@
               <div class="day-info-content-top">
                 <div>
                   <div
-                      class="day-info-content-top-card-area"
-                      :key="index"
-                      v-for="(item, index) in onlineDayInfo.countdown"
+                    class="day-info-content-top-card-area"
+                    :key="index"
+                    v-for="(item, index) in onlineDayInfo.countdown"
                   >
                     <div>
                       距离
                       <el-tooltip
-                          v-if="item.remark"
-                          :content="item.remark"
-                          placement="right"
+                        v-if="item.remark"
+                        :content="item.remark"
+                        placement="right"
                       >
-                        <span class="online-blue">{{ item.text }}</span>
+                        <span class="online-orange">{{ item.text }}</span>
                       </el-tooltip>
-                      <span v-else class="online-blue">{{ item.text }}</span>
+                      <span v-else class="online-orange">{{ item.text }}</span>
                       <span title="国服 UTC-8">{{
-                          " " + calcActivityDiff(item.time)
-                        }}</span>
+                        " " + calcActivityDiff(item.time)
+                      }}</span>
                     </div>
                   </div>
                 </div>
                 <div
-                    v-if="settings.feature.san && imgShow"
-                    class="sane-area"
-                    @click.stop="openToolDrawer"
+                  v-if="settings.feature.san && imgShow"
+                  class="sane-area"
+                  @click.stop="openToolDrawer"
                 >
                   <div class="sane">
-                    当前理智为<span class="online-blue sane-number">{{ san.currentSan }}</span>点
+                    当前理智为<span class="online-orange sane-number">{{
+                      san.currentSan
+                    }}</span
+                    >点
                   </div>
                   <div class="sane-info">
                     {{ san.remainTime }}
@@ -65,20 +74,24 @@
               <div class="day-info-content-bottom">
                 <div class="day-info-content-bottom-card-area">
                   <el-tooltip
-                      class="item"
-                      effect="dark"
-                      placement="bottom"
-                      v-for="item in dayInfo"
-                      :key="item.type"
+                    class="item"
+                    effect="dark"
+                    placement="bottom"
+                    v-for="item in dayInfo"
+                    :key="item.type"
                   >
                     <div slot="content">
-                      {{ `${item.name} - 开放日期： ${calcResourceOpenDay(item.day)}` }}
+                      {{
+                        `${item.name} - 开放日期： ${calcResourceOpenDay(
+                          item.day
+                        )}`
+                      }}
                     </div>
                     <div
-                        class="day-info-content-bottom-card"
-                        :class="item.notToday ? 'notToday' : ''"
+                      class="day-info-content-bottom-card"
+                      :class="item.notToday ? 'notToday' : ''"
                     >
-                      <img v-if="imgShow" v-lazy="item.src"/>
+                      <img v-if="imgShow" v-lazy="item.src" />
                     </div>
                   </el-tooltip>
                 </div>
@@ -86,116 +99,135 @@
             </div>
           </div>
         </el-carousel-item>
-        <el-carousel-item
-            v-for="(item, index) in onlineSpeakList"
-            :key="index"
-        >
+        <el-carousel-item v-for="(item, index) in onlineSpeakList" :key="index">
           <div v-html="item.html"></div>
         </el-carousel-item>
       </el-carousel>
     </el-card>
     <el-tabs
-        v-if="settings.display.showByTag"
-        v-model="currentTag"
-        :stretch="true"
-        @tab-click="selectListByTag"
+      v-if="settings.display.showByTag"
+      v-model="currentTag"
+      :stretch="true"
+      @tab-click="selectListByTag"
     >
       <el-tab-pane
-          v-for="item of transformToSortList(cardListByTag)"
-          :key="item.dataName"
-          :label="item.dataName"
-          :name="item.dataName">
-            <span slot="label">
-              <el-tooltip
-                  effect="dark"
-                  :content="getDataSourceByName(item.dataName).title"
-                  placement="top"
-              >
-              <img class="title-img" :src="getDataSourceByName(item.dataName).icon"/>
-              </el-tooltip>
-            </span>
+        v-for="item of transformToSortList(cardListByTag)"
+        :key="item.dataName"
+        :label="item.dataName"
+        :name="item.dataName"
+      >
+        <span slot="label">
+          <el-tooltip
+            effect="dark"
+            :content="getDataSourceByName(item.dataName).title"
+            placement="top"
+          >
+            <img
+              class="title-img"
+              :src="getDataSourceByName(item.dataName).icon"
+            />
+          </el-tooltip>
+        </span>
       </el-tab-pane>
     </el-tabs>
     <div class="content-timeline-shadow"></div>
     <el-timeline
-        ref="elTimelineArea"
-        v-if="LazyLoaded"
-        :class="[
-            settings.display.windowMode ? 'window' : '',
-            settings.display.showByTag ? 'tag' : ''
-        ]"
+      ref="elTimelineArea"
+      v-if="LazyLoaded"
+      :class="[
+        settings.display.windowMode ? 'window' : '',
+        settings.display.showByTag ? 'tag' : '',
+      ]"
     >
       <MyElTimelineItem
-          v-for="(item, index) in filterCardList"
-          :key="index"
-          :timestamp="item.timeForDisplay"
-          placement="top"
-          :icon-style="{'--icon': `url('${getDataSourceByName(item.dataSource).icon}')`}"
-          :icon="'headImg'"
+        v-for="(item, index) in filterCardList"
+        :key="index"
+        :timestamp="item.timeForDisplay"
+        placement="top"
+        :icon-style="{
+          '--icon': `url('${getDataSourceByName(item.dataSource).icon}')`,
+        }"
+        :icon="'headImg'"
       >
         <span class="is-top-info" v-if="item.isTop">
-          <span class="color-blue">【当前条目在{{ getDataSourceByName(item.dataSource).title }}的时间线内为置顶状态】</span>
+          <span class="color-blue"
+            >【当前条目在{{
+              getDataSourceByName(item.dataSource).title
+            }}的时间线内为置顶状态】</span
+          >
         </span>
 
         <span class="card-btn-area">
           <el-button
-              class="to-copy-share"
-              :class="{'special-source': item.componentData}"
-              size="small"
-              @click="copyData(item)"
-              @contextmenu.prevent.native="rightCopyData(item)"
-              title="左键生成图片分享，右键九宫格分享"
+            class="to-copy-share"
+            :class="{ 'special-source': item.componentData }"
+            size="small"
+            @click="copyData(item)"
+            @contextmenu.prevent.native="rightCopyData(item)"
+            title="左键生成图片分享，右键九宫格分享"
           >
             <i class="el-icon-share"></i>
           </el-button>
-         <el-button
-             class="to-copy-btn"
-             :class="{'special-source': item.componentData}"
-             size="small"
-             @click="copyTextData(item)"
-             title="复制文字进剪切板"
-         >
+          <el-button
+            class="to-copy-btn"
+            :class="{ 'special-source': item.componentData }"
+            size="small"
+            @click="copyTextData(item)"
+            title="复制文字进剪切板"
+          >
             <i class="el-icon-document-copy"></i>
           </el-button>
           <el-button
-              v-if="!item.componentData"
-              class="to-url-btn"
-              size="small"
-              title="前往该条内容"
-              @click="openUrl(item.jumpUrl)"
-          ><i class="el-icon-right"></i
+            v-if="!item.componentData"
+            class="to-url-btn"
+            size="small"
+            title="前往该条内容"
+            @click="openUrl(item.jumpUrl)"
+            ><i class="el-icon-right"></i
           ></el-button>
         </span>
         <el-card
-            class="card"
-            :class="[`font-size-${settings.display.fontSize}`, {'special-source': item.componentData}]"
-            shadow="never"
+          class="card"
+          :class="[
+            `font-size-${settings.display.fontSize}`,
+            { 'special-source': item.componentData },
+          ]"
+          shadow="never"
         >
           <component
-              :is="resolveComponent(item)"
-              :item="item"
-              :show-image="imgShow"
+            :is="resolveComponent(item)"
+            :item="item"
+            :show-image="imgShow"
           ></component>
         </el-card>
       </MyElTimelineItem>
     </el-timeline>
-    <div v-else style="height: 300px" v-loading="loading"></div>
+    <div
+      v-else
+      style="height: 300px"
+      v-loading="loading"
+      element-loading-custom-class="page-loading"
+    ></div>
     <el-dialog
-        :modal-append-to-body="false"
-        title="图片自动复制出错，请于图片右键复制图片"
-        :visible.sync="imageError"
-        width="80%"
+      :modal-append-to-body="false"
+      title="图片自动复制出错，请于图片右键复制图片"
+      :visible.sync="imageError"
+      width="80%"
     >
-      <img :src="errorImageUrl" style="width: 100%"/>
+      <img :src="errorImageUrl" style="width: 100%" />
     </el-dialog>
     <select-image-to-copy ref="SelectImageToCopy" @copyData="copyData">
-
     </select-image-to-copy>
   </div>
 </template>
 
 <script>
-import {CURRENT_VERSION, dayInfo, PAGE_UPDATE, quickJump} from "../../common/Constants";
+import {
+  CURRENT_VERSION,
+  dayInfo,
+  PAGE_UPDATE,
+  quickJump,
+} from "../../common/Constants";
 import MyElTimelineItem from "./MyTimeLineItem";
 import DefaultItem from "./items/DefaultItem";
 import DataSourceUtil from "../../common/util/DataSourceUtil";
@@ -203,7 +235,7 @@ import Settings from "../../common/Settings";
 import SanInfo from "../../common/sync/SanInfo";
 import TimeUtil from "../../common/util/TimeUtil";
 import Search from "../Search";
-import {deepAssign} from "../../common/util/CommonFunctions";
+import { deepAssign } from "../../common/util/CommonFunctions";
 import PlatformHelper from "../../common/platform/PlatformHelper";
 import InsiderUtil from "../../common/util/InsiderUtil";
 import ServerUtil from "../../common/util/ServerUtil";
@@ -211,10 +243,12 @@ import SelectImageToCopy from "@/components/SelectImageToCopy";
 
 export default {
   name: "TimeLine",
-  components: {MyElTimelineItem, Search, SelectImageToCopy},
+  components: { MyElTimelineItem, Search, SelectImageToCopy },
   props: ["cardListByTag", "imgShow"],
   data() {
-    Settings.doAfterInit(settings => this.currentTag = settings.display.defaultTag);
+    Settings.doAfterInit(
+      (settings) => (this.currentTag = settings.display.defaultTag)
+    );
     Settings.doAfterUpdate((settings, changed) => {
       if (changed.display && changed.display.defaultTag) {
         this.currentTag = settings.display.defaultTag;
@@ -253,10 +287,12 @@ export default {
   },
   watch: {
     cardListByTag() {
-      this.cardListAll = DataSourceUtil.mergeAllData(this.cardListByTag).map((x) => {
-        x.content = x.content.replace(/\n/g, "<br/>");
-        return x;
-      });
+      this.cardListAll = DataSourceUtil.mergeAllData(this.cardListByTag).map(
+        (x) => {
+          x.content = x.content.replace(/\n/g, "<br/>");
+          return x;
+        }
+      );
       this.selectListByTag(false);
     },
     cardList() {
@@ -265,7 +301,7 @@ export default {
   },
   methods: {
     openWeb: PlatformHelper.Tabs.create,
-    openUrl(url, w = 1024, h = window.screen.height-100) {
+    openUrl(url, w = 1024, h = window.screen.height - 100) {
       if (this.settings.feature.linkMax) {
         PlatformHelper.Windows.createMaxPopupWindow(url);
       } else {
@@ -288,7 +324,7 @@ export default {
         this.cardList = this.cardListAll;
       }
       if (emitEvent) {
-        this.$emit('cardListChange');
+        this.$emit("cardListChange");
       }
     },
     // 打开计算小工具
@@ -327,18 +363,18 @@ export default {
       ServerUtil.checkOnlineInfo(false).then((data) => {
         // 头部公告
         let filterList = data.list.filter(
-            (x) =>
-                new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
-                new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
+          (x) =>
+            new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
+            new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
         );
 
         this.onlineSpeakList.push(...filterList);
 
         // 快捷连接
         let btnList = data.btnList.filter(
-            (x) =>
-                new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
-                new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
+          (x) =>
+            new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
+            new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
         );
         if (btnList.length > 0) {
           this.quickJump.url.push(...btnList);
@@ -351,13 +387,13 @@ export default {
         this.onlineDayInfo = data.dayInfo;
         // 倒计时
         this.onlineDayInfo.countdown = this.onlineDayInfo.countdown.filter(
-            (x) =>
-                new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
-                new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
+          (x) =>
+            new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
+            new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
         );
 
-        if(data.iconName){
-          PlatformHelper.Storage.saveLocalStorage('iconName', data.iconName);
+        if (data.iconName) {
+          PlatformHelper.Storage.saveLocalStorage("iconName", data.iconName);
         }
 
         // 内部密码
@@ -380,7 +416,7 @@ export default {
       if (this.openResources) {
         return "活动期间，“资源收集”限时全天开放";
       } else {
-        return days.map(x => TimeUtil.numberToWeek(x)).join();
+        return days.map((x) => TimeUtil.numberToWeek(x)).join();
       }
     },
     changeFilterText(text) {
@@ -393,24 +429,34 @@ export default {
     filterList() {
       if (this.filterText) {
         const newFilterList = [];
-        deepAssign([], this.cardList)
-            .forEach((item) => {
-              const regex = new RegExp('(' + this.filterText.replaceAll(/([*.?+$^\[\](){}|\\\/])/g, '\\$1') + ')', 'gi');
-              if (regex.test(item.content.replaceAll(/(<([^>]+)>)/gi, ''))) {
-                let newContent = item.content.replaceAll(/<br\/?>/gi, '\n')
-                newContent = newContent.replaceAll(regex, '<span class="highlight">$1</span>');
-                newContent = newContent.replaceAll('\n', '<br>');
-                item.content = newContent;
-                newFilterList.push(item);
-              }
-            });
+        deepAssign([], this.cardList).forEach((item) => {
+          const regex = new RegExp(
+            "(" +
+              this.filterText.replaceAll(/([*.?+$^\[\](){}|\\\/])/g, "\\$1") +
+              ")",
+            "gi"
+          );
+          if (regex.test(item.content.replaceAll(/(<([^>]+)>)/gi, ""))) {
+            let newContent = item.content.replaceAll(/<br\/?>/gi, "\n");
+            newContent = newContent.replaceAll(
+              regex,
+              '<span class="highlight">$1</span>'
+            );
+            newContent = newContent.replaceAll("\n", "<br>");
+            item.content = newContent;
+            newFilterList.push(item);
+          }
+        });
         this.filterCardList = newFilterList;
       } else {
         this.filterCardList = this.cardList;
       }
     },
     changeInsider() {
-      const [newLevel, validCode] = InsiderUtil.calcInsiderLevel(this.filterText, this.insiderCodeMap);
+      const [newLevel, validCode] = InsiderUtil.calcInsiderLevel(
+        this.filterText,
+        this.insiderCodeMap
+      );
       if (validCode) {
         this.settings.insider.code = this.filterText;
         this.settings.insider.level = newLevel;
@@ -431,7 +477,7 @@ export default {
             this.changeInsider();
             this.$refs.SearchModel.clearText();
             this.filterText = null;
-            this.$emit('cardListChange');
+            this.$emit("cardListChange");
           }
         }
       });
@@ -439,66 +485,74 @@ export default {
     // 监听标签
     setClickFun() {
       document
-          .querySelectorAll(".online-speak")[0]
-          .addEventListener("click", () => {
-            const target = event.target || event.srcElement;
-            // 是否为a标签
-            if (target.nodeName.toLocaleLowerCase() === "a" || target.parentNode.nodeName.toLocaleLowerCase() === "a") {
-              // 对捕获到的 a 标签进行处理，需要先禁止它的跳转行为
-              if (event.preventDefault) {
-                event.preventDefault();
-              } else {
-                window.event.returnValue = true;
-              }
-              const url = target.getAttribute("href") || target.parentNode.getAttribute("href");
-              if (target.className === "webOpen" || target.parentNode.className === "webOpen") {
-                this.openWeb(url);
-              } else {
-                this.openUrl(url, 1400, 950);
-              }
+        .querySelectorAll(".online-speak")[0]
+        .addEventListener("click", () => {
+          const target = event.target || event.srcElement;
+          // 是否为a标签
+          if (
+            target.nodeName.toLocaleLowerCase() === "a" ||
+            target.parentNode.nodeName.toLocaleLowerCase() === "a"
+          ) {
+            // 对捕获到的 a 标签进行处理，需要先禁止它的跳转行为
+            if (event.preventDefault) {
+              event.preventDefault();
+            } else {
+              window.event.returnValue = true;
             }
+            const url =
+              target.getAttribute("href") ||
+              target.parentNode.getAttribute("href");
+            if (
+              target.className === "webOpen" ||
+              target.parentNode.className === "webOpen"
+            ) {
+              this.openWeb(url);
+            } else {
+              this.openUrl(url, 1400, 950);
+            }
+          }
 
-            if (target.nodeName.toLocaleLowerCase() === "drawer") {
-              this.$parent.drawer = !this.$parent.drawer;
-            }
+          if (target.nodeName.toLocaleLowerCase() === "drawer") {
+            this.$parent.drawer = !this.$parent.drawer;
+          }
 
-            if (target.nodeName.toLocaleLowerCase() === "setting") {
-              this.$parent.openSetting();
-            }
-          });
+          if (target.nodeName.toLocaleLowerCase() === "setting") {
+            this.$parent.openSetting();
+          }
+        });
     },
     openUpdate() {
       PlatformHelper.Tabs.createWithExtensionFile(PAGE_UPDATE);
     },
     copyTextData(item) {
       this.$copyText(
-          `${item.content.replace(
-              /<br\/>/g,
-              `
+        `${item.content.replace(
+          /<br\/>/g,
+          `
 `
-          )}
+        )}
 
 蜜饼来源：${item.jumpUrl}
 
 数据由 小刻食堂${CURRENT_VERSION} 收集
 工具介绍链接：https://arknightscommunity.drblack-system.com/15386.html`
       ).then(
-          (e) => {
-            this.$message({
-              offset: 50,
-              center: true,
-              message: "复制成功",
-              type: "success",
-            });
-          },
-          (e) => {
-            this.$message({
-              offset: 50,
-              center: true,
-              message: "复制失败",
-              type: "error",
-            });
-          }
+        (e) => {
+          this.$message({
+            offset: 50,
+            center: true,
+            message: "复制成功",
+            type: "success",
+          });
+        },
+        (e) => {
+          this.$message({
+            offset: 50,
+            center: true,
+            message: "复制失败",
+            type: "error",
+          });
+        }
       );
       return;
     },
@@ -515,24 +569,27 @@ export default {
         type: "info",
       });
 
-      PlatformHelper.Img.generateShareImage(item,
-          "/assets/image/" + Settings.logo,
-          DataSourceUtil.getByName(item.dataSource).icon,
-          imageUrl
-      ).then(canvas => {
-        canvas.toBlob(blob => {
-          try {
-            if (typeof ClipboardItem === 'undefined') {
-              this.$message({
-                offset: 50,
-                center: true,
-                message: "当前环境不支持自动复制到剪贴板",
-                type: "info",
-              });
-              this.errorImageUrl = canvas.toDataURL("image/jpeg");
-              this.imageError = true;
-            } else {
-              navigator.clipboard.write([new ClipboardItem({[blob.type]: blob})])
+      PlatformHelper.Img.generateShareImage(
+        item,
+        "/assets/image/" + Settings.logo,
+        DataSourceUtil.getByName(item.dataSource).icon,
+        imageUrl
+      )
+        .then((canvas) => {
+          canvas.toBlob((blob) => {
+            try {
+              if (typeof ClipboardItem === "undefined") {
+                this.$message({
+                  offset: 50,
+                  center: true,
+                  message: "当前环境不支持自动复制到剪贴板",
+                  type: "info",
+                });
+                this.errorImageUrl = canvas.toDataURL("image/jpeg");
+                this.imageError = true;
+              } else {
+                navigator.clipboard
+                  .write([new ClipboardItem({ [blob.type]: blob })])
                   .then(() => {
                     this.$message({
                       offset: 50,
@@ -546,31 +603,32 @@ export default {
                     this.errorImageUrl = canvas.toDataURL("image/jpeg");
                     this.imageError = true;
                   });
+              }
+            } catch (e) {
+              console.log(e);
+              this.errorImageUrl = canvas.toDataURL("image/jpeg");
+              this.imageError = true;
             }
-          } catch (e) {
-            console.log(e);
-            this.errorImageUrl = canvas.toDataURL("image/jpeg");
-            this.imageError = true;
-          }
+          });
+        })
+        .catch((e) => {
+          console.log(e);
+          this.$message({
+            offset: 50,
+            center: true,
+            message: "图片生成失败",
+            type: "error",
+          });
         });
-      }).catch((e) => {
-        console.log(e);
-        this.$message({
-          offset: 50,
-          center: true,
-          message: "图片生成失败",
-          type: "error",
-        });
-      });
     },
 
     // 高级复制
     rightCopyData(item) {
-      if(item.imageList.length>0){
+      if (item.imageList.length > 0) {
         let selectImageToCopy = this.$refs.SelectImageToCopy;
         selectImageToCopy.item = item;
         selectImageToCopy.copyImageToImage = true;
-      }else{
+      } else {
         this.$message({
           offset: 50,
           center: true,
@@ -583,6 +641,14 @@ export default {
 };
 </script>
 <style lang="less">
+.page-loading {
+  .el-loading-spinner .el-loading-text {
+    color: #ffba4b;
+  }
+  .el-loading-spinner .path {
+    stroke: #ffba4b;
+  }
+}
 // 图片加载中
 img[lazy="loading"] {
   -webkit-animation: loading 1s linear 1s 5 alternate;
@@ -608,6 +674,11 @@ img[lazy="error"] {
 @import "../../theme/theme.less";
 
 .styleChange(@theme) {
+  @ceobeLightColor: "ceobeLightColor-@{theme}"; //小刻食堂主题亮色浅色
+  @ceobeColor: "ceobeColor-@{theme}"; //小刻食堂主题亮色
+  @ceobeVeryLightColor: "ceobeVeryLightColor-@{theme}"; // 小刻食堂主题亮色非常浅色
+
+  @ceobeDarkColor: "ceobeDarkColor-@{theme}"; //小刻食堂主题暗色
   @bgColor: "bgColor-@{theme}"; // 背景颜色
   @content: "content-@{theme}"; // 文本颜色
   @timeline: "timeline-@{theme}"; // 时间线颜色和时间线border颜色
@@ -625,8 +696,6 @@ img[lazy="error"] {
   .color-blue {
     color: #23ade5;
   }
-
-
 
   .card {
     width: 100%;
@@ -774,7 +843,7 @@ img[lazy="error"] {
               .sane {
                 font-size: 16px;
                 font-family: Geometos, "Sans-Regular", "SourceHanSansCN-Regular",
-                YaHei;
+                  YaHei;
 
                 .sane-number {
                   font-size: 28px;
@@ -821,7 +890,7 @@ img[lazy="error"] {
     }
 
     .el-carousel__button {
-      background-color: #23ade5;
+      background-color: @@ceobeColor;
     }
   }
   .sane-calculator {
@@ -843,7 +912,7 @@ img[lazy="error"] {
     transition: all 0.5s;
 
     .highlight {
-      color: #23ade5;
+      color: @@ceobeColor;
       box-shadow: 0 0 10px 0 red;
       transform: scale(1.1);
       padding: 5px;
@@ -884,12 +953,13 @@ img[lazy="error"] {
       }
 
       .to-url-btn:hover {
-        color: #409eff;
-        border-color: #c6e2ff;
-        background-color: @@hover;
+        color: @@ceobeColor;
+        border-color: @@ceobeLightColor;
+        background-color: @@ceobeVeryLightColor;
       }
 
-      .to-copy-btn, .to-copy-share {
+      .to-copy-btn,
+      .to-copy-share {
         position: absolute;
         top: -8px;
         right: 50px;
@@ -902,9 +972,9 @@ img[lazy="error"] {
         }
 
         &:hover {
-          color: #409eff;
-          border-color: #c6e2ff;
-          background-color: @@hover;
+          color: @@ceobeColor;
+          border-color: @@ceobeLightColor;
+          background-color: @@ceobeVeryLightColor;
         }
       }
 
