@@ -637,7 +637,7 @@ export default {
         border-radius: 3px;
         transition: all 0.5s;
         &:hover {
-        background: @@bgColor;
+          background: @@bgColor;
           height: auto;
           box-shadow: 0 0 20px 0px;
         }
