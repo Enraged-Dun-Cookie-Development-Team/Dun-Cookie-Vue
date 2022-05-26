@@ -1,28 +1,9 @@
 <template>
-  <div
-    id="timeline-area"
-    :class="settings.display.announcementScroll ? 'scrollTimeline' : ''"
-  >
-    <Search
-      ref="SearchModel"
-      :searchShow="searchShow"
-      @searchTextChange="changeFilterText"
-    ></Search>
-    <el-card
-      shadow="never"
-      class="info-card online-speak"
-      :class="searchShow ? 'searching' : ''"
-      v-loading="loading"
-      element-loading-text="【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没有*龙门粗口*正常连接】"
-      element-loading-custom-class="page-loading"
-    >
-      <el-carousel
-        arrow="never"
-        height="100px"
-        direction="vertical"
-        :interval="3000"
-        :autoplay="true"
-      >
+  <div id="timeline-area" :class="settings.display.announcementScroll ? 'scrollTimeline' : ''">
+    <Search ref="SearchModel" :searchShow="searchShow" @searchTextChange="changeFilterText"></Search>
+    <el-card shadow="never" class="info-card online-speak" :class="searchShow ? 'searching' : ''" v-loading="loading"
+      element-loading-text="【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没有*龙门粗口*正常连接】" element-loading-custom-class="page-loading">
+      <el-carousel arrow="never" height="100px" direction="vertical" :interval="3000" :autoplay="true">
         <el-carousel-item v-if="isNew">
           <div class="new-info-area" @click="openUpdate">
             <img src="/assets/image/update.png" />
@@ -34,37 +15,25 @@
             <div class="day-info-content">
               <div class="day-info-content-top">
                 <div>
-                  <div
-                    class="day-info-content-top-card-area"
-                    :key="index"
-                    v-for="(item, index) in onlineDayInfo.countdown"
-                  >
+                  <div class="day-info-content-top-card-area" :key="index"
+                    v-for="(item, index) in onlineDayInfo.countdown">
                     <div>
                       距离
-                      <el-tooltip
-                        v-if="item.remark"
-                        :content="item.remark"
-                        placement="right"
-                      >
+                      <el-tooltip v-if="item.remark" :content="item.remark" placement="right">
                         <span class="online-orange">{{ item.text }}</span>
                       </el-tooltip>
                       <span v-else class="online-orange">{{ item.text }}</span>
                       <span title="国服 UTC-8">{{
-                        " " + calcActivityDiff(item.time)
+                          " " + calcActivityDiff(item.time)
                       }}</span>
                     </div>
                   </div>
                 </div>
-                <div
-                  v-if="settings.feature.san && imgShow"
-                  class="sane-area"
-                  @click.stop="openToolDrawer"
-                >
+                <div v-if="settings.feature.san && imgShow" class="sane-area" @click.stop="openToolDrawer">
                   <div class="sane">
                     当前理智为<span class="online-orange sane-number">{{
-                      san.currentSan
-                    }}</span
-                    >点
+                        san.currentSan
+                    }}</span>点
                   </div>
                   <div class="sane-info">
                     {{ san.remainTime }}
@@ -73,24 +42,15 @@
               </div>
               <div class="day-info-content-bottom">
                 <div class="day-info-content-bottom-card-area">
-                  <el-tooltip
-                    class="item"
-                    effect="dark"
-                    placement="bottom"
-                    v-for="item in dayInfo"
-                    :key="item.type"
-                  >
+                  <el-tooltip class="item" effect="dark" placement="bottom" v-for="item in dayInfo" :key="item.type">
                     <div slot="content">
                       {{
-                        `${item.name} - 开放日期： ${calcResourceOpenDay(
-                          item.day
-                        )}`
+                          `${item.name} - 开放日期： ${calcResourceOpenDay(
+                            item.day
+                          )}`
                       }}
                     </div>
-                    <div
-                      class="day-info-content-bottom-card"
-                      :class="item.notToday ? 'notToday' : ''"
-                    >
+                    <div class="day-info-content-bottom-card" :class="item.notToday ? 'notToday' : ''">
                       <img v-if="imgShow" v-lazy="item.src" />
                     </div>
                   </el-tooltip>
@@ -104,120 +64,58 @@
         </el-carousel-item>
       </el-carousel>
     </el-card>
-    <el-tabs
-      v-if="settings.display.showByTag"
-      v-model="currentTag"
-      :stretch="true"
-      @tab-click="selectListByTag"
-    >
-      <el-tab-pane
-        v-for="item of transformToSortList(cardListByTag)"
-        :key="item.dataName"
-        :label="item.dataName"
-        :name="item.dataName"
-      >
+    <el-tabs v-if="settings.display.showByTag" v-model="currentTag" :stretch="true" @tab-click="selectListByTag">
+      <el-tab-pane v-for="item of transformToSortList(cardListByTag)" :key="item.dataName" :label="item.dataName"
+        :name="item.dataName">
         <span slot="label">
-          <el-tooltip
-            effect="dark"
-            :content="getDataSourceByName(item.dataName).title"
-            placement="top"
-          >
-            <img
-              class="title-img"
-              :src="getDataSourceByName(item.dataName).icon"
-            />
+          <el-tooltip effect="dark" :content="getDataSourceByName(item.dataName).title" placement="top">
+            <img class="title-img" :src="getDataSourceByName(item.dataName).icon" />
           </el-tooltip>
         </span>
       </el-tab-pane>
     </el-tabs>
     <div class="content-timeline-shadow"></div>
-    <el-timeline
-      ref="elTimelineArea"
-      v-if="LazyLoaded"
-      :class="[
-        settings.display.windowMode ? 'window' : '',
-        settings.display.showByTag ? 'tag' : '',
-      ]"
-    >
-      <MyElTimelineItem
-        v-for="(item, index) in filterCardList"
-        :key="index"
-        :timestamp="item.timeForDisplay"
-        placement="top"
-        :icon-style="{
+    <el-timeline ref="elTimelineArea" v-if="LazyLoaded" :class="[
+      settings.display.windowMode ? 'window' : '',
+      settings.display.showByTag ? 'tag' : '',
+    ]">
+      <MyElTimelineItem v-for="(item, index) in filterCardList" :key="index" :timestamp="item.timeForDisplay"
+        placement="top" :icon-style="{
           '--icon': `url('${getDataSourceByName(item.dataSource).icon}')`,
-        }"
-        :icon="'headImg'"
-      >
+        }" :icon="'headImg'">
         <span class="is-top-info" v-if="item.isTop">
-          <span class="color-blue"
-            >【当前条目在{{
+          <span class="color-blue">【当前条目在{{
               getDataSourceByName(item.dataSource).title
-            }}的时间线内为置顶状态】</span
-          >
+          }}的时间线内为置顶状态】</span>
         </span>
 
         <span class="card-btn-area">
-          <el-button
-            class="to-copy-share"
-            :class="{ 'special-source': item.componentData }"
-            size="small"
-            @click="copyData(item)"
-            @contextmenu.prevent.native="rightCopyData(item)"
-            title="左键生成图片分享，右键九宫格分享"
-          >
+          <el-button class="to-copy-share" :class="{ 'special-source': item.componentData }" size="small"
+            @click="copyData(item)" @contextmenu.prevent.native="rightCopyData(item)" title="左键生成图片分享，右键九宫格分享">
             <i class="el-icon-share"></i>
           </el-button>
-          <el-button
-            class="to-copy-btn"
-            :class="{ 'special-source': item.componentData }"
-            size="small"
-            @click="copyTextData(item)"
-            title="复制文字进剪切板"
-          >
+          <el-button class="to-copy-btn" :class="{ 'special-source': item.componentData }" size="small"
+            @click="copyTextData(item)" title="复制文字进剪切板">
             <i class="el-icon-document-copy"></i>
           </el-button>
-          <el-button
-            v-if="!item.componentData"
-            class="to-url-btn"
-            size="small"
-            title="前往该条内容"
-            @click="openUrl(item.jumpUrl)"
-            ><i class="el-icon-right"></i
-          ></el-button>
+          <el-button v-if="!item.componentData" class="to-url-btn" size="small" title="前往该条内容"
+            @click="openUrl(item.jumpUrl)"><i class="el-icon-right"></i></el-button>
         </span>
-        <el-card
-          class="card"
-          :class="[
-            `font-size-${settings.display.fontSize}`,
-            { 'special-source': item.componentData },
-          ]"
-          shadow="never"
-        >
-          <component
-            :is="resolveComponent(item)"
-            :item="item"
-            :show-image="imgShow"
-          ></component>
+        <el-card class="card" :class="[
+          `font-size-${settings.display.fontSize}`,
+          { 'special-source': item.componentData },
+        ]" shadow="never">
+          <component :is="resolveComponent(item)" :item="item" :show-image="imgShow"></component>
         </el-card>
       </MyElTimelineItem>
     </el-timeline>
-    <div
-      v-else
-      style="height: 300px"
-      v-loading="loading"
-      element-loading-custom-class="page-loading"
-    ></div>
-    <el-dialog
-      :modal-append-to-body="false"
-      title="图片自动复制出错，请于图片右键复制图片"
-      :visible.sync="imageError"
-      width="80%"
-    >
+    <div v-else style="height: 300px" v-loading="loading" element-loading-custom-class="page-loading"></div>
+    <el-dialog :modal-append-to-body="false" title="图片自动复制出错，请于图片右键复制图片" :visible.sync="imageError" width="80%">
       <img :src="errorImageUrl" style="width: 100%" />
     </el-dialog>
     <select-image-to-copy ref="SelectImageToCopy" @copyData="copyData">
     </select-image-to-copy>
+    <update-info-notice :updateInfo="updateInfo"></update-info-notice>
   </div>
 </template>
 
@@ -240,10 +138,11 @@ import PlatformHelper from "../../common/platform/PlatformHelper";
 import InsiderUtil from "../../common/util/InsiderUtil";
 import ServerUtil from "../../common/util/ServerUtil";
 import SelectImageToCopy from "@/components/SelectImageToCopy";
+import UpdateInfoNotice from '../UpdateInfoNotice';
 
 export default {
   name: "TimeLine",
-  components: { MyElTimelineItem, Search, SelectImageToCopy },
+  components: { MyElTimelineItem, Search, SelectImageToCopy, UpdateInfoNotice },
   props: ["cardListByTag", "imgShow"],
   data() {
     Settings.doAfterInit(
@@ -259,6 +158,7 @@ export default {
       san: SanInfo,
       searchShow: false,
       onlineDayInfo: {},
+      updateInfo: {},
       onlineSpeakList: [],
       isNew: false,
       dayInfo: dayInfo,
@@ -387,6 +287,9 @@ export default {
             new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
         );
 
+        // 插件更新信息
+        this.updateInfo = data.upgrade;
+
         if (data.iconName) {
           PlatformHelper.Storage.saveLocalStorage("iconName", data.iconName);
         }
@@ -427,14 +330,14 @@ export default {
         deepAssign([], this.cardList).forEach((item) => {
           const regex = new RegExp(
             "(" +
-              this.filterText.replaceAll(/([*.?+$^\[\](){}|\\\/])/g, "\\$1") +
-              ")",
+            this.filterText.replaceAll(/([*.?+$^\[\](){}|\\\/])/g, "\\$1") +
+            ")",
             "gi"
           );
           if (regex.test(item.content.replaceAll(/(<([^>]+)>)/gi, ""))) {
             item.content = item.content.replaceAll(
-                regex,
-                '<span class="highlight">$1</span>'
+              regex,
+              '<span class="highlight">$1</span>'
             );
             newFilterList.push(item);
           }
@@ -632,10 +535,12 @@ export default {
   .el-loading-spinner .el-loading-text {
     color: #ffba4b;
   }
+
   .el-loading-spinner .path {
     stroke: #ffba4b;
   }
 }
+
 // 图片加载中
 img[lazy="loading"] {
   -webkit-animation: loading 1s linear 1s 5 alternate;
@@ -650,9 +555,11 @@ img[lazy="error"] {
   from {
     filter: brightness(20%);
   }
+
   50% {
     filter: brightness(90%);
   }
+
   to {
     filter: brightness(20%);
   }
@@ -678,8 +585,9 @@ img[lazy="error"] {
   @hover: "hover-@{theme}"; // 按钮hover颜色
 
   a {
-    color: @@content !important;
+    color: @@content  !important;
   }
+
   .color-blue {
     color: #23ade5;
   }
@@ -744,6 +652,7 @@ img[lazy="error"] {
 
     #timeline-area {
       position: relative;
+
       // 间隔阴影
       .content-timeline-shadow {
         position: absolute;
@@ -781,6 +690,7 @@ img[lazy="error"] {
 
     .el-card__body {
       padding: 0;
+
       // 升级内容样式
       .new-info-area {
         cursor: pointer;
@@ -798,8 +708,7 @@ img[lazy="error"] {
 
       // 今日信息内容样式
       .day-info {
-        .day-info-title {
-        }
+        .day-info-title {}
 
         .day-info-content {
           display: flex;
@@ -829,15 +738,14 @@ img[lazy="error"] {
               .sane {
                 font-size: 16px;
                 font-family: Geometos, "Sans-Regular", "SourceHanSansCN-Regular",
-                  YaHei,serif;
+                  YaHei, serif;
 
                 .sane-number {
                   font-size: 28px;
                 }
               }
 
-              .sane-info {
-              }
+              .sane-info {}
             }
           }
 
@@ -879,6 +787,7 @@ img[lazy="error"] {
       background-color: @@ceobeColor;
     }
   }
+
   .sane-calculator {
     display: flex;
     justify-content: space-around;
@@ -952,6 +861,7 @@ img[lazy="error"] {
         background-color: @@bgColor;
         color: @@content;
         border: @@btnBorder 1px solid;
+
         // 需要特殊显示的数据源只提供复制按钮，跳转由数据源自行实现
         &.special-source {
           right: 0;
@@ -966,6 +876,7 @@ img[lazy="error"] {
 
       .to-copy-share {
         right: 100px;
+
         // 需要特殊显示的数据源只提供复制按钮，跳转由数据源自行实现
         &.special-source {
           right: 50px;

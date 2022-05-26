@@ -72,7 +72,7 @@ async function transformDataSource(settings) {
 class Settings {
   // 插件初始化的时间
   initTime = new Date().getTime();
-  // 插件版本号
+  // 配置版本号
   version = CURRENT_SETTING_VERSION;
   // Logo
   logo = "icon.png"
