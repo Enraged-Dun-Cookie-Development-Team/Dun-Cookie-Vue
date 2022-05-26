@@ -108,8 +108,8 @@
       <img :src="errorImageUrl" style="width: 100%" />
     </el-dialog>
     <select-image-to-copy ref="SelectImageToCopy" @copyData="copyData">
-
     </select-image-to-copy>
+    <update-info-notice :updateInfo="updateInfo"></update-info-notice>
   </div>
 </template>
 
@@ -127,10 +127,11 @@ import PlatformHelper from "../../common/platform/PlatformHelper";
 import InsiderUtil from "../../common/util/InsiderUtil";
 import ServerUtil from "../../common/util/ServerUtil";
 import SelectImageToCopy from "@/components/SelectImageToCopy";
+import UpdateInfoNotice from '../UpdateInfoNotice';
 
 export default {
   name: "TimeLine",
-  components: { MyElTimelineItem, Search, SelectImageToCopy },
+  components: { MyElTimelineItem, Search, SelectImageToCopy, UpdateInfoNotice },
   props: ["cardListByTag", "imgShow"],
   data() {
     Settings.doAfterInit(settings => this.currentTag = settings.display.defaultTag);
@@ -146,6 +147,7 @@ export default {
       san: SanInfo,
       searchShow: false,
       onlineDayInfo: {},
+      updateInfo: {},
       onlineSpeakList: [],
       isNew: false,
       dayInfo: dayInfo,
@@ -532,9 +534,11 @@ img[lazy="error"] {
     filter: brightness(20%);
   }
 
+
   50% {
     filter: brightness(90%);
   }
+
 
   to {
     filter: brightness(20%);
@@ -626,6 +630,7 @@ img[lazy="error"] {
     #timeline-area {
       position: relative;
 
+
       // 间隔阴影
       .content-timeline-shadow {
         position: absolute;
@@ -715,7 +720,7 @@ img[lazy="error"] {
               .sane {
                 font-size: 16px;
                 font-family: Geometos, "Sans-Regular", "SourceHanSansCN-Regular",
-                  YaHei, serif;
+                  YaHei,  serif;
 
                 .sane-number {
                   font-size: 28px;
@@ -764,6 +769,7 @@ img[lazy="error"] {
       background-color: #23ade5;
     }
   }
+
 
   .sane-calculator {
     display: flex;
@@ -839,6 +845,7 @@ img[lazy="error"] {
         color: @@content;
         border: @@btnBorder 1px solid;
 
+
         // 需要特殊显示的数据源只提供复制按钮，跳转由数据源自行实现
         &.special-source {
           right: 0;
@@ -853,6 +860,7 @@ img[lazy="error"] {
 
       .to-copy-share {
         right: 100px;
+
 
         // 需要特殊显示的数据源只提供复制按钮，跳转由数据源自行实现
         &.special-source {
