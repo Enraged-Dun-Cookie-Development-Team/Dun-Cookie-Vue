@@ -43,15 +43,16 @@ export default class ServerUtil {
 
 
                 let today = TimeUtil.format(new Date(), 'yyyy-MM-dd');
-                let announcementNoticeStatus = PlatformHelper.Storage.saveLocalStorage("announcement-notice-status")
-                
+                let announcementNoticeStatus = await PlatformHelper.Storage.getLocalStorage("announcement-notice-status") || {};
+
                 filterList.map(x => {
                     if (x.notice) {
                         if (!announcementNoticeStatus[today]) {
-                            announcementNoticeStatus = { today: {} };
+                            announcementNoticeStatus = {};
+                            announcementNoticeStatus[today] = {};
                         }
-                        if (!announcementNoticeStatus[today][today + x.notice]) {
-                            announcementNoticeStatus[today][today + x.notice] = true;
+                        if (!announcementNoticeStatus[today][today +"-"+ x.notice]) {
+                            announcementNoticeStatus[today][today + "-" + x.notice] = true;
                             let imgReg = /<img.*?src='(.*?)'/;
                             let imgUrl = x.html.match(imgReg)[1];
                             let removeTagReg = /<\/?.+?\/?>/g;
@@ -67,6 +68,7 @@ export default class ServerUtil {
                         }
                     }
                 })
+                PlatformHelper.Storage.saveLocalStorage("announcement-notice-status", announcementNoticeStatus)
             }
         }
         return data;
