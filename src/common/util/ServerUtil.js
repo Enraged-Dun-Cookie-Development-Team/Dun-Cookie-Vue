@@ -5,7 +5,7 @@ import HttpUtil from "./HttpUtil";
 import PlatformHelper from "../platform/PlatformHelper";
 import InsiderUtil from "./InsiderUtil";
 import Settings from "../Settings";
-import {CANTEEN_INTERFACE_LIST, CURRENT_VERSION} from "../Constants";
+import { CANTEEN_INTERFACE_LIST, CURRENT_VERSION } from "../Constants";
 import NotificationUtil from "./NotificationUtil";
 import TimeUtil from "./TimeUtil";
 import PromiseUtil from "./PromiseUtil";
@@ -41,20 +41,30 @@ export default class ServerUtil {
                         new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
                 );
 
+
+                let today = TimeUtil.format(new Date(), 'yyyy-MM-dd');
+                let announcementNoticeStatus = PlatformHelper.Storage.saveLocalStorage("announcement-notice-status")
+                
                 filterList.map(x => {
                     if (x.notice) {
-                        let imgReg = /<img.*?src='(.*?)'/;
-                        let imgUrl = x.html.match(imgReg)[1];
-                        let removeTagReg = /<\/?.+?\/?>/g;
-                        let divReg = /<\/div>/g;
+                        if (!announcementNoticeStatus[today]) {
+                            announcementNoticeStatus = { today: {} };
+                        }
+                        if (!announcementNoticeStatus[today][today + x.notice]) {
+                            announcementNoticeStatus[today][today + x.notice] = true;
+                            let imgReg = /<img.*?src='(.*?)'/;
+                            let imgUrl = x.html.match(imgReg)[1];
+                            let removeTagReg = /<\/?.+?\/?>/g;
+                            let divReg = /<\/div>/g;
 
-                        let content = x.html.replace(/\s+/g, '');
-                        content = content.replace(divReg, '\n');
-                        content = content.replace(removeTagReg, '');
+                            let content = x.html.replace(/\s+/g, '');
+                            content = content.replace(divReg, '\n');
+                            content = content.replace(removeTagReg, '');
 
-                        imgUrl =  imgUrl == "/assets/image/" + Settings.logo ? "/assets/image/announcement.png" : imgUrl;
+                            imgUrl = imgUrl == "/assets/image/" + Settings.logo ? "/assets/image/announcement.png" : imgUrl;
 
-                        NotificationUtil.SendNotice("博士，重要公告，记得开列表看噢！", content, imgUrl, "announcement" + new Date().getTime());
+                            NotificationUtil.SendNotice("博士，重要公告，记得开列表看噢！", content, imgUrl, "announcement" + new Date().getTime());
+                        }
                     }
                 })
             }
