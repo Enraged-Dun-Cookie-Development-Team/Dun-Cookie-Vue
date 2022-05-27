@@ -49,8 +49,9 @@ export default class BrowserPlatform extends AbstractPlatform {
     if (imageUrl) {
       image = await this.__loadImage(imageUrl);
     }
-    // 整体宽度以图片宽度为准，至少680，左右再各加10的边距
-    const canvasWidth = Math.max(680, image ? image.width : 0) + 20;
+    // 整体宽度以图片宽度为准，无图片680，有图片1080，左右再各加10的边距
+    const canvasWidth = Math.max(680, image ? 960 : 0) + 20;
+
 
     // 减掉左右边距
     const headerCanvasPromise = this.__generateImageHeader(canvasWidth - 20, dataItem, iconUrl, sourceIconUrl);
@@ -60,7 +61,7 @@ export default class BrowserPlatform extends AbstractPlatform {
     const textHeight = textCanvas ? textCanvas.height : 0;
     let canvasHeight = headerCanvas.height + 10 + textHeight + 10;
     if (image) {
-      canvasHeight += image.height;
+      canvasHeight += (canvasWidth-20) / image.width * image.height;
     }
 
     const canvas = document.createElement("canvas");
@@ -78,7 +79,7 @@ export default class BrowserPlatform extends AbstractPlatform {
       heightOffset += textHeight + 10;
     }
     if (image) {
-      ctx.drawImage(image, (canvasWidth - image.width) / 2, heightOffset);
+      ctx.drawImage(image, 10, heightOffset, canvasWidth-20, (canvasWidth-20)/image.width*image.height);
     }
     return canvas;
   }
@@ -161,7 +162,7 @@ export default class BrowserPlatform extends AbstractPlatform {
     wrapper.style.maxWidth = textWidth + "px";
     wrapper.style.whiteSpace = "break-spaces";
     wrapper.style.wordBreak = "break-all";
-    wrapper.style.font = "16px Microsoft Yahei";
+    wrapper.style.font = "18px Microsoft Yahei";
     wrapper.style.color = "#848488";
     let html = dataItem.content;
     if (dataItem.retweeted) {

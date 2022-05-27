@@ -1,7 +1,7 @@
-import {DataSource, UserInfo} from '../DataSource';
+import { DataSource, UserInfo } from '../DataSource';
 import Settings from '../../Settings';
 import TimeUtil from '../../util/TimeUtil';
-import {DataItem, RetweetedInfo} from '../../DataItem';
+import { DataItem, RetweetedInfo } from '../../DataItem';
 import HttpUtil from '../../util/HttpUtil';
 
 /**
@@ -46,14 +46,17 @@ export class WeiboDataSource extends DataSource {
           const containerId = data.data.cardlistInfo.containerid;
           let weiboId = containerId.substring((containerId.length - 10), containerId.length) + '/' + x.mblog.bid;
           let time = new Date(dynamicInfo.created_at);
-
+          let coverImage = dynamicInfo.original_pic;
+          if (coverImage) {
+            coverImage = coverImage.replace("https", "http");
+          }
           const builder = DataItem.builder(this.dataName)
             .id(weiboId)
             .timeForSort(time.getTime())
             .timeForDisplay(TimeUtil.format(new Date(time), 'yyyy-MM-dd hh:mm:ss'))
             .content(dynamicInfo.raw_text || dynamicInfo.text.replace(/<\a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<span class="url-icon">|<\img.*?>|全文|网页链接/g, '').replace(/<br \/>/g, '\n'))
             .jumpUrl(`https://weibo.com/${weiboId}`)
-            .coverImage(dynamicInfo.bmiddle_pic)
+            .coverImage(coverImage)
             .previewList(dynamicInfo.pic_ids && dynamicInfo.pic_ids.map(x => `https://wx1.sinaimg.cn/thumbnail/${x}`))
             .imageList(dynamicInfo.pic_ids && dynamicInfo.pic_ids.map(x => `https://wx1.sinaimg.cn/large/${x}`))
             .imageHttpList(dynamicInfo.pic_ids && dynamicInfo.pic_ids.map(x => `http://wx3.sinaimg.cn/large/${x}`));

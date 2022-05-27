@@ -1,7 +1,7 @@
 {
     "list": [
         {
-            "html": "<div class='online-area'> <img class='online-title-img' src='http://api.ceobecanteen.top/%E9%81%93%E5%85%B7_%E6%8B%9B%E8%81%98%E8%AE%B8%E5%8F%AF.png'><div> <div><span class='online-blue'>公开招募啦！！！</span></div> <div>Tag: </div> <div><span class='online-red'>IOS Flutter开发，视频动效与分镜</span></div> <div>已经拉满九小时啦</div> <div>有兴趣的快来噢，加群 <a class='webOpen' href='https://jq.qq.com/?_wv=1027&k=Vod1uO13'>【蹲饼组】</a> 联系我们呀！</div> </div> </div>",
+            "html": "<div class='online-area'> <img class='online-title-img' src='/assets/image/icon.png'><div> <div><span class='online-blue'>公开招募啦！！！</span></div> <div>Tag: </div> <div><span class='online-red'>IOS Flutter开发，视频动效与分镜</span></div> <div>已经拉满九小时啦</div> <div>有兴趣的快来噢，加群 <a class='webOpen' href='https://jq.qq.com/?_wv=1027&k=Vod1uO13'>【蹲饼组】</a> 联系我们呀！</div> </div> </div>",
             "starTime":"2022-05-14 04:00:00",
             "overTime":"2022-06-30 15:59:59",
             "notice": false
