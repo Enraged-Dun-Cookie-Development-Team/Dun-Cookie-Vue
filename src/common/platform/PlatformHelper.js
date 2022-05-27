@@ -183,8 +183,19 @@ class NotificationHelper {
     /**
      * 一般使用create即可，只有需要显示特殊图标的时候才用这个方法
      */
-    createWithSpecialIcon(id, iconUrl, title, message, imageUrl) {
-        return currentPlatform.createNotifications(id, iconUrl, title, message, imageUrl);
+    async createWithSpecialIcon(id, iconUrl, title, message, imageUrl) {
+        let objectUrl;
+        if (typeof imageUrl === 'string' && imageUrl.startsWith("http")) {
+            const response = await fetch(imageUrl);
+            const blob = await response.blob();
+
+            objectUrl = URL.createObjectURL(blob);
+        }
+        return await currentPlatform.createNotifications(id, iconUrl, title, message, objectUrl || imageUrl).finally(_ => {
+            if (objectUrl) {
+                URL.revokeObjectURL(objectUrl);
+            }
+        });
     }
 
     addClickListener(listener) {
