@@ -100,7 +100,7 @@ export default class ChromePlatform extends BrowserPlatform {
     }
 
     createNotifications(id, iconUrl, title, message, imageUrl) {
-        var options = {
+        let options = {
             type: 'basic',
             iconUrl: iconUrl,
             message: message,

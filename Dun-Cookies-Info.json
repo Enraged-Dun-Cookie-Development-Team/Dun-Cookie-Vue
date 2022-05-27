@@ -1,27 +1,21 @@
 {
     "list": [
         {
-            "html": "<div class='online-area'> <img class='online-title-img' src='http://api.ceobecanteen.top/%E9%81%93%E5%85%B7_%E6%8B%9B%E8%81%98%E8%AE%B8%E5%8F%AF.png'><div> <div><span class='online-blue'>公开招募啦！！！</span></div> <div>Tag: </div> <div><span class='online-red'>IOS Flutter开发，视频动效与分镜，界面UI设计</span></div> <div>已经拉满九小时啦</div> <div>有兴趣的快来噢，加群 <a class='webOpen' href='https://jq.qq.com/?_wv=1027&k=Vod1uO13'>【蹲饼组】</a> 联系我们呀！</div> </div> </div>",
-            "starTime":"2022-05-11 04:00:00",
-            "overTime":"2022-05-14 03:59:59",
-            "notice": true
-        },
-        {
-            "html": "<div class='online-area'> <img class='online-title-img' src='http://api.ceobecanteen.top/%E9%81%93%E5%85%B7_%E6%8B%9B%E8%81%98%E8%AE%B8%E5%8F%AF.png'><div> <div><span class='online-blue'>公开招募啦！！！</span></div> <div>Tag: </div> <div><span class='online-red'>IOS Flutter开发，视频动效与分镜，界面UI设计</span></div> <div>已经拉满九小时啦</div> <div>有兴趣的快来噢，加群 <a class='webOpen' href='https://jq.qq.com/?_wv=1027&k=Vod1uO13'>【蹲饼组】</a> 联系我们呀！</div> </div> </div>",
+            "html": "<div class='online-area'> <img class='online-title-img' src='/assets/image/icon.png'><div> <div><span class='online-blue'>公开招募啦！！！</span></div> <div>Tag: </div> <div><span class='online-red'>IOS Flutter开发，视频动效与分镜</span></div> <div>已经拉满九小时啦</div> <div>有兴趣的快来噢，加群 <a class='webOpen' href='https://jq.qq.com/?_wv=1027&k=Vod1uO13'>【蹲饼组】</a> 联系我们呀！</div> </div> </div>",
             "starTime":"2022-05-14 04:00:00",
             "overTime":"2022-06-30 15:59:59",
+            "notice": false
+        },
+        {
+            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20220422/e95c8fb410cc957130e93937094606b7'> <div> <div><span class='online-blue'>#9赛季「渊默行动」</span>将于<span class='online-blue'>6月2号</span>结束</div> <div>结束时间为<span class='online-red'>周四04:00</span></div> <div>博士们加油挑战自我吧</div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频与精彩作战</span> </div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
+            "starTime":"2022-05-19 16:00:00",
+            "overTime":"2022-06-02 03:59:59",
             "notice": false
         },
         {
             "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20220422/cbf2d65644cfb82613cc07e1845f3b0f.jpg'> <div> <div><span class='online-blue'>SideStory「愚人号」</span>将于<span class='online-blue'>5月1号</span>开启</div> <div>开启时间为<span class='online-red'>周日16:00</span></div> <div>活动前记得<span class='online-red'>刷剿灭，囤理智</span></div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频与剧情捧读</span> </div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
             "starTime":"2022-04-23 04:00:00",
             "overTime":"2022-05-01 15:59:59",
-            "notice": false
-        },
-        {
-            "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20220422/cbf2d65644cfb82613cc07e1845f3b0f.jpg'> <div> <div><span class='online-blue'>SideStory「愚人号」</span>将于<span class='online-blue'>5月22号</span>结束</div> <div>结束时间为<span class='online-red'>周日4:00</span></div> <div>活动期间掉落<span class='online-red'>异铁组、轻锰矿、化合切削液</span></div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频与剧情捧读</span> </div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
-            "starTime":"2022-05-01 16:00:00",
-            "overTime":"2022-05-15 03:59:59",
             "notice": false
         },
         {
@@ -43,7 +37,81 @@
             "notice": false
         }
     ],
-    "btnList": [
+    "btnList": [        
+        {
+            "starTime": "2022-05-20 16:00:00",
+            "overTime": "2022-06-02 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1FA4y1Z7ZZ",
+            "name": "【黑蓑影卫攻略组/渊默行动】全网首杀 满级旧约登顶33 - 不畏苦暗！",
+            "img": "https://i1.hdslb.com/bfs/archive/b066b84e3a9997fcf95e2dbffc64a67719267d41.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2022-05-20 16:00:00",
+            "overTime": "2022-06-02 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1Kv4y1A7zq",
+            "name": "【黑蓑影卫攻略组/渊默行动】首杀双人18 - 雷 公 电 母",
+            "img": "https://i2.hdslb.com/bfs/archive/95b065103a2ccb697c91cc6108009272b84a7742.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2022-05-20 16:00:00",
+            "overTime": "2022-06-02 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1t34y1E7dk",
+            "name": "【御坂美琴__Official/全网首杀】渊默行动双人20级 中  门  对  狙",
+            "img": "https://i0.hdslb.com/bfs/archive/ad0ec174d79026a7943fcbc252653b33f98cd29e.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2022-05-20 16:00:00",
+            "overTime": "2022-06-02 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1fa411J7EQ",
+            "name": "【微言蚁/渊默行动】两个五星，旧约18",
+            "img": "https://i0.hdslb.com/bfs/archive/7cee06e975e55f1b7da240781ebba769f9ba61fb.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+
+        {
+            "starTime": "2022-05-20 16:00:00",
+            "overTime": "2022-06-02 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1a5411R7Fr",
+            "name": "【魔法Zc目录】“渊默行动”盐风溶洞18镀层+日替（含高配） 全关卡平民攻略大合集！阵容平民+低练度+语音详解的愉悦攻略！",
+            "img": "https://i0.hdslb.com/bfs/archive/6105fe9c63b9ee713233a7e4b21723c94a0edcd9.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2022-05-20 16:00:00",
+            "overTime": "2022-06-02 03:59:59",
+            "url": "https://www.bilibili.com/video/BV16R4y1c7aw",
+            "name": "【好吃的橘子鸭】「渊默行动」平民单核+挑战任务，操作简单，阵容平民，语音详解，必过！",
+            "img": "https://i2.hdslb.com/bfs/archive/9d10201cd4e96e90d7fd59d2bfd8ee3c7aee26a7.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2022-05-20 16:00:00",
+            "overTime": "2022-06-02 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1zu41167mC",
+            "name": "【小狼XF】渊默行动/危机18单6+日更危机8",
+            "img": "https://i1.hdslb.com/bfs/archive/52a281c6b2838467568dd5b744acdc1f3d9fb2f2.png@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2022-05-20 16:00:00",
+            "overTime": "2022-06-02 03:59:59",
+            "url": "https://www.bilibili.com/video/BV15Y411F7qC",
+            "name": "【萧然Q/渊默行动18】盐风溶洞 摆完挂机 简单好抄（日替更新，挑战任务更新）",
+            "img": "https://i2.hdslb.com/bfs/archive/e58dd25417ac39d5e60f3d0c8d4535cf776b5a54.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+        {
+            "starTime": "2022-05-20 16:00:00",
+            "overTime": "2022-06-02 03:59:59",
+            "url": "https://www.bilibili.com/video/BV1FP4y1F7EW",
+            "name": "【自在道爷/渊默行动】每日挂机流，任务不用愁~更新5.19 尚蜀山道8，语音快乐详解，轻松解放双手！",
+            "img": "https://i0.hdslb.com/bfs/archive/ea60a36690df66f3f638a119f1ebd65a8cc173d9.jpg@200w_125h_1c.webp",
+            "radius": true
+        },
+
         {
             "starTime": "2022-05-02 16:00:00",
             "overTime": "2022-05-22 03:59:59",
@@ -77,14 +145,6 @@
             "radius": true
         },
         {
-            "starTime": "2022-04-14 16:00:00",
-            "overTime": "2022-04-28 03:59:59",
-            "url": "https://www.bilibili.com/video/BV1xY4y1h7fZ",
-            "name": "【小鬼卡比/吾导先路】第十章 全关卡 磨难【低配】攻略合集 【破碎日冕】",
-            "img": "https://i0.hdslb.com/bfs/archive/ff54f446a140f7333cb2c6f61f716e6d9777b2fd.jpg@200w_125h_1c.webp",
-            "radius": true
-        },
-        {
             "starTime": "2022-05-02 16:00:00",
             "overTime": "2022-05-22 03:59:59",
             "url": "https://www.bilibili.com/video/BV1Ea411J7tM",
@@ -112,16 +172,16 @@
     ],
     "dayInfo": {
         "resources": {
-            "starTime": "2022-02-24 16:00:00",
-            "overTime": "2022-03-10 03:59:59"
+            "starTime": "2022-05-19 16:00:00",
+            "overTime": "2022-06-02 03:59:59"
         },
         "countdown": [
             {
                 "text": "当前轮换池结束",
-                "remark": "推进之王[兑换]、空弦、守林人、贾维[兑换]、蚀清",
-                "time": "2022-05-12 03:59:59",
-                "starTime": "2022-04-28 04:00:00",
-                "overTime": "2022-05-12 03:59:59"
+                "remark": "瑕光[兑换]、嵯峨、爱丽丝、布洛卡[兑换]、极光",
+                "time": "2022-06-09 03:59:59",
+                "starTime": "2022-05-26 04:00:00",
+                "overTime": "2022-06-09 03:59:59"
             },
             {
                 "text": "当前轮换池结束",
@@ -132,18 +192,18 @@
             },
             
             {
-                "text": "下个活动池【海蚀】开启",
-                "remark": "归溟幽灵鲨 [限定]，艾丽妮，掠风",
-                "time": "2022-05-01 15:59:59",
-                "starTime": "2022-04-28 04:00:00",
-                "overTime": "2022-05-01 15:59:59"
+                "text": "下个活动池【联合行动】开启",
+                "remark": "能天使，斯卡蒂，凯尔希，山，拉普兰德，赤冬，雷蛇，普罗旺斯，食铁兽，月禾",
+                "time": "2022-05-19 15:59:59",
+                "starTime": "2022-05-19 04:00:00",
+                "overTime": "2022-05-19 15:59:59"
             },
             {
-                "text": "当前活动池【海蚀】结束",
-                "remark": "归溟幽灵鲨 [限定]，艾丽妮，掠风",
-                "time": "2022-05-15 03:59:59",
-                "starTime": "2022-05-01 16:00:00",
-                "overTime": "2022-05-15 03:59:59"
+                "text": "当前活动池【联合行动】结束",
+                "remark": "能天使，斯卡蒂，凯尔希，山，拉普兰德，赤冬，雷蛇，普罗旺斯，食铁兽，月禾",
+                "time": "2022-06-02 03:59:59",
+                "starTime": "2022-05-19 16:00:00",
+                "overTime": "2022-06-02 03:59:59"
             },
             {
                 "text": "当前活动池【奔崖怒号】结束",
@@ -154,25 +214,25 @@
             },
 
             {
-                "text": "SideStory「愚人号」，活动开放",
+                "text": "SideStory「覆潮之下」，复刻开启",
                 "remark": "通关主线1-10",
                 "time": "2022-05-01 15:59:59",
-                "starTime": "2022-04-23 04:00:00",
-                "overTime": "2022-05-01 15:59:59"
+                "starTime": "2022-05-30 04:00:00",
+                "overTime": "2022-05-30 15:59:59"
             },
             {
-                "text": "SideStory「吾导先路」，活动结束",
-                "remark": "解锁条件：通关主线1-10",
-                "time": "2022-03-29 03:59:59",
-                "starTime": "2022-03-15 16:00:00",
-                "overTime": "2022-03-29 03:59:59"
+                "text": "第9赛季「渊默行动」，活动结束",
+                "remark": "解锁条件：通关主线 2-10",
+                "time": "2022-06-02 03:59:59",
+                "starTime": "2022-05-22 16:00:00",
+                "overTime": "2022-05-30 03:59:59"
             },
             {
-                "text": "SideStory「愚人号」，活动结束",
+                "text": "SideStory「覆潮之下」，复刻结束",
                 "remark": "通关主线1-10",
-                "time": "2022-05-22 19:29:59",
-                "starTime": "2022-05-01 16:00:00",
-                "overTime": "2022-05-22 19:29:59"
+                "time": "2022-06-13 03:59:59",
+                "starTime": "2022-05-30 16:00:00",
+                "overTime": "2022-06-13 03:59:59"
             }
         ]
     },
@@ -194,9 +254,9 @@
         "71add0d3edb7f188abf850643eeeca13b5cc266254b4d6bf1369e9889c584f658a21f6e110a509d5775c406b022839613196dc16db07677626208c2f5e4f77cc": 2
     },
     "app": {
-        "version": "0.5",
+        "version": "0.6",
         "update": false,
         "lastFocusVersion": "0.1",
-        "description": "添加正式版罗德岛蜜饼工坊-饼学大厦数据\n添加wan子姐每周二创推荐栏\n添加阅读漫画页面，可以更方便的看漫画了"
+        "description": "顽子姐泰拉每周速递修复显示顺序与b站同步\n修改饼学大厦右上角切换大厦的图标\n修改饼学大厦默认显示的大厦为最新大厦"
     }
 }
