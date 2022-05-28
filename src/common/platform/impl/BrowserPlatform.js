@@ -13,6 +13,8 @@ let _isMobile;
 const imageCache = {};
 const qrcodeCache = {};
 
+const CORS_AVAILABLE_DOMAINS = {'penguin-stats.io': true, 'penguin-stats.cn': true};
+
 /**
  * 浏览器平台，放置与具体浏览器无关的通用逻辑
  */
@@ -227,26 +229,17 @@ width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retwee
   }
 
   sendHttpRequest(url, method) {
-    return new Promise((resolve, reject) => {
-      let xhr = new XMLHttpRequest();
-      xhr.open(method, url, true);
-      let err;
-      xhr.onload = () => {
-        if (xhr.status === 200) {
-          resolve(xhr.responseText);
-        } else {
-          err = xhr;
-        }
+    if (typeof url === 'string') {
+      url = new URL(url);
+    }
+    return fetch(url, {
+      method: method,
+      mode: CORS_AVAILABLE_DOMAINS[url.host] ? 'cors' : 'no-cors',
+    }).then(response => {
+      if (response.type === 'opaque') {
+        throw '获取响应失败，可能是插件权限中未允许访问目标网站：' + url.origin;
       }
-      xhr.onerror = () => {
-        err = `请求URL时发生异常：${url}`;
-      }
-      xhr.onloadend = () => {
-        if (!!err) {
-          reject(err);
-        }
-      }
-      xhr.send();
+      return response.text();
     });
   }
 
