@@ -36,8 +36,14 @@ class HttpUtil {
     try {
       return await PlatformHelper.Http.sendGet(url);
     } catch (e) {
-      // 为避免出现错误提示使用户迷惑，故仅使用log而不使用warn或error
-      console.log(e);
+      let errMsg = `请求URL时发生异常：${url}`;
+      if (typeof e !== "string") {
+        // 为避免出现错误提示使用户迷惑，故仅使用log而不使用warn或error
+        console.log(e);
+      } else {
+        errMsg = e;
+      }
+      DebugUtil.debugLog(0, errMsg);
     }
   }
 }
