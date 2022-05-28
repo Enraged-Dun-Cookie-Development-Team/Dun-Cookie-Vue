@@ -33,9 +33,7 @@
 		"https://*.hycdn.cn/*",
 		"https://music.163.com/*",
 		"http://*.music.126.net/*",
-		"http://prts.wiki/*",
-		"https://penguin-stats.io/*",
-		"https://penguin-stats.cn/*"
+		"http://prts.wiki/*"
 	],
 	"options_ui": {
 		"page": "options.html",
