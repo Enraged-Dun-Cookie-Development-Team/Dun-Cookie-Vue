@@ -31,9 +31,11 @@
 		"https://*.hypergryph.com/*",
 		"http://*.sinaimg.cn/*",
 		"https://*.hycdn.cn/*",
-		"http://*.163.com/*",
-		"http://*.126.net/*",
-		"http://*.prts.wiki/*"
+		"https://music.163.com/*",
+		"http://*.music.126.net/*",
+		"http://prts.wiki/*",
+		"https://penguin-stats.io/*",
+		"https://penguin-stats.cn/*"
 	],
 	"options_ui": {
 		"page": "options.html",
