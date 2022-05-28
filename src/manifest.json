@@ -32,8 +32,7 @@
 		"http://*.sinaimg.cn/*",
 		"https://*.hycdn.cn/*",
 		"https://music.163.com/*",
-		"http://*.music.126.net/*",
-		"http://prts.wiki/*"
+		"http://*.music.126.net/*"
 	],
 	"options_ui": {
 		"page": "options.html",
