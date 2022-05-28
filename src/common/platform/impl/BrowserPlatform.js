@@ -13,6 +13,8 @@ let _isMobile;
 const imageCache = {};
 const qrcodeCache = {};
 
+const CORS_AVAILABLE_DOMAINS = {'penguin-stats.io': true, 'penguin-stats.cn': true};
+
 /**
  * 浏览器平台，放置与具体浏览器无关的通用逻辑
  */
@@ -227,12 +229,15 @@ width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retwee
   }
 
   sendHttpRequest(url, method) {
+    if (typeof url === 'string') {
+      url = new URL(url);
+    }
     return fetch(url, {
       method: method,
-      mode: 'no-cors',
+      mode: CORS_AVAILABLE_DOMAINS[url.host] ? 'cors' : 'no-cors',
     }).then(response => {
       if (response.type === 'opaque') {
-        throw '获取响应失败，可能是插件权限中未允许访问目标网站：' + new URL(url).origin;
+        throw '获取响应失败，可能是插件权限中未允许访问目标网站：' + url.origin;
       }
       return response.text();
     });
