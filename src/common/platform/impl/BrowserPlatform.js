@@ -13,7 +13,8 @@ let _isMobile;
 const imageCache = {};
 const qrcodeCache = {};
 
-const CORS_AVAILABLE_DOMAINS = {'penguin-stats.io': true, 'penguin-stats.cn': true};
+// 跨域白名单
+const CORS_AVAILABLE_DOMAINS = {'penguin-stats.io': true, 'penguin-stats.cn': true, 'api.ceobecanteen.top': true};
 
 /**
  * 浏览器平台，放置与具体浏览器无关的通用逻辑
