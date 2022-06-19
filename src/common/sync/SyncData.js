@@ -3,7 +3,7 @@ import {deepAssign, deepEquals} from "../util/CommonFunctions";
 import DebugUtil from "../util/DebugUtil";
 
 // 该类仅用于IDE友好提示
-// noinspection JSUnusedLocalSymbols
+// noinspection JSUnusedLocalSymbols,JSUnusedGlobalSymbols
 class CanSync {
   doAfterUpdate(listener) {
     throw new Error('仅用于IDE的友好提示，不应当被调用');
@@ -30,8 +30,17 @@ function keyPersist(key) {
   return 'sync-persist:' + key;
 }
 
+/**
+ * 数据同步模式
+ */
 class DataSyncMode {
+  /**
+   * 仅后台可写，前台是只读模式
+   */
   static ONLY_BACKGROUND_WRITABLE = 1;
+  /**
+   * 前后台都自由读/写
+   */
   static ALL_WRITABLE = 2;
 }
 
@@ -136,6 +145,9 @@ class DataSynchronizer {
     this.updateListeners.push(listener);
   }
 
+  /**
+   * 因为一次可以更新多个值，为减少开销，所以在下一个tick(由于浏览器实现不同可能不止一个tick，但是一般都在个位数毫秒级)统一发送更新
+   */
   sendUpdateAtNextTick() {
     if (!this.updateFlag) {
       setTimeout(async () => {
@@ -275,7 +287,7 @@ const keyMap = {};
  */
 function createSyncData(target, key, mode, shouldPersist = false) {
   if (keyMap[key]) {
-    throw new Error('duplicate key: ' + key);
+    throw new Error('duplicate sync key: ' + key);
   }
   let synchronizer = new DataSynchronizer(key, target);
   switch (mode) {
