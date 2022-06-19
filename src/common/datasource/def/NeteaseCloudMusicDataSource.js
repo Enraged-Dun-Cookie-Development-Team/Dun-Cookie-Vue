@@ -13,8 +13,11 @@ export class NeteaseCloudMusicDataSource extends DataSource {
     return 'music.163.com';
   };
 
-  constructor(icon, dataName, title, dataUrl, priority) {
-    super(icon, dataName, title, dataUrl, priority);
+  /**
+   * @param config {DataSourceConfig} 数据源配置
+   */
+  constructor(config) {
+    super(config);
   }
 
   async processData(rawDataText) {

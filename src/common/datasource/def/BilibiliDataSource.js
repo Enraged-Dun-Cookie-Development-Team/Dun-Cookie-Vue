@@ -1,6 +1,6 @@
-import { DataSource, UserInfo } from '../DataSource';
+import {DataSource, DataSourceConfig, UserInfo} from '../DataSource';
 import TimeUtil from '../../util/TimeUtil';
-import { DataItem } from '../../DataItem';
+import {DataItem} from '../../DataItem';
 import HttpUtil from '../../util/HttpUtil';
 
 /**
@@ -13,22 +13,39 @@ export class BilibiliDataSource extends DataSource {
     return 'bilibili_dynamic';
   };
 
-  static async withUid(uid, priority) {
+  /**
+   * @param uid {number}
+   * @param customConfigCallback {(function(DataSourceConfig): void)|undefined}
+   * @returns {Promise<BilibiliDataSource|null>}
+   */
+  static async withUid(uid, customConfigCallback = undefined) {
     try {
       const data = await DataSource.getOrFetchUserInfo(uid, BilibiliDataSource);
       if (!data) {
         return null;
       }
       const dataUrl = `https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=${uid}&offset_dynamic_id=0&need_top=0&platform=web`;
-      return new BilibiliDataSource(data.avatarUrl, data.dataName, data.username, dataUrl, priority);
+      const config = DataSourceConfig.builder()
+          .icon(data.avatarUrl)
+          .dataName(data.dataName)
+          .title(data.username)
+          .dataUrl(dataUrl)
+          .build();
+      if (customConfigCallback) {
+        customConfigCallback(config);
+      }
+      return new BilibiliDataSource(config);
     } catch (e) {
       console.log(e);
       return null;
     }
   }
 
-  constructor(icon, dataName, title, dataUrl, priority) {
-    super(icon, dataName, title, dataUrl, priority);
+  /**
+   * @param config {DataSourceConfig} 数据源配置
+   */
+  constructor(config) {
+    super(config);
   }
 
   async processData(rawDataText) {

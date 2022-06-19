@@ -13,6 +13,7 @@ import PlatformHelper from '../platform/PlatformHelper';
 class DataSource {
   /**
    * 用于在设置页面中显示的图标
+   * @type {string}
    */
   icon;
   /**
@@ -22,24 +23,36 @@ class DataSource {
    * <strong>注意：子类需要用一个<code>static get typeName() {}</code>函数来定义类型数据源类型名称</strong>，
    *              实例化的时候会自动解析(使用静态是为了便于其它文件获取)<br/>
    * <strong>注意：dataType用于在储存中标识数据源类型，非必要请不要修改，修改后会导致数据解析错误。</strong>
+   * @type {string}
    */
   dataType;
   /**
    * 数据名称(比如朝陇山，泰拉记事社等)，每个数据源必须有一个唯一的dataName，不能重复
    * <p>
    * <strong>注意：该字段用于在储存中标识数据源，非必要请不要修改，修改后会导致用户储存的(该数据源的)旧配置失效。</strong>
+   * @type {string}
    */
   dataName;
   /**
+   * 指定蹲饼器ID，使用相同的蹲饼器ID的数据源将共用一个蹲饼器
+   * <p>
+   * 不指定的话将自动使用dataName作为ID
+   * @type {string|undefined}
+   */
+  fetcherId;
+  /**
    * 弹窗标题
+   * @type {string}
    */
   title;
   /**
    * 优先级，用于在显示时排序，越小越靠前
+   * @type {number}
    */
   priority;
   /**
    * 用于获取数据的URL，可以是string或array
+   * @type {string|string[]}
    */
   dataUrl;
 
@@ -51,13 +64,17 @@ class DataSource {
    */
   _cookieIdCache = {};
 
-  constructor(icon, dataName, title, dataUrl, priority = 100) {
-    this.icon = icon;
-    this.dataName = dataName;
+  /**
+   * @param config {DataSourceConfig} 数据源配置
+   */
+  constructor(config) {
+    this.icon = config.icon;
+    this.dataName = config.dataName;
     this.dataType = this.constructor.typeName;
-    this.title = title;
-    this.dataUrl = dataUrl;
-    this.priority = priority;
+    this.fetcherId = config.fetcherId;
+    this.title = config.title;
+    this.dataUrl = config.dataUrl;
+    this.priority = config.priority;
     // 避免私有属性被json序列化传递
     Object.defineProperty(this, '_cookieIdCache', {
       enumerable: false
@@ -65,8 +82,8 @@ class DataSource {
   }
 
   /**
-   *
-   * @return {Promise<(DataItem[])[]>}
+   * 从数据源获取并解析数据
+   * @return {Promise<FetchResult>}
    */
   async fetchData() {
     let promise;
@@ -89,9 +106,9 @@ class DataSource {
       throw new Error(`数据源[${this.dataName}]解析结果为空`);
     }
     try {
-      const cardList = DataSourceUtil.sortData(data);
-      const newCookieList = this._filterNewCookie(cardList);
-      return [cardList, newCookieList];
+      const allCookies = DataSourceUtil.sortData(data);
+      const newCookies = this._filterNewCookie(allCookies);
+      return new FetchResult(allCookies, newCookies);
     } catch (e) {
       console.warn(`处理数据源[${this.dataName}]的解析结果时发生异常：${e.message}`);
       throw e;
@@ -141,6 +158,101 @@ class DataSource {
 
 }
 
+/**
+ * 数据源配置
+ */
+class DataSourceConfig {
+  /**
+   * @type {string}
+   * @see DataSource.icon
+   */
+  icon;
+  /**
+   * @type {string}
+   * @see DataSource.dataName
+   */
+  dataName;
+  /**
+   * @type {string}
+   * @see DataSource.title
+   */
+  title;
+  /**
+   * @type {string|string[]}
+   * @see DataSource.dataUrl
+   */
+  dataUrl;
+  /**
+   * 优先级默认100
+   * @type {number}
+   * @see DataSource.priority
+   */
+  priority = 100;
+  /**
+   * @type {string|undefined}
+   * @see DataSource.fetcherId
+   */
+  fetcherId;
+
+
+  static builder() {
+    const instance = new DataSourceConfig();
+    // 其实这里用反射生成应该可读性更强一些，但是只有明确写出来IDE才能识别并自动补全
+    const _builder = {
+      /**
+       * @param val {string}
+       * @see DataSource.icon
+       */
+      icon: (val) => {
+        instance.icon = val;
+        return _builder;
+      },
+      /**
+       * @param val {string}
+       * @see DataSource.dataName
+       */
+      dataName: (val) => {
+        instance.dataName = val;
+        return _builder;
+      },
+      /**
+       * @param val {string}
+       * @see DataSource.title
+       */
+      title: (val) => {
+        instance.title = val;
+        return _builder;
+      },
+      /**
+       * @param val {string}
+       * @see DataSource.dataUrl
+       */
+      dataUrl: (val) => {
+        instance.dataUrl = val;
+        return _builder;
+      },
+      /**
+       * @param val {number}
+       * @see DataSource.priority
+       */
+      priority: (val) => {
+        instance.priority = val;
+        return _builder;
+      },
+      /**
+       * @param val {string}
+       * @see DataSource.fetcherId
+       */
+      fetcherId: (val) => {
+        instance.fetcherId = val;
+        return _builder;
+      },
+      build: () => instance,
+    };
+    return _builder;
+  }
+}
+
 class UserInfo {
   dataName;
   username;
@@ -156,4 +268,31 @@ class UserInfo {
   }
 }
 
-export {DataSource, UserInfo};
+/**
+ * 蹲饼结果
+ */
+class FetchResult {
+  /**
+   * 本次蹲到的所有饼(包括旧饼)，顺序为从新到旧
+   * @type {DataItem[]}
+   */
+  allCookies;
+  /**
+   * 本次蹲到的新饼，顺序为从新到旧
+   * @type {DataItem[]}
+   */
+  newCookies;
+
+  /**
+   * 两个参数都要求从新到旧排序
+   * @param allCookies {DataItem[]} 本次蹲到的所有饼(包括旧饼)
+   * @param newCookies {DataItem[]} 本次蹲到的新饼
+   */
+  constructor(allCookies, newCookies) {
+    this.allCookies = allCookies;
+    this.newCookies = newCookies;
+  }
+}
+
+
+export {DataSource, DataSourceConfig, UserInfo, FetchResult};

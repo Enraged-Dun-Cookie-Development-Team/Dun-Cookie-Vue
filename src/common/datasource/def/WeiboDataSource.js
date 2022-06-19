@@ -1,4 +1,4 @@
-import { DataSource, UserInfo } from '../DataSource';
+import {DataSource, DataSourceConfig, UserInfo} from '../DataSource';
 import Settings from '../../Settings';
 import TimeUtil from '../../util/TimeUtil';
 import { DataItem, RetweetedInfo } from '../../DataItem';
@@ -14,22 +14,39 @@ export class WeiboDataSource extends DataSource {
     return 'weibo';
   };
 
-  static async withUid(uid, priority) {
+  /**
+   * @param uid {number}
+   * @param customConfigCallback {(function(DataSourceConfig): void)|undefined}
+   * @returns {Promise<WeiboDataSource|null>}
+   */
+  static async withUid(uid, customConfigCallback = undefined) {
     try {
       const data = await DataSource.getOrFetchUserInfo(uid, WeiboDataSource);
       if (!data) {
         return null;
       }
       const dataUrl = `https://m.weibo.cn/api/container/getIndex?type=uid&value=${uid}&containerid=107603${uid}`;
-      return new WeiboDataSource(data.avatarUrl, data.dataName, data.username, dataUrl, priority);
+      const config = DataSourceConfig.builder()
+        .icon(data.avatarUrl)
+        .dataName(data.dataName)
+        .title(data.username)
+        .dataUrl(dataUrl)
+        .build();
+      if (customConfigCallback) {
+        customConfigCallback(config);
+      }
+      return new WeiboDataSource(config);
     } catch (e) {
       console.log(e);
       return null;
     }
   }
 
-  constructor(icon, dataName, title, dataUrl, priority) {
-    super(icon, dataName, title, dataUrl, priority);
+  /**
+   * @param config {DataSourceConfig} 数据源配置
+   */
+  constructor(config) {
+    super(config);
   }
 
   async processData(rawDataText) {

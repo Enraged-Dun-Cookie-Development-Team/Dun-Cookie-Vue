@@ -57,15 +57,15 @@ function tryDun(settings) {
       const source = CurrentDataSource[dataName];
       DunInfo.counter++;
       source.fetchData()
-        .then(([newCardList, newCookieList]) => {
+        .then((fetchResult) => {
           const hasOldCardList = CardList[dataName] && CardList[dataName].length > 0;
-          if (hasOldCardList && newCookieList.length > 0) {
-            DunInfo.cookieCount += newCookieList.length;
-            console.log("new cookies: ", newCookieList);
-            tryNotice(source, newCookieList);
+          if (hasOldCardList && fetchResult.newCookies.length > 0) {
+            DunInfo.cookieCount += fetchResult.newCookies.length;
+            console.log("new cookies: ", fetchResult.newCookies);
+            tryNotice(source, fetchResult.newCookies);
           }
-          if (newCardList && newCardList.length > 0) {
-            CardList[dataName] = newCardList;
+          if (fetchResult.allCookies && fetchResult.allCookies.length > 0) {
+            CardList[dataName] = fetchResult.allCookies;
           }
         })
         .catch(e => console.error(e))
