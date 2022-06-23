@@ -599,7 +599,7 @@ export default {
         height: 40px;
         overflow: hidden;
         background:  @@bgColor;
-        padding: 0 10px;
+        padding: 0 10px 0 0;
         border-radius: 3px;
         transition: all 0.5s;
         &:hover {
