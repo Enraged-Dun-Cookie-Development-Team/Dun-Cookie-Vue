@@ -7,7 +7,7 @@ import {MonsterSirenDataSource} from './def/MonsterSirenDataSource';
 import {ArknightsOfficialWebDataSource} from './def/ArknightsOfficialWebDataSource';
 import {TerraHistoricusDataSource} from './def/TerraHistoricusDataSource';
 import {NeteaseCloudMusicDataSource} from './def/NeteaseCloudMusicDataSource';
-import {IS_DEBUG} from '../Constants';
+import {USE_TEST_URL} from '../Constants';
 import {DataSourceConfig} from "./DataSource";
 
 async function buildDefaultDataSourcesList() {
@@ -51,6 +51,9 @@ function setTestUrl(sources) {
     sources['鹰角网络微博'].dataUrl = PlatformHelper.Extension.getURL('test/yjwbJson.json');
 }
 
+const SHARE_FETCHER_BILIBILI = 'share:' + BilibiliDataSource.typeName;
+const SHARE_FETCHER_WEIBO = 'share:' + WeiboDataSource.typeName;
+
 /**
  * 默认数据源
  * @type {(DataSource|Promise<DataSource>)[]}
@@ -82,12 +85,14 @@ const configList = [
         config.dataName = '朝陇山微博';
         config.title = '朝陇山';
         config.priority = 3;
+        config.fetcherId = SHARE_FETCHER_WEIBO;
     }),
     WeiboDataSource.withUid(7506039414, (config) => {
         config.icon =  '/assets/image/icon/ys3Weibo.jpg';
         config.dataName = '一拾山微博';
         config.title = '一拾山';
         config.priority = 4;
+        config.fetcherId = SHARE_FETCHER_WEIBO;
     }),
     new MonsterSirenDataSource(
       DataSourceConfig.builder()
@@ -103,6 +108,7 @@ const configList = [
         config.dataName = '泰拉记事社微博';
         config.title = '泰拉记事社微博';
         config.priority = 6;
+        config.fetcherId = SHARE_FETCHER_WEIBO;
     }),
     new ArknightsOfficialWebDataSource(
       DataSourceConfig.builder()
@@ -136,12 +142,14 @@ const configList = [
         config.dataName = '鹰角网络微博';
         config.title = '鹰角网络微博';
         config.priority = 10;
+        config.fetcherId = SHARE_FETCHER_WEIBO;
     }),
     BilibiliDataSource.withUid(1265652806, (config) => {
         config.icon =  '/assets/image/icon/arkzmd.jpg';
         config.dataName = '明日方舟终末地';
         config.title = '明日方舟终末地';
         config.priority = 11;
+        config.fetcherId = SHARE_FETCHER_BILIBILI;
     }),
 ];
 
@@ -154,7 +162,7 @@ const defaultDataSources = {};
 const defaultDataSourcesList = [];
 const initPromise = buildDefaultDataSourcesList().then(res => {
     Object.assign(defaultDataSources, res);
-    if (IS_DEBUG) {
+    if (USE_TEST_URL) {
         setTestUrl(defaultDataSources);
     }
     const list = [];
@@ -163,7 +171,10 @@ const initPromise = buildDefaultDataSourcesList().then(res => {
             list.push(defaultDataSources[key]);
         }
     }
+    // 按优先级排序
     list.sort((a, b) => a.priority - b.priority);
+    // 冻结所有默认数据源，避免被意外修改
+    list.map(val => Object.freeze(val));
     defaultDataSourcesList.splice(0);
     defaultDataSourcesList.push(...list);
 });

@@ -6,6 +6,7 @@ import {updateSettings} from './SettingsUpdater';
 import PlatformHelper from './platform/PlatformHelper';
 import DebugUtil from "./util/DebugUtil";
 import CurrentDataSource from "./sync/CurrentDataSource";
+import CardList from "./sync/CardList";
 
 // 随便调用一个无影响的东西来导入调试工具类
 DebugUtil.constructor;
@@ -25,10 +26,10 @@ const updateListeners = [];
  * 将配置信息转化成可以用于蹲饼的数据源
  */
 async function transformDataSource(settings) {
-  const list = {};
+  const sourceMap = {};
   const defList = await getDefaultDataSources();
   for (const dataName of settings.enableDataSources) {
-    list[dataName] = defList[dataName];
+    sourceMap[dataName] = defList[dataName];
   }
   const promiseList = [];
   for (const info of settings.customDataSources) {
@@ -42,9 +43,9 @@ async function transformDataSource(settings) {
   }
   return await Promise.allSettled(promiseList).then(results => {
     for (const result of results) {
-      if (result.status) {
+      if (result.status === 'fulfilled') {
         if (result.value) {
-          list[result.value.dataName] = result.value;
+          sourceMap[result.value.dataName] = result.value;
         } else {
           console.error(result);
         }
@@ -52,18 +53,24 @@ async function transformDataSource(settings) {
         console.error(result.reason);
       }
     }
-    for (const key in CurrentDataSource) {
-      if (CurrentDataSource.hasOwnProperty(key)) {
-        delete CurrentDataSource[key];
+    CurrentDataSource.setSourceMap(sourceMap);
+    // 两个for循环用于同步CardList的key使其与最新的CurrentDataSource的key保持一致
+    for (const key in CardList) {
+      if (CardList.hasOwnProperty(key)) {
+        if (!sourceMap[key]) {
+          delete CardList[key];
+        }
       }
     }
-    for (const key in list) {
-      if (list.hasOwnProperty(key)) {
-        CurrentDataSource[key] = list[key];
+    for (const key in sourceMap) {
+      if (sourceMap.hasOwnProperty(key)) {
+        if (!CardList[key]) {
+          CardList[key] = [];
+        }
       }
     }
     if (PlatformHelper.isBackground) {
-      DebugUtil.debugLog(0, 'new datasource list: ', CurrentDataSource);
+      DebugUtil.debugLog(0, '当前数据源已更新: ', CurrentDataSource.sourceMap);
     }
     return true;
   });
@@ -75,7 +82,7 @@ class Settings {
   // 配置版本号
   version = CURRENT_SETTING_VERSION;
   // Logo
-  logo = "icon.png"
+  logo = "icon.png";
 
   /**
    * 启用的默认数据源，储存dataName
@@ -368,11 +375,6 @@ class Settings {
             DebugUtil.debugLog(0, "未启用任何默认数据源，将自动启用全部默认数据源");
           }
 
-          for (const key in CurrentDataSource) {
-            if (CurrentDataSource.hasOwnProperty(key)) {
-              delete CurrentDataSource[key];
-            }
-          }
           await transformDataSource(this);
 
           this.__updateWindowMode();

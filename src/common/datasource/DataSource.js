@@ -108,7 +108,7 @@ class DataSource {
     try {
       const allCookies = DataSourceUtil.sortData(data);
       const newCookies = this._filterNewCookie(allCookies);
-      return new FetchResult(allCookies, newCookies);
+      return new FetchResult(response, allCookies, newCookies);
     } catch (e) {
       console.warn(`处理数据源[${this.dataName}]的解析结果时发生异常：${e.message}`);
       throw e;
@@ -131,6 +131,10 @@ class DataSource {
     return newCookieList;
   }
 
+  /**
+   * @param rawDataText {string}
+   * @returns {Promise<DataItem[]>}
+   */
   async processData(rawDataText) {
     console.error(`数据源[${this.dataName}]未实现processData方法！`);
   }
@@ -193,7 +197,6 @@ class DataSourceConfig {
    * @see DataSource.fetcherId
    */
   fetcherId;
-
 
   static builder() {
     const instance = new DataSourceConfig();
@@ -273,6 +276,11 @@ class UserInfo {
  */
 class FetchResult {
   /**
+   * 本次蹲到的饼的原始数据
+   * @type {string|string[]}
+   */
+  rawContent;
+  /**
    * 本次蹲到的所有饼(包括旧饼)，顺序为从新到旧
    * @type {DataItem[]}
    */
@@ -285,12 +293,15 @@ class FetchResult {
 
   /**
    * 两个参数都要求从新到旧排序
+   * @param rawContent {string|string[]} 本次蹲到的饼的原始数据
    * @param allCookies {DataItem[]} 本次蹲到的所有饼(包括旧饼)
    * @param newCookies {DataItem[]} 本次蹲到的新饼
    */
-  constructor(allCookies, newCookies) {
+  constructor(rawContent, allCookies, newCookies) {
+    this.rawContent = rawContent;
     this.allCookies = allCookies;
     this.newCookies = newCookies;
+    Object.freeze(this);
   }
 }
 

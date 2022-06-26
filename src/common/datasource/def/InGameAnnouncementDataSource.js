@@ -12,6 +12,11 @@ import HttpUtil from "../../util/HttpUtil";
  */
 const ignoreAnnounces = [94, 95, 97, 98, 192, 112];
 
+let FocusAnnounceId = null;
+let ClientVersion = null;
+let ResVersion = null;
+let gamePlatform = null;
+
 /**
  * 游戏内公告数据源。
  * <p>
@@ -22,11 +27,6 @@ export class InGameAnnouncementDataSource extends DataSource {
   static get typeName() {
     return 'arknights_in_game_announcement';
   };
-
-  FocusAnnounceId = null;
-  ClientVersion = null;
-  ResVersion = null;
-  gamePlatform = null;
 
   /**
    * @param config {DataSourceConfig} 数据源配置
@@ -65,7 +65,7 @@ export class InGameAnnouncementDataSource extends DataSource {
   // 通讯组专用 检测到了可能会更新
   JudgmentNewFocusAnnounceId(data) {
     if (data) {
-      if (this.FocusAnnounceId && data.focusAnnounceId && this.FocusAnnounceId != data.focusAnnounceId && this.FocusAnnounceId < data.focusAnnounceId) {
+      if (FocusAnnounceId && data.focusAnnounceId && FocusAnnounceId != data.focusAnnounceId && FocusAnnounceId < data.focusAnnounceId) {
         let announceIdExist = false;
         data.announceList.forEach(x => {
           if (data.focusAnnounceId == x.announceId) {
@@ -76,7 +76,7 @@ export class InGameAnnouncementDataSource extends DataSource {
           NotificationUtil.SendNotice(`【通讯组预告】小刻貌似闻到了饼的味道！`, '检测到游戏出现公告弹窗，可能马上发饼！', null, new Date().getTime());
         }
       }
-      this.FocusAnnounceId = data.focusAnnounceId;
+      FocusAnnounceId = data.focusAnnounceId;
     }
   }
 
@@ -84,24 +84,24 @@ export class InGameAnnouncementDataSource extends DataSource {
   JudgmentVersionRelease(versionData) {
     if (versionData) {
       // 避免切换平台弹出更新通知
-      if (this.gamePlatform == Settings.dun.gamePlatform) {
-        if (this.ClientVersion && versionData.clientVersion && this.ClientVersion != versionData.clientVersion) {
+      if (gamePlatform == Settings.dun.gamePlatform) {
+        if (ClientVersion && versionData.clientVersion && ClientVersion != versionData.clientVersion) {
           const nowVersion = versionData.clientVersion.split(".").map(a => parseInt(a));
-          const pastVersion = this.ClientVersion.split(".").map(a => parseInt(a));
+          const pastVersion = ClientVersion.split(".").map(a => parseInt(a));
 
           if (nowVersion[0] > pastVersion[0]) {
             NotificationUtil.SendNotice(`【${Settings.dun.gamePlatform}/超大版本】更新包已经准备好啦`, '博士，这可是难遇的超大版本更新诶！！！\n相信博士已经等不及了吧，快去下载呦~', null, new Date().getTime());
           } else if (nowVersion[1] > pastVersion[1] || nowVersion[2] > pastVersion[2]) {
             NotificationUtil.SendNotice(`【${Settings.dun.gamePlatform}/大版本】更新包已经准备好啦`, '博士，更新包已经给你准备好啦！\n先下载更新包，等等进游戏快人一部噢！', null, new Date().getTime());
           }
-        } else if (this.ResVersion && versionData.resVersion && this.ResVersion != versionData.resVersion) {
+        } else if (ResVersion && versionData.resVersion && ResVersion != versionData.resVersion) {
           NotificationUtil.SendNotice(`【${Settings.dun.gamePlatform}/闪断更新】已经完成闪断更新`, '博士，快去重启进入游戏吧！', null, new Date().getTime());
         }
       } else {
-        this.gamePlatform = Settings.dun.gamePlatform
+        gamePlatform = Settings.dun.gamePlatform
       }
-      this.ClientVersion = versionData.clientVersion;
-      this.ResVersion = versionData.resVersion;
+      ClientVersion = versionData.clientVersion;
+      ResVersion = versionData.resVersion;
     }
   }
 }

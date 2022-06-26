@@ -103,7 +103,7 @@ export default class NodePlatform extends AbstractPlatform {
     sendMessage(type, data) {
         const message = this.__buildMessageToSend(type, data);
 
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             this.broadcastChannel.postMessage(message);
             resolve('Node环境暂不支持响应消息');
         });
@@ -286,7 +286,7 @@ export default class NodePlatform extends AbstractPlatform {
         return node_require('jquery')(window);
     }
 
-    generateShareImage(dataItem, imageUrl) {
+    generateShareImage(dataItem, iconUrl, sourceIconUrl, imageUrl) {
         if (DEBUG_LOG) {
             console.log('Node环境暂不支持生成图片');
         }
