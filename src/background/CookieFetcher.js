@@ -61,12 +61,6 @@ class CookieFetcher {
     const startTime = new Date().getTime();
     return source.fetchData()
       .then((fetchResult) => {
-        if (Math.random() > 0.5) {
-          throw '调试异常';
-        }
-        return fetchResult;
-      })
-      .then((fetchResult) => {
         if (IS_DEBUG) {
           this._debugLogSuccess(startTime, source, fetchResult);
         }
