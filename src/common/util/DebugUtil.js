@@ -7,7 +7,7 @@
 import {DEBUG_LEVEL} from "../Constants";
 
 // 这两个变量用于避免调试输出太多导致控制台卡死，可参考本文件中的debugConsoleOutput方法
-let debugLogClearThreshold = 5_0000;
+let debugLogClearThreshold = 50000;
 let debugLogCounter = 0;
 
 // noinspection JSUnresolvedVariable,JSUnusedGlobalSymbols

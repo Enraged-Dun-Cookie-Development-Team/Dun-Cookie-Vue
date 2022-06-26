@@ -2,6 +2,7 @@ import Settings from '../common/Settings';
 import NotificationUtil from '../common/util/NotificationUtil';
 import SanInfo from '../common/sync/SanInfo';
 import {
+    ENABLE_FEATURES,
     MESSAGE_CHANGE_COUNTDOWN,
     MESSAGE_FORCE_REFRESH,
     MESSAGE_GET_COUNTDOWN,
@@ -24,6 +25,9 @@ import {restartDunTimer, tryDun} from "./DunController";
 let popupWindowId = null;
 
 function ExtensionInit() {
+    if (ENABLE_FEATURES.length > 0) {
+        DebugUtil.debugLog(0, '已启用特性：', ENABLE_FEATURES);
+    }
     // PlatformHelper.BrowserAction.setBadge('Beta', [255, 0, 0, 255]);
     // 开始蹲饼！
     Settings.doAfterInit(() => {
@@ -79,7 +83,7 @@ function ExtensionInit() {
     PlatformHelper.Lifecycle.addInstalledListener(details => {
         if (details.reason === 'install') {
             PlatformHelper.Tabs.createWithExtensionFile(PAGE_WELCOME);
-        } 
+        }
         if (details.reason === 'update' || details.reason === 'install') {
             PlatformHelper.Storage.saveLocalStorage("version-notice",false);
         }

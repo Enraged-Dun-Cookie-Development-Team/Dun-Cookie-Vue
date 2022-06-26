@@ -18,6 +18,11 @@ const DEBUG_LOG = IS_DEBUG && true;
  * 是否使用测试用的数据源URL
  */
 const USE_TEST_URL = IS_DEBUG && false;
+/**
+ * 启用的功能
+ * @type {string[]}
+ */
+const ENABLE_FEATURES = (process.env.VUE_APP_ENABLE_FEATURES || '').split(',').filter(v => v.length > 0);
 
 /**
  * 当前配置文件版本号
@@ -32,7 +37,7 @@ const CURRENT_VERSION = '3.1.1';
  */
 const SHOW_VERSION = CURRENT_VERSION + (IS_DEBUG ? '【调试模式】' : '');
 
-export {IS_DEBUG, DEBUG_LEVEL, DEBUG_LOG, USE_TEST_URL, CURRENT_SETTING_VERSION, CURRENT_VERSION, SHOW_VERSION};
+export {IS_DEBUG, DEBUG_LEVEL, DEBUG_LOG, USE_TEST_URL, ENABLE_FEATURES, CURRENT_SETTING_VERSION, CURRENT_VERSION, SHOW_VERSION};
 // endregion
 
 // region 各种参数，主要用于测试模式

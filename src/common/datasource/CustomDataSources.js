@@ -42,6 +42,7 @@ class CustomDataSourceBuilder {
 const BASE_PRIORITY = 1000;
 
 const customDataSourceTypes = [
+  /* IFTRUE_feature__custom_datasource */
   {
     name: BilibiliDataSource.typeName,
     builder: new CustomDataSourceBuilder(BilibiliDataSource, 'B站', '请输入B站UID', 'B站UID', function (arg) {
@@ -64,10 +65,15 @@ const customDataSourceTypes = [
       });
     })
   },
+  /* FITRUE_feature__custom_datasource */
 ];
 const customDataSourceTypesByName = {};
 for (const type of customDataSourceTypes) {
   customDataSourceTypesByName[type.name] = type.builder;
 }
+
+/* IFTRUE_feature__custom_datasource */
+global.custom = customDataSourceTypesByName;
+/* FITRUE_feature__custom_datasource */
 
 export {customDataSourceTypes, customDataSourceTypesByName};

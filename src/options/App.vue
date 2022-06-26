@@ -509,10 +509,6 @@ import DunInfo from "../common/sync/DunInfo";
 import { SHOW_VERSION } from "../common/Constants";
 import { getDefaultDataSourcesList } from "../common/datasource/DefaultDataSources";
 import TimeUtil from "../common/util/TimeUtil";
-import {
-  customDataSourceTypes,
-  customDataSourceTypesByName,
-} from "../common/datasource/CustomDataSources";
 import { animateCSS, deepAssign } from "../common/util/CommonFunctions";
 import PlatformHelper from "../common/platform/PlatformHelper";
 import "animate.css";
@@ -540,15 +536,12 @@ export default {
       settings: Settings,
       currentDataSource: CurrentDataSource.sourceMap,
       defSourcesList: [],
-      customTypes: customDataSourceTypes,
-      customTypesByName: customDataSourceTypesByName,
       marks: {
         8: "20点",
         12: "第二天凌晨",
         20: "8点",
       },
       activeTab: "0",
-      customData: [],
       bodyIsShow: false,
       activeMenu: -1,
       showBack: false,
@@ -562,19 +555,6 @@ export default {
     openUrl: PlatformHelper.Tabs.create,
     init() {
       this.settings.doAfterInit((settings) => {
-        this.customData = settings.customDataSources
-          .map((item) => {
-            const type = customDataSourceTypesByName[item.type];
-            if (type) {
-              return {
-                type: type.typeName,
-                builder: type,
-                arg: item.arg,
-              };
-            }
-          })
-          .filter((item) => !!item);
-        global.customData = this.customData;
         this.logo = "../assets/image/" + settings.logo;
       });
       DunInfo.doAfterUpdate((data) => {
@@ -597,26 +577,11 @@ export default {
         }, 500);
       });
     },
-    addCustomData() {
-      this.customData.push({ type: "" });
-    },
-    handleChangeCustomDataType(index, newType) {
-      this.customData[index].builder = customDataSourceTypesByName[newType];
-    },
-    removeCustomData(index) {
-      this.customData.splice(index, 1);
-    },
     // 保存设置
     saveSetting(formName, data) {
       if (data) {
         deepAssign(this.settings, data);
       }
-      this.settings.customDataSources = this.customData.map((item) => {
-        return {
-          type: item.type,
-          arg: item.arg,
-        };
-      });
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.settings.saveSettings().then(() => {

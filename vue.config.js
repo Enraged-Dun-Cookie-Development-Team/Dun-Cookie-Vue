@@ -1,7 +1,5 @@
 const chainWebpack = require('./chainWebpack.config.js');
 const backgroundMode = process.env.BACKGROUND_MODE;
-const devtoolMode = process.env.DEVTOOL_MODE;
-const newtabMode = process.env.NEWTAB_MODE;
 
 const config = {
     devServer: {
@@ -26,13 +24,6 @@ const config = {
             title: '列表',
             chunks: ['chunk-vendors', 'chunk-common', 'popup'],
         },
-        // windowPopup: {
-        //     entry: 'src/windowPopup/index.js',
-        //     template: 'public/index.html',
-        //     filename: 'windowPopup.html',
-        //     title: '小刻食堂',
-        //     chunks: ['chunk-vendors', 'chunk-common', 'windowPopup'],
-        // },
         welcome: {
             entry: 'src/welcome/index.js',
             template: 'public/index.html',
@@ -85,22 +76,5 @@ if (backgroundMode === 'html') {
     }
 }
 
-if (devtoolMode) {
-    config.pages['devtool'] = {
-        entry: 'src/devtool/index.js',
-        template: 'public/index.html',
-        filename: 'devtool.html',
-        title: 'Devtool',
-    }
-}
-
-if (newtabMode) {
-    config.pages['newtab'] = {
-        entry: 'src/newtab/index.js',
-        template: 'public/index.html',
-        filename: 'newtab.html',
-        title: 'NewTab',
-    }
-}
 
 module.exports = config;
