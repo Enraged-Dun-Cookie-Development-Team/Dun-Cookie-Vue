@@ -69,10 +69,17 @@ class DataSynchronizer {
   inited = false;
   initListeners = [];
 
-  constructor(key, target, shouldPersist) {
+  updateHandler;
+
+  constructor(key, target, shouldPersist, updateHandler) {
     this.key = key;
     this.target = target;
     this.shouldPersist = shouldPersist;
+    if (typeof updateHandler === "function") {
+      this.updateHandler = updateHandler;
+    } else {
+      this.updateHandler = deepAssign;
+    }
     PlatformHelper.Storage.getLocalStorage(keyPersist(key)).then(data => {
       // 当且仅当未进行过更新且storage中有数据时才会将storage中的数据设为当前数据
       // 如果已经接收过数据更新则忽略storage中的数据
@@ -114,7 +121,7 @@ class DataSynchronizer {
 
   __handleReloadOrReceiveUpdate(data, isReload = false) {
     const changed = {};
-    deepAssign(this.target, data, changed);
+    this.updateHandler(this.target, data, changed);
     if (isReload) {
       DebugUtil.debugLog(6, `从storage中读取${this.key}: `, data, 'changed: ', changed);
     } else {
@@ -125,6 +132,7 @@ class DataSynchronizer {
     }
   }
 
+  // noinspection JSUnusedGlobalSymbols
   doAfterInit(listener) {
     if (this.inited) {
       listener(this.proxy);
@@ -133,6 +141,7 @@ class DataSynchronizer {
     }
   }
 
+  // noinspection JSUnusedGlobalSymbols
   doAfterFirstUpdate(listener) {
     if (this.updateCount > 0) {
       listener(this.proxy);
@@ -141,12 +150,13 @@ class DataSynchronizer {
     }
   }
 
+  // noinspection JSUnusedGlobalSymbols
   doAfterUpdate(listener) {
     this.updateListeners.push(listener);
   }
 
   /**
-   * 因为一次可以更新多个值，为减少开销，所以在下一个tick(由于浏览器实现不同可能不止一个tick，但是一般都在个位数毫秒级)统一发送更新
+   * 因为一次可以更新多个值，为减少开销，所以在下1毫秒(由于浏览器实现不同一般超过1毫秒，但是一般都在个位数毫秒级)统一发送更新
    */
   sendUpdateAtNextTick() {
     if (!this.updateFlag) {
@@ -248,8 +258,8 @@ class DataSynchronizer {
 }
 
 class DataSynchronizerAllWritable extends DataSynchronizer {
-  constructor(key, target, shouldPersist) {
-    super(key, target, shouldPersist);
+  constructor(key, target, shouldPersist, updateHandler) {
+    super(key, target, shouldPersist, updateHandler);
     if (PlatformHelper.isBackground) {
       PlatformHelper.Message.registerListener(keyGet(key), keyGet(key), () => this.target);
     } else {
@@ -261,8 +271,8 @@ class DataSynchronizerAllWritable extends DataSynchronizer {
 }
 
 class DataSynchronizerOnlyBackgroundWritable extends DataSynchronizer {
-  constructor(key, target, shouldPersist) {
-    super(key, target, shouldPersist);
+  constructor(key, target, shouldPersist, updateHandler) {
+    super(key, target, shouldPersist, updateHandler);
     if (PlatformHelper.isBackground) {
       PlatformHelper.Message.registerListener(keyGet(key), keyGet(key), () => this.target);
       this.proxy = this.createWritableProxy();
@@ -283,19 +293,20 @@ const keyMap = {};
  * @param key 同步key，不能重复
  * @param mode 同步模式
  * @param shouldPersist 是否需要数据持久化
+ * @param updateHandler 更新处理器
  * @return {* & CanSync}
  */
-function createSyncData(target, key, mode, shouldPersist = false) {
+function createSyncData(target, key, mode, shouldPersist = false, updateHandler = undefined) {
   if (keyMap[key]) {
     throw new Error('duplicate sync key: ' + key);
   }
-  let synchronizer = new DataSynchronizer(key, target);
+  let synchronizer;
   switch (mode) {
     case DataSyncMode.ALL_WRITABLE:
-      synchronizer = new DataSynchronizerAllWritable(key, target, shouldPersist);
+      synchronizer = new DataSynchronizerAllWritable(key, target, shouldPersist, updateHandler);
       break;
     case DataSyncMode.ONLY_BACKGROUND_WRITABLE:
-      synchronizer = new DataSynchronizerOnlyBackgroundWritable(key, target, shouldPersist);
+      synchronizer = new DataSynchronizerOnlyBackgroundWritable(key, target, shouldPersist, updateHandler);
       break;
     default:
       throw new Error('unsupported sync mode: ' + mode);
