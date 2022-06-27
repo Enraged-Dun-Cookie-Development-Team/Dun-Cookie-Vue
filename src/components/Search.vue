@@ -192,7 +192,7 @@ export default {
       }
       item.loading = true;
       PenguinStatistics.GetItemInfo(item.itemId).then((data) => {
-        let matrix = JSON.parse(data)?.matrix;
+        let matrix = JSON.parse(data).matrix;
         matrix.forEach((item) => {
           let stage = PenguinStatistics.GetStageInfo(item.stageId);
           let zone = PenguinStatistics.GetZonesInfo(stage.zoneId);
