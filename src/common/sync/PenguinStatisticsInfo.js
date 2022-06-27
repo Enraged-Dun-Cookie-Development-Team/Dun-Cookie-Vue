@@ -20,17 +20,17 @@ export default class PenguinStatistics {
     static GetNewItems() {
         let promiseList = [];
         promiseList.push(new Promise(resolve => {
-            HttpUtil.GET("https://penguin-stats.io/PenguinStats/api/v2/items?i18n=false", false).then(data => {
+            HttpUtil.GET("https://penguin-stats.cn/PenguinStats/api/v2/items?i18n=false", false).then(data => {
                 resolve(data);
             });
         }))
         promiseList.push(new Promise(resolve => {
-            HttpUtil.GET("https://penguin-stats.io/PenguinStats/api/v2/stages", false).then(data => {
+            HttpUtil.GET("https://penguin-stats.cn/PenguinStats/api/v2/stages", false).then(data => {
                 resolve(data);
             });
         }))
         promiseList.push(new Promise(resolve => {
-            HttpUtil.GET("https://penguin-stats.io/PenguinStats/api/v2/zones", false).then(data => {
+            HttpUtil.GET("https://penguin-stats.cn/PenguinStats/api/v2/zones", false).then(data => {
                 resolve(data);
             });
         }))
@@ -49,7 +49,7 @@ export default class PenguinStatistics {
 
     static GetItemInfo(id) {
         return new Promise(resolve => {
-            HttpUtil.GET(`https://penguin-stats.io/PenguinStats/api/v2/result/matrix?is_personal=false&itemFilter=${id}&server=CN&show_closed_zones=true`, false).then(data => {
+            HttpUtil.GET(`https://penguin-stats.cn/PenguinStats/api/v2/result/matrix?is_personal=false&itemFilter=${id}&server=CN&show_closed_zones=true`, false).then(data => {
                 resolve(data)
             })
         })
