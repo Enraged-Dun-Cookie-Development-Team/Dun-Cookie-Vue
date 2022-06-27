@@ -107,7 +107,7 @@ class CookieFetcher {
     cache.push(new FetchLogItem(true, startTime, endTime - startTime, source, fetchResult, null));
     DebugUtil.debugLog(5, `[${this.id}]成功获取数据：`, {
       dataName: source.dataName,
-      dataType: source.dataType,
+      dataType: source.dataType.typeName,
       fetchResult: fetchResult
     });
   }
@@ -130,7 +130,7 @@ class CookieFetcher {
     }
     DebugUtil.debugLogError(0, `[${this.id}]获取数据失败：`, {
       dataName: source.dataName,
-      dataType: source.dataType,
+      dataType: source.dataType.typeName,
       reason: reason
     });
   }

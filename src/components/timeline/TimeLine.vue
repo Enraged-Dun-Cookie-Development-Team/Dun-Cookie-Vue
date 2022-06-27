@@ -211,7 +211,7 @@ export default {
       if (!item.componentData) {
         return DefaultItem;
       }
-      return this.getDataSourceByName(item.dataSource).dataType;
+      return this.getDataSourceByName(item.dataSource).dataType.typeName;
     },
     selectListByTag(emitEvent = true) {
       if (this.settings.display.showByTag) {

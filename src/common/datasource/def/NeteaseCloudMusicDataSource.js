@@ -1,8 +1,10 @@
-import {DataSource, DataSourceConfig, UserInfo} from '../DataSource';
+import {DataSource, DataSourceConfig, DataSourceTypeInfo, UserInfo} from '../DataSource';
 import TimeUtil from '../../util/TimeUtil';
 import {DataItem} from '../../DataItem';
 import Settings from '../../Settings';
 import HttpUtil from "../../util/HttpUtil";
+
+const typeInfo = new DataSourceTypeInfo('music.163.com');
 
 /**
  * 网易云音乐数据源。
@@ -11,8 +13,11 @@ import HttpUtil from "../../util/HttpUtil";
  */
 export class NeteaseCloudMusicDataSource extends DataSource {
 
-  static get typeName() {
-    return 'music.163.com';
+  /**
+   * @returns {DataSourceTypeInfo}
+   */
+  static get typeInfo() {
+    return typeInfo;
   };
 
   /**
@@ -79,7 +84,7 @@ export class NeteaseCloudMusicDataSource extends DataSource {
     if (json.code !== 200) {
       throw 'request fail: ' + JSON.stringify(json);
     }
-    const dataName = NeteaseCloudMusicDataSource.typeName + '_' + artistId;
+    const dataName = NeteaseCloudMusicDataSource.typeInfo.typeName + '_' + artistId;
     return new UserInfo(dataName, json.artist.name, json.artist.img1v1Url);
   }
 }

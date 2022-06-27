@@ -20,8 +20,8 @@ Vue.config.productionTip = false
 Vue.use(ElementUI).use(VueClipboard);
 
 // 注意这里不能使用链式调用，否则只有第一个注册的会生效
-Vue.component(TerraHistoricusDataSource.typeName, TerraHistoricusItem);
-Vue.component(NeteaseCloudMusicDataSource.typeName, NeteaseCloudMusicItem);
+Vue.component(TerraHistoricusDataSource.typeInfo.typeName, TerraHistoricusItem);
+Vue.component(NeteaseCloudMusicDataSource.typeInfo.typeName, NeteaseCloudMusicItem);
 
 new Vue({
     render: h => h(App),

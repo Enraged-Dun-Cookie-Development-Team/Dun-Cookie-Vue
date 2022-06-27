@@ -4,10 +4,16 @@ import DebugUtil from '../util/DebugUtil';
 import PlatformHelper from '../platform/PlatformHelper';
 
 /**
+ * 这个类型提示用any是因为他类型识别有问题，用Function会提示错误，数组的0号位置应当是数据源的constructor
+ * @type {{[key: string]: [any, DataSourceTypeInfo]}}
+ */
+const dataTypeCache = {};
+
+/**
  * 表示一个数据源
  * <p>
  *
- * <strong>注意：子类需要定义一个<code>static get typeName() {}</code>函数，详情参考dataType的注释</strong>
+ * <strong>注意：子类需要定义一个<code>static get typeInfo() {}</code>函数，详情参考dataType的注释</strong>
  * @see dataType
  */
 class DataSource {
@@ -17,13 +23,10 @@ class DataSource {
    */
   icon;
   /**
-   * 关于dataType：<br/>
-   * 用于代表一种数据源(比如微博、B站等)，每种数据源必须有一个唯一的dataType，不能重复<br/>
-   * 实际值建议使用域名/品牌名等不易变化的值，有必要的话长一点也没关系<br/>
-   * <strong>注意：子类需要用一个<code>static get typeName() {}</code>函数来定义类型数据源类型名称</strong>，
+   * 数据源类型信息，详细说明参考{@link DataSourceTypeInfo}中各个字段的信息
+   * <strong>注意：子类需要用一个<code>static get typeInfo() {}</code>函数来定义类型数据源类型信息，且应当是单例的</strong>，
    *              实例化的时候会自动解析(使用静态是为了便于其它文件获取)<br/>
-   * <strong>注意：dataType用于在储存中标识数据源类型，非必要请不要修改，修改后会导致数据解析错误。</strong>
-   * @type {string}
+   * @type {DataSourceTypeInfo}
    */
   dataType;
   /**
@@ -70,7 +73,8 @@ class DataSource {
   constructor(config) {
     this.icon = config.icon;
     this.dataName = config.dataName;
-    this.dataType = this.constructor.typeName;
+    this.dataType = this.constructor.typeInfo;
+    this._verifyTypeInfo();
     this.groupId = config.groupId;
     this.title = config.title;
     this.dataUrl = config.dataUrl;
@@ -79,6 +83,25 @@ class DataSource {
     Object.defineProperty(this, '_cookieIdCache', {
       enumerable: false
     });
+  }
+
+  /**
+   * @private
+   */
+  _verifyTypeInfo() {
+    if (!this.dataType || this.dataType.constructor !== DataSourceTypeInfo) {
+      DebugUtil.debugLogError(0, `子类未定义静态typeInfo方法`, this);
+    }
+    if (dataTypeCache[this.dataType.typeName]) {
+      if (this.constructor !== dataTypeCache[this.dataType.typeName][0]) {
+        DebugUtil.debugLogError(0, `${this.dataType.typeName}的typeName可能有重复，这可能会导致数据源识别异常`, this);
+      }
+      if (this.dataType !== dataTypeCache[this.dataType.typeName][1]) {
+        DebugUtil.debugLogWarn(0, `${this.dataType.typeName}的typeInfo方法返回的不是单例`, this);
+      }
+    } else {
+      dataTypeCache[this.dataType.typeName] = [this.constructor, this.dataType];
+    }
   }
 
   /**
@@ -144,7 +167,7 @@ class DataSource {
    */
   static async getOrFetchUserInfo(uid, type) {
     try {
-      const cacheKey = "cache_" + type.typeName + '_' + uid;
+      const cacheKey = "cache_" + type.typeInfo.typeName + '_' + uid;
       let data = await PlatformHelper.Storage.getLocalStorage(cacheKey);
       if (!data) {
         data = await type.fetchUserInfo(uid);
@@ -160,6 +183,26 @@ class DataSource {
     }
   }
 
+}
+
+class DataSourceTypeInfo {
+  /**
+   * 关于typeName：<br/>
+   * 用于代表一种数据源(比如微博、B站等)，每种数据源必须有一个唯一的typeName，不能重复<br/>
+   * 实际值建议使用域名/品牌名等不易变化的值，有必要的话长一点也没关系<br/>
+   * <strong>注意：typeName用于在储存中标识数据源类型，非必要请不要修改，修改后会导致数据解析错误。</strong>
+   * @type {string}
+   */
+  typeName;
+
+  /**
+   *
+   * @param typeName {string}
+   */
+  constructor(typeName) {
+    this.typeName = typeName;
+    Object.freeze(this);
+  }
 }
 
 /**
@@ -331,4 +374,4 @@ class FetchResult {
 }
 
 
-export {DataSource, DataSourceConfig, UserInfo, FetchResult};
+export {DataSource, DataSourceTypeInfo, DataSourceConfig, UserInfo, FetchResult};

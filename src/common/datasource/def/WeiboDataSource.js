@@ -1,8 +1,10 @@
-import {DataSource, DataSourceConfig, UserInfo} from '../DataSource';
+import {DataSource, DataSourceConfig, DataSourceTypeInfo, UserInfo} from '../DataSource';
 import Settings from '../../Settings';
 import TimeUtil from '../../util/TimeUtil';
 import { DataItem, RetweetedInfo } from '../../DataItem';
 import HttpUtil from '../../util/HttpUtil';
+
+const typeInfo = new DataSourceTypeInfo('weibo');
 
 /**
  * 微博数据源。
@@ -10,8 +12,11 @@ import HttpUtil from '../../util/HttpUtil';
  */
 export class WeiboDataSource extends DataSource {
 
-  static get typeName() {
-    return 'weibo';
+  /**
+   * @returns {DataSourceTypeInfo}
+   */
+  static get typeInfo() {
+    return typeInfo;
   };
 
   /**
@@ -106,7 +111,7 @@ export class WeiboDataSource extends DataSource {
     if (json.ok != 1) {
       throw 'request fail: ' + JSON.stringify(json);
     }
-    const dataName = WeiboDataSource.typeName + '_' + uid;
+    const dataName = WeiboDataSource.typeInfo.typeName + '_' + uid;
     return new UserInfo(dataName, json.data.userInfo.screen_name, json.data.userInfo.avatar_hd);
   }
 }

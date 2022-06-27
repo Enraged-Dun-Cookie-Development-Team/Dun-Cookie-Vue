@@ -33,6 +33,10 @@ class DebugUtil {
     this.debugConsoleOutput(level, 'log', ...data);
   }
 
+  debugLogWarn(level, ...data) {
+    this.debugConsoleOutput(level, 'warn', ...data);
+  }
+
   debugLogError(level, ...data) {
     this.debugConsoleOutput(level, 'error', ...data);
   }

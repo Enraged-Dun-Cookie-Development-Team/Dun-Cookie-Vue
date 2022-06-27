@@ -1,9 +1,11 @@
-import { DataSource } from '../DataSource';
+import {DataSource, DataSourceTypeInfo} from '../DataSource';
 import Settings from '../../Settings';
 import NotificationUtil from '../../util/NotificationUtil';
 import TimeUtil from '../../util/TimeUtil';
 import { DataItem } from '../../DataItem';
 import HttpUtil from "../../util/HttpUtil";
+
+const typeInfo = new DataSourceTypeInfo('arknights_in_game_announcement');
 
 /**
  * 需要被忽略的公告列表，一般是常驻活动/用户协议公告之类的
@@ -24,8 +26,11 @@ let gamePlatform = null;
  */
 export class InGameAnnouncementDataSource extends DataSource {
 
-  static get typeName() {
-    return 'arknights_in_game_announcement';
+  /**
+   * @returns {DataSourceTypeInfo}
+   */
+  static get typeInfo() {
+    return typeInfo;
   };
 
   /**

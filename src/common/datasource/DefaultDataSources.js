@@ -51,8 +51,8 @@ function setTestUrl(sources) {
     sources['鹰角网络微博'].dataUrl = PlatformHelper.Extension.getURL('test/yjwbJson.json');
 }
 
-const SHARE_DEFAULT_GROUP_BILIBILI = 'share:' + BilibiliDataSource.typeName;
-const SHARE_DEFAULT_GROUP_WEIBO = 'share:' + WeiboDataSource.typeName;
+const SHARE_DEFAULT_GROUP_BILIBILI = 'share:' + BilibiliDataSource.typeInfo.typeName;
+const SHARE_DEFAULT_GROUP_WEIBO = 'share:' + WeiboDataSource.typeInfo.typeName;
 
 /**
  * 默认数据源

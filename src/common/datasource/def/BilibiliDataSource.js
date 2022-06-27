@@ -1,7 +1,9 @@
-import {DataSource, DataSourceConfig, UserInfo} from '../DataSource';
+import {DataSource, DataSourceConfig, DataSourceTypeInfo, UserInfo} from '../DataSource';
 import TimeUtil from '../../util/TimeUtil';
 import {DataItem} from '../../DataItem';
 import HttpUtil from '../../util/HttpUtil';
+
+const typeInfo = new DataSourceTypeInfo('bilibili_dynamic');
 
 /**
  * 哔哩哔哩数据源。
@@ -9,8 +11,11 @@ import HttpUtil from '../../util/HttpUtil';
  */
 export class BilibiliDataSource extends DataSource {
 
-  static get typeName() {
-    return 'bilibili_dynamic';
+  /**
+   * @returns {DataSourceTypeInfo}
+   */
+  static get typeInfo() {
+    return typeInfo;
   };
 
   /**
@@ -111,7 +116,7 @@ export class BilibiliDataSource extends DataSource {
     if (json.code != 0) {
       throw 'request fail: ' + JSON.stringify(json);
     }
-    const dataName = BilibiliDataSource.typeName + '_' + uid;
+    const dataName = BilibiliDataSource.typeInfo.typeName + '_' + uid;
     return new UserInfo(dataName, json.data.name, json.data.face);
   }
 }

@@ -67,7 +67,7 @@ class DataItem {
      * 当使用特殊组件时，提供给组件的数据
      * <p>
      * 当提供了该属性时会自动寻找特殊组件
-     * 需要在components/timeline/items下新增组件，并且在popup/index.js注册组件(组件名为dataSource的dataType)
+     * 需要在components/timeline/items下新增组件，并且在popup/index.js注册组件(组件名为dataSource的dataType.typeName)
      */
     componentData;
 

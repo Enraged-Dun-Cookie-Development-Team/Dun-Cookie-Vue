@@ -8,7 +8,7 @@ class CustomDataSourceBuilder {
   type;
 
   get typeName() {
-    return this.type.typeName;
+    return this.type.typeInfo.typeName;
   }
 
   /**
@@ -43,7 +43,7 @@ const BASE_PRIORITY = 1000;
 
 const customDataSourceTypes = [
   {
-    name: BilibiliDataSource.typeName,
+    name: BilibiliDataSource.typeInfo.typeName,
     builder: new CustomDataSourceBuilder(BilibiliDataSource, 'B站', '请输入B站UID', 'B站UID', function (arg) {
       if (!/^\d+$/.test(arg)) {
         return Promise.reject('非法UID');
@@ -54,7 +54,7 @@ const customDataSourceTypes = [
     })
   },
   {
-    name: WeiboDataSource.typeName,
+    name: WeiboDataSource.typeInfo.typeName,
     builder: new CustomDataSourceBuilder(WeiboDataSource, '微博', '请输入微博UID', '微博UID', function (arg) {
       if (!/^\d+$/.test(arg)) {
         return Promise.reject('非法UID');
