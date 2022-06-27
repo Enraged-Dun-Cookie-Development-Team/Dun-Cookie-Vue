@@ -133,15 +133,13 @@ const configList = [
         .priority(8)
         .build()
     ),
-    new NeteaseCloudMusicDataSource(
-      DataSourceConfig.builder()
-        .icon('/assets/image/wyyyy.ico')
-        .dataName('塞壬唱片网易云音乐')
-        .title('网易云音乐')
-        .dataUrl('https://music.163.com/api/artist/albums/32540734')
-        .priority(9)
-        .build()
-    ),
+    NeteaseCloudMusicDataSource.withUid(32540734, (config) => {
+        config
+          .icon('/assets/image/wyyyy.ico')
+          .dataName('塞壬唱片网易云音乐')
+          .title('网易云音乐')
+          .priority(9);
+    }),
     WeiboDataSource.withUid(7461423907, (config) => {
         config
           .icon('/assets/image/icon/yjwb.jpg')

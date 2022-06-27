@@ -14,33 +14,6 @@ export class BilibiliDataSource extends DataSource {
   };
 
   /**
-   * @param uid {number}
-   * @param customConfigCallback {(function(DataSourceConfigBuilder): void)|undefined}
-   * @returns {Promise<BilibiliDataSource|null>}
-   */
-  static async withUid(uid, customConfigCallback = undefined) {
-    try {
-      const data = await DataSource.getOrFetchUserInfo(uid, BilibiliDataSource);
-      if (!data) {
-        return null;
-      }
-      const dataUrl = `https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=${uid}&offset_dynamic_id=0&need_top=0&platform=web`;
-      const configBuilder = DataSourceConfig.builder()
-          .icon(data.avatarUrl)
-          .dataName(data.dataName)
-          .title(data.username)
-          .dataUrl(dataUrl);
-      if (customConfigCallback) {
-        customConfigCallback(configBuilder);
-      }
-      return new BilibiliDataSource(configBuilder.build());
-    } catch (e) {
-      console.log(e);
-      return null;
-    }
-  }
-
-  /**
    * @param config {DataSourceConfig} 数据源配置
    */
   constructor(config) {
@@ -103,6 +76,33 @@ export class BilibiliDataSource extends DataSource {
         list.push(builder.build());
       });
       return list;
+    }
+  }
+
+  /**
+   * @param uid {number}
+   * @param customConfigCallback {(function(DataSourceConfigBuilder): void)|undefined}
+   * @returns {Promise<BilibiliDataSource|null>}
+   */
+  static async withUid(uid, customConfigCallback = undefined) {
+    try {
+      const data = await DataSource.getOrFetchUserInfo(uid, BilibiliDataSource);
+      if (!data) {
+        return null;
+      }
+      const dataUrl = `https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=${uid}&offset_dynamic_id=0&need_top=0&platform=web`;
+      const configBuilder = DataSourceConfig.builder()
+        .icon(data.avatarUrl)
+        .dataName(data.dataName)
+        .title(data.username)
+        .dataUrl(dataUrl);
+      if (customConfigCallback) {
+        customConfigCallback(configBuilder);
+      }
+      return new BilibiliDataSource(configBuilder.build());
+    } catch (e) {
+      console.log(e);
+      return null;
     }
   }
 

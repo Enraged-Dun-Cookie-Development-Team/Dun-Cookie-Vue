@@ -15,33 +15,6 @@ export class WeiboDataSource extends DataSource {
   };
 
   /**
-   * @param uid {number}
-   * @param customConfigCallback {(function(DataSourceConfigBuilder): void)|undefined}
-   * @returns {Promise<WeiboDataSource|null>}
-   */
-  static async withUid(uid, customConfigCallback = undefined) {
-    try {
-      const data = await DataSource.getOrFetchUserInfo(uid, WeiboDataSource);
-      if (!data) {
-        return null;
-      }
-      const dataUrl = `https://m.weibo.cn/api/container/getIndex?type=uid&value=${uid}&containerid=107603${uid}`;
-      const configBuilder = DataSourceConfig.builder()
-        .icon(data.avatarUrl)
-        .dataName(data.dataName)
-        .title(data.username)
-        .dataUrl(dataUrl);
-      if (customConfigCallback) {
-        customConfigCallback(configBuilder);
-      }
-      return new WeiboDataSource(configBuilder.build());
-    } catch (e) {
-      console.log(e);
-      return null;
-    }
-  }
-
-  /**
    * @param config {DataSourceConfig} 数据源配置
    */
   constructor(config) {
@@ -98,6 +71,33 @@ export class WeiboDataSource extends DataSource {
         }
       });
       return list;
+    }
+  }
+
+  /**
+   * @param uid {number}
+   * @param customConfigCallback {(function(DataSourceConfigBuilder): void)|undefined}
+   * @returns {Promise<WeiboDataSource|null>}
+   */
+  static async withUid(uid, customConfigCallback = undefined) {
+    try {
+      const data = await DataSource.getOrFetchUserInfo(uid, WeiboDataSource);
+      if (!data) {
+        return null;
+      }
+      const dataUrl = `https://m.weibo.cn/api/container/getIndex?type=uid&value=${uid}&containerid=107603${uid}`;
+      const configBuilder = DataSourceConfig.builder()
+        .icon(data.avatarUrl)
+        .dataName(data.dataName)
+        .title(data.username)
+        .dataUrl(dataUrl);
+      if (customConfigCallback) {
+        customConfigCallback(configBuilder);
+      }
+      return new WeiboDataSource(configBuilder.build());
+    } catch (e) {
+      console.log(e);
+      return null;
     }
   }
 
