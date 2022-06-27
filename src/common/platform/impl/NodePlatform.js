@@ -44,7 +44,7 @@ export default class NodePlatform extends AbstractPlatform {
     }
 
     getAllWindow() {
-        return Promise.reslove([]);
+        return Promise.resolve([]);
     }
 
     async getLocalStorage(name) {
