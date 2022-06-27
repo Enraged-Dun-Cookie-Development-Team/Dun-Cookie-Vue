@@ -26,7 +26,7 @@ let fetchers = {};
 function buildFetchers(sourceMap) {
   const newFetchers = {};
   Object.entries(sourceMap).forEach(([dataName, source]) => {
-    const fetcherId = source.fetcherId || dataName;
+    const fetcherId = source.groupId || dataName;
     let fetcher = newFetchers[fetcherId];
     if (!fetcher) {
       fetcher = new CookieFetcher(fetcherId);

@@ -15,7 +15,7 @@ export class BilibiliDataSource extends DataSource {
 
   /**
    * @param uid {number}
-   * @param customConfigCallback {(function(DataSourceConfig): void)|undefined}
+   * @param customConfigCallback {(function(DataSourceConfigBuilder): void)|undefined}
    * @returns {Promise<BilibiliDataSource|null>}
    */
   static async withUid(uid, customConfigCallback = undefined) {
@@ -25,16 +25,15 @@ export class BilibiliDataSource extends DataSource {
         return null;
       }
       const dataUrl = `https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=${uid}&offset_dynamic_id=0&need_top=0&platform=web`;
-      const config = DataSourceConfig.builder()
+      const configBuilder = DataSourceConfig.builder()
           .icon(data.avatarUrl)
           .dataName(data.dataName)
           .title(data.username)
-          .dataUrl(dataUrl)
-          .build();
+          .dataUrl(dataUrl);
       if (customConfigCallback) {
-        customConfigCallback(config);
+        customConfigCallback(configBuilder);
       }
-      return new BilibiliDataSource(config);
+      return new BilibiliDataSource(configBuilder.build());
     } catch (e) {
       console.log(e);
       return null;

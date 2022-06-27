@@ -34,12 +34,12 @@ class DataSource {
    */
   dataName;
   /**
-   * 指定蹲饼器ID，使用相同的蹲饼器ID的数据源将共用一个蹲饼器
+   * 指定分组ID，使用相同的分组ID的数据源将共用一个蹲饼器
    * <p>
-   * 不指定的话将自动使用dataName作为ID
+   * 不指定的话将自动使用dataName作为分组ID
    * @type {string|undefined}
    */
-  fetcherId;
+  groupId;
   /**
    * 弹窗标题
    * @type {string}
@@ -71,7 +71,7 @@ class DataSource {
     this.icon = config.icon;
     this.dataName = config.dataName;
     this.dataType = this.constructor.typeName;
-    this.fetcherId = config.fetcherId;
+    this.groupId = config.groupId;
     this.title = config.title;
     this.dataUrl = config.dataUrl;
     this.priority = config.priority;
@@ -194,65 +194,90 @@ class DataSourceConfig {
   priority = 100;
   /**
    * @type {string|undefined}
-   * @see DataSource.fetcherId
+   * @see DataSource.groupId
    */
-  fetcherId;
+  groupId;
 
+  /**
+   * @returns {DataSourceConfigBuilder}
+   */
   static builder() {
-    const instance = new DataSourceConfig();
-    // 其实这里用反射生成应该可读性更强一些，但是只有明确写出来IDE才能识别并自动补全
-    const _builder = {
-      /**
-       * @param val {string}
-       * @see DataSource.icon
-       */
-      icon: (val) => {
-        instance.icon = val;
-        return _builder;
-      },
-      /**
-       * @param val {string}
-       * @see DataSource.dataName
-       */
-      dataName: (val) => {
-        instance.dataName = val;
-        return _builder;
-      },
-      /**
-       * @param val {string}
-       * @see DataSource.title
-       */
-      title: (val) => {
-        instance.title = val;
-        return _builder;
-      },
-      /**
-       * @param val {string}
-       * @see DataSource.dataUrl
-       */
-      dataUrl: (val) => {
-        instance.dataUrl = val;
-        return _builder;
-      },
-      /**
-       * @param val {number}
-       * @see DataSource.priority
-       */
-      priority: (val) => {
-        instance.priority = val;
-        return _builder;
-      },
-      /**
-       * @param val {string}
-       * @see DataSource.fetcherId
-       */
-      fetcherId: (val) => {
-        instance.fetcherId = val;
-        return _builder;
-      },
-      build: () => instance,
-    };
-    return _builder;
+    return new DataSourceConfigBuilder();
+  }
+}
+
+/**
+ * 虽然这些方法直接放在DataSourceConfig里面链式调用，而不使用builder也是可行的，但是语义上感觉不太合适，
+ * 用builder可以体现出config尚未准备好的语义
+ */
+class DataSourceConfigBuilder {
+  /**
+   * @type {DataSourceConfig}
+   */
+  _instance = new DataSourceConfig();
+
+  /**
+   * @param val {string}
+   * @returns {DataSourceConfigBuilder}
+   * @see DataSource.icon
+   */
+  icon(val) {
+    this._instance.icon = val;
+    return this;
+  }
+
+  /**
+   * @param val {string}
+   * @returns {DataSourceConfigBuilder}
+   * @see DataSource.dataName
+   */
+  dataName(val) {
+    this._instance.dataName = val;
+    return this;
+  }
+
+  /**
+   * @param val {string}
+   * @returns {DataSourceConfigBuilder}
+   * @see DataSource.title
+   */
+  title(val) {
+    this._instance.title = val;
+    return this;
+  }
+
+  /**
+   * @param val {string}
+   * @returns {DataSourceConfigBuilder}
+   * @see DataSource.dataUrl
+   */
+  dataUrl(val) {
+    this._instance.dataUrl = val;
+    return this;
+  }
+
+  /**
+   * @param val {number}
+   * @returns {DataSourceConfigBuilder}
+   * @see DataSource.priority
+   */
+  priority(val) {
+    this._instance.priority = val;
+    return this;
+  }
+
+  /**
+   * @param val {string}
+   * @returns {DataSourceConfigBuilder}
+   * @see DataSource.groupId
+   */
+  groupId(val) {
+    this._instance.groupId = val;
+    return this;
+  }
+
+  build() {
+    return this._instance;
   }
 }
 

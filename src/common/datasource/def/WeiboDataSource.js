@@ -16,7 +16,7 @@ export class WeiboDataSource extends DataSource {
 
   /**
    * @param uid {number}
-   * @param customConfigCallback {(function(DataSourceConfig): void)|undefined}
+   * @param customConfigCallback {(function(DataSourceConfigBuilder): void)|undefined}
    * @returns {Promise<WeiboDataSource|null>}
    */
   static async withUid(uid, customConfigCallback = undefined) {
@@ -26,16 +26,15 @@ export class WeiboDataSource extends DataSource {
         return null;
       }
       const dataUrl = `https://m.weibo.cn/api/container/getIndex?type=uid&value=${uid}&containerid=107603${uid}`;
-      const config = DataSourceConfig.builder()
+      const configBuilder = DataSourceConfig.builder()
         .icon(data.avatarUrl)
         .dataName(data.dataName)
         .title(data.username)
-        .dataUrl(dataUrl)
-        .build();
+        .dataUrl(dataUrl);
       if (customConfigCallback) {
-        customConfigCallback(config);
+        customConfigCallback(configBuilder);
       }
-      return new WeiboDataSource(config);
+      return new WeiboDataSource(configBuilder.build());
     } catch (e) {
       console.log(e);
       return null;

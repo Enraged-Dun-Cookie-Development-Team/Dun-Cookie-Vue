@@ -51,8 +51,8 @@ function setTestUrl(sources) {
     sources['鹰角网络微博'].dataUrl = PlatformHelper.Extension.getURL('test/yjwbJson.json');
 }
 
-const SHARE_FETCHER_BILIBILI = 'share:' + BilibiliDataSource.typeName;
-const SHARE_FETCHER_WEIBO = 'share:' + WeiboDataSource.typeName;
+const SHARE_DEFAULT_GROUP_BILIBILI = 'share:' + BilibiliDataSource.typeName;
+const SHARE_DEFAULT_GROUP_WEIBO = 'share:' + WeiboDataSource.typeName;
 
 /**
  * 默认数据源
@@ -60,16 +60,18 @@ const SHARE_FETCHER_WEIBO = 'share:' + WeiboDataSource.typeName;
  */
 const configList = [
     BilibiliDataSource.withUid(161775300, (config) => {
-        config.icon =  '/assets/image/icon/bili.ico';
-        config.dataName = '官方B站动态';
-        config.title = '哔哩哔哩';
-        config.priority = 0;
+        config
+          .icon('/assets/image/icon/bili.ico')
+          .dataName('官方B站动态')
+          .title('哔哩哔哩')
+          .priority(0);
     }),
     WeiboDataSource.withUid(6279793937, (config) => {
-        config.icon =  '/assets/image/icon/weibo.ico';
-        config.dataName = '官方微博';
-        config.title = '微博';
-        config.priority = 1;
+        config
+          .icon('/assets/image/icon/weibo.ico')
+          .dataName('官方微博')
+          .title('微博')
+          .priority(1);
     }),
     new InGameAnnouncementDataSource(
       DataSourceConfig.builder()
@@ -81,18 +83,20 @@ const configList = [
         .build()
     ),
     WeiboDataSource.withUid(6441489862, (config) => {
-        config.icon =  '/assets/image/icon/cho3Weibo.jpg';
-        config.dataName = '朝陇山微博';
-        config.title = '朝陇山';
-        config.priority = 3;
-        config.fetcherId = SHARE_FETCHER_WEIBO;
+        config
+          .icon('/assets/image/icon/cho3Weibo.jpg')
+          .dataName('朝陇山微博')
+          .title('朝陇山')
+          .priority(3)
+          .groupId(SHARE_DEFAULT_GROUP_WEIBO);
     }),
     WeiboDataSource.withUid(7506039414, (config) => {
-        config.icon =  '/assets/image/icon/ys3Weibo.jpg';
-        config.dataName = '一拾山微博';
-        config.title = '一拾山';
-        config.priority = 4;
-        config.fetcherId = SHARE_FETCHER_WEIBO;
+        config
+          .icon('/assets/image/icon/ys3Weibo.jpg')
+          .dataName('一拾山微博')
+          .title('一拾山')
+          .priority(4)
+          .groupId(SHARE_DEFAULT_GROUP_WEIBO);
     }),
     new MonsterSirenDataSource(
       DataSourceConfig.builder()
@@ -104,11 +108,12 @@ const configList = [
         .build()
     ),
     WeiboDataSource.withUid(7499841383, (config) => {
-        config.icon =  '/assets/image/icon/tlWeibo.jpg';
-        config.dataName = '泰拉记事社微博';
-        config.title = '泰拉记事社微博';
-        config.priority = 6;
-        config.fetcherId = SHARE_FETCHER_WEIBO;
+        config
+          .icon('/assets/image/icon/tlWeibo.jpg')
+          .dataName('泰拉记事社微博')
+          .title('泰拉记事社微博')
+          .priority(6)
+          .groupId(SHARE_DEFAULT_GROUP_WEIBO);
     }),
     new ArknightsOfficialWebDataSource(
       DataSourceConfig.builder()
@@ -138,18 +143,20 @@ const configList = [
         .build()
     ),
     WeiboDataSource.withUid(7461423907, (config) => {
-        config.icon =  '/assets/image/icon/yjwb.jpg';
-        config.dataName = '鹰角网络微博';
-        config.title = '鹰角网络微博';
-        config.priority = 10;
-        config.fetcherId = SHARE_FETCHER_WEIBO;
+        config
+          .icon('/assets/image/icon/yjwb.jpg')
+          .dataName('鹰角网络微博')
+          .title('鹰角网络微博')
+          .priority(10)
+          .groupId(SHARE_DEFAULT_GROUP_WEIBO);
     }),
     BilibiliDataSource.withUid(1265652806, (config) => {
-        config.icon =  '/assets/image/icon/arkzmd.jpg';
-        config.dataName = '明日方舟终末地';
-        config.title = '明日方舟终末地';
-        config.priority = 11;
-        config.fetcherId = SHARE_FETCHER_BILIBILI;
+        config
+          .icon('/assets/image/icon/arkzmd.jpg')
+          .dataName('明日方舟终末地')
+          .title('明日方舟终末地')
+          .priority(11)
+          .groupId(SHARE_DEFAULT_GROUP_BILIBILI);
     }),
 ];
 
