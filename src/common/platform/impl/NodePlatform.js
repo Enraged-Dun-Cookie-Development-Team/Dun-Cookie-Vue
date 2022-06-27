@@ -49,7 +49,7 @@ export default class NodePlatform extends AbstractPlatform {
 
     async getLocalStorage(name) {
         const file = await this.fs.open(storageFile, this.fs_callback.constants.O_RDONLY | this.fs_callback.constants.O_CREAT);
-        const content = (await file.readFile('UTF-8'))?.toString() || '{}';
+        const content = ((await file.readFile('UTF-8')) || '{}').toString();
         await file.close();
         try {
             const json = JSON.parse(content);
