@@ -51,8 +51,7 @@ function setTestUrl(sources) {
     sources['鹰角网络微博'].dataUrl = PlatformHelper.Extension.getURL('test/yjwbJson.json');
 }
 
-const SHARE_DEFAULT_GROUP_BILIBILI = 'share:' + BilibiliDataSource.typeInfo.typeName;
-const SHARE_DEFAULT_GROUP_WEIBO = 'share:' + WeiboDataSource.typeInfo.typeName;
+const SHARE_DEFAULT_GROUP = 'share';
 
 /**
  * 默认数据源
@@ -88,7 +87,7 @@ const configList = [
           .dataName('朝陇山微博')
           .title('朝陇山')
           .priority(3)
-          .groupId(SHARE_DEFAULT_GROUP_WEIBO);
+          .groupId(SHARE_DEFAULT_GROUP);
     }),
     WeiboDataSource.withUid(7506039414, (config) => {
         config
@@ -96,7 +95,7 @@ const configList = [
           .dataName('一拾山微博')
           .title('一拾山')
           .priority(4)
-          .groupId(SHARE_DEFAULT_GROUP_WEIBO);
+          .groupId(SHARE_DEFAULT_GROUP);
     }),
     new MonsterSirenDataSource(
       DataSourceConfig.builder()
@@ -113,7 +112,7 @@ const configList = [
           .dataName('泰拉记事社微博')
           .title('泰拉记事社微博')
           .priority(6)
-          .groupId(SHARE_DEFAULT_GROUP_WEIBO);
+          .groupId(SHARE_DEFAULT_GROUP);
     }),
     new ArknightsOfficialWebDataSource(
       DataSourceConfig.builder()
@@ -146,7 +145,7 @@ const configList = [
           .dataName('鹰角网络微博')
           .title('鹰角网络微博')
           .priority(10)
-          .groupId(SHARE_DEFAULT_GROUP_WEIBO);
+          .groupId(SHARE_DEFAULT_GROUP);
     }),
     BilibiliDataSource.withUid(1265652806, (config) => {
         config
@@ -154,7 +153,7 @@ const configList = [
           .dataName('明日方舟终末地')
           .title('明日方舟终末地')
           .priority(11)
-          .groupId(SHARE_DEFAULT_GROUP_BILIBILI);
+          .groupId(SHARE_DEFAULT_GROUP);
     }),
 ];
 

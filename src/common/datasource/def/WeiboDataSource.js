@@ -4,7 +4,7 @@ import TimeUtil from '../../util/TimeUtil';
 import { DataItem, RetweetedInfo } from '../../DataItem';
 import HttpUtil from '../../util/HttpUtil';
 
-const typeInfo = new DataSourceTypeInfo('weibo');
+const typeInfo = new DataSourceTypeInfo('weibo', 4 * 1000);
 
 /**
  * 微博数据源。

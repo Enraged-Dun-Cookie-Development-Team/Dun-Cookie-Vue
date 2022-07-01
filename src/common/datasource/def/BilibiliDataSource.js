@@ -3,7 +3,7 @@ import TimeUtil from '../../util/TimeUtil';
 import {DataItem} from '../../DataItem';
 import HttpUtil from '../../util/HttpUtil';
 
-const typeInfo = new DataSourceTypeInfo('bilibili_dynamic');
+const typeInfo = new DataSourceTypeInfo('bilibili_dynamic', 10 * 1000);
 
 /**
  * 哔哩哔哩数据源。

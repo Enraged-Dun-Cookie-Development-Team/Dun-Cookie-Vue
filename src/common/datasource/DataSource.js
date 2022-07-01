@@ -39,7 +39,8 @@ class DataSource {
   /**
    * 指定分组ID，使用相同的分组ID的数据源将共用一个蹲饼器
    * <p>
-   * 不指定的话将自动使用dataName作为分组ID
+   * 不指定的话将自动使用dataName作为分组ID<br>
+   * <strong>注意：具体的蹲饼策略中只有相同类型的数据源会作为同一组进行轮换蹲饼，不同类型的同名分组在内部实现上会被拆分成不同的蹲饼组</strong>
    * @type {string|undefined}
    */
   groupId;
@@ -194,13 +195,20 @@ class DataSourceTypeInfo {
    * @type {string}
    */
   typeName;
+  /**
+   * 当前数据源类型的多个数据源对象的请求频率限制，当值不是正数时视为无限制，单位：毫秒
+   * @type {number|undefined}
+   */
+  requestFrequencyLimit;
 
   /**
    *
    * @param typeName {string}
+   * @param requestFrequencyLimit {number|undefined}
    */
-  constructor(typeName) {
+  constructor(typeName, requestFrequencyLimit = undefined) {
     this.typeName = typeName;
+    this.requestFrequencyLimit = requestFrequencyLimit;
     Object.freeze(this);
   }
 }

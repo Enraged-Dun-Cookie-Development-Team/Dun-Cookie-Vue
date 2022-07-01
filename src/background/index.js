@@ -46,7 +46,8 @@ function ExtensionInit() {
         if (message.type) {
             switch (message.type) {
                 case MESSAGE_FORCE_REFRESH:
-                    tryDun(Settings);
+                    // TODO 根据promise返回对应的结果，需要popup.vue那边配合
+                    tryDun(true);
                     return;
                 case MESSAGE_SAN_GET:
                     return SanInfo;
@@ -79,7 +80,7 @@ function ExtensionInit() {
     PlatformHelper.Lifecycle.addInstalledListener(details => {
         if (details.reason === 'install') {
             PlatformHelper.Tabs.createWithExtensionFile(PAGE_WELCOME);
-        } 
+        }
         if (details.reason === 'update' || details.reason === 'install') {
             PlatformHelper.Storage.saveLocalStorage("version-notice",false);
         }

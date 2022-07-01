@@ -2,7 +2,7 @@ import {CookieHandler} from "./CookieHandler";
 import {IS_DEBUG} from "../common/Constants";
 
 /**
- * 蹲饼数据缓存，用于分析问题
+ * 蹲饼日志缓存，用于分析问题
  * @type {{[key: string]: FetchLogItem[]}}
  */
 const fetchLogCache = {};
@@ -15,6 +15,12 @@ class CookieFetcher {
    * 蹲饼器ID
    */
   id;
+
+  /**
+   * 数据源类型
+   * @type {DataSourceTypeInfo}
+   */
+  sourceType;
 
   /**
    * 数据源列表
@@ -31,9 +37,11 @@ class CookieFetcher {
 
   /**
    * @param id {string} 蹲饼器ID
+   * @param sourceType {DataSourceTypeInfo} 数据源类型
    */
-  constructor(id) {
+  constructor(id, sourceType) {
     this.id = id;
+    this.sourceType = sourceType;
   }
 
   /**
@@ -41,15 +49,16 @@ class CookieFetcher {
    * @param source {DataSource} 要添加的数据源
    */
   addDataSource(source) {
+    if (source.dataType !== this.sourceType) {
+      DebugUtil.debugLogError(0, `[${source.dataType.typeName}]类型的数据源[${source.dataName}]`
+        + `被尝试加入到[${this.sourceType.typeName}]类型的蹲饼分组中，已禁止本次加入`);
+      return;
+    }
     this.sourceList.push(source);
   }
 
-  /**
-   * 删除数据源
-   * @param source {DataSource} 要删除的数据源，会判断dataName
-   */
-  removeDataSource(source) {
-    this.sourceList = this.sourceList.filter(item => item !== source && item.dataName !== source.dataName);
+  get dataSourceCount() {
+    return this.sourceList.length;
   }
 
   /**
@@ -85,10 +94,6 @@ class CookieFetcher {
     const source = this.sourceList[this._index];
     this._index++;
     return source;
-  }
-
-  isEmpty() {
-    return this.sourceList.length === 0;
   }
 
   /**
