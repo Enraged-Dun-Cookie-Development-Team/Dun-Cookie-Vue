@@ -489,17 +489,16 @@ export default {
     // 强刷
     reload() {
       this.isReload = true;
-      PlatformHelper.Message.send(MESSAGE_FORCE_REFRESH);
       this.$message({
         offset: 50,
         center: true,
         message: "正在找饼，请保持网络畅通",
         type: "warning",
       });
-      setTimeout(() => {
+      PlatformHelper.Message.send(MESSAGE_FORCE_REFRESH).then(() => {
         this.drawer = false;
         this.isReload = false;
-      }, 5000);
+      });
     },
 
     // 检测滚动条高度，大于600出现回顶部按钮
