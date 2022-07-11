@@ -14,7 +14,7 @@ const imageCache = {};
 const qrcodeCache = {};
 
 // 跨域白名单
-const CORS_AVAILABLE_DOMAINS = { 'penguin-stats.io': true, 'penguin-stats.cn': true, 'api.ceobecanteen.top': true };
+const CORS_AVAILABLE_DOMAINS = { 'penguin-stats.io': true, 'api.ceobecanteen.top': true };
 
 /**
  * 浏览器平台，放置与具体浏览器无关的通用逻辑

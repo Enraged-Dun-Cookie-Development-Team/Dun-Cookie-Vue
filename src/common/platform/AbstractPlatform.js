@@ -49,7 +49,7 @@ export default class AbstractPlatform {
     /**
      * 读取本地储存中的内容
      * @param {string|string[]|object} name 如果不提供该参数则返回储存中的全部内容
-     * @return {Promise} 读取成功则reslove(键值对，如果请求的是单个string则直接返回值)，读取失败则reject
+     * @return {Promise} 读取成功则resolve(键值对，如果请求的是单个string则直接返回值)，读取失败则reject
      */
     getLocalStorage(name) {
         throw unsupportedTip;
@@ -59,7 +59,7 @@ export default class AbstractPlatform {
      * 将数据储存到本地
      * @param {string} name
      * @param data
-     * @return {Promise} 储存成功则reslove(无任何参数)，储存失败则reject
+     * @return {Promise} 储存成功则resolve(无任何参数)，储存失败则reject
      */
     saveLocalStorage(name, data) {
         throw unsupportedTip;
@@ -182,7 +182,7 @@ export default class AbstractPlatform {
      * @param width 窗口宽度
      * @param height 窗口高度
      * @param state 窗口的初始状态，可以不提供，当该值为minimized/maximized/fullscreen时width、height参数无效
-     * @return {Promise} reslove接收一个参数(新窗口的tab对象)
+     * @return {Promise} resolve接收一个参数(新窗口的tab对象)
      */
     createWindow(url, type, width, height, state) {
         throw unsupportedTip;
@@ -193,7 +193,7 @@ export default class AbstractPlatform {
      * @param winId 窗口id
      * @param width 窗口宽度
      * @param height 窗口高度
-     * @return {Promise} reslove接收一个参数(新窗口的tab对象)
+     * @return {Promise} resolve接收一个参数(新窗口的tab对象)
      */
     updateWindow(winId, width, height) {
         throw unsupportedTip;
@@ -213,7 +213,7 @@ export default class AbstractPlatform {
      * @param url 目标url
      * @param filename 文件名，如果传入空字符串或者非string类型的值则使用浏览器默认的文件名
      * @param saveAs 是否提供文件选择对话框，true->提供，false->不提供，非boolean类型的值->使用浏览器默认设置
-     * @return {Promise} reslove接收一个参数(下载任务的id)
+     * @return {Promise} resolve接收一个参数(下载任务的id)
      */
     download(url, filename, saveAs) {
         throw unsupportedTip;
@@ -232,7 +232,7 @@ export default class AbstractPlatform {
      * 发送HTTP请求
      * @param url 目标url
      * @param method 请求方法(GET/POST等)
-     * @return {Promise} reslove接收一个参数(http响应内容)
+     * @return {Promise} resolve接收一个参数(http响应内容)
      */
     sendHttpRequest(url, method) {
         throw unsupportedTip;

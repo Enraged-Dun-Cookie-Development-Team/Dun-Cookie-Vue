@@ -538,7 +538,7 @@ export default {
       oldDunCount: 0,
       dunInfo: DunInfo,
       settings: Settings,
-      currentDataSource: CurrentDataSource,
+      currentDataSource: CurrentDataSource.sourceMap,
       defSourcesList: [],
       customTypes: customDataSourceTypes,
       customTypesByName: customDataSourceTypesByName,
@@ -581,7 +581,7 @@ export default {
         this.oldDunCount = data.counter;
       });
       CurrentDataSource.doAfterUpdate((data) => {
-        this.currentDataSource = data;
+        this.currentDataSource = data.sourceMap;
       });
     },
     initAnimate() {

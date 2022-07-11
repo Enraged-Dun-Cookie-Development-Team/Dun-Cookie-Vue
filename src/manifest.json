@@ -32,7 +32,9 @@
 		"http://*.sinaimg.cn/*",
 		"https://*.hycdn.cn/*",
 		"https://music.163.com/*",
-		"http://*.music.126.net/*"
+		"https://*.music.126.net/*",
+		"https://penguin-stats.cn/*",
+		"https://penguin-stats.io/*"
 	],
 	"options_ui": {
 		"page": "options.html",

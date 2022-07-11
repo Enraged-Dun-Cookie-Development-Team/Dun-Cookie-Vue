@@ -12,7 +12,7 @@ class DataSourceUtil {
    * @return {DataSource|undefined}
    */
   static getByName(dataName) {
-    return CurrentDataSource[dataName];
+    return CurrentDataSource.getByName(dataName);
   }
 
   /**
