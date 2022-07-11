@@ -2,6 +2,7 @@ import {PLATFORM_CHROME} from '../../Constants';
 import BrowserPlatform from "./BrowserPlatform";
 import DebugUtil from "../../util/DebugUtil";
 
+// noinspection JSUnresolvedVariable
 export default class ChromePlatform extends BrowserPlatform {
 
     constructor() {

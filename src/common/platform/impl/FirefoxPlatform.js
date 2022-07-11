@@ -4,6 +4,7 @@ import BrowserPlatform from "./BrowserPlatform";
 // 火狐无法储存被vue监视的对象，故在内部做json编解码
 const _InternalJsonCompatible = '__INTERNAL_JSON__';
 
+// noinspection JSUnresolvedVariable
 export default class FirefoxPlatform extends BrowserPlatform {
 
     constructor() {
