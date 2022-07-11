@@ -25,6 +25,7 @@
 		"unlimitedStorage",
 		"notifications",
 		"downloads",
+		"alarms",
 		"https://*.bilibili.com/*",
 		"https://*.hdslb.com/*",
 		"https://*.weibo.cn/*",

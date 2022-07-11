@@ -98,6 +98,10 @@ export default class PlatformHelper {
         return lifecycleHelper;
     }
 
+    static get Alarms() {
+        return alarmHelper;
+    }
+
     static get Http() {
         return httpHelper;
     }
@@ -251,6 +255,20 @@ class LifecycleHelper {
     }
 }
 
+class AlarmHelper {
+    create(name, alarmInfo) {
+        return currentPlatform.createAlarm(name, alarmInfo);
+    }
+
+    clearAll() {
+        return currentPlatform.clearAllAlarms();
+    }
+
+    addListener(listener) {
+        return currentPlatform.addAlarmsListener(listener);
+    }
+}
+
 class HttpHelper {
     sendGet(url) {
         return currentPlatform.sendHttpRequest(url, 'GET');
@@ -272,6 +290,7 @@ const notificationHelper = new NotificationHelper();
 const windowsHelper = new WindowsHelper();
 const downloadsHelper = new DownloadsHelper();
 const lifecycleHelper = new LifecycleHelper();
+const alarmHelper = new AlarmHelper();
 const httpHelper = new HttpHelper();
 const imgHelper = new ImgHelper();
 globalThis.PlatformHelper = PlatformHelper

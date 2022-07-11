@@ -280,6 +280,20 @@ export default class NodePlatform extends AbstractPlatform {
         return new Promise((resolve, _) => resolve());
     }
 
+    createAlarm(name, alarmInfo) {
+        if (DEBUG_LOG) {
+            console.log('Node环境不支持Alarm');
+        }
+    }
+
+    clearAllAlarms() {
+        if (DEBUG_LOG) {
+            console.log('Node环境不支持Alarm');
+        }
+        // 无事发生
+        return new Promise((resolve, _) => resolve());
+    }
+
     getHtmlParser() {
         const { JSDOM } = node_require('jsdom');
         const { window } = new JSDOM("");

@@ -246,6 +246,7 @@ export default class AbstractPlatform {
     setBadgeText(text) {
         throw unsupportedTip;
     }
+
     /**
      * 设置扩展图标的标记背景色
      * @param color {[number,number,number,number]} rgba(range 0-255)
@@ -254,6 +255,33 @@ export default class AbstractPlatform {
     setBadgeBackgroundColor(color) {
         throw unsupportedTip;
     }
+
+    /**
+     * 创建定时警报
+     * @param name {string | undefined}
+     * @param alarmInfo {{when?: number, delayInMinutes?: number, periodInMinutes?: number} | undefined}
+     * @return {void}
+     */
+    createAlarm(name, alarmInfo) {
+        throw unsupportedTip;
+    }
+
+    /**
+     * 清除全部警报
+     * @return {Promise<boolean>}
+     */
+    clearAllAlarms() {
+        throw unsupportedTip;
+    }
+
+    /**
+     * 监听alarm事件
+     * <p>
+     * @param listener 监听器，接收一个参数(alarm)
+     */
+    addAlarmsListener(listener) {
+        throw unsupportedTip;
+    };
 
     /**
      * 返回的对象可以当成jQuery的$来使用

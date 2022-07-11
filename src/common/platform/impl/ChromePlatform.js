@@ -230,4 +230,24 @@ export default class ChromePlatform extends BrowserPlatform {
         });
     }
 
+    createAlarm(name, alarmInfo) {
+        chrome.alarms.create(name, alarmInfo);
+    }
+
+    clearAllAlarms() {
+        return new Promise((resolve, reject) => {
+            chrome.alarms.clearAll(result => {
+                if (chrome.runtime.lastError) {
+                    reject(chrome.runtime.lastError);
+                    return;
+                }
+                resolve(result);
+            });
+        });
+    }
+
+    addAlarmsListener(listener) {
+        chrome.alarms.onAlarm.addListener(listener);
+    }
+
 }

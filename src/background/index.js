@@ -102,8 +102,21 @@ function ExtensionInit() {
               .then(tab => popupWindowId = tab.id);
         }
     });
+
+    PlatformHelper.Alarms.addListener(alarm => {
+        /**
+         * @type {string|undefined}
+         */
+        const name = alarm.name;
+        if (name && name.startsWith('countdown_')) {
+            const countDownName = name.split('|')[0].substring('countdown_'.length);
+            NotificationUtil.SendNotice(`倒计时完毕`, `${countDownName} 到点了！`, null, 'countdown_' + new Date().getTime());
+            CountDown.removeCountDownByName(countDownName);
+        }
+    });
 }
 
+const countDownThreshold = 5 * 60 * 1000;
 const countDown = {
     sendNoticeList: [],
     countDownList: [],
@@ -114,13 +127,20 @@ const countDown = {
                 this.countDownList = [];
                 data.map(x => x.data).forEach(item => {
                     this.countDownList.push(item);
-                    this.sendNoticeList.push(
-                        setTimeout(_ => {
-                            NotificationUtil.SendNotice(`倒计时完毕`, `${item.name} 到点了！`, null, new Date().getTime());
-                            // 有过通知后从内存中删除计时器数据
-                            CountDown.removeCountDown(item);
-                        }, new Date(item.stopTime) - new Date())
-                    );
+                    const endTime = new Date(item.stopTime).getTime();
+                    const delayTime = endTime - new Date();
+                    if (delayTime >= countDownThreshold) {
+                        const uniqueName = 'countdown_' + item.name + '|' + Math.random().toFixed(3).substring(2, 5);
+                        PlatformHelper.Alarms.create(uniqueName, {when: endTime});
+                    } else {
+                        this.sendNoticeList.push(
+                          setTimeout(_ => {
+                              NotificationUtil.SendNotice(`倒计时完毕`, `${item.name} 到点了！`, null, 'countdown_' + new Date().getTime());
+                              // 有过通知后从内存中删除计时器数据
+                              CountDown.removeCountDown(item);
+                          }, delayTime)
+                        );
+                    }
                 })
             }
         })
@@ -130,7 +150,9 @@ const countDown = {
             clearTimeout(id)
         });
         this.sendNoticeList = [];
-        this.Start();
+        PlatformHelper.Alarms.clearAll().finally(() => {
+            this.Start();
+        });
     },
     GetAllCountDown() {
         let list = [];

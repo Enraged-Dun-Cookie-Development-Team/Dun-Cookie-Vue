@@ -162,4 +162,16 @@ export default class FirefoxPlatform extends BrowserPlatform {
         return browser.browserAction.setBadgeBackgroundColor({color: color});
     }
 
+    createAlarm(name, alarmInfo) {
+        browser.alarms.create(name, alarmInfo);
+    }
+
+    clearAllAlarms() {
+        return browser.alarms.clearAll();
+    }
+
+    addAlarmsListener(listener) {
+        browser.alarms.onAlarm.addListener(listener);
+    }
+
 }
