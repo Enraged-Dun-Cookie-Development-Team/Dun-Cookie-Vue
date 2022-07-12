@@ -42,12 +42,12 @@ let remainTimeIntervalId = 0;
 function startSanRecovery(san, delay) {
   // 如果提供了时间参数则依照提供的参数延时，便于插件重启后正确更新
   if (!delay) {
-    const now = new Date.getTime();
+    const now = new Date().getTime();
     const timeElapsed = now - san.updateTime;
     const recovery = Math.floor(timeElapsed / SAN_RECOVERY_SPEED);
     const remainTime = timeElapsed % SAN_RECOVERY_SPEED;
     san.currentSan += recovery;
-    updateTime = now - remainTime;
+    san.updateTime = now - remainTime;
     delay = SAN_RECOVERY_SPEED - remainTime;
   }
   san.startReloadTime();
