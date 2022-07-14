@@ -60,6 +60,7 @@ export default class CountDown {
     }
 
     static removeCountDownByName(name){
+        DebugUtil.debugConsoleOutput(0, 'debug', ' %c 倒计时 ', 'color: #eee; background: #DA70D6', `在存储中删除计时器[${name}]`);
         return new Promise(resolve => {
             this.getCountDownLocalStorage().then(data  =>  {
                 let jsonData = JSON.parse(data);

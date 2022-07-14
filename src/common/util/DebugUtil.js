@@ -43,7 +43,10 @@ class DebugUtil {
       if (debugLogCounter >= debugLogClearThreshold) {
         console.clear();
       }
-      console[type](`%c[${new Date().toLocaleString()}]`, "color: gray", ...data);
+      const firstArg = data[0];
+      const restArg = data;
+      restArg.shift();
+      console[type](`%c[${new Date().toLocaleString()}]` + firstArg, "color: gray", ...restArg);
       debugLogCounter++;
     }
   }

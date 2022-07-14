@@ -108,6 +108,7 @@ function ExtensionInit() {
          * @type {string|undefined}
          */
         const name = alarm.name;
+        countDownDebugLog(`alarm监听器触发[${name}]：`, alarm);
         if (name && name.startsWith('countdown_')) {
             const countDownName = name.split('|')[0].substring('countdown_'.length);
             NotificationUtil.SendNotice(`倒计时完毕`, `${countDownName} 到点了！`, null, 'countdown_' + new Date().getTime());
@@ -115,8 +116,11 @@ function ExtensionInit() {
         }
     });
 }
-
+function countDownDebugLog(...data) {
+    DebugUtil.debugConsoleOutput(0, 'debug', ' %c 倒计时 ', 'color: white; background: #DA70D6', ...data);
+}
 const countDownThreshold = 5 * 60 * 1000;
+let countDownFlag = false;
 const countDown = {
     sendNoticeList: [],
     countDownList: [],
@@ -128,11 +132,13 @@ const countDown = {
                 data.map(x => x.data).forEach(item => {
                     this.countDownList.push(item);
                     const endTime = new Date(item.stopTime).getTime();
-                    const delayTime = endTime - new Date();
+                    const delayTime = endTime - new Date().getTime();
                     if (delayTime >= countDownThreshold) {
+                        countDownDebugLog(`设置alarm[${item.name}]-指定时间：${new Date(endTime).toLocaleString()}`);
                         const uniqueName = 'countdown_' + item.name + '|' + Math.random().toFixed(3).substring(2, 5);
                         PlatformHelper.Alarms.create(uniqueName, {when: endTime});
                     } else {
+                        countDownDebugLog(`设置setTimeout[${item.name}]-延时：${delayTime}`);
                         this.sendNoticeList.push(
                           setTimeout(_ => {
                               NotificationUtil.SendNotice(`倒计时完毕`, `${item.name} 到点了！`, null, 'countdown_' + new Date().getTime());
@@ -146,12 +152,19 @@ const countDown = {
         })
     },
     Change() {
+        if (countDownFlag) {
+            return;
+        }
+        countDownFlag = true;
+        countDownDebugLog('清空setTimeout');
         this.sendNoticeList.forEach(id => {
             clearTimeout(id)
         });
         this.sendNoticeList = [];
+        countDownDebugLog('清空alarms');
         PlatformHelper.Alarms.clearAll().finally(() => {
             this.Start();
+            countDownFlag = false;
         });
     },
     GetAllCountDown() {
