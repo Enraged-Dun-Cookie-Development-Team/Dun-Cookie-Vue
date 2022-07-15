@@ -46,7 +46,7 @@ class DebugUtil {
       const firstArg = data[0];
       const restArg = data;
       restArg.shift();
-      console[type](`%c[${new Date().toLocaleString()}]` + firstArg, "color: gray", ...restArg);
+      console[type](`%c[${new Date().toLocaleString()}]%c ` + firstArg, "color: gray", "color: black", ...restArg);
       debugLogCounter++;
     }
   }
