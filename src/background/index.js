@@ -117,7 +117,7 @@ function ExtensionInit() {
     });
 }
 function countDownDebugLog(...data) {
-    DebugUtil.debugConsoleOutput(0, 'debug', ' %c 倒计时 ', 'color: white; background: #DA70D6', ...data);
+    DebugUtil.debugConsoleOutput(0, 'debug', '%c 倒计时 ', 'color: white; background: #DA70D6', ...data);
 }
 const countDownThreshold = 5 * 60 * 1000;
 let countDownFlag = false;
