@@ -19,6 +19,7 @@ export default class NodePlatform extends AbstractPlatform {
     http = node_require('http');
     https = node_require('https');
     url = node_require('url');
+    os = node_require('os');
     worker_threads;
     broadcastChannel;
 
@@ -41,6 +42,10 @@ export default class NodePlatform extends AbstractPlatform {
 
     get PlatformType() {
         return PLATFORM_NODE;
+    }
+
+    get PlatformOs() {
+        return this.os.platform();
     }
 
     getAllWindow() {

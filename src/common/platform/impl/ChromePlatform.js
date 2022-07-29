@@ -13,6 +13,10 @@ export default class ChromePlatform extends BrowserPlatform {
         return PLATFORM_CHROME;
     }
 
+    get PlatformOs() {
+        return chrome.runtime.PlatformOs;
+    }
+
     getAllWindow() {
         return new Promise((resolve) => {
             chrome.windows.getAll({}, function (data) {

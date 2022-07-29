@@ -187,4 +187,7 @@ const penguinStatistics = {
 
 ExtensionInit();
 countDown.Start();
+if (PlatformHelper.osIsMac) {
+    setInterval(() => countDown.Change(), 10 * 60 * 1000);
+}
 penguinStatistics.Init();

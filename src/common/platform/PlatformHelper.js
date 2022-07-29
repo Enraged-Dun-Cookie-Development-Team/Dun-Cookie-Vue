@@ -55,6 +55,24 @@ export default class PlatformHelper {
         return currentPlatform.PlatformType;
     }
 
+    /**
+     * 苹果：mac/darwin
+     * <br>
+     * Windows: win/win32
+     * @return {string}
+     */
+    static get PlatformOs() {
+        return currentPlatform.PlatformOs;
+    }
+
+    static get osIsMac() {
+        return PlatformHelper.PlatformOs === 'mac' || PlatformHelper.PlatformOs === 'darwin';
+    }
+
+    static get osIsWindows() {
+        return PlatformHelper.PlatformOs === 'win' || PlatformHelper.PlatformOs === 'win32';
+    }
+
     static get PlatformInstance() {
         return currentPlatform;
     }
