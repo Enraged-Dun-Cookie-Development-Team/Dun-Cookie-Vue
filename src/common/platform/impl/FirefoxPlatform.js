@@ -15,8 +15,8 @@ export default class FirefoxPlatform extends BrowserPlatform {
         return PLATFORM_FIREFOX;
     }
 
-    get PlatformOs() {
-        return browser.runtime.PlatformOs;
+    getPlatformInfo() {
+        return browser.runtime.getPlatformInfo();
     }
 
     getAllWindow() {

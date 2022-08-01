@@ -43,9 +43,9 @@ export default class AbstractPlatform {
 
     /**
      * 操作系统
-     * @return {string}
+     * @return {Promise<any>}
      */
-    get PlatformOs() {
+    getPlatformInfo() {
         throw unsupportedTip;
     };
 

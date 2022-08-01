@@ -56,21 +56,20 @@ export default class PlatformHelper {
     }
 
     /**
-     * 苹果：mac/darwin
-     * <br>
-     * Windows: win/win32
-     * @return {string}
+     * @return {Promise<any>}
      */
-    static get PlatformOs() {
-        return currentPlatform.PlatformOs;
+    static getPlatformInfo() {
+        return currentPlatform.getPlatformInfo();
     }
 
-    static get osIsMac() {
-        return PlatformHelper.PlatformOs === 'mac' || PlatformHelper.PlatformOs === 'darwin';
+    static async osIsMac() {
+        const os = (await PlatformHelper.getPlatformInfo()).os;
+        return os === 'mac' || os === 'darwin';
     }
 
-    static get osIsWindows() {
-        return PlatformHelper.PlatformOs === 'win' || PlatformHelper.PlatformOs === 'win32';
+    static async osIsWindows() {
+        const os = (await PlatformHelper.getPlatformInfo()).os;
+        return os === 'win' || os === 'win32';
     }
 
     static get PlatformInstance() {
