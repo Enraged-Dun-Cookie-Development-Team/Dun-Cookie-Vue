@@ -267,7 +267,7 @@ export default class NodePlatform extends AbstractPlatform {
                 }
             });
 
-            req.on('timeout', reject);
+            req.on('timeout', () => reject(`web request timeout(${timeout}ms)`));
             req.on('error', reject);
             req.end();
         });

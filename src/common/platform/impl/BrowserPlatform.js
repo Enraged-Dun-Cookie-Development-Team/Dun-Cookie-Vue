@@ -244,7 +244,7 @@ width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retwee
       const controller = new AbortController();
       options.signal = controller.signal;
       timeoutId = setTimeout(() => {
-        controller.abort();
+        controller.abort(`web request timeout(${timeout}ms)`);
       }, timeout);
     }
     return fetch(url, options).then(response => {
@@ -252,6 +252,11 @@ width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retwee
         throw '获取响应失败，可能是插件权限中未允许访问目标网站：' + url.origin;
       }
       return response.text();
+    }).catch(err => {
+      if (err.name === 'AbortError' && options.signal && options.signal.reason) {
+        throw options.signal.reason;
+      }
+      throw err
     }).finally(() => {
       if (timeoutId > 0) {
         clearTimeout(timeoutId);
