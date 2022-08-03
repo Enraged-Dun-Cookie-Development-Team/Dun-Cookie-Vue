@@ -142,14 +142,12 @@ class DataSource {
 }
 
 class UserInfo {
-  dataName;
   username;
   avatarUrl;
   version = 1;
   timestamp;
 
-  constructor(dataName, username, avatarUrl) {
-    this.dataName = dataName;
+  constructor(username, avatarUrl) {
     this.username = username;
     this.avatarUrl = avatarUrl;
     this.timestamp = new Date().getTime();
