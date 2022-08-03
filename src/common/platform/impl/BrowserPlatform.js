@@ -14,6 +14,8 @@ const imageCache = {};
 const qrcodeCache = {};
 
 const CORS_AVAILABLE_DOMAINS = {'penguin-stats.io': true, 'penguin-stats.cn': true};
+// 正常浏览器在给权限后跨域视为basic请求 无视cors相关设定，脑子有毛病的QQ浏览器在mode: no-cors跨域时直接用CORB策略拒绝读取响应(正常浏览器好像只会在contentScript里有这种设定)
+const ALWAYS_ENABLE_CORS = navigator.userAgent.includes('QQBrowser');
 
 /**
  * 浏览器平台，放置与具体浏览器无关的通用逻辑
@@ -237,14 +239,14 @@ width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retwee
      */
     const options = {
       method: method,
-      mode: CORS_AVAILABLE_DOMAINS[url.host] ? 'cors' : 'no-cors',
+      mode: ALWAYS_ENABLE_CORS || CORS_AVAILABLE_DOMAINS[url.host] ? 'cors' : 'no-cors',
     };
     let timeoutId = 0;
     if (timeout && timeout > 0) {
       const controller = new AbortController();
       options.signal = controller.signal;
       timeoutId = setTimeout(() => {
-        controller.abort(`web request timeout(${timeout}ms)`);
+        controller.abort();
       }, timeout);
     }
     return fetch(url, options).then(response => {
@@ -253,8 +255,8 @@ width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retwee
       }
       return response.text();
     }).catch(err => {
-      if (err.name === 'AbortError' && options.signal && options.signal.reason) {
-        throw options.signal.reason;
+      if (err.name === 'AbortError') {
+        throw new Error(`web request timeout(${timeout}ms)`);
       }
       throw err
     }).finally(() => {
