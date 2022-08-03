@@ -211,7 +211,7 @@ export default class NodePlatform extends AbstractPlatform {
         }
     }
 
-    sendHttpRequest(url, method) {
+    sendHttpRequest(url, method, timeout) {
         return new Promise((resolve, reject) => {
             if (url.indexOf('file') === 0) {
                 const filePath = this.url.fileURLToPath(url);
@@ -239,6 +239,9 @@ export default class NodePlatform extends AbstractPlatform {
                     'Cookie': this.weiboCookie
                 }
             }
+            if (timeout && timeout > 0) {
+                options.timeout = timeout;
+            }
             let web;
             if (url.indexOf('https') === 0) {
                 web = this.https;
@@ -264,6 +267,7 @@ export default class NodePlatform extends AbstractPlatform {
                 }
             });
 
+            req.on('timeout', reject);
             req.on('error', reject);
             req.end();
         });

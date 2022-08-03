@@ -240,9 +240,10 @@ export default class AbstractPlatform {
      * 发送HTTP请求
      * @param url 目标url
      * @param method 请求方法(GET/POST等)
+     * @param timeout 超时(单位：毫秒)，不提供或小于等于0时无限等待直至到达浏览器内置超时
      * @return {Promise} resolve接收一个参数(http响应内容)
      */
-    sendHttpRequest(url, method) {
+    sendHttpRequest(url, method, timeout) {
         throw unsupportedTip;
     };
 

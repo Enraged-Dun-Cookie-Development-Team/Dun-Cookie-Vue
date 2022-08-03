@@ -287,8 +287,8 @@ class AlarmHelper {
 }
 
 class HttpHelper {
-    sendGet(url) {
-        return currentPlatform.sendHttpRequest(url, 'GET');
+    sendGet(url, timeout) {
+        return currentPlatform.sendHttpRequest(url, 'GET', timeout);
     }
 }
 

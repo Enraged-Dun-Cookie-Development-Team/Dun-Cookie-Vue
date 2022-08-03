@@ -228,18 +228,34 @@ width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retwee
     });
   }
 
-  sendHttpRequest(url, method) {
+  sendHttpRequest(url, method, timeout) {
     if (typeof url === 'string') {
       url = new URL(url);
     }
-    return fetch(url, {
+    /**
+     * @type {RequestInit}
+     */
+    const options = {
       method: method,
       mode: CORS_AVAILABLE_DOMAINS[url.host] ? 'cors' : 'no-cors',
-    }).then(response => {
+    };
+    let timeoutId = 0;
+    if (timeout && timeout > 0) {
+      const controller = new AbortController();
+      options.signal = controller.signal;
+      timeoutId = setTimeout(() => {
+        controller.abort();
+      }, timeout);
+    }
+    return fetch(url, options).then(response => {
       if (response.type === 'opaque') {
         throw '获取响应失败，可能是插件权限中未允许访问目标网站：' + url.origin;
       }
       return response.text();
+    }).finally(() => {
+      if (timeoutId > 0) {
+        clearTimeout(timeoutId);
+      }
     });
   }
 
