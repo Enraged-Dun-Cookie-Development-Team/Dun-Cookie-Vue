@@ -184,7 +184,7 @@ const quickJump = {
       radius: true,
     },
     {
-      url: "https://arknightscommunity.drblack-system.com/",
+      url: "https://terrach.net/",
       name: "泰拉通讯枢纽",
       img: "/assets/image/link/tltxsn.png",
       radius: false,
