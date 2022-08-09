@@ -1,9 +1,9 @@
 <template>
-  <div id="timeline-area" :class="settings.display.announcementScroll ? 'scrollTimeline' : ''">
+  <div id="timeline-area" :class="settings.display.announcementScroll && timelineEnableScroll ? 'scrollTimeline' : ''" ref="totalScrollArea">
     <Search ref="SearchModel" :searchShow="searchShow" @searchTextChange="changeFilterText"></Search>
     <el-card shadow="never" class="info-card online-speak" :class="searchShow ? 'searching' : ''" v-loading="loading"
       element-loading-text="【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没有*龙门粗口*正常连接】">
-      <div @wheel="gowheel" @touchmove.prevent>
+      <div @wheel="gowheel" @mouseover="mouseOverAnnouncement" @mouseleave="mouseLeaveAnnouncement">
         <el-carousel ref="swiper" arrow="never" height="100px" direction="vertical" :interval="3000" :autoplay="true">
           <el-carousel-item v-if="isNew">
             <div class="new-info-area" @click="openUpdate">
@@ -137,7 +137,8 @@ export default {
       }
     });
     return {
-      announcementScroll: true,
+      announcementAreaScroll: true,
+      timelineEnableScroll: true,
       settings: Settings,
       san: SanInfo,
       searchShow: false,
@@ -495,23 +496,29 @@ export default {
 
     // 上下滚动绑定滚轮事件
     gowheel(event) {
-      debugger
-      if (event.deltaY > 0 && this.announcementScroll == true) { //data中定义one为true 当one为true时执行
+      if (event.deltaY > 0 && this.announcementAreaScroll == true) { //data中定义one为true 当one为true时执行
         this.$refs.swiper.next();           //以此来控制每次轮播图切换的张数
-        this.announcementScroll = false;
+        this.announcementAreaScroll = false;
         setTimeout(() => {
-          this.announcementScroll = true
-        }, 1000)
+          this.announcementAreaScroll = true
+        }, 500)
       }
 
-      if (event.deltaY < 0 && this.announcementScroll == true) {
+      if (event.deltaY < 0 && this.announcementAreaScroll == true) {
         this.$refs.swiper.prev();
-        this.announcementScroll = false;
+        this.announcementAreaScroll = false;
         setTimeout(() => {
-          this.announcementScroll = true
-        }, 1000)
+          this.announcementAreaScroll = true
+        }, 500)
       }
     },
+    mouseOverAnnouncement() {
+      this.timelineEnableScroll = false
+    },
+
+    mouseLeaveAnnouncement() {
+      this.timelineEnableScroll = true
+    }
   },
 };
 </script>
