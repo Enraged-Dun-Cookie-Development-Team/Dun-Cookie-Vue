@@ -21,9 +21,9 @@
                       <div>
                         距离
                         <el-tooltip v-if="item.remark" :content="item.remark" placement="right">
-                          <span class="online-blue">{{ item.text }}</span>
+                          <span class="online-orange">{{ item.text }}</span>
                         </el-tooltip>
-                        <span v-else class="online-blue">{{ item.text }}</span>
+                        <span v-else class="online-orange">{{ item.text }}</span>
                         <span title="国服 UTC-8">{{
                             " " + calcActivityDiff(item.time)
                         }}</span>
@@ -32,7 +32,7 @@
                   </div>
                   <div v-if="settings.feature.san && imgShow" class="sane-area" @click.stop="openToolDrawer">
                     <div class="sane">
-                      当前理智为<span class="online-blue sane-number">{{ san.currentSan }}</span>点
+                      当前理智为<span class="online-orange sane-number">{{ san.currentSan }}</span>点
                     </div>
                     <div class="sane-info">
                       {{ san.remainTime }}
