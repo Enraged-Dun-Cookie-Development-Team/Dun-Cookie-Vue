@@ -50,10 +50,10 @@ function startSanRecovery(san, delay) {
     san.updateTime = now - remainTime;
     delay = SAN_RECOVERY_SPEED - remainTime;
   }
+  sanRecovery(san);
   san.startReloadTime();
   sanTimerId = setTimeout(() => {
     // 将实际恢复逻辑放进setTimeout中，如果放在外面就会出现第一次会立刻恢复1理智(而没有等待恢复时间)的问题
-    sanRecovery(san);
     if (san.currentSan < Settings.san.maxValue) {
       startSanRecovery(san);
     }
