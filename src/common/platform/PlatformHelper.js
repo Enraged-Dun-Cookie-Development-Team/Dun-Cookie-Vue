@@ -55,6 +55,23 @@ export default class PlatformHelper {
         return currentPlatform.PlatformType;
     }
 
+    /**
+     * @return {Promise<any>}
+     */
+    static getPlatformInfo() {
+        return currentPlatform.getPlatformInfo();
+    }
+
+    static async osIsMac() {
+        const os = (await PlatformHelper.getPlatformInfo()).os;
+        return os === 'mac' || os === 'darwin';
+    }
+
+    static async osIsWindows() {
+        const os = (await PlatformHelper.getPlatformInfo()).os;
+        return os === 'win' || os === 'win32';
+    }
+
     static get PlatformInstance() {
         return currentPlatform;
     }
@@ -96,6 +113,10 @@ export default class PlatformHelper {
 
     static get Lifecycle() {
         return lifecycleHelper;
+    }
+
+    static get Alarms() {
+        return alarmHelper;
     }
 
     static get Http() {
@@ -251,9 +272,23 @@ class LifecycleHelper {
     }
 }
 
+class AlarmHelper {
+    create(name, alarmInfo) {
+        return currentPlatform.createAlarm(name, alarmInfo);
+    }
+
+    clearAll() {
+        return currentPlatform.clearAllAlarms();
+    }
+
+    addListener(listener) {
+        return currentPlatform.addAlarmsListener(listener);
+    }
+}
+
 class HttpHelper {
-    sendGet(url) {
-        return currentPlatform.sendHttpRequest(url, 'GET');
+    sendGet(url, timeout) {
+        return currentPlatform.sendHttpRequest(url, 'GET', timeout);
     }
 }
 
@@ -272,6 +307,7 @@ const notificationHelper = new NotificationHelper();
 const windowsHelper = new WindowsHelper();
 const downloadsHelper = new DownloadsHelper();
 const lifecycleHelper = new LifecycleHelper();
+const alarmHelper = new AlarmHelper();
 const httpHelper = new HttpHelper();
 const imgHelper = new ImgHelper();
 globalThis.PlatformHelper = PlatformHelper

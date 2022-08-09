@@ -7,7 +7,7 @@ import {
   MESSAGE_SETTINGS_UPDATE,
   SAN_RECOVERY_SPEED
 } from '../Constants';
-import {deepAssign} from '../util/CommonFunctions';
+import { deepAssign } from '../util/CommonFunctions';
 import NotificationUtil from '../util/NotificationUtil';
 import PlatformHelper from '../platform/PlatformHelper';
 
@@ -21,7 +21,6 @@ let sanTimerId = null;
 // 需要注意的是：目前san-update代表当前理智的相关信息修改，而settings-update代表可能有最大理智相关信息修改
 
 function sanRecovery(san) {
-  san.currentSan++;
   if (Settings.san.maxValue - san.currentSan == 3) {
     noticeSan(`理智快满啦`, `博士！！博士！！理智还差不到18分钟就满啦！快点上线清理智噢！`);
   }
@@ -43,7 +42,13 @@ let remainTimeIntervalId = 0;
 function startSanRecovery(san, delay) {
   // 如果提供了时间参数则依照提供的参数延时，便于插件重启后正确更新
   if (!delay) {
-    delay = SAN_RECOVERY_SPEED;
+    const now = new Date().getTime();
+    const timeElapsed = now - san.updateTime;
+    const recovery = Math.floor(timeElapsed / SAN_RECOVERY_SPEED);
+    const remainTime = timeElapsed % SAN_RECOVERY_SPEED;
+    san.currentSan += recovery;
+    san.updateTime = now - remainTime;
+    delay = SAN_RECOVERY_SPEED - remainTime;
   }
   san.startReloadTime();
   sanTimerId = setTimeout(() => {
@@ -106,13 +111,16 @@ function tryReload(san, settings) {
       } else if ((newSan - settings.san.maxValue) <= 5) {
         // 插件被关闭的那段时间中理智已经完全恢复了并且不超过半小时(5 * 6分钟), 则直接推送提醒且不启动计时器
         san.currentSan = settings.san.maxValue;
-        noticeSan(`理智已满`, `理智已经满了！！请博士赶快上线清理智，不要浪费啦！`);
+        noticeSan(`理智已满`, `理智都满一会啦！！！这可是20合成玉呀！`);
+      } else {
+        // 插件被关闭的那段时间中理智已经完全恢复了并且超过半小时(5 * 6分钟), 则将理智设置满且不启动计时器
+        san.currentSan = settings.san.maxValue;
       }
     } else {
       // 插件被关闭的那段时间中一点理智都没恢复(被关闭的时间小于理智恢复间隔)，正常启动计时器继续计时
       shouldStartTimer = true;
     }
-
+    san.calcRemainingTime();
     if (shouldStartTimer) {
       startSanRecovery(san, SAN_RECOVERY_SPEED - timeElapsed % SAN_RECOVERY_SPEED);
     }
@@ -121,7 +129,7 @@ function tryReload(san, settings) {
 
 // 判断是否需要推送
 function noticeSan(title, message) {
-  if(Settings.san.noticeWhenFull) {
+  if (Settings.san.noticeWhenFull) {
     NotificationUtil.SendNotice(title, message, null, new Date().getTime());
   }
 }

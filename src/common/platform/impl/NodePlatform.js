@@ -19,6 +19,7 @@ export default class NodePlatform extends AbstractPlatform {
     http = node_require('http');
     https = node_require('https');
     url = node_require('url');
+    os = node_require('os');
     worker_threads;
     broadcastChannel;
 
@@ -43,13 +44,17 @@ export default class NodePlatform extends AbstractPlatform {
         return PLATFORM_NODE;
     }
 
+    get PlatformOs() {
+        return this.os.platform();
+    }
+
     getAllWindow() {
-        return Promise.reslove([]);
+        return Promise.resolve([]);
     }
 
     async getLocalStorage(name) {
         const file = await this.fs.open(storageFile, this.fs_callback.constants.O_RDONLY | this.fs_callback.constants.O_CREAT);
-        const content = (await file.readFile('UTF-8'))?.toString() || '{}';
+        const content = ((await file.readFile('UTF-8')) || '{}').toString();
         await file.close();
         try {
             const json = JSON.parse(content);
@@ -206,7 +211,7 @@ export default class NodePlatform extends AbstractPlatform {
         }
     }
 
-    sendHttpRequest(url, method) {
+    sendHttpRequest(url, method, timeout) {
         return new Promise((resolve, reject) => {
             if (url.indexOf('file') === 0) {
                 const filePath = this.url.fileURLToPath(url);
@@ -234,6 +239,9 @@ export default class NodePlatform extends AbstractPlatform {
                     'Cookie': this.weiboCookie
                 }
             }
+            if (timeout && timeout > 0) {
+                options.timeout = timeout;
+            }
             let web;
             if (url.indexOf('https') === 0) {
                 web = this.https;
@@ -259,6 +267,7 @@ export default class NodePlatform extends AbstractPlatform {
                 }
             });
 
+            req.on('timeout', () => reject(`web request timeout(${timeout}ms)`));
             req.on('error', reject);
             req.end();
         });
@@ -275,6 +284,20 @@ export default class NodePlatform extends AbstractPlatform {
     setBadgeBackgroundColor(color) {
         if (DEBUG_LOG) {
             console.log('Node环境不支持Badge');
+        }
+        // 无事发生
+        return new Promise((resolve, _) => resolve());
+    }
+
+    createAlarm(name, alarmInfo) {
+        if (DEBUG_LOG) {
+            console.log('Node环境不支持Alarm');
+        }
+    }
+
+    clearAllAlarms() {
+        if (DEBUG_LOG) {
+            console.log('Node环境不支持Alarm');
         }
         // 无事发生
         return new Promise((resolve, _) => resolve());

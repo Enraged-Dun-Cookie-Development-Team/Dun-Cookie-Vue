@@ -21,7 +21,7 @@ const CURRENT_SETTING_VERSION = 2;
 /**
  * 当前插件版本号
  */
-const CURRENT_VERSION = '3.1.1';
+const CURRENT_VERSION = '3.1.9';
 /**
  * 展示用的版本号
  */
@@ -184,7 +184,7 @@ const quickJump = {
       radius: true,
     },
     {
-      url: "https://arknightscommunity.drblack-system.com/",
+      url: "https://terrach.net/",
       name: "泰拉通讯枢纽",
       img: "/assets/image/link/tltxsn.png",
       radius: false,

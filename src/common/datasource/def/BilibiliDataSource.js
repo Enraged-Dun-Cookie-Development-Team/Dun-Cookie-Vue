@@ -14,17 +14,21 @@ export class BilibiliDataSource extends DataSource {
   };
 
   static async withUid(uid, priority) {
+    /**
+     * @type {UserInfo}
+     */
+    let data;
     try {
-      const data = await DataSource.getOrFetchUserInfo(uid, BilibiliDataSource);
-      if (!data) {
-        return null;
-      }
-      const dataUrl = `https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=${uid}&offset_dynamic_id=0&need_top=0&platform=web`;
-      return new BilibiliDataSource(data.avatarUrl, data.dataName, data.username, dataUrl, priority);
+      data = await DataSource.getOrFetchUserInfo(uid, BilibiliDataSource);
     } catch (e) {
       console.log(e);
-      return null;
     }
+    if (!data) {
+      data = new UserInfo('bili_' + uid, '/assets/image/icon/bili.ico');
+    }
+    const dataName = BilibiliDataSource.typeName + '_' + uid;
+    const dataUrl = `https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=${uid}&offset_dynamic_id=0&need_top=0&platform=web`;
+    return new BilibiliDataSource(data.avatarUrl, dataName, data.username, dataUrl, priority);
   }
 
   constructor(icon, dataName, title, dataUrl, priority) {
@@ -95,7 +99,6 @@ export class BilibiliDataSource extends DataSource {
     if (json.code != 0) {
       throw 'request fail: ' + JSON.stringify(json);
     }
-    const dataName = BilibiliDataSource.typeName + '_' + uid;
-    return new UserInfo(dataName, json.data.name, json.data.face);
+    return new UserInfo(json.data.name, json.data.face);
   }
 }

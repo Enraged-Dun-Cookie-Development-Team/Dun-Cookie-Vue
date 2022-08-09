@@ -4,6 +4,7 @@ import BrowserPlatform from "./BrowserPlatform";
 // 火狐无法储存被vue监视的对象，故在内部做json编解码
 const _InternalJsonCompatible = '__INTERNAL_JSON__';
 
+// noinspection JSUnresolvedVariable
 export default class FirefoxPlatform extends BrowserPlatform {
 
     constructor() {
@@ -12,6 +13,10 @@ export default class FirefoxPlatform extends BrowserPlatform {
 
     get PlatformType() {
         return PLATFORM_FIREFOX;
+    }
+
+    getPlatformInfo() {
+        return browser.runtime.getPlatformInfo();
     }
 
     getAllWindow() {
@@ -160,6 +165,18 @@ export default class FirefoxPlatform extends BrowserPlatform {
 
     setBadgeBackgroundColor(color) {
         return browser.browserAction.setBadgeBackgroundColor({color: color});
+    }
+
+    createAlarm(name, alarmInfo) {
+        browser.alarms.create(name, alarmInfo);
+    }
+
+    clearAllAlarms() {
+        return browser.alarms.clearAll();
+    }
+
+    addAlarmsListener(listener) {
+        browser.alarms.onAlarm.addListener(listener);
     }
 
 }

@@ -1,68 +1,64 @@
 <template>
-  <div id="timeline-area" :class="settings.display.announcementScroll ? 'scrollTimeline' : ''">
+  <div id="timeline-area" :class="settings.display.announcementScroll && timelineEnableScroll ? 'scrollTimeline' : ''" ref="totalScrollArea">
     <Search ref="SearchModel" :searchShow="searchShow" @searchTextChange="changeFilterText"></Search>
     <el-card shadow="never" class="info-card online-speak" :class="searchShow ? 'searching' : ''" v-loading="loading"
-      element-loading-text="【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没有*龙门粗口*正常连接】" element-loading-custom-class="page-loading">
-      <el-carousel arrow="never" height="100px" direction="vertical" :interval="3000" :autoplay="true">
-        <el-carousel-item v-if="isNew">
-          <div class="new-info-area" @click="openUpdate">
-            <img src="/assets/image/update.png" />
-            博士，检测到了新版本，点击这里进入更新页面
-          </div>
-        </el-carousel-item>
-        <el-carousel-item>
-          <div class="day-info">
-            <div class="day-info-content">
-              <div class="day-info-content-top">
-                <div>
-                  <div class="day-info-content-top-card-area" :key="index"
-                    v-for="(item, index) in onlineDayInfo.countdown">
-                    <div>
-                      距离
-                      <el-tooltip v-if="item.remark" :content="item.remark" placement="right">
-                        <span class="online-orange">{{ item.text }}</span>
-                      </el-tooltip>
-                      <span v-else class="online-orange">{{ item.text }}</span>
-                      <span title="国服 UTC-8">{{
-                          " " + calcActivityDiff(item.time)
-                      }}</span>
+      element-loading-text="【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没有*龙门粗口*正常连接】">
+      <div @wheel="gowheel" @mouseover="mouseOverAnnouncement" @mouseleave="mouseLeaveAnnouncement">
+        <el-carousel ref="swiper" arrow="never" height="100px" direction="vertical" :interval="3000" :autoplay="true">
+          <el-carousel-item v-if="isNew">
+            <div class="new-info-area" @click="openUpdate">
+              <img src="/assets/image/update.png" />
+              博士，检测到了新版本，点击这里进入更新页面
+            </div>
+          </el-carousel-item>
+          <el-carousel-item>
+            <div class="day-info">
+              <div class="day-info-content">
+                <div class="day-info-content-top">
+                  <div>
+                    <div class="day-info-content-top-card-area" :key="index"
+                      v-for="(item, index) in onlineDayInfo.countdown">
+                      <div>
+                        距离
+                        <el-tooltip v-if="item.remark" :content="item.remark" placement="right">
+                          <span class="online-blue">{{ item.text }}</span>
+                        </el-tooltip>
+                        <span v-else class="online-blue">{{ item.text }}</span>
+                        <span title="国服 UTC-8">{{
+                            " " + calcActivityDiff(item.time)
+                        }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div v-if="settings.feature.san && imgShow" class="sane-area" @click.stop="openToolDrawer">
+                    <div class="sane">
+                      当前理智为<span class="online-blue sane-number">{{ san.currentSan }}</span>点
+                    </div>
+                    <div class="sane-info">
+                      {{ san.remainTime }}
                     </div>
                   </div>
                 </div>
-                <div v-if="settings.feature.san && imgShow" class="sane-area" @click.stop="openToolDrawer">
-                  <div class="sane">
-                    当前理智为<span class="online-orange sane-number">{{
-                        san.currentSan
-                    }}</span>点
+                <div class="day-info-content-bottom">
+                  <div class="day-info-content-bottom-card-area">
+                    <el-tooltip class="item" effect="dark" placement="bottom" v-for="item in dayInfo" :key="item.type">
+                      <div slot="content">
+                        {{ `${item.name} - 开放日期： ${calcResourceOpenDay(item.day)}` }}
+                      </div>
+                      <div class="day-info-content-bottom-card" :class="item.notToday ? 'notToday' : ''">
+                        <img v-if="imgShow" v-lazy="item.src" />
+                      </div>
+                    </el-tooltip>
                   </div>
-                  <div class="sane-info">
-                    {{ san.remainTime }}
-                  </div>
-                </div>
-              </div>
-              <div class="day-info-content-bottom">
-                <div class="day-info-content-bottom-card-area">
-                  <el-tooltip class="item" effect="dark" placement="bottom" v-for="item in dayInfo" :key="item.type">
-                    <div slot="content">
-                      {{
-                          `${item.name} - 开放日期： ${calcResourceOpenDay(
-                            item.day
-                          )}`
-                      }}
-                    </div>
-                    <div class="day-info-content-bottom-card" :class="item.notToday ? 'notToday' : ''">
-                      <img v-if="imgShow" v-lazy="item.src" />
-                    </div>
-                  </el-tooltip>
                 </div>
               </div>
             </div>
-          </div>
-        </el-carousel-item>
-        <el-carousel-item v-for="(item, index) in onlineSpeakList" :key="index">
-          <div v-html="item.html"></div>
-        </el-carousel-item>
-      </el-carousel>
+          </el-carousel-item>
+          <el-carousel-item v-for="(item, index) in onlineSpeakList" :key="index">
+            <div v-html="item.html"></div>
+          </el-carousel-item>
+        </el-carousel>
+      </div>
     </el-card>
     <el-tabs v-if="settings.display.showByTag" v-model="currentTag" :stretch="true" @tab-click="selectListByTag">
       <el-tab-pane v-for="item of transformToSortList(cardListByTag)" :key="item.dataName" :label="item.dataName"
@@ -133,7 +129,7 @@ import Settings from "../../common/Settings";
 import SanInfo from "../../common/sync/SanInfo";
 import TimeUtil from "../../common/util/TimeUtil";
 import Search from "../Search";
-import { deepAssign } from "../../common/util/CommonFunctions";
+import {  deepAssign  } from "../../common/util/CommonFunctions";
 import PlatformHelper from "../../common/platform/PlatformHelper";
 import InsiderUtil from "../../common/util/InsiderUtil";
 import ServerUtil from "../../common/util/ServerUtil";
@@ -154,6 +150,8 @@ export default {
       }
     });
     return {
+      announcementAreaScroll: true,
+      timelineEnableScroll: true,
       settings: Settings,
       san: SanInfo,
       searchShow: false,
@@ -527,6 +525,32 @@ export default {
         });
       }
     },
+
+    // 上下滚动绑定滚轮事件
+    gowheel(event) {
+      if (event.deltaY > 0 && this.announcementAreaScroll == true) { //data中定义one为true 当one为true时执行
+        this.$refs.swiper.next();           //以此来控制每次轮播图切换的张数
+        this.announcementAreaScroll = false;
+        setTimeout(() => {
+          this.announcementAreaScroll = true
+        }, 500)
+      }
+
+      if (event.deltaY < 0 && this.announcementAreaScroll == true) {
+        this.$refs.swiper.prev();
+        this.announcementAreaScroll = false;
+        setTimeout(() => {
+          this.announcementAreaScroll = true
+        }, 500)
+      }
+    },
+    mouseOverAnnouncement() {
+      this.timelineEnableScroll = false
+    },
+
+    mouseLeaveAnnouncement() {
+      this.timelineEnableScroll = true
+    }
   },
 };
 </script>
@@ -876,7 +900,6 @@ img[lazy="error"] {
 
       .to-copy-share {
         right: 100px;
-
         // 需要特殊显示的数据源只提供复制按钮，跳转由数据源自行实现
         &.special-source {
           right: 50px;

@@ -15,17 +15,21 @@ export class WeiboDataSource extends DataSource {
   };
 
   static async withUid(uid, priority) {
+    /**
+     * @type {UserInfo}
+     */
+    let data;
     try {
-      const data = await DataSource.getOrFetchUserInfo(uid, WeiboDataSource);
-      if (!data) {
-        return null;
-      }
-      const dataUrl = `https://m.weibo.cn/api/container/getIndex?type=uid&value=${uid}&containerid=107603${uid}`;
-      return new WeiboDataSource(data.avatarUrl, data.dataName, data.username, dataUrl, priority);
+      data = await DataSource.getOrFetchUserInfo(uid, WeiboDataSource);
     } catch (e) {
       console.log(e);
-      return null;
     }
+    if (!data) {
+      data = new UserInfo('weibo_' + uid, '/assets/image/icon/weibo.ico');
+    }
+    const dataName = WeiboDataSource.typeName + '_' + uid;
+    const dataUrl = `https://m.weibo.cn/api/container/getIndex?type=uid&value=${uid}&containerid=107603${uid}`;
+    return new WeiboDataSource(data.avatarUrl, dataName, data.username, dataUrl, priority);
   }
 
   constructor(icon, dataName, title, dataUrl, priority) {
