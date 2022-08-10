@@ -21,7 +21,15 @@ let sanTimerId = null;
 // 需要注意的是：目前san-update代表当前理智的相关信息修改，而settings-update代表可能有最大理智相关信息修改
 
 function sanRecovery(san) {
-  if (Settings.san.maxValue - san.currentSan == 3) {
+  const timeElapsed = new Date().getTime() - san.updateTime;
+  // 时间超长时可能是休眠导致setTimeout延时了，用经过时间除以6分钟来判断理智恢复数量以避免出问题
+  if (timeElapsed > SAN_RECOVERY_SPEED) {
+    const recovery = Math.floor(timeElapsed / SAN_RECOVERY_SPEED);
+    san.currentSan += recovery;
+  } else {
+    san.currentSan++;
+  }
+  if (Settings.san.maxValue - san.currentSan === 3) {
     noticeSan(`理智快满啦`, `博士！！博士！！理智还差不到18分钟就满啦！快点上线清理智噢！`);
   }
   if (san.currentSan >= Settings.san.maxValue) {
@@ -42,18 +50,20 @@ let remainTimeIntervalId = 0;
 function startSanRecovery(san, delay) {
   // 如果提供了时间参数则依照提供的参数延时，便于插件重启后正确更新
   if (!delay) {
-    const now = new Date().getTime();
-    const timeElapsed = now - san.updateTime;
-    const recovery = Math.floor(timeElapsed / SAN_RECOVERY_SPEED);
-    const remainTime = timeElapsed % SAN_RECOVERY_SPEED;
-    san.currentSan += recovery;
-    san.updateTime = now - remainTime;
-    delay = SAN_RECOVERY_SPEED - remainTime;
+    // 偏移时间 用于将理智恢复时间对准6分钟
+    const offsetTime = (new Date().getTime() - san.updateTime) % SAN_RECOVERY_SPEED;
+    if (offsetTime > 0) {
+      // 将理智更新时间也对准6分钟
+      san.updateTime -= offsetTime;
+      delay = SAN_RECOVERY_SPEED - offsetTime;
+    } else {
+      delay = SAN_RECOVERY_SPEED;
+    }
   }
-  sanRecovery(san);
-  san.startReloadTime();
+  if (remainTimeIntervalId === 0) san.startReloadTime();
   sanTimerId = setTimeout(() => {
     // 将实际恢复逻辑放进setTimeout中，如果放在外面就会出现第一次会立刻恢复1理智(而没有等待恢复时间)的问题
+    sanRecovery(san);
     if (san.currentSan < Settings.san.maxValue) {
       startSanRecovery(san);
     }
