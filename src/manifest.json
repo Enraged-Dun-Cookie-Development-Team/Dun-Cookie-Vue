@@ -35,7 +35,8 @@
 		"https://music.163.com/*",
 		"http://*.music.126.net/*",
 		"http://*.ceobecanteen.top/*",
-		"https://*.ceobecanteen.top/*"
+		"https://*.ceobecanteen.top/*",
+		"http://127.0.0.1:8000/api/v1/*"
 	],
 	"options_ui": {
 		"page": "options.html",
