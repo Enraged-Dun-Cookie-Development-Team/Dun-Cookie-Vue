@@ -1,8 +1,9 @@
 <template>
-  <div id="timeline-area" :class="settings.display.announcementScroll && timelineEnableScroll ? 'scrollTimeline' : ''" ref="totalScrollArea">
+  <div id="timeline-area" :class="settings.display.announcementScroll && timelineEnableScroll ? 'scrollTimeline' : ''"
+    ref="totalScrollArea">
     <Search ref="SearchModel" :searchShow="searchShow" @searchTextChange="changeFilterText"></Search>
     <el-card shadow="never" class="info-card online-speak" :class="searchShow ? 'searching' : ''" v-loading="loading"
-      element-loading-text="【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没有*龙门粗口*正常连接】">
+      element-loading-text="【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没 有*龙门粗口*正常连接】">
       <div @wheel="gowheel" @mouseover="mouseOverAnnouncement" @mouseleave="mouseLeaveAnnouncement">
         <el-carousel ref="swiper" arrow="never" height="100px" direction="vertical" :interval="3000" :autoplay="true">
           <el-carousel-item v-if="isNew">
@@ -54,7 +55,7 @@
               </div>
             </div>
           </el-carousel-item>
-          <el-carousel-item v-for="(item, index) in onlineSpeakList" :key="index">
+          <el-carousel-item v-for="(item, index) in onlineSpeakList" :key="index+2">
             <div v-html="item.html"></div>
           </el-carousel-item>
         </el-carousel>
@@ -144,7 +145,7 @@ export default {
       searchShow: false,
       onlineDayInfo: {},
       onlineSpeakList: [],
-      isNew: false,
+      isNew: true,
       dayInfo: dayInfo,
       quickJump: quickJump,
       loading: true, // 初始化加载
@@ -218,8 +219,8 @@ export default {
     resourcesNotToday() {
       let date = TimeUtil.changeToCCT(new Date());
       // 如果日期在里面
-      let starTime = new Date(this.onlineDayInfo.resources.starTime);
-      let overTime = new Date(this.onlineDayInfo.resources.overTime);
+      let starTime = new Date(this.onlineDayInfo.resources.start_time);
+      let overTime = new Date(this.onlineDayInfo.resources.over_time);
       if (date >= starTime && date <= overTime) {
         this.dayInfo.forEach((item) => {
           item.notToday = false;
@@ -239,48 +240,39 @@ export default {
     },
     // 获取在线信息
     getOnlineSpeak() {
-      ServerUtil.checkOnlineInfo(false).then((data) => {
+      let version = ServerUtil.getVersionInfo(false, false).then((data) => {
+        // 是否最新
+        this.isNew = Settings.JudgmentVersion(data.version, CURRENT_VERSION);
+      });
+      
+      let announcement = ServerUtil.getAnnouncementInfo(false).then((data) => {
         // 头部公告
-        let filterList = data.list.filter(
+        let filterList = data.filter(
           (x) =>
-            new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
-            new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
+            new Date(x.start_time) <= TimeUtil.changeToCCT(new Date()) &&
+            new Date(x.over_time) >= TimeUtil.changeToCCT(new Date())
         );
 
         this.onlineSpeakList.push(...filterList);
+      });
 
-        // 快捷连接
-        let btnList = data.btnList.filter(
-          (x) =>
-            new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
-            new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
-        );
-        if (btnList.length > 0) {
-          this.quickJump.url.push(...btnList);
-        }
-
-        // 是否最新
-        this.isNew = Settings.JudgmentVersion(data.upgrade.v, CURRENT_VERSION);
-
+      let resource = ServerUtil.getResourceInfo(false).then((data) => {
         // 资源获取
-        this.onlineDayInfo = data.dayInfo;
+        this.onlineDayInfo = data;
         // 倒计时
         this.onlineDayInfo.countdown = this.onlineDayInfo.countdown.filter(
           (x) =>
-            new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
-            new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
+            new Date(x.start_time) <= TimeUtil.changeToCCT(new Date()) &&
+            new Date(x.over_time) >= TimeUtil.changeToCCT(new Date())
         );
+      });
 
-        if (data.iconName) {
-          PlatformHelper.Storage.saveLocalStorage('iconName', data.iconName);
-        }
-
-        // 内部密码
-        this.insiderCodeMap = data.insider;
+      Promise.all([announcement, version, resource]).then(() => {
         this.resourcesNotToday();
         this.loading = false;
       });
     },
+    
     calcActivityDiff(endDate) {
       let startDate = TimeUtil.changeToCCT(new Date());
       const diff = TimeUtil.calcDiff(endDate, startDate);
