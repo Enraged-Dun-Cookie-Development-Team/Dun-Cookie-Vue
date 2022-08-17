@@ -833,6 +833,20 @@ body {
   align-items: center;
   margin-right: 30px;
 
+  p {
+    margin: 0px;
+  }
+
+  // 菜单按钮
+  drawer {
+    color : #dd558a;
+  }
+
+  // 设置按钮
+  setting {
+    color: #dd55c4;
+  }
+
   .online-title-img {
     height: 100px;
     margin-right: 10px;
