@@ -41,9 +41,12 @@
         </el-divider>
         <div class="drawer-btn-area-quickJump" ref="drawerBtnAreaQuickJump">
           <el-tooltip :content="item.title" :key="index" v-for="(item, index) in quickJump.url" placement="top">
-            <div class="quickJump-img-area">
+            <div class="quickJump-img-area"  style="vertical-align: middle;display: table-cell;">
               <img v-if="LazyLoaded" v-lazy="item.cover_img" class="btn-icon radius"
-                @click="openUrl(item.video_link)" />
+              @click="openUrl(item.video_link)" />
+              <div class="author">
+                <p>{{item.author}}</p>
+              </div>
             </div>
           </el-tooltip>
         </div>
@@ -581,14 +584,39 @@ export default {
       border-radius: 5px;
       overflow: hidden;
       border: 1px solid #dcdfe6;
+      position: relative;
 
       // display: flex;
       // flex-wrap: wrap;
       // align-items: center;
-      .quickJump-img-area {}
-
+      &:hover {
+        img {
+          filter: blur(30px) brightness(0.1);
+        }
+        .author{
+          & p {
+            opacity: 1;
+          }
+        }
+      }
       img {
         height: 100px;
+      }
+
+      .author{
+        position:absolute;
+        width: 100%;
+        z-index:1;
+        top:50%;
+        left:50%;
+        transform:translate(-50%, -50%);
+        text-align: center;
+
+        & p{
+          opacity: 0;
+          font-size: 20px;
+          color:#fff;
+        }
       }
     }
 
