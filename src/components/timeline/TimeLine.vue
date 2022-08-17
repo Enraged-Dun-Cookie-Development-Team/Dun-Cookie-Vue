@@ -3,7 +3,7 @@
     ref="totalScrollArea">
     <Search ref="SearchModel" :searchShow="searchShow" @searchTextChange="changeFilterText"></Search>
     <el-card shadow="never" class="info-card online-speak" :class="searchShow ? 'searching' : ''" v-loading="loading"
-      element-loading-text="【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没 有*龙门粗口*正常连接】">
+      element-loading-text="【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没有*龙门粗口*正常连接】">
       <div @wheel="gowheel" @mouseover="mouseOverAnnouncement" @mouseleave="mouseLeaveAnnouncement">
         <el-carousel ref="swiper" arrow="never" height="100px" direction="vertical" :interval="3000" :autoplay="true">
           <el-carousel-item v-if="isNew">
