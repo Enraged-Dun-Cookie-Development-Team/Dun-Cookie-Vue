@@ -162,6 +162,7 @@ export default {
       dunInfo: DunInfo,
       settings: Settings,
       drawer: false, // 打开菜单
+      drawerFirst: false, // 这次打开窗口是否打开过二级菜单
       toolDrawer: false, // 理智计算器菜单
       isReload: false, // 是否正在刷新
       quickJump: quickJump,
@@ -203,8 +204,9 @@ export default {
       }, 1);
     },
     handleIconClick() {
-      if (!this.drawer) {
+      if (!this.drawer && !this.drawerFirst) {
         this.getVideoJump()
+        this.drawerFirst = true;
       }
 
       this.drawer = !this.drawer;
