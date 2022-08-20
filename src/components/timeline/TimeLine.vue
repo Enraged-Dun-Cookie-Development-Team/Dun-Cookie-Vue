@@ -4,8 +4,10 @@
     <Search ref="SearchModel" :searchShow="searchShow" @searchTextChange="changeFilterText"></Search>
     <el-card shadow="never" class="info-card online-speak" :class="searchShow ? 'searching' : ''" v-loading="loading"
       element-loading-text="【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没有*龙门粗口*正常连接】">
-      <div @wheel="gowheel" @mouseover="mouseOverAnnouncement" @mouseleave="mouseLeaveAnnouncement">
-        <el-carousel ref="swiper" arrow="never" height="100px" direction="vertical" :interval="3000" :autoplay="true">
+      <div @wheel="gowheel" @mouseover="mouseOverAnnouncement" @mouseleave="mouseLeaveAnnouncement"
+        class="announcement-area">
+        <el-carousel ref="swiper" height="100px" arrow="never" direction="vertical" :interval="3000" :autoplay="true"
+          v-if="!loading">
           <el-carousel-item v-if="isNew">
             <div class="new-info-area" @click="openUpdate">
               <img src="/assets/image/update.png" />
@@ -55,7 +57,7 @@
               </div>
             </div>
           </el-carousel-item>
-          <el-carousel-item v-for="(item, index) in onlineSpeakList" :key="index+2">
+          <el-carousel-item v-for="(item, index) in onlineSpeakList" :key="index + 2">
             <div v-html="item.html"></div>
           </el-carousel-item>
         </el-carousel>
@@ -145,7 +147,7 @@ export default {
       searchShow: false,
       onlineDayInfo: {},
       onlineSpeakList: [],
-      isNew: true,
+      isNew: false,
       dayInfo: dayInfo,
       quickJump: quickJump,
       loading: true, // 初始化加载
@@ -244,7 +246,7 @@ export default {
         // 是否最新
         this.isNew = Settings.JudgmentVersion(data.version, CURRENT_VERSION);
       });
-      
+
       let announcement = ServerUtil.getAnnouncementInfo(false).then((data) => {
         // 头部公告
         let filterList = data.filter(
@@ -272,7 +274,7 @@ export default {
         this.loading = false;
       });
     },
-    
+
     calcActivityDiff(endDate) {
       let startDate = TimeUtil.changeToCCT(new Date());
       const diff = TimeUtil.calcDiff(endDate, startDate);
@@ -661,6 +663,10 @@ img[lazy="error"] {
 
     .el-card__body {
       padding: 0;
+
+      .announcement-area {
+        height: 100px;
+      }
 
       // 升级内容样式
       .new-info-area {
