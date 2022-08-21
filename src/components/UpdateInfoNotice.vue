@@ -1,19 +1,21 @@
 <template>
-  <el-dialog :title="'小刻食堂 V' + updateInfo.v + ' 翻新了什么？'" :modal-append-to-body="false" :visible.sync="showUpdateInfo"
-    width="80%">
+  <el-dialog :title="'小刻食堂 V' + updateInfo.version + ' 翻新了什么？'" :modal-append-to-body="false"
+    :visible.sync="showUpdateInfo" width="80%">
     <div class="update-info-area" v-html="updateInfo.description"></div>
   </el-dialog>
 </template>
 
 <script>
 import PlatformHelper from "../common/platform/PlatformHelper";
+import ServerUtil from "../common/util/ServerUtil";
 import { CURRENT_VERSION } from "../common/Constants";
+
 
 export default {
   name: "UpdateInfoNotice",
-  props: ["updateInfo"],
   data() {
     return {
+      updateInfo: {},
       showUpdateInfo: false,
     }
   },
@@ -21,18 +23,22 @@ export default {
     this.init();
   },
   methods: {
-    init() {
-      setTimeout(async () => {
-        if (CURRENT_VERSION === this.updateInfo.v) {
-          let versionNotice = await PlatformHelper.Storage.getLocalStorage('version-notice');
-          if (!versionNotice) {
+    async init() {
+      let versionUpdate = await PlatformHelper.Storage.getLocalStorage('version-update');
+      if (!versionUpdate || CURRENT_VERSION != versionUpdate) {
+        ServerUtil.getVersionInfo(true, false).then((data) => {
+            this.updateInfo = data;
             this.showUpdateInfo = true;
-            versionNotice = true;
-            PlatformHelper.Storage.saveLocalStorage('version-notice', versionNotice);
-          }
-        }
-      }, 1000);
+            PlatformHelper.Storage.saveLocalStorage('version-update', data.version);
+        });
+      }
     }
   }
 }
 </script>
+
+<style lang="less" scoped>
+.update-info-area {
+  white-space: pre-wrap
+}
+</style>
