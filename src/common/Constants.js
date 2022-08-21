@@ -80,7 +80,7 @@ export {PAGE_WELCOME, PAGE_POPUP_WINDOW, PAGE_OPTIONS, PAGE_DONATE, PAGE_UPDATE,
 // region 杂项
 const TOOL_QR_URL = 'https://arknightscommunity.drblack-system.com/15386.html';
 const CANTEEN_INTERFACE_LIST = ['http://api.ceobecanteen.top/'];
-const CANTEEN_SERVER_LIST = ['http://127.0.0.1:8000/api/v1/']
+const CANTEEN_SERVER_LIST = ['https://server.ceobecanteen.top/api/v1/']
 // TODO 直接从common.js里面copy过来的，等待优化重构
 const quickJump = {
   source: [
