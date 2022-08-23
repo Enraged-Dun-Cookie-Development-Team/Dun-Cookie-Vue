@@ -373,7 +373,6 @@ export default {
     getCountDownList() {
       PlatformHelper.Message.send(MESSAGE_GET_COUNTDOWN).then(data => {
         this.countDownList = data.sort((x, y) => new Date(x.stopTime) > new Date(y.stopTime) ? 1 : -1);
-        console.log(this.countDownList)
       })
     },
     // 设置数据

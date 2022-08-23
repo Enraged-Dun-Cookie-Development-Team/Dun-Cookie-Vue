@@ -82,7 +82,6 @@ export default class ServerUtil {
         let data;
         try {
             data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/announcement/list", false)), res => !!res);
-            console.log(data)
             data = data.data
         } catch (e) {
             console.log(e);
