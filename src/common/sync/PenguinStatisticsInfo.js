@@ -19,18 +19,21 @@ export default class PenguinStatistics {
 
     static GetNewItems() {
         let promiseList = [];
+        let options = {
+            appendTimestamp: false
+        }
         promiseList.push(new Promise(resolve => {
-            HttpUtil.GET("https://penguin-stats.io/PenguinStats/api/v2/items?i18n=false", false).then(data => {
+            HttpUtil.GET("https://penguin-stats.io/PenguinStats/api/v2/items?i18n=false", options).then(data => {
                 resolve(data);
             });
         }))
         promiseList.push(new Promise(resolve => {
-            HttpUtil.GET("https://penguin-stats.io/PenguinStats/api/v2/stages", false).then(data => {
+            HttpUtil.GET("https://penguin-stats.io/PenguinStats/api/v2/stages", options).then(data => {
                 resolve(data);
             });
         }))
         promiseList.push(new Promise(resolve => {
-            HttpUtil.GET("https://penguin-stats.io/PenguinStats/api/v2/zones", false).then(data => {
+            HttpUtil.GET("https://penguin-stats.io/PenguinStats/api/v2/zones", options).then(data => {
                 resolve(data);
             });
         }))
@@ -48,8 +51,11 @@ export default class PenguinStatistics {
     }
 
     static GetItemInfo(id) {
+        let options = {
+            appendTimestamp: false
+        }
         return new Promise(resolve => {
-            HttpUtil.GET(`https://penguin-stats.io/PenguinStats/api/v2/result/matrix?is_personal=false&itemFilter=${id}&server=CN&show_closed_zones=true`, false).then(data => {
+            HttpUtil.GET(`https://penguin-stats.io/PenguinStats/api/v2/result/matrix?is_personal=false&itemFilter=${id}&server=CN&show_closed_zones=true`, options).then(data => {
                 resolve(data)
             })
         })

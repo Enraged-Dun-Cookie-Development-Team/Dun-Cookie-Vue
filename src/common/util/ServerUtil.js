@@ -51,7 +51,7 @@ export default class ServerUtil {
                             announcementNoticeStatus = {};
                             announcementNoticeStatus[today] = {};
                         }
-                        if (!announcementNoticeStatus[today][today +"-"+ x.notice]) {
+                        if (!announcementNoticeStatus[today][today + "-" + x.notice]) {
                             announcementNoticeStatus[today][today + "-" + x.notice] = true;
                             let imgReg = /<img.*?src='(.*?)'/;
                             let imgUrl = x.html.match(imgReg)[1];
@@ -81,7 +81,10 @@ export default class ServerUtil {
         await new Promise(resolve => Settings.doAfterInit(() => resolve()));
         let data;
         try {
-            data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/announcement/list", false)), res => !!res);
+            let options = {
+                appendTimestamp: false
+            }
+            data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/announcement/list", options)), res => !!res);
             data = data.data
         } catch (e) {
             console.log(e);
@@ -112,7 +115,7 @@ export default class ServerUtil {
                             announcementNoticeStatus = {};
                             announcementNoticeStatus[today] = {};
                         }
-                        if (!announcementNoticeStatus[today][today +"-"+ x.notice]) {
+                        if (!announcementNoticeStatus[today][today + "-" + x.notice]) {
                             announcementNoticeStatus[today][today + "-" + x.notice] = true;
                             let imgReg = /<img.*?src='(.*?)'/;
                             let imgUrl = x.html.match(imgReg)[1];
@@ -142,7 +145,10 @@ export default class ServerUtil {
         await new Promise(resolve => Settings.doAfterInit(() => resolve()));
         let data;
         try {
-            data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/video/list", false)), res => !!res);
+            let options = {
+                appendTimestamp: false
+            }
+            data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/video/list", options)), res => !!res);
             data = data.data
         } catch (e) {
             console.log(e);
@@ -162,7 +168,10 @@ export default class ServerUtil {
         await new Promise(resolve => Settings.doAfterInit(() => resolve()));
         let data;
         try {
-            data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/resource/get", false)), res => !!res);
+            let options = {
+                appendTimestamp: false
+            }
+            data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/resource/get", options)), res => !!res);
             data = data.data
         } catch (e) {
             console.log(e);
@@ -184,10 +193,13 @@ export default class ServerUtil {
         let data;
         let networkBroken = false;
         try {
+            let options = {
+                appendTimestamp: false
+            }
             if (currentVersion) {
-                data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/version/plugin?version=" + CURRENT_VERSION, false)), res => !!res);
+                data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/version/plugin?version=" + CURRENT_VERSION, options)), res => !!res);
             } else {
-                data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/version/plugin", false)), res => !!res);
+                data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/version/plugin", options)), res => !!res);
             }
             data = data.data
         } catch (e) {
