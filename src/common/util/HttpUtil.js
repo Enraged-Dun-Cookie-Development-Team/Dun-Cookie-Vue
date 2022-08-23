@@ -35,7 +35,7 @@ class HttpUtil {
    * @return {Promise}
    */
   static async GET(url, options={}) {
-    if (typeof(options.appendTimestamp) != 'boolean' || options.appendTimestamp) {
+    if (typeof options.appendTimestamp != 'boolean' || options.appendTimestamp) {
       url = appendTimeStamp(url);
     }
     DebugUtil.debugLog(7, `正在请求URL：${url}`);

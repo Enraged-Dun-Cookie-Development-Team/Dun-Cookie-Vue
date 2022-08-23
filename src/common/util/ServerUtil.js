@@ -10,6 +10,17 @@ import NotificationUtil from "./NotificationUtil";
 import TimeUtil from "./TimeUtil";
 import PromiseUtil from "./PromiseUtil";
 
+const serveOption = {
+    appendTimestamp: false,
+    failControll: (response) => {
+        if(response.status == 502 || response.status == 504) {
+            throw '获取响应失败，可能是临时网络波动，如果长时间失败请联系开发者';
+        } else {
+            response.text();
+        }
+    }
+}
+
 export default class ServerUtil {
     static async checkOnlineInfo(shouldNotice) {
         await new Promise(resolve => Settings.doAfterInit(() => resolve()));
@@ -81,10 +92,7 @@ export default class ServerUtil {
         await new Promise(resolve => Settings.doAfterInit(() => resolve()));
         let data;
         try {
-            let options = {
-                appendTimestamp: false
-            }
-            data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/announcement/list", options)), res => !!res);
+            data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/announcement/list", serveOption)), res => !!res);
             data = data.data
         } catch (e) {
             console.log(e);
@@ -145,10 +153,7 @@ export default class ServerUtil {
         await new Promise(resolve => Settings.doAfterInit(() => resolve()));
         let data;
         try {
-            let options = {
-                appendTimestamp: false
-            }
-            data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/video/list", options)), res => !!res);
+            data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/video/list", serveOption)), res => !!res);
             data = data.data
         } catch (e) {
             console.log(e);
@@ -168,10 +173,7 @@ export default class ServerUtil {
         await new Promise(resolve => Settings.doAfterInit(() => resolve()));
         let data;
         try {
-            let options = {
-                appendTimestamp: false
-            }
-            data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/resource/get", options)), res => !!res);
+            data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/resource/get", serveOption)), res => !!res);
             data = data.data
         } catch (e) {
             console.log(e);
@@ -193,13 +195,10 @@ export default class ServerUtil {
         let data;
         let networkBroken = false;
         try {
-            let options = {
-                appendTimestamp: false
-            }
             if (currentVersion) {
-                data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/version/plugin?version=" + CURRENT_VERSION, options)), res => !!res);
+                data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/version/plugin?version=" + CURRENT_VERSION, serveOption)), res => !!res);
             } else {
-                data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/version/plugin", options)), res => !!res);
+                data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/version/plugin", serveOption)), res => !!res);
             }
             data = data.data
         } catch (e) {
