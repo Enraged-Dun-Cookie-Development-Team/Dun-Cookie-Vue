@@ -109,7 +109,7 @@
     </el-dialog>
     <select-image-to-copy ref="SelectImageToCopy" @copyData="copyData">
     </select-image-to-copy>
-    <update-info-notice :updateInfo="updateInfo"></update-info-notice>
+    <update-info-notice></update-info-notice>
   </div>
 </template>
 
@@ -147,7 +147,6 @@ export default {
       san: SanInfo,
       searchShow: false,
       onlineDayInfo: {},
-      updateInfo: {},
       onlineSpeakList: [],
       isNew: false,
       dayInfo: dayInfo,
