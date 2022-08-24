@@ -12,11 +12,10 @@ import PromiseUtil from "./PromiseUtil";
 
 const serveOption = {
     appendTimestamp: false,
+    // 响应头的ok等于true时调用，处理502与504当作网络问题
     failControll: (response) => {
         if(response.status == 502 || response.status == 504) {
             throw '获取响应失败，可能是临时网络波动，如果长时间失败请联系开发者';
-        } else {
-            response.text();
         }
     }
 }
