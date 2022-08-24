@@ -26,11 +26,10 @@ export default {
     async init() {
       let versionUpdate = await PlatformHelper.Storage.getLocalStorage('version-update');
       if (!versionUpdate || CURRENT_VERSION != versionUpdate) {
-        ServerUtil.getVersionInfo(true, false).then((data) => {
-            this.updateInfo = data;
-            this.showUpdateInfo = true;
-            PlatformHelper.Storage.saveLocalStorage('version-update', data.version);
-        });
+        let data = await ServerUtil.getVersionInfo(true, false)
+        this.updateInfo = data;
+        this.showUpdateInfo = true;
+        PlatformHelper.Storage.saveLocalStorage('version-update', data.version);
       }
     }
   }

@@ -34,7 +34,7 @@ class HttpUtil {
    * @param {function} options.failControll 控制catch回调函数，默认在ok位false抛出异常
    * @return {Promise}
    */
-  static async GET(url, options={}) {
+  static async GET(url, options = {}) {
     if (typeof options.appendTimestamp != 'boolean' || options.appendTimestamp) {
       url = appendTimeStamp(url);
     }
