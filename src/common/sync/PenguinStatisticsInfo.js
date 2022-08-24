@@ -70,7 +70,9 @@ export default class PenguinStatistics {
     }
 
     static GetItemByText(text) {
-        return this.penguinStatisticsInfo.items.filter(item => item.itemType != "RECRUIT_TAG" && ((item.pron.zh && item.pron.zh.some(x => x.replaceAll('`', '').indexOf(text) != -1)) || (item.alias.zh && item.alias.zh.some(x => x.replaceAll('`', '').indexOf(text) != -1))));
+        return this.penguinStatisticsInfo.items.filter(item => item.itemType != "RECRUIT_TAG" && // 判断是否不为公招tag
+            ((item.pron.zh && item.pron.zh.some(x => x.replaceAll('`', '').indexOf(text) != -1)) ||  //判断中文相关拼音是否存在，去除字中间的`
+                (item.alias.zh && item.alias.zh.some(x => x.replaceAll('`', '').indexOf(text) != -1)))); //判断中文相关文字是否存在，去除字中间的`
     }
 }
 
