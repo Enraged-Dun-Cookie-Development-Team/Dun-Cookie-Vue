@@ -13,9 +13,9 @@ class HttpUtil {
    * 向指定的url发送get请求并解析为JSON
    * @param url 想要请求的url
    * @param {Object} options 可选的参数对象
-   * @param {boolean} options.appendTimestamp 是否要增加时间戳参数以避免缓存，默认为true
-   * @param {number} options.timeout 超时(单位：毫秒)，默认5秒
-   * @param {function} options.failControll 控制catch回调函数，默认undife在ok位false抛出异常
+   * @param {boolean?} options.appendTimestamp 是否要增加时间戳参数以避免缓存，默认为true
+   * @param {number?} options.timeout 超时(单位：毫秒)，默认5秒
+   * @param {function?} options.failController 控制catch回调函数，默认在ok为false时抛出异常
    * @return {Promise}
    */
   static async GET_Json(url, options = {}) {
@@ -29,9 +29,9 @@ class HttpUtil {
    * 向指定的url发送get请求
    * @param url 想要请求的url
    * @param {Object} options 可选的参数对象
-   * @param {boolean} options.appendTimestamp 是否要增加时间戳参数以避免缓存，默认为true
-   * @param {number} options.timeout 超时(单位：毫秒)，默认5秒
-   * @param {function} options.failControll 控制catch回调函数，默认在ok位false抛出异常
+   * @param {boolean?} options.appendTimestamp 是否要增加时间戳参数以避免缓存，默认为true
+   * @param {number?} options.timeout 超时(单位：毫秒)，默认5秒
+   * @param {function?} options.failController 控制catch回调函数，默认在ok为false时抛出异常
    * @return {Promise}
    */
   static async GET(url, options = {}) {

@@ -231,7 +231,7 @@ width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retwee
     });
   }
 
-  sendHttpRequest(url, method, timeout, failControll) {
+  sendHttpRequest(url, method, timeout, failController) {
     if (typeof url === 'string') {
       url = new URL(url);
     }
@@ -255,10 +255,10 @@ width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retwee
         throw '获取响应失败，可能是插件权限中未允许访问目标网站：' + url.origin;
       }
       if (!response.ok) {
-        if (!failControll) {
+        if (!failController) {
           throw '获取响应失败，可能是临时网络波动，如果长时间失败请联系开发者'
         }
-        return failControll(response)
+        return failController(response)
       }
       return response.text();
     }).catch(err => {
