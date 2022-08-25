@@ -79,24 +79,17 @@
             /></el-button>
           </el-tooltip>
         </el-row>
-        <el-divider v-if="quickJump.url" content-position="left"
-          >快捷链接
+        <el-divider v-if="quickJump.url" content-position="left">快捷链接
         </el-divider>
         <div class="drawer-btn-area-quickJump" ref="drawerBtnAreaQuickJump">
-          <el-tooltip
-            :content="item.name"
-            :key="index"
-            v-for="(item, index) in quickJump.url"
-            placement="top"
-          >
-            <div class="quickJump-img-area">
-              <img
-                v-if="LazyLoaded"
-                v-lazy="item.img"
-                class="btn-icon"
-                :class="item.radius ? 'radius' : ''"
-                @click="openUrl(item.url)"
-              />
+          <el-tooltip 
+            :content="item.title" :key="index" v-for="(item, index) in quickJump.url" placement="top">
+            <div class="quickJump-img-area"  style="vertical-align: middle;display: table-cell;">
+              <img v-if="LazyLoaded" v-lazy="item.cover_img" class="btn-icon radius"
+              @click="openUrl(item.video_link)" />
+              <div class="author">
+                <p>{{item.author}}</p>
+              </div>
             </div>
           </el-tooltip>
         </div>
