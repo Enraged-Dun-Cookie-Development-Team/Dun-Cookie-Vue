@@ -211,7 +211,7 @@ export default class NodePlatform extends AbstractPlatform {
         }
     }
 
-    sendHttpRequest(url, method, timeout) {
+    sendHttpRequest(url, method, timeout, failController) {
         return new Promise((resolve, reject) => {
             if (url.indexOf('file') === 0) {
                 const filePath = this.url.fileURLToPath(url);

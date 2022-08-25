@@ -3,12 +3,7 @@
     <!-- <div id="app" :style="'height:' + allHeight + 'px'"> -->
     <div id="app">
       <!-- 理智计算 -->
-      <el-drawer
-        :visible.sync="toolDrawer"
-        :show-close="false"
-        direction="ttb"
-        size="180px"
-      >
+      <el-drawer :visible.sync="toolDrawer" :show-close="false" direction="ttb" size="180px">
         <el-divider content-position="left">理智计算提醒</el-divider>
         <el-form
           size="mini"
@@ -84,24 +79,17 @@
             /></el-button>
           </el-tooltip>
         </el-row>
-        <el-divider v-if="quickJump.url" content-position="left"
-          >快捷链接
+        <el-divider v-if="quickJump.url" content-position="left">快捷链接
         </el-divider>
         <div class="drawer-btn-area-quickJump" ref="drawerBtnAreaQuickJump">
-          <el-tooltip
-            :content="item.name"
-            :key="index"
-            v-for="(item, index) in quickJump.url"
-            placement="top"
-          >
-            <div class="quickJump-img-area">
-              <img
-                v-if="LazyLoaded"
-                v-lazy="item.img"
-                class="btn-icon"
-                :class="item.radius ? 'radius' : ''"
-                @click="openUrl(item.url)"
-              />
+          <el-tooltip 
+            :content="item.title" :key="index" v-for="(item, index) in quickJump.url" placement="top">
+            <div class="quickJump-img-area"  style="vertical-align: middle;display: table-cell;">
+              <img v-if="LazyLoaded" v-lazy="item.cover_img" class="btn-icon radius"
+              @click="openUrl(item.video_link)" />
+              <div class="author">
+                <p>{{item.author}}</p>
+              </div>
             </div>
           </el-tooltip>
         </div>
@@ -204,6 +192,7 @@
 import countTo from "vue-count-to";
 import TimeLine from "../components/timeline/TimeLine";
 import Settings from "../common/Settings";
+import TimeUtil from "../common/util/TimeUtil";
 import SanInfo from "../common/sync/SanInfo";
 import DunInfo from "../common/sync/DunInfo";
 import MenuIcon from "@/popup/MenuIcon";
@@ -223,6 +212,7 @@ import {
 import PlatformHelper from "../common/platform/PlatformHelper";
 import "animate.css";
 import CardList from "../common/sync/CardList";
+import ServerUtil from "../common/util/ServerUtil";
 
 export default {
   name: "app",
@@ -258,6 +248,7 @@ export default {
       dunInfo: DunInfo,
       settings: Settings,
       drawer: false, // 打开菜单
+      drawerFirst: false, // 这次打开窗口是否打开过二级菜单
       toolDrawer: false, // 理智计算器菜单
       isReload: false, // 是否正在刷新
       quickJump: quickJump,
@@ -298,7 +289,26 @@ export default {
       }, 1);
     },
     handleIconClick() {
+      if (!this.drawer && !this.drawerFirst) {
+        this.getVideoJump()
+        this.drawerFirst = true;
+      }
+
       this.drawer = !this.drawer;
+    },
+    // 获取快速跳转视频信息
+    getVideoJump() {
+      ServerUtil.getVideoInfo().then((data) => {
+        // 快捷连接
+        let btnList = data.filter(
+          (x) =>
+            new Date(x.start_time) <= TimeUtil.changeToCCT(new Date()) &&
+            new Date(x.over_time) >= TimeUtil.changeToCCT(new Date())
+        );
+        if (btnList.length > 0) {
+          this.quickJump.url.push(...btnList);
+        }
+      });
     },
     // 初始化菜单图标
     menuIconInit() {
@@ -576,7 +586,7 @@ export default {
 
   #app {
     /deep/ a {
-      color: @@content !important;
+      color: @@content  !important;
     }
 
     background-color: @@bgColor;
@@ -636,6 +646,7 @@ export default {
         padding: 0 10px 0 0;
         border-radius: 3px;
         transition: all 0.5s;
+
         &:hover {
           background: @@bgColor;
           height: auto;
@@ -693,14 +704,39 @@ export default {
       border-radius: 5px;
       overflow: hidden;
       border: 1px solid #dcdfe6;
+      position: relative;
+
       // display: flex;
       // flex-wrap: wrap;
       // align-items: center;
-      .quickJump-img-area {
+      &:hover {
+        img {
+          filter: blur(30px) brightness(0.1);
+        }
+        .author{
+          & p {
+            opacity: 1;
+          }
+        }
       }
-
       img {
         height: 100px;
+      }
+
+      .author{
+        position:absolute;
+        width: 100%;
+        z-index:1;
+        top:50%;
+        left:50%;
+        transform:translate(-50%, -50%);
+        text-align: center;
+
+        & p{
+          opacity: 0;
+          font-size: 20px;
+          color:#fff;
+        }
       }
     }
 
@@ -949,6 +985,20 @@ body {
   display: flex;
   align-items: center;
   margin-right: 30px;
+
+  p {
+    margin: 0px;
+  }
+
+  // 菜单按钮
+  drawer {
+    color : #dd558a;
+  }
+
+  // 设置按钮
+  setting {
+    color: #dd55c4;
+  }
 
   .online-title-img {
     height: 100px;

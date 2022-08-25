@@ -241,9 +241,10 @@ export default class AbstractPlatform {
      * @param url 目标url
      * @param method 请求方法(GET/POST等)
      * @param timeout 超时(单位：毫秒)，不提供或小于等于0时无限等待直至到达浏览器内置超时
+     * @param failController 回调函数，用于处理响应ok为false
      * @return {Promise} resolve接收一个参数(http响应内容)
      */
-    sendHttpRequest(url, method, timeout) {
+    sendHttpRequest(url, method, timeout, failController) {
         throw unsupportedTip;
     };
 
