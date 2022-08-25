@@ -1,12 +1,6 @@
 {
     "list": [
         {
-            "html": "<div class='online-area'> <img class='online-title-img radius' src='/assets/image/icon.png'> <div> <div>最新版本<span class='online-blue'>Edge浏览器Bug</span></div> <div>经博士反馈，发现点击弹出的饼无法正常跳转网页</div> <div>可以尝试输入网址<span class='online-red'>“edge://flags”</span></div> <div>后将<span class='online-yellow'>“Toast Notification Background Task Event Handlers”</span>调成<span class='online-blue'>“disable”</span> </div> <div>既可以恢复正常跳转</div> </div> </div>",
-            "starTime": "2022-08-06 21:00:00",
-            "overTime": "2022-08-30 15:59:59",
-            "notice": false
-        },
-        {
             "html": "<div class='online-area'> <img class='online-title-img radius' src='https://ak.hycdn.cn/announce/images/20220803/9b52ac5f3a89ad3c878a749568211207'> <div> <div><span class='online-blue'>#01「引航者试炼」</span>将于<span class='online-blue'>8月18号</span>开始</div> <div>开始时间为<span class='online-red'>周四16:00</span></div> <div>完成<span class='online-red'>“试炼任务”</span>积累试炼经验</div> <div>活动开启时，<span class='online-yellow'>快捷链接</span>更新<span class='online-blue'>作业视频</span> </div> <div>或者点击 <span class='online-blue'><drawer>这里</drawer></span> 快速跳转</div> </div> </div>",
             "starTime": "2022-08-14 16:00:00",
             "overTime": "2022-08-18 15:59:59",
@@ -142,11 +136,11 @@
                 "overTime": "2022-08-11 15:59:59"
             },
             {
-                "text": "当前活动池【沙洲引路人】结束",
-                "remark": "多萝西、承曦格雷伊、白面鸮",
-                "time": "2022-07-19 03:59:59",
-                "starTime": "2022-07-05 16:00:00",
-                "overTime": "2022-07-24 03:59:59"
+                "text": "联合寻访结束",
+                "remark": "卡涅利安、麦哲伦、风笛、异客",
+                "time": "2022-09-08 03:59:59",
+                "starTime": "2022-08-25 16:00:00",
+                "overTime": "2022-09-08 03:59:59"
             },
             {
                 "text": "当前活动池【巨斧与笔尖】结束",
@@ -188,11 +182,11 @@
     },
     "logo": "icon.png",
     "upgrade": {
-        "v": "3.1.9",
-        "title": "小刻食堂翻新啦 - 3.1.9",
-        "description": "🐛 修复各种各样的bug </br>1. 修复没有文字生成图片复制失败</br>2. 修复泰拉记事社官网推送与排序问题</br>3. 重要公告不会当天重复推送</br>4. 微博头图改用原图，清晰大图一眼可见</br>5. 修复复制微博图片模糊的情况</br>6. 修复理智计算器在休眠和关机情况下出错</br>7. 修复计时器在休眠与关机情况下出错",
-        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/3.1.9/Ceobe-Canteen-3.1.9.crx",
-        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/3.1.9/Ceobe-Canteen-3.1.9.zip",
+        "v": "3.2.1",
+        "title": "小刻食堂翻新啦 - 3.2.1",
+        "description": "🧱 替换运营信息获取来源，如公告、视频资源等，务必升级到这个版本后 </br>1. 替换运营信息获取来源，更加方便更新啦。所以以后更新频率将更加频繁，记得去看快捷连接的视频推荐呀</br>2. 更新后第一次打开列表提醒更新内容</br>3. 修复企鹅物流查询无法展示</br>4. 断网情况不在列表显示更新提醒",
+        "downCrx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/3.2.1/Ceobe-Canteen-3.2.1.crx",
+        "downZip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/3.2.1/Ceobe-Canteen-3.2.1.zip",
         "downSpare": "https://pan.baidu.com/s/1kzY6kpfYqLcGpuaiwQOGoA",
         "downSpareText": "备用下载（提取码 jzq9）",
         "downChrome": "https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN",

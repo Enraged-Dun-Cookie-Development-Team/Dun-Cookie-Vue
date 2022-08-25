@@ -29,7 +29,8 @@ function ExtensionInit() {
     Settings.doAfterInit(() => {
         restartDunTimer();
         setTimeout(() => {
-            ServerUtil.checkOnlineInfo(true);
+            ServerUtil.getVersionInfo(false, true);
+            ServerUtil.getAnnouncementInfo(true);
         }, 600000);
     });
 
