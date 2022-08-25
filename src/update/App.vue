@@ -26,32 +26,32 @@
         <el-button
           size="mini"
            type="success"
-          @click="openUrl(updateInfo.downChrome)"
+          @click="openUrl(updateInfo.down.chrome)"
           >Chrome应用商店</el-button
         >
         <el-button
             size="mini"
             type="success"
-            @click="openUrl(updateInfo.downEdge)"
+            @click="openUrl(updateInfo.down.edge)"
         >Edge应用商店</el-button
         >
         <el-button
             size="mini"
             type="success"
-            @click="openUrl(updateInfo.downFirefox)"
+            @click="openUrl(updateInfo.down.firefox)"
         >Firefox应用商店</el-button
         >
       </div>
       <div style="text-align: center">
-      <el-button type="success" @click="openUrl(updateInfo.downCrx)" size="mini"
+      <el-button type="success" @click="openUrl(updateInfo.down.crx)" size="mini"
           >下载Crx</el-button
         >
-        <el-button type="success" @click="openUrl(updateInfo.downZip)" size="mini"
+        <el-button type="success" @click="openUrl(updateInfo.down.zip)" size="mini"
           >下载Zip</el-button
         >
         
-        <el-button v-if="updateInfo.downSpareText" @click="openUrl(updateInfo.downSpare)" size="mini"
-          >{{updateInfo.downSpareText}}</el-button
+        <el-button v-if="updateInfo.downSpareText" @click="openUrl(updateInfo.down.spare[0])" size="mini"
+          >{{updateInfo.down.spare[1]}}</el-button
         >
       </div>
       <el-divider></el-divider>
@@ -93,8 +93,8 @@ export default {
     openUrl: PlatformHelper.Tabs.create,
     // 检查一次更新
     getUpdateInfo() {
-      ServerUtil.checkOnlineInfo(false).then((responseText) => {
-        this.updateInfo = responseText.upgrade;
+      ServerUtil.getVersionInfo(false, false).then((responseText) => {
+        this.updateInfo = responseText;
       });
     },
   },

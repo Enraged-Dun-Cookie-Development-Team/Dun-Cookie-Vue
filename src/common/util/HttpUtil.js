@@ -12,12 +12,14 @@ class HttpUtil {
   /**
    * 向指定的url发送get请求并解析为JSON
    * @param url 想要请求的url
-   * @param appendTimestamp 是否要增加时间戳参数以避免缓存，默认为true
-   * @param timeout 超时(单位：毫秒)，默认5秒
+   * @param {Object} options 可选的参数对象
+   * @param {boolean?} options.appendTimestamp 是否要增加时间戳参数以避免缓存，默认为true
+   * @param {number?} options.timeout 超时(单位：毫秒)，默认5秒
+   * @param {function?} options.failController 控制catch回调函数，默认在ok为false时抛出异常
    * @return {Promise}
    */
-  static async GET_Json(url, appendTimestamp = true, timeout = 5000) {
-    const response = await HttpUtil.GET(url, appendTimestamp, timeout);
+  static async GET_Json(url, options = {}) {
+    const response = await HttpUtil.GET(url, options);
     if (response) {
       return JSON.parse(response);
     }
@@ -26,17 +28,19 @@ class HttpUtil {
   /**
    * 向指定的url发送get请求
    * @param url 想要请求的url
-   * @param appendTimestamp 是否要增加时间戳参数以避免缓存，默认为true
-   * @param timeout 超时(单位：毫秒)，默认5秒
+   * @param {Object} options 可选的参数对象
+   * @param {boolean?} options.appendTimestamp 是否要增加时间戳参数以避免缓存，默认为true
+   * @param {number?} options.timeout 超时(单位：毫秒)，默认5秒
+   * @param {function?} options.failController 控制catch回调函数，默认在ok为false时抛出异常
    * @return {Promise}
    */
-  static async GET(url, appendTimestamp = true, timeout = 5000) {
-    if (appendTimestamp) {
+  static async GET(url, options = {}) {
+    if (typeof options.appendTimestamp != 'boolean' || options.appendTimestamp) {
       url = appendTimeStamp(url);
     }
     DebugUtil.debugLog(7, `正在请求URL：${url}`);
     try {
-      return await PlatformHelper.Http.sendGet(url, timeout);
+      return await PlatformHelper.Http.sendGet(url, options);
     } catch (e) {
       let errMsg = `请求URL时发生异常：${url}`;
       if (typeof e !== "string") {

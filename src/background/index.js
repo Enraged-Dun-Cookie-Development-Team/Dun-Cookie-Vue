@@ -29,7 +29,8 @@ function ExtensionInit() {
     Settings.doAfterInit(() => {
         restartDunTimer();
         setTimeout(() => {
-            ServerUtil.checkOnlineInfo(true);
+            ServerUtil.getVersionInfo(false, true);
+            ServerUtil.getAnnouncementInfo(true);
         }, 600000);
     });
 
@@ -79,6 +80,9 @@ function ExtensionInit() {
     PlatformHelper.Lifecycle.addInstalledListener(details => {
         if (details.reason === 'install') {
             PlatformHelper.Tabs.createWithExtensionFile(PAGE_WELCOME);
+        } 
+        if (details.reason === 'update' || details.reason === 'install') {
+            PlatformHelper.Storage.saveLocalStorage("version-notice",false);
         }
     });
 

@@ -19,18 +19,21 @@ export default class PenguinStatistics {
 
     static GetNewItems() {
         let promiseList = [];
+        let options = {
+            appendTimestamp: false
+        }
         promiseList.push(new Promise(resolve => {
-            HttpUtil.GET("https://penguin-stats.io/PenguinStats/api/v2/items?i18n=false", false).then(data => {
+            HttpUtil.GET("https://penguin-stats.io/PenguinStats/api/v2/items?i18n=false", options).then(data => {
                 resolve(data);
             });
         }))
         promiseList.push(new Promise(resolve => {
-            HttpUtil.GET("https://penguin-stats.io/PenguinStats/api/v2/stages", false).then(data => {
+            HttpUtil.GET("https://penguin-stats.io/PenguinStats/api/v2/stages", options).then(data => {
                 resolve(data);
             });
         }))
         promiseList.push(new Promise(resolve => {
-            HttpUtil.GET("https://penguin-stats.io/PenguinStats/api/v2/zones", false).then(data => {
+            HttpUtil.GET("https://penguin-stats.io/PenguinStats/api/v2/zones", options).then(data => {
                 resolve(data);
             });
         }))
@@ -48,8 +51,11 @@ export default class PenguinStatistics {
     }
 
     static GetItemInfo(id) {
+        let options = {
+            appendTimestamp: false
+        }
         return new Promise(resolve => {
-            HttpUtil.GET(`https://penguin-stats.io/PenguinStats/api/v2/result/matrix?is_personal=false&itemFilter=${id}&server=CN&show_closed_zones=true`, false).then(data => {
+            HttpUtil.GET(`https://penguin-stats.io/PenguinStats/api/v2/result/matrix?is_personal=false&itemFilter=${id}&server=CN&show_closed_zones=true`, options).then(data => {
                 resolve(data)
             })
         })
@@ -64,7 +70,9 @@ export default class PenguinStatistics {
     }
 
     static GetItemByText(text) {
-        return this.penguinStatisticsInfo.items.filter(item => item.pron.zh.some(x => x.replaceAll('`', '').indexOf(text) != -1) || item.alias.zh.some(x => x.replaceAll('`', '').indexOf(text) != -1));
+        return this.penguinStatisticsInfo.items.filter(item => item.itemType != "RECRUIT_TAG" && // 判断是否不为公招tag
+            ((item.pron.zh && item.pron.zh.some(x => x.replaceAll('`', '').indexOf(text) != -1)) ||  //判断中文相关拼音是否存在，去除字中间的`
+                (item.alias.zh && item.alias.zh.some(x => x.replaceAll('`', '').indexOf(text) != -1)))); //判断中文相关文字是否存在，去除字中间的`
     }
 }
 

@@ -1,10 +1,13 @@
 <template>
-  <div id="timeline-area" :class="settings.display.announcementScroll && timelineEnableScroll ? 'scrollTimeline' : ''" ref="totalScrollArea">
+  <div id="timeline-area" :class="settings.display.announcementScroll && timelineEnableScroll ? 'scrollTimeline' : ''"
+    ref="totalScrollArea">
     <Search ref="SearchModel" :searchShow="searchShow" @searchTextChange="changeFilterText"></Search>
     <el-card shadow="never" class="info-card online-speak" :class="searchShow ? 'searching' : ''" v-loading="loading"
       element-loading-text="【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没有*龙门粗口*正常连接】">
-      <div @wheel="gowheel" @mouseover="mouseOverAnnouncement" @mouseleave="mouseLeaveAnnouncement">
-        <el-carousel ref="swiper" arrow="never" height="100px" direction="vertical" :interval="3000" :autoplay="true">
+      <div @wheel="gowheel" @mouseover="mouseOverAnnouncement" @mouseleave="mouseLeaveAnnouncement"
+        class="announcement-area">
+        <el-carousel ref="swiper" height="100px" arrow="never" direction="vertical" :interval="3000" :autoplay="true"
+          v-if="!loading">
           <el-carousel-item v-if="isNew">
             <div class="new-info-area" @click="openUpdate">
               <img src="/assets/image/update.png" />
@@ -54,7 +57,7 @@
               </div>
             </div>
           </el-carousel-item>
-          <el-carousel-item v-for="(item, index) in onlineSpeakList" :key="index">
+          <el-carousel-item v-for="(item, index) in onlineSpeakList" :key="index + 2">
             <div v-html="item.html"></div>
           </el-carousel-item>
         </el-carousel>
@@ -105,8 +108,8 @@
       <img :src="errorImageUrl" style="width: 100%" />
     </el-dialog>
     <select-image-to-copy ref="SelectImageToCopy" @copyData="copyData">
-
     </select-image-to-copy>
+    <update-info-notice></update-info-notice>
   </div>
 </template>
 
@@ -124,10 +127,11 @@ import PlatformHelper from "../../common/platform/PlatformHelper";
 import InsiderUtil from "../../common/util/InsiderUtil";
 import ServerUtil from "../../common/util/ServerUtil";
 import SelectImageToCopy from "@/components/SelectImageToCopy";
+import UpdateInfoNotice from '../UpdateInfoNotice';
 
 export default {
   name: "TimeLine",
-  components: { MyElTimelineItem, Search, SelectImageToCopy },
+  components: { MyElTimelineItem, Search, SelectImageToCopy, UpdateInfoNotice },
   props: ["cardListByTag", "imgShow"],
   data() {
     Settings.doAfterInit(settings => this.currentTag = settings.display.defaultTag);
@@ -218,8 +222,8 @@ export default {
     resourcesNotToday() {
       let date = TimeUtil.changeToCCT(new Date());
       // 如果日期在里面
-      let starTime = new Date(this.onlineDayInfo.resources.starTime);
-      let overTime = new Date(this.onlineDayInfo.resources.overTime);
+      let starTime = new Date(this.onlineDayInfo.resources.start_time);
+      let overTime = new Date(this.onlineDayInfo.resources.over_time);
       if (date >= starTime && date <= overTime) {
         this.dayInfo.forEach((item) => {
           item.notToday = false;
@@ -239,48 +243,39 @@ export default {
     },
     // 获取在线信息
     getOnlineSpeak() {
-      ServerUtil.checkOnlineInfo(false).then((data) => {
+      let version = ServerUtil.getVersionInfo(false, false).then((data) => {
+        // 是否最新
+        this.isNew = Settings.JudgmentVersion(data.version, CURRENT_VERSION);
+      });
+
+      let announcement = ServerUtil.getAnnouncementInfo(false).then((data) => {
         // 头部公告
-        let filterList = data.list.filter(
+        let filterList = data.filter(
           (x) =>
-            new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
-            new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
+            new Date(x.start_time) <= TimeUtil.changeToCCT(new Date()) &&
+            new Date(x.over_time) >= TimeUtil.changeToCCT(new Date())
         );
 
         this.onlineSpeakList.push(...filterList);
+      });
 
-        // 快捷连接
-        let btnList = data.btnList.filter(
-          (x) =>
-            new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
-            new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
-        );
-        if (btnList.length > 0) {
-          this.quickJump.url.push(...btnList);
-        }
-
-        // 是否最新
-        this.isNew = Settings.JudgmentVersion(data.upgrade.v, CURRENT_VERSION);
-
+      let resource = ServerUtil.getResourceInfo(false).then((data) => {
         // 资源获取
-        this.onlineDayInfo = data.dayInfo;
+        this.onlineDayInfo = data;
         // 倒计时
         this.onlineDayInfo.countdown = this.onlineDayInfo.countdown.filter(
           (x) =>
-            new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
-            new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
+            new Date(x.start_time) <= TimeUtil.changeToCCT(new Date()) &&
+            new Date(x.over_time) >= TimeUtil.changeToCCT(new Date())
         );
+      });
 
-        if (data.iconName) {
-          PlatformHelper.Storage.saveLocalStorage('iconName', data.iconName);
-        }
-
-        // 内部密码
-        this.insiderCodeMap = data.insider;
+      Promise.all([announcement, version, resource]).then(() => {
         this.resourcesNotToday();
         this.loading = false;
       });
     },
+
     calcActivityDiff(endDate) {
       let startDate = TimeUtil.changeToCCT(new Date());
       const diff = TimeUtil.calcDiff(endDate, startDate);
@@ -538,9 +533,11 @@ img[lazy="error"] {
     filter: brightness(20%);
   }
 
+
   50% {
     filter: brightness(90%);
   }
+
 
   to {
     filter: brightness(20%);
@@ -632,6 +629,7 @@ img[lazy="error"] {
     #timeline-area {
       position: relative;
 
+
       // 间隔阴影
       .content-timeline-shadow {
         position: absolute;
@@ -669,6 +667,10 @@ img[lazy="error"] {
 
     .el-card__body {
       padding: 0;
+
+      .announcement-area {
+        height: 100px;
+      }
 
       // 升级内容样式
       .new-info-area {
@@ -717,7 +719,7 @@ img[lazy="error"] {
               .sane {
                 font-size: 16px;
                 font-family: Geometos, "Sans-Regular", "SourceHanSansCN-Regular",
-                  YaHei, serif;
+                  YaHei,  serif;
 
                 .sane-number {
                   font-size: 28px;
@@ -766,6 +768,7 @@ img[lazy="error"] {
       background-color: #23ade5;
     }
   }
+
 
   .sane-calculator {
     display: flex;
@@ -841,6 +844,7 @@ img[lazy="error"] {
         color: @@content;
         border: @@btnBorder 1px solid;
 
+
         // 需要特殊显示的数据源只提供复制按钮，跳转由数据源自行实现
         &.special-source {
           right: 0;
@@ -855,6 +859,7 @@ img[lazy="error"] {
 
       .to-copy-share {
         right: 100px;
+
 
         // 需要特殊显示的数据源只提供复制按钮，跳转由数据源自行实现
         &.special-source {
