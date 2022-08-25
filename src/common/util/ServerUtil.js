@@ -150,7 +150,7 @@ export default class ServerUtil {
             data = await HttpUtil.GET_Json(fallbackUrl);
             data = data.upgrade
             // 如果检测到是断网，将版本赋值成当前版本，避免弹出更新提醒
-            if (networkBroken) {
+            if (networkBroken || currentVersion) {
                 data.version = CURRENT_VERSION
             }
         } else {
