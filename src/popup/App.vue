@@ -731,6 +731,7 @@ export default {
         left:50%;
         transform:translate(-50%, -50%);
         text-align: center;
+        pointer-events: none;
 
         & p{
           opacity: 0;
