@@ -8,18 +8,18 @@
       <el-divider></el-divider>
       <div class="info">
         <div class="info-title">
-          版本已经更新，让我们更新后和小刻一起继续等待自由的兔兔发饼吧！
+          版本已经更新
         </div>
         <div class="info-title">
-          Chrome应用商店下载的博士请等候审核通过后更新
+          让我们更新后和小刻一起继续等待自由的兔兔发饼吧！
         </div>
       </div>
       <el-divider></el-divider>
-      <el-card class="box-card">
+      <el-card class="box-card description">
         <div slot="header" class="clearfix">
           <span>{{ updateInfo.title }}</span>
         </div>
-        <div v-html="updateInfo.description"></div>
+        <div v-html="updateInfo.description" ></div>
       </el-card>
       <el-divider></el-divider>
       <div style="text-align: center; margin-bottom: 10px">
@@ -50,7 +50,7 @@
           >下载Zip</el-button
         >
         
-        <el-button v-if="updateInfo.downSpareText" @click="openUrl(updateInfo.down.spare[0])" size="mini"
+        <el-button v-if="updateInfo.down" @click="openUrl(updateInfo.down.spare[0])" size="mini"
           >{{updateInfo.down.spare[1]}}</el-button
         >
       </div>
@@ -125,6 +125,9 @@ export default {
       color: #aaa;
       margin: 10px 0;
     }
+  }
+  .description{
+    white-space: pre-wrap;
   }
   .btn-area {
     width: 100%;
