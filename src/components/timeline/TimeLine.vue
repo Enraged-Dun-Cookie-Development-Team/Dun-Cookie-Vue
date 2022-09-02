@@ -364,16 +364,21 @@ export default {
             } else {
               window.event.returnValue = true;
             }
-            const url = target.getAttribute("href") || target.parentNode.getAttribute("href");
-            if (target.className === "webOpen" || target.parentNode.className === "webOpen") {
-              this.openWeb(url);
-            } else {
+            const url =
+              target.getAttribute("href") ||
+              target.parentNode.getAttribute("href");
+            if (
+              target.className === "tabOpen" ||
+              target.parentNode.className === "tabOpen"
+            ) {
               this.openUrl(url, 1400, 950);
+            } else {
+              this.openWeb(url);
             }
           }
 
           if (target.nodeName.toLocaleLowerCase() === "drawer") {
-            this.$parent.drawer = !this.$parent.drawer;
+            this.$parent.handleIconClick();
           }
 
           if (target.nodeName.toLocaleLowerCase() === "setting") {
