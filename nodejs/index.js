@@ -2,7 +2,7 @@ import DunInfo from "../src/common/sync/DunInfo.js";
 import { Worker } from "worker_threads";
 import CardList from "../src/common/sync/CardList";
 import ws from "ws"
-import fs from "fs"
+// import fs from "fs"
 
 const worker = new Worker('../src/background/index.js', {
   execArgv: ['--experimental-loader', './loader.mjs'],
@@ -16,12 +16,12 @@ worker.on('error', (e) => {
 Object.keys(DunInfo);
 
 // 读取配置文件
-let rawdata = fs.readFileSync("config.json");
-let config = JSON.parse(rawdata);
-let ws_url = "ws://" + config.ws.host + ":" + config.ws.port;   // websocket的地址
-let intervalTime = config.ws.interval_time;                     // 尝试重连时间间隔
-let limitConnect = config.ws.limit_connect || -1;               // 尝试重连次数
-let heartBeatTime = config.ws.heart_beat_time || 5;             // 心跳间隔时间 
+// let rawdata = fs.readFileSync("config.json");
+// let config = JSON.parse(rawdata);
+// let ws_url = "ws://" + config.ws.host + ":" + config.ws.port;   // websocket的地址
+// let intervalTime = config.ws.interval_time;                     // 尝试重连时间间隔
+// let limitConnect = config.ws.limit_connect || -1;               // 尝试重连次数
+// let heartBeatTime = config.ws.heart_beat_time || 5;             // 心跳间隔时间 
 
 let timeConnect = 0;                                            // 重连次数
 let aliveInterval;                                              // websocket心跳检测计时器
