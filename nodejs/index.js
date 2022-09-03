@@ -26,7 +26,7 @@ let heartBeatTime = config.ws.heart_beat_time || 5;             // 心跳间隔�
 let timeConnect = 0;                                            // 重连次数
 let aliveInterval;                                              // websocket心跳检测计时器
 
-wsInit();
+// wsInit();
 
 // 创建了一个客户端的socket,然后让这个客户端去连接服务器的socket
 function wsInit() {
