@@ -137,11 +137,6 @@ function httpServer() {
       res.writeHeader(200, { 'Content-Type': 'application/json;charset=utf-8' });
       res.write(JSON.stringify(userCardList));
       res.end();
-    } else if (urlObj.pathname == "/canteen/userNumber") { // 获取用户总数量
-      let userNumber = { "userNumber": ipList.length };
-      res.writeHeader(200, { 'Content-Type': 'application/json;charset=utf-8' });
-      res.write(JSON.stringify(userNumber));
-      res.end();
     } else {
       res.writeHeader(404, { 'Content-Type': 'text/html;charset=utf-8' });
       res.end();
