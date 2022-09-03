@@ -8,10 +8,10 @@ const worker = new Worker('../src/background/index.js', {
   execArgv: ['--experimental-loader', './loader.mjs'],
 });
 
-worker.onerror = (e) => {
-  console.log(e);
+worker.on('error', (e) => {
+  console.error(e);
   process.exit(0);
-};
+});
 
 Object.keys(DunInfo);
 
