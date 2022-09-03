@@ -16,7 +16,7 @@ const qrcodeCache = {};
 const CORS_AVAILABLE_DOMAINS = {'penguin-stats.io': true, 'penguin-stats.cn': true};
 // 正常浏览器在给权限后跨域视为basic请求 无视cors相关设定，脑子有毛病的QQ浏览器在mode: no-cors跨域时直接用CORB策略拒绝读取响应(正常浏览器好像只会在contentScript里有这种设定)
 // 事实上正常浏览器和QQ浏览器在加权限后mode: no-cors跨域的Response.type都是basic，但是QQ浏览器就是不让你读取 诶就是玩
-const ALWAYS_ENABLE_CORS = navigator.userAgent.includes('QQBrowser');
+const ALWAYS_ENABLE_CORS = typeof navigator != 'undefined' && navigator.userAgent.includes('QQBrowser');
 
 /**
  * 浏览器平台，放置与具体浏览器无关的通用逻辑
