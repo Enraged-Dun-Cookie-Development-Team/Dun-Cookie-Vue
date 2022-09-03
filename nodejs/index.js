@@ -110,14 +110,14 @@ function httpServer() {
       let userCardList = { "type": "没什么用这个，只是为了跟之前格式一样", "data": {} };
 
       // 复制基础信息
-      let detailList = JSON.parse(JSON.stringify(CardList));
+      let detailList = CardList;
       if (Object.keys(detailList).length == 0) {
         res.writeHeader(200, { 'Content-Type': 'application/json;charset=utf-8' });
-        res.write(JSON.stringify({ "error": "还没有获得饼列表，再等等就有了" } ));
+        res.write(JSON.stringify({ "error": "还没有获得饼列表，再等等就有了" }));
         res.end();
         return
       }
-      
+
       let sourceList = urlObj.query.source;
       // 确保source参数被赋值
       if (sourceList != undefined) {
@@ -125,13 +125,13 @@ function httpServer() {
 
         sources.forEach(source => {
           let sourcename = sourceMap[source];
-          userCardList.data[sourcename] = JSON.parse(JSON.stringify(detailList[sourcename]));
+          userCardList.data[sourcename] = detailList[sourcename] || {};
         });
       }
 
       // source无内容自动获取全列表
       if (Object.keys(userCardList.data).length == 0) {
-        userCardList.data = JSON.parse(JSON.stringify(detailList));
+        userCardList.data = detailList;
       }
 
       res.writeHeader(200, { 'Content-Type': 'application/json;charset=utf-8' });
