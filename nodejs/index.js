@@ -10,6 +10,7 @@ const worker = new Worker('../src/background/index.js', {
 
 worker.onerror = (e) => {
   console.log(e);
+  process.exit(0);
 };
 
 Object.keys(DunInfo);
@@ -75,6 +76,77 @@ function reconnect() {
   } else {
     console.log("TCP连接已超时");
   }
+}
+
+
+
+// 以下都为临时需要的http请求，之后删除
+import urlib from "url"
+import http from "http"
+httpServer()
+let sourceMap = {
+  "0": "官方B站动态",
+  "1": "官方微博",
+  "2": "游戏内公告",
+  "3": "朝陇山微博",
+  "4": "一拾山微博",
+  "5": "塞壬唱片官网",
+  "6": "泰拉记事社微博",
+  "7": "官网",
+  "8": "泰拉记事社官网",
+  "9": "塞壬唱片网易云音乐",
+  "10": "鹰角网络微博",
+  "11": "明日方舟终末地",
+};
+
+function httpServer() {
+  // 建立与3000端口连接
+  http.createServer((req, res) => {
+    // json文件 utf-8解析及写入cardList
+    let urlObj = urlib.parse(req.url, true);
+    // 判断路径是否正确
+    if (urlObj.pathname == "/canteen/cardList") {
+      // 没蹲饼列表的时候返回
+      let userCardList = { "type": "没什么用这个，只是为了跟之前格式一样", "data": {} };
+
+      // 复制基础信息
+      let detailList = JSON.parse(JSON.stringify(CardList));
+      if (Object.keys(detailList).length == 0) {
+        res.writeHeader(200, { 'Content-Type': 'application/json;charset=utf-8' });
+        res.write(JSON.stringify({ "error": "还没有获得饼列表，再等等就有了" } ));
+        res.end();
+        return
+      }
+      
+      let sourceList = urlObj.query.source;
+      // 确保source参数被赋值
+      if (sourceList != undefined) {
+        let sources = sourceList.split("_");
+
+        sources.forEach(source => {
+          let sourcename = sourceMap[source];
+          userCardList.data[sourcename] = JSON.parse(JSON.stringify(detailList[sourcename]));
+        });
+      }
+
+      // source无内容自动获取全列表
+      if (Object.keys(userCardList.data).length == 0) {
+        userCardList.data = JSON.parse(JSON.stringify(detailList));
+      }
+
+      res.writeHeader(200, { 'Content-Type': 'application/json;charset=utf-8' });
+      res.write(JSON.stringify(userCardList));
+      res.end();
+    } else if (urlObj.pathname == "/canteen/userNumber") { // 获取用户总数量
+      let userNumber = { "userNumber": ipList.length };
+      res.writeHeader(200, { 'Content-Type': 'application/json;charset=utf-8' });
+      res.write(JSON.stringify(userNumber));
+      res.end();
+    } else {
+      res.writeHeader(404, { 'Content-Type': 'text/html;charset=utf-8' });
+      res.end();
+    }
+  }).listen(3000); // 绑定3000端口
 }
 
 // 测试命令: node --experimental-loader ./loader.mjs ./index.js
