@@ -15,11 +15,13 @@ class FetcherScheduleInfo {
   fetcher;
 
   /**
+   * 不可修改的蹲饼间隔
    * @type {number}
    */
   intervalTime;
 
   /**
+   * 下一次蹲饼的时间
    * @type {number}
    */
   nextScheduleTime = 0;
@@ -100,7 +102,7 @@ function buildFetchers(sourceMap) {
 }
 
 /**
- * @param globalIntervalTime {number}
+ * @param {number} globalIntervalTime 用户设置的全局蹲饼时间
  */
 function buildFetcherSchedule(globalIntervalTime) {
   /**
@@ -122,9 +124,12 @@ function buildFetcherSchedule(globalIntervalTime) {
    */
   const scheduleByGroup = Object.entries(fetchersGroupByType).map(([groupKey, list]) => {
     const type = list[0].sourceType;
+    /**
+     * @type {[CookieFetcher, number]} 蹲饼分组，组内数据源数量
+     */
     const listWithCount = list.map(f => [f, f.dataSourceCount]);
     // TODO 这部分变量名看似无意义，
-    //  实际上是引用 https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/pull/53 中的文档的变量名
+    //  实际上是引用 https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/wiki/蹲饼器策略 中的文档的变量名
     const G = list.length;
     const C = type.requestFrequencyLimit;
     const M = globalIntervalTime;
@@ -143,12 +148,15 @@ function buildFetcherSchedule(globalIntervalTime) {
     } else if (X >= G) {
       let count = N;
       let idx = 0;
+      // 默认一轮内数据源全都蹲一遍，判断一轮蹲的次数是否大于可接受数量
       while (count > X) {
+        // 减少组内有复数的蹲饼组单轮蹲的数量
         if (listWithCount[idx][1] > 1) {
           listWithCount[idx][1]--;
           count--;
         }
         idx++;
+        // 返回第一组蹲饼组重新计算
         if (idx >= listWithCount.length) {
           idx = 0;
         }
@@ -156,6 +164,9 @@ function buildFetcherSchedule(globalIntervalTime) {
       finalList = listWithCount.flatMap(([f, c]) => Array(c).fill(f));
       finalIntervalTime = M;
     } else {
+      /**
+       * @type {number} 强制蹲饼频率，平台最小蹲饼间隔*组数量
+       */
       const B = C * G;
       finalList = listWithCount.map(([f]) => f);
       finalIntervalTime = B;
@@ -167,9 +178,9 @@ function buildFetcherSchedule(globalIntervalTime) {
     let initNextTime = startTime;
     finalList.forEach((f) => {
       const info = new FetcherScheduleInfo(f, finalIntervalTime);
-      info.nextScheduleTime = initNextTime;
+      info.nextScheduleTime = initNextTime;   // 赋值这个调度器初始开始蹲饼时间
       scheduleList.push(info);
-      initNextTime += finalIntervalTime;
+      initNextTime += finalIntervalTime;      // 用于计算下个调度器开始时间
     });
     return [groupKey, scheduleList];
   });
