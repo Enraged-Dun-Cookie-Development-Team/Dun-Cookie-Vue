@@ -193,6 +193,7 @@ function buildFetcherSchedule(globalIntervalTime) {
   });
   sortFetcherSchedule(finalFetcherSchedule);
   fetcherSchedule = finalFetcherSchedule;
+  lastIntervalTime = globalIntervalTime;
 }
 
 /**
@@ -205,7 +206,7 @@ function tryDun(force = false) {
   const promiseList = [];
   const currentTime = new Date().getTime();
   for (const schedule of fetcherSchedule) {
-    if (force || schedule.nextScheduleTime >= currentTime) {
+    if (force || schedule.nextScheduleTime <= currentTime) {
       const promise = schedule.fetcher.fetchCookies()
         .finally(() => {
           DunInfo.counter++;
@@ -224,7 +225,7 @@ function tryDun(force = false) {
       }
     }
     sortFetcherSchedule(fetcherSchedule);
-    DebugUtil.debugLog(1, `===已完成第${DunInfo.roundCount}轮蹲饼${force ? '(本轮为手动强制刷新)' : ''}，共${allCount}个蹲饼器，成功${successCount}个，失败${allCount - successCount}个===`);
+    DebugUtil.debugLog(1, `===已完成第${DunInfo.roundCount}轮检测${force ? '(本轮为手动强制刷新)' : ''}，共${allCount}个蹲饼器，成功${successCount}个，失败${allCount - successCount}个===`);
   });
 }
 
@@ -245,7 +246,7 @@ function startDunTimer() {
   } else {
     try {
       const sourceMap = CurrentDataSource.sourceMap;
-      let intervalTime = delay;
+      let intervalTime = delay * 1000;
       if (sourceMap !== lastSourceMap) {
         buildFetchers(sourceMap);
         buildFetcherSchedule(intervalTime);
@@ -258,9 +259,10 @@ function startDunTimer() {
       console.error(e);
     }
   }
+  // 1秒检测一次蹲饼调度器
   dunTimeoutId = setTimeout(() => {
     startDunTimer();
-  }, delay * 1000);
+  }, 1000);
 }
 
 
@@ -284,6 +286,9 @@ class FetchUtils {
   }
   getAllLog() {
     return fetchLogCache;
+  }
+  schedulList() {
+    return fetcherSchedule;
   }
 }
 
