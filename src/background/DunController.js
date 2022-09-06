@@ -197,6 +197,7 @@ function buildFetcherSchedule(globalIntervalTime) {
 
 /**
  * 蹲饼！
+ * @param {boolean} force 强制手动刷新
  * @return {Promise}
  */
 function tryDun(force = false) {

@@ -26,6 +26,9 @@ const updateListeners = [];
  * 将配置信息转化成可以用于蹲饼的数据源
  */
 async function transformDataSource(settings) {
+  /**
+   * 启用的数据源
+   */
   const sourceMap = {};
   const defList = await getDefaultDataSources();
   for (const dataName of settings.enableDataSources) {
