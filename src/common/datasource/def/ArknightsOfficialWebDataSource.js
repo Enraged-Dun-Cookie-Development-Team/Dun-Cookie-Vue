@@ -4,7 +4,7 @@ import TimeUtil from '../../util/TimeUtil';
 import {DataItem} from '../../DataItem';
 import PlatformHelper from "../../platform/PlatformHelper";
 
-const typeInfo = new DataSourceTypeInfo('ak.hypergryph.com');
+const typeInfo = new DataSourceTypeInfo('ak.hypergryph.com', 15*1000);
 
 /**
  * 明日方舟官网数据源。

@@ -180,7 +180,7 @@ function buildFetcherSchedule(globalIntervalTime) {
       const info = new FetcherScheduleInfo(f, finalIntervalTime);
       info.nextScheduleTime = initNextTime;   // 赋值这个调度器初始开始蹲饼时间
       scheduleList.push(info);
-      initNextTime += finalIntervalTime;      // 用于计算下个调度器开始时间
+      initNextTime += C;      // 用于计算下个调度器开始时间
     });
     return [groupKey, scheduleList];
   });

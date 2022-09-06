@@ -4,7 +4,7 @@ import {DataItem} from '../../DataItem';
 import Settings from '../../Settings';
 import HttpUtil from "../../util/HttpUtil";
 
-const typeInfo = new DataSourceTypeInfo('music.163.com');
+const typeInfo = new DataSourceTypeInfo('music.163.com', 10*1000);
 
 /**
  * 网易云音乐数据源。

@@ -33,7 +33,7 @@ class CookieFetcher {
    * @type {number}
    * @private
    */
-  _index = 0;
+  _index = -1;
 
   /**
    * @param id {string} 蹲饼器ID
@@ -88,11 +88,11 @@ class CookieFetcher {
    * @private
    */
   _nextDataSource() {
+    this._index++;
     if (this._index >= this.sourceList.length) {
       this._index = 0;
     }
     const source = this.sourceList[this._index];
-    this._index++;
     return source;
   }
 

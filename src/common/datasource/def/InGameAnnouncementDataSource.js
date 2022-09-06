@@ -5,7 +5,7 @@ import TimeUtil from '../../util/TimeUtil';
 import { DataItem } from '../../DataItem';
 import HttpUtil from "../../util/HttpUtil";
 
-const typeInfo = new DataSourceTypeInfo('arknights_in_game_announcement');
+const typeInfo = new DataSourceTypeInfo('arknights_in_game_announcement', 15*1000);
 
 /**
  * 需要被忽略的公告列表，一般是常驻活动/用户协议公告之类的
@@ -17,7 +17,7 @@ const ignoreAnnounces = [94, 95, 97, 98, 192, 112];
 let FocusAnnounceId = null;
 let ClientVersion = null;
 let ResVersion = null;
-let gamePlatform = null;
+let GamePlatform = null;
 
 /**
  * 游戏内公告数据源。
@@ -89,7 +89,7 @@ export class InGameAnnouncementDataSource extends DataSource {
   JudgmentVersionRelease(versionData) {
     if (versionData) {
       // 避免切换平台弹出更新通知
-      if (gamePlatform == Settings.dun.gamePlatform) {
+      if (GamePlatform == Settings.dun.gamePlatform) {
         if (ClientVersion && versionData.clientVersion && ClientVersion != versionData.clientVersion) {
           const nowVersion = versionData.clientVersion.split(".").map(a => parseInt(a));
           const pastVersion = ClientVersion.split(".").map(a => parseInt(a));
@@ -103,7 +103,7 @@ export class InGameAnnouncementDataSource extends DataSource {
           NotificationUtil.SendNotice(`【${Settings.dun.gamePlatform}/闪断更新】已经完成闪断更新`, '博士，快去重启进入游戏吧！', null, new Date().getTime());
         }
       } else {
-        gamePlatform = Settings.dun.gamePlatform
+        GamePlatform = Settings.dun.gamePlatform
       }
       ClientVersion = versionData.clientVersion;
       ResVersion = versionData.resVersion;

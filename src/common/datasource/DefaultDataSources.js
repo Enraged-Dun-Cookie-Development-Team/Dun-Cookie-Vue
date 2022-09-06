@@ -86,8 +86,7 @@ const configList = [
           .icon('/assets/image/icon/cho3Weibo.jpg')
           .dataName('朝陇山微博')
           .title('朝陇山')
-          .priority(3)
-          .groupId(SHARE_DEFAULT_GROUP);
+          .priority(3);
     }),
     WeiboDataSource.withUid(7506039414, (config) => {
         config

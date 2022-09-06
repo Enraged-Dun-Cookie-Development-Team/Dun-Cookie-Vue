@@ -4,7 +4,7 @@ import {DataItem} from '../../DataItem';
 import Settings from '../../Settings';
 import HttpUtil from "../../util/HttpUtil";
 
-const typeInfo = new DataSourceTypeInfo('terra-historicus.hypergryph.com');
+const typeInfo = new DataSourceTypeInfo('terra-historicus.hypergryph.com', 15*1000);
 
 /**
  * 泰拉记事社(官网)数据源。

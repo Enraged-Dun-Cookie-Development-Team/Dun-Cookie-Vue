@@ -3,7 +3,7 @@ import TimeUtil from '../../util/TimeUtil';
 import {DataItem} from '../../DataItem';
 import Settings from '../../Settings';
 
-const typeInfo = new DataSourceTypeInfo('monster-siren.hypergryph.com');
+const typeInfo = new DataSourceTypeInfo('monster-siren.hypergryph.com', 15*1000);
 
 /**
  * 塞壬唱片(官网)数据源。
