@@ -24,9 +24,9 @@
                       <div>
                         距离
                         <el-tooltip v-if="item.remark" :content="item.remark" placement="right">
-                          <span class="online-blue">{{ item.text }}</span>
+                          <span class="online-orange">{{ item.text }}</span>
                         </el-tooltip>
-                        <span v-else class="online-blue">{{ item.text }}</span>
+                        <span v-else class="online-orange">{{ item.text }}</span>
                         <span title="国服 UTC-8">{{
                             " " + calcActivityDiff(item.time)
                         }}</span>
@@ -35,7 +35,7 @@
                   </div>
                   <div v-if="settings.feature.san && imgShow" class="sane-area" @click.stop="openToolDrawer">
                     <div class="sane">
-                      当前理智为<span class="online-blue sane-number">{{ san.currentSan }}</span>点
+                      当前理智为<span class="online-orange sane-number">{{ san.currentSan }}</span>点
                     </div>
                     <div class="sane-info">
                       {{ san.remainTime }}
@@ -57,7 +57,7 @@
               </div>
             </div>
           </el-carousel-item>
-          <el-carousel-item v-for="(item, index) in onlineSpeakList" :key="index + 2">
+          <el-carousel-item v-for="(item, index) in onlineSpeakList" :key="index">
             <div v-html="item.html"></div>
           </el-carousel-item>
         </el-carousel>
@@ -76,13 +76,16 @@
     <div class="content-timeline-shadow"></div>
     <el-timeline ref="elTimelineArea" v-if="LazyLoaded" :class="[
       settings.display.windowMode ? 'window' : '',
-      settings.display.showByTag ? 'tag' : ''
+      settings.display.showByTag ? 'tag' : '',
     ]">
       <MyElTimelineItem v-for="(item, index) in filterCardList" :key="index" :timestamp="item.timeForDisplay"
-        placement="top" :icon-style="{ '--icon': `url('${getDataSourceByName(item.dataSource).icon}')` }"
-        :icon="'headImg'">
+        placement="top" :icon-style="{
+          '--icon': `url('${getDataSourceByName(item.dataSource).icon}')`,
+        }" :icon="'headImg'">
         <span class="is-top-info" v-if="item.isTop">
-          <span class="color-blue">【当前条目在{{ getDataSourceByName(item.dataSource).title }}的时间线内为置顶状态】</span>
+          <span class="color-blue">【当前条目在{{
+              getDataSourceByName(item.dataSource).title
+          }}的时间线内为置顶状态】</span>
         </span>
 
         <span class="card-btn-area">
@@ -97,13 +100,15 @@
           <el-button v-if="!item.componentData" class="to-url-btn" size="small" title="前往该条内容"
             @click="openUrl(item.jumpUrl)"><i class="el-icon-right"></i></el-button>
         </span>
-        <el-card class="card"
-          :class="[`font-size-${settings.display.fontSize}`, { 'special-source': item.componentData }]" shadow="never">
+        <el-card class="card" :class="[
+          `font-size-${settings.display.fontSize}`,
+          { 'special-source': item.componentData },
+        ]" shadow="never">
           <component :is="resolveComponent(item)" :item="item" :show-image="imgShow"></component>
         </el-card>
       </MyElTimelineItem>
     </el-timeline>
-    <div v-else style="height: 300px" v-loading="loading"></div>
+    <div v-else style="height: 300px" v-loading="loading" element-loading-custom-class="page-loading"></div>
     <el-dialog :modal-append-to-body="false" title="图片自动复制出错，请于图片右键复制图片" :visible.sync="imageError" width="80%">
       <img :src="errorImageUrl" style="width: 100%" />
     </el-dialog>
@@ -114,7 +119,12 @@
 </template>
 
 <script>
-import { CURRENT_VERSION, dayInfo, PAGE_UPDATE, quickJump } from "../../common/Constants";
+import {
+  CURRENT_VERSION,
+  dayInfo,
+  PAGE_UPDATE,
+  quickJump,
+} from "../../common/Constants";
 import MyElTimelineItem from "./MyTimeLineItem";
 import DefaultItem from "./items/DefaultItem";
 import DataSourceUtil from "../../common/util/DataSourceUtil";
@@ -122,7 +132,7 @@ import Settings from "../../common/Settings";
 import SanInfo from "../../common/sync/SanInfo";
 import TimeUtil from "../../common/util/TimeUtil";
 import Search from "../Search";
-import { deepAssign } from "../../common/util/CommonFunctions";
+import {  deepAssign  } from "../../common/util/CommonFunctions";
 import PlatformHelper from "../../common/platform/PlatformHelper";
 import InsiderUtil from "../../common/util/InsiderUtil";
 import ServerUtil from "../../common/util/ServerUtil";
@@ -134,7 +144,9 @@ export default {
   components: { MyElTimelineItem, Search, SelectImageToCopy, UpdateInfoNotice },
   props: ["cardListByTag", "imgShow"],
   data() {
-    Settings.doAfterInit(settings => this.currentTag = settings.display.defaultTag);
+    Settings.doAfterInit(
+      (settings) => (this.currentTag = settings.display.defaultTag)
+    );
     Settings.doAfterUpdate((settings, changed) => {
       if (changed.display && changed.display.defaultTag) {
         this.currentTag = settings.display.defaultTag;
@@ -147,6 +159,7 @@ export default {
       san: SanInfo,
       searchShow: false,
       onlineDayInfo: {},
+      updateInfo: {},
       onlineSpeakList: [],
       isNew: false,
       dayInfo: dayInfo,
@@ -207,7 +220,7 @@ export default {
         this.cardList = this.cardListAll;
       }
       if (emitEvent) {
-        this.$emit('cardListChange');
+        this.$emit("cardListChange");
       }
     },
     // 打开计算小工具
@@ -290,7 +303,7 @@ export default {
       if (this.openResources) {
         return "活动期间，“资源收集”限时全天开放";
       } else {
-        return days.map(x => TimeUtil.numberToWeek(x)).join();
+        return days.map((x) => TimeUtil.numberToWeek(x)).join();
       }
     },
     changeFilterText(text) {
@@ -324,7 +337,10 @@ export default {
       }
     },
     changeInsider() {
-      const [newLevel, validCode] = InsiderUtil.calcInsiderLevel(this.filterText, this.insiderCodeMap);
+      const [newLevel, validCode] = InsiderUtil.calcInsiderLevel(
+        this.filterText,
+        this.insiderCodeMap
+      );
       if (validCode) {
         this.settings.insider.code = this.filterText;
         this.settings.insider.level = newLevel;
@@ -345,7 +361,7 @@ export default {
             this.changeInsider();
             this.$refs.SearchModel.clearText();
             this.filterText = null;
-            this.$emit('cardListChange');
+            this.$emit("cardListChange");
           }
         }
       });
@@ -357,7 +373,10 @@ export default {
         .addEventListener("click", () => {
           const target = event.target || event.srcElement;
           // 是否为a标签
-          if (target.nodeName.toLocaleLowerCase() === "a" || target.parentNode.nodeName.toLocaleLowerCase() === "a") {
+          if (
+            target.nodeName.toLocaleLowerCase() === "a" ||
+            target.parentNode.nodeName.toLocaleLowerCase() === "a"
+          ) {
             // 对捕获到的 a 标签进行处理，需要先禁止它的跳转行为
             if (event.preventDefault) {
               event.preventDefault();
@@ -429,53 +448,57 @@ export default {
         type: "info",
       });
 
-      PlatformHelper.Img.generateShareImage(item,
+      PlatformHelper.Img.generateShareImage(
+        item,
         "/assets/image/" + Settings.logo,
         DataSourceUtil.getByName(item.dataSource).icon,
         imageUrl
-      ).then(canvas => {
-        canvas.toBlob(blob => {
-          try {
-            if (typeof ClipboardItem === 'undefined') {
-              this.$message({
-                offset: 50,
-                center: true,
-                message: "当前环境不支持自动复制到剪贴板",
-                type: "info",
-              });
+      )
+        .then((canvas) => {
+          canvas.toBlob((blob) => {
+            try {
+              if (typeof ClipboardItem === "undefined") {
+                this.$message({
+                  offset: 50,
+                  center: true,
+                  message: "当前环境不支持自动复制到剪贴板",
+                  type: "info",
+                });
+                this.errorImageUrl = canvas.toDataURL("image/jpeg");
+                this.imageError = true;
+              } else {
+                navigator.clipboard
+                  .write([new ClipboardItem({ [blob.type]: blob })])
+                  .then(() => {
+                    this.$message({
+                      offset: 50,
+                      center: true,
+                      message: "已复制到剪切板",
+                      type: "success",
+                    });
+                  })
+                  .catch((e) => {
+                    console.log(e);
+                    this.errorImageUrl = canvas.toDataURL("image/jpeg");
+                    this.imageError = true;
+                  });
+              }
+            } catch (e) {
+              console.log(e);
               this.errorImageUrl = canvas.toDataURL("image/jpeg");
               this.imageError = true;
-            } else {
-              navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })])
-                .then(() => {
-                  this.$message({
-                    offset: 50,
-                    center: true,
-                    message: "已复制到剪切板",
-                    type: "success",
-                  });
-                })
-                .catch((e) => {
-                  console.log(e);
-                  this.errorImageUrl = canvas.toDataURL("image/jpeg");
-                  this.imageError = true;
-                });
             }
-          } catch (e) {
-            console.log(e);
-            this.errorImageUrl = canvas.toDataURL("image/jpeg");
-            this.imageError = true;
-          }
+          });
+        })
+        .catch((e) => {
+          console.log(e);
+          this.$message({
+            offset: 50,
+            center: true,
+            message: "图片生成失败",
+            type: "error",
+          });
         });
-      }).catch((e) => {
-        console.log(e);
-        this.$message({
-          offset: 50,
-          center: true,
-          message: "图片生成失败",
-          type: "error",
-        });
-      });
     },
 
     // 高级复制
@@ -523,6 +546,16 @@ export default {
 };
 </script>
 <style lang="less">
+.page-loading {
+  .el-loading-spinner .el-loading-text {
+    color: #ffba4b;
+  }
+
+  .el-loading-spinner .path {
+    stroke: #ffba4b;
+  }
+}
+
 // 图片加载中
 img[lazy="loading"] {
   -webkit-animation: loading 1s linear 1s 5 alternate;
@@ -552,6 +585,11 @@ img[lazy="error"] {
 @import "../../theme/theme.less";
 
 .styleChange(@theme) {
+  @ceobeLightColor: "ceobeLightColor-@{theme}"; //小刻食堂主题亮色浅色
+  @ceobeColor: "ceobeColor-@{theme}"; //小刻食堂主题亮色
+  @ceobeVeryLightColor: "ceobeVeryLightColor-@{theme}"; // 小刻食堂主题亮色非常浅色
+
+  @ceobeDarkColor: "ceobeDarkColor-@{theme}"; //小刻食堂主题暗色
   @bgColor: "bgColor-@{theme}"; // 背景颜色
   @content: "content-@{theme}"; // 文本颜色
   @timeline: "timeline-@{theme}"; // 时间线颜色和时间线border颜色
@@ -570,8 +608,6 @@ img[lazy="error"] {
   .color-blue {
     color: #23ade5;
   }
-
-
 
   .card {
     width: 100%;
@@ -770,7 +806,7 @@ img[lazy="error"] {
     }
 
     .el-carousel__button {
-      background-color: #23ade5;
+      background-color: @@ceobeColor;
     }
   }
 
@@ -794,7 +830,7 @@ img[lazy="error"] {
     transition: all 0.5s;
 
     .highlight {
-      color: #23ade5;
+      color: @@ceobeColor;
       box-shadow: 0 0 10px 0 red;
       transform: scale(1.1);
       padding: 5px;
@@ -835,9 +871,9 @@ img[lazy="error"] {
       }
 
       .to-url-btn:hover {
-        color: #409eff;
-        border-color: #c6e2ff;
-        background-color: @@hover;
+        color: @@ceobeColor;
+        border-color: @@ceobeLightColor;
+        background-color: @@ceobeVeryLightColor;
       }
 
       .to-copy-btn,
@@ -856,15 +892,14 @@ img[lazy="error"] {
         }
 
         &:hover {
-          color: #409eff;
-          border-color: #c6e2ff;
-          background-color: @@hover;
+          color: @@ceobeColor;
+          border-color: @@ceobeLightColor;
+          background-color: @@ceobeVeryLightColor;
         }
       }
 
       .to-copy-share {
         right: 100px;
-
 
         // 需要特殊显示的数据源只提供复制按钮，跳转由数据源自行实现
         &.special-source {
