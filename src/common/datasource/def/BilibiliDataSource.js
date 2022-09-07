@@ -117,6 +117,6 @@ export class BilibiliDataSource extends DataSource {
       throw 'request fail: ' + JSON.stringify(json);
     }
     const dataName = BilibiliDataSource.typeInfo.typeName + '_' + uid;
-    return new UserInfo(dataName, json.data.name, json.data.face);
+    return new UserInfo(dataName, json.data.name+'B站', json.data.face);
   }
 }

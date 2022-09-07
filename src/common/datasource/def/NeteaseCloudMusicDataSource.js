@@ -85,6 +85,6 @@ export class NeteaseCloudMusicDataSource extends DataSource {
       throw 'request fail: ' + JSON.stringify(json);
     }
     const dataName = NeteaseCloudMusicDataSource.typeInfo.typeName + '_' + artistId;
-    return new UserInfo(dataName, json.artist.name, json.artist.img1v1Url);
+    return new UserInfo(dataName, json.artist.name+'网易云', json.artist.img1v1Url);
   }
 }

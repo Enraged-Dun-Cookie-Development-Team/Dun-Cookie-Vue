@@ -112,6 +112,6 @@ export class WeiboDataSource extends DataSource {
       throw 'request fail: ' + JSON.stringify(json);
     }
     const dataName = WeiboDataSource.typeInfo.typeName + '_' + uid;
-    return new UserInfo(dataName, json.data.userInfo.screen_name, json.data.userInfo.avatar_hd);
+    return new UserInfo(dataName, json.data.userInfo.screen_name+'微博', json.data.userInfo.avatar_hd);
   }
 }
