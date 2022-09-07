@@ -9,8 +9,8 @@ const worker = new Worker('../src/background/index.js', {
 });
 
 worker.on('error', (e) => {
+  console.error('有未捕获异常：');
   console.error(e);
-  process.exit(0);
 });
 
 Object.keys(DunInfo);
@@ -21,7 +21,7 @@ Object.keys(DunInfo);
 // let ws_url = "ws://" + config.ws.host + ":" + config.ws.port;   // websocket的地址
 // let intervalTime = config.ws.interval_time;                     // 尝试重连时间间隔
 // let limitConnect = config.ws.limit_connect || -1;               // 尝试重连次数
-// let heartBeatTime = config.ws.heart_beat_time || 5;             // 心跳间隔时间 
+// let heartBeatTime = config.ws.heart_beat_time || 5;             // 心跳间隔时间
 
 let timeConnect = 0;                                            // 重连次数
 let aliveInterval;                                              // websocket心跳检测计时器
