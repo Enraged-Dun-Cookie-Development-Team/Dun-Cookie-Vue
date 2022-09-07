@@ -9,8 +9,8 @@ const worker = new Worker('../src/background/index.js', {
 });
 
 worker.on('error', (e) => {
+  console.error('有未捕获异常：');
   console.error(e);
-  process.exit(0);
 });
 
 Object.keys(DunInfo);
