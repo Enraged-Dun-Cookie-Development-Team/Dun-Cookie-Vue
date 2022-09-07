@@ -387,17 +387,17 @@ export default {
               target.getAttribute("href") ||
               target.parentNode.getAttribute("href");
             if (
-              target.className === "webOpen" ||
-              target.parentNode.className === "webOpen"
+              target.className === "tabOpen" ||
+              target.parentNode.className === "tabOpen"
             ) {
-              this.openWeb(url);
-            } else {
               this.openUrl(url, 1400, 950);
+            } else {
+              this.openWeb(url);
             }
           }
 
           if (target.nodeName.toLocaleLowerCase() === "drawer") {
-            this.$parent.drawer = !this.$parent.drawer;
+            this.$parent.handleIconClick();
           }
 
           if (target.nodeName.toLocaleLowerCase() === "setting") {

@@ -44,8 +44,8 @@ export default class NodePlatform extends AbstractPlatform {
         return PLATFORM_NODE;
     }
 
-    get PlatformOs() {
-        return this.os.platform();
+    getPlatformInfo() {
+        return Promise.resolve({os: this.os.platform(), arch: this.os.arch(), nacl_arch: this.os.arch()});
     }
 
     getAllWindow() {
@@ -301,6 +301,12 @@ export default class NodePlatform extends AbstractPlatform {
         }
         // 无事发生
         return new Promise((resolve, _) => resolve());
+    }
+
+    addAlarmsListener(listener) {
+        if (DEBUG_LOG) {
+            console.log('Node环境不支持Alarm');
+        }
     }
 
     getHtmlParser() {
