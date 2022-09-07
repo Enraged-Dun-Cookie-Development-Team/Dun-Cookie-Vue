@@ -1,7 +1,9 @@
-import {DataSource} from '../DataSource';
+import {DataSource, DataSourceTypeInfo} from '../DataSource';
 import TimeUtil from '../../util/TimeUtil';
 import {DataItem} from '../../DataItem';
 import Settings from '../../Settings';
+
+const typeInfo = new DataSourceTypeInfo('monster-siren.hypergryph.com', 15*1000);
 
 /**
  * 塞壬唱片(官网)数据源。
@@ -9,12 +11,18 @@ import Settings from '../../Settings';
  */
 export class MonsterSirenDataSource extends DataSource {
 
-  static get typeName() {
-    return 'monster-siren.hypergryph.com';
+  /**
+   * @returns {DataSourceTypeInfo}
+   */
+  static get typeInfo() {
+    return typeInfo;
   };
 
-  constructor(icon, dataName, title, dataUrl, priority) {
-    super(icon, dataName, title, dataUrl, priority);
+  /**
+   * @param config {DataSourceConfig} 数据源配置
+   */
+  constructor(config) {
+    super(config);
   }
 
   async processData(rawDataText) {

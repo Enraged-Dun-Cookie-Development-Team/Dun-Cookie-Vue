@@ -7,16 +7,8 @@ import {MonsterSirenDataSource} from './def/MonsterSirenDataSource';
 import {ArknightsOfficialWebDataSource} from './def/ArknightsOfficialWebDataSource';
 import {TerraHistoricusDataSource} from './def/TerraHistoricusDataSource';
 import {NeteaseCloudMusicDataSource} from './def/NeteaseCloudMusicDataSource';
-import {IS_DEBUG} from '../Constants';
-
-function buildDatasource(promise, icon, dataName, title) {
-    return promise.then(source => {
-        source.icon = icon;
-        source.dataName = dataName;
-        source.title = title;
-        return source;
-    });
-}
+import {USE_TEST_URL} from '../Constants';
+import {DataSourceConfig} from "./DataSource";
 
 async function buildDefaultDataSourcesList() {
     const promiseList = [];
@@ -59,53 +51,133 @@ function setTestUrl(sources) {
     sources['鹰角网络微博'].dataUrl = PlatformHelper.Extension.getURL('test/yjwbJson.json');
 }
 
+const SHARE_DEFAULT_GROUP = 'share';
+
 /**
  * 默认数据源
- * @type {(DataSource|Promise)[]}
+ * @type {(DataSource|Promise<DataSource>)[]}
  */
 const configList = [
-    buildDatasource(BilibiliDataSource.withUid(161775300, 0), '/assets/image/icon/bili.ico', '官方B站动态', '哔哩哔哩'),
-    buildDatasource(WeiboDataSource.withUid(6279793937, 1), '/assets/image/icon/weibo.ico', '官方微博', '微博'),
+    BilibiliDataSource.withUid(161775300, (config) => {
+        config
+          .icon('/assets/image/icon/bili.ico')
+          .dataName('官方B站动态')
+          .title('哔哩哔哩')
+          .priority(0);
+    }),
+    WeiboDataSource.withUid(6279793937, (config) => {
+        config
+          .icon('/assets/image/icon/weibo.ico')
+          .dataName('官方微博')
+          .title('微博')
+          .priority(1);
+    }),
     new InGameAnnouncementDataSource(
-        '/assets/image/txz.jpg',
-        '游戏内公告',
-        '通讯组',
-        'https://ak-conf.hypergryph.com/config/prod/announce_meta/Android/announcement.meta.json',
-        2
+      DataSourceConfig.builder()
+        .icon('/assets/image/txz.jpg')
+        .dataName('游戏内公告')
+        .title('通讯组')
+        .dataUrl('https://ak-conf.hypergryph.com/config/prod/announce_meta/Android/announcement.meta.json')
+        .priority(2)
+        .build()
     ),
-    buildDatasource(WeiboDataSource.withUid(6441489862, 3), '/assets/image/icon/cho3Weibo.jpg', '朝陇山微博', '朝陇山'),
-    buildDatasource(WeiboDataSource.withUid(7506039414, 4), '/assets/image/icon/ys3Weibo.jpg', '一拾山微博', '一拾山'),
+    WeiboDataSource.withUid(6441489862, (config) => {
+        config
+          .icon('/assets/image/icon/cho3Weibo.jpg')
+          .dataName('朝陇山微博')
+          .title('朝陇山')
+          .priority(3);
+    }),
+    WeiboDataSource.withUid(7506039414, (config) => {
+        config
+          .icon('/assets/image/icon/ys3Weibo.jpg')
+          .dataName('一拾山微博')
+          .title('一拾山')
+          .priority(4)
+          .groupId(SHARE_DEFAULT_GROUP);
+    }),
     new MonsterSirenDataSource(
-        '/assets/image/sr.png',
-        '塞壬唱片官网',
-        '塞壬唱片',
-        'https://monster-siren.hypergryph.com/api/news',
-        5
+      DataSourceConfig.builder()
+        .icon('/assets/image/sr.png')
+        .dataName('塞壬唱片官网')
+        .title('塞壬唱片')
+        .dataUrl('https://monster-siren.hypergryph.com/api/news')
+        .priority(5)
+        .build()
     ),
-    buildDatasource(WeiboDataSource.withUid(7499841383, 6), '/assets/image/icon/tlWeibo.jpg', '泰拉记事社微博', '泰拉记事社微博'),
+    WeiboDataSource.withUid(7499841383, (config) => {
+        config
+          .icon('/assets/image/icon/tlWeibo.jpg')
+          .dataName('泰拉记事社微博')
+          .title('泰拉记事社微博')
+          .priority(6)
+          .groupId(SHARE_DEFAULT_GROUP);
+    }),
     new ArknightsOfficialWebDataSource(
-        '/assets/image/icon/mrfz.ico',
-        '官网',
-        '官网网站',
-        'https://ak.hypergryph.com/',
-        7
+      DataSourceConfig.builder()
+        .icon('/assets/image/icon/mrfz.ico')
+        .dataName('官网')
+        .title('官网网站')
+        .dataUrl('https://ak.hypergryph.com/')
+        .priority(7)
+        .build()
     ),
     new TerraHistoricusDataSource(
-        '/assets/image/icon/tl.jpg',
-        '泰拉记事社官网',
-        '泰拉记事社官网',
-        'https://terra-historicus.hypergryph.com/api/comic',
-        8
+      DataSourceConfig.builder()
+        .icon('/assets/image/icon/tl.jpg')
+        .dataName('泰拉记事社官网')
+        .title('泰拉记事社官网')
+        .dataUrl('https://terra-historicus.hypergryph.com/api/comic')
+        .priority(8)
+        .build()
     ),
-    new NeteaseCloudMusicDataSource(
-        '/assets/image/wyyyy.ico',
-        '塞壬唱片网易云音乐',
-        '网易云音乐',
-        'https://music.163.com/api/artist/albums/32540734',
-        9
-    ),
-    buildDatasource(WeiboDataSource.withUid(7461423907, 10), '/assets/image/icon/yjwb.jpg', '鹰角网络微博', '鹰角网络微博'),
-    buildDatasource(BilibiliDataSource.withUid(1265652806, 11), '/assets/image/icon/arkzmd.jpg', '明日方舟终末地', '明日方舟终末地'),
+    NeteaseCloudMusicDataSource.withUid(32540734, (config) => {
+        config
+          .icon('/assets/image/wyyyy.ico')
+          .dataName('塞壬唱片网易云音乐')
+          .title('网易云音乐')
+          .priority(9);
+    }),
+    WeiboDataSource.withUid(7461423907, (config) => {
+        config
+          .icon('/assets/image/icon/yjwb.jpg')
+          .dataName('鹰角网络微博')
+          .title('鹰角网络微博')
+          .priority(10)
+          .groupId(SHARE_DEFAULT_GROUP);
+    }),
+    BilibiliDataSource.withUid(1265652806, (config) => {
+        config
+          .icon('/assets/image/icon/arkzmd.jpg')
+          .dataName('明日方舟终末地')
+          .title('明日方舟终末地')
+          .priority(11)
+          .groupId(SHARE_DEFAULT_GROUP);
+    }),
+    BilibiliDataSource.withUid(1883857209, (config) => {
+        config
+          .priority(12)
+          .groupId(SHARE_DEFAULT_GROUP);
+    }),
+    BilibiliDataSource.withUid(1554642444, (config) => {
+        config
+          .priority(13)
+          .groupId(SHARE_DEFAULT_GROUP);
+    }),
+    BilibiliDataSource.withUid(2123591088, (config) => {
+        config
+          .priority(14)
+          .groupId(SHARE_DEFAULT_GROUP);
+    }),
+    WeiboDataSource.withUid(7683268725, (config) => {
+        config
+          .priority(15)
+          .groupId(SHARE_DEFAULT_GROUP);
+    }),
+    NeteaseCloudMusicDataSource.withUid(50653540, (config) => {
+        config
+          .priority(16);
+    }),
 ];
 
 
@@ -117,7 +189,7 @@ const defaultDataSources = {};
 const defaultDataSourcesList = [];
 const initPromise = buildDefaultDataSourcesList().then(res => {
     Object.assign(defaultDataSources, res);
-    if (IS_DEBUG) {
+    if (USE_TEST_URL) {
         setTestUrl(defaultDataSources);
     }
     const list = [];
@@ -126,7 +198,10 @@ const initPromise = buildDefaultDataSourcesList().then(res => {
             list.push(defaultDataSources[key]);
         }
     }
+    // 按优先级排序
     list.sort((a, b) => a.priority - b.priority);
+    // 冻结所有默认数据源，避免被意外修改
+    list.map(val => Object.freeze(val));
     defaultDataSourcesList.splice(0);
     defaultDataSourcesList.push(...list);
 });

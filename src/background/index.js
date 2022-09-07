@@ -47,8 +47,7 @@ function ExtensionInit() {
         if (message.type) {
             switch (message.type) {
                 case MESSAGE_FORCE_REFRESH:
-                    tryDun(Settings);
-                    return;
+                    return tryDun(true).then(() => true, () => false);
                 case MESSAGE_SAN_GET:
                     return SanInfo;
                 case MESSAGE_CHANGE_COUNTDOWN:
@@ -80,7 +79,7 @@ function ExtensionInit() {
     PlatformHelper.Lifecycle.addInstalledListener(details => {
         if (details.reason === 'install') {
             PlatformHelper.Tabs.createWithExtensionFile(PAGE_WELCOME);
-        } 
+        }
         if (details.reason === 'update' || details.reason === 'install') {
             PlatformHelper.Storage.saveLocalStorage("version-notice",false);
         }

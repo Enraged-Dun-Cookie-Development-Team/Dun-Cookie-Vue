@@ -15,6 +15,11 @@ const IS_DEBUG = DEBUG_LEVEL > 0;
  */
 const DEBUG_LOG = IS_DEBUG && true;
 /**
+ * 是否使用测试用的数据源URL
+ */
+const USE_TEST_URL = IS_DEBUG && false;
+
+/**
  * 当前配置文件版本号
  */
 const CURRENT_SETTING_VERSION = 2;
@@ -27,7 +32,7 @@ const CURRENT_VERSION = '3.2.5';
  */
 const SHOW_VERSION = CURRENT_VERSION + (IS_DEBUG ? '【调试模式】' : '');
 
-export {IS_DEBUG, DEBUG_LEVEL, DEBUG_LOG, CURRENT_SETTING_VERSION, CURRENT_VERSION, SHOW_VERSION};
+export {IS_DEBUG, DEBUG_LEVEL, DEBUG_LOG, USE_TEST_URL, CURRENT_SETTING_VERSION, CURRENT_VERSION, SHOW_VERSION};
 // endregion
 
 // region 各种参数，主要用于测试模式

@@ -1,8 +1,10 @@
-import {DataSource} from '../DataSource';
+import {DataSource, DataSourceTypeInfo} from '../DataSource';
 import TimeUtil from '../../util/TimeUtil';
 import {DataItem} from '../../DataItem';
 import Settings from '../../Settings';
 import HttpUtil from "../../util/HttpUtil";
+
+const typeInfo = new DataSourceTypeInfo('terra-historicus.hypergryph.com', 15*1000);
 
 /**
  * 泰拉记事社(官网)数据源。
@@ -10,12 +12,18 @@ import HttpUtil from "../../util/HttpUtil";
  */
 export class TerraHistoricusDataSource extends DataSource {
 
-  static get typeName() {
-    return 'terra-historicus.hypergryph.com';
+  /**
+   * @returns {DataSourceTypeInfo}
+   */
+  static get typeInfo() {
+    return typeInfo;
   };
 
-  constructor(icon, dataName, title, dataUrl, priority) {
-    super(icon, dataName, title, dataUrl, priority);
+  /**
+   * @param config {DataSourceConfig} 数据源配置
+   */
+  constructor(config) {
+    super(config);
   }
 
   async processData(rawDataText) {

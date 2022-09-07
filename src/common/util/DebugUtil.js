@@ -33,6 +33,10 @@ class DebugUtil {
     this.debugConsoleOutput(level, 'log', ...data);
   }
 
+  debugLogWarn(level, ...data) {
+    this.debugConsoleOutput(level, 'warn', ...data);
+  }
+
   debugLogError(level, ...data) {
     this.debugConsoleOutput(level, 'error', ...data);
   }
@@ -43,10 +47,7 @@ class DebugUtil {
       if (debugLogCounter >= debugLogClearThreshold) {
         console.clear();
       }
-      const firstArg = data[0];
-      const restArg = data;
-      restArg.shift();
-      console[type](`%c[${new Date().toLocaleString()}]%c ` + firstArg, "color: gray", "color: black", ...restArg);
+      console[type](`%c[${new Date().toLocaleString()}]`, "color: gray", ...data);
       debugLogCounter++;
     }
   }

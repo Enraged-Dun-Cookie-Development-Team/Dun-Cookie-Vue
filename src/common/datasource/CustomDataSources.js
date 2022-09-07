@@ -8,7 +8,7 @@ class CustomDataSourceBuilder {
   type;
 
   get typeName() {
-    return this.type.typeName;
+    return this.type.typeInfo.typeName;
   }
 
   /**
@@ -24,7 +24,7 @@ class CustomDataSourceBuilder {
    */
   argPlaceholder;
   /**
-   * 构建方法，接收一个字符串参数构建出数据源，返回值应该是一个Promise<DataSource|null>或null
+   * 构建方法，接收一个字符串参数构建出数据源，返回值应该是一个Promise<DataSource|null>
    */
   build;
 
@@ -43,21 +43,25 @@ const BASE_PRIORITY = 1000;
 
 const customDataSourceTypes = [
   {
-    name: BilibiliDataSource.typeName,
+    name: BilibiliDataSource.typeInfo.typeName,
     builder: new CustomDataSourceBuilder(BilibiliDataSource, 'B站', '请输入B站UID', 'B站UID', function (arg) {
       if (!/^\d+$/.test(arg)) {
-        return null;
+        return Promise.reject('非法UID');
       }
-      return BilibiliDataSource.withUid(arg, BASE_PRIORITY);
+      return BilibiliDataSource.withUid(arg, (config) => {
+        config.priority = BASE_PRIORITY;
+      });
     })
   },
   {
-    name: WeiboDataSource.typeName,
+    name: WeiboDataSource.typeInfo.typeName,
     builder: new CustomDataSourceBuilder(WeiboDataSource, '微博', '请输入微博UID', '微博UID', function (arg) {
       if (!/^\d+$/.test(arg)) {
-        return null;
+        return Promise.reject('非法UID');
       }
-      return WeiboDataSource.withUid(arg, BASE_PRIORITY);
+      return WeiboDataSource.withUid(arg, (config) => {
+        config.priority = BASE_PRIORITY;
+      });
     })
   },
 ];

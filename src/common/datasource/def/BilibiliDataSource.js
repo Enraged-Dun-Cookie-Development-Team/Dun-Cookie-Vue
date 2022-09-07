@@ -1,7 +1,9 @@
-import { DataSource, UserInfo } from '../DataSource';
+import {DataSource, DataSourceConfig, DataSourceTypeInfo, UserInfo} from '../DataSource';
 import TimeUtil from '../../util/TimeUtil';
-import { DataItem } from '../../DataItem';
+import {DataItem} from '../../DataItem';
 import HttpUtil from '../../util/HttpUtil';
+
+const typeInfo = new DataSourceTypeInfo('bilibili_dynamic', 10 * 1000);
 
 /**
  * 哔哩哔哩数据源。
@@ -9,30 +11,18 @@ import HttpUtil from '../../util/HttpUtil';
  */
 export class BilibiliDataSource extends DataSource {
 
-  static get typeName() {
-    return 'bilibili_dynamic';
+  /**
+   * @returns {DataSourceTypeInfo}
+   */
+  static get typeInfo() {
+    return typeInfo;
   };
 
-  static async withUid(uid, priority) {
-    /**
-     * @type {UserInfo}
-     */
-    let data;
-    try {
-      data = await DataSource.getOrFetchUserInfo(uid, BilibiliDataSource);
-    } catch (e) {
-      console.log(e);
-    }
-    if (!data) {
-      data = new UserInfo('bili_' + uid, '/assets/image/icon/bili.ico');
-    }
-    const dataName = BilibiliDataSource.typeName + '_' + uid;
-    const dataUrl = `https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=${uid}&offset_dynamic_id=0&need_top=0&platform=web`;
-    return new BilibiliDataSource(data.avatarUrl, dataName, data.username, dataUrl, priority);
-  }
-
-  constructor(icon, dataName, title, dataUrl, priority) {
-    super(icon, dataName, title, dataUrl, priority);
+  /**
+   * @param config {DataSourceConfig} 数据源配置
+   */
+  constructor(config) {
+    super(config);
   }
 
   async processData(rawDataText) {
@@ -94,11 +84,39 @@ export class BilibiliDataSource extends DataSource {
     }
   }
 
+  /**
+   * @param uid {number}
+   * @param customConfigCallback {(function(DataSourceConfigBuilder): void)|undefined}
+   * @returns {Promise<BilibiliDataSource|null>}
+   */
+  static async withUid(uid, customConfigCallback = undefined) {
+    try {
+      const data = await DataSource.getOrFetchUserInfo(uid, BilibiliDataSource);
+      if (!data) {
+        return null;
+      }
+      const dataUrl = `https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=${uid}&offset_dynamic_id=0&need_top=0&platform=web`;
+      const configBuilder = DataSourceConfig.builder()
+        .icon(data.avatarUrl)
+        .dataName(data.dataName)
+        .title(data.username)
+        .dataUrl(dataUrl);
+      if (customConfigCallback) {
+        customConfigCallback(configBuilder);
+      }
+      return new BilibiliDataSource(configBuilder.build());
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  }
+
   static async fetchUserInfo(uid) {
     const json = await HttpUtil.GET_Json(`https://api.bilibili.com/x/space/acc/info?mid=${uid}&jsonp=jsonp`);
     if (json.code != 0) {
       throw 'request fail: ' + JSON.stringify(json);
     }
-    return new UserInfo(json.data.name, json.data.face);
+    const dataName = BilibiliDataSource.typeInfo.typeName + '_' + uid;
+    return new UserInfo(dataName, json.data.name+'B站', json.data.face);
   }
 }

@@ -1,8 +1,10 @@
-import { DataSource, UserInfo } from '../DataSource';
+import {DataSource, DataSourceConfig, DataSourceTypeInfo, UserInfo} from '../DataSource';
 import Settings from '../../Settings';
 import TimeUtil from '../../util/TimeUtil';
 import { DataItem, RetweetedInfo } from '../../DataItem';
 import HttpUtil from '../../util/HttpUtil';
+
+const typeInfo = new DataSourceTypeInfo('weibo', 4 * 1000);
 
 /**
  * 微博数据源。
@@ -10,30 +12,18 @@ import HttpUtil from '../../util/HttpUtil';
  */
 export class WeiboDataSource extends DataSource {
 
-  static get typeName() {
-    return 'weibo';
+  /**
+   * @returns {DataSourceTypeInfo}
+   */
+  static get typeInfo() {
+    return typeInfo;
   };
 
-  static async withUid(uid, priority) {
-    /**
-     * @type {UserInfo}
-     */
-    let data;
-    try {
-      data = await DataSource.getOrFetchUserInfo(uid, WeiboDataSource);
-    } catch (e) {
-      console.log(e);
-    }
-    if (!data) {
-      data = new UserInfo('weibo_' + uid, '/assets/image/icon/weibo.ico');
-    }
-    const dataName = WeiboDataSource.typeName + '_' + uid;
-    const dataUrl = `https://m.weibo.cn/api/container/getIndex?type=uid&value=${uid}&containerid=107603${uid}`;
-    return new WeiboDataSource(data.avatarUrl, dataName, data.username, dataUrl, priority);
-  }
-
-  constructor(icon, dataName, title, dataUrl, priority) {
-    super(icon, dataName, title, dataUrl, priority);
+  /**
+   * @param config {DataSourceConfig} 数据源配置
+   */
+  constructor(config) {
+    super(config);
   }
 
   async processData(rawDataText) {
@@ -89,12 +79,39 @@ export class WeiboDataSource extends DataSource {
     }
   }
 
+  /**
+   * @param uid {number}
+   * @param customConfigCallback {(function(DataSourceConfigBuilder): void)|undefined}
+   * @returns {Promise<WeiboDataSource|null>}
+   */
+  static async withUid(uid, customConfigCallback = undefined) {
+    try {
+      const data = await DataSource.getOrFetchUserInfo(uid, WeiboDataSource);
+      if (!data) {
+        return null;
+      }
+      const dataUrl = `https://m.weibo.cn/api/container/getIndex?type=uid&value=${uid}&containerid=107603${uid}`;
+      const configBuilder = DataSourceConfig.builder()
+        .icon(data.avatarUrl)
+        .dataName(data.dataName)
+        .title(data.username)
+        .dataUrl(dataUrl);
+      if (customConfigCallback) {
+        customConfigCallback(configBuilder);
+      }
+      return new WeiboDataSource(configBuilder.build());
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  }
+
   static async fetchUserInfo(uid) {
     const json = await HttpUtil.GET_Json(`https://m.weibo.cn/api/container/getIndex?type=uid&value=${uid}&containerid=100505${uid}`);
     if (json.ok != 1) {
       throw 'request fail: ' + JSON.stringify(json);
     }
-    const dataName = WeiboDataSource.typeName + '_' + uid;
-    return new UserInfo(dataName, json.data.userInfo.screen_name, json.data.userInfo.avatar_hd);
+    const dataName = WeiboDataSource.typeInfo.typeName + '_' + uid;
+    return new UserInfo(dataName, json.data.userInfo.screen_name+'微博', json.data.userInfo.avatar_hd);
   }
 }

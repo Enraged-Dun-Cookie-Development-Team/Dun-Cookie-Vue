@@ -33,7 +33,7 @@
 		"http://*.sinaimg.cn/*",
 		"https://*.hycdn.cn/*",
 		"https://music.163.com/*",
-		"http://*.music.126.net/*",
+		"https://*.music.126.net/*",
 		"http://*.ceobecanteen.top/*",
 		"https://*.ceobecanteen.top/*"
 	],
