@@ -92,7 +92,7 @@
           <el-button class="green" @click.stop="saveSetting('form')">
             <i class="el-icon-circle-check"></i>保存
           </el-button>
-          <el-button class="blue" @click.stop="settingExport">
+          <el-button class="purple" @click.stop="settingExport">
             <i class="el-icon-download"></i>导出配置
           </el-button>
           <el-upload
@@ -216,11 +216,11 @@
                 </div>
                 <div class="body-menu-content-card">
                   <div class="content-card-title">推送重复的饼</div>
-                  <div class="content-card-description">推送不同平台一样的饼</div>
+                  <div class="content-card-description">
+                    推送不同平台一样的饼
+                  </div>
                   <div class="content-card-content flex-between">
-                    <div>
-                      关闭后不会推送不同平台同样的饼，列表还是都会显示
-                    </div>
+                    <div>关闭后不会推送不同平台同样的饼，列表还是都会显示</div>
                     <div>
                       <el-switch
                         v-model="settings.dun.repetitionPush"
@@ -406,10 +406,10 @@
                         placeholder="选择默认标签"
                       >
                         <el-option
-                            v-for="source in currentDataSource"
-                            :key="source.dataName"
-                            :label="source.title"
-                            :value="source.dataName"
+                          v-for="source in currentDataSource"
+                          :key="source.dataName"
+                          :label="source.title"
+                          :value="source.dataName"
                         >
                           <div style="display: flex; align-items: center">
                             <img
@@ -506,11 +506,14 @@ import countTo from "vue-count-to";
 
 import Settings from "../common/Settings";
 import DunInfo from "../common/sync/DunInfo";
-import {SHOW_VERSION} from "../common/Constants";
-import {getDefaultDataSourcesList} from "../common/datasource/DefaultDataSources";
+import { SHOW_VERSION } from "../common/Constants";
+import { getDefaultDataSourcesList } from "../common/datasource/DefaultDataSources";
 import TimeUtil from "../common/util/TimeUtil";
-import {customDataSourceTypes, customDataSourceTypesByName,} from "../common/datasource/CustomDataSources";
-import {animateCSS, deepAssign} from "../common/util/CommonFunctions";
+import {
+  customDataSourceTypes,
+  customDataSourceTypesByName,
+} from "../common/datasource/CustomDataSources";
+import { animateCSS, deepAssign } from "../common/util/CommonFunctions";
 import PlatformHelper from "../common/platform/PlatformHelper";
 import "animate.css";
 import CurrentDataSource from "../common/sync/CurrentDataSource";
@@ -577,7 +580,7 @@ export default {
       DunInfo.doAfterUpdate((data) => {
         this.oldDunCount = data.counter;
       });
-      CurrentDataSource.doAfterUpdate(data => {
+      CurrentDataSource.doAfterUpdate((data) => {
         this.currentDataSource = data;
       });
     },
@@ -729,6 +732,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@ceobeLightColor: #fcddab; //小刻食堂主题亮色浅色
+@ceobeVeryLightColor: #fff7ec; //小刻食堂主题非常浅色
+@ceobeColor: #ffba4b; //小刻食堂主题亮色
+@ceobeDarkColor: #353535; // 小刻食堂主题暗色
 #app {
   height: 100vh;
   width: 100vw;
@@ -759,7 +766,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #23ade5;
+  background: @ceobeColor;
   color: #fff;
   height: 100px;
   padding: 0 20px;
@@ -821,7 +828,7 @@ export default {
       border-radius: 3px;
       position: absolute;
       right: -10px;
-      background: #23ade5;
+      background: @ceobeColor;
       color: #ffffff;
       top: 90px;
       text-align: right;
@@ -1002,12 +1009,12 @@ export default {
 
       position: relative;
 
-      &.blue {
-        background: #7aa6da;
+      &.purple {
+        background: #d67ada;
       }
 
       &.green {
-        background: #b9ca4a;
+        background: #e2d84d;
       }
 
       &.pink {
@@ -1043,76 +1050,6 @@ export default {
         font-size: 1.8em;
       }
     }
-
-    // button {
-    //   font-size: 20px;
-    //   font-family: Raleway;
-    //   line-height: 20px;
-    //   padding: 0.618em 1em;
-    //   border-radius: 10px 10px 12px 12px;
-    //   box-shadow: 0px 8px 0px 0px #2980b9,
-    //     /* button thickness */ 0px 0 20px rgba(255, 255, 255, 0.2) inset,
-    //     /* inner glow */ 2px 30px 0px rgba(255, 255, 255, 0.1) inset,
-    //     /* sublte reflection */ 5px 15px 30px -10px #000; /* dark shadow underneath */
-    //   border: 1px solid #2980b9;
-    //   cursor: pointer;
-    //   background: #3498db;
-    //   color: #ecf0f1;
-    //   text-shadow: 1px 1px 1px #34495e;
-    //   transform: rotateX(5deg);
-    //   margin: 10px 10px;
-    //   width: 180px;
-    //   text-align: left;
-    // }
-    // button i {
-    //   padding-right: 17px;
-    //   transform: scale(1.1) translate(0, -1px);
-    // }
-    // button:hover {
-    //   margin-top: 15px;
-    //   margin-bottom: 5px;
-    //   box-shadow: 0px 5px 0px 0px #2980b9,
-    //     /* button thickness */ 0px 0 50px rgba(134, 243, 255, 1) inset,
-    //     /* inner glow */ 5px 28px 0px rgba(255, 255, 255, 0.15) inset,
-    //     /* sublte reflection */ 0px 0px 30px rgba(134, 243, 255, 0.2),
-    //     /* outer glow */ 5px 15px 30px -10px #000; /* dark shadow underneath */
-    //   color: #fff;
-    //   filter: saturate(1.5);
-    // }
-    // button:hover i {
-    //   transform: scale(1.1) translate(1px, -3px) scale(1.2);
-    // }
-    // button:active {
-    //   margin-top: 18px;
-    //   margin-bottom: 2px;
-    //   box-shadow: 0px 2px 0px 0px #2980b9,
-    //     /* button thickness */ 0px 0 100px 10px rgba(134, 243, 255, 1) inset,
-    //     /* inner glow */ 5px 25px 0px rgba(255, 255, 255, 0.1) inset,
-    //     /* sublte reflection */ 0px 0px 30px rgba(134, 243, 255, 0.5),
-    //     /* outer glow */ 5px 15px 30px -10px #000; /* dark shadow underneath */
-    //   filter: saturate(1.7);
-    // }
-    // button:active i {
-    //   transform: scale(1.2) translate(2px, -5px) scale(1.3);
-    // }
-    // .pink {
-    //   filter: hue-rotate(100deg);
-    // }
-    // .pink:hover {
-    //   filter: hue-rotate(100deg) saturate(1.2);
-    // }
-    // .pink:active {
-    //   filter: hue-rotate(100deg) saturate(1.4);
-    // }
-    // .green {
-    //   filter: hue-rotate(255deg) saturate(0.8);
-    // }
-    // .green:hover {
-    //   filter: hue-rotate(255deg) saturate(1);
-    // }
-    // .green:active {
-    //   filter: hue-rotate(255deg) saturate(1.2);
-    // }
   }
 
   // 内容样式
@@ -1170,10 +1107,10 @@ export default {
       .content-card-content,
       .content-line-content {
         border-radius: 3px;
-        border: 1px solid #23ade5;
+        border: 1px solid @ceobeColor;
         padding: 20px;
         margin: 10px 0;
-        color: #23ade5;
+        color: @ceobeColor;
 
         &.flex-between {
           display: flex;
@@ -1322,6 +1259,72 @@ export default {
       }
     }
   }
+}
+
+// 开关按钮
+/deep/ .el-switch.is-checked .el-switch__core {
+  border-color: @ceobeColor;
+  background-color: @ceobeColor;
+}
+
+// 单选框
+/deep/ .el-radio__input.is-checked .el-radio__inner {
+  border-color: @ceobeColor;
+  background: @ceobeColor;
+}
+/deep/ .el-radio__inner:hover {
+  border-color: @ceobeColor;
+}
+/deep/ .el-radio__input.is-checked + .el-radio__label {
+  color: @ceobeColor;
+}
+
+// 多选框
+/deep/ .el-checkbox__input.is-checked .el-checkbox__inner,
+.el-checkbox__input.is-indeterminate .el-checkbox__inner {
+  background-color: @ceobeColor;
+  border-color: @ceobeColor;
+}
+/deep/ .el-checkbox__inner:hover {
+  border-color: @ceobeColor;
+}
+/deep/ .el-checkbox__input.is-focus .el-checkbox__inner {
+  border-color: @ceobeColor;
+}
+/deep/ .el-checkbox__input.is-checked + .el-checkbox__label {
+  color: @ceobeColor;
+}
+
+// 拖拉条
+/deep/ .el-slider__bar {
+  background-color: @ceobeColor;
+}
+/deep/ .el-slider__button {
+  border-color: @ceobeColor;
+}
+
+// 计数器
+/deep/ .el-input.is-active .el-input__inner,
+/deep/ .el-input__inner:focus {
+  border-color: @ceobeColor;
+}
+/deep/
+  .el-input-number__decrease:hover:not(.is-disabled)
+  ~ .el-input
+  .el-input__inner:not(.is-disabled),
+/deep/
+  .el-input-number__increase:hover:not(.is-disabled)
+  ~ .el-input
+  .el-input__inner:not(.is-disabled) {
+  border-color: @ceobeColor;
+}
+
+// 按钮
+.el-button:focus,
+.el-button:hover {
+  color: @ceobeColor;
+  border-color: @ceobeLightColor;
+  background-color: @ceobeVeryLightColor;
 }
 
 .body-menu-content {

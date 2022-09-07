@@ -105,7 +105,11 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
+@ceobeLightColor: #fcddab; //小刻食堂主题亮色浅色
+@ceobeVeryLightColor: #fff7ec; //小刻食堂主题非常浅色
+@ceobeColor: #ffba4b; //小刻食堂主题亮色
+@ceobeDarkColor: #353535; // 小刻食堂主题暗色
 @font-face {
   font-family: Geometos;
   src: url('../assets/font/Geometos.ttf');
@@ -115,7 +119,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #23ade5;
+  background: @ceobeColor;
 
   .title {
     margin: 10px;

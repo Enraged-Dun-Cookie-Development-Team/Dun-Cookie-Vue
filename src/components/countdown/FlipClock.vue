@@ -120,7 +120,11 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
+@ceobeLightColor: #fcddab; //小刻食堂主题亮色浅色
+@ceobeVeryLightColor: #fff7ec; //小刻食堂主题非常浅色
+@ceobeColor: #ffba4b; //小刻食堂主题亮色
+@ceobeDarkColor: #353535; // 小刻食堂主题暗色
 * {
   padding: 0;
   margin: 0;
@@ -134,7 +138,7 @@ export default {
     width: 100%;
     text-align: center;
     font-size: 34px;
-    color: #3E81AC;
+    color: @ceobeColor;
     margin-bottom: 10px;
     padding-bottom: 10px;
     position: relative;
@@ -145,7 +149,7 @@ export default {
       bottom: 0px;
       left: calc(50% - 100px);
       height: 2px;
-      background: linear-gradient(90deg, #fff, #3E81AC, #fff);
+      background: linear-gradient(90deg, #fff, @ceobeColor, #fff);
       border-radius: 50%;
       content: "";
       z-index: 0;
@@ -169,7 +173,7 @@ export default {
       font-size: 20px;
       font-style: normal;
       vertical-align: top;
-      color: #79B3D8;
+      color: @ceobeLightColor;
       margin-left: 0px;
       margin-right: 15px;
       height: 10px;

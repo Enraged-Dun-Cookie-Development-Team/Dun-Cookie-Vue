@@ -66,7 +66,7 @@ export default class BrowserPlatform extends AbstractPlatform {
     const textHeight = textCanvas ? textCanvas.height : 0;
     let canvasHeight = headerCanvas.height + 10 + textHeight + 10;
     if (image) {
-      canvasHeight += (canvasWidth-20) / image.width * image.height;
+      canvasHeight += (canvasWidth - 20) / image.width * image.height;
     }
 
     const canvas = document.createElement("canvas");
@@ -84,7 +84,7 @@ export default class BrowserPlatform extends AbstractPlatform {
       heightOffset += textHeight + 10;
     }
     if (image) {
-      ctx.drawImage(image, 10, heightOffset, canvasWidth-20, (canvasWidth-20)/image.width*image.height);
+      ctx.drawImage(image, 10, heightOffset, canvasWidth - 20, (canvasWidth - 20) / image.width * image.height);
     }
     return canvas;
   }
@@ -118,7 +118,7 @@ export default class BrowserPlatform extends AbstractPlatform {
     const [icon, sourceIcon, jumpQrCode, toolQrCode] = promiseResult;
 
     // 小刻食堂信息
-    ctx.fillStyle = "#23ade5";
+    ctx.fillStyle = "#ffba4b";
     ctx.font = "36px Microsoft Yahei";
     ctx.fillText(`小刻食堂 V${CURRENT_VERSION}`, 120, 50);
     ctx.drawImage(icon, 10, 10, 100, 100);
@@ -135,7 +135,7 @@ export default class BrowserPlatform extends AbstractPlatform {
 
     // 二维码
     const qrcodeSize = 90;
-    ctx.fillStyle = "#23ade5";
+    ctx.fillStyle = "#ffba4b";
     ctx.textBaseline = "top";
     ctx.textAlign = "center";
     const toolQrCodeOffset = canvas.width - qrcodeSize;
