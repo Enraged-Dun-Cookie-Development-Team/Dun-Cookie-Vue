@@ -154,6 +154,30 @@ const configList = [
           .priority(11)
           .groupId(SHARE_DEFAULT_GROUP);
     }),
+    BilibiliDataSource.withUid(1883857209, (config) => {
+        config
+          .priority(12)
+          .groupId(SHARE_DEFAULT_GROUP);
+    }),
+    BilibiliDataSource.withUid(1554642444, (config) => {
+        config
+          .priority(13)
+          .groupId(SHARE_DEFAULT_GROUP);
+    }),
+    BilibiliDataSource.withUid(2123591088, (config) => {
+        config
+          .priority(14)
+          .groupId(SHARE_DEFAULT_GROUP);
+    }),
+    WeiboDataSource.withUid(7683268725, (config) => {
+        config
+          .priority(15)
+          .groupId(SHARE_DEFAULT_GROUP);
+    }),
+    NeteaseCloudMusicDataSource.withUid(50653540, (config) => {
+        config
+          .priority(16);
+    }),
 ];
 
 
