@@ -26,7 +26,7 @@ const CURRENT_SETTING_VERSION = 2;
 /**
  * 当前插件版本号
  */
-const CURRENT_VERSION = '3.1.1';
+const CURRENT_VERSION = '3.2.5';
 /**
  * 展示用的版本号
  */
@@ -85,6 +85,7 @@ export {PAGE_WELCOME, PAGE_POPUP_WINDOW, PAGE_OPTIONS, PAGE_DONATE, PAGE_UPDATE,
 // region 杂项
 const TOOL_QR_URL = 'https://arknightscommunity.drblack-system.com/15386.html';
 const CANTEEN_INTERFACE_LIST = ['http://api.ceobecanteen.top/'];
+const CANTEEN_SERVER_LIST = ['https://server.ceobecanteen.top/api/v1/']
 // TODO 直接从common.js里面copy过来的，等待优化重构
 const quickJump = {
   source: [
@@ -189,7 +190,7 @@ const quickJump = {
       radius: true,
     },
     {
-      url: "https://arknightscommunity.drblack-system.com/",
+      url: "https://terrach.net/",
       name: "泰拉通讯枢纽",
       img: "/assets/image/link/tltxsn.png",
       radius: false,
@@ -308,5 +309,5 @@ const countDown = [
   }
 ];
 
-export {quickJump, dayInfo,countDown, TOOL_QR_URL, CANTEEN_INTERFACE_LIST};
+export {quickJump, dayInfo,countDown, TOOL_QR_URL, CANTEEN_INTERFACE_LIST, CANTEEN_SERVER_LIST};
 // endregion

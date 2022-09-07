@@ -1,68 +1,67 @@
 <template>
-  <div id="timeline-area" :class="settings.display.announcementScroll ? 'scrollTimeline' : ''">
+  <div id="timeline-area" :class="settings.display.announcementScroll && timelineEnableScroll ? 'scrollTimeline' : ''"
+    ref="totalScrollArea">
     <Search ref="SearchModel" :searchShow="searchShow" @searchTextChange="changeFilterText"></Search>
     <el-card shadow="never" class="info-card online-speak" :class="searchShow ? 'searching' : ''" v-loading="loading"
-      element-loading-text="【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没有*龙门粗口*正常连接】" element-loading-custom-class="page-loading">
-      <el-carousel arrow="never" height="100px" direction="vertical" :interval="3000" :autoplay="true">
-        <el-carousel-item v-if="isNew">
-          <div class="new-info-area" @click="openUpdate">
-            <img src="/assets/image/update.png" />
-            博士，检测到了新版本，点击这里进入更新页面
-          </div>
-        </el-carousel-item>
-        <el-carousel-item>
-          <div class="day-info">
-            <div class="day-info-content">
-              <div class="day-info-content-top">
-                <div>
-                  <div class="day-info-content-top-card-area" :key="index"
-                    v-for="(item, index) in onlineDayInfo.countdown">
-                    <div>
-                      距离
-                      <el-tooltip v-if="item.remark" :content="item.remark" placement="right">
-                        <span class="online-orange">{{ item.text }}</span>
-                      </el-tooltip>
-                      <span v-else class="online-orange">{{ item.text }}</span>
-                      <span title="国服 UTC-8">{{
-                          " " + calcActivityDiff(item.time)
-                      }}</span>
+      element-loading-text="【如果你看到这条信息超过1分钟，去*龙门粗口*看看网络有没有*龙门粗口*正常连接】">
+      <div @wheel="gowheel" @mouseover="mouseOverAnnouncement" @mouseleave="mouseLeaveAnnouncement"
+        class="announcement-area">
+        <el-carousel ref="swiper" height="100px" arrow="never" direction="vertical" :interval="3000" :autoplay="true"
+          v-if="!loading">
+          <el-carousel-item v-if="isNew">
+            <div class="new-info-area" @click="openUpdate">
+              <img src="/assets/image/update.png" />
+              博士，检测到了新版本，点击这里进入更新页面
+            </div>
+          </el-carousel-item>
+          <el-carousel-item>
+            <div class="day-info">
+              <div class="day-info-content">
+                <div class="day-info-content-top">
+                  <div>
+                    <div class="day-info-content-top-card-area" :key="index"
+                      v-for="(item, index) in onlineDayInfo.countdown">
+                      <div>
+                        距离
+                        <el-tooltip v-if="item.remark" :content="item.remark" placement="right">
+                          <span class="online-orange">{{ item.text }}</span>
+                        </el-tooltip>
+                        <span v-else class="online-orange">{{ item.text }}</span>
+                        <span title="国服 UTC-8">{{
+                            " " + calcActivityDiff(item.time)
+                        }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div v-if="settings.feature.san && imgShow" class="sane-area" @click.stop="openToolDrawer">
+                    <div class="sane">
+                      当前理智为<span class="online-orange sane-number">{{ san.currentSan }}</span>点
+                    </div>
+                    <div class="sane-info">
+                      {{ san.remainTime }}
                     </div>
                   </div>
                 </div>
-                <div v-if="settings.feature.san && imgShow" class="sane-area" @click.stop="openToolDrawer">
-                  <div class="sane">
-                    当前理智为<span class="online-orange sane-number">{{
-                        san.currentSan
-                    }}</span>点
+                <div class="day-info-content-bottom">
+                  <div class="day-info-content-bottom-card-area">
+                    <el-tooltip class="item" effect="dark" placement="bottom" v-for="item in dayInfo" :key="item.type">
+                      <div slot="content">
+                        {{ `${item.name} - 开放日期： ${calcResourceOpenDay(item.day)}` }}
+                      </div>
+                      <div class="day-info-content-bottom-card" :class="item.notToday ? 'notToday' : ''">
+                        <img v-if="imgShow" v-lazy="item.src" />
+                      </div>
+                    </el-tooltip>
                   </div>
-                  <div class="sane-info">
-                    {{ san.remainTime }}
-                  </div>
-                </div>
-              </div>
-              <div class="day-info-content-bottom">
-                <div class="day-info-content-bottom-card-area">
-                  <el-tooltip class="item" effect="dark" placement="bottom" v-for="item in dayInfo" :key="item.type">
-                    <div slot="content">
-                      {{
-                          `${item.name} - 开放日期： ${calcResourceOpenDay(
-                            item.day
-                          )}`
-                      }}
-                    </div>
-                    <div class="day-info-content-bottom-card" :class="item.notToday ? 'notToday' : ''">
-                      <img v-if="imgShow" v-lazy="item.src" />
-                    </div>
-                  </el-tooltip>
                 </div>
               </div>
             </div>
-          </div>
-        </el-carousel-item>
-        <el-carousel-item v-for="(item, index) in onlineSpeakList" :key="index">
-          <div v-html="item.html"></div>
-        </el-carousel-item>
-      </el-carousel>
+          </el-carousel-item>
+          <el-carousel-item v-for="(item, index) in onlineSpeakList" :key="index">
+            <div v-html="item.html"></div>
+          </el-carousel-item>
+        </el-carousel>
+      </div>
     </el-card>
     <el-tabs v-if="settings.display.showByTag" v-model="currentTag" :stretch="true" @tab-click="selectListByTag">
       <el-tab-pane v-for="item of transformToSortList(cardListByTag)" :key="item.dataName" :label="item.dataName"
@@ -115,7 +114,7 @@
     </el-dialog>
     <select-image-to-copy ref="SelectImageToCopy" @copyData="copyData">
     </select-image-to-copy>
-    <update-info-notice :updateInfo="updateInfo"></update-info-notice>
+    <update-info-notice></update-info-notice>
   </div>
 </template>
 
@@ -133,7 +132,7 @@ import Settings from "../../common/Settings";
 import SanInfo from "../../common/sync/SanInfo";
 import TimeUtil from "../../common/util/TimeUtil";
 import Search from "../Search";
-import { deepAssign } from "../../common/util/CommonFunctions";
+import {  deepAssign  } from "../../common/util/CommonFunctions";
 import PlatformHelper from "../../common/platform/PlatformHelper";
 import InsiderUtil from "../../common/util/InsiderUtil";
 import ServerUtil from "../../common/util/ServerUtil";
@@ -155,6 +154,8 @@ export default {
       }
     });
     return {
+      announcementAreaScroll: true,
+      timelineEnableScroll: true,
       settings: Settings,
       san: SanInfo,
       searchShow: false,
@@ -235,8 +236,8 @@ export default {
     resourcesNotToday() {
       let date = TimeUtil.changeToCCT(new Date());
       // 如果日期在里面
-      let starTime = new Date(this.onlineDayInfo.resources.starTime);
-      let overTime = new Date(this.onlineDayInfo.resources.overTime);
+      let starTime = new Date(this.onlineDayInfo.resources.start_time);
+      let overTime = new Date(this.onlineDayInfo.resources.over_time);
       if (date >= starTime && date <= overTime) {
         this.dayInfo.forEach((item) => {
           item.notToday = false;
@@ -256,51 +257,39 @@ export default {
     },
     // 获取在线信息
     getOnlineSpeak() {
-      ServerUtil.checkOnlineInfo(false).then((data) => {
+      let version = ServerUtil.getVersionInfo(false, false).then((data) => {
+        // 是否最新
+        this.isNew = Settings.JudgmentVersion(data.version, CURRENT_VERSION);
+      });
+
+      let announcement = ServerUtil.getAnnouncementInfo(false).then((data) => {
         // 头部公告
-        let filterList = data.list.filter(
+        let filterList = data.filter(
           (x) =>
-            new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
-            new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
+            new Date(x.start_time) <= TimeUtil.changeToCCT(new Date()) &&
+            new Date(x.over_time) >= TimeUtil.changeToCCT(new Date())
         );
 
         this.onlineSpeakList.push(...filterList);
+      });
 
-        // 快捷连接
-        let btnList = data.btnList.filter(
-          (x) =>
-            new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
-            new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
-        );
-        if (btnList.length > 0) {
-          this.quickJump.url.push(...btnList);
-        }
-
-        // 是否最新
-        this.isNew = Settings.JudgmentVersion(data.upgrade.v, CURRENT_VERSION);
-
+      let resource = ServerUtil.getResourceInfo(false).then((data) => {
         // 资源获取
-        this.onlineDayInfo = data.dayInfo;
+        this.onlineDayInfo = data;
         // 倒计时
         this.onlineDayInfo.countdown = this.onlineDayInfo.countdown.filter(
           (x) =>
-            new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
-            new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
+            new Date(x.start_time) <= TimeUtil.changeToCCT(new Date()) &&
+            new Date(x.over_time) >= TimeUtil.changeToCCT(new Date())
         );
+      });
 
-        // 插件更新信息
-        this.updateInfo = data.upgrade;
-
-        if (data.iconName) {
-          PlatformHelper.Storage.saveLocalStorage("iconName", data.iconName);
-        }
-
-        // 内部密码
-        this.insiderCodeMap = data.insider;
+      Promise.all([announcement, version, resource]).then(() => {
         this.resourcesNotToday();
         this.loading = false;
       });
     },
+
     calcActivityDiff(endDate) {
       let startDate = TimeUtil.changeToCCT(new Date());
       const diff = TimeUtil.calcDiff(endDate, startDate);
@@ -399,17 +388,17 @@ export default {
               target.getAttribute("href") ||
               target.parentNode.getAttribute("href");
             if (
-              target.className === "webOpen" ||
-              target.parentNode.className === "webOpen"
+              target.className === "tabOpen" ||
+              target.parentNode.className === "tabOpen"
             ) {
-              this.openWeb(url);
-            } else {
               this.openUrl(url, 1400, 950);
+            } else {
+              this.openWeb(url);
             }
           }
 
           if (target.nodeName.toLocaleLowerCase() === "drawer") {
-            this.$parent.drawer = !this.$parent.drawer;
+            this.$parent.handleIconClick();
           }
 
           if (target.nodeName.toLocaleLowerCase() === "setting") {
@@ -528,6 +517,32 @@ export default {
         });
       }
     },
+
+    // 上下滚动绑定滚轮事件
+    gowheel(event) {
+      if (event.deltaY > 0 && this.announcementAreaScroll == true) { //data中定义one为true 当one为true时执行
+        this.$refs.swiper.next();           //以此来控制每次轮播图切换的张数
+        this.announcementAreaScroll = false;
+        setTimeout(() => {
+          this.announcementAreaScroll = true
+        }, 500)
+      }
+
+      if (event.deltaY < 0 && this.announcementAreaScroll == true) {
+        this.$refs.swiper.prev();
+        this.announcementAreaScroll = false;
+        setTimeout(() => {
+          this.announcementAreaScroll = true
+        }, 500)
+      }
+    },
+    mouseOverAnnouncement() {
+      this.timelineEnableScroll = false
+    },
+
+    mouseLeaveAnnouncement() {
+      this.timelineEnableScroll = true
+    }
   },
 };
 </script>
@@ -557,9 +572,11 @@ img[lazy="error"] {
     filter: brightness(20%);
   }
 
+
   50% {
     filter: brightness(90%);
   }
+
 
   to {
     filter: brightness(20%);
@@ -654,6 +671,7 @@ img[lazy="error"] {
     #timeline-area {
       position: relative;
 
+
       // 间隔阴影
       .content-timeline-shadow {
         position: absolute;
@@ -691,6 +709,10 @@ img[lazy="error"] {
 
     .el-card__body {
       padding: 0;
+
+      .announcement-area {
+        height: 100px;
+      }
 
       // 升级内容样式
       .new-info-area {
@@ -739,7 +761,7 @@ img[lazy="error"] {
               .sane {
                 font-size: 16px;
                 font-family: Geometos, "Sans-Regular", "SourceHanSansCN-Regular",
-                  YaHei, serif;
+                  YaHei,  serif;
 
                 .sane-number {
                   font-size: 28px;
@@ -788,6 +810,7 @@ img[lazy="error"] {
       background-color: @@ceobeColor;
     }
   }
+
 
   .sane-calculator {
     display: flex;
@@ -862,6 +885,7 @@ img[lazy="error"] {
         background-color: @@bgColor;
         color: @@content;
         border: @@btnBorder 1px solid;
+
 
         // 需要特殊显示的数据源只提供复制按钮，跳转由数据源自行实现
         &.special-source {

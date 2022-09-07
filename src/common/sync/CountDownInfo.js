@@ -56,10 +56,15 @@ export default class CountDown {
     }
 
     static removeCountDown(item){
+        return CountDown.removeCountDownByName(item.name);
+    }
+
+    static removeCountDownByName(name){
+        DebugUtil.debugConsoleOutput(0, 'debug', '%c 倒计时 ', 'color: #eee; background: #DA70D6', `在存储中删除计时器[${name}]`);
         return new Promise(resolve => {
             this.getCountDownLocalStorage().then(data  =>  {
                 let jsonData = JSON.parse(data);
-                jsonData = jsonData.filter(x=>x.name != item.name)
+                jsonData = jsonData.filter(x=>x.name != name)
                 PlatformHelper.Storage.saveLocalStorage('CountDown',JSON.stringify(jsonData)).then(result => {
                     if(result != undefined){
                         NotificationUtil.SendNotice(`倒计时存储失败`,'本次改动将在浏览器关闭后丢失',null,new Date().getTime());

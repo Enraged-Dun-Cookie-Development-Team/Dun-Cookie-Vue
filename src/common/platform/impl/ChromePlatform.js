@@ -2,6 +2,7 @@ import {PLATFORM_CHROME} from '../../Constants';
 import BrowserPlatform from "./BrowserPlatform";
 import DebugUtil from "../../util/DebugUtil";
 
+// noinspection JSUnresolvedVariable
 export default class ChromePlatform extends BrowserPlatform {
 
     constructor() {
@@ -10,6 +11,12 @@ export default class ChromePlatform extends BrowserPlatform {
 
     get PlatformType() {
         return PLATFORM_CHROME;
+    }
+
+    getPlatformInfo() {
+      return new Promise((resolve) => {
+        chrome.runtime.getPlatformInfo((info) => resolve(info));
+      });
     }
 
     getAllWindow() {
@@ -228,6 +235,26 @@ export default class ChromePlatform extends BrowserPlatform {
                 resolve();
             });
         });
+    }
+
+    createAlarm(name, alarmInfo) {
+        chrome.alarms.create(name, alarmInfo);
+    }
+
+    clearAllAlarms() {
+        return new Promise((resolve, reject) => {
+            chrome.alarms.clearAll(result => {
+                if (chrome.runtime.lastError) {
+                    reject(chrome.runtime.lastError);
+                    return;
+                }
+                resolve(result);
+            });
+        });
+    }
+
+    addAlarmsListener(listener) {
+        chrome.alarms.onAlarm.addListener(listener);
     }
 
 }

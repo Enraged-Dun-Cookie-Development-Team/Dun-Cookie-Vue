@@ -19,6 +19,7 @@ export default class NodePlatform extends AbstractPlatform {
     http = node_require('http');
     https = node_require('https');
     url = node_require('url');
+    os = node_require('os');
     worker_threads;
     broadcastChannel;
 
@@ -41,6 +42,10 @@ export default class NodePlatform extends AbstractPlatform {
 
     get PlatformType() {
         return PLATFORM_NODE;
+    }
+
+    getPlatformInfo() {
+        return Promise.resolve({os: this.os.platform(), arch: this.os.arch(), nacl_arch: this.os.arch()});
     }
 
     getAllWindow() {
@@ -206,7 +211,7 @@ export default class NodePlatform extends AbstractPlatform {
         }
     }
 
-    sendHttpRequest(url, method) {
+    sendHttpRequest(url, method, timeout, failController) {
         return new Promise((resolve, reject) => {
             if (url.indexOf('file') === 0) {
                 const filePath = this.url.fileURLToPath(url);
@@ -234,6 +239,9 @@ export default class NodePlatform extends AbstractPlatform {
                     'Cookie': this.weiboCookie
                 }
             }
+            if (timeout && timeout > 0) {
+                options.timeout = timeout;
+            }
             let web;
             if (url.indexOf('https') === 0) {
                 web = this.https;
@@ -259,6 +267,7 @@ export default class NodePlatform extends AbstractPlatform {
                 }
             });
 
+            req.on('timeout', () => reject(`web request timeout(${timeout}ms)`));
             req.on('error', reject);
             req.end();
         });
@@ -278,6 +287,26 @@ export default class NodePlatform extends AbstractPlatform {
         }
         // 无事发生
         return new Promise((resolve, _) => resolve());
+    }
+
+    createAlarm(name, alarmInfo) {
+        if (DEBUG_LOG) {
+            console.log('Node环境不支持Alarm');
+        }
+    }
+
+    clearAllAlarms() {
+        if (DEBUG_LOG) {
+            console.log('Node环境不支持Alarm');
+        }
+        // 无事发生
+        return new Promise((resolve, _) => resolve());
+    }
+
+    addAlarmsListener(listener) {
+        if (DEBUG_LOG) {
+            console.log('Node环境不支持Alarm');
+        }
     }
 
     getHtmlParser() {

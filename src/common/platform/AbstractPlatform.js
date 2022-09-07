@@ -22,7 +22,7 @@ export default class AbstractPlatform {
      * @return {boolean}
      */
     get isBackground() {
-        throw unsupportedTip;
+        throw new Error(unsupportedTip);
     };
 
     /**
@@ -30,7 +30,7 @@ export default class AbstractPlatform {
      * @return {boolean}
      */
     get isMobile() {
-        throw unsupportedTip;
+        throw new Error(unsupportedTip);
     };
 
     /**
@@ -38,7 +38,15 @@ export default class AbstractPlatform {
      * @return {string}
      */
     get PlatformType() {
-        throw unsupportedTip;
+        throw new Error(unsupportedTip);
+    };
+
+    /**
+     * 操作系统
+     * @return {Promise<any>}
+     */
+    getPlatformInfo() {
+        throw new Error(unsupportedTip);
     };
 
     // TODO 关于数据同步
@@ -52,7 +60,7 @@ export default class AbstractPlatform {
      * @return {Promise} 读取成功则resolve(键值对，如果请求的是单个string则直接返回值)，读取失败则reject
      */
     getLocalStorage(name) {
-        throw unsupportedTip;
+        throw new Error(unsupportedTip);
     };
 
     /**
@@ -62,7 +70,7 @@ export default class AbstractPlatform {
      * @return {Promise} 储存成功则resolve(无任何参数)，储存失败则reject
      */
     saveLocalStorage(name, data) {
-        throw unsupportedTip;
+        throw new Error(unsupportedTip);
     };
 
     /**
@@ -72,7 +80,7 @@ export default class AbstractPlatform {
      * @return {Promise} 如果有消息接收者有返回消息的话可以在这个Promise获取(注意：如果没有返回消息的话Promise会得到undefined)
      */
     sendMessage(type, data) {
-        throw unsupportedTip;
+        throw new Error(unsupportedTip);
     };
 
     /**
@@ -82,7 +90,7 @@ export default class AbstractPlatform {
      * @param listener 监听器，接收一个参数处理信息，可以使用返回值返回消息
      */
     addMessageListener(id, type, listener) {
-        throw unsupportedTip;
+        throw new Error(unsupportedTip);
     };
 
     /**
@@ -91,7 +99,7 @@ export default class AbstractPlatform {
      * @return {Promise}
      */
     setPopup(url) {
-        throw unsupportedTip;
+        throw new Error(unsupportedTip);
     };
 
     /**
@@ -100,7 +108,7 @@ export default class AbstractPlatform {
      * @return {string}
      */
     getURLForExtensionFile(file) {
-        throw unsupportedTip;
+        throw new Error(unsupportedTip);
     };
 
 
@@ -109,7 +117,7 @@ export default class AbstractPlatform {
      * @return {Promise} 返回全部的窗口
      */
     getAllWindow() {
-        throw unsupportedTip;
+        throw new Error(unsupportedTip);
     };
 
     /**
@@ -122,7 +130,7 @@ export default class AbstractPlatform {
      * @return {Promise}
      */
     createNotifications(id, iconUrl, title, message, imageUrl) {
-        throw unsupportedTip;
+        throw new Error(unsupportedTip);
     };
 
     /**
@@ -130,7 +138,7 @@ export default class AbstractPlatform {
      * @param listener 监听器，接收一个参数(通知ID)
      */
     addNotificationClickListener(listener) {
-        throw unsupportedTip;
+        throw new Error(unsupportedTip);
     };
 
     /**
@@ -140,7 +148,7 @@ export default class AbstractPlatform {
      * @param listener 监听器，接收一个参数(当前页面的tab对象)
      */
     addIconClickListener(listener) {
-        throw unsupportedTip;
+        throw new Error(unsupportedTip);
     };
 
     /**
@@ -149,7 +157,7 @@ export default class AbstractPlatform {
      * @return {Promise}
      */
     createTab(url) {
-        throw unsupportedTip;
+        throw new Error(unsupportedTip);
     };
 
     __buildCreateData(window, url, type, width, height, state) {
@@ -185,7 +193,7 @@ export default class AbstractPlatform {
      * @return {Promise} resolve接收一个参数(新窗口的tab对象)
      */
     createWindow(url, type, width, height, state) {
-        throw unsupportedTip;
+        throw new Error(unsupportedTip);
     };
 
     /**
@@ -196,7 +204,7 @@ export default class AbstractPlatform {
      * @return {Promise} resolve接收一个参数(新窗口的tab对象)
      */
     updateWindow(winId, width, height) {
-        throw unsupportedTip;
+        throw new Error(unsupportedTip);
     };
 
     /**
@@ -205,7 +213,7 @@ export default class AbstractPlatform {
      * @return {Promise}
      */
     removeWindow(windowId) {
-        throw unsupportedTip;
+        throw new Error(unsupportedTip);
     };
 
     /**
@@ -216,7 +224,7 @@ export default class AbstractPlatform {
      * @return {Promise} resolve接收一个参数(下载任务的id)
      */
     download(url, filename, saveAs) {
-        throw unsupportedTip;
+        throw new Error(unsupportedTip);
     };
 
     /**
@@ -225,17 +233,19 @@ export default class AbstractPlatform {
      * @param listener 监听器，接收一个参数(details{id,previousVersion,reason})
      */
     addInstallListener(listener) {
-        throw unsupportedTip;
+        throw new Error(unsupportedTip);
     };
 
     /**
      * 发送HTTP请求
      * @param url 目标url
      * @param method 请求方法(GET/POST等)
+     * @param timeout 超时(单位：毫秒)，不提供或小于等于0时无限等待直至到达浏览器内置超时
+     * @param failController 回调函数，用于处理响应ok为false
      * @return {Promise} resolve接收一个参数(http响应内容)
      */
-    sendHttpRequest(url, method) {
-        throw unsupportedTip;
+    sendHttpRequest(url, method, timeout, failController) {
+        throw new Error(unsupportedTip);
     };
 
     /**
@@ -244,16 +254,44 @@ export default class AbstractPlatform {
      * @return {Promise}
      */
     setBadgeText(text) {
-        throw unsupportedTip;
+        throw new Error(unsupportedTip);
     }
+
     /**
      * 设置扩展图标的标记背景色
      * @param color {[number,number,number,number]} rgba(range 0-255)
      * @return {Promise}
      */
     setBadgeBackgroundColor(color) {
-        throw unsupportedTip;
+        throw new Error(unsupportedTip);
     }
+
+    /**
+     * 创建定时警报
+     * @param name {string | undefined}
+     * @param alarmInfo {{when?: number, delayInMinutes?: number, periodInMinutes?: number} | undefined}
+     * @return {void}
+     */
+    createAlarm(name, alarmInfo) {
+        throw new Error(unsupportedTip);
+    }
+
+    /**
+     * 清除全部警报
+     * @return {Promise<boolean>}
+     */
+    clearAllAlarms() {
+        throw new Error(unsupportedTip);
+    }
+
+    /**
+     * 监听alarm事件
+     * <p>
+     * @param listener 监听器，接收一个参数(alarm)
+     */
+    addAlarmsListener(listener) {
+        throw new Error(unsupportedTip);
+    };
 
     /**
      * 返回的对象可以当成jQuery的$来使用
@@ -261,7 +299,7 @@ export default class AbstractPlatform {
      * @return {jQuery}
      */
     getHtmlParser() {
-        throw unsupportedTip;
+        throw new Error(unsupportedTip);
     }
 
     /**
@@ -273,7 +311,7 @@ export default class AbstractPlatform {
      * @return {Promise}
      */
     generateShareImage(dataItem, iconUrl, sourceIconUrl, imageUrl) {
-        throw unsupportedTip;
+        throw new Error(unsupportedTip);
     }
 
     /**

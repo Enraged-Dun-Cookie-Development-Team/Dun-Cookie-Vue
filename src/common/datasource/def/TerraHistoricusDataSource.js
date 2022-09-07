@@ -35,7 +35,7 @@ export class TerraHistoricusDataSource extends DataSource {
     const comicData = await Promise.all(promiseList);
     comicData.forEach(comic => {
       let info = comic.data;
-      const date = TimeUtil.format(new Date(info.updateTime * 1000), 'yyyy-MM-dd');
+      const date = TimeUtil.format(new Date(info.episodes[0].displayTime * 1000), 'yyyy-MM-dd');
       const time = new Date(`${date} ${Settings.getTimeBySortMode()}`);
       list.push(DataItem.builder(this.dataName)
         .id(`Terra${info.cid}_${info.episodes[0].cid}`)

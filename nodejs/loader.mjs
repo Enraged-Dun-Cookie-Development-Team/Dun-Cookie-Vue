@@ -1,8 +1,18 @@
 // 文档：https://nodejs.org/docs/latest-v16.x/api/esm.html#loadurl-context-defaultload
 
+import { fileURLToPath } from 'url';
+import { dirname, sep } from 'path';
+
+const __dirname = dirname(dirname(fileURLToPath(import.meta.url)));
+const srcDir = __dirname + sep + 'src';
+const nodejsDir = __dirname + sep + 'nodejs';
+
 export async function load(url, context, defaultLoad) {
-  if (url.indexOf('/Dun-Cookie-Vue/src/') !== -1 || url.indexOf('/Dun-Cookie-Vue/nodejs/') !== -1) {
-    context.format = 'module';
+  if (url.startsWith('file:')) {
+    const path = fileURLToPath(url);
+    if (path.startsWith(srcDir) || path.startsWith(nodejsDir)) {
+      context.format = 'module';
+    }
   }
   return defaultLoad(url, context, defaultLoad);
 }
