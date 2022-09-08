@@ -18,7 +18,7 @@ const serveOption = {
             throw '获取响应失败，可能是临时网络波动，如果长时间失败请联系开发者';
         }
     }
-}
+};
 
 export default class ServerUtil {
 
@@ -36,7 +36,7 @@ export default class ServerUtil {
         if (!data) {
             const fallbackUrl = PlatformHelper.Extension.getURL("Dun-Cookies-Info.json");
             data = await HttpUtil.GET_Json(fallbackUrl);
-            data = data.list
+            data = data.list;
         } else {
             data = data.data;
         }
@@ -77,8 +77,8 @@ export default class ServerUtil {
                             NotificationUtil.SendNotice("博士，重要公告，记得开列表看噢！", content, imgUrl, "announcement" + new Date().getTime());
                         }
                     }
-                })
-                PlatformHelper.Storage.saveLocalStorage("announcement-notice-status", announcementNoticeStatus)
+                });
+                PlatformHelper.Storage.saveLocalStorage("announcement-notice-status", announcementNoticeStatus);
             }
         }
         return data;
@@ -98,7 +98,7 @@ export default class ServerUtil {
         if (!data) {
             const fallbackUrl = PlatformHelper.Extension.getURL("Dun-Cookies-Info.json");
             data = await HttpUtil.GET_Json(fallbackUrl);
-            data = data.btnList
+            data = data.btnList;
         } else {
             data = data.data;
         }
@@ -119,7 +119,7 @@ export default class ServerUtil {
         if (!data) {
             const fallbackUrl = PlatformHelper.Extension.getURL("Dun-Cookies-Info.json");
             data = await HttpUtil.GET_Json(fallbackUrl);
-            data = data.dayInfo
+            data = data.dayInfo;
         } else {
             data = data.data;
         }
@@ -148,10 +148,10 @@ export default class ServerUtil {
         if (!data) {
             const fallbackUrl = PlatformHelper.Extension.getURL("Dun-Cookies-Info.json");
             data = await HttpUtil.GET_Json(fallbackUrl);
-            data = data.upgrade
+            data = data.upgrade;
             // 如果检测到是断网，将版本赋值成当前版本，避免弹出更新提醒
             if (networkBroken || currentVersion) {
-                data.version = CURRENT_VERSION
+                data.version = CURRENT_VERSION;
             }
         } else {
             data = data.data;

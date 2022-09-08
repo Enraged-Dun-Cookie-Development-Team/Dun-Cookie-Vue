@@ -111,4 +111,4 @@ function animateCSS(element, animation, callback) {
 }
 
 
-export {deepAssign, deepEquals, animateCSS};
+export { deepAssign, deepEquals, animateCSS };

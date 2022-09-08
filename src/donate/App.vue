@@ -2,9 +2,14 @@
   <div class="background" :class="settings.getColorTheme()">
     <div id="app">
       <el-card class="box-card" shadow="never">
-        <el-row type="flex" align="middle" justify="space-around">
-          <el-image class="img" :src="logo"></el-image>
-          <div class="version">小刻食堂 V{{currentVersion}}</div>
+        <el-row
+          type="flex" align="middle"
+          justify="space-around"
+        >
+          <el-image class="img" :src="logo" />
+          <div class="version">
+            小刻食堂 V{{ currentVersion }}
+          </div>
         </el-row>
         <el-divider>感谢</el-divider>
         玩了方舟已经两年了，身为开服玩家，我根本不知道方舟竟然能陪我走这么远。
@@ -27,10 +32,10 @@
         前期的蹲饼真的很辛苦，各个渠道杂乱无章，出神入化的大佬PS让我不止被骗一次。
         因为是程序员，所以上班用手机的频率比用电脑的频率低得多，于是我萌生出了Chrome插件的想法。
         说干就干，今年3月3日，蹲饼1.0出身了。当时的功能单一到只能设置蹲饼频率，来源页只有B站的数据源，界面复古。
-         <img src="https://img.nga.178.com/attachments/mon_202103/03/-klbw3Q16r-5qnhK2iT1kSae-iq.jpg">
+        <img src="https://img.nga.178.com/attachments/mon_202103/03/-klbw3Q16r-5qnhK2iT1kSae-iq.jpg" />
         他是我的第一个正式对外的项目，我怀着激动又害怕的心情发表到了<a href="https://ngabbs.com/read.php?tid=25757955">NGA</a>，
         但是没想到反响很大，里面有着对我的各种鼓励和支持。
-         <br />
+        <br />
         2021年3月9日，对蹲饼是个有纪念意义的日子，蹲饼有了第二个亲爹（。
         lwt对我的帮助不止于帮我过图。还有帮我对程序的发布，测试，售后，维护等等各种繁杂的事情。
         从此，蹲饼的开发速度直线飙升。
@@ -47,30 +52,30 @@
 
 <script>
 import Settings from '../common/Settings';
-import {CURRENT_VERSION} from '../common/Constants';
+import { CURRENT_VERSION } from '../common/Constants';
 
 export default {
-  name: "app",
-  mounted() {
-    this.init();
-  },
-  watch: {},
-  data() {
-    return {
-      logo: "",
-      currentVersion: CURRENT_VERSION,
-      settings: Settings,
-    };
-  },
-  computed: {
-  },
-  methods: {
-    init() {
-      this.settings.doAfterInit((settings) => {
-        this.logo = "../assets/image/" + settings.logo;
-      });
+    name: "App",
+    data() {
+        return {
+            logo: "",
+            currentVersion: CURRENT_VERSION,
+            settings: Settings,
+        };
     },
-  },
+    computed: {
+    },
+    watch: {},
+    mounted() {
+        this.init();
+    },
+    methods: {
+        init() {
+            this.settings.doAfterInit((settings) => {
+                this.logo = "../assets/image/" + settings.logo;
+            });
+        },
+    },
 };
 </script>
 

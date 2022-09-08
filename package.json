@@ -56,13 +56,5 @@
   ],
   "gitHooks": {
     "pre-commit": "lint-staged"
-  },
-  "lint-staged": {
-    "**/src/**/*.{js,vue}": [
-      "vue-cli-service lint"
-    ],
-    "**/src/**/*.{vue,css,sass,scss}": [
-      "stylelint --fix"
-    ]
   }
 }

@@ -1,4 +1,4 @@
-import {PLATFORM_UNKNOWN} from '../../Constants';
+import { PLATFORM_UNKNOWN } from '../../Constants';
 import ChromePlatform from "./ChromePlatform";
 
 /**

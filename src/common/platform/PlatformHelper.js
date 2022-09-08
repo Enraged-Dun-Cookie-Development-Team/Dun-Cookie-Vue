@@ -5,10 +5,10 @@ import NodePlatform from './impl/NodePlatform';
 import UnknownPlatform from './impl/UnknownPlatform';
 
 // 这个环境检测的代码复制于 https://stackoverflow.com/questions/7507638/any-standard-mechanism-for-detecting-if-a-javascript-is-executing-as-a-webworker
-const isNode = ("undefined" !== typeof global) && ('[object global]' === Object.prototype.toString.call(global));
+const isNode = "undefined" !== typeof global && '[object global]' === Object.prototype.toString.call(global);
 const isNodeProcess = isNode && !!process.env.NODE_UNIQUE_ID;
-const isWebWorker = !isNode && ('undefined' !== typeof WorkerGlobalScope) && ("function" === typeof importScripts) && (navigator instanceof WorkerNavigator);
-const isBrowser = !isNode && !isWebWorker && ("undefined" !== typeof navigator) && ("undefined" !== typeof document);
+const isWebWorker = !isNode && 'undefined' !== typeof WorkerGlobalScope && "function" === typeof importScripts && navigator instanceof WorkerNavigator;
+const isBrowser = !isNode && !isWebWorker && "undefined" !== typeof navigator && "undefined" !== typeof document;
 const isBrowserWindow = isBrowser && !!window.opener;
 
 // TODO 还有一些以注释形式存在于其它文件中的chrome调用，之后记得处理
@@ -42,7 +42,7 @@ export default class PlatformHelper {
 
     static get isBackground() {
         return currentPlatform.isBackground;
-    };
+    }
 
     static get isMobile() {
         return currentPlatform.isMobile;
@@ -161,7 +161,7 @@ class BrowserActionHelper {
 
     setPopupURL(url) {
         if (!url || typeof url !== 'string') {
-            url = ''
+            url = '';
         }
         return currentPlatform.setPopup(url);
     }
@@ -234,7 +234,7 @@ class NotificationHelper {
 class WindowsHelper {
     create(url, type, width, height, state) {
         return currentPlatform.createWindow(url, type, width, height, state).catch(err => {
-            console.warn("创建窗口失败！")
+            console.warn("创建窗口失败！");
             console.error(err);
         });
     }
@@ -311,4 +311,4 @@ const lifecycleHelper = new LifecycleHelper();
 const alarmHelper = new AlarmHelper();
 const httpHelper = new HttpHelper();
 const imgHelper = new ImgHelper();
-globalThis.PlatformHelper = PlatformHelper
+globalThis.PlatformHelper = PlatformHelper;

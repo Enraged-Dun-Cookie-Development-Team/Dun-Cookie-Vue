@@ -1,5 +1,5 @@
 import ChromePlatform from './ChromePlatform';
-import {PLATFORM_EDGE} from '../../Constants';
+import { PLATFORM_EDGE } from '../../Constants';
 
 // 根据MDN中的兼容性表格中的说明，Edge会将message发给同一个页面的onMessageListener，因此在每个页面生成一个唯一id，接收时过滤掉相同页面的消息
 // https://developer.mozilla.org/zh-CN/docs/Mozilla/Add-ons/WebExtensions/API/runtime/sendMessage#browser_compatibility

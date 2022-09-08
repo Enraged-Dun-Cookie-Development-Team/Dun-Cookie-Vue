@@ -1,6 +1,6 @@
 <template>
   <div @click.stop="handleIconClick">
-    <button class="nav" ref="wrapperNav">
+    <button ref="wrapperNav" class="nav">
       <span></span>
       <span></span>
       <span></span>
@@ -11,12 +11,12 @@
 
 <script>
 export default {
-  name: "MenuIcon",
-  methods: {
-    handleIconClick() {
-      this.$emit("handleIconClick");
+    name: "MenuIcon",
+    methods: {
+        handleIconClick() {
+            this.$emit("handleIconClick");
+        },
     },
-  },
 };
 </script>
 

@@ -15,7 +15,7 @@ const unsupportedTip = "该平台未实现该接口！请联系[小刻食堂]开
  */
 export default class AbstractPlatform {
 
-    static __MESSAGE_WITHOUT_RESPONSE = '__NO_RESPONSE__'
+    static __MESSAGE_WITHOUT_RESPONSE = '__NO_RESPONSE__';
 
     /**
      * 是否是后台线程(后台线程应该有且只有一个，尽量将需要计算的内容都放入后台线程)
@@ -23,7 +23,7 @@ export default class AbstractPlatform {
      */
     get isBackground() {
         throw new Error(unsupportedTip);
-    };
+    }
 
     /**
      * 获取当前是否是移动端
@@ -31,7 +31,7 @@ export default class AbstractPlatform {
      */
     get isMobile() {
         throw new Error(unsupportedTip);
-    };
+    }
 
     /**
      * 浏览器类型
@@ -39,7 +39,7 @@ export default class AbstractPlatform {
      */
     get PlatformType() {
         throw new Error(unsupportedTip);
-    };
+    }
 
     /**
      * 操作系统
@@ -47,7 +47,7 @@ export default class AbstractPlatform {
      */
     getPlatformInfo() {
         throw new Error(unsupportedTip);
-    };
+    }
 
     // TODO 关于数据同步
     //  如果使用浏览器自带的同步功能：
@@ -61,7 +61,7 @@ export default class AbstractPlatform {
      */
     getLocalStorage(name) {
         throw new Error(unsupportedTip);
-    };
+    }
 
     /**
      * 将数据储存到本地
@@ -71,7 +71,7 @@ export default class AbstractPlatform {
      */
     saveLocalStorage(name, data) {
         throw new Error(unsupportedTip);
-    };
+    }
 
     /**
      * 向其它页面发送消息
@@ -81,7 +81,7 @@ export default class AbstractPlatform {
      */
     sendMessage(type, data) {
         throw new Error(unsupportedTip);
-    };
+    }
 
     /**
      * 监听message
@@ -91,7 +91,7 @@ export default class AbstractPlatform {
      */
     addMessageListener(id, type, listener) {
         throw new Error(unsupportedTip);
-    };
+    }
 
     /**
      * 设置点击扩展图标时的弹出窗
@@ -100,7 +100,7 @@ export default class AbstractPlatform {
      */
     setPopup(url) {
         throw new Error(unsupportedTip);
-    };
+    }
 
     /**
      * 获取扩展插件中指定文件对应的URL
@@ -109,7 +109,7 @@ export default class AbstractPlatform {
      */
     getURLForExtensionFile(file) {
         throw new Error(unsupportedTip);
-    };
+    }
 
 
     /**
@@ -118,7 +118,7 @@ export default class AbstractPlatform {
      */
     getAllWindow() {
         throw new Error(unsupportedTip);
-    };
+    }
 
     /**
      * 创建一个桌面通知
@@ -131,7 +131,7 @@ export default class AbstractPlatform {
      */
     createNotifications(id, iconUrl, title, message, imageUrl) {
         throw new Error(unsupportedTip);
-    };
+    }
 
     /**
      * 注册桌面通知被点击的监听器
@@ -139,7 +139,7 @@ export default class AbstractPlatform {
      */
     addNotificationClickListener(listener) {
         throw new Error(unsupportedTip);
-    };
+    }
 
     /**
      * 监听浏览器中的插件图标点击事件。
@@ -149,7 +149,7 @@ export default class AbstractPlatform {
      */
     addIconClickListener(listener) {
         throw new Error(unsupportedTip);
-    };
+    }
 
     /**
      * 在新标签页中打开指定url
@@ -158,7 +158,7 @@ export default class AbstractPlatform {
      */
     createTab(url) {
         throw new Error(unsupportedTip);
-    };
+    }
 
     __buildCreateData(window, url, type, width, height, state) {
         const createData = {
@@ -194,7 +194,7 @@ export default class AbstractPlatform {
      */
     createWindow(url, type, width, height, state) {
         throw new Error(unsupportedTip);
-    };
+    }
 
     /**
      * 更新窗口信息
@@ -205,7 +205,7 @@ export default class AbstractPlatform {
      */
     updateWindow(winId, width, height) {
         throw new Error(unsupportedTip);
-    };
+    }
 
     /**
      * 关闭指定窗口
@@ -214,7 +214,7 @@ export default class AbstractPlatform {
      */
     removeWindow(windowId) {
         throw new Error(unsupportedTip);
-    };
+    }
 
     /**
      * 下载指定url的内容
@@ -225,7 +225,7 @@ export default class AbstractPlatform {
      */
     download(url, filename, saveAs) {
         throw new Error(unsupportedTip);
-    };
+    }
 
     /**
      * 监听扩展插件的安装事件。
@@ -234,7 +234,7 @@ export default class AbstractPlatform {
      */
     addInstallListener(listener) {
         throw new Error(unsupportedTip);
-    };
+    }
 
     /**
      * 发送HTTP请求
@@ -246,7 +246,7 @@ export default class AbstractPlatform {
      */
     sendHttpRequest(url, method, timeout, failController) {
         throw new Error(unsupportedTip);
-    };
+    }
 
     /**
      * 设置扩展图标的标记文字
@@ -291,7 +291,7 @@ export default class AbstractPlatform {
      */
     addAlarmsListener(listener) {
         throw new Error(unsupportedTip);
-    };
+    }
 
     /**
      * 返回的对象可以当成jQuery的$来使用

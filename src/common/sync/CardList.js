@@ -1,4 +1,4 @@
-import {createSyncData, DataSyncMode} from "./SyncData";
+import { createSyncData, DataSyncMode } from "./SyncData";
 
 /**
  * @type {CanSync}

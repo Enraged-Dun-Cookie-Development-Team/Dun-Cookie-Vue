@@ -1,24 +1,28 @@
 <template>
   <div id="app">
     <div class="title-area">
-            <div class="title">
-              <a href="http://www.ceobecanteen.top/" target="_blank">
-                <el-image class="img" :src="logo"></el-image>
-              </a>
-              <div class="name-area">
-                小刻食堂倒计时模块
-              </div>
-            </div>
+      <div class="title">
+        <a href="http://www.ceobecanteen.top/" target="_blank">
+          <el-image class="img" :src="logo" />
+        </a>
+        <div class="name-area">
+          小刻食堂倒计时模块
+        </div>
+      </div>
     </div>
     <div class="count-down-area">
-      <el-card class="box-card" :key="item.name" v-for="(item) in countDownList">
+      <el-card
+        v-for="(item) in countDownList" :key="item.name"
+        class="box-card"
+      >
         <count-down-flip-clock
-            @changeTime="changeTime(item,$event)"
-            @endTime="endTime(item)"
-            :name="item.name"
-            :stopTime="item.stopTime"
-            :selectableRange="item.selectableRange"
-            :pickerTime="item.pickerTime"></count-down-flip-clock>
+          :name="item.name"
+          :stop-time="item.stopTime"
+          :selectable-range="item.selectableRange"
+          :picker-time="item.pickerTime"
+          @changeTime="changeTime(item,$event)"
+          @endTime="endTime(item)"
+        />
       </el-card>
     </div>
   </div>
@@ -29,78 +33,78 @@ import CountDown from '../common/sync/CountDownInfo';
 import PlatformHelper from "@/common/platform/PlatformHelper";
 import TimeUtil from "@/common/util/TimeUtil";
 import CountDownFlipClock from "../components/countdown/FlipClock";
-import {countDown, MESSAGE_CHANGE_COUNTDOWN, MESSAGE_SAN_GET} from "../common/Constants";
-import {deepAssign} from "@/common/util/CommonFunctions";
-import Settings from "../common/Settings"
+import { countDown, MESSAGE_CHANGE_COUNTDOWN, MESSAGE_SAN_GET } from "../common/Constants";
+import { deepAssign } from "@/common/util/CommonFunctions";
+import Settings from "../common/Settings";
 
 export default {
-  name: "countDownTime",
-  components: {
+    name: "CountDownTime",
+    components: {
     // eslint-disable-next-line vue/no-unused-components
-    CountDownFlipClock
-  },
-  mounted() {
-    this.init();
-    this.getAllCountDownLocalStorage();
-  },
-  data() {
-    return {
-      logo: "",
-      settings: Settings,
-      form: {},
-      countDownList: []
-    };
-  },
-  computed: {},
-  methods: {
-    init () {
-      this.settings.doAfterInit((settings) => {
-        this.logo = "../assets/image/" + settings.logo;
-      });
+        CountDownFlipClock
     },
-
-    start() {
-
+    data() {
+        return {
+            logo: "",
+            settings: Settings,
+            form: {},
+            countDownList: []
+        };
     },
-
-    changeTime(item, data) {
-      let info = {
-        ...item,
-        ...data
-      }
-      CountDown.addCountDownLocalStorage(info).then(_=>{
-        PlatformHelper.Message.send(MESSAGE_CHANGE_COUNTDOWN)
-      })
+    computed: {},
+    mounted() {
+        this.init();
+        this.getAllCountDownLocalStorage();
     },
+    methods: {
+        init () {
+            this.settings.doAfterInit((settings) => {
+                this.logo = "../assets/image/" + settings.logo;
+            });
+        },
 
-    endTime(data){
-      CountDown.removeCountDown(data).then(_=>{
-        PlatformHelper.Message.send(MESSAGE_CHANGE_COUNTDOWN);
-      })
-    },
+        start() {
 
-    getAllCountDownLocalStorage() {
-      CountDown.getCountDownLocalStorage().then(data => {
-        let array = [];
-        if (data) {
-          let info = [...JSON.parse(data).map(x => x.data), ...countDown];
-          info.forEach(item => {
-            if (!array.some(x => x.name == item.name)) {
-              array.push({
+        },
+
+        changeTime(item, data) {
+            let info = {
                 ...item,
-                pickerTime: new Date(item.pickerTime),
-                stopTime: item.stopTime ? new Date(item.stopTime) : null
-              });
-            }
-          })
-        } else {
-          array = countDown;
-        }
-        this.countDownList = array.sort((x, y) => x.index < y.index ? -1 : 1);
-      })
-    },
+                ...data
+            };
+            CountDown.addCountDownLocalStorage(info).then(_=>{
+                PlatformHelper.Message.send(MESSAGE_CHANGE_COUNTDOWN);
+            });
+        },
 
-  },
+        endTime(data){
+            CountDown.removeCountDown(data).then(_=>{
+                PlatformHelper.Message.send(MESSAGE_CHANGE_COUNTDOWN);
+            });
+        },
+
+        getAllCountDownLocalStorage() {
+            CountDown.getCountDownLocalStorage().then(data => {
+                let array = [];
+                if (data) {
+                    let info = [...JSON.parse(data).map(x => x.data), ...countDown];
+                    info.forEach(item => {
+                        if (!array.some(x => x.name == item.name)) {
+                            array.push({
+                                ...item,
+                                pickerTime: new Date(item.pickerTime),
+                                stopTime: item.stopTime ? new Date(item.stopTime) : null
+                            });
+                        }
+                    });
+                } else {
+                    array = countDown;
+                }
+                this.countDownList = array.sort((x, y) => x.index < y.index ? -1 : 1);
+            });
+        },
+
+    },
 
 };
 </script>

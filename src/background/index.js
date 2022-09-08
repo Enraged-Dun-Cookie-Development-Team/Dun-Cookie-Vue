@@ -18,7 +18,7 @@ import CountDown from '../common/sync/CountDownInfo';
 import TimeUtil from "../common/util/TimeUtil";
 import PenguinStatistics from "../common/sync/PenguinStatisticsInfo";
 import CardList from "../common/sync/CardList";
-import {restartDunTimer, tryDun} from "./DunController";
+import { restartDunTimer, tryDun } from "./DunController";
 
 // 开启弹出菜单窗口化时的窗口ID
 let popupWindowId = null;
@@ -46,17 +46,17 @@ function ExtensionInit() {
     PlatformHelper.Message.registerListener('background', null, (message) => {
         if (message.type) {
             switch (message.type) {
-                case MESSAGE_FORCE_REFRESH:
-                    return tryDun(true).then(() => true, () => false);
-                case MESSAGE_SAN_GET:
-                    return SanInfo;
-                case MESSAGE_CHANGE_COUNTDOWN:
-                    countDown.Change();
-                    return;
-                case MESSAGE_GET_COUNTDOWN:
-                    return countDown.GetAllCountDown();
-                default:
-                    return;
+            case MESSAGE_FORCE_REFRESH:
+                return tryDun(true).then(() => true, () => false);
+            case MESSAGE_SAN_GET:
+                return SanInfo;
+            case MESSAGE_CHANGE_COUNTDOWN:
+                countDown.Change();
+                return;
+            case MESSAGE_GET_COUNTDOWN:
+                return countDown.GetAllCountDown();
+            default:
+                return;
             }
         }
     });
@@ -101,8 +101,8 @@ function ExtensionInit() {
                 height = 850;
             }
             PlatformHelper.Windows
-              .createPopupWindow(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW), width, height)
-              .then(tab => popupWindowId = tab.id);
+                .createPopupWindow(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW), width, height)
+                .then(tab => popupWindowId = tab.id);
         }
     });
 
@@ -139,20 +139,20 @@ const countDown = {
                     if (delayTime >= countDownThreshold) {
                         countDownDebugLog(`设置alarm[${item.name}]-指定时间：${new Date(endTime).toLocaleString()}`);
                         const uniqueName = 'countdown_' + item.name + '|' + Math.random().toFixed(3).substring(2, 5);
-                        PlatformHelper.Alarms.create(uniqueName, {when: endTime});
+                        PlatformHelper.Alarms.create(uniqueName, { when: endTime });
                     } else {
                         countDownDebugLog(`设置setTimeout[${item.name}]-延时：${delayTime}`);
                         this.sendNoticeList.push(
-                          setTimeout(_ => {
-                              NotificationUtil.SendNotice(`倒计时完毕`, `${item.name} 到点了！`, null, 'countdown_' + new Date().getTime());
-                              // 有过通知后从内存中删除计时器数据
-                              CountDown.removeCountDown(item);
-                          }, delayTime)
+                            setTimeout(_ => {
+                                NotificationUtil.SendNotice(`倒计时完毕`, `${item.name} 到点了！`, null, 'countdown_' + new Date().getTime());
+                                // 有过通知后从内存中删除计时器数据
+                                CountDown.removeCountDown(item);
+                            }, delayTime)
                         );
                     }
-                })
+                });
             }
-        })
+        });
     },
     Change() {
         if (countDownFlag) {
@@ -161,7 +161,7 @@ const countDown = {
         countDownFlag = true;
         countDownDebugLog('清空setTimeout');
         this.sendNoticeList.forEach(id => {
-            clearTimeout(id)
+            clearTimeout(id);
         });
         this.sendNoticeList = [];
         countDownDebugLog('清空alarms');
@@ -173,18 +173,18 @@ const countDown = {
     GetAllCountDown() {
         let list = [];
         this.countDownList.forEach(item => {
-            let value = TimeUtil.calcDiff(new Date(item.stopTime), new Date())
+            let value = TimeUtil.calcDiff(new Date(item.stopTime), new Date());
             if (value != '') {
                 list.push({ ...item, timeStr: value, stopTime: TimeUtil.format(item.stopTime, 'yyyy-MM-dd hh:mm:ss') });
             }
-        })
+        });
         return list;
     }
-}
+};
 
 const penguinStatistics = {
     Init() {
-        PenguinStatistics.GetNewItems()
+        PenguinStatistics.GetNewItems();
     }
 };
 

@@ -1,11 +1,19 @@
 <template>
   <div class="wrapper" :data-id="item.id">
     <div class="wrapper-content"></div>
-    <img v-if="showImage" v-lazy="item.coverImage" class="image-back"/>
+    <img
+      v-if="showImage" v-lazy="item.coverImage"
+      class="image-back"
+    />
     <div class="content-card">
       <div class="content-card-info">
-        <img v-if="showImage" v-lazy="item.coverImage" class="content-card-image"/>
-        <div class="content-card-title">{{ item.componentData.name }}</div>
+        <img
+          v-if="showImage" v-lazy="item.coverImage"
+          class="content-card-image"
+        />
+        <div class="content-card-title">
+          {{ item.componentData.name }}
+        </div>
         <div class="content-card-introduction">
           {{ item.componentData.introduction }}
         </div>
@@ -14,10 +22,12 @@
         </div>
       </div>
       <div class="content-card-episodes">
-        <span v-for="episodes in item.componentData.episodes"
-              :key="episodes.cid"
-              class="content-card-episodes-btn"
-              @click="openUrl(`https://terra-historicus.hypergryph.com/comic/${item.componentData.cid}/episode/${episodes.cid}`)">
+        <span
+          v-for="episodes in item.componentData.episodes"
+          :key="episodes.cid"
+          class="content-card-episodes-btn"
+          @click="openUrl(`https://terra-historicus.hypergryph.com/comic/${item.componentData.cid}/episode/${episodes.cid}`)"
+        >
           {{ episodes.title }}
         </span>
       </div>
@@ -31,25 +41,25 @@ import PlatformHelper from '../../../common/platform/PlatformHelper';
 import Settings from '../../../common/Settings';
 
 export default {
-  name: "TerraHistoricusItem",
-  props: ["item", "showImage"],
-  data() {
-    return {
-      settings: Settings,
-    };
-  },
-  methods: {
-    openUrl(url) {
-      if(this.settings.feature.linkMax) {
-        PlatformHelper.Windows
-          .createMaxPopupWindow(url);
-      } else {
-        PlatformHelper.Windows
-          .createPopupWindow(url, 900, 1000);
-      }
+    name: "TerraHistoricusItem",
+    props: ["item", "showImage"],
+    data() {
+        return {
+            settings: Settings,
+        };
+    },
+    methods: {
+        openUrl(url) {
+            if(this.settings.feature.linkMax) {
+                PlatformHelper.Windows
+                    .createMaxPopupWindow(url);
+            } else {
+                PlatformHelper.Windows
+                    .createPopupWindow(url, 900, 1000);
+            }
+        }
     }
-  }
-}
+};
 </script>
 
 <style lang="less" scoped>

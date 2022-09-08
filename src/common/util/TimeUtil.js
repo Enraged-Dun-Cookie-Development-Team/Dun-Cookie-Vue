@@ -37,7 +37,7 @@ class TimeUtil {
         }
         for (const k in o) {
             if (new RegExp("(" + k + ")").test(formatText)) {
-                formatText = formatText.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                formatText = formatText.replace(RegExp.$1, RegExp.$1.length === 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
             }
         }
         return formatText;
@@ -78,29 +78,29 @@ class TimeUtil {
         let localTime = date.getTime();
         let localOffset = date.getTimezoneOffset() * 60000;
         let utc = localTime + localOffset;
-        let cct = utc + (3600000 * 8);
+        let cct = utc + 3600000 * 8;
         let cctDate = new Date(cct);
         return cctDate;
     }
 
     static numberToWeek(x) {
         switch (x) {
-            case 0:
-                return '星期天';
-            case 1:
-                return '星期一';
-            case 2:
-                return '星期二';
-            case 3:
-                return '星期三';
-            case 4:
-                return '星期四';
-            case 5:
-                return '星期五';
-            case 6:
-                return '星期六';
-            default:
-                return '无效';
+        case 0:
+            return '星期天';
+        case 1:
+            return '星期一';
+        case 2:
+            return '星期二';
+        case 3:
+            return '星期三';
+        case 4:
+            return '星期四';
+        case 5:
+            return '星期五';
+        case 6:
+            return '星期六';
+        default:
+            return '无效';
         }
     }
 
@@ -111,17 +111,17 @@ class TimeUtil {
      * @param s
      */
     static dateAddTime(h, m, s) {
-        let date = new Date()
-        date.setHours(date.getHours() + parseInt(h))
-        date.setMinutes(date.getMinutes() + parseInt(m))
-        date.setSeconds(date.getSeconds() + parseInt(s))
-        return new Date(date)
+        let date = new Date();
+        date.setHours(date.getHours() + parseInt(h));
+        date.setMinutes(date.getMinutes() + parseInt(m));
+        date.setSeconds(date.getSeconds() + parseInt(s));
+        return new Date(date);
     }
 
 
     static secondToDate(result) {
-        let m = Math.floor((result / 60 % 60));
-        let s = Math.floor((result % 60));
+        let m = Math.floor(result / 60 % 60);
+        let s = Math.floor(result % 60);
         return m + ":" + s ;
     }
 }

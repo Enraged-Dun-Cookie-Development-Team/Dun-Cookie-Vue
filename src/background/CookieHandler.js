@@ -1,4 +1,4 @@
-import {distance} from "fastest-levenshtein";
+import { distance } from "fastest-levenshtein";
 import Settings from "../common/Settings";
 import NotificationUtil from "../common/util/NotificationUtil";
 import CardList from "../common/sync/CardList";
@@ -26,18 +26,18 @@ const DUPLICATE_THRESHOLD = 0.8;
  * @param cookieContent {string} 删除空白符的饼内容
  */
 function isDuplicateCookie(sourceName, cookieContent) {
-  // 设置相似度阈值，如果饼的相似度达到指定值(范围0~1，值越大越相似，1为完全相等)则视为重复饼
-  for (const data of lastCookiesCache) {
-    if (data[0] === sourceName) {
-      // 相同数据源的不检测重复
-      continue;
+    // 设置相似度阈值，如果饼的相似度达到指定值(范围0~1，值越大越相似，1为完全相等)则视为重复饼
+    for (const data of lastCookiesCache) {
+        if (data[0] === sourceName) {
+            // 相同数据源的不检测重复
+            continue;
+        }
+        const rate = 1 - distance(cookieContent, data[1]) / Math.max(cookieContent.length,  data[1].length);
+        if (rate > DUPLICATE_THRESHOLD) {
+            return true;
+        }
     }
-    const rate = 1 - distance(cookieContent, data[1]) / Math.max(cookieContent.length,  data[1].length);
-    if (rate > DUPLICATE_THRESHOLD) {
-      return true;
-    }
-  }
-  return false;
+    return false;
 }
 
 /**
@@ -47,20 +47,20 @@ function isDuplicateCookie(sourceName, cookieContent) {
  * @private
  */
 function tryNotice(source, newCookieList) {
-  if (!Settings.dun.enableNotice) {
-    return;
-  }
-  for (const cookie of newCookieList) {
-    const cookieContent = cookie.content.replace(/\s/g, "");
-    // 启用了推送重复饼，或者没启用且饼不是重复的，则进行推送
-    if (Settings.dun.repetitionPush || !isDuplicateCookie(source.dataName, cookieContent)) {
-      NotificationUtil.SendNotice(`小刻在【${source.title}】里面找到了一个饼！`, cookieContent, cookie.coverImage, cookie.id);
+    if (!Settings.dun.enableNotice) {
+        return;
     }
-    lastCookiesCache.push([source.dataName, cookieContent]);
-    if (lastCookiesCache.length > DUPLICATE_CHECK_COUNT) {
-      lastCookiesCache.shift();
+    for (const cookie of newCookieList) {
+        const cookieContent = cookie.content.replace(/\s/g, "");
+        // 启用了推送重复饼，或者没启用且饼不是重复的，则进行推送
+        if (Settings.dun.repetitionPush || !isDuplicateCookie(source.dataName, cookieContent)) {
+            NotificationUtil.SendNotice(`小刻在【${source.title}】里面找到了一个饼！`, cookieContent, cookie.coverImage, cookie.id);
+        }
+        lastCookiesCache.push([source.dataName, cookieContent]);
+        if (lastCookiesCache.length > DUPLICATE_CHECK_COUNT) {
+            lastCookiesCache.shift();
+        }
     }
-  }
 }
 
 /**
@@ -68,23 +68,23 @@ function tryNotice(source, newCookieList) {
  */
 class CookieHandler {
 
-  /**
+    /**
    *
    * @param source {DataSource}
    * @param fetchResult {FetchResult}
    */
-  static handle(source, fetchResult) {
-    const {newCookies, allCookies} = fetchResult;
-    const hasOldCardList = CardList[source.dataName] && CardList[source.dataName].length > 0;
-    if (hasOldCardList && newCookies.length > 0) {
-      DunInfo.cookieCount += newCookies.length;
-      console.log("new cookies: ", newCookies);
-      tryNotice(source, newCookies);
+    static handle(source, fetchResult) {
+        const { newCookies, allCookies } = fetchResult;
+        const hasOldCardList = CardList[source.dataName] && CardList[source.dataName].length > 0;
+        if (hasOldCardList && newCookies.length > 0) {
+            DunInfo.cookieCount += newCookies.length;
+            console.log("new cookies: ", newCookies);
+            tryNotice(source, newCookies);
+        }
+        if (allCookies && allCookies.length > 0) {
+            CardList[source.dataName] = allCookies;
+        }
     }
-    if (allCookies && allCookies.length > 0) {
-      CardList[source.dataName] = allCookies;
-    }
-  }
 }
 
-export {CookieHandler};
+export { CookieHandler };

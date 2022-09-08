@@ -1,4 +1,4 @@
-import PlatformHelper from '../platform/PlatformHelper'
+import PlatformHelper from '../platform/PlatformHelper';
 import NotificationUtil from '../util/NotificationUtil';
 
 export default class CountDown {
@@ -14,7 +14,7 @@ export default class CountDown {
                 resolve();
             });
             // 后台开始计算时间
-        })
+        });
     }
 
     static async addCountDownLocalStorage(countDm){
@@ -29,30 +29,30 @@ export default class CountDown {
                             NotificationUtil.SendNotice(`倒计时存储失败：${countDm.name}`, '数据将在浏览器关闭后丢失', null, new Date().getTime());
                             return;
                         }
-                        resolve()
+                        resolve();
                     });
                 } else {
                     let jsonData = JSON.parse(data);
                     if (jsonData.some(x => x.name == countDm.name)) {
-                        let tempData = jsonData.find(x => x.name == countDm.name)
-                        tempData.data = countDm
+                        let tempData = jsonData.find(x => x.name == countDm.name);
+                        tempData.data = countDm;
                     } else {
-                        jsonData.push({name: countDm.name, data: countDm})
+                        jsonData.push({ name: countDm.name, data: countDm });
                     }
                     PlatformHelper.Storage.saveLocalStorage('CountDown', JSON.stringify(jsonData)).then(result=>{
                         if (result != undefined) {
                             NotificationUtil.SendNotice(`倒计时存储失败：${countDm.name}`, '数据将在浏览器关闭后丢失', null, new Date().getTime());
                             return;
                         }
-                        resolve()
+                        resolve();
                     });
                 }
-            })
-        })
+            });
+        });
     }
 
     static async getCountDownLocalStorage(){
-       return await PlatformHelper.Storage.getLocalStorage('CountDown') || "[]"
+        return await PlatformHelper.Storage.getLocalStorage('CountDown') || "[]";
     }
 
     static removeCountDown(item){
@@ -64,16 +64,16 @@ export default class CountDown {
         return new Promise(resolve => {
             this.getCountDownLocalStorage().then(data  =>  {
                 let jsonData = JSON.parse(data);
-                jsonData = jsonData.filter(x=>x.name != name)
+                jsonData = jsonData.filter(x=>x.name != name);
                 PlatformHelper.Storage.saveLocalStorage('CountDown',JSON.stringify(jsonData)).then(result => {
                     if(result != undefined){
                         NotificationUtil.SendNotice(`倒计时存储失败`,'本次改动将在浏览器关闭后丢失',null,new Date().getTime());
                         return;
                     }
                     resolve();
-                })
-            })
-        })
+                });
+            });
+        });
     }
 
     static async StopCountDown (name){

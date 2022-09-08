@@ -2,14 +2,14 @@
   <div>
     <div class="search-area" :class="searchShow ? 'show' : ''">
       <input
+        ref="searchText"
+        v-model="searchText"
         type="text"
         class="input-border"
-        v-model="searchText"
         placeholder="输入两次@查找企鹅物流数据"
-        ref="searchText"
       />
     </div>
-    <div class="search-area-penguin-name" v-show="penguinShow">
+    <div v-show="penguinShow" class="search-area-penguin-name">
       <div
         style="cursor: pointer"
         @click="openUrl('https://penguin-stats.cn/')"
@@ -23,7 +23,7 @@
           plain
           @click="changeSort()"
         >
-          {{ this.sortType == 0 ? "按掉落百分比排序" : "按单件理智排序" }}
+          {{ sortType == 0 ? "按掉落百分比排序" : "按单件理智排序" }}
         </el-button>
       </div>
       <div>
@@ -31,17 +31,16 @@
           v-model="showCloseStage"
           active-color="#13ce66"
           inactive-color="#ff4949"
-        >
-        </el-switch>
+        />
         显示/隐藏已关闭关卡
       </div>
     </div>
     <el-card class="search-area-penguin" :class="penguinShow ? 'show' : ''">
       <el-collapse
-        class="show-area-penguin"
-        v-model="activeNames"
         v-for="(item, index) in penguinSearchList"
-        v-bind:key="item.itemId"
+        :key="item.itemId"
+        v-model="activeNames"
+        class="show-area-penguin"
         @change="getPenguinDate(index)"
       >
         <el-collapse-item>
@@ -57,13 +56,15 @@
             ></span>
             <span>{{ item.name }}</span>
           </template>
-          <div class="seach-process-text" v-if="item.loading">查找中……</div>
+          <div v-if="item.loading" class="seach-process-text">
+            查找中……
+          </div>
           <div class="info-card-area">
             <el-card
-              class="info-card"
-              v-show="(info.isOpen || showCloseStage) && sortType == 0"
               v-for="info in item.matrix_per"
-              v-bind:key="info.stage.code"
+              v-show="(info.isOpen || showCloseStage) && sortType == 0"
+              :key="info.stage.code"
+              class="info-card"
             >
               <div
                 class="info-card-title info-card-title-isOpen"
@@ -76,10 +77,9 @@
                 <span
                   class="info-card-title-right"
                   :title="info.zone.zoneName"
-                  >{{ info.zone.zoneName }}</span
-                >
+                >{{ info.zone.zoneName }}</span>
               </div>
-              <div class="info-card-body" v-show="!info.isGacha">
+              <div v-show="!info.isGacha" class="info-card-body">
                 <span title="单件掉率">{{ info.per }}%</span>
                 <span title="单件期望理智">{{
                   info.cost == Infinity ? "" : info.cost
@@ -90,10 +90,10 @@
               </div>
             </el-card>
             <el-card
-              class="info-card"
-              v-show="(info.isOpen || showCloseStage) && sortType == 1"
               v-for="info in item.matrix_cost"
-              v-bind:key="info.stage.code"
+              v-show="(info.isOpen || showCloseStage) && sortType == 1"
+              :key="info.stage.code"
+              class="info-card"
             >
               <div
                 class="info-card-title info-card-title-isOpen"
@@ -106,10 +106,9 @@
                 <span
                   class="info-card-title-right"
                   :title="info.zone.zoneName"
-                  >{{ info.zone.zoneName }}</span
-                >
+                >{{ info.zone.zoneName }}</span>
               </div>
-              <div class="info-card-body" v-show="!info.isGacha">
+              <div v-show="!info.isGacha" class="info-card-body">
                 <span title="单件掉率">{{ info.per }}%</span>
                 <span title="单件期望理智">{{
                   info.cost == Infinity ? "" : info.cost
@@ -131,117 +130,117 @@ import PlatformHelper from "@/common/platform/PlatformHelper";
 import TimeUtil from "@/common/util/TimeUtil";
 
 export default {
-  name: "search",
-  props: ["searchShow"],
-  components: {},
-  created() {},
-  mounted() {
-    this.init();
-  },
-  watch: {
-    searchShow(value) {
-      if (value) {
-        this.$refs.searchText.focus();
-      } else {
-        this.$refs.searchText.blur();
-      }
+    name: "Search",
+    components: {},
+    props: ["searchShow"],
+    data() {
+        return {
+            searchText: "",
+            penguinShow: false,
+            activeNames: "",
+            penguinSearchList: [],
+            penguin: {},
+            showCloseStage: false,
+            sortType: 0,
+        };
     },
-    searchText(value) {
-      this.loadPenguin(value);
-      this.$emit("searchTextChange", value);
+    computed: {},
+    watch: {
+        searchShow(value) {
+            if (value) {
+                this.$refs.searchText.focus();
+            } else {
+                this.$refs.searchText.blur();
+            }
+        },
+        searchText(value) {
+            this.loadPenguin(value);
+            this.$emit("searchTextChange", value);
+        },
     },
-  },
-  data() {
-    return {
-      searchText: "",
-      penguinShow: false,
-      activeNames: "",
-      penguinSearchList: [],
-      penguin: {},
-      showCloseStage: false,
-      sortType: 0,
-    };
-  },
-  computed: {},
-  beforeDestroy() {},
-  methods: {
-    openUrl: PlatformHelper.Tabs.create,
-    init() {
-      PenguinStatistics.GetItems().then((penguinStatisticsInfo) => {
-        this.penguin = penguinStatisticsInfo;
-      });
+    created() {},
+    mounted() {
+        this.init();
     },
-    clearText() {
-      this.searchText = null;
-    },
-    loadPenguin(text) {
-      if (text && text.split("@@").length > 1) {
-        this.penguinShow = true;
-        this.activeNames = "";
-        this.penguinSearchList = PenguinStatistics.GetItemByText(
-          text.split("@@")[1]
-        );
-      } else {
-        this.penguinShow = false;
-        this.penguinSearchList = [];
-      }
-    },
-    getPenguinDate(index) {
-      let item = this.penguinSearchList[index];
-      if (item.matrix_per && item.matrix_cost) {
-        return;
-      }
-      item.loading = true;
-      PenguinStatistics.GetItemInfo(item.itemId).then((data) => {
-        let matrix = JSON.parse(data).matrix;
-        matrix.forEach((item) => {
-          let stage = PenguinStatistics.GetStageInfo(item.stageId);
-          let zone = PenguinStatistics.GetZonesInfo(stage.zoneId);
-          item.stage = stage;
-          item.zone = zone;
-          item.per = Math.round((item.quantity / item.times) * 10000) / 100.0;
-          let p = item.quantity / item.times;
-          item.cost = Math.round((stage.apCost / p) * 100) / 100.0;
-          item.time = TimeUtil.secondToDate(stage.minClearTime / 1000 / p);
-          item.isGacha = !stage.minClearTime || (stage.isGacha ? true : false);
-          item.isOpen = zone.existence.CN.hasOwnProperty("closeTime")
-            ? new Date().getTime() >= zone.existence.CN.openTime &&
+    beforeDestroy() {},
+    methods: {
+        openUrl: PlatformHelper.Tabs.create,
+        init() {
+            PenguinStatistics.GetItems().then((penguinStatisticsInfo) => {
+                this.penguin = penguinStatisticsInfo;
+            });
+        },
+        clearText() {
+            this.searchText = null;
+        },
+        loadPenguin(text) {
+            if (text && text.split("@@").length > 1) {
+                this.penguinShow = true;
+                this.activeNames = "";
+                this.penguinSearchList = PenguinStatistics.GetItemByText(
+                    text.split("@@")[1]
+                );
+            } else {
+                this.penguinShow = false;
+                this.penguinSearchList = [];
+            }
+        },
+        getPenguinDate(index) {
+            let item = this.penguinSearchList[index];
+            if (item.matrix_per && item.matrix_cost) {
+                return;
+            }
+            item.loading = true;
+            PenguinStatistics.GetItemInfo(item.itemId).then((data) => {
+                let matrix = JSON.parse(data).matrix;
+                matrix.forEach((item) => {
+                    let stage = PenguinStatistics.GetStageInfo(item.stageId);
+                    let zone = PenguinStatistics.GetZonesInfo(stage.zoneId);
+                    item.stage = stage;
+                    item.zone = zone;
+                    item.per = Math.round(item.quantity / item.times * 10000) / 100.0;
+                    let p = item.quantity / item.times;
+                    item.cost = Math.round(stage.apCost / p * 100) / 100.0;
+                    item.time = TimeUtil.secondToDate(stage.minClearTime / 1000 / p);
+                    item.isGacha = !stage.minClearTime || (stage.isGacha ? true : false);
+                    item.isOpen = zone.existence.CN.hasOwnProperty("closeTime")
+                        ? new Date().getTime() >= zone.existence.CN.openTime &&
               new Date().getTime() <= zone.existence.CN.closeTime
-            : true;
-        });
-        let matrix_per = JSON.parse(JSON.stringify(matrix));
-        let matrix_cost = JSON.parse(JSON.stringify(matrix));
-        matrix_per
-          .sort((x, y) => {
-            return y.per - x.per;
-          })
-          .sort((x, y) => {
-            if (y.isGacha && !x.isGacha) return -1;
-          });
-        matrix_cost
-          .sort((x, y) => {
-            return (
-              (y.cost != "" && y.cost != null) -
+                        : true;
+                });
+                let matrix_per = JSON.parse(JSON.stringify(matrix));
+                let matrix_cost = JSON.parse(JSON.stringify(matrix));
+                matrix_per
+                    .sort((x, y) => {
+                        return y.per - x.per;
+                    })
+                    .sort((x, y) => {
+                        if (y.isGacha && !x.isGacha) return -1;
+                    });
+                matrix_cost
+                    .sort((x, y) => {
+                        return (
+                            (y.cost != "" && y.cost != null) -
                 (x.cost != "" && x.cost != null) || x.cost - y.cost
-            );
-          })
-          .sort((x, y) => {
-            if (y.isGacha && !x.isGacha) return -1;
-          });
-        this.$set(item, "matrix_per", matrix_per);
-        this.$set(item, "matrix_cost", matrix_cost);
-        this.$set(item, "loading", false);
-        console.log(item);
-      });
+                        );
+                    })
+                    .sort((x, y) => {
+                        if (y.isGacha && !x.isGacha) return -1;
+                    });
+                this.$set(item, "matrix_per", matrix_per);
+                this.$set(item, "matrix_cost", matrix_cost);
+                this.$set(item, "loading", false);
+                console.log(item);
+            });
+        },
+        changeSort() {
+            if (this.sortType == 0) {
+                this.sortType = 1;
+            } else {
+                this.sortType = 0;
+            }
+        },
     },
-    changeSort() {
-      if (this.sortType == 0) {
-        this.sortType = 1;
-      } else {
-        this.sortType = 0;
-      }
-    },
-  },
 };
 </script>
 <style lang="less" scoped>

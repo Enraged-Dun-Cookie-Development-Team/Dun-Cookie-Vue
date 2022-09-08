@@ -1,16 +1,19 @@
 <template>
-  <div id="app" v-loading="load" @click="showInfo = !showInfo">
+  <div
+    id="app" v-loading="load"
+    @click="showInfo = !showInfo"
+  >
     <div v-show="!load" class="img-info">
       <h3>图片信息</h3>
-      <div>{{ this.info.currentSrc }}</div>
-      <div>{{ this.info.naturalWidth }} × {{ this.info.naturalHeight }}</div>
+      <div>{{ info.currentSrc }}</div>
+      <div>{{ info.naturalWidth }} × {{ info.naturalHeight }}</div>
     </div>
     <div ref="imgScroll" :class="overflow ? 'imgScrollOverflow' : 'imgScroll'">
       <img
-          :class="showInfo ? 'show-info' : ''"
-          :src="img"
-          class="img"
-          @load="imgOnload($event)"
+        :class="showInfo ? 'show-info' : ''"
+        :src="img"
+        class="img"
+        @load="imgOnload($event)"
       />
     </div>
     <div v-show="pageShow" class="turnPage">
@@ -27,86 +30,86 @@
 import PlatformHelper from "../common/platform/PlatformHelper";
 
 export default {
-  name: "ViewImg",
-  created() {
-    this.init();
-  },
-  mounted() {
-    document.addEventListener("keyup", (e) => {
-      if (e.key === "Escape") {
-        // 关闭窗口
-        PlatformHelper.Windows.remove(this.winId);
-      } else if (e.key === "ArrowLeft") {
-        this.leftPage();
-        // 左翻页
-      } else if (e.key === "ArrowRight") {
-        this.rightPage();
-        // 右翻页
-      }
-    });
-  },
+    name: "ViewImg",
 
-  data() {
-    return {
-      load: true,
-      imageList: [],
-      img: null,
-      info: {},
-      showInfo: false,
-      pageNow: 0,
-      pageAll: 0,
-      pageShow: false,
-      overflow: false,
-    };
-  },
-  computed: {},
-  methods: {
-    async init() {
-      this.winId = await PlatformHelper.Storage.getLocalStorage('windowTabId');
-      this.imageList = await PlatformHelper.Storage.getLocalStorage('imageList');
-      this.img = await PlatformHelper.Storage.getLocalStorage('imgNow');
-      if (this.imageList) {
-        this.pageShow = true;
-        this.pageAll = this.imageList.length;
-        this.pageNow = this.imageList.findIndex((x) => x === this.img);
-      }
+    data() {
+        return {
+            load: true,
+            imageList: [],
+            img: null,
+            info: {},
+            showInfo: false,
+            pageNow: 0,
+            pageAll: 0,
+            pageShow: false,
+            overflow: false,
+        };
     },
-    imgOnload(data) {
-      this.load = false;
-      this.info.currentSrc = this.img;
-      this.info.naturalHeight = data.target.naturalHeight;
-      this.info.naturalWidth = data.target.naturalWidth;
+    computed: {},
+    created() {
+        this.init();
+    },
+    mounted() {
+        document.addEventListener("keyup", (e) => {
+            if (e.key === "Escape") {
+                // 关闭窗口
+                PlatformHelper.Windows.remove(this.winId);
+            } else if (e.key === "ArrowLeft") {
+                this.leftPage();
+                // 左翻页
+            } else if (e.key === "ArrowRight") {
+                this.rightPage();
+                // 右翻页
+            }
+        });
+    },
+    methods: {
+        async init() {
+            this.winId = await PlatformHelper.Storage.getLocalStorage('windowTabId');
+            this.imageList = await PlatformHelper.Storage.getLocalStorage('imageList');
+            this.img = await PlatformHelper.Storage.getLocalStorage('imgNow');
+            if (this.imageList) {
+                this.pageShow = true;
+                this.pageAll = this.imageList.length;
+                this.pageNow = this.imageList.findIndex((x) => x === this.img);
+            }
+        },
+        imgOnload(data) {
+            this.load = false;
+            this.info.currentSrc = this.img;
+            this.info.naturalHeight = data.target.naturalHeight;
+            this.info.naturalWidth = data.target.naturalWidth;
 
-      this.overflow = false;
-      const appendHeight = (window.outerHeight - window.innerHeight);
-      const appendWidth = (window.outerWidth - window.innerWidth);
-      let newWidth = this.info.naturalWidth + appendWidth;
-      if (newWidth > window.screen.width) {
-        newWidth = window.screen.width - 100;
-        this.overflow = true;
-      }
-      let newHeight = this.info.naturalHeight + appendHeight;
-      if (newHeight > window.screen.height) {
-        newHeight = window.screen.height - 100;
-        this.overflow = true;
-      }
-      PlatformHelper.Windows.update(this.winId, newWidth, newHeight);
+            this.overflow = false;
+            const appendHeight = window.outerHeight - window.innerHeight;
+            const appendWidth = window.outerWidth - window.innerWidth;
+            let newWidth = this.info.naturalWidth + appendWidth;
+            if (newWidth > window.screen.width) {
+                newWidth = window.screen.width - 100;
+                this.overflow = true;
+            }
+            let newHeight = this.info.naturalHeight + appendHeight;
+            if (newHeight > window.screen.height) {
+                newHeight = window.screen.height - 100;
+                this.overflow = true;
+            }
+            PlatformHelper.Windows.update(this.winId, newWidth, newHeight);
+        },
+        leftPage() {
+            if (this.pageNow > 0) {
+                this.img = this.imageList[--this.pageNow];
+                let scrollArea = this.$refs.imgScroll;
+                scrollArea.scrollTop = 0;
+            }
+        },
+        rightPage() {
+            if (this.pageNow < this.pageAll - 1) {
+                this.img = this.imageList[++this.pageNow];
+                let scrollArea = this.$refs.imgScroll;
+                scrollArea.scrollTop = 0;
+            }
+        },
     },
-    leftPage() {
-      if (this.pageNow > 0) {
-        this.img = this.imageList[--this.pageNow];
-        let scrollArea = this.$refs.imgScroll;
-        scrollArea.scrollTop = 0;
-      }
-    },
-    rightPage() {
-      if (this.pageNow < this.pageAll - 1) {
-        this.img = this.imageList[++this.pageNow];
-        let scrollArea = this.$refs.imgScroll;
-        scrollArea.scrollTop = 0;
-      }
-    },
-  },
 };
 </script>
 

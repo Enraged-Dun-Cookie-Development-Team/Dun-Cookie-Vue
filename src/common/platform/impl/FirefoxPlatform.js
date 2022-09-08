@@ -1,4 +1,4 @@
-import {PLATFORM_FIREFOX} from '../../Constants';
+import { PLATFORM_FIREFOX } from '../../Constants';
 import BrowserPlatform from "./BrowserPlatform";
 
 // 火狐无法储存被vue监视的对象，故在内部做json编解码
@@ -26,7 +26,7 @@ export default class FirefoxPlatform extends BrowserPlatform {
     getLocalStorage(name) {
         return browser.storage.local.get(name).then(result => {
             // 自动解码json
-            const keys = Object.keys(result)
+            const keys = Object.keys(result);
             for (const key of keys) {
                 if (result.hasOwnProperty(key)) {
                     const val = result[key];
@@ -49,7 +49,7 @@ export default class FirefoxPlatform extends BrowserPlatform {
         const val = {};
         // 自动编码json
         if (typeof data === 'object') {
-            data = '__INTERNAL_JSON__' + JSON.stringify(data)
+            data = '__INTERNAL_JSON__' + JSON.stringify(data);
         }
         val[name] = data;
         return browser.storage.local.set(val);
@@ -86,7 +86,7 @@ export default class FirefoxPlatform extends BrowserPlatform {
     setPopup(url) {
         return new Promise((resolve, reject) => {
             // 虽然不知道为啥Firefox这个不返回Promise，但是Firefox文档里这个确实没写返回值
-            browser.browserAction.setPopup({popup: url});
+            browser.browserAction.setPopup({ popup: url });
             resolve();
         });
     }
@@ -118,7 +118,7 @@ export default class FirefoxPlatform extends BrowserPlatform {
     }
 
     createTab(url) {
-        return browser.tabs.create({url: url});
+        return browser.tabs.create({ url: url });
     }
 
     createWindow(url, type, width, height, state) {
@@ -136,7 +136,7 @@ export default class FirefoxPlatform extends BrowserPlatform {
     }
 
     updateWindow(winId, width, height) {
-        return browser.windows.update(winId, {width, height});
+        return browser.windows.update(winId, { width, height });
     }
 
     download(url, filename, saveAs) {
@@ -160,11 +160,11 @@ export default class FirefoxPlatform extends BrowserPlatform {
     }
 
     setBadgeText(text) {
-        return browser.browserAction.setBadgeText({text: text});
+        return browser.browserAction.setBadgeText({ text: text });
     }
 
     setBadgeBackgroundColor(color) {
-        return browser.browserAction.setBadgeBackgroundColor({color: color});
+        return browser.browserAction.setBadgeBackgroundColor({ color: color });
     }
 
     createAlarm(name, alarmInfo) {

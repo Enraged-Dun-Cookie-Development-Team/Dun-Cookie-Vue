@@ -1,18 +1,26 @@
 <template>
-  <div class="wrapper"  :data-id="item.id" @click="openUrl(item.jumpUrl)">
+  <div
+    class="wrapper" :data-id="item.id"
+    @click="openUrl(item.jumpUrl)"
+  >
     <div class="wrapper-content"></div>
-    <img v-if="showImage" v-lazy="item.coverImage" class="image-back"/>
-    <div class="content-card" >
+    <img
+      v-if="showImage" v-lazy="item.coverImage"
+      class="image-back"
+    />
+    <div class="content-card">
       <div class="record-area">
         <div class="record-area-record">
-          <img v-lazy="item.coverImage" class="record-image"/>
+          <img v-lazy="item.coverImage" class="record-image" />
         </div>
-        <img v-lazy="'assets/image/record.png'" class="record-image-back"/>
+        <img v-lazy="'assets/image/record.png'" class="record-image-back" />
       </div>
       <div class="record-info">
         {{ item.componentData.name }}
       </div>
-      <div class="record-size">共{{ item.componentData.size }}首</div>
+      <div class="record-size">
+        共{{ item.componentData.size }}首
+      </div>
       <div class="record-btn">
         <i class="el-icon-d-arrow-right"></i>
         Go To Album
@@ -27,25 +35,25 @@ import PlatformHelper from '../../../common/platform/PlatformHelper';
 import Settings from '../../../common/Settings';
 
 export default {
-  name: "NeteaseCloudMusicItem",
-  props: ["item", "showImage"],
-  data() {
-    return {
-      settings: Settings,
-    };
-  },
-  methods: {
-    openUrl(url) {
-      if(this.settings.feature.linkMax) {
-        PlatformHelper.Windows
-          .createMaxPopupWindow(url);
-      } else {
-        PlatformHelper.Windows
-          .createPopupWindow(url, 1400, 800);
-      }
+    name: "NeteaseCloudMusicItem",
+    props: ["item", "showImage"],
+    data() {
+        return {
+            settings: Settings,
+        };
+    },
+    methods: {
+        openUrl(url) {
+            if(this.settings.feature.linkMax) {
+                PlatformHelper.Windows
+                    .createMaxPopupWindow(url);
+            } else {
+                PlatformHelper.Windows
+                    .createPopupWindow(url, 1400, 800);
+            }
+        }
     }
-  }
-}
+};
 </script>
 
 <style lang="less" scoped>

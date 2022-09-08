@@ -1,4 +1,4 @@
-import {PLATFORM_CHROME} from '../../Constants';
+import { PLATFORM_CHROME } from '../../Constants';
 import BrowserPlatform from "./BrowserPlatform";
 import DebugUtil from "../../util/DebugUtil";
 
@@ -14,9 +14,9 @@ export default class ChromePlatform extends BrowserPlatform {
     }
 
     getPlatformInfo() {
-      return new Promise((resolve) => {
-        chrome.runtime.getPlatformInfo((info) => resolve(info));
-      });
+        return new Promise((resolve) => {
+            chrome.runtime.getPlatformInfo((info) => resolve(info));
+        });
     }
 
     getAllWindow() {

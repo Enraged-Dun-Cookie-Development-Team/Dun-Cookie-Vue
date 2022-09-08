@@ -45,7 +45,7 @@ export default class NodePlatform extends AbstractPlatform {
     }
 
     getPlatformInfo() {
-        return Promise.resolve({os: this.os.platform(), arch: this.os.arch(), nacl_arch: this.os.arch()});
+        return Promise.resolve({ os: this.os.platform(), arch: this.os.arch(), nacl_arch: this.os.arch() });
     }
 
     getAllWindow() {
@@ -54,7 +54,7 @@ export default class NodePlatform extends AbstractPlatform {
 
     async getLocalStorage(name) {
         const file = await this.fs.open(storageFile, this.fs_callback.constants.O_RDONLY | this.fs_callback.constants.O_CREAT);
-        const content = ((await file.readFile('UTF-8')) || '{}').toString();
+        const content = (await file.readFile('UTF-8') || '{}').toString();
         await file.close();
         try {
             const json = JSON.parse(content);
@@ -74,7 +74,7 @@ export default class NodePlatform extends AbstractPlatform {
             const result = {};
             for (const key of name) {
                 if (key !== undefined && typeof json[key] !== undefined) {
-                    result[key] = json[key]
+                    result[key] = json[key];
                 }
             }
             return result;
@@ -83,7 +83,7 @@ export default class NodePlatform extends AbstractPlatform {
             for (const key in name) {
                 if (name.hasOwnProperty(key)) {
                     if (key !== undefined && typeof json[key] !== undefined) {
-                        result[key] = json[key]
+                        result[key] = json[key];
                     }
                 }
             }
@@ -91,7 +91,7 @@ export default class NodePlatform extends AbstractPlatform {
         }
     }
 
-    storageSaveLock = false
+    storageSaveLock = false;
 
     async saveLocalStorage(name, data) {
         const current = await this.getLocalStorage();
@@ -125,7 +125,7 @@ export default class NodePlatform extends AbstractPlatform {
                     this.broadcastChannel.postMessage({ type: message.type, data: value });
                 }
             }
-        }
+        };
     }
 
     setPopup(url) {
@@ -221,7 +221,7 @@ export default class NodePlatform extends AbstractPlatform {
                         if (buffer) {
                             resolve(buffer.toString());
                         } else {
-                            reject("文件不存在")
+                            reject("文件不存在");
                         }
                     } finally {
                         file.close();
@@ -237,7 +237,7 @@ export default class NodePlatform extends AbstractPlatform {
             if (this.weiboCookie && url.indexOf("weibo") !== -1) {
                 options.headers = {
                     'Cookie': this.weiboCookie
-                }
+                };
             }
             if (timeout && timeout > 0) {
                 options.timeout = timeout;
