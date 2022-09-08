@@ -95,10 +95,11 @@ export class BilibiliDataSource extends DataSource {
       if (!data) {
         return null;
       }
+      const dataName = BilibiliDataSource.typeInfo.typeName + '_' + uid;
       const dataUrl = `https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=${uid}&offset_dynamic_id=0&need_top=0&platform=web`;
       const configBuilder = DataSourceConfig.builder()
         .icon(data.avatarUrl)
-        .dataName(data.dataName)
+        .dataName(dataName)
         .title(data.username)
         .dataUrl(dataUrl);
       if (customConfigCallback) {
@@ -116,7 +117,6 @@ export class BilibiliDataSource extends DataSource {
     if (json.code != 0) {
       throw 'request fail: ' + JSON.stringify(json);
     }
-    const dataName = BilibiliDataSource.typeInfo.typeName + '_' + uid;
-    return new UserInfo(dataName, json.data.name+'B站', json.data.face);
+    return new UserInfo(json.data.name+'B站', json.data.face);
   }
 }

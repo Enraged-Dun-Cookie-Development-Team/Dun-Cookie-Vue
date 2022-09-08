@@ -63,10 +63,11 @@ export class NeteaseCloudMusicDataSource extends DataSource {
       if (!data) {
         return null;
       }
+      const dataName = NeteaseCloudMusicDataSource.typeInfo.typeName + '_' + artistId;
       const dataUrl = `https://music.163.com/api/artist/albums/${artistId}`;
       const configBuilder = DataSourceConfig.builder()
         .icon(data.avatarUrl)
-        .dataName(data.dataName)
+        .dataName(dataName)
         .title(data.username)
         .dataUrl(dataUrl);
       if (customConfigCallback) {
@@ -84,7 +85,6 @@ export class NeteaseCloudMusicDataSource extends DataSource {
     if (json.code !== 200) {
       throw 'request fail: ' + JSON.stringify(json);
     }
-    const dataName = NeteaseCloudMusicDataSource.typeInfo.typeName + '_' + artistId;
-    return new UserInfo(dataName, json.artist.name+'网易云', json.artist.img1v1Url);
+    return new UserInfo(json.artist.name+'网易云', json.artist.img1v1Url);
   }
 }
