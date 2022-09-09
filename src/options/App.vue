@@ -603,7 +603,7 @@ export default {
                     })
                     .filter((item) => !!item);
                 global.customData = this.customData;
-                this.logo = "../assets/image/" + settings.logo;
+                this.logo = "/assets/image/" + settings.logo;
             });
             DunInfo.doAfterUpdate((data) => {
                 this.oldDunCount = data.counter;

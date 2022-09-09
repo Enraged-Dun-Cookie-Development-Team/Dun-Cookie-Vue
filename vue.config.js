@@ -71,6 +71,11 @@ const config = {
     },
     css: {
         extract: true,
+        loaderOptions: {
+            css: {
+                url: false
+            }
+        }
     },
     chainWebpack,
 }

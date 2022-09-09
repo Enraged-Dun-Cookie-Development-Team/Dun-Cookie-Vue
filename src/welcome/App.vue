@@ -34,18 +34,18 @@
           <div class="blue">
             点击展开全部插件列表
           </div>
-          <img src="../assets/welcome/1.jpg" />
+          <img src="/assets/welcome/1.jpg" />
           <br />
           <div class="blue">
             将置顶按钮激活
           </div>
-          <img src="../assets/welcome/2.jpg" />
-          <img src="../assets/welcome/3.jpg" />
+          <img src="/assets/welcome/2.jpg" />
+          <img src="/assets/welcome/3.jpg" />
           <br />
           <div class="blue">
             开始看饼
           </div>
-          <img src="../assets/welcome/4.jpg" />
+          <img src="/assets/welcome/4.jpg" />
         </el-collapse-item>
       </el-collapse>
       <el-divider />
@@ -97,7 +97,7 @@ export default {
     methods: {
         init() {
             this.settings.doAfterInit((settings) => {
-                this.logo = "../assets/image/" + settings.logo;
+                this.logo = "/assets/image/" + settings.logo;
             });
         },
         toSetting() {

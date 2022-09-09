@@ -72,7 +72,7 @@ export default {
     methods: {
         init() {
             this.settings.doAfterInit((settings) => {
-                this.logo = "../assets/image/" + settings.logo;
+                this.logo = "/assets/image/" + settings.logo;
             });
         },
     },

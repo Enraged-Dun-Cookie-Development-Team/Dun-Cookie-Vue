@@ -53,7 +53,7 @@ export default {
     methods: {
         init() {
             this.settings.doAfterInit((settings) => {
-                this.logo = "../assets/image/" + settings.logo;
+                this.logo = "/assets/image/" + settings.logo;
             });
         },
 
@@ -111,7 +111,7 @@ export default {
 
 @font-face {
   font-family: Geometos;
-  src: url('../assets/font/Geometos.ttf');
+  src: url('/assets/font/Geometos.ttf');
 }
 
 .title-area {

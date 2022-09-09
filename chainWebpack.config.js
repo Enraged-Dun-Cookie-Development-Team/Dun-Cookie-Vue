@@ -1,5 +1,4 @@
 const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtensionReloader = require('webpack-extension-reloader');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
@@ -12,14 +11,18 @@ const chainWebpack = config => {
     }
     config.entry('contentScripts').add(path.resolve(__dirname, './src/contentScripts/index.js'));
     config.output.filename('[name].js');
-    config.plugins.delete('copy');
 
-    config.plugin('CopyWebpackPlugin').use(CopyWebpackPlugin, [[
-        { from: 'src/assets', to: 'assets' },
-        { from: 'src/manifest.json', to: 'manifest.json', flatten: true },
-        { from: 'src/Dun-Cookies-Info.json', to: 'Dun-Cookies-Info.json', flatten: true },
-        { from: 'src/test', to: 'test' },
-    ]]);
+    config.plugin('copy').tap((_args) => {
+        return [{
+            patterns: [
+                { from: 'src/assets', to: 'assets' },
+                { from: 'src/manifest.json', to: '[name][ext]' },
+                { from: 'src/Dun-Cookies-Info.json', to: '[name][ext]' },
+                { from: 'src/test', to: 'test' },
+                { from: 'node_modules/element-ui/lib/theme-chalk/fonts/', to: 'css/fonts/[name][ext]' },
+            ]
+        }];
+    });
 
     if (isDevMode) {
         // development-mode
@@ -41,7 +44,7 @@ const chainWebpack = config => {
       .maxAssetSize(2_000_000)
 
     config.optimization.clear();
-    
+
 }
 
 module.exports = chainWebpack;
