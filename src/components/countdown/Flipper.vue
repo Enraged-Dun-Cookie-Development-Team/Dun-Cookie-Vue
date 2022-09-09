@@ -7,12 +7,16 @@
 
 <script>
 export default {
-    name: 'FlipClock',
+    name: 'Flipper',
     props: {
         max: {
+            type: Number,
             default: 9
         },
-        text: {},
+        text: {
+            type: String,
+            required: true
+        },
         // front paper text
         // 前牌文字
         frontText: {

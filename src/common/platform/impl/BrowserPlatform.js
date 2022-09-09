@@ -224,6 +224,7 @@ width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retwee
         if (qrcodeCache[text]) {
             return Promise.resolve(qrcodeCache[text]);
         }
+        // eslint-disable-next-line new-cap
         const qrcode = new QRCode.toCanvas(text, { margin: 0 });
         return qrcode.then(canvas => {
             qrcodeCache[text] = canvas;

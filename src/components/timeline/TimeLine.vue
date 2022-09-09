@@ -114,9 +114,11 @@
     >
       <MyElTimelineItem
         v-for="(item, index) in filterCardList" :key="index" :timestamp="item.timeForDisplay"
-        placement="top" :icon-style="{
+        placement="top"
+        :icon-style="{
           '--icon': `url('${getDataSourceByName(item.dataSource).icon}')`,
-        }" :icon="'headImg'"
+        }"
+        :icon="'headImg'"
       >
         <span v-if="item.isTop" class="is-top-info">
           <span class="color-blue">【当前条目在{{
@@ -133,7 +135,8 @@
           </el-button>
           <el-button
             class="to-copy-btn" :class="{ 'special-source': item.componentData }" size="small"
-            title="复制文字进剪切板" @click="copyTextData(item)"
+            title="复制文字进剪切板"
+            @click="copyTextData(item)"
           >
             <i class="el-icon-document-copy"></i>
           </el-button>
@@ -185,7 +188,7 @@ import Settings from "../../common/Settings";
 import SanInfo from "../../common/sync/SanInfo";
 import TimeUtil from "../../common/util/TimeUtil";
 import Search from "../Search";
-import {  deepAssign  } from "../../common/util/CommonFunctions";
+import { deepAssign } from "../../common/util/CommonFunctions";
 import PlatformHelper from "../../common/platform/PlatformHelper";
 import InsiderUtil from "../../common/util/InsiderUtil";
 import ServerUtil from "../../common/util/ServerUtil";
@@ -196,7 +199,7 @@ import CurrentDataSource from "../../common/sync/CurrentDataSource";
 export default {
     name: "TimeLine",
     components: { MyElTimelineItem, Search, SelectImageToCopy, UpdateInfoNotice },
-    props: ["cardListByTag", "imgShow"],
+    props: { cardListByTag: { type: Object, required: true }, imgShow: Boolean },
     data() {
         Settings.doAfterInit(
             (settings) => this.currentTag = settings.display.defaultTag
@@ -373,7 +376,7 @@ export default {
                 deepAssign([], this.cardList).forEach((item) => {
                     const regex = new RegExp(
                         "(" +
-            this.filterText.replaceAll(/([*.?+$^\[\](){}|\\\/])/g, "\\$1") +
+            this.filterText.replaceAll(/([*.?+$^[\](){}|\\/])/g, "\\$1") +
             ")",
                         "gi"
                     );
@@ -490,10 +493,10 @@ export default {
             );
         },
         /**
-     * 复制
-     * @param item
-     * @param imageUrl {string?} 用于展示图片
-     */
+ * 复制
+ * @param item
+ * @param imageUrl {string?} 用于展示图片
+ */
         copyData(item, imageUrl) {
             this.$message({
                 offset: 50,
@@ -656,7 +659,7 @@ img[lazy="error"] {
   @hover: "hover-@{theme}"; // 按钮hover颜色
 
   a {
-    color: @@content  !important;
+    color: @@content !important;
   }
 
   .color-blue {
@@ -814,7 +817,7 @@ img[lazy="error"] {
               .sane {
                 font-size: 16px;
                 font-family: Geometos, "Sans-Regular", "SourceHanSansCN-Regular",
-                  YaHei,  serif;
+                  YaHei, serif;
 
                 .sane-number {
                   font-size: 28px;

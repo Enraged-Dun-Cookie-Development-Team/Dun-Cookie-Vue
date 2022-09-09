@@ -54,7 +54,10 @@ export default {
     inject: ['timeline'],
 
     props: {
-        timestamp: String,
+        timestamp: {
+            type:String,
+            required:true
+        },
 
         hideTimestamp: {
             type: Boolean,
@@ -66,17 +69,29 @@ export default {
             default: 'bottom'
         },
 
-        type: String,
+        type: {
+            type: String,
+            default: ''
+        },
 
-        color: String,
+        color: {
+            type: String,
+            default: ''
+        },
 
         size: {
             type: String,
             default: 'normal'
         },
 
-        icon: [String, Array, Object],
-        iconStyle: [String, Array, Object]
+        icon: {
+            type:[String, Array, Object],
+            required: true,
+        },
+        iconStyle: {
+            type:[String, Array, Object],
+            required: true,
+        },
     }
 };
 </script>

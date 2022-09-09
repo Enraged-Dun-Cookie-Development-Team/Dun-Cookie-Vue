@@ -132,7 +132,9 @@ import TimeUtil from "@/common/util/TimeUtil";
 export default {
     name: "Search",
     components: {},
-    props: ["searchShow"],
+    props: {
+        searchShow: Boolean
+    },
     data() {
         return {
             searchText: "",

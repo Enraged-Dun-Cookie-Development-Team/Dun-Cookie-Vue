@@ -1,3 +1,4 @@
+
 import AbstractPlatform from '../AbstractPlatform';
 import { DEBUG_LOG, PLATFORM_NODE } from '../../Constants';
 import { deepAssign } from '../../util/CommonFunctions';
@@ -73,7 +74,7 @@ export default class NodePlatform extends AbstractPlatform {
         } else if (Array.isArray(name)) {
             const result = {};
             for (const key of name) {
-                if (key !== undefined && typeof json[key] !== undefined) {
+                if (key !== undefined && typeof json[key] !== "undefined") {
                     result[key] = json[key];
                 }
             }
@@ -82,7 +83,7 @@ export default class NodePlatform extends AbstractPlatform {
             const result = deepAssign({}, name);
             for (const key in name) {
                 if (name.hasOwnProperty(key)) {
-                    if (key !== undefined && typeof json[key] !== undefined) {
+                    if (key !== undefined && typeof json[key] !== "undefined") {
                         result[key] = json[key];
                     }
                 }

@@ -38,7 +38,7 @@ export class ArknightsOfficialWebDataSource extends DataSource {
             let time = new Date(`${date} ${Settings.getTimeBySortMode()}`);
             let judgment = url.match(/\d+/g);
             list.push(DataItem.builder(this.dataName)
-                .id(judgment.length > 0 ? parseInt(judgment[0]) : index)
+                .id(parseInt(judgment[0]))
                 .timeForSort(time.getTime())
                 .timeForDisplay(TimeUtil.format(time, 'yyyy-MM-dd'))
                 .content(title)

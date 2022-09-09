@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-mutating-props -->
 <template>
   <div id="app">
     <div class="title" @dblclick="stopCountDown">
@@ -22,13 +23,10 @@
         计时已停止，选择时间后将开启倒计时
       </div>
       <el-time-picker
-        v-model="pickerTime"
-        :clearable="false"
-        :picker-options="{
+        v-model="pickerTime" :clearable="false" :picker-options="{
           selectableRange
         }"
-        placeholder="剩余时间"
-        @blur="changeEndTime"
+        placeholder="剩余时间" @blur="changeEndTime"
       />
     </div>
   </div>
@@ -44,7 +42,24 @@ export default {
         Flipper
     },
     // 名字/终点时间点/时间范围/默认时间点
-    props: ["name", "stopTime", "selectableRange", "pickerTime"],
+    props: {
+        name: {
+            type: String,
+            required: true
+        },
+        stopTime: {
+            type: String,
+            required: true
+        },
+        selectableRange: {
+            type: String,
+            required: true
+        },
+        pickerTime: {
+            type: String,
+            required: true
+        }
+    },
     data() {
         return {
             timer: null,
@@ -131,6 +146,7 @@ export default {
 @ceobeVeryLightColor: #fff7ec; //小刻食堂主题非常浅色
 @ceobeColor: #ffba4b; //小刻食堂主题亮色
 @ceobeDarkColor: #353535; // 小刻食堂主题暗色
+
 * {
   padding: 0;
   margin: 0;
@@ -198,5 +214,4 @@ export default {
   }
 
 }
-
 </style>

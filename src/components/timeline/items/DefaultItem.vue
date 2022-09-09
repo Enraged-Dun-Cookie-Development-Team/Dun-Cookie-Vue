@@ -58,7 +58,7 @@ import PlatformHelper from '../../../common/platform/PlatformHelper';
 
 export default {
     name: "DefaultItem",
-    props: ["item", "showImage"],
+    props: { item:{ type:Object,required:true }, showImages:Boolean },
     data() {
         return {
             settings: Settings,

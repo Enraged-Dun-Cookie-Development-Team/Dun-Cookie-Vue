@@ -11,7 +11,15 @@ module.exports = {
     env: {
         browser: true,
         node: true,
-        es6: true,
+        es2022: true,
+        webextensions: true,
+    },
+    globals:{
+        PlatformHelper: true,
+        DebugUtil: true,
+        WorkerNavigator: true,
+        Settings: true,
+        ClipboardItem: true,
     },
     extends: ['plugin:vue/recommended', 'plugin:vue/strongly-recommended', 'eslint:recommended'],
 
@@ -19,7 +27,8 @@ module.exports = {
     //it is base on https://github.com/vuejs/eslint-config-vue
     rules: {
         'semi': [ERROR, 'always'], //禁止语句后面没有分号
-        'no-unused-vars': [ERROR, { argsIgnorePattern: '^_|event' }], //禁止有没用的变量，除event和_标记
+        // 'no-unused-vars': [ERROR, { argsIgnorePattern: '^_|event' }], //禁止有没用的变量，除event和_标记
+        'no-unused-vars': OFF,
         'no-debugger': process.env.NODE_ENV === 'production' ? ERROR : WARN, //生产环境禁止有debugger，测试环境警告
         "no-catch-shadow": ERROR,//禁止catch子句参数与外部作用域变量同名
         "no-dupe-keys": ERROR,//在创建对象字面量时不允许键重复 {a:1,a:1}
@@ -32,6 +41,7 @@ module.exports = {
         "no-trailing-spaces": ERROR,//一行结束后面不要有空格
         "no-spaced-func": ERROR,//函数调用时 函数名与()之间不能有空格
         "no-var": OFF,//禁用var，用let和const代替
+        "no-prototype-builtins": OFF,//允许直接使用 Object.prototypes 的内置属性
         "indent": [ERROR, 4], //js代码缩进
         'new-cap': [ERROR, { //首字母大小写
             'newIsCap': true,

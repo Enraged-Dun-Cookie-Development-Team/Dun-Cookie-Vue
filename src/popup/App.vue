@@ -11,26 +11,19 @@
           理智计算提醒
         </el-divider>
         <el-form
-          size="mini"
-          class="sane-calculator"
-          label-position="right"
-          :inline="true"
-          label-width="150px"
+          size="mini" class="sane-calculator" label-position="right"
+          :inline="true" label-width="150px"
           style="text-align: center"
         >
           <el-form-item label="当前理智">
             <el-input-number
-              ref="saneEdit"
-              v-model="currentSan"
-              :min="0"
-              :max="settings.san.maxValue"
-              label="输入当前理智"
+              ref="saneEdit" v-model="currentSan"
+              :min="0" :max="settings.san.maxValue" label="输入当前理智"
             />
           </el-form-item>
           <el-form-item label="理智满后是否推送">
             <el-switch
-              v-model="settings.san.noticeWhenFull"
-              class="san-push"
+              v-model="settings.san.noticeWhenFull" class="san-push"
               @change="settings.saveSettings()"
             />
           </el-form-item>
@@ -41,18 +34,16 @@
           </el-form-item>
         </el-form>
         <div
-          class="mention"
-          style="text-align: center; margin-top: 16px; opacity: 0.4"
-        ></div>
+          class="mention" style=" margin-top: 16px;text-align: center;
+
+        opacity: 0.4"
+        >
+        </div>
       </el-drawer>
       <!-- 菜单 -->
       <el-drawer
-        :visible.sync="drawer"
-        :show-close="false"
-        :direction="settings.display.windowMode ? 'rtl' : 'ttb'"
-        size="520px"
-        @close="menuIconClick"
-        @open="menuIconClick"
+        :visible.sync="drawer" :show-close="false" :direction="settings.display.windowMode ? 'rtl' : 'ttb'"
+        size="520px" @close="menuIconClick" @open="menuIconClick"
       >
         <el-divider content-position="left">
           饼的发源地
@@ -62,15 +53,12 @@
           justify="center"
         >
           <el-tooltip
-            v-for="item in quickJump.source"
-            :key="item.img"
-            :content="item.name"
-            placement="top"
+            v-for="item in quickJump.source" :key="item.img"
+            :content="item.name" placement="top"
           >
             <el-button size="small" @click="openUrl(item.url)">
               <img
-                class="btn-icon"
-                :class="item.radius ? 'radius' : ''"
+                class="btn-icon" :class="item.radius ? 'radius' : ''"
                 :src="item.img"
               />
             </el-button>
@@ -84,15 +72,12 @@
           class="drawer-btn-area"
         >
           <el-tooltip
-            v-for="item in quickJump.tool"
-            :key="item.img"
-            :content="item.name"
-            placement="top"
+            v-for="item in quickJump.tool" :key="item.img"
+            :content="item.name" placement="top"
           >
             <el-button size="small" @click="openUrl(item.url)">
               <img
-                class="btn-icon"
-                :class="item.radius ? 'radius' : ''"
+                class="btn-icon" :class="item.radius ? 'radius' : ''"
                 :src="item.img"
               />
             </el-button>
@@ -103,8 +88,8 @@
         </el-divider>
         <div ref="drawerBtnAreaQuickJump" class="drawer-btn-area-quickJump">
           <el-tooltip
-            v-for="(item, index) in quickJump.url" :key="index" :content="item.title"
-            placement="top"
+            v-for="(item, index) in quickJump.url" :key="index"
+            :content="item.title" placement="top"
           >
             <div class="quickJump-img-area" style="vertical-align: middle;display: table-cell;">
               <img
@@ -131,41 +116,33 @@
             点个star
           </el-button>
           <el-button
-            type="primary"
-            :loading="isReload"
-            icon="el-icon-refresh"
-            @click="reload"
+            type="primary" :loading="isReload"
+            icon="el-icon-refresh" @click="reload"
           >
             刷新
           </el-button>
           <el-button
-            v-if="settings.feature.options"
-            type="primary"
-            icon="el-icon-setting"
-            @click="openSetting"
+            v-if="settings.feature.options" type="primary"
+            icon="el-icon-setting" @click="openSetting"
           >
             设置
           </el-button>
           <el-button
-            type="primary"
-            icon="el-icon-upload2"
+            type="primary" icon="el-icon-upload2"
             @click="drawer = false"
           >
             收起
           </el-button>
         </el-row>
-        <div style="position: absolute; bottom: 10px; right: 10px" class="sign">
+        <div style="position: absolute; right: 10px; bottom: 10px" class="sign">
           Powered By 蓝芷怡 & 洛梧藤 & 云闪
         </div>
       </el-drawer>
       <!-- 置顶按钮 -->
       <el-button
-        icon="el-icon-top"
-        type="primary"
-        circle
+        icon="el-icon-top" type="primary" circle
         class="top-btn"
-        :class="!drawer && scrollShow ? 'top-btn-show' : ''"
-        @click.stop="goTop()"
+        :class="!drawer && scrollShow ? 'top-btn-show' : ''" @click.stop="goTop()"
       />
       <div class="title-area">
         <div class="version">
@@ -173,10 +150,10 @@
           <span>
             <span>【已蹲饼
               <countTo
-                :start-val="oldDunCount"
-                :end-val="dunInfo.counter"
+                :start-val="oldDunCount" :end-val="dunInfo.counter"
                 :duration="1000"
-              />次】</span>
+              />次】
+            </span>
             <span v-if="settings.checkLowFrequency()"> 【低频蹲饼时段】 </span>
           </span>
         </div>
@@ -184,13 +161,11 @@
         <!--              :class="[drawer?'menu-btn-open':'menu-btn-close', firefox ? 'menu-btn-firefox' : '','menu-btn','el-icon-menu']"></span>-->
         <div class="countdown-and-btn">
           <div
-            v-show="countDownList.length > 0"
-            class="count-down-area"
+            v-show="countDownList.length > 0" class="count-down-area"
             @click="openCountDown()"
           >
             <div
-              v-for="(item, index) in countDownList"
-              :key="index"
+              v-for="(item, index) in countDownList" :key="index"
               :title="'到点时间：' + item.stopTime"
             >
               {{ item.name }}:剩余约{{ item.timeStr }}
@@ -202,17 +177,14 @@
               drawer ? 'menu-btn-open' : 'menu-btn-close',
               firefox ? 'menu-btn-firefox' : '',
               'menu-btn',
-            ]"
-            @handleIconClick="handleIconClick()"
+            ]" @handleIconClick="handleIconClick()"
           />
         </div>
       </div>
       <div id="content">
         <time-line
-          ref="timeline"
-          :img-show="LazyLoaded"
-          :card-list-by-tag="cardList"
-          @cardListChange="goTop(1, 0)"
+          ref="timeline" :img-show="LazyLoaded"
+          :card-list-by-tag="cardList" @cardListChange="goTop(1, 0)"
         />
       </div>
     </div>
@@ -287,13 +259,13 @@ export default {
             }
         },
     },
-    created() {},
+    created() { },
     mounted() {
         this.init();
         // 监听鼠标滚动事件
         window.addEventListener("scroll", this.handleScroll, true);
     },
-    beforeDestroy() {},
+    beforeDestroy() { },
     methods: {
         openUrl: PlatformHelper.Tabs.create,
         init() {
@@ -443,7 +415,7 @@ export default {
             } else {
                 this.$alert(
                     tip +
-            '<br/><span id="firefox-collapse-warning-tip" style="color: red">点击<button id="btn-disable-firefox-warning">此处</button>以后都不再提示</span>',
+          '<br/><span id="firefox-collapse-warning-tip" style="color: red">点击<button id="btn-disable-firefox-warning">此处</button>以后都不再提示</span>',
                     "提示",
                     {
                         dangerouslyUseHTMLString: true,
@@ -616,7 +588,7 @@ export default {
 
   #app {
     /deep/ a {
-      color: @@content  !important;
+      color: @@content !important;
     }
 
     background-color: @@bgColor;
@@ -629,6 +601,7 @@ export default {
   .color-blue {
     color: #23ade5;
   }
+
   .sane-calculator {
     .san-push.is-checked {
       /deep/ .el-switch__core {
@@ -743,30 +716,32 @@ export default {
         img {
           filter: blur(30px) brightness(0.1);
         }
-        .author{
+
+        .author {
           & p {
             opacity: 1;
           }
         }
       }
+
       img {
         height: 100px;
       }
 
-      .author{
-        position:absolute;
+      .author {
+        position: absolute;
         width: 100%;
-        z-index:1;
-        top:50%;
-        left:50%;
-        transform:translate(-50%, -50%);
+        z-index: 1;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         text-align: center;
         pointer-events: none;
 
-        & p{
+        & p {
           opacity: 0;
           font-size: 20px;
-          color:#fff;
+          color: #fff;
         }
       }
     }
@@ -890,11 +865,8 @@ export default {
       border-right: @@btnBorder 1px solid;
     }
 
-    .el-input-number__increase:hover + .el-input > .el-input__inner,
-    .el-input-number__decrease:hover
-      + .el-input-number__increase
-      + .el-input
-      > .el-input__inner {
+    .el-input-number__increase:hover+.el-input>.el-input__inner,
+    .el-input-number__decrease:hover+.el-input-number__increase+.el-input>.el-input__inner {
       border: @@ceobeColor 1px solid;
     }
 
@@ -1023,7 +995,7 @@ body {
 
   // 菜单按钮
   drawer {
-    color : #dd558a;
+    color: #dd558a;
   }
 
   // 设置按钮

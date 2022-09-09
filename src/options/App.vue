@@ -38,8 +38,7 @@
               <div class="has-cookie">
                 小刻已经成功找到
                 <countTo
-                  :start-val="0"
-                  :end-val="dunInfo.cookieCount"
+                  :start-val="0" :end-val="dunInfo.cookieCount"
                   :duration="1000"
                 />
                 个饼
@@ -47,8 +46,7 @@
               <div class="look-cookie">
                 进入食堂后找了
                 <countTo
-                  :start-val="oldDunCount"
-                  :end-val="dunInfo.counter"
+                  :start-val="oldDunCount" :end-val="dunInfo.counter"
                   :duration="1000"
                 />
                 次
@@ -71,8 +69,7 @@
       <div ref="body-area" class="body-area">
         <div class="body-menu-big">
           <div
-            ref="body-menu-big-left"
-            class="body-menu-big-left"
+            ref="body-menu-big-left" class="body-menu-big-left"
             @click="changeMenu(0)"
           >
             <div class="menu-card system">
@@ -81,8 +78,7 @@
             </div>
           </div>
           <div
-            ref="body-menu-big-right"
-            class="body-menu-big-right"
+            ref="body-menu-big-right" class="body-menu-big-right"
             @click="changeMenu(1)"
           >
             <div class="menu-card view">
@@ -92,8 +88,7 @@
           </div>
         </div>
         <i
-          class="el-icon-back back-btn"
-          :class="showBack ? '' : 'btn-hide'"
+          class="el-icon-back back-btn" :class="showBack ? '' : 'btn-hide'"
           @click.stop="changeMenu()"
         ></i>
         <div class="config-btn" :class="showBack ? '' : 'btn-hide'">
@@ -104,11 +99,8 @@
             <i class="el-icon-download"></i>导出配置
           </el-button>
           <el-upload
-            ref="upload"
-            action="aaa"
-            :auto-upload="false"
-            :on-change="settingImport"
-            accept="application/json"
+            ref="upload" action="aaa" :auto-upload="false"
+            :on-change="settingImport" accept="application/json"
             :show-file-list="false"
           >
             <el-button class="pink">
@@ -123,10 +115,8 @@
         </div>
         <div class="body-menu-content">
           <el-form
-            ref="form"
-            class="form"
-            :model="settings"
-            label-width="100px"
+            ref="form" class="form"
+            :model="settings" label-width="100px"
           >
             <div ref="system-form" class="system system-form">
               <div class="body-menu-content-card">
@@ -138,13 +128,11 @@
                 </div>
                 <div class="content-card-content">
                   <el-checkbox-group
-                    v-model="settings.enableDataSources"
-                    class="checkbox-group-area"
+                    v-model="settings.enableDataSources" class="checkbox-group-area"
                     :min="1"
                   >
                     <el-checkbox
-                      v-for="source of defSourcesList"
-                      :key="source.dataName"
+                      v-for="source of defSourcesList" :key="source.dataName"
                       :label="source.dataName"
                     >
                       <span class="checkbox-area">
@@ -170,17 +158,13 @@
                     </div>
                     <div>
                       <el-button
-                        size="small"
-                        @click="
+                        size="small" @click="
                           openUrl('https://passport.weibo.cn/signin/login')
                         "
                       >
                         进入登录页面
                       </el-button>
-                      <el-button
-                        size="small"
-                        @click="openUrl('https://m.weibo.cn/profile/')"
-                      >
+                      <el-button size="small" @click="openUrl('https://m.weibo.cn/profile/')">
                         查看是否登录成功
                       </el-button>
                     </div>
@@ -202,11 +186,8 @@
                     </div>
                     <div>
                       <el-input-number
-                        v-model="settings.dun.intervalTime"
-                        controls-position="right"
-                        size="small"
-                        :min="12"
-                        :max="3600"
+                        v-model="settings.dun.intervalTime" controls-position="right" size="small"
+                        :min="12" :max="3600"
                       />
                     </div>
                   </div>
@@ -272,12 +253,9 @@
                     </div>
                     <div class="content-line-content">
                       <el-slider
-                        v-model="settings.dun.lowFrequencyTime"
-                        show-stops
-                        :max="24"
+                        v-model="settings.dun.lowFrequencyTime" show-stops :max="24"
                         :marks="marks"
-                        :format-tooltip="lowFrequencyTimeTooltip"
-                        range
+                        :format-tooltip="lowFrequencyTimeTooltip" range
                       />
                     </div>
                   </div>
@@ -294,11 +272,8 @@
                       </div>
                       <div>
                         <el-input-number
-                          v-model="settings.dun.timeOfLowFrequency"
-                          controls-position="right"
-                          size="small"
-                          :min="2"
-                          :max="20"
+                          v-model="settings.dun.timeOfLowFrequency" controls-position="right"
+                          size="small" :min="2" :max="20"
                         />
                       </div>
                     </div>
@@ -458,21 +433,13 @@
                       <!--              :rules="{required: true, message: '请选择默认标签', trigger: 'blur'}">-->
                       <!--  -->
                       <!--</el-form-item>-->
-                      <el-select
-                        v-model="settings.display.defaultTag"
-                        placeholder="选择默认标签"
-                      >
+                      <el-select v-model="settings.display.defaultTag" placeholder="选择默认标签">
                         <el-option
-                          v-for="source in currentDataSource"
-                          :key="source.dataName"
-                          :label="source.title"
+                          v-for="source in currentDataSource" :key="source.dataName" :label="source.title"
                           :value="source.dataName"
                         >
                           <div style="display: flex; align-items: center">
-                            <img
-                              :src="source.icon"
-                              style="width: 25px; margin-right: 10px"
-                            />
+                            <img :src="source.icon" style="margin-right: 10px;width: 25px" />
                             <span>{{ source.title }}</span>
                           </div>
                         </el-option>
@@ -542,12 +509,8 @@
                     <div class="content-line-content flex-between">
                       <div>
                         <el-input-number
-                          v-if="settings.feature.san"
-                          v-model="settings.san.maxValue"
-                          placeholder="理智上限"
-                          controls-position="right"
-                          size="small"
-                          :min="80"
+                          v-if="settings.feature.san" v-model="settings.san.maxValue" placeholder="理智上限"
+                          controls-position="right" size="small" :min="80"
                           :max="135"
                         />
                       </div>
@@ -617,7 +580,7 @@ export default {
     computed: {},
     watch: {},
     // Feedback
-    created() {},
+    created() { },
     mounted() {
         this.init();
         this.initAnimate();
@@ -801,6 +764,7 @@ export default {
 @ceobeVeryLightColor: #fff7ec; //小刻食堂主题非常浅色
 @ceobeColor: #ffba4b; //小刻食堂主题亮色
 @ceobeDarkColor: #353535; // 小刻食堂主题暗色
+
 #app {
   height: 100vh;
   width: 100vw;
@@ -835,6 +799,7 @@ export default {
   color: #fff;
   height: 100px;
   padding: 0 20px;
+
   // 头部左侧logo和版本信息
   .head {
     display: flex;
@@ -875,7 +840,7 @@ export default {
       align-items: flex-end;
       user-select: none;
 
-      &:hover + .more-cookie {
+      &:hover+.more-cookie {
         opacity: 1;
       }
 
@@ -1088,13 +1053,11 @@ export default {
 
       &:after {
         content: "";
-        background: linear-gradient(
-          to right,
-          #222 0%,
-          #222 50%,
-          #fff 50%,
-          #fff 100%
-        );
+        background: linear-gradient(to right,
+            #222 0%,
+            #222 50%,
+            #fff 50%,
+            #fff 100%);
         background-position: 100% 0;
         background-size: 200% 100%;
         width: 100%;
@@ -1220,6 +1183,7 @@ export default {
 
   //表单
   .form {
+
     .system,
     .view {
       display: none;
@@ -1337,10 +1301,12 @@ export default {
   border-color: @ceobeColor;
   background: @ceobeColor;
 }
+
 /deep/ .el-radio__inner:hover {
   border-color: @ceobeColor;
 }
-/deep/ .el-radio__input.is-checked + .el-radio__label {
+
+/deep/ .el-radio__input.is-checked+.el-radio__label {
   color: @ceobeColor;
 }
 
@@ -1350,13 +1316,16 @@ export default {
   background-color: @ceobeColor;
   border-color: @ceobeColor;
 }
+
 /deep/ .el-checkbox__inner:hover {
   border-color: @ceobeColor;
 }
+
 /deep/ .el-checkbox__input.is-focus .el-checkbox__inner {
   border-color: @ceobeColor;
 }
-/deep/ .el-checkbox__input.is-checked + .el-checkbox__label {
+
+/deep/ .el-checkbox__input.is-checked+.el-checkbox__label {
   color: @ceobeColor;
 }
 
@@ -1364,6 +1333,7 @@ export default {
 /deep/ .el-slider__bar {
   background-color: @ceobeColor;
 }
+
 /deep/ .el-slider__button {
   border-color: @ceobeColor;
 }
@@ -1373,14 +1343,9 @@ export default {
 /deep/ .el-input__inner:focus {
   border-color: @ceobeColor;
 }
-/deep/
-  .el-input-number__decrease:hover:not(.is-disabled)
-  ~ .el-input
-  .el-input__inner:not(.is-disabled),
-/deep/
-  .el-input-number__increase:hover:not(.is-disabled)
-  ~ .el-input
-  .el-input__inner:not(.is-disabled) {
+
+/deep/ .el-input-number__decrease:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled),
+/deep/ .el-input-number__increase:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled) {
   border-color: @ceobeColor;
 }
 
@@ -1409,6 +1374,7 @@ export default {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(-360deg);
   }
@@ -1418,6 +1384,7 @@ export default {
   from {
     margin-left: 0;
   }
+
   to {
     margin-left: -242px;
   }

@@ -36,7 +36,7 @@ import Settings from '../../../common/Settings';
 
 export default {
     name: "NeteaseCloudMusicItem",
-    props: ["item", "showImage"],
+    props: { item:{ type:Object,required:true }, showImages:Boolean },
     data() {
         return {
             settings: Settings,

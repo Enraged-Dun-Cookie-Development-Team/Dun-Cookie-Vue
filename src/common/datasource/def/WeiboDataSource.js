@@ -70,7 +70,7 @@ export class WeiboDataSource extends DataSource {
                             dynamicInfo.raw_text ||
                 dynamicInfo.text
                     .replace(
-                        /<\a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<span class="url-icon">|<\img.*?>|全文|网页链接/g,
+                        /<a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<span class="url-icon">|<img.*?>|全文|网页链接/g,
                         ""
                     )
                     .replace(/<br \/>/g, "\n")
@@ -115,7 +115,7 @@ export class WeiboDataSource extends DataSource {
                                     x.mblog.retweeted_status.raw_text ||
                     x.mblog.retweeted_status.text
                         .replace(
-                            /<\a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<span class="url-icon">|<\/img.*?>|全文|网页链接/g,
+                            /<a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<span class="url-icon">|<\/img.*?>|全文|网页链接/g,
                             ""
                         )
                         .replace(/<br \/>/g, "\n")
