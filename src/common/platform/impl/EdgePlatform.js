@@ -9,25 +9,23 @@ const _pageId = String(Math.floor(Math.random() * 1000000));
  * 由于Edge内核是chromium，因此直接继承ChromePlatform，仅特殊部分进行单独处理
  */
 export default class EdgePlatform extends ChromePlatform {
+  constructor() {
+    super();
+  }
 
-    constructor() {
-        super();
+  get PlatformType() {
+    return PLATFORM_EDGE;
+  }
+
+  __buildMessageToSend(type, data) {
+    const message = super.__buildMessageToSend(type, data);
+    message.page = _pageId;
+    return message;
+  }
+
+  __handleReceiverMessage(id, type, message, listener) {
+    if (message.page !== _pageId) {
+      return super.__handleReceiverMessage(id, type, message, listener);
     }
-
-    get PlatformType() {
-        return PLATFORM_EDGE;
-    }
-
-    __buildMessageToSend(type, data) {
-        const message = super.__buildMessageToSend(type, data);
-        message.page = _pageId;
-        return message;
-    }
-
-    __handleReceiverMessage(id, type, message, listener) {
-        if (message.page !== _pageId) {
-            return super.__handleReceiverMessage(id, type, message, listener);
-        }
-    }
-
+  }
 }

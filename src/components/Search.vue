@@ -10,28 +10,14 @@
       />
     </div>
     <div v-show="penguinShow" class="search-area-penguin-name">
-      <div
-        style="cursor: pointer"
-        @click="openUrl('https://penguin-stats.cn/')"
-      >
-        数据支持：企鹅物流
-      </div>
+      <div style="cursor: pointer" @click="openUrl('https://penguin-stats.cn/')">数据支持：企鹅物流</div>
       <div>
-        <el-button
-          class="type-button"
-          type="primary"
-          plain
-          @click="changeSort()"
-        >
-          {{ sortType == 0 ? "按掉落百分比排序" : "按单件理智排序" }}
+        <el-button class="type-button" type="primary" plain @click="changeSort()">
+          {{ sortType == 0 ? '按掉落百分比排序' : '按单件理智排序' }}
         </el-button>
       </div>
       <div>
-        <el-switch
-          v-model="showCloseStage"
-          active-color="#13ce66"
-          inactive-color="#ff4949"
-        />
+        <el-switch v-model="showCloseStage" active-color="#13ce66" inactive-color="#ff4949" />
         显示/隐藏已关闭关卡
       </div>
     </div>
@@ -49,16 +35,12 @@
               v-if="item.spriteCoord"
               class="search-area-penguin-penguin-title"
               :style="{
-                'background-position': `-${45 * item.spriteCoord[0]}px -${
-                  45 * item.spriteCoord[1]
-                }px`,
+                'background-position': `-${45 * item.spriteCoord[0]}px -${45 * item.spriteCoord[1]}px`,
               }"
             ></span>
             <span>{{ item.name }}</span>
           </template>
-          <div v-if="item.loading" class="seach-process-text">
-            查找中……
-          </div>
+          <div v-if="item.loading" class="seach-process-text">查找中……</div>
           <div class="info-card-area">
             <el-card
               v-for="info in item.matrix_per"
@@ -71,22 +53,13 @@
                 :class="info.isOpen ? '' : 'info-card-title-close'"
                 :title="info.isOpen ? '关卡开启中' : '关卡未开启'"
               >
-                <span class="info-card-title-left" :title="info.stage.code">{{
-                  info.stage.code
-                }}</span>
-                <span
-                  class="info-card-title-right"
-                  :title="info.zone.zoneName"
-                >{{ info.zone.zoneName }}</span>
+                <span class="info-card-title-left" :title="info.stage.code">{{ info.stage.code }}</span>
+                <span class="info-card-title-right" :title="info.zone.zoneName">{{ info.zone.zoneName }}</span>
               </div>
               <div v-show="!info.isGacha" class="info-card-body">
                 <span title="单件掉率">{{ info.per }}%</span>
-                <span title="单件期望理智">{{
-                  info.cost == Infinity ? "" : info.cost
-                }}</span>
-                <span title="单件期望时间">{{
-                  info.cost == Infinity ? "不建议本关卡" : info.time
-                }}</span>
+                <span title="单件期望理智">{{ info.cost == Infinity ? '' : info.cost }}</span>
+                <span title="单件期望时间">{{ info.cost == Infinity ? '不建议本关卡' : info.time }}</span>
               </div>
             </el-card>
             <el-card
@@ -100,22 +73,13 @@
                 :class="info.isOpen ? '' : 'info-card-title-close'"
                 :title="info.isOpen ? '关卡开启中' : '关卡未开启'"
               >
-                <span class="info-card-title-left" :title="info.stage.code">{{
-                  info.stage.code
-                }}</span>
-                <span
-                  class="info-card-title-right"
-                  :title="info.zone.zoneName"
-                >{{ info.zone.zoneName }}</span>
+                <span class="info-card-title-left" :title="info.stage.code">{{ info.stage.code }}</span>
+                <span class="info-card-title-right" :title="info.zone.zoneName">{{ info.zone.zoneName }}</span>
               </div>
               <div v-show="!info.isGacha" class="info-card-body">
                 <span title="单件掉率">{{ info.per }}%</span>
-                <span title="单件期望理智">{{
-                  info.cost == Infinity ? "" : info.cost
-                }}</span>
-                <span title="单件期望时间">{{
-                  info.cost == Infinity ? "不建议本关卡" : info.time
-                }}</span>
+                <span title="单件期望理智">{{ info.cost == Infinity ? '' : info.cost }}</span>
+                <span title="单件期望时间">{{ info.cost == Infinity ? '不建议本关卡' : info.time }}</span>
               </div>
             </el-card>
           </div>
@@ -125,137 +89,131 @@
   </div>
 </template>
 <script>
-import PenguinStatistics from "@/common/sync/PenguinStatisticsInfo";
-import PlatformHelper from "@/common/platform/PlatformHelper";
-import TimeUtil from "@/common/util/TimeUtil";
+import PenguinStatistics from '@/common/sync/PenguinStatisticsInfo';
+import PlatformHelper from '@/common/platform/PlatformHelper';
+import TimeUtil from '@/common/util/TimeUtil';
 
 export default {
-    name: "Search",
-    components: {},
-    props: {
-        searchShow: Boolean
+  name: 'Search',
+  components: {},
+  props: {
+    searchShow: Boolean,
+  },
+  data() {
+    return {
+      searchText: '',
+      penguinShow: false,
+      activeNames: '',
+      penguinSearchList: [],
+      penguin: {},
+      showCloseStage: false,
+      sortType: 0,
+    };
+  },
+  computed: {},
+  watch: {
+    searchShow(value) {
+      if (value) {
+        this.$refs.searchText.focus();
+      } else {
+        this.$refs.searchText.blur();
+      }
     },
-    data() {
-        return {
-            searchText: "",
-            penguinShow: false,
-            activeNames: "",
-            penguinSearchList: [],
-            penguin: {},
-            showCloseStage: false,
-            sortType: 0,
-        };
+    searchText(value) {
+      this.loadPenguin(value);
+      this.$emit('searchTextChange', value);
     },
-    computed: {},
-    watch: {
-        searchShow(value) {
-            if (value) {
-                this.$refs.searchText.focus();
-            } else {
-                this.$refs.searchText.blur();
-            }
-        },
-        searchText(value) {
-            this.loadPenguin(value);
-            this.$emit("searchTextChange", value);
-        },
+  },
+  created() {},
+  mounted() {
+    this.init();
+  },
+  beforeDestroy() {},
+  methods: {
+    openUrl: PlatformHelper.Tabs.create,
+    init() {
+      PenguinStatistics.GetItems().then((penguinStatisticsInfo) => {
+        this.penguin = penguinStatisticsInfo;
+      });
     },
-    created() {},
-    mounted() {
-        this.init();
+    clearText() {
+      this.searchText = null;
     },
-    beforeDestroy() {},
-    methods: {
-        openUrl: PlatformHelper.Tabs.create,
-        init() {
-            PenguinStatistics.GetItems().then((penguinStatisticsInfo) => {
-                this.penguin = penguinStatisticsInfo;
-            });
-        },
-        clearText() {
-            this.searchText = null;
-        },
-        loadPenguin(text) {
-            if (text && text.split("@@").length > 1) {
-                this.penguinShow = true;
-                this.activeNames = "";
-                this.penguinSearchList = PenguinStatistics.GetItemByText(
-                    text.split("@@")[1]
-                );
-            } else {
-                this.penguinShow = false;
-                this.penguinSearchList = [];
-            }
-        },
-        getPenguinDate(index) {
-            let item = this.penguinSearchList[index];
-            if (item.matrix_per && item.matrix_cost) {
-                return;
-            }
-            item.loading = true;
-            PenguinStatistics.GetItemInfo(item.itemId).then((data) => {
-                let matrix = JSON.parse(data).matrix;
-                matrix.forEach((item) => {
-                    let stage = PenguinStatistics.GetStageInfo(item.stageId);
-                    let zone = PenguinStatistics.GetZonesInfo(stage.zoneId);
-                    item.stage = stage;
-                    item.zone = zone;
-                    item.per = Math.round(item.quantity / item.times * 10000) / 100.0;
-                    let p = item.quantity / item.times;
-                    item.cost = Math.round(stage.apCost / p * 100) / 100.0;
-                    item.time = TimeUtil.secondToDate(stage.minClearTime / 1000 / p);
-                    item.isGacha = !stage.minClearTime || (stage.isGacha ? true : false);
-                    item.isOpen = zone.existence.CN.hasOwnProperty("closeTime")
-                        ? new Date().getTime() >= zone.existence.CN.openTime &&
-              new Date().getTime() <= zone.existence.CN.closeTime
-                        : true;
-                });
-                let matrix_per = JSON.parse(JSON.stringify(matrix));
-                let matrix_cost = JSON.parse(JSON.stringify(matrix));
-                matrix_per
-                    .sort((x, y) => {
-                        return y.per - x.per;
-                    })
-                    .sort((x, y) => {
-                        if (y.isGacha && !x.isGacha) return -1;
-                    });
-                matrix_cost
-                    .sort((x, y) => {
-                        return (
-                            (y.cost != "" && y.cost != null) -
-                (x.cost != "" && x.cost != null) || x.cost - y.cost
-                        );
-                    })
-                    .sort((x, y) => {
-                        if (y.isGacha && !x.isGacha) return -1;
-                    });
-                this.$set(item, "matrix_per", matrix_per);
-                this.$set(item, "matrix_cost", matrix_cost);
-                this.$set(item, "loading", false);
-                console.log(item);
-            });
-        },
-        changeSort() {
-            if (this.sortType == 0) {
-                this.sortType = 1;
-            } else {
-                this.sortType = 0;
-            }
-        },
+    loadPenguin(text) {
+      if (text && text.split('@@').length > 1) {
+        this.penguinShow = true;
+        this.activeNames = '';
+        this.penguinSearchList = PenguinStatistics.GetItemByText(text.split('@@')[1]);
+      } else {
+        this.penguinShow = false;
+        this.penguinSearchList = [];
+      }
     },
+    getPenguinDate(index) {
+      let item = this.penguinSearchList[index];
+      if (item.matrix_per && item.matrix_cost) {
+        return;
+      }
+      item.loading = true;
+      PenguinStatistics.GetItemInfo(item.itemId).then((data) => {
+        let matrix = JSON.parse(data).matrix;
+        matrix.forEach((item) => {
+          let stage = PenguinStatistics.GetStageInfo(item.stageId);
+          let zone = PenguinStatistics.GetZonesInfo(stage.zoneId);
+          item.stage = stage;
+          item.zone = zone;
+          item.per = Math.round((item.quantity / item.times) * 10000) / 100.0;
+          let p = item.quantity / item.times;
+          item.cost = Math.round((stage.apCost / p) * 100) / 100.0;
+          item.time = TimeUtil.secondToDate(stage.minClearTime / 1000 / p);
+          item.isGacha = !stage.minClearTime || (stage.isGacha ? true : false);
+          item.isOpen = zone.existence.CN.hasOwnProperty('closeTime')
+            ? new Date().getTime() >= zone.existence.CN.openTime && new Date().getTime() <= zone.existence.CN.closeTime
+            : true;
+        });
+        let matrix_per = JSON.parse(JSON.stringify(matrix));
+        let matrix_cost = JSON.parse(JSON.stringify(matrix));
+        matrix_per
+          .sort((x, y) => {
+            return y.per - x.per;
+          })
+          .sort((x, y) => {
+            if (y.isGacha && !x.isGacha) return -1;
+          });
+        matrix_cost
+          .sort((x, y) => {
+            return (y.cost != '' && y.cost != null) - (x.cost != '' && x.cost != null) || x.cost - y.cost;
+          })
+          .sort((x, y) => {
+            if (y.isGacha && !x.isGacha) return -1;
+          });
+        this.$set(item, 'matrix_per', matrix_per);
+        this.$set(item, 'matrix_cost', matrix_cost);
+        this.$set(item, 'loading', false);
+        console.log(item);
+      });
+    },
+    changeSort() {
+      if (this.sortType == 0) {
+        this.sortType = 1;
+      } else {
+        this.sortType = 0;
+      }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>
-@import "../theme/theme.less";
+@import '../theme/theme.less';
 
 .styleChange(@theme) {
-  @ceobeLightColor: "ceobeLightColor-@{theme}"; //小刻食堂主题亮色浅色
-  @ceobeColor: "ceobeColor-@{theme}"; //小刻食堂主题亮色
-  @ceobeVeryLightColor: "ceobeVeryLightColor-@{theme}"; // 小刻食堂主题亮色非常浅色
-  @bgColor: "bgColor-@{theme}"; // 背景颜色
-  @btnBorder: "btnBorder-@{theme}"; // 按钮边框颜色和一些小线条
-  @setSmall: "setSmall-@{theme}"; // 设置文本颜色
-  @shadow: "shadow-@{theme}"; // 卡片的阴影
+  @ceobeLightColor: 'ceobeLightColor-@{theme}'; //小刻食堂主题亮色浅色
+  @ceobeColor: 'ceobeColor-@{theme}'; //小刻食堂主题亮色
+  @ceobeVeryLightColor: 'ceobeVeryLightColor-@{theme}'; // 小刻食堂主题亮色非常浅色
+  @bgColor: 'bgColor-@{theme}'; // 背景颜色
+  @btnBorder: 'btnBorder-@{theme}'; // 按钮边框颜色和一些小线条
+  @setSmall: 'setSmall-@{theme}'; // 设置文本颜色
+  @shadow: 'shadow-@{theme}'; // 卡片的阴影
   .search-area {
     height: 120px;
     width: 100%;
@@ -272,7 +230,7 @@ export default {
       width: 80%;
       height: 50px;
       font-size: 42px;
-      font-family: "Geometos";
+      font-family: 'Geometos';
       padding: 8px;
       text-align: center;
       font-weight: bold;
@@ -297,7 +255,7 @@ export default {
     height: 45px;
     width: 45px;
     background-size: 270px 720px;
-    background-image: url("https://penguin-stats.s3.amazonaws.com/sprite/sprite.202109171627.small.png");
+    background-image: url('https://penguin-stats.s3.amazonaws.com/sprite/sprite.202109171627.small.png');
   }
 
   .search-area-penguin-name {
@@ -396,7 +354,7 @@ export default {
 
           &.info-card-title-isOpen::after {
             position: absolute;
-            content: " ";
+            content: ' ';
             top: -30px;
             right: -30px;
             border: 17px transparent solid;

@@ -11,17 +11,17 @@
 
 <script>
 export default {
-    name: "MenuIcon",
-    methods: {
-        handleIconClick() {
-            this.$emit("handleIconClick");
-        },
+  name: 'MenuIcon',
+  methods: {
+    handleIconClick() {
+      this.$emit('handleIconClick');
     },
+  },
 };
 </script>
 
 <style lang="less">
-@import "../theme/theme.less";
+@import '../theme/theme.less';
 
 .dark {
   .styleChange(dark);
@@ -32,8 +32,8 @@ export default {
 }
 
 .styleChange(@theme) {
-  @ceobeColor: "ceobeColor-@{theme}"; //小刻食堂主题亮色
-  @ceobeDarkColor: "ceobeDarkColor-@{theme}"; //小刻食堂主题暗色
+  @ceobeColor: 'ceobeColor-@{theme}'; //小刻食堂主题亮色
+  @ceobeDarkColor: 'ceobeDarkColor-@{theme}'; //小刻食堂主题暗色
 
   .menu-btn {
     width: 30px;

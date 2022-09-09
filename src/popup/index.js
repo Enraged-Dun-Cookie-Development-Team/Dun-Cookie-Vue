@@ -9,11 +9,11 @@ import TerraHistoricusItem from '../components/timeline/items/TerraHistoricusIte
 import NeteaseCloudMusicItem from '../components/timeline/items/NeteaseCloudMusicItem';
 import { TerraHistoricusDataSource } from '../common/datasource/def/TerraHistoricusDataSource';
 import { NeteaseCloudMusicDataSource } from '../common/datasource/def/NeteaseCloudMusicDataSource';
-import Settings from "../common/Settings";
+import Settings from '../common/Settings';
 
 Vue.use(VueLazyload, {
-    loading: '/assets/image/' + Settings.logo,
-    error: '/assets/image/' + Settings.logo,
+  loading: '/assets/image/' + Settings.logo,
+  error: '/assets/image/' + Settings.logo,
 });
 
 Vue.config.productionTip = false;
@@ -24,5 +24,5 @@ Vue.component(TerraHistoricusDataSource.typeInfo.typeName, TerraHistoricusItem);
 Vue.component(NeteaseCloudMusicDataSource.typeInfo.typeName, NeteaseCloudMusicItem);
 
 new Vue({
-    render: h => h(App),
+  render: (h) => h(App),
 }).$mount('#app');

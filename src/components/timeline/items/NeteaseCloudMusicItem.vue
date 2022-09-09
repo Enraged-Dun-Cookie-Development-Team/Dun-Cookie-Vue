@@ -1,13 +1,7 @@
 <template>
-  <div
-    class="wrapper" :data-id="item.id"
-    @click="openUrl(item.jumpUrl)"
-  >
+  <div class="wrapper" :data-id="item.id" @click="openUrl(item.jumpUrl)">
     <div class="wrapper-content"></div>
-    <img
-      v-if="showImage" v-lazy="item.coverImage"
-      class="image-back"
-    />
+    <img v-if="showImage" v-lazy="item.coverImage" class="image-back" />
     <div class="content-card">
       <div class="record-area">
         <div class="record-area-record">
@@ -18,9 +12,7 @@
       <div class="record-info">
         {{ item.componentData.name }}
       </div>
-      <div class="record-size">
-        共{{ item.componentData.size }}首
-      </div>
+      <div class="record-size">共{{ item.componentData.size }}首</div>
       <div class="record-btn">
         <i class="el-icon-d-arrow-right"></i>
         Go To Album
@@ -33,27 +25,25 @@
 // 用于NeteaseCloudMusicDataSource的特殊组件
 import PlatformHelper from '../../../common/platform/PlatformHelper';
 import Settings from '../../../common/Settings';
-import { DataItem } from "../../../common/DataItem";
+import { DataItem } from '../../../common/DataItem';
 
 export default {
-    name: "NeteaseCloudMusicItem",
-    props: { item:{ type:DataItem,required:true }, showImage:Boolean },
-    data() {
-        return {
-            settings: Settings,
-        };
+  name: 'NeteaseCloudMusicItem',
+  props: { item: { type: DataItem, required: true }, showImage: Boolean },
+  data() {
+    return {
+      settings: Settings,
+    };
+  },
+  methods: {
+    openUrl(url) {
+      if (this.settings.feature.linkMax) {
+        PlatformHelper.Windows.createMaxPopupWindow(url);
+      } else {
+        PlatformHelper.Windows.createPopupWindow(url, 1400, 800);
+      }
     },
-    methods: {
-        openUrl(url) {
-            if(this.settings.feature.linkMax) {
-                PlatformHelper.Windows
-                    .createMaxPopupWindow(url);
-            } else {
-                PlatformHelper.Windows
-                    .createPopupWindow(url, 1400, 800);
-            }
-        }
-    }
+  },
 };
 </script>
 
@@ -100,15 +90,17 @@ export default {
         }
 
         &:after {
-          content: "";
+          content: '';
           position: absolute;
           top: -58%;
           left: -18%;
           width: 150%;
           height: 150%;
-          background-image: linear-gradient(hsla(0, 0%, 100%, 0.2),
-          hsla(0, 0%, 100%, 0.25) 48%,
-          hsla(0, 0%, 100%, 0) 52%);
+          background-image: linear-gradient(
+            hsla(0, 0%, 100%, 0.2),
+            hsla(0, 0%, 100%, 0.25) 48%,
+            hsla(0, 0%, 100%, 0) 52%
+          );
           transform: rotate(24deg);
           opacity: 0.5;
           transition: transform 0.5s ease, opacity 0.5s ease;
@@ -128,7 +120,7 @@ export default {
     // 右边
     .record-info {
       transition: all 0.5s;
-      font-family: Geometos, "Sans-Regular", "SourceHanSansCN-Regular", YaHei, serif;
+      font-family: Geometos, 'Sans-Regular', 'SourceHanSansCN-Regular', YaHei, serif;
       font-size: 1.8rem;
       color: #fff;
       width: 380px;
@@ -144,7 +136,7 @@ export default {
       position: absolute;
       bottom: 17px;
       right: 330px;
-      font-family: Geometos, "Sans-Regular", "SourceHanSansCN-Regular", YaHei, serif;
+      font-family: Geometos, 'Sans-Regular', 'SourceHanSansCN-Regular', YaHei, serif;
       color: #fff;
       font-size: 1.2rem;
       opacity: 0;
@@ -152,7 +144,7 @@ export default {
 
     .record-btn {
       transition: all 0.5s;
-      font-family: Geometos, "Sans-Regular", "SourceHanSansCN-Regular", YaHei, serif;
+      font-family: Geometos, 'Sans-Regular', 'SourceHanSansCN-Regular', YaHei, serif;
       font-size: 1.2rem;
       right: 15px;
       position: absolute;

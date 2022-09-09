@@ -1,16 +1,10 @@
 <template>
   <div class="wrapper" :data-id="item.id">
     <div class="wrapper-content"></div>
-    <img
-      v-if="showImage" v-lazy="item.coverImage"
-      class="image-back"
-    />
+    <img v-if="showImage" v-lazy="item.coverImage" class="image-back" />
     <div class="content-card">
       <div class="content-card-info">
-        <img
-          v-if="showImage" v-lazy="item.coverImage"
-          class="content-card-image"
-        />
+        <img v-if="showImage" v-lazy="item.coverImage" class="content-card-image" />
         <div class="content-card-title">
           {{ item.componentData.name }}
         </div>
@@ -26,7 +20,9 @@
           v-for="episodes in item.componentData.episodes"
           :key="episodes.cid"
           class="content-card-episodes-btn"
-          @click="openUrl(`https://terra-historicus.hypergryph.com/comic/${item.componentData.cid}/episode/${episodes.cid}`)"
+          @click="
+            openUrl(`https://terra-historicus.hypergryph.com/comic/${item.componentData.cid}/episode/${episodes.cid}`)
+          "
         >
           {{ episodes.title }}
         </span>
@@ -39,27 +35,25 @@
 // 用于TerraHistoricusDataSource的特殊组件
 import PlatformHelper from '../../../common/platform/PlatformHelper';
 import Settings from '../../../common/Settings';
-import { DataItem } from "../../../common/DataItem";
+import { DataItem } from '../../../common/DataItem';
 
 export default {
-    name: "TerraHistoricusItem",
-    props: { item:{ type:DataItem,required:true }, showImage:Boolean },
-    data() {
-        return {
-            settings: Settings,
-        };
+  name: 'TerraHistoricusItem',
+  props: { item: { type: DataItem, required: true }, showImage: Boolean },
+  data() {
+    return {
+      settings: Settings,
+    };
+  },
+  methods: {
+    openUrl(url) {
+      if (this.settings.feature.linkMax) {
+        PlatformHelper.Windows.createMaxPopupWindow(url);
+      } else {
+        PlatformHelper.Windows.createPopupWindow(url, 900, 1000);
+      }
     },
-    methods: {
-        openUrl(url) {
-            if(this.settings.feature.linkMax) {
-                PlatformHelper.Windows
-                    .createMaxPopupWindow(url);
-            } else {
-                PlatformHelper.Windows
-                    .createPopupWindow(url, 900, 1000);
-            }
-        }
-    }
+  },
 };
 </script>
 
@@ -119,7 +113,7 @@ export default {
       overflow: auto;
 
       .content-card-episodes-btn {
-        text-align:center;
+        text-align: center;
         display: flex;
         align-items: center;
         justify-content: center;

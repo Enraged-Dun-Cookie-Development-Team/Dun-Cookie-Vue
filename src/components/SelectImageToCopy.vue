@@ -12,24 +12,18 @@
         <br />
         <span>如果长时间没反应，请刷新页面</span>
       </span>
-      <el-button
-        size="small" type="primary"
-        :disabled="isPrint" @click="copyData"
-      >
-        复制
-      </el-button>
+      <el-button size="small" type="primary" :disabled="isPrint" @click="copyData"> 复制 </el-button>
     </div>
-    <div class="image-area" :class="hideNoImage?'hideNoImage':''">
+    <div class="image-area" :class="hideNoImage ? 'hideNoImage' : ''">
       <div v-if="item.imageList && item.imageList.length > 1" class="multi-img">
         <div
-          v-for="img in item.imageHttpList" :key="img"
+          v-for="img in item.imageHttpList"
+          :key="img"
           class="multi-img-area"
-          :style="{'width':spanNumber+'%','max-width':spanNumber+'%'}" :class="selectImg.some(x=>x==img)?'hasImage':'noImage'"
+          :style="{ width: spanNumber + '%', 'max-width': spanNumber + '%' }"
+          :class="selectImg.some((x) => x == img) ? 'hasImage' : 'noImage'"
         >
-          <img
-            v-lazy="img" class="img"
-            crossorigin="anonymous" @click="addImage(img)"
-          />
+          <img v-lazy="img" class="img" crossorigin="anonymous" @click="addImage(img)" />
         </div>
       </div>
     </div>
@@ -37,69 +31,69 @@
 </template>
 
 <script>
-import html2canvas from "html2canvas";
+import html2canvas from 'html2canvas';
 
 export default {
-    name: "SelectImageToCopy",
-    props: [],
-    data() {
-        return {
-            item: {},
-            // 窗口显示
-            copyImageToImage: false,
-            // 当前选择的图片列表
-            selectImg: [],
-            // 生成的图片url
-            successImageUrl: null,
-            // 石头隐藏未被选中的图片
-            hideNoImage: false,
-            // 图片宽度
-            spanNumber: 33,
-            isPrint: true
-        };
+  name: 'SelectImageToCopy',
+  props: [],
+  data() {
+    return {
+      item: {},
+      // 窗口显示
+      copyImageToImage: false,
+      // 当前选择的图片列表
+      selectImg: [],
+      // 生成的图片url
+      successImageUrl: null,
+      // 石头隐藏未被选中的图片
+      hideNoImage: false,
+      // 图片宽度
+      spanNumber: 33,
+      isPrint: true,
+    };
+  },
+  methods: {
+    closeDialog() {
+      this.item = {};
+      this.copyImageToImage = false;
+      this.hideNoImage = false;
+      this.spanNumber = 33;
+      this.selectImg = [];
+      this.isPrint = true;
     },
-    methods: {
-        closeDialog() {
-            this.item = {};
-            this.copyImageToImage = false;
-            this.hideNoImage = false;
-            this.spanNumber = 33;
-            this.selectImg = [];
-            this.isPrint = true;
-        },
 
-        addImage(img) {
-            let index = this.selectImg.findIndex(x => x == img);
-            if (index >= 0) {
-                this.selectImg.splice(index, 1);
-            } else {
-                this.selectImg.push(img);
-            }
-            if (this.selectImg.length > 0) {
-                this.isPrint = false;
-            } else {
-                this.isPrint = true;
-            }
-        },
+    addImage(img) {
+      let index = this.selectImg.findIndex((x) => x == img);
+      if (index >= 0) {
+        this.selectImg.splice(index, 1);
+      } else {
+        this.selectImg.push(img);
+      }
+      if (this.selectImg.length > 0) {
+        this.isPrint = false;
+      } else {
+        this.isPrint = true;
+      }
+    },
 
-        copyData() {
-            this.isPrint = true;
-            this.hideNoImage = true;
-            if (this.selectImg.length == 1 || this.selectImg.length == 2) {
-                this.spanNumber = 100;
-            }
-            this.$nextTick(async () => {
-                let imageCanvas = await html2canvas(document.querySelector('.image-area'), {
-                    allowTaint: true,
-                    useCORS: true,
-                    imageTimeout: 10000
-                });
-                this.successImageUrl = imageCanvas.toDataURL("image/jpeg");
-                this.$emit('copyData', this.item, this.successImageUrl);
-                this.copyImageToImage = false;
-            });
-        }
-    }
+    copyData() {
+      this.isPrint = true;
+      this.hideNoImage = true;
+      if (this.selectImg.length == 1 || this.selectImg.length == 2) {
+        this.spanNumber = 100;
+      }
+      this.$nextTick(async () => {
+        let imageCanvas = await html2canvas(document.querySelector('.image-area'), {
+          allowTaint: true,
+          useCORS: true,
+          imageTimeout: 10000,
+        });
+        this.successImageUrl = imageCanvas.toDataURL('image/jpeg');
+        this.$emit('copyData', this.item, this.successImageUrl);
+        this.copyImageToImage = false;
+      });
+    },
+  },
 };
 </script>
 
@@ -141,7 +135,7 @@ export default {
     max-width: 33%;
 
     &.hasImage::after {
-      content: "\e6da";
+      content: '\e6da';
       position: absolute;
       top: 5px;
       left: 5px;
@@ -162,6 +156,5 @@ export default {
       width: 100%;
     }
   }
-
 }
 </style>
