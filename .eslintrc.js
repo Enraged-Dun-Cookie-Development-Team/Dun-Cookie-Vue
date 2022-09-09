@@ -26,7 +26,6 @@ module.exports = {
     'plugin:vue/strongly-recommended',
     'eslint:recommended',
     'prettier',
-    'prettier/prettier',
   ],
 
   // add your custom rules here
