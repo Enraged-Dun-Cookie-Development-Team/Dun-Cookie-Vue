@@ -33,10 +33,11 @@
 // 用于NeteaseCloudMusicDataSource的特殊组件
 import PlatformHelper from '../../../common/platform/PlatformHelper';
 import Settings from '../../../common/Settings';
+import { DataItem } from "../../../common/DataItem";
 
 export default {
     name: "NeteaseCloudMusicItem",
-    props: { item:{ type:Object,required:true }, showImages:Boolean },
+    props: { item:{ type:DataItem,required:true }, showImage:Boolean },
     data() {
         return {
             settings: Settings,

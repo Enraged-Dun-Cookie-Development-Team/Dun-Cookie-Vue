@@ -68,6 +68,7 @@ class DataItem {
      * <p>
      * 当提供了该属性时会自动寻找特殊组件
      * 需要在components/timeline/items下新增组件，并且在popup/index.js注册组件(组件名为dataSource的dataType.typeName)
+     * @type {{[key: string]: unknown}}
      */
     componentData;
 

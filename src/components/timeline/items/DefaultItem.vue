@@ -55,10 +55,11 @@
 <script>
 import Settings from '../../../common/Settings';
 import PlatformHelper from '../../../common/platform/PlatformHelper';
+import { DataItem } from "../../../common/DataItem";
 
 export default {
     name: "DefaultItem",
-    props: { item:{ type:Object,required:true }, showImages:Boolean },
+    props: { item:{ type:DataItem,required:true }, showImage:Boolean },
     data() {
         return {
             settings: Settings,

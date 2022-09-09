@@ -32,7 +32,9 @@ async function transformDataSource(settings) {
     const sourceMap = {};
     const defList = await getDefaultDataSources();
     for (const dataName of settings.enableDataSources) {
-        sourceMap[dataName] = defList[dataName];
+        if (defList.hasOwnProperty(dataName)) {
+            sourceMap[dataName] = defList[dataName];
+        }
     }
     const promiseList = [];
     for (const info of settings.customDataSources) {
