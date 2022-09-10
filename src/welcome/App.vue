@@ -42,9 +42,10 @@
       </div>
       <el-divider />
       <div>
-        现在可以点击<el-button size="mini" @click="toGithub"> Github </el-button>查看项目源码。<span style="color: #23ade5"
-          >欢迎点star哦</span
-        >
+        现在可以点击
+        <el-button size="mini" @click="toGithub"> Github </el-button>
+        查看项目源码。
+        <span style="color: #23ade5">欢迎点star哦</span>
       </div>
       <el-divider />
       <Feedback />

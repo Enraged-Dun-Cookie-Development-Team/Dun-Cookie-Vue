@@ -261,7 +261,6 @@ export default {
         transform: translateY(-20px);
       }
 
-      // 这是一行注释
       100% {
         transform: scaleX(1);
       }
