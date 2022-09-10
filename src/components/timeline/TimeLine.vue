@@ -574,6 +574,8 @@ export default {
 };
 </script>
 <style lang="less">
+@import '../../theme/theme.less';
+
 .page-loading {
   .el-loading-spinner .el-loading-text {
     color: #ffba4b;
@@ -585,6 +587,7 @@ export default {
 }
 
 // 图片加载中
+
 img[lazy='loading'] {
   -webkit-animation: loading 1s linear 1s 5 alternate;
   animation: loading 1s linear infinite;
@@ -607,8 +610,6 @@ img[lazy='error'] {
     filter: brightness(20%);
   }
 }
-
-@import '../../theme/theme.less';
 
 .styleChange(@theme) {
   @ceobeLightColor: 'ceobeLightColor-@{theme}'; //小刻食堂主题亮色浅色
@@ -637,9 +638,9 @@ img[lazy='error'] {
 
   .card {
     width: 100%;
-    background-color: @@bgColor;
     border: @@timeline solid 1px;
     color: @@content;
+    background-color: @@bgColor;
     // .retweeted  {
     //   background-color: @@bgColor;
     //   border: @@timeline solid 1px;
@@ -681,8 +682,8 @@ img[lazy='error'] {
   }
 
   #content {
-    margin-top: 40px;
     position: fixed;
+    margin-top: 40px;
     width: 100%;
 
     .scrollTimeline {
@@ -697,12 +698,13 @@ img[lazy='error'] {
       position: relative;
 
       // 间隔阴影
+
       .content-timeline-shadow {
         position: absolute;
+        z-index: 10;
         width: 100%;
         height: 25px;
         background: linear-gradient(180deg, @@bgColor 50%, transparent);
-        z-index: 10;
       }
     }
 
@@ -713,11 +715,11 @@ img[lazy='error'] {
   }
 
   .online-speak {
-    padding: 3px;
     margin: 0 18px;
-    background-color: @@bgColor;
+    padding: 3px;
     border: @@timeline solid 1px;
     color: @@content;
+    background-color: @@bgColor;
     filter: blur(0);
     transition: 0.5s filter;
 
@@ -739,14 +741,15 @@ img[lazy='error'] {
       }
 
       // 升级内容样式
+
       .new-info-area {
-        cursor: pointer;
-        height: 100%;
         display: flex;
-        flex-direction: row;
-        align-items: center;
-        font-size: 1.3rem;
         justify-content: space-evenly;
+        align-items: center;
+        height: 100%;
+        font-size: 1.3rem;
+        cursor: pointer;
+        flex-direction: row;
 
         img {
           width: 100px;
@@ -754,23 +757,21 @@ img[lazy='error'] {
       }
 
       // 今日信息内容样式
-      .day-info {
-        .day-info-title {
-        }
 
+      .day-info {
         .day-info-content {
           display: flex;
-          flex-direction: column;
           justify-content: flex-start;
-          height: 100px;
           margin-right: 30px;
+          height: 100px;
+          flex-direction: column;
 
           .day-info-content-top {
-            width: 100%;
             display: flex;
-            flex-direction: row;
             justify-content: space-between;
             align-items: center;
+            width: 100%;
+            flex-direction: row;
 
             .day-info-content-top-card-area {
               font-size: 12px;
@@ -791,31 +792,28 @@ img[lazy='error'] {
                   font-size: 28px;
                 }
               }
-
-              .sane-info {
-              }
             }
           }
 
           .day-info-content-bottom {
-            margin-top: 5px;
-            width: 100%;
             display: flex;
             justify-content: space-around;
             align-items: flex-end;
+            margin-top: 5px;
+            width: 100%;
 
             & .day-info-content-bottom-card-area {
               display: flex;
-              align-items: center;
               justify-content: space-around;
+              align-items: center;
 
               .day-info-content-bottom-card {
-                height: 40px;
-                width: 70px;
-                overflow: hidden;
                 display: flex;
-                align-items: center;
                 justify-content: center;
+                align-items: center;
+                overflow: hidden;
+                width: 70px;
+                height: 40px;
 
                 img {
                   height: 100%;
@@ -846,21 +844,21 @@ img[lazy='error'] {
   }
 
   .el-timeline {
-    padding-left: 25px;
     overflow: auto;
+    margin-top: 10px;
     padding-top: 25px;
     padding-right: 20px;
+    padding-left: 25px;
     height: 415px;
-    margin-top: 10px;
     transition: all 0.5s;
 
     .highlight {
+      display: inline-block;
+      margin: 5px;
+      padding: 5px;
       color: @@ceobeColor;
       box-shadow: 0 0 10px 0 red;
       transform: scale(1.1);
-      padding: 5px;
-      margin: 5px;
-      display: inline-block;
     }
 
     &.tag {
@@ -890,14 +888,14 @@ img[lazy='error'] {
         position: absolute;
         top: -8px;
         right: 0;
-        background-color: @@bgColor;
-        color: @@content;
         border: @@btnBorder 1px solid;
+        color: @@content;
+        background-color: @@bgColor;
       }
 
       .to-url-btn:hover {
-        color: @@ceobeColor;
         border-color: @@ceobeLightColor;
+        color: @@ceobeColor;
         background-color: @@ceobeVeryLightColor;
       }
 
@@ -906,18 +904,19 @@ img[lazy='error'] {
         position: absolute;
         top: -8px;
         right: 50px;
-        background-color: @@bgColor;
-        color: @@content;
         border: @@btnBorder 1px solid;
+        color: @@content;
+        background-color: @@bgColor;
 
         // 需要特殊显示的数据源只提供复制按钮，跳转由数据源自行实现
+
         &.special-source {
           right: 0;
         }
 
         &:hover {
-          color: @@ceobeColor;
           border-color: @@ceobeLightColor;
+          color: @@ceobeColor;
           background-color: @@ceobeVeryLightColor;
         }
       }
@@ -926,12 +925,14 @@ img[lazy='error'] {
         right: 100px;
 
         // 需要特殊显示的数据源只提供复制按钮，跳转由数据源自行实现
+
         &.special-source {
           right: 50px;
         }
       }
 
       // 需要特殊显示的数据源
+
       &.special-source {
         .el-card__body {
           padding: 0 !important;
@@ -944,10 +945,10 @@ img[lazy='error'] {
     }
 
     .el-timeline-item__timestamp {
-      color: @@subTitle;
-      margin-left: 20px;
       margin-bottom: 15px;
+      margin-left: 20px;
       font-size: 1rem;
+      color: @@subTitle;
     }
 
     .el-timeline-item__node {
@@ -987,8 +988,8 @@ img[lazy='error'] {
   position: fixed;
   top: 40px;
   left: 0;
+  z-index: 11;
   width: 100%;
   height: 120px;
-  z-index: 11;
 }
 </style>

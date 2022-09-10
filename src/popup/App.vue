@@ -514,12 +514,12 @@ export default {
     /deep/ a {
       color: @@content !important;
     }
-
-    background-color: @@bgColor;
+    overflow: auto;
     width: 700px;
     height: 599px;
-    overflow: auto;
     font-size: 14px;
+
+    background-color: @@bgColor;
   }
 
   .color-blue {
@@ -537,19 +537,19 @@ export default {
 
   .title-area {
     position: fixed;
-    width: calc(100% - 32px);
-    height: 40px;
-    line-height: 40px;
     top: 0;
     z-index: 9999;
     display: flex;
-    padding: 0 14px 0 18px;
     justify-content: space-between;
     align-items: flex-start;
+    padding: 0 14px 0 18px;
+    width: calc(100% - 32px);
+    height: 40px;
     font-size: 1rem;
     color: @@ceobeColor;
-    user-select: none;
     background: @@ceobeDarkColor;
+    line-height: 40px;
+    user-select: none;
 
     .version {
       text-align: left;
@@ -565,19 +565,19 @@ export default {
       }
 
       .count-down-area {
-        cursor: pointer;
-        margin-right: 10px;
-        text-align: right;
-        height: 40px;
         overflow: hidden;
+        margin-right: 10px;
         padding: 0 10px 0 0;
+        height: 40px;
         border-radius: 3px;
+        text-align: right;
         transition: all 0.5s;
+        cursor: pointer;
 
         &:hover {
-          background: @@bgColor;
           height: auto;
-          box-shadow: 0 0 20px 0px;
+          background: @@bgColor;
+          box-shadow: 0 0 20px 0;
         }
       }
     }
@@ -585,13 +585,13 @@ export default {
 
   .top-btn {
     position: fixed;
+    right: -40px;
     bottom: 30px;
     z-index: 9999;
-    opacity: 1;
-    right: -40px;
-    transition: 0.3s all;
-    background-color: @@ceobeColor;
     border-color: @@ceobeColor;
+    background-color: @@ceobeColor;
+    opacity: 1;
+    transition: 0.3s all;
 
     &.top-btn-show {
       right: 20px;
@@ -618,24 +618,26 @@ export default {
   }
 
   // 快捷连接
+
   .drawer-btn-area-quickJump {
     display: flex;
     overflow-x: scroll;
-    height: 100px;
     margin: 0 10px;
+    height: 100px;
 
     .quickJump-img-area {
-      flex-shrink: 0;
-      max-width: 350px;
-      margin-right: 10px;
-      border-radius: 5px;
-      overflow: hidden;
-      border: 1px solid #dcdfe6;
       position: relative;
+      overflow: hidden;
+      margin-right: 10px;
+      max-width: 350px;
+      border: 1px solid #dcdfe6;
+      border-radius: 5px;
+      flex-shrink: 0;
 
       // display: flex;
       // flex-wrap: wrap;
       // align-items: center;
+
       &:hover {
         img {
           filter: blur(30px) brightness(0.1);
@@ -654,18 +656,18 @@ export default {
 
       .author {
         position: absolute;
-        width: 100%;
-        z-index: 1;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -50%);
+        z-index: 1;
+        width: 100%;
         text-align: center;
+        transform: translate(-50%, -50%);
         pointer-events: none;
 
         & p {
-          opacity: 0;
           font-size: 20px;
           color: #fff;
+          opacity: 0;
         }
       }
     }
@@ -690,9 +692,10 @@ export default {
   }
 
   // 标签栏
+
   /deep/ .el-tabs {
-    height: 30px;
     margin: 0 10px;
+    height: 30px;
 
     .el-tabs__nav-prev,
     .el-tabs__nav-next {
@@ -701,8 +704,8 @@ export default {
     }
 
     .el-tabs__header {
-      margin-bottom: 5px;
       margin-top: 15px;
+      margin-bottom: 5px;
 
       .title-img {
         width: 30px;
@@ -732,6 +735,7 @@ export default {
   }
 
   // 隐藏二级菜单
+
   /deep/ .ttb {
     background-color: @@bgColor;
 
@@ -740,13 +744,13 @@ export default {
     }
 
     .el-divider__text {
-      background-color: @@bgColor;
       color: @@setLarge;
+      background-color: @@bgColor;
     }
 
     .el-button {
-      background-color: @@bgColor;
       border: @@btnBorder 1px solid;
+      background-color: @@bgColor;
 
       .radius {
         background-color: #fff;
@@ -754,14 +758,15 @@ export default {
     }
 
     // 单独对刷新设置设颜色
+
     .el-button--primary {
-      background-color: @@ceobeColor;
       border: @@ceobeColor 1px solid;
+      background-color: @@ceobeColor;
     }
 
     .el-button:hover {
-      color: @@ceobeColor;
       border-color: @@ceobeLightColor;
+      color: @@ceobeColor;
       background-color: @@ceobeVeryLightColor;
     }
 
@@ -777,8 +782,8 @@ export default {
 
     .el-input-number__increase,
     .el-input-number__decrease {
-      background-color: @@numberInput;
       color: @@setSmall;
+      background-color: @@numberInput;
     }
 
     .el-input-number__increase {
@@ -795,9 +800,9 @@ export default {
     }
 
     .el-input__inner {
-      background-color: @@bgColor;
-      color: @@setLarge;
       border: @@btnBorder 1px solid;
+      color: @@setLarge;
+      background-color: @@bgColor;
     }
 
     .el-input__inner:focus {
@@ -808,8 +813,8 @@ export default {
 
 .dark {
   .styleChange(dark);
-  background: #22272e;
   height: 100vh;
+  background: #22272e;
 }
 
 .light {
@@ -836,8 +841,8 @@ export default {
   }
 
   .el-timeline {
-    padding-left: 20px !important;
     padding-right: 10px !important;
+    padding-left: 20px !important;
   }
 
   .el-timeline-item__timestamp {
@@ -873,8 +878,8 @@ export default {
     flex-wrap: wrap;
 
     .el-button {
-      width: 40% !important;
       margin: 3px !important;
+      width: 40% !important;
     }
   }
 
@@ -901,10 +906,6 @@ body {
 
 ::-webkit-scrollbar {
   width: 0 !important;
-}
-
-::-webkit-scrollbar {
-  width: 0 !important;
   height: 0;
 }
 
@@ -914,22 +915,24 @@ body {
   margin-right: 30px;
 
   p {
-    margin: 0px;
+    margin: 0;
   }
 
   // 菜单按钮
+
   drawer {
     color: #dd558a;
   }
 
   // 设置按钮
+
   setting {
     color: #dd55c4;
   }
 
   .online-title-img {
-    height: 100px;
     margin-right: 10px;
+    height: 100px;
 
     &.radius {
       border-radius: 4px;

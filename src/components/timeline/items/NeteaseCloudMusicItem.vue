@@ -56,37 +56,39 @@ export default {
     top: 0;
     left: 0;
     width: 100%;
-    filter: blur(70px) brightness(50%);
     height: 150px;
+    filter: blur(70px) brightness(50%);
     object-fit: cover;
   }
 
   .content-card {
+    position: absolute;
     top: 0;
     left: 0;
-    position: absolute;
-    height: 100%;
     width: 100%;
+    height: 100%;
     // 左边 图片大小在此控制
+
     .record-area {
       position: absolute;
-      height: 120px;
       top: 15px;
       left: 50px;
       width: 120px;
+      height: 120px;
       // 动画效果
+
       .record-area-record {
-        transform: perspective(500px);
-        transition: transform 0.5s ease, opacity 0.5s ease;
-        height: 100%;
         position: absolute;
         left: 0;
         z-index: 2;
         overflow: hidden;
+        height: 100%;
+        transition: transform 0.5s ease, opacity 0.5s ease;
+        transform: perspective(500px);
 
         .record-image {
-          height: 100%;
           overflow: hidden;
+          height: 100%;
         }
 
         &:after {
@@ -111,56 +113,58 @@ export default {
       .record-image-back {
         position: absolute;
         top: 5px;
+        left: 35px;
         height: 110px;
         transition: all 0.5s;
-        left: 35px;
       }
     }
 
     // 右边
+
     .record-info {
-      transition: all 0.5s;
-      font-family: Geometos, 'Sans-Regular', 'SourceHanSansCN-Regular', YaHei, serif;
-      font-size: 1.8rem;
-      color: #fff;
-      width: 380px;
-      text-align: center;
       position: absolute;
       top: 60px;
-      padding: 10px 0;
       right: 10px;
+      padding: 10px 0;
+      width: 380px;
+      font-size: 1.8rem;
+      font-family: Geometos, 'Sans-Regular', 'SourceHanSansCN-Regular', YaHei, serif;
+      text-align: center;
+      color: #fff;
+      transition: all 0.5s;
     }
 
     .record-size {
-      transition: all 0.5s;
       position: absolute;
-      bottom: 17px;
       right: 330px;
+      bottom: 17px;
+      font-size: 1.2rem;
       font-family: Geometos, 'Sans-Regular', 'SourceHanSansCN-Regular', YaHei, serif;
       color: #fff;
-      font-size: 1.2rem;
       opacity: 0;
+      transition: all 0.5s;
     }
 
     .record-btn {
-      transition: all 0.5s;
-      font-family: Geometos, 'Sans-Regular', 'SourceHanSansCN-Regular', YaHei, serif;
-      font-size: 1.2rem;
-      right: 15px;
       position: absolute;
+      right: 15px;
       bottom: 15px;
-      color: #fff;
-      border: 1px solid #fff;
-      padding: 3px 5px;
-      white-space: nowrap;
-      width: 18px;
       overflow: hidden;
+      padding: 3px 5px;
+      width: 18px;
+      font-size: 1.2rem;
+      font-family: Geometos, 'Sans-Regular', 'SourceHanSansCN-Regular', YaHei, serif;
+      border: 1px solid #fff;
       border-radius: 4px;
+      white-space: nowrap;
+      color: #fff;
+      transition: all 0.5s;
     }
   }
 
   &:hover {
     // 动画效果
+
     .record-area {
       .record-area-record {
         box-shadow: 0 7px 15px 4px rgb(0 0 0 / 30%);
@@ -180,13 +184,14 @@ export default {
 
     .content-card {
       // 右边
+
       .record-info {
-        font-size: 1.5rem;
-        background: #454545;
-        text-align: center;
         top: 30px;
         right: -10px;
+        font-size: 1.5rem;
         border-radius: 4px 0 0 4px;
+        text-align: center;
+        background: #454545;
       }
 
       .record-size {

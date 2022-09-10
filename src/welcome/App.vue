@@ -95,29 +95,36 @@ export default {
 
 <style lang="less" scoped>
 #app {
-  max-width: 600px;
   margin: auto;
+  max-width: 600px;
+
   .img {
     width: 50px;
   }
+
   .blue {
-    color: #23ade5;
     font-size: 1.2rem;
+    color: #23ade5;
   }
+
   .version {
     font-size: 1.5rem;
   }
+
   .info {
     text-align: center;
+
     .info-title {
       font-size: 1.3rem;
     }
+
     .info-time {
+      margin: 10px 0;
       font-size: 0.8rem;
       color: #aaa;
-      margin: 10px 0;
     }
   }
+
   .btn-area {
     width: 100%;
     text-align: right;
@@ -126,15 +133,18 @@ export default {
   .checkbox-area {
     display: flex;
     align-items: center;
+
     .iconimg {
       margin-right: 5px;
       width: 16px;
     }
   }
+
   /deep/ .el-collapse {
     border-top: 0;
     border-bottom: 0;
   }
+
   /deep/ .el-collapse-item__header {
     border-bottom: 0;
   }

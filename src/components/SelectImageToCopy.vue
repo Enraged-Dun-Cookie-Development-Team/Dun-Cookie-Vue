@@ -115,19 +115,19 @@ export default {
 .title-area {
   display: flex;
   justify-content: space-between;
-  margin: 10px auto;
   align-items: center;
+  margin: 10px auto;
 }
 
 .multi-img {
-  max-width: 700px;
-  width: 100%;
-  margin: auto;
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  flex-direction: row;
   justify-content: space-between;
+  align-items: flex-start;
+  margin: auto;
+  width: 100%;
+  max-width: 700px;
+  flex-wrap: wrap;
+  flex-direction: row;
 
   .multi-img-area {
     position: relative;
@@ -135,21 +135,21 @@ export default {
     max-width: 33%;
 
     &.hasImage::after {
-      content: '\e6da';
       position: absolute;
       top: 5px;
       left: 5px;
       width: 20px;
       height: 20px;
-      font-family: element-icons !important;
-      background: #23ade5;
-      text-align: center;
-      line-height: 20px;
-      border-radius: 3px;
       font-size: 19px;
+      font-family: element-icons !important;
       font-weight: 900;
-      color: #fff;
       border: 1px solid #fff;
+      border-radius: 3px;
+      text-align: center;
+      color: #fff;
+      background: #23ade5;
+      content: '\e6da';
+      line-height: 20px;
     }
 
     .img {

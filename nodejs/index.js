@@ -1,7 +1,7 @@
 import DunInfo from '../src/common/sync/DunInfo.js';
 import { Worker } from 'worker_threads';
 import CardList from '../src/common/sync/CardList';
-import ws from 'ws';
+import WS from 'ws';
 // import fs from "fs"
 
 const worker = new Worker('../src/background/index.js', {
@@ -30,7 +30,7 @@ let aliveInterval; // websocket心跳检测计时器
 
 // 创建了一个客户端的socket,然后让这个客户端去连接服务器的socket
 function wsInit() {
-  let sock = new ws(ws_url);
+  let sock = new WS(ws_url);
   sock.on('open', (_) => {
     console.log('与服务端建立链接成功');
     // 初始化重连次数

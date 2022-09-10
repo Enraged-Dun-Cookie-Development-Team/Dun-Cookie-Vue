@@ -109,30 +109,33 @@ export default {
   .margintb {
     margin: 10px 0 0 0;
   }
+
   .wrapper-content {
     white-space: break-spaces;
   }
+
   .card-retweeted {
     padding: 10px;
-    border-radius: 3px;
     width: auto;
+    border-radius: 3px;
   }
+
   .img-area {
+    position: relative;
+    overflow: hidden;
     width: 100%;
     height: 150px;
-    overflow: hidden;
-    position: relative;
     cursor: pointer;
 
     .multi-img {
-      max-width: 700px;
-      width: 100%;
-      margin: auto;
       display: flex;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      flex-direction: row;
       justify-content: space-between;
+      align-items: flex-start;
+      margin: auto;
+      width: 100%;
+      max-width: 700px;
+      flex-wrap: wrap;
+      flex-direction: row;
 
       .multi-img-area {
         position: relative;
@@ -142,10 +145,10 @@ export default {
     }
 
     .one-img {
-      max-width: 700px;
-      width: 100%;
-      margin: auto;
       position: relative;
+      margin: auto;
+      width: 100%;
+      max-width: 700px;
     }
 
     .multi-img-area,
@@ -163,22 +166,23 @@ export default {
     }
 
     .img {
-      border-radius: 4px;
       width: 100%;
+      border-radius: 4px;
     }
 
     // 图片操作按钮
+
     .img-btn {
       position: absolute;
-      z-index: 1;
-      right: 6px;
       top: 2px;
+      right: 6px;
+      z-index: 1;
       width: 26px;
       height: 20px;
+      border-radius: 3px;
       text-align: center;
       background: #fff;
       line-height: 16px;
-      border-radius: 3px;
 
       i {
         font-size: 12px;
@@ -190,13 +194,13 @@ export default {
     }
 
     &::before {
-      content: ' ';
       position: absolute;
       bottom: 0;
-      height: 50px;
-      width: 100%;
-      background: linear-gradient(0, @@bgColor, transparent);
       z-index: 1;
+      width: 100%;
+      height: 50px;
+      background: linear-gradient(0deg, @@bgColor, transparent);
+      content: ' ';
     }
 
     &.show-all {

@@ -146,8 +146,8 @@ export default {
 @ceobeDarkColor: #353535; // 小刻食堂主题暗色
 
 * {
-  padding: 0;
   margin: 0;
+  padding: 0;
 }
 
 #app {
@@ -155,33 +155,33 @@ export default {
   user-select: none;
 
   .title {
-    width: 100%;
-    text-align: center;
-    font-size: 34px;
-    color: @ceobeColor;
+    position: relative;
     margin-bottom: 10px;
     padding-bottom: 10px;
-    position: relative;
+    width: 100%;
+    font-size: 34px;
+    text-align: center;
+    color: @ceobeColor;
 
     &::after {
       position: absolute;
-      width: 200px;
-      bottom: 0px;
+      bottom: 0;
       left: calc(50% - 100px);
-      height: 2px;
-      background: linear-gradient(90deg, #fff, @ceobeColor, #fff);
-      border-radius: 50%;
-      content: '';
       z-index: 0;
+      width: 200px;
+      height: 2px;
+      border-radius: 50%;
+      background: linear-gradient(90deg, #fff, @ceobeColor, #fff);
       transition: all 0.5s;
+      content: '';
     }
   }
 
   .flip-clock {
+    margin-top: 20px;
+    width: 100%;
     text-align: center;
     user-select: none;
-    width: 100%;
-    margin-top: 20px;
 
     .M-Flipper {
       margin: 0 6px;
@@ -189,21 +189,21 @@ export default {
 
     em {
       display: inline-block;
-      line-height: 115px;
+      margin-right: 15px;
+      margin-left: 0;
+      height: 10px;
       font-size: 20px;
+      color: @ceobeLightColor;
+      line-height: 115px;
       font-style: normal;
       vertical-align: top;
-      color: @ceobeLightColor;
-      margin-left: 0px;
-      margin-right: 15px;
-      height: 10px;
     }
   }
 
   .end-flip-clock {
     width: 100%;
-    text-align: center;
     font-size: 16px;
+    text-align: center;
 
     .info {
       margin-top: 20px;

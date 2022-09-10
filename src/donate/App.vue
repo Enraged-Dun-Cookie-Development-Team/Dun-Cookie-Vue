@@ -92,55 +92,65 @@ export default {
     /deep/ a {
       color: @@content!important;
     }
+    margin: auto;
 
     width: 600px;
     min-width: 600px;
-    margin: auto;
     // .is-always-shadow {
     //   box-shadow: 0 2px 12px 0 @@shadow;
     // }
+
     .box-card {
-      background-color: @@bgColor;
       border: @@btnBorder 1px solid;
+      background-color: @@bgColor;
 
       .el-divider {
         background-color: @@btnBorder;
       }
+
       .img {
         width: 50px;
       }
+
       .version {
         font-size: 1.5rem;
         color: @@setLarge;
       }
+
       .info {
         text-align: center;
+
         .info-title {
           font-size: 1.3rem;
           color: @@setLarge;
         }
+
         .info-time {
+          margin: 10px 0;
           font-size: 0.8rem;
           color: #aaa;
-          margin: 10px 0;
         }
       }
+
       .el-tabs--border-card {
         border: @@btnBorder 1px solid;
         box-shadow: none;
 
         /deep/.el-tabs__header {
-          background-color: @@numberInput;
           border-bottom: 1px solid @@btnBorder;
+          background-color: @@numberInput;
         }
+
         /deep/.el-tabs__item {
           color: @@subTitle;
         }
+
         /deep/.el-tabs__item.is-active {
-          background-color: @@bgColor;
           border-right-color: @@btnBorder;
           border-left-color: @@btnBorder;
+          background-color: @@bgColor;
         }
+
         /deep/.el-tabs__content {
           background-color: @@bgColor;
         }
@@ -149,70 +159,81 @@ export default {
       /deep/.el-input-number.is-controls-right .el-input-number__increase {
         border-bottom: 1px solid @@btnBorder;
       }
+
       /deep/.el-input-number__increase,
       /deep/.el-input-number__decrease {
-        background-color: @@numberInput;
         border-left: @@btnBorder 1px solid;
         color: @@setSmall;
+        background-color: @@numberInput;
       }
+
       /deep/.el-input-number__increase:hover + .el-input > .el-input__inner,
       /deep/.el-input-number__decrease:hover + .el-input-number__increase + .el-input > .el-input__inner {
         border: #409eff 1px solid;
       }
+
       /deep/.el-input__inner {
-        background-color: @@bgColor;
-        color: @@setLarge;
         border: @@btnBorder 1px solid;
+        color: @@setLarge;
+        background-color: @@bgColor;
       }
+
       /deep/.el-input__inner:focus {
         border-color: #409eff;
       }
+
       /deep/.el-form-item__label,
       /deep/.el-radio,
       /deep/.el-checkbox {
         color: @@setSmall;
       }
+
       .lowfrequency-time-picker {
         width: 100%;
       }
+
       .el-radio__input.is-checked + .el-radio__label {
         color: #409eff;
       }
+
       .btn-area {
+        margin-top: 10px;
         width: 100%;
         text-align: center;
-        margin-top: 10px;
       }
 
       .checkbox-area {
         display: flex;
         align-items: center;
+
         .iconimg {
           margin-right: 5px;
           width: 16px;
         }
       }
+
       /deep/.footer {
         color: @@setLarge;
       }
     }
   }
+
   .white {
     background-color: #fff;
   }
 }
 
 .background {
-  transition: background 0.5s;
-  height: calc(100vh - 16px);
   overflow: auto;
+  height: calc(100vh - 16px);
+  transition: background 0.5s;
 }
 
 .dark {
   .styleChange(dark);
   margin: -8px;
-  background-color: #22272e;
   border: #22272e 8px solid;
+  background-color: #22272e;
 }
 
 .light {

@@ -107,38 +107,39 @@ export default {
 @ceobeVeryLightColor: #fff7ec; //小刻食堂主题非常浅色
 @ceobeColor: #ffba4b; //小刻食堂主题亮色
 @ceobeDarkColor: #353535; // 小刻食堂主题暗色
+
 .M-Flipper {
-  display: inline-block;
   position: relative;
+  display: inline-block;
   width: 40px;
   height: 65px;
-  line-height: 65px;
+  font-size: 50px;
+  font-family: 'Helvetica Neue';
   border: solid 1px @ceobeColor;
   border-radius: 10px;
-  background: #fff;
-  font-size: 50px;
-  color: #fff;
-  box-shadow: 0 0 6px rgba(71, 42, 4, 0.5);
   text-align: center;
-  font-family: 'Helvetica Neue';
+  color: #fff;
+  background: #fff;
+  box-shadow: 0 0 6px rgba(71, 42, 4, 0.5);
+  line-height: 65px;
 }
 
 .M-Flipper .digital:before,
 .M-Flipper .digital:after {
-  content: '';
   position: absolute;
-  left: 0;
   right: 0;
-  background: @ceobeColor;
+  left: 0;
   overflow: hidden;
+  background: @ceobeColor;
+  content: '';
   box-sizing: border-box;
 }
 
 .M-Flipper .digital:before {
   top: 0;
   bottom: 50%;
-  border-radius: 8px 8px 0 0;
   border-bottom: solid 1px @ceobeLightColor;
+  border-radius: 8px 8px 0 0;
 }
 
 .M-Flipper .digital:after {
@@ -149,6 +150,7 @@ export default {
 }
 
 /*向下翻*/
+
 .M-Flipper.down .front:before {
   z-index: 3;
 }
@@ -176,6 +178,7 @@ export default {
 }
 
 /*向上翻*/
+
 .M-Flipper.up .front:after {
   z-index: 3;
 }

@@ -27,7 +27,6 @@ module.exports = {
     'no-descending-specificity': null,
     'function-url-quotes': 'always',
     'color-hex-length': 'short', //允许缩写颜色
-    'rule-empty-line-before': 'always', //样式前空行
     'font-family-no-missing-generic-family-keyword': null, //允许在字体系列名称列表中缺少通用系列
     'property-no-unknown': true,
     'selector-class-pattern': null,

@@ -116,16 +116,16 @@ export default {
   background: @ceobeColor;
 
   .title {
-    margin: 10px;
     display: flex;
-    align-content: center;
+    justify-content: space-between;
     align-items: center;
+    margin: 10px;
+    width: 500px;
+    font-size: 40px;
+    color: #fff;
+    align-content: center;
     flex-wrap: nowrap;
     flex-direction: row;
-    font-size: 40px;
-    width: 500px;
-    color: #ffffff;
-    justify-content: space-between;
 
     .img {
       height: 65px;
@@ -134,16 +134,16 @@ export default {
 }
 
 .count-down-area {
-  margin: 30px 30px 0 30px;
   display: flex;
+  justify-content: space-around;
+  margin: 30px 30px 0 30px;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-around;
 
   .box-card {
-    height: 180px;
-    min-width: 48%;
     margin-bottom: 30px;
+    min-width: 48%;
+    height: 180px;
   }
 }
 </style>

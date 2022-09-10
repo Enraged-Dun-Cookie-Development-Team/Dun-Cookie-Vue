@@ -625,23 +625,24 @@ export default {
 @ceobeDarkColor: #353535; // 小刻食堂主题暗色
 
 #app {
-  height: 100vh;
-  width: 100vw;
   overflow: hidden;
+  width: 100vw;
+  height: 100vh;
 }
 
 //loading界面
+
 .loading-title-area {
-  height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  height: 100vh;
   flex-direction: column;
   user-select: none;
 
   .loading-title {
-    font-size: 2rem;
     margin-top: 50px;
+    font-size: 2rem;
   }
 
   .loading-image {
@@ -650,20 +651,22 @@ export default {
 }
 
 //顶部区域
+
 .head-area {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: @ceobeColor;
-  color: #fff;
-  height: 100px;
   padding: 0 20px;
+  height: 100px;
+  color: #fff;
+  background: @ceobeColor;
 
   // 头部左侧logo和版本信息
+
   .head {
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     user-select: none;
 
     .img {
@@ -687,16 +690,17 @@ export default {
   }
 
   // 头部右侧蹲饼信息和时间
+
   .info {
-    text-align: center;
-    color: #ffffff;
     position: relative;
+    text-align: center;
+    color: #fff;
 
     .info-title {
-      font-size: 1.3rem;
       display: flex;
-      flex-direction: column;
       align-items: flex-end;
+      font-size: 1.3rem;
+      flex-direction: column;
       user-select: none;
 
       &:hover + .more-cookie {
@@ -714,18 +718,18 @@ export default {
     }
 
     .more-cookie {
-      border-radius: 3px;
       position: absolute;
-      right: -10px;
-      background: @ceobeColor;
-      color: #ffffff;
       top: 90px;
-      text-align: right;
-      font-size: 0.95rem;
+      right: -10px;
+      z-index: 999;
       padding: 10px;
+      font-size: 0.95rem;
+      border-radius: 3px;
+      text-align: right;
+      color: #fff;
+      background: @ceobeColor;
       opacity: 0;
       transition: all 0.5s;
-      z-index: 999;
 
       .info-time {
         margin-top: 10px;
@@ -735,25 +739,27 @@ export default {
 }
 
 // 下部分区域
+
 .body-area {
   .body-menu-big {
-    height: calc(100vh - 100px);
     position: relative;
+    height: calc(100vh - 100px);
 
     //左右菜单样式
+
     .body-menu-big-left,
     .body-menu-big-right {
       position: absolute;
-      left: calc(25vw - 150px);
       top: calc(50vh - 100px - 150px);
-      width: 300px;
-      height: 300px;
+      left: calc(25vw - 150px);
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
-      flex-wrap: nowrap;
+      width: 300px;
+      height: 300px;
       transition: 1s all;
+      flex-direction: column;
+      flex-wrap: nowrap;
 
       &.active {
         top: 0;
@@ -767,8 +773,8 @@ export default {
 
           span:first-child,
           span:last-child {
-            font-size: 3rem;
             bottom: 10px;
+            font-size: 3rem;
           }
 
           span:last-child {
@@ -777,45 +783,45 @@ export default {
 
           &.system:after,
           &.view:after {
-            font-size: 4rem;
-            right: 6px;
             top: 6px;
+            right: 6px;
+            font-size: 4rem;
           }
         }
       }
 
       &.hide {
+        z-index: -1;
         width: 0;
         height: 0;
         opacity: 0;
-        z-index: -1;
       }
 
       .menu-card {
+        position: relative;
+        display: flex;
+        overflow: hidden;
         width: 100%;
         height: 100%;
-        cursor: pointer;
+        border: 2px solid #ccc;
         border-radius: 3px;
-        border: 2px solid #cccccc;
-        display: flex;
+        transition: all 1s;
+        cursor: pointer;
         flex-direction: column;
         user-select: none;
-        position: relative;
-        overflow: hidden;
-        transition: all 1s;
         box-sizing: border-box;
 
         &.system:after,
         &.view:after {
-          font-family: element-icons !important;
-          content: '\e6ca';
-          font-size: 15rem;
           position: absolute;
-          right: -40px;
           top: -70px;
-          opacity: 0.2;
+          right: -40px;
           z-index: 0;
+          font-size: 15rem;
+          font-family: element-icons !important;
+          opacity: 0.2;
           transition: all 1s;
+          content: '\e6ca';
         }
 
         &.view:after {
@@ -824,39 +830,40 @@ export default {
 
         span:first-child,
         span:last-child {
-          font-size: 5.5rem;
-          color: #fff;
-          font-family: 'SimHei', -apple-system, BlinkMacSystemFont, 'Microsoft YaHei', 'Segoe UI', 'Roboto',
-            'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-          text-shadow: 0 0 1rem #312f2f, 0 0 0.5rem #312f2f, 0 0 0.25rem #312f2f;
           position: absolute;
           bottom: 90px;
           left: 25px;
           z-index: 2;
+          font-size: 5.5rem;
+          font-family: 'SimHei', -apple-system, BlinkMacSystemFont, 'Microsoft YaHei', 'Segoe UI', 'Roboto',
+            'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+          color: #fff;
+          text-shadow: 0 0 1rem #312f2f, 0 0 0.5rem #312f2f, 0 0 0.25rem #312f2f;
           transition: all 1s;
         }
 
         span:last-child {
-          font-size: 4rem;
-          left: 95px;
           bottom: 20px;
+          left: 95px;
           z-index: 1;
+          font-size: 4rem;
         }
       }
     }
 
     .body-menu-big-right {
-      left: calc(75vw - 150px);
       top: calc(50vh - 100px - 150px);
+      left: calc(75vw - 150px);
     }
   }
 
   // 返回按钮样式
+
   .back-btn {
-    font-size: 2.5rem;
     position: absolute;
-    left: 20px;
     top: 130px;
+    left: 20px;
+    font-size: 2.5rem;
     opacity: 1;
     transition: all 0.7s;
 
@@ -884,18 +891,17 @@ export default {
     }
 
     button {
-      width: 240px;
-      height: 60px;
+      position: relative;
       margin: auto 3px;
       padding: 5px 10px;
-      cursor: pointer;
+      width: 240px;
+      height: 60px;
 
       font-size: 1.6em;
-      letter-spacing: 1px;
-      color: #222;
       border-radius: 0;
-
-      position: relative;
+      color: #222;
+      cursor: pointer;
+      letter-spacing: 1px;
 
       &.purple {
         background: #d67ada;
@@ -910,16 +916,16 @@ export default {
       }
 
       &:after {
-        content: '';
-        background: linear-gradient(to right, #222 0%, #222 50%, #fff 50%, #fff 100%);
-        background-position: 100% 0;
-        background-size: 200% 100%;
-        width: 100%;
-        height: 5px;
         position: absolute;
         top: 100%;
         left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(to right, #222 0%, #222 50%, #fff 50%, #fff 100%);
+        background-position: 100% 0;
+        background-size: 200% 100%;
         transition: all 0.5s;
+        content: '';
       }
 
       &:hover {
@@ -935,15 +941,17 @@ export default {
   }
 
   // 内容样式
+
   .body-menu-content {
     position: absolute;
     top: 150px;
     left: 10vw;
+    overflow: auto;
     width: 80vw;
     height: calc(100vh - 250px);
-    overflow: auto;
 
     // 卡片列表间隔及其第一个和最后一个的间距
+
     .body-menu-content-card {
       margin: 20px 0;
 
@@ -957,23 +965,26 @@ export default {
     }
 
     //卡片
+
     .body-menu-content-card,
     .body-menu-content-line {
       position: relative;
 
       //卡片标题
+
       .content-card-title,
       .content-line-title {
         position: absolute;
         top: -9px;
-        font-size: 1rem;
-        background: #fff;
         left: 20px;
         padding: 0 10px;
+        font-size: 1rem;
         color: #222;
+        background: #fff;
       }
 
       //描述标题
+
       .content-card-description,
       .content-line-description {
         position: absolute;
@@ -986,12 +997,13 @@ export default {
       }
 
       //卡片内容
+
       .content-card-content,
       .content-line-content {
-        border-radius: 3px;
-        border: 1px solid @ceobeColor;
-        padding: 20px;
         margin: 10px 0;
+        padding: 20px;
+        border: 1px solid @ceobeColor;
+        border-radius: 3px;
         color: @ceobeColor;
 
         &.flex-between {
@@ -1017,13 +1029,14 @@ export default {
     }
 
     //卡片内画线样式
+
     .body-menu-content-line {
       margin-top: 20px;
 
       .content-line-content {
+        border-right: none;
         border-bottom: none;
         border-left: none;
-        border-right: none;
         border-radius: 0;
       }
 
@@ -1036,6 +1049,7 @@ export default {
   }
 
   //表单
+
   .form {
     .system,
     .view {
@@ -1044,13 +1058,13 @@ export default {
 
     .flex {
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
 
       .body-menu-content-card {
-        width: 48%;
-        margin-bottom: 0px;
         margin-top: 10px;
+        margin-bottom: 0;
+        width: 48%;
 
         .content-card-content {
           margin: 0;
@@ -1059,9 +1073,9 @@ export default {
     }
 
     .btn-area {
+      margin-top: 10px;
       width: 100%;
       text-align: center;
-      margin-top: 10px;
     }
 
     .checkbox-group-area {
@@ -1088,42 +1102,43 @@ export default {
 }
 
 //正常运行中动画
+
 .info-animate {
-  border-radius: 3px;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background: #312f2f;
-  color: #fff;
   padding: 16px 30px;
-  font-size: 1.6rem;
   width: 300px;
+  font-size: 1.6rem;
+  border-radius: 3px;
+  color: #fff;
+  background: #312f2f;
 
   .animate {
     position: relative;
     width: 30px;
     height: 30px;
+    font-weight: bold;
     text-align: center;
     line-height: 30px;
-    font-weight: bold;
 
     &::after {
       position: absolute;
-      left: -5px;
       top: -2px;
+      left: -5px;
       width: 40px;
       height: 40px;
-      content: ' ';
       background: url('/assets/image/animate.png');
       background-size: contain;
+      content: ' ';
       animation: rotate infinite 6s ease-out;
     }
   }
 
   .animate-text-area {
-    width: 80%;
     overflow: hidden;
     margin-left: 20px;
+    width: 80%;
     font-size: 18px;
     color: #7d7d7c;
     user-select: none;
@@ -1144,12 +1159,14 @@ export default {
 }
 
 // 开关按钮
+
 /deep/ .el-switch.is-checked .el-switch__core {
   border-color: @ceobeColor;
   background-color: @ceobeColor;
 }
 
 // 单选框
+
 /deep/ .el-radio__input.is-checked .el-radio__inner {
   border-color: @ceobeColor;
   background: @ceobeColor;
@@ -1164,10 +1181,11 @@ export default {
 }
 
 // 多选框
+
 /deep/ .el-checkbox__input.is-checked .el-checkbox__inner,
 .el-checkbox__input.is-indeterminate .el-checkbox__inner {
-  background-color: @ceobeColor;
   border-color: @ceobeColor;
+  background-color: @ceobeColor;
 }
 
 /deep/ .el-checkbox__inner:hover {
@@ -1183,6 +1201,7 @@ export default {
 }
 
 // 拖拉条
+
 /deep/ .el-slider__bar {
   background-color: @ceobeColor;
 }
@@ -1192,6 +1211,7 @@ export default {
 }
 
 // 计数器
+
 /deep/ .el-input.is-active .el-input__inner,
 /deep/ .el-input__inner:focus {
   border-color: @ceobeColor;
@@ -1203,19 +1223,16 @@ export default {
 }
 
 // 按钮
+
 .el-button:focus,
 .el-button:hover {
-  color: @ceobeColor;
   border-color: @ceobeLightColor;
+  color: @ceobeColor;
   background-color: @ceobeVeryLightColor;
 }
 
 .body-menu-content {
   scrollbar-width: none;
-}
-
-::-webkit-scrollbar {
-  width: 0 !important;
 }
 
 ::-webkit-scrollbar {

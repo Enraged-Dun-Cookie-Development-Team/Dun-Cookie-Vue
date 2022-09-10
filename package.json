@@ -42,6 +42,7 @@
     "lint-staged": "^13.0.3",
     "postcss": "^8.4.12",
     "postcss-html": "^1.3.0",
+    "postcss-less": "6.0.0",
     "prettier": "^2.7.1",
     "stylelint": "^14.6.0",
     "stylelint-config-prettier": "^9.0.3",
@@ -56,5 +57,19 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "**/src/**/*.{js,vue}": [
+      "vue-cli-service lint"
+    ],
+    "**/src/**/*.{vue,css,sass,scss,less}": [
+      "stylelint --fix"
+    ],
+    "**/src/**/*.{vue,css,sass,scss,js}": [
+      "prettier --write"
+    ]
+  }
 }

@@ -21,12 +21,7 @@ module.exports = {
     Settings: true,
     ClipboardItem: true,
   },
-  extends: [
-    'plugin:vue/recommended',
-    'plugin:vue/strongly-recommended',
-    'eslint:recommended',
-    'prettier',
-  ],
+  extends: ['plugin:vue/recommended', 'plugin:vue/strongly-recommended', 'eslint:recommended', 'prettier'],
 
   // add your custom rules here
   //it is base on https://github.com/vuejs/eslint-config-vue
