@@ -14,6 +14,10 @@ module.exports = {
       files: ['**/*.vue'],
       customSyntax: 'postcss-html',
     },
+    {
+      files: ['**/*.less'],
+      customSyntax: 'postcss-less',
+    },
   ],
   ignoreFiles: ['**/*.js', '**/*.jsx', '**/*.tsx', '**/*.ts', '**/*.json'],
   rules: {
