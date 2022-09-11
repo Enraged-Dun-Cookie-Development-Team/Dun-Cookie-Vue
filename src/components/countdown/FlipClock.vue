@@ -140,10 +140,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@ceobeLightColor: #fcddab; //小刻食堂主题亮色浅色
-@ceobeVeryLightColor: #fff7ec; //小刻食堂主题非常浅色
-@ceobeColor: #ffba4b; //小刻食堂主题亮色
-@ceobeDarkColor: #353535; // 小刻食堂主题暗色
+@ceobeLightColor: #fcddab; /* 小刻食堂主题亮色浅色 */
+@ceobeVeryLightColor: #fff7ec; /* 小刻食堂主题非常浅色 */
+@ceobeColor: #ffba4b; /* 小刻食堂主题亮色 */
+@ceobeDarkColor: #353535; /* 小刻食堂主题暗色 */
 
 * {
   margin: 0;

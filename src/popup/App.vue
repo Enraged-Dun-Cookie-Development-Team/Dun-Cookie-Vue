@@ -511,7 +511,7 @@ export default {
   @numberInput: 'numberInput-@{theme}'; //设置页面加减按钮
 
   #app {
-    /deep/ a {
+    :deep(a) {
       color: @@content !important;
     }
     overflow: auto;
@@ -528,7 +528,7 @@ export default {
 
   .sane-calculator {
     .san-push.is-checked {
-      /deep/ .el-switch__core {
+      :deep(.el-switch__core) {
         border-color: @@ceobeColor;
         background-color: @@ceobeColor;
       }
@@ -693,7 +693,7 @@ export default {
 
   // 标签栏
 
-  /deep/ .el-tabs {
+  :deep(.el-tabs) {
     margin: 0 10px;
     height: 30px;
 
@@ -736,7 +736,7 @@ export default {
 
   // 隐藏二级菜单
 
-  /deep/ .ttb {
+  :deep(.ttb) {
     background-color: @@bgColor;
 
     .el-divider {

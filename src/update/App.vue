@@ -129,12 +129,12 @@ export default {
     }
   }
 
-  /deep/ .el-collapse {
+  :deep(.el-collapse) {
     border-top: 0;
     border-bottom: 0;
   }
 
-  /deep/ .el-collapse-item__header {
+  :deep(.el-collapse-item__header) {
     border-bottom: 0;
   }
 }

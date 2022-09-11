@@ -313,17 +313,17 @@ export default {
       border-top: 1px solid @@btnBorder;
       border-bottom: 1px solid @@btnBorder;
 
-      /deep/ .el-collapse-item__header {
+      :deep(.el-collapse-item__header) {
         border-bottom: 1px solid @@btnBorder;
         color: @@setSmall;
         background-color: @@bgColor;
       }
 
-      /deep/ .el-collapse-item__content {
+      :deep(.el-collapse-item__content) {
         background-color: @@bgColor;
       }
 
-      /deep/ .el-collapse-item__wrap {
+      :deep(.el-collapse-item__wrap) {
         border-bottom: 1px solid @@btnBorder;
       }
     }
@@ -348,7 +348,7 @@ export default {
         border: none;
         flex: 1;
 
-        /deep/ .el-card__body {
+        :deep(.el-card__body) {
           border: 1px solid @@btnBorder;
           color: @@setSmall;
           background-color: @@bgColor;

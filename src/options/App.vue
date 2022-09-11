@@ -1160,65 +1160,65 @@ export default {
 
 // 开关按钮
 
-/deep/ .el-switch.is-checked .el-switch__core {
+:deep(.el-switch.is-checked .el-switch__core) {
   border-color: @ceobeColor;
   background-color: @ceobeColor;
 }
 
 // 单选框
 
-/deep/ .el-radio__input.is-checked .el-radio__inner {
+:deep(.el-radio__input.is-checked .el-radio__inner) {
   border-color: @ceobeColor;
   background: @ceobeColor;
 }
 
-/deep/ .el-radio__inner:hover {
+:deep(.el-radio__inner:hover) {
   border-color: @ceobeColor;
 }
 
-/deep/ .el-radio__input.is-checked + .el-radio__label {
+:deep(.el-radio__input.is-checked + .el-radio__label) {
   color: @ceobeColor;
 }
 
 // 多选框
 
-/deep/ .el-checkbox__input.is-checked .el-checkbox__inner,
+:deep(.el-checkbox__input.is-checked .el-checkbox__inner),
 .el-checkbox__input.is-indeterminate .el-checkbox__inner {
   border-color: @ceobeColor;
   background-color: @ceobeColor;
 }
 
-/deep/ .el-checkbox__inner:hover {
+:deep(.el-checkbox__inner:hover) {
   border-color: @ceobeColor;
 }
 
-/deep/ .el-checkbox__input.is-focus .el-checkbox__inner {
+:deep(.el-checkbox__input.is-focus .el-checkbox__inner) {
   border-color: @ceobeColor;
 }
 
-/deep/ .el-checkbox__input.is-checked + .el-checkbox__label {
+:deep(.el-checkbox__input.is-checked + .el-checkbox__label) {
   color: @ceobeColor;
 }
 
 // 拖拉条
 
-/deep/ .el-slider__bar {
+:deep(.el-slider__bar) {
   background-color: @ceobeColor;
 }
 
-/deep/ .el-slider__button {
+:deep(.el-slider__button) {
   border-color: @ceobeColor;
 }
 
 // 计数器
 
-/deep/ .el-input.is-active .el-input__inner,
-/deep/ .el-input__inner:focus {
+:deep(.el-input.is-active .el-input__inner),
+:deep(.el-input__inner:focus) {
   border-color: @ceobeColor;
 }
 
-/deep/ .el-input-number__decrease:hover:not(.is-disabled) ~ .el-input .el-input__inner:not(.is-disabled),
-/deep/ .el-input-number__increase:hover:not(.is-disabled) ~ .el-input .el-input__inner:not(.is-disabled) {
+:deep(.el-input-number__decrease:hover:not(.is-disabled) ~ .el-input .el-input__inner:not(.is-disabled)),
+:deep(.el-input-number__increase:hover:not(.is-disabled) ~ .el-input .el-input__inner:not(.is-disabled)) {
   border-color: @ceobeColor;
 }
 

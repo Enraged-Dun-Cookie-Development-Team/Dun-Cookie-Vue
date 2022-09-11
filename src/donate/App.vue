@@ -89,7 +89,7 @@ export default {
   @numberInput: 'numberInput-@{theme}'; //设置页面加减按钮
 
   #app {
-    /deep/ a {
+    :deep(a) {
       color: @@content!important;
     }
     margin: auto;
@@ -136,55 +136,55 @@ export default {
         border: @@btnBorder 1px solid;
         box-shadow: none;
 
-        /deep/.el-tabs__header {
+        :deep(.el-tabs__header) {
           border-bottom: 1px solid @@btnBorder;
           background-color: @@numberInput;
         }
 
-        /deep/.el-tabs__item {
+        :deep(.el-tabs__item) {
           color: @@subTitle;
         }
 
-        /deep/.el-tabs__item.is-active {
+        :deep(.el-tabs__item.is-active) {
           border-right-color: @@btnBorder;
           border-left-color: @@btnBorder;
           background-color: @@bgColor;
         }
 
-        /deep/.el-tabs__content {
+        :deep(.el-tabs__content) {
           background-color: @@bgColor;
         }
       }
 
-      /deep/.el-input-number.is-controls-right .el-input-number__increase {
+      :deep(.el-input-number.is-controls-right .el-input-number__increase) {
         border-bottom: 1px solid @@btnBorder;
       }
 
-      /deep/.el-input-number__increase,
-      /deep/.el-input-number__decrease {
+      :deep(.el-input-number__increase),
+      :deep(.el-input-number__decrease) {
         border-left: @@btnBorder 1px solid;
         color: @@setSmall;
         background-color: @@numberInput;
       }
 
-      /deep/.el-input-number__increase:hover + .el-input > .el-input__inner,
-      /deep/.el-input-number__decrease:hover + .el-input-number__increase + .el-input > .el-input__inner {
+      :deep(.el-input-number__increase:hover + .el-input > .el-input__inner),
+      :deep(.el-input-number__decrease:hover + .el-input-number__increase + .el-input > .el-input__inner) {
         border: #409eff 1px solid;
       }
 
-      /deep/.el-input__inner {
+      :deep(.el-input__inner) {
         border: @@btnBorder 1px solid;
         color: @@setLarge;
         background-color: @@bgColor;
       }
 
-      /deep/.el-input__inner:focus {
+      :deep(.el-input__inner:focus) {
         border-color: #409eff;
       }
 
-      /deep/.el-form-item__label,
-      /deep/.el-radio,
-      /deep/.el-checkbox {
+      :deep(.el-form-item__label),
+      :deep(.el-radio),
+      :deep(.el-checkbox) {
         color: @@setSmall;
       }
 
@@ -212,7 +212,7 @@ export default {
         }
       }
 
-      /deep/.footer {
+      :deep(.footer) {
         color: @@setLarge;
       }
     }
