@@ -8,8 +8,8 @@
     "build": "vue-cli-service build",
     "lint:eslint": "eslint --ext .js,.vue src",
     "fix:eslint": "eslint --ext .js,.vue src --fix",
-    "lint:stylelint": "stylelint  src/**/*.{vue,scss,css,sass,less}",
-    "fix:stylelint": "stylelint  src/**/*.{vue,scss,css,sass,less} --fix"
+    "lint:stylelint": "stylelint src/**/*.{vue,scss,css,sass,less}",
+    "fix:stylelint": "stylelint src/**/*.{vue,scss,css,sass,less} --fix"
   },
   "dependencies": {
     "animate.css": "^4.1.1",
@@ -59,17 +59,17 @@
     "not dead"
   ],
   "gitHooks": {
-    "pre-commit": "lint-staged"
+    "pre-commit": "lint-staged --concurrent false --quiet --verbose"
   },
   "lint-staged": {
-    "**/src/**/*.{js,vue}": [
+    "src/**/*.{js,vue}": [
       "vue-cli-service lint"
     ],
-    "**/src/**/*.{vue,css,sass,scss,less}": [
+    "src/**/*.{vue,css,sass,scss,less}": [
       "stylelint --fix"
     ],
-    "**/src/**/*.{vue,css,sass,scss,js}": [
-      "prettier --write"
+    "**/{*,.*}": [
+      "prettier --ignore-unknown --write"
     ]
   }
 }
