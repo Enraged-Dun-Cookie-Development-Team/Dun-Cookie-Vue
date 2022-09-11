@@ -1,6 +1,6 @@
-import PlatformHelper from "../platform/PlatformHelper";
-import {deepAssign, deepEquals} from "../util/CommonFunctions";
-import DebugUtil from "../util/DebugUtil";
+import PlatformHelper from '../platform/PlatformHelper';
+import { deepAssign, deepEquals } from '../util/CommonFunctions';
+import DebugUtil from '../util/DebugUtil';
 
 // 该类仅用于IDE友好提示
 // noinspection JSUnusedLocalSymbols,JSUnusedGlobalSymbols
@@ -47,11 +47,11 @@ class DataSyncMode {
 const CanSyncMethods = (() => {
   const obj = new CanSync();
   const list = [];
-  Object.getOwnPropertyNames(Object.getPrototypeOf(obj)).forEach(methodName => {
+  Object.getOwnPropertyNames(Object.getPrototypeOf(obj)).forEach((methodName) => {
     if (methodName !== 'constructor') {
       list.push(methodName);
     }
-  })
+  });
   return list;
 })();
 
@@ -75,12 +75,12 @@ class DataSynchronizer {
     this.key = key;
     this.target = target;
     this.shouldPersist = shouldPersist;
-    if (typeof updateHandler === "function") {
+    if (typeof updateHandler === 'function') {
       this.updateHandler = updateHandler;
     } else {
       this.updateHandler = deepAssign;
     }
-    PlatformHelper.Storage.getLocalStorage(keyPersist(key)).then(data => {
+    PlatformHelper.Storage.getLocalStorage(keyPersist(key)).then((data) => {
       // 当且仅当未进行过更新且storage中有数据时才会将storage中的数据设为当前数据
       // 如果已经接收过数据更新则忽略storage中的数据
       if (this.updateCount === 0 && data) {
@@ -224,7 +224,7 @@ class DataSynchronizer {
         let flag = _this.isSyncProperty(prop);
         if (flag) {
           let value = _this[prop];
-          if (typeof value === "function") {
+          if (typeof value === 'function') {
             value = value.bind(_this);
           }
           DebugUtil.debugLog(7, `获取内部属性${_this.key}: ${String(prop)}: `, value);
@@ -233,7 +233,7 @@ class DataSynchronizer {
         const value = Reflect.get(...arguments);
         DebugUtil.debugLog(9, `获取${_this.key}: ${String(prop)}: `, value);
         return value;
-      }
+      },
     };
     // NOTICE 由于vue2使用property的方式做监听，所以不能禁止，否则vue就监听不到了
     //        但在vue3或者非vue环境中可以考虑禁止property操作
@@ -242,11 +242,11 @@ class DataSynchronizer {
       handler.deleteProperty = function (target, prop) {
         DebugUtil.debugLog(7, `禁止删除属性${_this.key}: ${String(prop)}`);
         return false;
-      }
+      };
       handler.defineProperty = function (target, prop, descriptor) {
         DebugUtil.debugLog(7, `禁止添加属性${_this.key}: ${String(prop)}`, descriptor);
         return false;
-      }
+      };
     }
     return handler;
   }
@@ -254,7 +254,6 @@ class DataSynchronizer {
   isSyncProperty(prop) {
     return CanSyncMethods.indexOf(prop) !== -1;
   }
-
 }
 
 class DataSynchronizerAllWritable extends DataSynchronizer {
@@ -263,9 +262,11 @@ class DataSynchronizerAllWritable extends DataSynchronizer {
     if (PlatformHelper.isBackground) {
       PlatformHelper.Message.registerListener(keyGet(key), keyGet(key), () => this.target);
     } else {
-      PlatformHelper.Message.send(keyGet(key)).then(data => this.__handleReloadOrReceiveUpdate(data));
+      PlatformHelper.Message.send(keyGet(key)).then((data) => this.__handleReloadOrReceiveUpdate(data));
     }
-    PlatformHelper.Message.registerListener(keyUpdate(key), keyUpdate(key), data => this.__handleReloadOrReceiveUpdate(data));
+    PlatformHelper.Message.registerListener(keyUpdate(key), keyUpdate(key), (data) =>
+      this.__handleReloadOrReceiveUpdate(data)
+    );
     this.proxy = this.createWritableProxy();
   }
 }
@@ -277,8 +278,10 @@ class DataSynchronizerOnlyBackgroundWritable extends DataSynchronizer {
       PlatformHelper.Message.registerListener(keyGet(key), keyGet(key), () => this.target);
       this.proxy = this.createWritableProxy();
     } else {
-      PlatformHelper.Message.send(keyGet(key)).then(data => this.__handleReloadOrReceiveUpdate(data));
-      PlatformHelper.Message.registerListener(keyUpdate(key), keyUpdate(key), data => this.__handleReloadOrReceiveUpdate(data));
+      PlatformHelper.Message.send(keyGet(key)).then((data) => this.__handleReloadOrReceiveUpdate(data));
+      PlatformHelper.Message.registerListener(keyUpdate(key), keyUpdate(key), (data) =>
+        this.__handleReloadOrReceiveUpdate(data)
+      );
       this.proxy = this.createReadonlyProxy();
     }
   }
@@ -318,4 +321,4 @@ function createSyncData(target, key, mode, shouldPersist = false, updateHandler 
 }
 
 global.SyncData = {};
-export {createSyncData, DataSyncMode, CanSync};
+export { createSyncData, DataSyncMode, CanSync };

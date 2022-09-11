@@ -1,5 +1,5 @@
 <template>
-  <div class="M-Flipper" :class="[flipType, {'go': isFlipping}]">
+  <div class="M-Flipper" :class="[flipType, { go: isFlipping }]">
     <div class="digital front" :class="_textClass(frontTextFromData)"></div>
     <div class="digital back" :class="_textClass(backTextFromData)"></div>
   </div>
@@ -7,96 +7,99 @@
 
 <script>
 export default {
-  name: 'FlipClock',
+  name: 'Flipper',
   props: {
     max: {
-      default: 9
+      type: Number,
+      default: 9,
     },
-    text: {},
+    text: {
+      type: String,
+      required: true,
+    },
     // front paper text
     // 前牌文字
     frontText: {
       type: [Number, String],
-      default: 0
+      default: 0,
     },
     // back paper text
     // 后牌文字
     backText: {
       type: [Number, String],
-      default: 1
+      default: 1,
     },
     // flipping duration, please be consistent with the CSS animation-duration value.
     // 翻牌动画时间，与CSS中设置的animation-duration保持一致
     duration: {
       type: Number,
-      default: 600
+      default: 600,
     },
-
-  },
-  watch: {
-    text() {
-      this.init();
-    }
-  },
-  mounted() {
-    this.init();
   },
   data() {
     return {
       isFlipping: false,
       flipType: 'down',
       frontTextFromData: 0,
-      backTextFromData: 1
-    }
+      backTextFromData: 1,
+    };
+  },
+  watch: {
+    text() {
+      this.init();
+    },
+  },
+  mounted() {
+    this.init();
+  },
+  created() {
+    this.frontTextFromData = this.frontText;
+    this.backTextFromData = this.backText;
   },
   methods: {
     init() {
       let number = parseInt(this.text);
       let back = number + 1 > this.max ? 0 : number + 1;
-      this.flipDown(back, number)
+      this.flipDown(back, number);
     },
     _textClass(number) {
-      return 'number' + number
+      return 'number' + number;
     },
     _flip(type, front, back) {
       // 如果处于翻转中，则不执行
       if (this.isFlipping) {
-        return false
+        return false;
       }
-      this.frontTextFromData = front
-      this.backTextFromData = back
+      this.frontTextFromData = front;
+      this.backTextFromData = back;
       // 根据传递过来的type设置翻转方向
-      this.flipType = type
+      this.flipType = type;
       // 设置翻转状态为true
-      this.isFlipping = true
+      this.isFlipping = true;
       setTimeout(() => {
         // 设置翻转状态为false
-        this.isFlipping = false
-        this.frontTextFromData = back
-      }, this.duration)
+        this.isFlipping = false;
+        this.frontTextFromData = back;
+      }, this.duration);
     },
     // 下翻牌
     flipDown(front, back) {
-      this._flip('down', front, back)
+      this._flip('down', front, back);
     },
     // 上翻牌
     flipUp(front, back) {
-      this._flip('up', front, back)
+      this._flip('up', front, back);
     },
     // 设置前牌文字
     setFront(text) {
-      this.frontTextFromData = text
+      this.frontTextFromData = text;
     },
     // 设置后牌文字
     setBack(text) {
-      this.backTextFromData = text
-    }
+      this.backTextFromData = text;
+    },
   },
-  created() {
-    this.frontTextFromData = this.frontText
-    this.backTextFromData = this.backText
-  }
-}
+};
 </script>
 
 <style lang="less" scoped>
@@ -104,38 +107,39 @@ export default {
 @ceobeVeryLightColor: #fff7ec; //小刻食堂主题非常浅色
 @ceobeColor: #ffba4b; //小刻食堂主题亮色
 @ceobeDarkColor: #353535; // 小刻食堂主题暗色
+
 .M-Flipper {
-  display: inline-block;
   position: relative;
+  display: inline-block;
   width: 40px;
   height: 65px;
-  line-height: 65px;
+  font-size: 50px;
+  font-family: 'Helvetica Neue';
   border: solid 1px @ceobeColor;
   border-radius: 10px;
-  background: #fff;
-  font-size: 50px;
-  color: #fff;
-  box-shadow: 0 0 6px rgba(71,42,4, 0.5);
   text-align: center;
-  font-family: 'Helvetica Neue';
+  color: #fff;
+  background: #fff;
+  box-shadow: 0 0 6px rgba(71, 42, 4, 0.5);
+  line-height: 65px;
 }
 
 .M-Flipper .digital:before,
 .M-Flipper .digital:after {
-  content: '';
   position: absolute;
-  left: 0;
   right: 0;
-  background: @ceobeColor;
+  left: 0;
   overflow: hidden;
+  background: @ceobeColor;
+  content: '';
   box-sizing: border-box;
 }
 
 .M-Flipper .digital:before {
   top: 0;
   bottom: 50%;
-  border-radius: 8px 8px 0 0;
   border-bottom: solid 1px @ceobeLightColor;
+  border-radius: 8px 8px 0 0;
 }
 
 .M-Flipper .digital:after {
@@ -146,6 +150,7 @@ export default {
 }
 
 /*向下翻*/
+
 .M-Flipper.down .front:before {
   z-index: 3;
 }
@@ -173,6 +178,7 @@ export default {
 }
 
 /*向上翻*/
+
 .M-Flipper.up .front:after {
   z-index: 3;
 }

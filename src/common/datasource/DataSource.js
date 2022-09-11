@@ -60,7 +60,6 @@ class DataSource {
    */
   dataUrl;
 
-
   /**
    * 缓存旧饼ID
    * @type {{[key: string]: boolean}}
@@ -82,7 +81,7 @@ class DataSource {
     this.priority = config.priority;
     // 避免私有属性被json序列化传递
     Object.defineProperty(this, '_cookieIdCache', {
-      enumerable: false
+      enumerable: false,
     });
   }
 
@@ -114,9 +113,7 @@ class DataSource {
     if (typeof this.dataUrl === 'string') {
       promise = HttpUtil.GET(this.dataUrl);
     } else if (Array.isArray(this.dataUrl)) {
-      promise = Promise.all(
-        this.dataUrl.map(url => HttpUtil.GET(url))
-      );
+      promise = Promise.all(this.dataUrl.map((url) => HttpUtil.GET(url)));
     } else {
       throw new Error(`数据源[${this.dataName}]的dataUrl无效：${this.dataUrl}`);
     }
@@ -168,7 +165,7 @@ class DataSource {
    */
   static async getOrFetchUserInfo(uid, type) {
     try {
-      const cacheKey = "cache_" + type.typeInfo.typeName + '_' + uid;
+      const cacheKey = 'cache_' + type.typeInfo.typeName + '_' + uid;
       let data = await PlatformHelper.Storage.getLocalStorage(cacheKey);
       if (!data) {
         data = await type.fetchUserInfo(uid);
@@ -183,7 +180,6 @@ class DataSource {
       return null;
     }
   }
-
 }
 
 class DataSourceTypeInfo {
@@ -379,5 +375,4 @@ class FetchResult {
   }
 }
 
-
-export {DataSource, DataSourceTypeInfo, DataSourceConfig, UserInfo, FetchResult};
+export { DataSource, DataSourceTypeInfo, DataSourceConfig, UserInfo, FetchResult };

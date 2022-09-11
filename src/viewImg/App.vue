@@ -2,16 +2,11 @@
   <div id="app" v-loading="load" @click="showInfo = !showInfo">
     <div v-show="!load" class="img-info">
       <h3>图片信息</h3>
-      <div>{{ this.info.currentSrc }}</div>
-      <div>{{ this.info.naturalWidth }} × {{ this.info.naturalHeight }}</div>
+      <div>{{ info.currentSrc }}</div>
+      <div>{{ info.naturalWidth }} × {{ info.naturalHeight }}</div>
     </div>
     <div ref="imgScroll" :class="overflow ? 'imgScrollOverflow' : 'imgScroll'">
-      <img
-          :class="showInfo ? 'show-info' : ''"
-          :src="img"
-          class="img"
-          @load="imgOnload($event)"
-      />
+      <img :class="showInfo ? 'show-info' : ''" :src="img" class="img" @load="imgOnload($event)" />
     </div>
     <div v-show="pageShow" class="turnPage">
       <span class="turnPage-btn-area">
@@ -24,27 +19,10 @@
 </template>
 
 <script>
-import PlatformHelper from "../common/platform/PlatformHelper";
+import PlatformHelper from '../common/platform/PlatformHelper';
 
 export default {
-  name: "ViewImg",
-  created() {
-    this.init();
-  },
-  mounted() {
-    document.addEventListener("keyup", (e) => {
-      if (e.key === "Escape") {
-        // 关闭窗口
-        PlatformHelper.Windows.remove(this.winId);
-      } else if (e.key === "ArrowLeft") {
-        this.leftPage();
-        // 左翻页
-      } else if (e.key === "ArrowRight") {
-        this.rightPage();
-        // 右翻页
-      }
-    });
-  },
+  name: 'ViewImg',
 
   data() {
     return {
@@ -60,6 +38,23 @@ export default {
     };
   },
   computed: {},
+  created() {
+    this.init();
+  },
+  mounted() {
+    document.addEventListener('keyup', (e) => {
+      if (e.key === 'Escape') {
+        // 关闭窗口
+        PlatformHelper.Windows.remove(this.winId);
+      } else if (e.key === 'ArrowLeft') {
+        this.leftPage();
+        // 左翻页
+      } else if (e.key === 'ArrowRight') {
+        this.rightPage();
+        // 右翻页
+      }
+    });
+  },
   methods: {
     async init() {
       this.winId = await PlatformHelper.Storage.getLocalStorage('windowTabId');
@@ -78,8 +73,8 @@ export default {
       this.info.naturalWidth = data.target.naturalWidth;
 
       this.overflow = false;
-      const appendHeight = (window.outerHeight - window.innerHeight);
-      const appendWidth = (window.outerWidth - window.innerWidth);
+      const appendHeight = window.outerHeight - window.innerHeight;
+      const appendWidth = window.outerWidth - window.innerWidth;
       let newWidth = this.info.naturalWidth + appendWidth;
       if (newWidth > window.screen.width) {
         newWidth = window.screen.width - 100;
@@ -112,19 +107,19 @@ export default {
 
 <style lang="less" scoped>
 #app {
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
   display: flex;
-  align-items: flex-start;
   justify-content: flex-start;
+  align-items: flex-start;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
   perspective: 1000px;
 
   .img-info {
     position: fixed;
+    z-index: -1;
     width: 100%;
     text-align: center;
-    z-index: -1;
   }
 
   .img {
@@ -140,35 +135,35 @@ export default {
 
   .turnPage {
     position: fixed;
-    color: #23ade5;
     font-size: 1rem;
     font-weight: bold;
-    background: transparent;
     border-radius: 3px;
+    color: #23ade5;
+    background: transparent;
     user-select: none;
 
     .turnPage-btn-area {
       display: flex;
-      width: 100%;
       justify-content: space-around;
+      width: 100%;
     }
 
     .el-icon-arrow-left,
     .el-icon-arrow-right {
       position: fixed;
       top: 0;
-      height: 100vh;
-      width: 10vw;
-      min-width: 40px;
       display: flex;
       justify-content: center;
       align-items: center;
+      width: 10vw;
+      min-width: 40px;
+      height: 100vh;
       font-size: 25px;
       border-radius: 5px;
+      color: #fff;
       background: rgba(111, 111, 111, 0);
-      color: #ffffff;
-      cursor: pointer;
       transition: all 0.5s;
+      cursor: pointer;
 
       &:hover {
         background: rgba(111, 111, 111, 0.7);
@@ -186,11 +181,11 @@ export default {
     .turnNumber {
       position: fixed;
       bottom: 30px;
+      left: 50%;
       text-align: center;
       opacity: 0.3;
-      transform: translate(-50%, -25%);
       transition: all 0.5s;
-      left: 50%;
+      transform: translate(-50%, -25%);
     }
   }
 
@@ -199,15 +194,15 @@ export default {
   }
 
   .imgScroll {
+    overflow: hidden;
     width: 100%;
     height: 100%;
-    overflow: hidden;
   }
 
   .imgScrollOverflow {
+    overflow: auto;
     width: 100%;
     height: 100%;
-    overflow: auto;
   }
 }
 </style>

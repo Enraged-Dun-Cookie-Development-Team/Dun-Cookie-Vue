@@ -1,20 +1,20 @@
-import {CURRENT_SETTING_VERSION} from './Constants';
-import {getDefaultDataSourcesList} from './datasource/DefaultDataSources';
-import {deepAssign} from "./util/CommonFunctions";
+import { CURRENT_SETTING_VERSION } from './Constants';
+import { getDefaultDataSourcesList } from './datasource/DefaultDataSources';
+import { deepAssign } from './util/CommonFunctions';
 
 async function updateLegacyToV1(oldSettings) {
-  console.log("从旧配置升级：");
+  console.log('从旧配置升级：');
   console.log(oldSettings);
   const newSettings = {
     dun: {},
     display: {},
-    san: {}
+    san: {},
   };
 
   if (oldSettings.hasOwnProperty('time')) newSettings.dun.intervalTime = oldSettings.time;
   if (oldSettings.hasOwnProperty('source')) {
     const list = await getDefaultDataSourcesList();
-    newSettings.enableDataSources = oldSettings.source.map(idx => list[idx].dataName);
+    newSettings.enableDataSources = oldSettings.source.map((idx) => list[idx].dataName);
   }
   if (oldSettings.hasOwnProperty('fontsize')) newSettings.display.fontSize = oldSettings.fontsize;
   if (oldSettings.hasOwnProperty('imgshow')) newSettings.display.showImage = oldSettings.imgshow;
@@ -30,19 +30,19 @@ async function updateLegacyToV1(oldSettings) {
   if (oldSettings.hasOwnProperty('saneMax')) newSettings.san.maxValue = oldSettings.saneMax;
   if (oldSettings.hasOwnProperty('isWindow')) newSettings.display.windowMode = oldSettings.isWindow;
 
-  console.log("升级完毕，新配置：");
+  console.log('升级完毕，新配置：');
   console.log(newSettings);
   return newSettings;
 }
 
 async function updateV1ToV2(oldSettings) {
-  console.log("从V1配置升级：");
+  console.log('从V1配置升级：');
   console.log(oldSettings);
   const newSettings = deepAssign({}, oldSettings);
 
   Reflect.deleteProperty(newSettings, 'currentDataSources');
 
-  console.log("升级完毕，新配置：");
+  console.log('升级完毕，新配置：');
   console.log(newSettings);
   return newSettings;
 }
@@ -67,4 +67,4 @@ async function updateSettings(oldSettings) {
   }
 }
 
-export {updateSettings}
+export { updateSettings };

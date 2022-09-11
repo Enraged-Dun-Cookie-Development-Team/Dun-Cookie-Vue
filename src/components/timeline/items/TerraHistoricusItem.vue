@@ -1,11 +1,13 @@
 <template>
   <div class="wrapper" :data-id="item.id">
     <div class="wrapper-content"></div>
-    <img v-if="showImage" v-lazy="item.coverImage" class="image-back"/>
+    <img v-if="showImage" v-lazy="item.coverImage" class="image-back" />
     <div class="content-card">
       <div class="content-card-info">
-        <img v-if="showImage" v-lazy="item.coverImage" class="content-card-image"/>
-        <div class="content-card-title">{{ item.componentData.name }}</div>
+        <img v-if="showImage" v-lazy="item.coverImage" class="content-card-image" />
+        <div class="content-card-title">
+          {{ item.componentData.name }}
+        </div>
         <div class="content-card-introduction">
           {{ item.componentData.introduction }}
         </div>
@@ -14,10 +16,14 @@
         </div>
       </div>
       <div class="content-card-episodes">
-        <span v-for="episodes in item.componentData.episodes"
-              :key="episodes.cid"
-              class="content-card-episodes-btn"
-              @click="openUrl(`https://terra-historicus.hypergryph.com/comic/${item.componentData.cid}/episode/${episodes.cid}`)">
+        <span
+          v-for="episodes in item.componentData.episodes"
+          :key="episodes.cid"
+          class="content-card-episodes-btn"
+          @click="
+            openUrl(`https://terra-historicus.hypergryph.com/comic/${item.componentData.cid}/episode/${episodes.cid}`)
+          "
+        >
           {{ episodes.title }}
         </span>
       </div>
@@ -29,10 +35,11 @@
 // 用于TerraHistoricusDataSource的特殊组件
 import PlatformHelper from '../../../common/platform/PlatformHelper';
 import Settings from '../../../common/Settings';
+import { DataItem } from '../../../common/DataItem';
 
 export default {
-  name: "TerraHistoricusItem",
-  props: ["item", "showImage"],
+  name: 'TerraHistoricusItem',
+  props: { item: { type: DataItem, required: true }, showImage: Boolean },
   data() {
     return {
       settings: Settings,
@@ -40,16 +47,14 @@ export default {
   },
   methods: {
     openUrl(url) {
-      if(this.settings.feature.linkMax) {
-        PlatformHelper.Windows
-          .createMaxPopupWindow(url);
+      if (this.settings.feature.linkMax) {
+        PlatformHelper.Windows.createMaxPopupWindow(url);
       } else {
-        PlatformHelper.Windows
-          .createPopupWindow(url, 900, 1000);
+        PlatformHelper.Windows.createPopupWindow(url, 900, 1000);
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="less" scoped>
@@ -64,13 +69,13 @@ export default {
   }
 
   .content-card {
-    display: flex;
+    position: absolute;
     top: 0;
     left: 0;
-    position: absolute;
-    height: 100%;
-    width: 100%;
+    display: flex;
     padding: 2% 2%;
+    width: 100%;
+    height: 100%;
 
     .content-card-info {
       margin-top: 3%;
@@ -82,10 +87,10 @@ export default {
       }
 
       .content-card-title {
-        color: #fff;
         font-size: 2rem;
-        letter-spacing: -0.1rem;
+        color: #fff;
         text-shadow: 0 0 1rem #000, 0 0 0.5rem #000, 0 0 0.25rem #000;
+        letter-spacing: -0.1rem;
       }
 
       .content-card-introduction {
@@ -96,30 +101,30 @@ export default {
 
       .content-card-subtitle {
         margin-top: 5px;
-        color: #fff;
         font-size: 0.9rem;
+        color: #fff;
       }
     }
 
     .content-card-episodes {
-      width: 250px;
-      margin: 0 0 0 20px;
-      max-height: 310px;
       overflow: auto;
+      margin: 0 0 0 20px;
+      width: 250px;
+      max-height: 310px;
 
       .content-card-episodes-btn {
-        text-align:center;
         display: flex;
-        align-items: center;
         justify-content: center;
-        border: 1px solid #fff;
-        border-radius: 4px;
-        line-height: 1.2;
-        color: #fff;
-        transition: background-color 0.5s;
-        cursor: pointer;
+        align-items: center;
         margin: 10px 0;
         padding: 3px 0;
+        border: 1px solid #fff;
+        border-radius: 4px;
+        text-align: center;
+        color: #fff;
+        transition: background-color 0.5s;
+        line-height: 1.2;
+        cursor: pointer;
 
         &:hover {
           background-color: #b0243b;

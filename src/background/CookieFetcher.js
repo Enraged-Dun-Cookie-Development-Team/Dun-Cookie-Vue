@@ -1,5 +1,5 @@
-import {CookieHandler} from "./CookieHandler";
-import {IS_DEBUG} from "../common/Constants";
+import { CookieHandler } from './CookieHandler';
+import { IS_DEBUG } from '../common/Constants';
 
 /**
  * 蹲饼日志缓存，用于分析问题
@@ -50,8 +50,11 @@ class CookieFetcher {
    */
   addDataSource(source) {
     if (source.dataType !== this.sourceType) {
-      DebugUtil.debugLogError(0, `[${source.dataType.typeName}]类型的数据源[${source.dataName}]`
-        + `被尝试加入到[${this.sourceType.typeName}]类型的蹲饼分组中，已禁止本次加入`);
+      DebugUtil.debugLogError(
+        0,
+        `[${source.dataType.typeName}]类型的数据源[${source.dataName}]` +
+          `被尝试加入到[${this.sourceType.typeName}]类型的蹲饼分组中，已禁止本次加入`
+      );
       return;
     }
     this.sourceList.push(source);
@@ -68,18 +71,20 @@ class CookieFetcher {
   fetchCookies() {
     const source = this._nextDataSource();
     const startTime = new Date().getTime();
-    return source.fetchData()
-      .then((fetchResult) => {
+    return source.fetchData().then(
+      (fetchResult) => {
         if (IS_DEBUG) {
           this._debugLogSuccess(startTime, source, fetchResult);
         }
         CookieHandler.handle(source, fetchResult);
         return fetchResult;
-      }, (reason) => {
+      },
+      (reason) => {
         this._logFail(startTime, source, reason);
         // 重新抛出异常，让上层调用方能感知到异常
         throw reason;
-      });
+      }
+    );
   }
 
   /**
@@ -113,7 +118,7 @@ class CookieFetcher {
     DebugUtil.debugLog(5, `[${this.id}]成功获取数据：`, {
       dataName: source.dataName,
       dataType: source.dataType.typeName,
-      fetchResult: fetchResult
+      fetchResult: fetchResult,
     });
   }
 
@@ -136,7 +141,7 @@ class CookieFetcher {
     DebugUtil.debugLogError(0, `[${this.id}]获取数据失败：`, {
       dataName: source.dataName,
       dataType: source.dataType.typeName,
-      reason: reason
+      reason: reason,
     });
   }
 }
@@ -183,4 +188,4 @@ class FetchLogItem {
   }
 }
 
-export {CookieFetcher, fetchLogCache}
+export { CookieFetcher, fetchLogCache };

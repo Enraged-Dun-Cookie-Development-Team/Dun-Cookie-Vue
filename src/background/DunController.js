@@ -2,11 +2,11 @@
  * @file 蹲饼控制器
  */
 
-import DunInfo from "../common/sync/DunInfo";
-import CardList from "../common/sync/CardList";
-import CurrentDataSource from "../common/sync/CurrentDataSource";
-import Settings from "../common/Settings";
-import {CookieFetcher, fetchLogCache} from "./CookieFetcher";
+import DunInfo from '../common/sync/DunInfo';
+import CardList from '../common/sync/CardList';
+import CurrentDataSource from '../common/sync/CurrentDataSource';
+import Settings from '../common/Settings';
+import { CookieFetcher, fetchLogCache } from './CookieFetcher';
 
 class FetcherScheduleInfo {
   /**
@@ -60,7 +60,6 @@ let lastSourceMap = {};
  */
 let lastIntervalTime = -1;
 
-
 // TODO 生成新的fetch表或者schedule表时可以根据旧信息来定义新表的轮询起始时间
 //  目的是解决重新配置前刚好有一堆请求 然后重新配置后又来一堆请求 导致被ban的情况。
 //  由于重新配置是一个很少发生的情况，所以该功能优先级较低
@@ -109,7 +108,7 @@ function buildFetcherSchedule(globalIntervalTime) {
    * @type {{[key: string]: CookieFetcher[]}}
    */
   const fetchersGroupByType = {};
-  Object.values(fetchers).forEach(f => {
+  Object.values(fetchers).forEach((f) => {
     let list = fetchersGroupByType[f.sourceType.typeName];
     if (!list) {
       list = [];
@@ -127,13 +126,13 @@ function buildFetcherSchedule(globalIntervalTime) {
     /**
      * @type {[CookieFetcher, number]} 蹲饼分组，组内数据源数量
      */
-    const listWithCount = list.map(f => [f, f.dataSourceCount]);
+    const listWithCount = list.map((f) => [f, f.dataSourceCount]);
     // TODO 这部分变量名看似无意义，
     //  实际上是引用 https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/wiki/蹲饼器策略 中的文档的变量名
     const G = list.length;
     const C = type.requestFrequencyLimit;
     const M = globalIntervalTime;
-    const N = listWithCount.map(val => val[1]).reduce((prev, current) => prev + current, 0);
+    const N = listWithCount.map((val) => val[1]).reduce((prev, current) => prev + current, 0);
     const X = M / C;
     const Y = M / N;
     const Z = M / G;
@@ -178,9 +177,9 @@ function buildFetcherSchedule(globalIntervalTime) {
     let initNextTime = startTime;
     finalList.forEach((f) => {
       const info = new FetcherScheduleInfo(f, finalIntervalTime);
-      info.nextScheduleTime = initNextTime;   // 赋值这个调度器初始开始蹲饼时间
+      info.nextScheduleTime = initNextTime; // 赋值这个调度器初始开始蹲饼时间
       scheduleList.push(info);
-      initNextTime += C;      // 用于计算下个调度器开始时间
+      initNextTime += C; // 用于计算下个调度器开始时间
     });
     return [groupKey, scheduleList];
   });
@@ -207,11 +206,10 @@ function tryDun(force = false) {
   const currentTime = new Date().getTime();
   for (const schedule of fetcherSchedule) {
     if (force || schedule.nextScheduleTime <= currentTime) {
-      const promise = schedule.fetcher.fetchCookies()
-        .finally(() => {
-          DunInfo.counter++;
-          schedule.updateNextScheduleTime();
-        });
+      const promise = schedule.fetcher.fetchCookies().finally(() => {
+        DunInfo.counter++;
+        schedule.updateNextScheduleTime();
+      });
       promiseList.push(promise);
     }
   }
@@ -225,7 +223,12 @@ function tryDun(force = false) {
       }
     }
     sortFetcherSchedule(fetcherSchedule);
-    DebugUtil.debugLog(1, `===已完成第${DunInfo.roundCount}轮检测${force ? '(本轮为手动强制刷新)' : ''}，共${allCount}个蹲饼器，成功${successCount}个，失败${allCount - successCount}个===`);
+    DebugUtil.debugLog(
+      1,
+      `===已完成第${DunInfo.roundCount}轮检测${
+        force ? '(本轮为手动强制刷新)' : ''
+      }，共${allCount}个蹲饼器，成功${successCount}个，失败${allCount - successCount}个===`
+    );
   });
 }
 
@@ -265,7 +268,6 @@ function startDunTimer() {
   }, 1000);
 }
 
-
 function restartDunTimer() {
   if (dunTimeoutId) {
     clearTimeout(dunTimeoutId);
@@ -294,4 +296,4 @@ class FetchUtils {
 
 global.FetchUtils = new FetchUtils();
 
-export {restartDunTimer, tryDun};
+export { restartDunTimer, tryDun };

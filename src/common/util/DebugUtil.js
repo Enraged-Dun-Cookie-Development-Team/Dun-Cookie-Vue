@@ -4,7 +4,7 @@
  * debugLog作为特殊的会被依赖的方法除外，必须考虑兼容性问题
  */
 
-import {DEBUG_LEVEL} from "../Constants";
+import { DEBUG_LEVEL } from '../Constants';
 
 // 这两个变量用于避免调试输出太多导致控制台卡死，可参考本文件中的debugConsoleOutput方法
 let debugLogClearThreshold = 50000;
@@ -12,18 +12,17 @@ let debugLogCounter = 0;
 
 // noinspection JSUnresolvedVariable,JSUnusedGlobalSymbols
 class DebugUtil {
-
   // 清除storage中除了settings以外的全部内容
   clearStorage() {
     chrome.storage.local.get('settings', (result) => {
       if (chrome.runtime.lastError) {
-        console.log("清除失败");
+        console.log('清除失败');
         console.error(chrome.runtime.lastError);
         return;
       }
       const settings = result['settings'];
       chrome.storage.local.clear(() => {
-        chrome.storage.local.set({settings: settings});
+        chrome.storage.local.set({ settings: settings });
       });
     });
   }
@@ -47,7 +46,7 @@ class DebugUtil {
       if (debugLogCounter >= debugLogClearThreshold) {
         console.clear();
       }
-      console[type](`%c[${new Date().toLocaleString()}]`, "color: gray", ...data);
+      console[type](`%c[${new Date().toLocaleString()}]`, 'color: gray', ...data);
       debugLogCounter++;
     }
   }
@@ -59,7 +58,7 @@ class DebugUtil {
   }
 }
 
-const instance = new DebugUtil()
+const instance = new DebugUtil();
 global.DebugUtil = instance;
 
-export default instance
+export default instance;

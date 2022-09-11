@@ -1,6 +1,6 @@
-import {DataSource, DataSourceConfig, DataSourceTypeInfo, UserInfo} from '../DataSource';
+import { DataSource, DataSourceConfig, DataSourceTypeInfo, UserInfo } from '../DataSource';
 import TimeUtil from '../../util/TimeUtil';
-import {DataItem} from '../../DataItem';
+import { DataItem } from '../../DataItem';
 import HttpUtil from '../../util/HttpUtil';
 
 const typeInfo = new DataSourceTypeInfo('bilibili_dynamic', 10 * 1000);
@@ -10,13 +10,12 @@ const typeInfo = new DataSourceTypeInfo('bilibili_dynamic', 10 * 1000);
  * <p>
  */
 export class BilibiliDataSource extends DataSource {
-
   /**
    * @returns {DataSourceTypeInfo}
    */
   static get typeInfo() {
     return typeInfo;
-  };
+  }
 
   /**
    * @param config {DataSourceConfig} 数据源配置
@@ -29,40 +28,37 @@ export class BilibiliDataSource extends DataSource {
     let list = [];
     let data = JSON.parse(rawDataText);
     if (data.code == 0 && data.data != null && data.data.cards != null && data.data.cards.length > 0) {
-      data.data.cards.forEach(x => {
+      data.data.cards.forEach((x) => {
         const dynamicInfo = JSON.parse(x.card);
         const builder = DataItem.builder(this.dataName)
           .id(x.desc.timestamp)
           .timeForSort(x.desc.timestamp * 1000)
           .timeForDisplay(TimeUtil.format(new Date(x.desc.timestamp * 1000), 'yyyy-MM-dd hh:mm:ss'))
-          .jumpUrl(`https://t.bilibili.com/${x.desc.dynamic_id_str}`)
+          .jumpUrl(`https://t.bilibili.com/${x.desc.dynamic_id_str}`);
 
         switch (parseInt(x.desc.type)) {
           // 普通动态
           case 2: {
             builder
-              .previewList(dynamicInfo.item.pictures && dynamicInfo.item.pictures.map(x => x.img_src + "@320w.webp"))
-              .imageList(dynamicInfo.item.pictures && dynamicInfo.item.pictures.map(x => x.img_src))
-              .imageHttpList(dynamicInfo.item.pictures && dynamicInfo.item.pictures.map(x => x.img_src))
-              .coverImage((dynamicInfo.item.pictures && dynamicInfo.item.pictures.length > 0) ? dynamicInfo.item.pictures[0].img_src : null)
+              .previewList(dynamicInfo.item.pictures && dynamicInfo.item.pictures.map((x) => x.img_src + '@320w.webp'))
+              .imageList(dynamicInfo.item.pictures && dynamicInfo.item.pictures.map((x) => x.img_src))
+              .imageHttpList(dynamicInfo.item.pictures && dynamicInfo.item.pictures.map((x) => x.img_src))
+              .coverImage(
+                dynamicInfo.item.pictures && dynamicInfo.item.pictures.length > 0
+                  ? dynamicInfo.item.pictures[0].img_src
+                  : null
+              )
               .content(dynamicInfo.item.description);
             break;
           }
           // 无图片动态
           case 4: {
-            builder
-              .previewList(null)
-              .imageList(null)
-              .content(dynamicInfo.item.content);
+            builder.previewList(null).imageList(null).content(dynamicInfo.item.content);
             break;
           }
           // 视频
           case 8: {
-            builder
-              .previewList(null)
-              .imageList(null)
-              .coverImage(dynamicInfo.pic)
-              .content(dynamicInfo.dynamic);
+            builder.previewList(null).imageList(null).coverImage(dynamicInfo.pic).content(dynamicInfo.dynamic);
             break;
           }
           // 专栏
@@ -70,7 +66,9 @@ export class BilibiliDataSource extends DataSource {
             builder
               .previewList(null)
               .imageList(null)
-              .coverImage((dynamicInfo.image_urls && dynamicInfo.image_urls.length > 0) ? dynamicInfo.image_urls[0] : null)
+              .coverImage(
+                dynamicInfo.image_urls && dynamicInfo.image_urls.length > 0 ? dynamicInfo.image_urls[0] : null
+              )
               .content(dynamicInfo.summary);
             break;
           }
@@ -117,6 +115,6 @@ export class BilibiliDataSource extends DataSource {
     if (json.code != 0) {
       throw 'request fail: ' + JSON.stringify(json);
     }
-    return new UserInfo(json.data.name+'B站', json.data.face);
+    return new UserInfo(json.data.name + 'B站', json.data.face);
   }
 }

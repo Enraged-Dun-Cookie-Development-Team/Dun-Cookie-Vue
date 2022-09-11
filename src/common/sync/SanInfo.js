@@ -5,7 +5,7 @@ import {
   MESSAGE_SAN_GET,
   MESSAGE_SAN_UPDATE,
   MESSAGE_SETTINGS_UPDATE,
-  SAN_RECOVERY_SPEED
+  SAN_RECOVERY_SPEED,
 } from '../Constants';
 import { deepAssign } from '../util/CommonFunctions';
 import NotificationUtil from '../util/NotificationUtil';
@@ -118,7 +118,7 @@ function tryReload(san, settings) {
         // 插件被关闭的那段时间中恢复了一些理智但是没有完全恢复，正常启动计时器继续计时
         san.currentSan = newSan;
         shouldStartTimer = true;
-      } else if ((newSan - settings.san.maxValue) <= 5) {
+      } else if (newSan - settings.san.maxValue <= 5) {
         // 插件被关闭的那段时间中理智已经完全恢复了并且不超过半小时(5 * 6分钟), 则直接推送提醒且不启动计时器
         san.currentSan = settings.san.maxValue;
         noticeSan(`理智已满`, `理智都满一会啦！！！这可是20合成玉呀！`);
@@ -132,7 +132,7 @@ function tryReload(san, settings) {
     }
     san.calcRemainingTime();
     if (shouldStartTimer) {
-      startSanRecovery(san, SAN_RECOVERY_SPEED - timeElapsed % SAN_RECOVERY_SPEED);
+      startSanRecovery(san, SAN_RECOVERY_SPEED - (timeElapsed % SAN_RECOVERY_SPEED));
     }
   }
 }
@@ -172,17 +172,19 @@ class SanInfo {
 
   constructor() {
     this.reloadFromStorage().then(() => {
-      PlatformHelper.Message.send(MESSAGE_SAN_GET).then(data => deepAssign(this, data));
+      PlatformHelper.Message.send(MESSAGE_SAN_GET).then((data) => deepAssign(this, data));
       // 仅在后台页面进行理智计算
       if (PlatformHelper.isBackground) {
         tryReload(this, Settings);
-        PlatformHelper.Message.registerListener('sanInfo', MESSAGE_SAN_UPDATE, data => {
+        PlatformHelper.Message.registerListener('sanInfo', MESSAGE_SAN_UPDATE, (data) => {
           deepAssign(this, data);
           handleSanUpdate(this, Settings);
         });
-        PlatformHelper.Message.registerListener('sanInfo', MESSAGE_SETTINGS_UPDATE, data => handleSettingsUpdate(this, data));
+        PlatformHelper.Message.registerListener('sanInfo', MESSAGE_SETTINGS_UPDATE, (data) =>
+          handleSettingsUpdate(this, data)
+        );
       } else {
-        PlatformHelper.Message.registerListener('sanInfo', MESSAGE_SAN_UPDATE, data => deepAssign(this, data));
+        PlatformHelper.Message.registerListener('sanInfo', MESSAGE_SAN_UPDATE, (data) => deepAssign(this, data));
       }
     });
   }
@@ -203,7 +205,10 @@ class SanInfo {
       const isSameDay = endTime.getDay() !== now.getDay();
       const tomorrow = isSameDay ? '明天' : '';
 
-      this.remainTime = `预计${tomorrow}${TimeUtil.format(endTime, 'hh:mm')}回满，剩${TimeUtil.calcDiff(endTime, now.getTime())}`;
+      this.remainTime = `预计${tomorrow}${TimeUtil.format(endTime, 'hh:mm')}回满，剩${TimeUtil.calcDiff(
+        endTime,
+        now.getTime()
+      )}`;
     }
     this.saveUpdate();
   }
@@ -215,7 +220,7 @@ class SanInfo {
   }
 
   reloadFromStorage() {
-    return PlatformHelper.Storage.getLocalStorage('san').then(data => {
+    return PlatformHelper.Storage.getLocalStorage('san').then((data) => {
       if (data) {
         deepAssign(this, data);
       }

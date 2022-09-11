@@ -1,8 +1,8 @@
 import AbstractPlatform from '../AbstractPlatform';
-import $ from "jquery";
-import { CURRENT_VERSION, TOOL_QR_URL } from "../../Constants";
-import QRCode from "qrcode";
-import html2canvas from "html2canvas";
+import $ from 'jquery';
+import { CURRENT_VERSION, TOOL_QR_URL } from '../../Constants';
+import QRCode from 'qrcode';
+import html2canvas from 'html2canvas';
 
 const IGNORE_MESSAGE_ERROR_1 = 'Could not establish connection. Receiving end does not exist.';
 const IGNORE_MESSAGE_ERROR_2 = 'The message port closed before a response was received.';
@@ -13,7 +13,7 @@ let _isMobile;
 const imageCache = {};
 const qrcodeCache = {};
 
-const CORS_AVAILABLE_DOMAINS = {'penguin-stats.io': true, 'penguin-stats.cn': true};
+const CORS_AVAILABLE_DOMAINS = { 'penguin-stats.io': true, 'penguin-stats.cn': true };
 // 正常浏览器在给权限后跨域视为basic请求 无视cors相关设定，脑子有毛病的QQ浏览器在mode: no-cors跨域时直接用CORB策略拒绝读取响应(正常浏览器好像只会在contentScript里有这种设定)
 // 事实上正常浏览器和QQ浏览器在加权限后mode: no-cors跨域的Response.type都是basic，但是QQ浏览器就是不让你读取 诶就是玩
 const ALWAYS_ENABLE_CORS = typeof navigator != 'undefined' && navigator.userAgent.includes('QQBrowser');
@@ -22,7 +22,6 @@ const ALWAYS_ENABLE_CORS = typeof navigator != 'undefined' && navigator.userAgen
  * 浏览器平台，放置与具体浏览器无关的通用逻辑
  */
 export default class BrowserPlatform extends AbstractPlatform {
-
   constructor() {
     super();
     // 这部分放在类里面的原因是放在外面会被意外执行导致报错
@@ -31,7 +30,7 @@ export default class BrowserPlatform extends AbstractPlatform {
     console.log(`Current isBackground: ${_isBackground}`);
 
     const head = navigator.userAgent;
-    _isMobile = head.indexOf("Android") > 1 || head.indexOf("iPhone") > 1;
+    _isMobile = head.indexOf('Android') > 1 || head.indexOf('iPhone') > 1;
   }
 
   get isBackground() {
@@ -43,7 +42,7 @@ export default class BrowserPlatform extends AbstractPlatform {
   }
 
   get PlatformType() {
-    return "Browser";
+    return 'Browser';
   }
 
   async generateShareImage(dataItem, iconUrl, sourceIconUrl, imageUrl) {
@@ -57,7 +56,6 @@ export default class BrowserPlatform extends AbstractPlatform {
     // 整体宽度以图片宽度为准，无图片680，有图片1080，左右再各加10的边距
     const canvasWidth = Math.max(680, image ? 960 : 0) + 20;
 
-
     // 减掉左右边距
     const headerCanvasPromise = this.__generateImageHeader(canvasWidth - 20, dataItem, iconUrl, sourceIconUrl);
     const textCanvasPromise = this.__generateImageTextContent(canvasWidth - 20, dataItem);
@@ -66,14 +64,14 @@ export default class BrowserPlatform extends AbstractPlatform {
     const textHeight = textCanvas ? textCanvas.height : 0;
     let canvasHeight = headerCanvas.height + 10 + textHeight + 10;
     if (image) {
-      canvasHeight += (canvasWidth - 20) / image.width * image.height;
+      canvasHeight += ((canvasWidth - 20) / image.width) * image.height;
     }
 
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
-    ctx.fillStyle = "#ffffff";
+    ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     let heightOffset = 0;
@@ -84,7 +82,7 @@ export default class BrowserPlatform extends AbstractPlatform {
       heightOffset += textHeight + 10;
     }
     if (image) {
-      ctx.drawImage(image, 10, heightOffset, canvasWidth - 20, (canvasWidth - 20) / image.width * image.height);
+      ctx.drawImage(image, 10, heightOffset, canvasWidth - 20, ((canvasWidth - 20) / image.width) * image.height);
     }
     return canvas;
   }
@@ -100,8 +98,8 @@ export default class BrowserPlatform extends AbstractPlatform {
    * @private
    */
   async __generateImageHeader(width, dataItem, iconUrl, sourceIconUrl) {
-    let canvas = document.createElement("canvas");
-    let ctx = canvas.getContext("2d");
+    let canvas = document.createElement('canvas');
+    let ctx = canvas.getContext('2d');
     canvas.width = width;
     canvas.height = 120;
     const iconPromise = this.__loadImage(iconUrl);
@@ -112,38 +110,36 @@ export default class BrowserPlatform extends AbstractPlatform {
      * 这个类型提示用来避免ide的类型不匹配警告
      * @type {(HTMLImageElement|HTMLCanvasElement)[]}
      */
-    const promiseResult = await Promise.all(
-      [iconPromise, sourceIconPromise, jumpQrCodePromise, toolQrCodePromise]
-    );
+    const promiseResult = await Promise.all([iconPromise, sourceIconPromise, jumpQrCodePromise, toolQrCodePromise]);
     const [icon, sourceIcon, jumpQrCode, toolQrCode] = promiseResult;
 
     // 小刻食堂信息
-    ctx.fillStyle = "#ffba4b";
-    ctx.font = "36px Microsoft Yahei";
+    ctx.fillStyle = '#ffba4b';
+    ctx.font = '36px Microsoft Yahei';
     ctx.fillText(`小刻食堂 V${CURRENT_VERSION}`, 120, 50);
     ctx.drawImage(icon, 10, 10, 100, 100);
 
     // 数据源信息
-    ctx.fillStyle = "#848488";
-    ctx.font = "20px Microsoft Yahei";
+    ctx.fillStyle = '#848488';
+    ctx.font = '20px Microsoft Yahei';
     ctx.fillText(`${dataItem.dataSource}`, 170, 90);
     ctx.drawImage(sourceIcon, 120, 70, 40, 40);
 
-    ctx.fillStyle = "#909399";
-    ctx.font = "14px Microsoft Yahei";
+    ctx.fillStyle = '#909399';
+    ctx.font = '14px Microsoft Yahei';
     ctx.fillText(`${dataItem.timeForDisplay}`, 170, 110);
 
     // 二维码
     const qrcodeSize = 90;
-    ctx.fillStyle = "#ffba4b";
-    ctx.textBaseline = "top";
-    ctx.textAlign = "center";
+    ctx.fillStyle = '#ffba4b';
+    ctx.textBaseline = 'top';
+    ctx.textAlign = 'center';
     const toolQrCodeOffset = canvas.width - qrcodeSize;
     const jumpQrCodeOffset = toolQrCodeOffset - 20 - qrcodeSize;
     ctx.drawImage(jumpQrCode, jumpQrCodeOffset, 10, qrcodeSize, qrcodeSize);
-    ctx.fillText(`数据来源`, jumpQrCodeOffset + (qrcodeSize / 2), 10 + qrcodeSize + 5);
+    ctx.fillText(`数据来源`, jumpQrCodeOffset + qrcodeSize / 2, 10 + qrcodeSize + 5);
     ctx.drawImage(toolQrCode, toolQrCodeOffset, 10, qrcodeSize, qrcodeSize);
-    ctx.fillText(`食堂介绍`, toolQrCodeOffset + (qrcodeSize / 2), 10 + qrcodeSize + 5);
+    ctx.fillText(`食堂介绍`, toolQrCodeOffset + qrcodeSize / 2, 10 + qrcodeSize + 5);
 
     return canvas;
   }
@@ -162,13 +158,13 @@ export default class BrowserPlatform extends AbstractPlatform {
     }
     const textWidth = width;
     const wrapper = document.createElement('div');
-    wrapper.style.position = "absolute";
-    wrapper.style.minWidth = textWidth + "px";
-    wrapper.style.maxWidth = textWidth + "px";
-    wrapper.style.whiteSpace = "break-spaces";
-    wrapper.style.wordBreak = "break-all";
-    wrapper.style.font = "18px Microsoft Yahei";
-    wrapper.style.color = "#848488";
+    wrapper.style.position = 'absolute';
+    wrapper.style.minWidth = textWidth + 'px';
+    wrapper.style.maxWidth = textWidth + 'px';
+    wrapper.style.whiteSpace = 'break-spaces';
+    wrapper.style.wordBreak = 'break-all';
+    wrapper.style.font = '18px Microsoft Yahei';
+    wrapper.style.color = '#848488';
     let html = dataItem.content;
     if (dataItem.retweeted) {
       const retweeted = `<div style="
@@ -181,7 +177,7 @@ color: #848488;
 margin: 10px 0 0 0;
 padding: 10px;
 border-radius: 3px;
-width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retweeted.content}</span></div>`
+width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retweeted.content}</span></div>`;
       html += retweeted;
     }
     wrapper.innerHTML = html;
@@ -190,7 +186,7 @@ width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retwee
       useCORS: true,
       backgroundColor: null,
       width: textWidth,
-      scale: 1
+      scale: 1,
     });
     textCanvasPromise.finally(() => {
       document.body.removeChild(wrapper);
@@ -206,13 +202,13 @@ width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retwee
       return Promise.resolve(imageCache[src]);
     }
     const icon = document.createElement('img');
-    icon.crossOrigin = "anonymous";
+    icon.crossOrigin = 'anonymous';
     icon.src = src;
     return new Promise((resolve, reject) => {
       icon.onload = () => {
         imageCache[src] = icon;
         resolve(icon);
-      }
+      };
       icon.onerror = reject;
     });
   }
@@ -224,8 +220,9 @@ width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retwee
     if (qrcodeCache[text]) {
       return Promise.resolve(qrcodeCache[text]);
     }
+    // eslint-disable-next-line new-cap
     const qrcode = new QRCode.toCanvas(text, { margin: 0 });
-    return qrcode.then(canvas => {
+    return qrcode.then((canvas) => {
       qrcodeCache[text] = canvas;
       return canvas;
     });
@@ -250,27 +247,30 @@ width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retwee
         controller.abort();
       }, timeout);
     }
-    return fetch(url, options).then(response => {
-      if (response.type === 'opaque') {
-        throw '获取响应失败，可能是插件权限中未允许访问目标网站：' + url.origin;
-      }
-      if (!response.ok) {
-        if (!failController) {
-          throw '获取响应失败，可能是临时网络波动，如果长时间失败请联系开发者'
+    return fetch(url, options)
+      .then((response) => {
+        if (response.type === 'opaque') {
+          throw '获取响应失败，可能是插件权限中未允许访问目标网站：' + url.origin;
         }
-        return failController(response)
-      }
-      return response.text();
-    }).catch(err => {
-      if (err.name === 'AbortError') {
-        throw new Error(`web request timeout(${timeout}ms)`);
-      }
-      throw err
-    }).finally(() => {
-      if (timeoutId > 0) {
-        clearTimeout(timeoutId);
-      }
-    });
+        if (!response.ok) {
+          if (!failController) {
+            throw '获取响应失败，可能是临时网络波动，如果长时间失败请联系开发者';
+          }
+          return failController(response);
+        }
+        return response.text();
+      })
+      .catch((err) => {
+        if (err.name === 'AbortError') {
+          throw new Error(`web request timeout(${timeout}ms)`);
+        }
+        throw err;
+      })
+      .finally(() => {
+        if (timeoutId > 0) {
+          clearTimeout(timeoutId);
+        }
+      });
   }
 
   getHtmlParser() {
@@ -280,5 +280,4 @@ width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retwee
   __shouldIgnoreMessageError(errMsg) {
     return errMsg === IGNORE_MESSAGE_ERROR_1 || errMsg === IGNORE_MESSAGE_ERROR_2;
   }
-
 }

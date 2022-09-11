@@ -1,12 +1,12 @@
-import {CURRENT_SETTING_VERSION, MESSAGE_SETTINGS_UPDATE, PAGE_POPUP_WINDOW, PLATFORM_UNKNOWN} from './Constants';
-import {deepAssign} from './util/CommonFunctions';
-import {getDefaultDataSources} from './datasource/DefaultDataSources';
-import {customDataSourceTypes} from './datasource/CustomDataSources';
-import {updateSettings} from './SettingsUpdater';
+import { CURRENT_SETTING_VERSION, MESSAGE_SETTINGS_UPDATE, PAGE_POPUP_WINDOW, PLATFORM_UNKNOWN } from './Constants';
+import { deepAssign } from './util/CommonFunctions';
+import { getDefaultDataSources } from './datasource/DefaultDataSources';
+import { customDataSourceTypes } from './datasource/CustomDataSources';
+import { updateSettings } from './SettingsUpdater';
 import PlatformHelper from './platform/PlatformHelper';
-import DebugUtil from "./util/DebugUtil";
-import CurrentDataSource from "./sync/CurrentDataSource";
-import CardList from "./sync/CardList";
+import DebugUtil from './util/DebugUtil';
+import CurrentDataSource from './sync/CurrentDataSource';
+import CardList from './sync/CardList';
 
 // 随便调用一个无影响的东西来导入调试工具类
 DebugUtil.constructor;
@@ -21,7 +21,6 @@ let initPromise;
  */
 const updateListeners = [];
 
-
 /**
  * 将配置信息转化成可以用于蹲饼的数据源
  */
@@ -32,7 +31,9 @@ async function transformDataSource(settings) {
   const sourceMap = {};
   const defList = await getDefaultDataSources();
   for (const dataName of settings.enableDataSources) {
-    sourceMap[dataName] = defList[dataName];
+    if (defList.hasOwnProperty(dataName)) {
+      sourceMap[dataName] = defList[dataName];
+    }
   }
   const promiseList = [];
   for (const info of settings.customDataSources) {
@@ -44,7 +45,7 @@ async function transformDataSource(settings) {
       }
     }
   }
-  return await Promise.allSettled(promiseList).then(results => {
+  return await Promise.allSettled(promiseList).then((results) => {
     for (const result of results) {
       if (result.status === 'fulfilled') {
         if (result.value) {
@@ -85,7 +86,7 @@ class Settings {
   // 配置版本号
   version = CURRENT_SETTING_VERSION;
   // Logo
-  logo = "icon.png";
+  logo = 'icon.png';
 
   /**
    * 启用的默认数据源，储存dataName
@@ -141,12 +142,12 @@ class Settings {
     /**
      * 游戏内平台
      */
-    gamePlatform: "Android",
+    gamePlatform: 'Android',
     /**
      * 推送不同平台重复的饼
      */
-    repetitionPush: true
-  }
+    repetitionPush: true,
+  };
 
   /**
    * 显示相关配置
@@ -188,8 +189,8 @@ class Settings {
     /**
      * 公告是否跟时间线滚动
      */
-     announcementScroll: false,
-  }
+    announcementScroll: false,
+  };
 
   /**
    * 特性开关
@@ -216,7 +217,7 @@ class Settings {
      * 列表链接自动最大化
      */
     linkMax: false,
-  }
+  };
 
   /**
    * 理智设置
@@ -229,8 +230,8 @@ class Settings {
     /**
      * 理智上限
      */
-    maxValue: 135
-  }
+    maxValue: 135,
+  };
 
   /**
    * 内部权限等级
@@ -243,8 +244,8 @@ class Settings {
     /**
      * 当前权限等级，每次联网时更新
      */
-    level: 0
-  }
+    level: 0,
+  };
 
   /**
    * 获取颜色主题
@@ -254,8 +255,7 @@ class Settings {
    */
   getColorTheme() {
     const hour = new Date().getHours();
-    if (this.display.darkMode === 1
-      || (this.display.darkMode === -1 && (hour >= 18 || hour < 6))) {
+    if (this.display.darkMode === 1 || (this.display.darkMode === -1 && (hour >= 18 || hour < 6))) {
       return 'dark';
     } else {
       return 'light';
@@ -270,8 +270,8 @@ class Settings {
       return false;
     }
 
-    const vs1 = v1.split(".").map(a => parseInt(a));
-    const vs2 = v2.split(".").map(a => parseInt(a));
+    const vs1 = v1.split('.').map((a) => parseInt(a));
+    const vs2 = v2.split('.').map((a) => parseInt(a));
 
     const digit = Math.min(vs1.length, vs2.length);
     for (let i = 0; i < digit; i++) {
@@ -321,7 +321,7 @@ class Settings {
    * 使用此方法确保代码在初始化之后执行
    */
   doAfterInit(callback) {
-    initPromise.then(res => {
+    initPromise.then((res) => {
       callback(res);
       return res;
     });
@@ -335,15 +335,13 @@ class Settings {
   }
 
   constructor() {
-    PlatformHelper.Message.registerListener('settings', MESSAGE_SETTINGS_UPDATE, data => {
+    PlatformHelper.Message.registerListener('settings', MESSAGE_SETTINGS_UPDATE, (data) => {
       const changed = {};
       deepAssign(this, data, changed);
       DebugUtil.debugLog(0, '配置已更新：', changed);
       this.__updateWindowMode();
       let promise;
-      if (PlatformHelper.isBackground
-        && (changed.enableDataSources || changed.customDataSources)
-      ) {
+      if (PlatformHelper.isBackground && (changed.enableDataSources || changed.customDataSources)) {
         promise = transformDataSource(this);
       } else {
         promise = Promise.resolve();
@@ -374,8 +372,8 @@ class Settings {
           // 如果一个启用的都没有说明是新安装或者旧数据被清除，此时将默认数据源全部启用
           if (this.enableDataSources.length === 0) {
             const sources = await getDefaultDataSources();
-            this.enableDataSources = Object.keys(sources)
-            DebugUtil.debugLog(0, "未启用任何默认数据源，将自动启用全部默认数据源");
+            this.enableDataSources = Object.keys(sources);
+            DebugUtil.debugLog(0, '未启用任何默认数据源，将自动启用全部默认数据源');
           }
 
           await transformDataSource(this);
@@ -388,7 +386,7 @@ class Settings {
         }
       }
       return this;
-    })()
+    })();
   }
 
   __updateWindowMode() {
@@ -426,14 +424,14 @@ class Settings {
   async reloadSettings() {
     const value = await PlatformHelper.Storage.getLocalStorage('settings');
     if (value != null) {
-      DebugUtil.debugLog(0, "从储存中读取配置：", value);
+      DebugUtil.debugLog(0, '从储存中读取配置：', value);
       deepAssign(this, await updateSettings(value));
     }
     return this;
   }
 }
 
-const instance = new Settings()
+const instance = new Settings();
 global.Settings = instance;
 
 export default instance;

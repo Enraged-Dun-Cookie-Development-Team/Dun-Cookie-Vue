@@ -1,8 +1,8 @@
-import {distance} from "fastest-levenshtein";
-import Settings from "../common/Settings";
-import NotificationUtil from "../common/util/NotificationUtil";
-import CardList from "../common/sync/CardList";
-import DunInfo from "../common/sync/DunInfo";
+import { distance } from 'fastest-levenshtein';
+import Settings from '../common/Settings';
+import NotificationUtil from '../common/util/NotificationUtil';
+import CardList from '../common/sync/CardList';
+import DunInfo from '../common/sync/DunInfo';
 
 /**
  * 最新推送的通知，用于避免不同平台的饼重复通知，每一项由[数据源的dataName, 删除空白字符的饼内容]组成
@@ -32,7 +32,7 @@ function isDuplicateCookie(sourceName, cookieContent) {
       // 相同数据源的不检测重复
       continue;
     }
-    const rate = 1 - distance(cookieContent, data[1]) / Math.max(cookieContent.length,  data[1].length);
+    const rate = 1 - distance(cookieContent, data[1]) / Math.max(cookieContent.length, data[1].length);
     if (rate > DUPLICATE_THRESHOLD) {
       return true;
     }
@@ -51,10 +51,15 @@ function tryNotice(source, newCookieList) {
     return;
   }
   for (const cookie of newCookieList) {
-    const cookieContent = cookie.content.replace(/\s/g, "");
+    const cookieContent = cookie.content.replace(/\s/g, '');
     // 启用了推送重复饼，或者没启用且饼不是重复的，则进行推送
     if (Settings.dun.repetitionPush || !isDuplicateCookie(source.dataName, cookieContent)) {
-      NotificationUtil.SendNotice(`小刻在【${source.title}】里面找到了一个饼！`, cookieContent, cookie.coverImage, cookie.id);
+      NotificationUtil.SendNotice(
+        `小刻在【${source.title}】里面找到了一个饼！`,
+        cookieContent,
+        cookie.coverImage,
+        cookie.id
+      );
     }
     lastCookiesCache.push([source.dataName, cookieContent]);
     if (lastCookiesCache.length > DUPLICATE_CHECK_COUNT) {
@@ -67,18 +72,17 @@ function tryNotice(source, newCookieList) {
  * 蹲饼处理器
  */
 class CookieHandler {
-
   /**
    *
    * @param source {DataSource}
    * @param fetchResult {FetchResult}
    */
   static handle(source, fetchResult) {
-    const {newCookies, allCookies} = fetchResult;
+    const { newCookies, allCookies } = fetchResult;
     const hasOldCardList = CardList[source.dataName] && CardList[source.dataName].length > 0;
     if (hasOldCardList && newCookies.length > 0) {
       DunInfo.cookieCount += newCookies.length;
-      console.log("new cookies: ", newCookies);
+      console.log('new cookies: ', newCookies);
       tryNotice(source, newCookies);
     }
     if (allCookies && allCookies.length > 0) {
@@ -87,4 +91,4 @@ class CookieHandler {
   }
 }
 
-export {CookieHandler};
+export { CookieHandler };

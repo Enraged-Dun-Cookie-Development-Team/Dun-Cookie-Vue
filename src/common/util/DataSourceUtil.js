@@ -3,10 +3,9 @@
  * <p>
  * 之所以弄一个工具类出来而不是直接放进DataSource是为了文件避免循环依赖
  */
-import CurrentDataSource from "../sync/CurrentDataSource";
+import CurrentDataSource from '../sync/CurrentDataSource';
 
 class DataSourceUtil {
-
   /**
    * @param dataName {string}
    * @return {DataSource|undefined}
@@ -24,7 +23,7 @@ class DataSourceUtil {
       if (data.hasOwnProperty(k)) {
         list.push({
           dataName: k,
-          data: data[k]
+          data: data[k],
         });
       }
     }
@@ -38,8 +37,7 @@ class DataSourceUtil {
    * 合并数据，可以将合并的数据进行排序(默认启用排序)
    */
   static mergeAllData(data, sort = true) {
-    const result = Object.values(data)
-      .reduce((acc, cur) => [...acc, ...cur], []);
+    const result = Object.values(data).reduce((acc, cur) => [...acc, ...cur], []);
     if (sort) {
       DataSourceUtil.sortData(result);
     }

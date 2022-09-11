@@ -4,7 +4,7 @@
     <div id="app">
       <!-- 理智计算 -->
       <el-drawer :visible.sync="toolDrawer" :show-close="false" direction="ttb" size="180px">
-        <el-divider content-position="left">理智计算提醒</el-divider>
+        <el-divider content-position="left"> 理智计算提醒 </el-divider>
         <el-form
           size="mini"
           class="sane-calculator"
@@ -20,108 +20,76 @@
               :min="0"
               :max="settings.san.maxValue"
               label="输入当前理智"
-            ></el-input-number>
+            />
           </el-form-item>
           <el-form-item label="理智满后是否推送">
-            <el-switch
-              class="san-push"
-              v-model="settings.san.noticeWhenFull"
-              @change="settings.saveSettings()"
-            ></el-switch>
+            <el-switch v-model="settings.san.noticeWhenFull" class="san-push" @change="settings.saveSettings()" />
           </el-form-item>
           <el-form-item>
-            <el-button @click="saveSan">开始计算</el-button>
+            <el-button @click="saveSan"> 开始计算 </el-button>
           </el-form-item>
         </el-form>
         <div
           class="mention"
-          style="text-align: center; margin-top: 16px; opacity: 0.4"
+          style="
+            margin-top: 16px;
+            text-align: center;
+
+            opacity: 0.4;
+          "
         ></div>
       </el-drawer>
       <!-- 菜单 -->
       <el-drawer
         :visible.sync="drawer"
-        @close="menuIconClick"
-        @open="menuIconClick"
         :show-close="false"
         :direction="settings.display.windowMode ? 'rtl' : 'ttb'"
         size="520px"
+        @close="menuIconClick"
+        @open="menuIconClick"
       >
-        <el-divider content-position="left">饼的发源地</el-divider>
+        <el-divider content-position="left"> 饼的发源地 </el-divider>
         <el-row type="flex" class="drawer-btn-area" justify="center">
-          <el-tooltip
-            :key="item.img"
-            v-for="item in quickJump.source"
-            :content="item.name"
-            placement="top"
-          >
-            <el-button size="small" @click="openUrl(item.url)"
-              ><img
-                class="btn-icon"
-                :class="item.radius ? 'radius' : ''"
-                :src="item.img"
-            /></el-button>
+          <el-tooltip v-for="item in quickJump.source" :key="item.img" :content="item.name" placement="top">
+            <el-button size="small" @click="openUrl(item.url)">
+              <img class="btn-icon" :class="item.radius ? 'radius' : ''" :src="item.img" />
+            </el-button>
           </el-tooltip>
         </el-row>
-        <el-divider content-position="left">快捷工具</el-divider>
+        <el-divider content-position="left"> 快捷工具 </el-divider>
         <el-row type="flex" justify="center" class="drawer-btn-area">
-          <el-tooltip
-            :key="item.img"
-            v-for="item in quickJump.tool"
-            :content="item.name"
-            placement="top"
-          >
-            <el-button size="small" @click="openUrl(item.url)"
-              ><img
-                class="btn-icon"
-                :class="item.radius ? 'radius' : ''"
-                :src="item.img"
-            /></el-button>
+          <el-tooltip v-for="item in quickJump.tool" :key="item.img" :content="item.name" placement="top">
+            <el-button size="small" @click="openUrl(item.url)">
+              <img class="btn-icon" :class="item.radius ? 'radius' : ''" :src="item.img" />
+            </el-button>
           </el-tooltip>
         </el-row>
-        <el-divider v-if="quickJump.url" content-position="left">快捷链接
-        </el-divider>
-        <div class="drawer-btn-area-quickJump" ref="drawerBtnAreaQuickJump">
-          <el-tooltip 
-            :content="item.title" :key="index" v-for="(item, index) in quickJump.url" placement="top">
-            <div class="quickJump-img-area"  style="vertical-align: middle;display: table-cell;">
-              <img v-if="LazyLoaded" v-lazy="item.cover_img" class="btn-icon radius"
-              @click="openUrl(item.video_link)" />
+        <el-divider v-if="quickJump.url" content-position="left"> 快捷链接 </el-divider>
+        <div ref="drawerBtnAreaQuickJump" class="drawer-btn-area-quickJump">
+          <el-tooltip v-for="(item, index) in quickJump.url" :key="index" :content="item.title" placement="top">
+            <div class="quickJump-img-area" style="vertical-align: middle; display: table-cell">
+              <img
+                v-if="LazyLoaded"
+                v-lazy="item.cover_img"
+                class="btn-icon radius"
+                @click="openUrl(item.video_link)"
+              />
               <div class="author">
-                <p>{{item.author}}</p>
+                <p>{{ item.author }}</p>
               </div>
             </div>
           </el-tooltip>
         </div>
-        <el-divider content-position="left">调整蹲饼器</el-divider>
+        <el-divider content-position="left"> 调整蹲饼器 </el-divider>
         <el-row class="menu-button-area" type="flex" justify="center">
-          <el-button type="primary" @click="openGithub" icon="el-icon-star-off"
-            >点个star
+          <el-button type="primary" icon="el-icon-star-off" @click="openGithub"> 点个star </el-button>
+          <el-button type="primary" :loading="isReload" icon="el-icon-refresh" @click="reload"> 刷新 </el-button>
+          <el-button v-if="settings.feature.options" type="primary" icon="el-icon-setting" @click="openSetting">
+            设置
           </el-button>
-          <el-button
-            type="primary"
-            :loading="isReload"
-            @click="reload"
-            icon="el-icon-refresh"
-            >刷新
-          </el-button>
-          <el-button
-            type="primary"
-            icon="el-icon-setting"
-            @click="openSetting"
-            v-if="settings.feature.options"
-            >设置
-          </el-button>
-          <el-button
-            type="primary"
-            icon="el-icon-upload2"
-            @click="drawer = false"
-            >收起
-          </el-button>
+          <el-button type="primary" icon="el-icon-upload2" @click="drawer = false"> 收起 </el-button>
         </el-row>
-        <div style="position: absolute; bottom: 10px; right: 10px" class="sign">
-          Powered By 蓝芷怡 & 洛梧藤 & 云闪
-        </div>
+        <div style="position: absolute; right: 10px; bottom: 10px" class="sign">Powered By 蓝芷怡 & 洛梧藤 & 云闪</div>
       </el-drawer>
       <!-- 置顶按钮 -->
       <el-button
@@ -131,71 +99,45 @@
         class="top-btn"
         :class="!drawer && scrollShow ? 'top-btn-show' : ''"
         @click.stop="goTop()"
-      ></el-button>
+      />
       <div class="title-area">
         <div class="version">
           {{ `小刻食堂 V${currentVersion}` }}
           <span>
-            <span
-              >【已蹲饼
-              <countTo
-                :startVal="oldDunCount"
-                :endVal="dunInfo.counter"
-                :duration="1000"
-              ></countTo
-              >次】</span
-            >
+            <span>【已蹲饼 <countTo :start-val="oldDunCount" :end-val="dunInfo.counter" :duration="1000" />次】 </span>
             <span v-if="settings.checkLowFrequency()"> 【低频蹲饼时段】 </span>
           </span>
         </div>
         <!--        <span @click.stop="drawer = !drawer;"-->
         <!--              :class="[drawer?'menu-btn-open':'menu-btn-close', firefox ? 'menu-btn-firefox' : '','menu-btn','el-icon-menu']"></span>-->
         <div class="countdown-and-btn">
-          <div
-            class="count-down-area"
-            v-show="countDownList.length > 0"
-            @click="openCountDown()"
-          >
-            <div
-              v-for="(item, index) in countDownList"
-              :key="index"
-              :title="'到点时间：' + item.stopTime"
-            >
+          <div v-show="countDownList.length > 0" class="count-down-area" @click="openCountDown()">
+            <div v-for="(item, index) in countDownList" :key="index" :title="'到点时间：' + item.stopTime">
               {{ item.name }}:剩余约{{ item.timeStr }}
             </div>
             <div>【本数据仅会在打开列表时刷新】</div>
           </div>
           <Menu-Icon
+            :class="[drawer ? 'menu-btn-open' : 'menu-btn-close', firefox ? 'menu-btn-firefox' : '', 'menu-btn']"
             @handleIconClick="handleIconClick()"
-            :class="[
-              drawer ? 'menu-btn-open' : 'menu-btn-close',
-              firefox ? 'menu-btn-firefox' : '',
-              'menu-btn',
-            ]"
-          ></Menu-Icon>
+          />
         </div>
       </div>
       <div id="content">
-        <time-line
-          ref="timeline"
-          :imgShow="LazyLoaded"
-          :cardListByTag="cardList"
-          @cardListChange="goTop(1, 0)"
-        >
-        </time-line>
+        <time-line ref="timeline" :img-show="LazyLoaded" :card-list-by-tag="cardList" @cardListChange="goTop(1, 0)" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import countTo from "vue-count-to";
-import TimeLine from "../components/timeline/TimeLine";
-import Settings from "../common/Settings";
-import TimeUtil from "../common/util/TimeUtil";
-import SanInfo from "../common/sync/SanInfo";
-import DunInfo from "../common/sync/DunInfo";
-import MenuIcon from "@/popup/MenuIcon";
+import countTo from 'vue-count-to';
+import TimeLine from '../components/timeline/TimeLine';
+import Settings from '../common/Settings';
+import TimeUtil from '../common/util/TimeUtil';
+import SanInfo from '../common/sync/SanInfo';
+import DunInfo from '../common/sync/DunInfo';
+import MenuIcon from '@/popup/MenuIcon';
 import {
   dayInfo,
   MESSAGE_FORCE_REFRESH,
@@ -208,32 +150,15 @@ import {
   PLATFORM_FIREFOX,
   quickJump,
   SHOW_VERSION,
-} from "../common/Constants";
-import PlatformHelper from "../common/platform/PlatformHelper";
-import "animate.css";
-import CardList from "../common/sync/CardList";
-import ServerUtil from "../common/util/ServerUtil";
+} from '../common/Constants';
+import PlatformHelper from '../common/platform/PlatformHelper';
+import 'animate.css';
+import CardList from '../common/sync/CardList';
+import ServerUtil from '../common/util/ServerUtil';
 
 export default {
-  name: "app",
+  name: 'App',
   components: { countTo, TimeLine, MenuIcon },
-  created() {},
-  mounted() {
-    this.init();
-    // 监听鼠标滚动事件
-    window.addEventListener("scroll", this.handleScroll, true);
-  },
-  watch: {
-    drawer(value) {
-      if (value) {
-        this.$nextTick(() => {
-          this.bindScrollFun();
-        });
-      } else {
-        this.unbindScrollFun();
-      }
-    },
-  },
   data() {
     return {
       san: SanInfo,
@@ -262,6 +187,23 @@ export default {
     };
   },
   computed: {},
+  watch: {
+    drawer(value) {
+      if (value) {
+        this.$nextTick(() => {
+          this.bindScrollFun();
+        });
+      } else {
+        this.unbindScrollFun();
+      }
+    },
+  },
+  created() {},
+  mounted() {
+    this.init();
+    // 监听鼠标滚动事件
+    window.addEventListener('scroll', this.handleScroll, true);
+  },
   beforeDestroy() {},
   methods: {
     openUrl: PlatformHelper.Tabs.create,
@@ -277,9 +219,9 @@ export default {
         // 计算高度
         // this.calcHeight();
         let head = navigator.userAgent;
-        if (head.indexOf("Firefox") > 1) {
-          let div = document.getElementById("app");
-          div.style.fontFamily = "Microsoft yahei";
+        if (head.indexOf('Firefox') > 1) {
+          let div = document.getElementById('app');
+          div.style.fontFamily = 'Microsoft yahei';
           this.firefox = true;
         }
         // 图片卡 先加载dom后加载图片内容
@@ -290,7 +232,7 @@ export default {
     },
     handleIconClick() {
       if (!this.drawer && !this.drawerFirst) {
-        this.getVideoJump()
+        this.getVideoJump();
         this.drawerFirst = true;
       }
 
@@ -388,49 +330,40 @@ export default {
       // this.janvas.start();
     },
     async firefoxWarning() {
-      const flagKey = "firefox-collapse-warning-flag";
-      const flagDisableValue = "disabled";
+      const flagKey = 'firefox-collapse-warning-flag';
+      const flagDisableValue = 'disabled';
       const flag = await PlatformHelper.Storage.getLocalStorage(flagKey);
       if (flag === flagDisableValue) {
         return;
       }
-      const warningCountKey = "firefox-collapse-warning";
+      const warningCountKey = 'firefox-collapse-warning';
       const tip =
         '窗口太小,可能显示出现问题，您可以通过以下任意一种办法解决该问题：<br/>1.右键扩展图标并点击"移出折叠菜单"<br/>2.进入小刻食堂设置页面-界面设置-列表窗口化-启用';
-      let count = parseInt(
-        String(await PlatformHelper.Storage.getLocalStorage(warningCountKey))
-      );
+      let count = parseInt(String(await PlatformHelper.Storage.getLocalStorage(warningCountKey)));
       if (!count) {
         count = 0;
       }
       count++;
       PlatformHelper.Storage.saveLocalStorage(warningCountKey, count).then();
       if (count < 3) {
-        this.$alert(tip, "提示", {
+        this.$alert(tip, '提示', {
           dangerouslyUseHTMLString: true,
         }).then();
       } else {
         this.$alert(
           tip +
             '<br/><span id="firefox-collapse-warning-tip" style="color: red">点击<button id="btn-disable-firefox-warning">此处</button>以后都不再提示</span>',
-          "提示",
+          '提示',
           {
             dangerouslyUseHTMLString: true,
           }
         ).then();
         setTimeout(() => {
-          document
-            .getElementById("btn-disable-firefox-warning")
-            .addEventListener("click", () => {
-              PlatformHelper.Storage.saveLocalStorage(
-                flagKey,
-                flagDisableValue
-              ).then(() => {
-                document.getElementById(
-                  "firefox-collapse-warning-tip"
-                ).innerHTML = "以后将不会再提示该信息";
-              });
+          document.getElementById('btn-disable-firefox-warning').addEventListener('click', () => {
+            PlatformHelper.Storage.saveLocalStorage(flagKey, flagDisableValue).then(() => {
+              document.getElementById('firefox-collapse-warning-tip').innerHTML = '以后将不会再提示该信息';
             });
+          });
         }, 10);
       }
     },
@@ -447,7 +380,7 @@ export default {
               // 425和348两个魔法值来源于：https://discourse.mozilla.org/t/can-add-ons-webextensions-popups-determinate-whether-they-are-shown-in-the-overflow-menu-or-not/27937/6
               this.firefoxWarning();
             } else {
-              alert("窗口太小,可能显示出现问题");
+              alert('窗口太小,可能显示出现问题');
             }
           }
           fromLarge = window.innerWidth > 699;
@@ -462,18 +395,16 @@ export default {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
       // 添加监听事件（不同浏览器，事件方法不一样，所以可以作判断，也可以如下偷懒）
       // scrollDiv.addEventListener("DOMMouseScroll", handler, false);
-      scrollDiv.addEventListener("wheel", this.scrollHandler, false);
+      scrollDiv.addEventListener('wheel', this.scrollHandler, false);
     },
     unbindScrollFun() {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
-      scrollDiv.removeEventListener("wheel", this.scrollHandler);
+      scrollDiv.removeEventListener('wheel', this.scrollHandler);
     },
     // 获取倒计时数据
     getCountDownList() {
       PlatformHelper.Message.send(MESSAGE_GET_COUNTDOWN).then((data) => {
-        this.countDownList = data.sort((x, y) =>
-          new Date(x.stopTime) > new Date(y.stopTime) ? 1 : -1
-        );
+        this.countDownList = data.sort((x, y) => (new Date(x.stopTime) > new Date(y.stopTime) ? 1 : -1));
         console.log(this.countDownList);
       });
     },
@@ -485,8 +416,8 @@ export default {
       this.$message({
         offset: 50,
         center: true,
-        message: "保存成功，开始计算",
-        type: "success",
+        message: '保存成功，开始计算',
+        type: 'success',
       });
     },
 
@@ -502,8 +433,8 @@ export default {
       this.$message({
         offset: 50,
         center: true,
-        message: "正在找饼，请保持网络畅通",
-        type: "warning",
+        message: '正在找饼，请保持网络畅通',
+        type: 'warning',
       });
       PlatformHelper.Message.send(MESSAGE_FORCE_REFRESH).then(() => {
         this.drawer = false;
@@ -514,18 +445,14 @@ export default {
     // 检测滚动条高度，大于600出现回顶部按钮
     handleScroll() {
       let scrollArea =
-        this.$refs.timeline.$el.scrollTop == 0
-          ? this.$refs.timeline.$refs.elTimelineArea.$el
-          : this.$refs.timeline.$el;
+        this.$refs.timeline.$el.scrollTop == 0 ? this.$refs.timeline.$refs.elTimelineArea.$el : this.$refs.timeline.$el;
       this.scrollShow = scrollArea.scrollTop > 600 ? true : false;
     },
 
     // 回顶部
     goTop(step = 10, interval = 10) {
       let scrollArea =
-        this.$refs.timeline.$el.scrollTop == 0
-          ? this.$refs.timeline.$refs.elTimelineArea.$el
-          : this.$refs.timeline.$el;
+        this.$refs.timeline.$el.scrollTop == 0 ? this.$refs.timeline.$refs.elTimelineArea.$el : this.$refs.timeline.$el;
       let top = scrollArea.scrollTop;
       if (step < 1) {
         step = 1;
@@ -563,44 +490,45 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../theme/theme.less";
+@import '../theme/theme.less';
 
 .styleChange(@theme) {
-  @ceobeLightColor: "ceobeLightColor-@{theme}"; //小刻食堂主题亮色浅色
-  @ceobeColor: "ceobeColor-@{theme}"; //小刻食堂主题亮色
-  @ceobeVeryLightColor: "ceobeVeryLightColor-@{theme}"; // 小刻食堂主题亮色非常浅色
-  @ceobeDarkColor: "ceobeDarkColor-@{theme}"; //小刻食堂主题暗色
-  @bgColor: "bgColor-@{theme}"; // 背景颜色
-  @content: "content-@{theme}"; // 文本颜色
-  @timeline: "timeline-@{theme}"; // 时间线颜色和时间线border颜色
-  @subTitle: "subTitle-@{theme}"; // 小标题颜色
-  @btnBorder: "btnBorder-@{theme}"; // 按钮边框颜色和一些小线条
-  @setBtnBorder: "setBtnBorder-@{theme}";
-  @btnBg: "btnBg-@{theme}"; // 按钮内部颜色
-  @setLarge: "setLarge-@{theme}"; // 设置标题颜色
-  @setSmall: "setSmall-@{theme}"; // 设置文本颜色
-  @shadow: "shadow-@{theme}"; // 卡片的阴影
-  @hover: "hover-@{theme}"; // 按钮hover颜色
-  @numberInput: "numberInput-@{theme}"; //设置页面加减按钮
+  @ceobeLightColor: 'ceobeLightColor-@{theme}'; //小刻食堂主题亮色浅色
+  @ceobeColor: 'ceobeColor-@{theme}'; //小刻食堂主题亮色
+  @ceobeVeryLightColor: 'ceobeVeryLightColor-@{theme}'; // 小刻食堂主题亮色非常浅色
+  @ceobeDarkColor: 'ceobeDarkColor-@{theme}'; //小刻食堂主题暗色
+  @bgColor: 'bgColor-@{theme}'; // 背景颜色
+  @content: 'content-@{theme}'; // 文本颜色
+  @timeline: 'timeline-@{theme}'; // 时间线颜色和时间线border颜色
+  @subTitle: 'subTitle-@{theme}'; // 小标题颜色
+  @btnBorder: 'btnBorder-@{theme}'; // 按钮边框颜色和一些小线条
+  @setBtnBorder: 'setBtnBorder-@{theme}';
+  @btnBg: 'btnBg-@{theme}'; // 按钮内部颜色
+  @setLarge: 'setLarge-@{theme}'; // 设置标题颜色
+  @setSmall: 'setSmall-@{theme}'; // 设置文本颜色
+  @shadow: 'shadow-@{theme}'; // 卡片的阴影
+  @hover: 'hover-@{theme}'; // 按钮hover颜色
+  @numberInput: 'numberInput-@{theme}'; //设置页面加减按钮
 
   #app {
-    /deep/ a {
-      color: @@content  !important;
+    :deep(a) {
+      color: @@content !important;
     }
-
-    background-color: @@bgColor;
+    overflow: auto;
     width: 700px;
     height: 599px;
-    overflow: auto;
     font-size: 14px;
+
+    background-color: @@bgColor;
   }
 
   .color-blue {
     color: #23ade5;
   }
+
   .sane-calculator {
     .san-push.is-checked {
-      /deep/ .el-switch__core {
+      :deep(.el-switch__core) {
         border-color: @@ceobeColor;
         background-color: @@ceobeColor;
       }
@@ -609,19 +537,19 @@ export default {
 
   .title-area {
     position: fixed;
-    width: calc(100% - 32px);
-    height: 40px;
-    line-height: 40px;
     top: 0;
     z-index: 9999;
     display: flex;
-    padding: 0 14px 0 18px;
     justify-content: space-between;
     align-items: flex-start;
+    padding: 0 14px 0 18px;
+    width: calc(100% - 32px);
+    height: 40px;
     font-size: 1rem;
     color: @@ceobeColor;
-    user-select: none;
     background: @@ceobeDarkColor;
+    line-height: 40px;
+    user-select: none;
 
     .version {
       text-align: left;
@@ -637,19 +565,19 @@ export default {
       }
 
       .count-down-area {
-        cursor: pointer;
-        margin-right: 10px;
-        text-align: right;
-        height: 40px;
         overflow: hidden;
+        margin-right: 10px;
         padding: 0 10px 0 0;
+        height: 40px;
         border-radius: 3px;
+        text-align: right;
         transition: all 0.5s;
+        cursor: pointer;
 
         &:hover {
-          background: @@bgColor;
           height: auto;
-          box-shadow: 0 0 20px 0px;
+          background: @@bgColor;
+          box-shadow: 0 0 20px 0;
         }
       }
     }
@@ -657,13 +585,13 @@ export default {
 
   .top-btn {
     position: fixed;
+    right: -40px;
     bottom: 30px;
     z-index: 9999;
-    opacity: 1;
-    right: -40px;
-    transition: 0.3s all;
-    background-color: @@ceobeColor;
     border-color: @@ceobeColor;
+    background-color: @@ceobeColor;
+    opacity: 1;
+    transition: 0.3s all;
 
     &.top-btn-show {
       right: 20px;
@@ -690,52 +618,56 @@ export default {
   }
 
   // 快捷连接
+
   .drawer-btn-area-quickJump {
     display: flex;
     overflow-x: scroll;
-    height: 100px;
     margin: 0 10px;
+    height: 100px;
 
     .quickJump-img-area {
-      flex-shrink: 0;
-      max-width: 350px;
-      margin-right: 10px;
-      border-radius: 5px;
-      overflow: hidden;
-      border: 1px solid #dcdfe6;
       position: relative;
+      overflow: hidden;
+      margin-right: 10px;
+      max-width: 350px;
+      border: 1px solid #dcdfe6;
+      border-radius: 5px;
+      flex-shrink: 0;
 
       // display: flex;
       // flex-wrap: wrap;
       // align-items: center;
+
       &:hover {
         img {
           filter: blur(30px) brightness(0.1);
         }
-        .author{
+
+        .author {
           & p {
             opacity: 1;
           }
         }
       }
+
       img {
         height: 100px;
       }
 
-      .author{
-        position:absolute;
+      .author {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 1;
         width: 100%;
-        z-index:1;
-        top:50%;
-        left:50%;
-        transform:translate(-50%, -50%);
         text-align: center;
+        transform: translate(-50%, -50%);
         pointer-events: none;
 
-        & p{
-          opacity: 0;
+        & p {
           font-size: 20px;
-          color:#fff;
+          color: #fff;
+          opacity: 0;
         }
       }
     }
@@ -760,9 +692,10 @@ export default {
   }
 
   // 标签栏
-  /deep/ .el-tabs {
-    height: 30px;
+
+  :deep(.el-tabs) {
     margin: 0 10px;
+    height: 30px;
 
     .el-tabs__nav-prev,
     .el-tabs__nav-next {
@@ -771,8 +704,8 @@ export default {
     }
 
     .el-tabs__header {
-      margin-bottom: 5px;
       margin-top: 15px;
+      margin-bottom: 5px;
 
       .title-img {
         width: 30px;
@@ -802,7 +735,8 @@ export default {
   }
 
   // 隐藏二级菜单
-  /deep/ .ttb {
+
+  :deep(.ttb) {
     background-color: @@bgColor;
 
     .el-divider {
@@ -810,13 +744,13 @@ export default {
     }
 
     .el-divider__text {
-      background-color: @@bgColor;
       color: @@setLarge;
+      background-color: @@bgColor;
     }
 
     .el-button {
-      background-color: @@bgColor;
       border: @@btnBorder 1px solid;
+      background-color: @@bgColor;
 
       .radius {
         background-color: #fff;
@@ -824,14 +758,15 @@ export default {
     }
 
     // 单独对刷新设置设颜色
+
     .el-button--primary {
-      background-color: @@ceobeColor;
       border: @@ceobeColor 1px solid;
+      background-color: @@ceobeColor;
     }
 
     .el-button:hover {
-      color: @@ceobeColor;
       border-color: @@ceobeLightColor;
+      color: @@ceobeColor;
       background-color: @@ceobeVeryLightColor;
     }
 
@@ -847,8 +782,8 @@ export default {
 
     .el-input-number__increase,
     .el-input-number__decrease {
-      background-color: @@numberInput;
       color: @@setSmall;
+      background-color: @@numberInput;
     }
 
     .el-input-number__increase {
@@ -860,17 +795,14 @@ export default {
     }
 
     .el-input-number__increase:hover + .el-input > .el-input__inner,
-    .el-input-number__decrease:hover
-      + .el-input-number__increase
-      + .el-input
-      > .el-input__inner {
+    .el-input-number__decrease:hover + .el-input-number__increase + .el-input > .el-input__inner {
       border: @@ceobeColor 1px solid;
     }
 
     .el-input__inner {
-      background-color: @@bgColor;
-      color: @@setLarge;
       border: @@btnBorder 1px solid;
+      color: @@setLarge;
+      background-color: @@bgColor;
     }
 
     .el-input__inner:focus {
@@ -881,8 +813,8 @@ export default {
 
 .dark {
   .styleChange(dark);
-  background: #22272e;
   height: 100vh;
+  background: #22272e;
 }
 
 .light {
@@ -909,8 +841,8 @@ export default {
   }
 
   .el-timeline {
-    padding-left: 20px !important;
     padding-right: 10px !important;
+    padding-left: 20px !important;
   }
 
   .el-timeline-item__timestamp {
@@ -946,8 +878,8 @@ export default {
     flex-wrap: wrap;
 
     .el-button {
-      width: 40% !important;
       margin: 3px !important;
+      width: 40% !important;
     }
   }
 
@@ -974,10 +906,6 @@ body {
 
 ::-webkit-scrollbar {
   width: 0 !important;
-}
-
-::-webkit-scrollbar {
-  width: 0 !important;
   height: 0;
 }
 
@@ -987,22 +915,24 @@ body {
   margin-right: 30px;
 
   p {
-    margin: 0px;
+    margin: 0;
   }
 
   // 菜单按钮
+
   drawer {
-    color : #dd558a;
+    color: #dd558a;
   }
 
   // 设置按钮
+
   setting {
     color: #dd55c4;
   }
 
   .online-title-img {
-    height: 100px;
     margin-right: 10px;
+    height: 100px;
 
     &.radius {
       border-radius: 4px;

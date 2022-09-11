@@ -1,100 +1,99 @@
 {
-    "list": [
-        {
-            "html": "<div class='online-area'> <img class='online-title-img' src='/assets/image/icon.ico'> <div> <div><span class='online-red'>警告！！！警告！！！</span></div> <div>博士，PRTS检测到小刻食堂接口<span class='online-red'>出现异常</span>，初步判断有三种情况：</div> <div><span class='online-yellow'>1.</span>网络无连接 <span class='online-yellow'>2.</span>我们服务器可能收到攻击 <span class='online-yellow'>3.</span>你插件版本太旧啦</div> <div>博士请尽快解决！</div> <div>如果无法解决，<a class='webOpen' href='https://jq.qq.com/?_wv=1027&k=Vod1uO13'>点击加群</a> 联系开发者协助</div> </div> </div>",
-            "start_time": "2021-5-01 12:00:00",
-            "over_time": "2099-12-31 04:00:00",
-            "notice": false
-        },
-        {
-            "html": "<div class='online-area'> <img class='online-title-img' src='/assets/image/icon.ico'> <div> <div>博士，谢谢你使用蹲饼。</div> <div>如果觉得好用的话，希望能去<a class='webOpen' href='https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue'>GitHub</a>上点个<span class='online-red'>Star</span>或者</div> <div>去<a class='webOpen' href='https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN'>Chrome商店</a>，<a class='webOpen' href='https://microsoftedge.microsoft.com/addons/detail/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknight/jimmfliacfpeabcifcghmdankmdnmfmn?hl=zh-CN'>Edge商店</a>或<a class='webOpen' href='https://addons.mozilla.org/zh-CN/firefox/addon/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cookies/'>Firefox商店</a>里面给个<span class='online-red'>好评</span></div> <div>也可以去<a class='webOpen' href='https://arknightscommunity.drblack-system.com/15386.html'>泰拉通讯枢纽</a>里面<span class='online-red'>回复我们</span>，或者去<a class='webOpen' href='https://www.bilibili.com/video/BV1jv411P7bR/'>b站视频</a>给个<span class='online-red'>三连</span></div> <div>欢迎加群 <a class='webOpen' href='https://jq.qq.com/?_wv=1027&k=Vod1uO13'>【蹲饼测试群】</a> 一起聊天，蹲饼！</div> </div> </div>",
-            "start_time": "2021-5-01 12:00:00",
-            "over_time": "2099-12-31 04:00:00",
-            "notice": false
-        }
-    ],
-    "btnList": [
-        {
-            "start_time": "2021-5-01 12:00:00",
-            "over_time": "2099-12-31 04:00:00",
-            "video_link": "https://www.bilibili.com/video/BV1jv411P7bR",
-            "title": "【小刻食堂3.0宣传视频，给个三连支持一下吧】找饼，超速了!",
-            "cover_img": "https://i1.hdslb.com/bfs/archive/028990e686ff322f6b3b0712478cfd3655062adc.png@200w_125h_1c.webp"
-        },
-        {
-            "start_time": "2021-5-01 12:00:00",
-            "over_time": "2099-12-31 04:00:00",
-            "video_link": "https://www.bilibili.com/video/BV1z5411T7KU",
-            "title": "【洛梧藤】小刻食堂-蹲饼器 更新V2.1.0",
-            "cover_img": "https://i2.hdslb.com/bfs/archive/f6bda570b637e903b94968ec18152b0315d91459.jpg@200w_125h_1c.webp"
-        },
-        {
-            "start_time": "2021-5-01 12:00:00",
-            "over_time": "2099-12-31 04:00:00",
-            "video_link": "https://www.bilibili.com/video/BV1Ap4y1b7UC",
-            "title": "《明日方舟》游戏概念宣传PV-3",
-            "cover_img": "https://i0.hdslb.com/bfs/archive/8d9f8fc6a78cb8836dff0942dbdc760e6a08a9c0.jpg@200w_125h_1c.webp"
-        },
-        {
-            "start_time": "2021-5-01 12:00:00",
-            "over_time": "2099-12-31 04:00:00",
-            "video_link": "https://www.bilibili.com/video/BV1w4411b7c3",
-            "title": "《明日方舟》游戏概念宣传PV-2",
-            "cover_img": "https://i1.hdslb.com/bfs/archive/54932bd03d33f1aedc2d799c0673c19f51f3a801.jpg@200w_125h_1c.webp"
-        },
-        {
-            "start_time": "2021-5-01 12:00:00",
-            "over_time": "2099-12-31 04:00:00",
-            "video_link": "https://www.bilibili.com/video/BV1ux41147Eh",
-            "title": "《明日方舟》游戏概念宣传PV-1",
-            "cover_img": "https://i1.hdslb.com/bfs/archive/54932bd03d33f1aedc2d799c0673c19f51f3a801.jpg@200w_125h_1c.webp"
-        }
-    ],
-    "dayInfo": {
-        "resources": {
-            "start_time": "2021-8-26 16:00:00",
-            "over_time": "2021-9-09 03:59:59"
-        },
-        "countdown": [
-            {
-                "text": "1.网络无连接",
-                "remark": "去连接一下网络",
-                "time": "2021-3-03 16:00:00",
-                "start_time": "2021-3-03 16:00:00",
-                "over_time": "2099-12-31 04:00:00"
-            },
-            {
-                "text": "2.我们服务器可能收到攻击",
-                "remark": "请耐心等待",
-                "time": "2021-3-03 16:00:00",
-                "start_time": "2021-3-03 16:00:00",
-                "over_time": "2099-12-31 04:00:00"
-            },
-            {
-                "text": "3.你插件版本太旧啦",
-                "remark": "点击视频或者公告链接去下载最新版吧",
-                "time": "2021-3-03 16:00:00",
-                "start_time": "2021-3-03 16:00:00",
-                "over_time": "2099-12-31 04:00:00"
-            }
-        ]
+  "list": [
+    {
+      "html": "<div class='online-area'> <img class='online-title-img' src='/assets/image/icon.ico'> <div> <div><span class='online-red'>警告！！！警告！！！</span></div> <div>博士，PRTS检测到小刻食堂接口<span class='online-red'>出现异常</span>，初步判断有三种情况：</div> <div><span class='online-yellow'>1.</span>网络无连接 <span class='online-yellow'>2.</span>我们服务器可能收到攻击 <span class='online-yellow'>3.</span>你插件版本太旧啦</div> <div>博士请尽快解决！</div> <div>如果无法解决，<a class='webOpen' href='https://jq.qq.com/?_wv=1027&k=Vod1uO13'>点击加群</a> 联系开发者协助</div> </div> </div>",
+      "start_time": "2021-5-01 12:00:00",
+      "over_time": "2099-12-31 04:00:00",
+      "notice": false
     },
-    "upgrade": {
-        "version": "9.9.9",
-        "title": "你的版本可能过旧啦，点击下载zip或者crx看看吧",
-        "description": "记得去看看看看有没有版本更新呀",
-        "down": {
-            "crx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/",
-            "zip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/",
-            "spare": ["https://pan.baidu.com/s/1kzY6kpfYqLcGpuaiwQOGoA", "备用下载（提取码 jzq9）"],
-            "chrome": "https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN",
-            "edge": "https://microsoftedge.microsoft.com/addons/detail/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknight/jimmfliacfpeabcifcghmdankmdnmfmn?hl=zh-CN",
-            "firefox": "https://addons.mozilla.org/zh-CN/firefox/addon/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cookies/"
-    
-        }
-    },
-    "insider": {
-        "f6e9fa6d782cfb7781cee67c0a188637d44ef761af74e0bfff02e1f53786b90e78fcbe3bb31a602f405c37491fc6fb7b5f8dd4df0e76132f8886a6b7846dfa6b": 1,
-        "71add0d3edb7f188abf850643eeeca13b5cc266254b4d6bf1369e9889c584f658a21f6e110a509d5775c406b022839613196dc16db07677626208c2f5e4f77cc": 2
+    {
+      "html": "<div class='online-area'> <img class='online-title-img' src='/assets/image/icon.ico'> <div> <div>博士，谢谢你使用蹲饼。</div> <div>如果觉得好用的话，希望能去<a class='webOpen' href='https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue'>GitHub</a>上点个<span class='online-red'>Star</span>或者</div> <div>去<a class='webOpen' href='https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN'>Chrome商店</a>，<a class='webOpen' href='https://microsoftedge.microsoft.com/addons/detail/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknight/jimmfliacfpeabcifcghmdankmdnmfmn?hl=zh-CN'>Edge商店</a>或<a class='webOpen' href='https://addons.mozilla.org/zh-CN/firefox/addon/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cookies/'>Firefox商店</a>里面给个<span class='online-red'>好评</span></div> <div>也可以去<a class='webOpen' href='https://arknightscommunity.drblack-system.com/15386.html'>泰拉通讯枢纽</a>里面<span class='online-red'>回复我们</span>，或者去<a class='webOpen' href='https://www.bilibili.com/video/BV1jv411P7bR/'>b站视频</a>给个<span class='online-red'>三连</span></div> <div>欢迎加群 <a class='webOpen' href='https://jq.qq.com/?_wv=1027&k=Vod1uO13'>【蹲饼测试群】</a> 一起聊天，蹲饼！</div> </div> </div>",
+      "start_time": "2021-5-01 12:00:00",
+      "over_time": "2099-12-31 04:00:00",
+      "notice": false
     }
+  ],
+  "btnList": [
+    {
+      "start_time": "2021-5-01 12:00:00",
+      "over_time": "2099-12-31 04:00:00",
+      "video_link": "https://www.bilibili.com/video/BV1jv411P7bR",
+      "title": "【小刻食堂3.0宣传视频，给个三连支持一下吧】找饼，超速了!",
+      "cover_img": "https://i1.hdslb.com/bfs/archive/028990e686ff322f6b3b0712478cfd3655062adc.png@200w_125h_1c.webp"
+    },
+    {
+      "start_time": "2021-5-01 12:00:00",
+      "over_time": "2099-12-31 04:00:00",
+      "video_link": "https://www.bilibili.com/video/BV1z5411T7KU",
+      "title": "【洛梧藤】小刻食堂-蹲饼器 更新V2.1.0",
+      "cover_img": "https://i2.hdslb.com/bfs/archive/f6bda570b637e903b94968ec18152b0315d91459.jpg@200w_125h_1c.webp"
+    },
+    {
+      "start_time": "2021-5-01 12:00:00",
+      "over_time": "2099-12-31 04:00:00",
+      "video_link": "https://www.bilibili.com/video/BV1Ap4y1b7UC",
+      "title": "《明日方舟》游戏概念宣传PV-3",
+      "cover_img": "https://i0.hdslb.com/bfs/archive/8d9f8fc6a78cb8836dff0942dbdc760e6a08a9c0.jpg@200w_125h_1c.webp"
+    },
+    {
+      "start_time": "2021-5-01 12:00:00",
+      "over_time": "2099-12-31 04:00:00",
+      "video_link": "https://www.bilibili.com/video/BV1w4411b7c3",
+      "title": "《明日方舟》游戏概念宣传PV-2",
+      "cover_img": "https://i1.hdslb.com/bfs/archive/54932bd03d33f1aedc2d799c0673c19f51f3a801.jpg@200w_125h_1c.webp"
+    },
+    {
+      "start_time": "2021-5-01 12:00:00",
+      "over_time": "2099-12-31 04:00:00",
+      "video_link": "https://www.bilibili.com/video/BV1ux41147Eh",
+      "title": "《明日方舟》游戏概念宣传PV-1",
+      "cover_img": "https://i1.hdslb.com/bfs/archive/54932bd03d33f1aedc2d799c0673c19f51f3a801.jpg@200w_125h_1c.webp"
+    }
+  ],
+  "dayInfo": {
+    "resources": {
+      "start_time": "2021-8-26 16:00:00",
+      "over_time": "2021-9-09 03:59:59"
+    },
+    "countdown": [
+      {
+        "text": "1.网络无连接",
+        "remark": "去连接一下网络",
+        "time": "2021-3-03 16:00:00",
+        "start_time": "2021-3-03 16:00:00",
+        "over_time": "2099-12-31 04:00:00"
+      },
+      {
+        "text": "2.我们服务器可能收到攻击",
+        "remark": "请耐心等待",
+        "time": "2021-3-03 16:00:00",
+        "start_time": "2021-3-03 16:00:00",
+        "over_time": "2099-12-31 04:00:00"
+      },
+      {
+        "text": "3.你插件版本太旧啦",
+        "remark": "点击视频或者公告链接去下载最新版吧",
+        "time": "2021-3-03 16:00:00",
+        "start_time": "2021-3-03 16:00:00",
+        "over_time": "2099-12-31 04:00:00"
+      }
+    ]
+  },
+  "upgrade": {
+    "version": "9.9.9",
+    "title": "你的版本可能过旧啦，点击下载zip或者crx看看吧",
+    "description": "记得去看看看看有没有版本更新呀",
+    "down": {
+      "crx": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/",
+      "zip": "https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/",
+      "spare": ["https://pan.baidu.com/s/1kzY6kpfYqLcGpuaiwQOGoA", "备用下载（提取码 jzq9）"],
+      "chrome": "https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN",
+      "edge": "https://microsoftedge.microsoft.com/addons/detail/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknight/jimmfliacfpeabcifcghmdankmdnmfmn?hl=zh-CN",
+      "firefox": "https://addons.mozilla.org/zh-CN/firefox/addon/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cookies/"
+    }
+  },
+  "insider": {
+    "f6e9fa6d782cfb7781cee67c0a188637d44ef761af74e0bfff02e1f53786b90e78fcbe3bb31a602f405c37491fc6fb7b5f8dd4df0e76132f8886a6b7846dfa6b": 1,
+    "71add0d3edb7f188abf850643eeeca13b5cc266254b4d6bf1369e9889c584f658a21f6e110a509d5775c406b022839613196dc16db07677626208c2f5e4f77cc": 2
+  }
 }

@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="../assets/image/icon.png" />
+    <img alt="Vue logo" src="/assets/image/icon.png" />
     <HelloWorld msg="Welcome to Your Vue.js App" />
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
-import ElementUI from "element-ui";
-import "element-ui/lib/theme-chalk/index.css";
+import HelloWorld from './components/HelloWorld.vue';
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
     HelloWorld,
   },
@@ -20,13 +20,14 @@ export default {
 
 <style>
 #app {
+  margin-top: 60px;
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
 body {
   margin: 0;
   padding: 0;

@@ -1,5 +1,5 @@
-import {BilibiliDataSource} from './def/BilibiliDataSource';
-import {WeiboDataSource} from './def/WeiboDataSource';
+import { BilibiliDataSource } from './def/BilibiliDataSource';
+import { WeiboDataSource } from './def/WeiboDataSource';
 
 class CustomDataSourceBuilder {
   /**
@@ -28,7 +28,6 @@ class CustomDataSourceBuilder {
    */
   build;
 
-
   constructor(type, title, argTip, argPlaceholder, build) {
     this.type = type;
     this.title = title;
@@ -51,7 +50,7 @@ const customDataSourceTypes = [
       return BilibiliDataSource.withUid(arg, (config) => {
         config.priority = BASE_PRIORITY;
       });
-    })
+    }),
   },
   {
     name: WeiboDataSource.typeInfo.typeName,
@@ -62,7 +61,7 @@ const customDataSourceTypes = [
       return WeiboDataSource.withUid(arg, (config) => {
         config.priority = BASE_PRIORITY;
       });
-    })
+    }),
   },
 ];
 const customDataSourceTypesByName = {};
@@ -70,4 +69,4 @@ for (const type of customDataSourceTypes) {
   customDataSourceTypesByName[type.name] = type.builder;
 }
 
-export {customDataSourceTypes, customDataSourceTypesByName};
+export { customDataSourceTypes, customDataSourceTypesByName };
