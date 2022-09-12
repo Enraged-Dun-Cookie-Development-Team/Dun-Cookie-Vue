@@ -437,7 +437,7 @@ export default {
     },
     copyTextData(item) {
       this.$copyText(
-        `${item.content}
+        `${item.content.replace(/<\/span>|<span class="highlight">/g, '')}
 
 蜜饼来源：${item.jumpUrl}
 
