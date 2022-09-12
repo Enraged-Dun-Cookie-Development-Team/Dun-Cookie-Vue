@@ -304,11 +304,11 @@ export default class AbstractPlatform {
    * 生成某条数据的分享图片
    * @param dataItem {DataItem}
    * @param iconUrl {string}
-   * @param sourceIconUrl {string}
+   * @param dataSource {DataSource}
    * @param imageUrl {string?}
    * @return {Promise}
    */
-  generateShareImage(dataItem, iconUrl, sourceIconUrl, imageUrl) {
+  generateShareImage(dataItem, iconUrl, dataSource, imageUrl) {
     throw new Error(unsupportedTip);
   }
 

@@ -474,11 +474,10 @@ export default {
         message: '生成图片中，请稍后',
         type: 'info',
       });
-
       PlatformHelper.Img.generateShareImage(
         item,
         '/assets/image/' + Settings.logo,
-        DataSourceUtil.getByName(item.dataSource).icon,
+        { ...DataSourceUtil.getByName(item.dataSource) },
         imageUrl
       )
         .then((canvas) => {
