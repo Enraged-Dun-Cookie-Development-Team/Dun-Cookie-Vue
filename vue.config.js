@@ -5,9 +5,11 @@ const newtabMode = process.env.NEWTAB_MODE;
 
 const config = {
   devServer: {
-    writeToDisk: true,
     hot: false,
-    disableHostCheck: true,
+    allowedHosts: 'all',
+    devMiddleware: {
+      writeToDisk: true,
+    },
   },
   filenameHashing: false,
   lintOnSave: false, //关闭eslint检查
