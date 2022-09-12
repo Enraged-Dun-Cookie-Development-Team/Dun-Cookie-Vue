@@ -46,7 +46,6 @@ export default class BrowserPlatform extends AbstractPlatform {
   }
 
   async generateShareImage(dataItem, iconUrl, dataSource, imageUrl) {
-    debugger;
     if (typeof imageUrl !== 'string') {
       imageUrl = dataItem.coverImage;
     }
