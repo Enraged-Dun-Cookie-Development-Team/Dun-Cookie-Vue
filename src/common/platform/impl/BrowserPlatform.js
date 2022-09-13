@@ -45,7 +45,7 @@ export default class BrowserPlatform extends AbstractPlatform {
     return 'Browser';
   }
 
-  async generateShareImage(dataItem, iconUrl, sourceIconUrl, imageUrl) {
+  async generateShareImage(dataItem, iconUrl, dataSource, imageUrl) {
     if (typeof imageUrl !== 'string') {
       imageUrl = dataItem.coverImage;
     }
@@ -57,7 +57,7 @@ export default class BrowserPlatform extends AbstractPlatform {
     const canvasWidth = Math.max(680, image ? 960 : 0) + 20;
 
     // 减掉左右边距
-    const headerCanvasPromise = this.__generateImageHeader(canvasWidth - 20, dataItem, iconUrl, sourceIconUrl);
+    const headerCanvasPromise = this.__generateImageHeader(canvasWidth - 20, dataItem, iconUrl, dataSource);
     const textCanvasPromise = this.__generateImageTextContent(canvasWidth - 20, dataItem);
 
     const [headerCanvas, textCanvas] = await Promise.all([headerCanvasPromise, textCanvasPromise]);
@@ -93,17 +93,17 @@ export default class BrowserPlatform extends AbstractPlatform {
    * @param width {number}
    * @param dataItem {DataItem}
    * @param iconUrl {string}
-   * @param sourceIconUrl {string}
+   * @param dataSource {DataSource}
    * @return {Promise<HTMLCanvasElement>}
    * @private
    */
-  async __generateImageHeader(width, dataItem, iconUrl, sourceIconUrl) {
+  async __generateImageHeader(width, dataItem, iconUrl, dataSource) {
     let canvas = document.createElement('canvas');
     let ctx = canvas.getContext('2d');
     canvas.width = width;
     canvas.height = 120;
     const iconPromise = this.__loadImage(iconUrl);
-    const sourceIconPromise = this.__loadImage(sourceIconUrl);
+    const sourceIconPromise = this.__loadImage(dataSource.icon);
     const jumpQrCodePromise = this.__generateQrcode(dataItem.jumpUrl);
     const toolQrCodePromise = this.__generateQrcode(TOOL_QR_URL);
     /**
@@ -122,7 +122,7 @@ export default class BrowserPlatform extends AbstractPlatform {
     // 数据源信息
     ctx.fillStyle = '#848488';
     ctx.font = '20px Microsoft Yahei';
-    ctx.fillText(`${dataItem.dataSource}`, 170, 90);
+    ctx.fillText(`${dataSource.title}`, 170, 90);
     ctx.drawImage(sourceIcon, 120, 70, 40, 40);
 
     ctx.fillStyle = '#909399';

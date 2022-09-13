@@ -305,8 +305,8 @@ class HttpHelper {
 }
 
 class ImgHelper {
-  generateShareImage(dataItem, iconUrl, sourceIconUrl, imageUrl) {
-    return currentPlatform.generateShareImage(dataItem, iconUrl, sourceIconUrl, imageUrl);
+  generateShareImage(dataItem, iconUrl, dataSource, imageUrl) {
+    return currentPlatform.generateShareImage(dataItem, iconUrl, dataSource, imageUrl);
   }
 }
 

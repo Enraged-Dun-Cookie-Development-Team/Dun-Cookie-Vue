@@ -152,6 +152,9 @@ const configList = [
   NeteaseCloudMusicDataSource.withUid(50653540, (config) => {
     config.priority(16);
   }),
+  WeiboDataSource.withUid(7745672941, (config) => {
+    config.priority(17).groupId(SHARE_DEFAULT_GROUP);
+  }),
 ];
 
 /**

@@ -323,7 +323,7 @@ export default class NodePlatform extends AbstractPlatform {
     return node_require('jquery')(window);
   }
 
-  generateShareImage(dataItem, iconUrl, sourceIconUrl, imageUrl) {
+  generateShareImage(dataItem, iconUrl, dataSource, imageUrl) {
     if (DEBUG_LOG) {
       console.log('Node环境暂不支持生成图片');
     }
