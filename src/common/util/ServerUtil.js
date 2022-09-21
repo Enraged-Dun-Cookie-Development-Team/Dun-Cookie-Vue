@@ -21,35 +21,36 @@ const serveOption = {
 }
 
 export default class ServerUtil {
-
-    /**
-     * 获取公告信息
-     */
-    static async getAnnouncementInfo(shouldNotice) {
-        await new Promise(resolve => Settings.doAfterInit(() => resolve()));
-        let data;
-        try {
-            data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/announcement/list", serveOption)));
-        } catch (e) {
-            console.log(e);
-        }
-        if (!data) {
-            const fallbackUrl = PlatformHelper.Extension.getURL("Dun-Cookies-Info.json");
-            data = await HttpUtil.GET_Json(fallbackUrl);
-            data = data.list
-        } else {
-            data = data.data;
-        }
-        if (!data) {
-            return data;
-        }
-        if (shouldNotice) {
-            if (Settings.feature.announcementNotice) {
-                let filterList = data.filter(
-                    (x) =>
-                        new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
-                        new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
-                );
+  /**
+   * 获取公告信息
+   */
+  static async getAnnouncementInfo(shouldNotice) {
+    await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
+    let data;
+    try {
+      data = await PromiseUtil.any(
+        CANTEEN_SERVER_LIST.map((api) => HttpUtil.GET_Json(api + 'canteen/operate/announcement/list', serveOption))
+      );
+    } catch (e) {
+      console.log(e);
+    }
+    if (!data) {
+      const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
+      data = await HttpUtil.GET_Json(fallbackUrl);
+      data = data.list;
+    } else {
+      data = data.data;
+    }
+    if (!data) {
+      return data;
+    }
+    if (shouldNotice) {
+      if (Settings.feature.announcementNotice) {
+        let filterList = data.filter(
+          (x) =>
+            new Date(x.star_time) <= TimeUtil.changeToCCT(new Date()) &&
+            new Date(x.over_time) >= TimeUtil.changeToCCT(new Date())
+        );
 
                 let today = TimeUtil.format(new Date(), 'yyyy-MM-dd');
                 let announcementNoticeStatus = await PlatformHelper.Storage.getLocalStorage("announcement-notice-status") || {};
