@@ -58,9 +58,9 @@ export class WeiboDataSource extends DataSource {
             )
             .jumpUrl(`https://weibo.com/${weiboId}`)
             .coverImage(coverImage)
-            .previewList(dynamicInfo.pic_ids && dynamicInfo.pic_ids.map((x) => `https://wx1.sinaimg.cn/thumbnail/${x}`))
-            .imageList(dynamicInfo.pic_ids && dynamicInfo.pic_ids.map((x) => `https://wx1.sinaimg.cn/large/${x}`))
-            .imageHttpList(dynamicInfo.pic_ids && dynamicInfo.pic_ids.map((x) => `http://wx3.sinaimg.cn/large/${x}`));
+            .previewList(dynamicInfo.pics?.map((x) => x.url))
+            .imageList(dynamicInfo.pics?.map((x) => x.large?.url))
+            .imageHttpList(dynamicInfo.pics?.map((x) => x.large?.url.replace('https', 'http')));
 
           if (x.mblog.hasOwnProperty('isTop') && x.mblog.isTop == 1) {
             builder.setTop();
