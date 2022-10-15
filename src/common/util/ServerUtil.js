@@ -48,8 +48,8 @@ export default class ServerUtil {
       if (Settings.feature.announcementNotice) {
         let filterList = data.filter(
           (x) =>
-            new Date(x.starTime) <= TimeUtil.changeToCCT(new Date()) &&
-            new Date(x.overTime) >= TimeUtil.changeToCCT(new Date())
+            new Date(x.star_time) <= TimeUtil.changeToCCT(new Date()) &&
+            new Date(x.over_time) >= TimeUtil.changeToCCT(new Date())
         );
 
         let today = TimeUtil.format(new Date(), 'yyyy-MM-dd');
