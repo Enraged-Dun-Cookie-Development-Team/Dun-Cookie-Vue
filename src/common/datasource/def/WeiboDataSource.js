@@ -126,6 +126,6 @@ export class WeiboDataSource extends DataSource {
     if (json.ok != 1) {
       throw 'request fail: ' + JSON.stringify(json);
     }
-    return new UserInfo(json.data.userInfo.screen_name + '微博', json.data.userInfo.avatar_hd);
+    return new UserInfo(json.data.userInfo.screen_name + '微博', json.data.userInfo.profile_image_url);
   }
 }
