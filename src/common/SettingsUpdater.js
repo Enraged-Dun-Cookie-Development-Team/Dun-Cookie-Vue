@@ -35,19 +35,20 @@ async function updateLegacyToV1(oldSettings) {
   return newSettings;
 }
 
-async function updateV1ToV2(oldSettings) {
+function updateV1ToV2(oldSettings) {
   console.log('从V1配置升级：');
   console.log(oldSettings);
   const newSettings = deepAssign({}, oldSettings);
 
   Reflect.deleteProperty(newSettings, 'currentDataSources');
 
+  newSettings.version = newSettings.version + 1;
   console.log('升级V2完毕，新配置：');
   console.log(newSettings);
   return newSettings;
 }
 
-async function updateV2ToV3(oldSettings) {
+function updateV2ToV3(oldSettings) {
   console.log('从V2配置升级：');
   console.log(oldSettings);
   const newSettings = deepAssign({}, oldSettings);
@@ -64,6 +65,7 @@ async function updateV2ToV3(oldSettings) {
       break;
   }
 
+  newSettings.version = newSettings.version + 1;
   console.log('升级V3完毕，新配置：');
   console.log(newSettings);
   return newSettings;
