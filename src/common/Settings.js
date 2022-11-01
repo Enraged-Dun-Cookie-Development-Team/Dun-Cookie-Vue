@@ -300,7 +300,7 @@ class Settings {
     const time = this.dun.lowFrequencyTime;
     const starHour = time[0] < 12 ? time[0] + 12 : time[0] - 12;
     const endHour = time[1] < 12 ? time[1] + 12 : time[1] - 12;
-    return currentHour >= starHour || currentHour < endHour;
+    return currentHour >= starHour && currentHour < endHour;
   }
 
   /**
