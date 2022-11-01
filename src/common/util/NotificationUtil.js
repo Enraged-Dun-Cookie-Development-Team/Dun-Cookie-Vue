@@ -36,3 +36,5 @@ class NotificationUtil {
 }
 
 export default NotificationUtil;
+
+globalThis.NotificationUtil = NotificationUtil;
