@@ -42,7 +42,6 @@ function updateV1ToV2(oldSettings) {
 
   Reflect.deleteProperty(newSettings, 'currentDataSources');
 
-  newSettings.version = newSettings.version + 1;
   console.log('升级V2完毕，新配置：');
   console.log(newSettings);
   return newSettings;
@@ -65,7 +64,6 @@ function updateV2ToV3(oldSettings) {
       break;
   }
 
-  newSettings.version = newSettings.version + 1;
   console.log('升级V3完毕，新配置：');
   console.log(newSettings);
   return newSettings;
@@ -78,21 +76,25 @@ async function updateSettings(oldSettings) {
   }
   // 无版本号的旧配置文件升级
   if (!oldSettings.version) {
-    return await updateLegacyToV1(oldSettings);
+    oldSettings = await updateLegacyToV1(oldSettings);
   }
-  let oldVersion = parseInt(oldSettings.version);
-  while (oldVersion < CURRENT_SETTING_VERSION) {
-    switch (oldVersion) {
+
+  let currentVersion = parseInt(oldSettings.version);
+  let currentSettings = deepAssign({}, oldSettings);
+  Reflect.deleteProperty(currentSettings, 'version');
+  while (currentVersion < CURRENT_SETTING_VERSION) {
+    switch (currentVersion) {
       case 1:
-        oldSettings = updateV1ToV2(oldSettings);
+        currentSettings = updateV1ToV2(currentSettings);
         break;
       case 2:
-        oldSettings = updateV2ToV3(oldSettings);
+        currentSettings = updateV2ToV3(currentSettings);
         break;
     }
-    oldVersion++;
+    currentVersion++;
   }
-  return oldSettings;
+  currentSettings.version = CURRENT_SETTING_VERSION;
+  return currentSettings;
 }
 
 export { updateSettings };
