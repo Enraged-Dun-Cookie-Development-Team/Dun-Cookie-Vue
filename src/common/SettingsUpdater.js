@@ -41,6 +41,17 @@ async function updateV1ToV2(oldSettings) {
   const newSettings = deepAssign({}, oldSettings);
 
   Reflect.deleteProperty(newSettings, 'currentDataSources');
+
+  console.log('升级V2完毕，新配置：');
+  console.log(newSettings);
+  return newSettings;
+}
+
+async function updateV2ToV3(oldSettings) {
+  console.log('从V2配置升级：');
+  console.log(oldSettings);
+  const newSettings = deepAssign({}, oldSettings);
+
   switch (newSettings.dun?.gamePlatform) {
     case 'Android':
       newSettings.dun.gamePlatform = 'official/Android';
@@ -53,7 +64,7 @@ async function updateV1ToV2(oldSettings) {
       break;
   }
 
-  console.log('升级完毕，新配置：');
+  console.log('升级V3完毕，新配置：');
   console.log(newSettings);
   return newSettings;
 }
@@ -72,6 +83,9 @@ async function updateSettings(oldSettings) {
     switch (oldVersion) {
       case 1:
         oldSettings = updateV1ToV2(oldSettings);
+        break;
+      case 2:
+        oldSettings = updateV2ToV3(oldSettings);
         break;
     }
     oldVersion++;
