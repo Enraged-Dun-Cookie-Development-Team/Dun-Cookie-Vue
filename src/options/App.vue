@@ -149,11 +149,12 @@
                   <div class="content-card-title">游戏平台</div>
                   <div class="content-card-description">明日方舟游戏常用平台</div>
                   <div class="content-card-content flex-between">
-                    <div>分为IOS和安卓，B服同安卓</div>
+                    <div>分为IOS、安卓、B服</div>
                     <div>
                       <el-radio-group v-model="settings.dun.gamePlatform">
-                        <el-radio label="IOS"> IOS </el-radio>
-                        <el-radio label="Android"> 安卓 </el-radio>
+                        <el-radio label="official/IOS"> IOS </el-radio>
+                        <el-radio label="official/Android"> 安卓 </el-radio>
+                        <el-radio label="b/Android"> Bilibili </el-radio>
                       </el-radio-group>
                     </div>
                   </div>

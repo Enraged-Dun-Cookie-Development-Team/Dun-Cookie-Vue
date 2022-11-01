@@ -22,7 +22,7 @@ const USE_TEST_URL = IS_DEBUG && false;
 /**
  * 当前配置文件版本号
  */
-const CURRENT_SETTING_VERSION = 2;
+const CURRENT_SETTING_VERSION = 3;
 /**
  * 当前插件版本号
  */

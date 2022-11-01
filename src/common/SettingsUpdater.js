@@ -41,6 +41,17 @@ async function updateV1ToV2(oldSettings) {
   const newSettings = deepAssign({}, oldSettings);
 
   Reflect.deleteProperty(newSettings, 'currentDataSources');
+  switch (newSettings.dun?.gamePlatform) {
+    case 'Android':
+      newSettings.dun.gamePlatform = 'official/Android';
+      break;
+    case 'IOS':
+      newSettings.dun.gamePlatform = 'official/IOS';
+      break;
+    default:
+      newSettings.dun.gamePlatform = 'official/Android';
+      break;
+  }
 
   console.log('升级完毕，新配置：');
   console.log(newSettings);
@@ -65,6 +76,7 @@ async function updateSettings(oldSettings) {
     }
     oldVersion++;
   }
+  return oldSettings;
 }
 
 export { updateSettings };

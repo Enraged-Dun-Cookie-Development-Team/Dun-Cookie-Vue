@@ -64,7 +64,7 @@ export class InGameAnnouncementDataSource extends DataSource {
     if (Settings.dun.enableNotice) {
       this.JudgmentNewFocusAnnounceId(data);
       let versionData = await HttpUtil.GET_Json(
-        `https://ak-conf.hypergryph.com/config/prod/official/${Settings.dun.gamePlatform}/version`
+        `https://ak-conf.hypergryph.com/config/prod/${Settings.dun.gamePlatform}/version`
       );
       this.JudgmentVersionRelease(versionData);
     }
@@ -108,6 +108,19 @@ export class InGameAnnouncementDataSource extends DataSource {
         if (ClientVersion && versionData.clientVersion && ClientVersion != versionData.clientVersion) {
           const nowVersion = versionData.clientVersion.split('.').map((a) => parseInt(a));
           const pastVersion = ClientVersion.split('.').map((a) => parseInt(a));
+
+          let platformName = 'Android';
+          switch (Settings.dun.gamePlatform) {
+            case 'official/Android':
+              platformName = 'Android';
+              break;
+            case 'official/IOS':
+              platformName = 'Android';
+              break;
+            case 'b/Android':
+              platformName = 'Bilibili';
+              break;
+          }
 
           if (nowVersion[0] > pastVersion[0]) {
             NotificationUtil.SendNotice(

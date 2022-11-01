@@ -142,7 +142,7 @@ class Settings {
     /**
      * 游戏内平台
      */
-    gamePlatform: 'Android',
+    gamePlatform: 'official/Android',
     /**
      * 推送不同平台重复的饼
      */
