@@ -40,13 +40,13 @@ class DebugUtil {
     this.debugConsoleOutput(level, 'error', ...data);
   }
 
-  debugConsoleOutput(level, type, ...data) {
+  debugConsoleOutput(level, type, info, ...data) {
     if (DEBUG_LEVEL >= level || level === 0) {
       // 为避免启用调试模式时控制台输出信息太多导致卡死，输出的调试信息超过限制时清除之前输出的调试信息
       if (debugLogCounter >= debugLogClearThreshold) {
         console.clear();
       }
-      console[type](`%c[${new Date().toLocaleString()}]`, 'color: gray', ...data);
+      console[type](`%c[${new Date().toLocaleString()}] ${info}`, 'color: gray', ...data);
       debugLogCounter++;
     }
   }
