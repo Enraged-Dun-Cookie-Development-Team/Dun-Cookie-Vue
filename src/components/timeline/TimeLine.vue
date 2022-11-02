@@ -63,7 +63,7 @@
         </el-carousel>
       </div>
     </el-card>
-    <el-tabs v-if="settings.display.showByTag" v-model="currentTag" :stretch="true" @tab-click="selectListByTag">
+    <el-tabs v-if="settings.display.showByTag" v-model="currentTag" :stretch="true" @tab-click="selectListByTag" :class="this.$refs.SearchModel.penguinShow?'penguin-show':''">
       <el-tab-pane v-for="item of transformToSortList(cardListByTag)" :key="item.dataName" :label="item.dataName"
         :name="item.dataName">
         <span slot="label">
@@ -571,7 +571,9 @@ img[lazy="error"] {
     color: #23ade5;
   }
 
-
+  .penguin-show {
+    opacity: 0;
+  }
 
   .card {
     width: 100%;
