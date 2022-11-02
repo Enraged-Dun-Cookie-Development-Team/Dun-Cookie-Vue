@@ -278,8 +278,8 @@ export default {
   margin-right: 10px;
   height: 45px;
   width: 45px;
-  background-size: 270px 720px;
-  background-image: url("https://penguin-stats.s3.amazonaws.com/sprite/sprite.202109171627.small.png");
+  background-size: 270px;
+  background-image: url("https://penguin.upyun.galvincdn.com/sprite/sprite.202210111514.png");
 }
 
 .search-area-penguin-name {
