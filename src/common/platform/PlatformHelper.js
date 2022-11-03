@@ -226,6 +226,7 @@ class NotificationHelper {
           `推送图片响应：`,
           response
         );
+        if (response.status != 200) throw `图片响应状态码为${response.status}`;
         const blob = await response.blob();
 
         objectUrl = URL.createObjectURL(blob);
@@ -238,6 +239,8 @@ class NotificationHelper {
           `推送图片报错：`,
           e
         );
+        objectUrl = undefined;
+        imageUrl = undefined;
       }
     }
     return await currentPlatform
