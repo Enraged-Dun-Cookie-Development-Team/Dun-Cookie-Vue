@@ -7,6 +7,7 @@ import {MonsterSirenDataSource} from './def/MonsterSirenDataSource';
 import {ArknightsOfficialWebDataSource} from './def/ArknightsOfficialWebDataSource';
 import {TerraHistoricusDataSource} from './def/TerraHistoricusDataSource';
 import {NeteaseCloudMusicDataSource} from './def/NeteaseCloudMusicDataSource';
+import {ArknightsAnimeDataSource} from './def/ArknightsAnimeDataSource';
 import {IS_DEBUG} from '../Constants';
 
 function buildDatasource(promise, icon, dataName, title) {
@@ -57,6 +58,7 @@ function setTestUrl(sources) {
     sources['泰拉记事社官网'].dataUrl = PlatformHelper.Extension.getURL('test/tljssJson.json');
     sources['塞壬唱片网易云音乐'].dataUrl = PlatformHelper.Extension.getURL('test/wyyJson.json');
     sources['鹰角网络微博'].dataUrl = PlatformHelper.Extension.getURL('test/yjwbJson.json');
+    sources['动画官网资讯'].dataUrl = PlatformHelper.Extension.getURL('test/anime.json');
 }
 
 /**
@@ -106,6 +108,13 @@ const configList = [
     ),
     buildDatasource(WeiboDataSource.withUid(7461423907, 10), '/assets/image/icon/yjwb.jpg', '鹰角网络微博', '鹰角网络微博'),
     buildDatasource(BilibiliDataSource.withUid(1265652806, 11), '/assets/image/icon/arkzmd.jpg', '明日方舟终末地', '明日方舟终末地'),
+    new ArknightsAnimeDataSource(
+        '/assets/image/icon/anime.png',
+        '动画官网资讯',
+        '明日方舟动画',
+        'https://ak.hypergryph.com/anime/api/news',
+        10
+    ),
 ];
 
 
