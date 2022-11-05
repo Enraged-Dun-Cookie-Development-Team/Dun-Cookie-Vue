@@ -50,20 +50,48 @@ export class WeiboDataSource extends DataSource {
           const containerId = data.data.cardlistInfo.containerid;
           let weiboId = containerId.substring((containerId.length - 10), containerId.length) + '/' + x.mblog.bid;
           let time = new Date(dynamicInfo.created_at);
-          let coverImage = dynamicInfo.original_pic;
-          if (coverImage) {
-            coverImage = coverImage.replace("https", "http");
-          }
           const builder = DataItem.builder(this.dataName)
             .id(weiboId)
             .timeForSort(time.getTime())
             .timeForDisplay(TimeUtil.format(new Date(time), 'yyyy-MM-dd hh:mm:ss'))
             .content(dynamicInfo.raw_text || dynamicInfo.text.replace(/<\a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<span class="url-icon">|<\img.*?>|全文|网页链接/g, '').replace(/<br \/>/g, '\n'))
             .jumpUrl(`https://weibo.com/${weiboId}`)
-            .coverImage(coverImage)
-            .previewList(dynamicInfo.pics?.map(x => x.url))
-            .imageList(dynamicInfo.pics?.map(x => x.large?.url))
-            .imageHttpList(dynamicInfo.pics?.map(x => x.large?.url.replace("https", "http")));
+
+            switch (dynamicInfo.page_info?.type) {
+              // 普通动态
+              case "search_top": {
+                builder
+                  .coverImage(dynamicInfo.original_pic ? dynamicInfo.original_pic.replace("https", "http") : null)
+                  .previewList(dynamicInfo.pics?.map(x => x.url))
+                  .imageList(dynamicInfo.pics?.map(x => x.large?.url))
+                  .imageHttpList(dynamicInfo.pics?.map(x => x.large?.url.replace("https", "http")));
+                break;
+              }
+              // 视频动态
+              case "video": {
+                builder
+                  .coverImage(dynamicInfo.page_info.page_pic?.url?.replace("https", "http"))
+                  .previewList(null)
+                  .imageList(null)
+                break;
+              }
+              // 直播动态
+              case "live": {
+                builder
+                  .coverImage(dynamicInfo.page_info.page_pic?.url?.replace("https", "http"))
+                  .previewList(null)
+                  .imageList(null)
+                break;
+              }
+              default: {
+                builder
+                  .coverImage(dynamicInfo.original_pic?.replace("https", "http"))
+                  .previewList(dynamicInfo.pics?.map(x => x.url))
+                  .imageList(dynamicInfo.pics?.map(x => x.large?.url))
+                  .imageHttpList(dynamicInfo.pics?.map(x => x.large?.url.replace("https", "http")));
+                break;
+              }
+            }
 
           if (x.mblog.hasOwnProperty('isTop') && x.mblog.isTop == 1) {
             builder.setTop();
