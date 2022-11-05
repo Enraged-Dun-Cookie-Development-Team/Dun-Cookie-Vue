@@ -145,6 +145,12 @@ const quickJump = {
       img: '/assets/image/icon/yjwb.jpg',
       radius: true,
     },
+    {
+      url: 'https://ak.hypergryph.com/anime',
+      name: '明日方舟动画官网',
+      img: '/assets/image/icon/anime.png',
+      radius: true,
+    },
   ],
   tool: [
     {
