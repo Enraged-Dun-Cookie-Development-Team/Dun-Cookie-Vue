@@ -135,6 +135,10 @@ export default class ServerUtil {
       if (!error.response) {
         networkBroken = true;
       }
+      const response = error.response;
+      if (response.status >= 500 && response.status < 600) {
+        networkBroken = true;
+      }
     };
     const arg = currentVersion ? `?version=${CURRENT_VERSION}` : '';
     data = await HttpUtil.GET_Json(
@@ -169,3 +173,4 @@ export default class ServerUtil {
     return data;
   }
 }
+global.ServerUtil = ServerUtil;
