@@ -15,11 +15,11 @@ class HttpUtil {
    * @param {Object} options 可选的参数对象
    * @param {boolean?} options.appendTimestamp 是否要增加时间戳参数以避免缓存，默认为true
    * @param {number?} options.timeout 超时(单位：毫秒)，默认5秒
-   * @param {function?} failController 控制catch回调函数，默认在ok为false时抛出异常
+   * @param {function?} failController 控制catch回调函数，不提供时仅打印异常
    * @return {Promise}
    */
   static async GET_Json(url, options = {}, failController) {
-    const response = await HttpUtil.GET(url, options);
+    const response = await HttpUtil.GET(url, options, failController);
     if (response) {
       return JSON.parse(response);
     }
