@@ -300,7 +300,7 @@ class AlarmHelper {
 class HttpHelper {
   sendGet(url, options = {}) {
     let timeout = options.timeout || 10000;
-    return currentPlatform.sendHttpRequest(url, 'GET', timeout, options.failController);
+    return currentPlatform.sendHttpRequest(url, 'GET', timeout);
   }
 }
 

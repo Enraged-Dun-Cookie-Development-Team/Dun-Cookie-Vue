@@ -1,5 +1,6 @@
 import PlatformHelper from '../platform/PlatformHelper';
 import DebugUtil from './DebugUtil';
+import { RequestError } from '../platform/AbstractPlatform';
 
 function appendTimeStamp(urlStr) {
   const url = new URL(urlStr);
@@ -14,10 +15,10 @@ class HttpUtil {
    * @param {Object} options 可选的参数对象
    * @param {boolean?} options.appendTimestamp 是否要增加时间戳参数以避免缓存，默认为true
    * @param {number?} options.timeout 超时(单位：毫秒)，默认5秒
-   * @param {function?} options.failController 控制catch回调函数，默认在ok为false时抛出异常
+   * @param {function?} failController 控制catch回调函数，默认在ok为false时抛出异常
    * @return {Promise}
    */
-  static async GET_Json(url, options = {}) {
+  static async GET_Json(url, options = {}, failController) {
     const response = await HttpUtil.GET(url, options);
     if (response) {
       return JSON.parse(response);
@@ -30,10 +31,10 @@ class HttpUtil {
    * @param {Object} options 可选的参数对象
    * @param {boolean?} options.appendTimestamp 是否要增加时间戳参数以避免缓存，默认为true
    * @param {number?} options.timeout 超时(单位：毫秒)，默认10秒
-   * @param {function?} options.failController 控制catch回调函数，默认在ok为false时抛出异常
+   * @param {function?} failController 控制catch回调函数，不提供时仅打印异常
    * @return {Promise}
    */
-  static async GET(url, options = {}) {
+  static async GET(url, options = {}, failController) {
     if (typeof options.appendTimestamp != 'boolean' || options.appendTimestamp) {
       url = appendTimeStamp(url);
     }
@@ -49,6 +50,13 @@ class HttpUtil {
         errMsg = e;
       }
       DebugUtil.debugLog(0, errMsg);
+      if (failController) {
+        if (e instanceof RequestError) {
+          failController(e);
+        } else {
+          failController(new RequestError(`平台的请求方法抛出的异常不是RequestError：${String(e)}`, undefined, e));
+        }
+      }
     }
   }
 }

@@ -3,21 +3,13 @@
  */
 import HttpUtil from './HttpUtil';
 import PlatformHelper from '../platform/PlatformHelper';
-import InsiderUtil from './InsiderUtil';
 import Settings from '../Settings';
-import { CANTEEN_INTERFACE_LIST, CANTEEN_SERVER_LIST, CURRENT_VERSION } from '../Constants';
+import { CANTEEN_API_BASE, CURRENT_VERSION } from '../Constants';
 import NotificationUtil from './NotificationUtil';
 import TimeUtil from './TimeUtil';
-import PromiseUtil from './PromiseUtil';
 
-const serveOption = {
+const serverOption = {
   appendTimestamp: false,
-  // 响应头的ok等于true时调用，处理502与504当作网络问题
-  failController: (response) => {
-    if (response.status === 502 || response.status === 504) {
-      throw '获取响应失败，可能是临时网络波动，如果长时间失败请联系开发者';
-    }
-  },
 };
 
 export default class ServerUtil {
@@ -28,9 +20,7 @@ export default class ServerUtil {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     let data;
     try {
-      data = await PromiseUtil.any(
-        CANTEEN_SERVER_LIST.map((api) => HttpUtil.GET_Json(api + 'canteen/operate/announcement/list', serveOption))
-      );
+      data = await HttpUtil.GET_Json(CANTEEN_API_BASE + 'canteen/operate/announcement/list', serverOption);
     } catch (e) {
       console.log(e);
     }
@@ -98,9 +88,7 @@ export default class ServerUtil {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     let data;
     try {
-      data = await PromiseUtil.any(
-        CANTEEN_SERVER_LIST.map((api) => HttpUtil.GET_Json(api + 'canteen/operate/video/list', serveOption))
-      );
+      data = await HttpUtil.GET_Json(CANTEEN_API_BASE + 'canteen/operate/video/list', serverOption);
     } catch (e) {
       console.log(e);
     }
@@ -121,9 +109,7 @@ export default class ServerUtil {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     let data;
     try {
-      data = await PromiseUtil.any(
-        CANTEEN_SERVER_LIST.map((api) => HttpUtil.GET_Json(api + 'canteen/operate/resource/get', serveOption))
-      );
+      data = await HttpUtil.GET_Json(CANTEEN_API_BASE + 'canteen/operate/resource/get', serverOption);
     } catch (e) {
       console.log(e);
     }
@@ -145,23 +131,17 @@ export default class ServerUtil {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     let data;
     let networkBroken = false;
-    try {
-      if (currentVersion) {
-        data = await PromiseUtil.any(
-          CANTEEN_SERVER_LIST.map((api) =>
-            HttpUtil.GET_Json(api + 'canteen/operate/version/plugin?version=' + CURRENT_VERSION, serveOption)
-          )
-        );
-      } else {
-        data = await PromiseUtil.any(
-          CANTEEN_SERVER_LIST.map((api) => HttpUtil.GET_Json(api + 'canteen/operate/version/plugin', serveOption))
-        );
+    const failController = (error) => {
+      if (!error.response) {
+        networkBroken = true;
       }
-    } catch (e) {
-      // 只有断网返回没有状态会进入catch
-      networkBroken = true;
-      console.log(e);
-    }
+    };
+    const arg = currentVersion ? `?version=${CURRENT_VERSION}` : '';
+    data = await HttpUtil.GET_Json(
+      `${CANTEEN_API_BASE}canteen/operate/version/plugin${arg}`,
+      serverOption,
+      failController
+    );
     if (!data) {
       const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
       data = await HttpUtil.GET_Json(fallbackUrl);
