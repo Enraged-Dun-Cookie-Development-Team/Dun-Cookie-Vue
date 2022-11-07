@@ -137,9 +137,9 @@ export default class ServerUtil {
         let networkBroken = false;
         try {
             if (currentVersion) {
-                data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/version/plugin?version=" + CURRENT_VERSION, serveOption)));
+                data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/version/plugin?version=" + CURRENT_VERSION, serveOption)), res=>!!res);
             } else {
-                data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/version/plugin", serveOption)));
+                data = await PromiseUtil.any(CANTEEN_SERVER_LIST.map(api => HttpUtil.GET_Json(api + "canteen/operate/version/plugin", serveOption)), res=>!!res);
             }
         } catch (e) {
             // 只有断网返回没有状态会进入catch
