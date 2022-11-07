@@ -28,11 +28,12 @@ export default {
   methods: {
     async init() {
       let versionUpdate = await PlatformHelper.Storage.getLocalStorage('version-update');
-      if (!versionUpdate || CURRENT_VERSION != versionUpdate) {
-        let data = await ServerUtil.getVersionInfo(true, false);
+      if (!versionUpdate || CURRENT_VERSION !== versionUpdate) {
+        let data = await ServerUtil.getVersionInfo(false, CURRENT_VERSION);
+        data.version = CURRENT_VERSION;
         this.updateInfo = data;
         this.showUpdateInfo = true;
-        PlatformHelper.Storage.saveLocalStorage('version-update', data.version);
+        PlatformHelper.Storage.saveLocalStorage('version-update', CURRENT_VERSION);
       }
     },
   },

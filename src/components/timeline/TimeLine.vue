@@ -310,7 +310,7 @@ export default {
     },
     // 获取在线信息
     getOnlineSpeak() {
-      let version = ServerUtil.getVersionInfo(false, false).then((data) => {
+      let version = ServerUtil.getVersionInfo().then((data) => {
         // 是否最新
         this.isNew = Settings.JudgmentVersion(data.version, CURRENT_VERSION);
       });

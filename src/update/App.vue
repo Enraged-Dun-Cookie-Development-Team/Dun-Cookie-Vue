@@ -70,7 +70,7 @@ export default {
     openUrl: PlatformHelper.Tabs.create,
     // 检查一次更新
     getUpdateInfo() {
-      ServerUtil.getVersionInfo(false, false).then((responseText) => {
+      ServerUtil.getVersionInfo().then((responseText) => {
         this.updateInfo = responseText;
       });
     },

@@ -124,23 +124,23 @@ export default class ServerUtil {
   }
 
   /**
-   * @param currentVersion {boolean} 是否获取当前版本信息
-   * @param shouldNotice {boolean}
+   * @param checkVersionUpdate {boolean} 是否检测版本更新并推送
+   * @param targetVersion {string} 要获取的目标版本信息，不提供时获取最新版
    */
-  static async getVersionInfo(currentVersion, shouldNotice) {
+  static async getVersionInfo(checkVersionUpdate = true, targetVersion = undefined) {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     let data;
-    let networkBroken = false;
     const failController = (error) => {
+      // 断网导致没有response和服务器响应5xx的情况不检测是否存在版本更新
       if (!error.response) {
-        networkBroken = true;
+        checkVersionUpdate = false;
       }
       const response = error.response;
       if (response.status >= 500 && response.status < 600) {
-        networkBroken = true;
+        checkVersionUpdate = false;
       }
     };
-    const arg = currentVersion ? `?version=${CURRENT_VERSION}` : '';
+    const arg = targetVersion ? `?version=${targetVersion}` : '';
     data = await HttpUtil.GET_Json(
       `${CANTEEN_API_BASE}canteen/operate/version/plugin${arg}`,
       serverOption,
@@ -150,17 +150,14 @@ export default class ServerUtil {
       const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
       data = await HttpUtil.GET_Json(fallbackUrl);
       data = data.upgrade;
-      // 如果检测到是断网，将版本赋值成当前版本，避免弹出更新提醒
-      if (networkBroken || currentVersion) {
-        data.version = CURRENT_VERSION;
-      }
+      data.is_fallback = true;
     } else {
       data = data.data;
     }
     if (!data) {
       return data;
     }
-    if (shouldNotice) {
+    if (checkVersionUpdate) {
       if (Settings.JudgmentVersion(data.upgrade.v, CURRENT_VERSION) && Settings.dun.enableNotice) {
         NotificationUtil.SendNotice(
           '小刻食堂翻新啦！！',
@@ -173,4 +170,3 @@ export default class ServerUtil {
     return data;
   }
 }
-global.ServerUtil = ServerUtil;
