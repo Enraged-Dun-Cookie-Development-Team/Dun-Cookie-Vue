@@ -136,7 +136,7 @@ export default class ServerUtil {
         checkVersionUpdate = false;
       }
       const response = error.response;
-      if (response.status >= 500 && response.status < 600) {
+      if (response?.status >= 500 && response?.status < 600) {
         checkVersionUpdate = false;
       }
     };
