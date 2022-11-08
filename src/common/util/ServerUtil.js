@@ -130,14 +130,16 @@ export default class ServerUtil {
   static async getVersionInfo(checkVersionUpdate = true, targetVersion = undefined) {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     let data;
+    let notNewVersion = true;
     const failController = (error) => {
       // 断网导致没有response和服务器响应5xx的情况不检测是否存在版本更新
       if (!error.response) {
-        checkVersionUpdate = false;
+        notNewVersion = false;
+        return;
       }
       const response = error.response;
-      if (response?.status >= 500 && response?.status < 600) {
-        checkVersionUpdate = false;
+      if (response.status >= 500 && response.status < 600) {
+        notNewVersion = false;
       }
     };
     const arg = targetVersion ? `?version=${targetVersion}` : '';
@@ -150,6 +152,9 @@ export default class ServerUtil {
       const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
       data = await HttpUtil.GET_Json(fallbackUrl);
       data = data.upgrade;
+      if (!notNewVersion) {
+        data.version = CURRENT_VERSION;
+      }
       data.is_fallback = true;
     } else {
       data = data.data;
@@ -157,7 +162,7 @@ export default class ServerUtil {
     if (!data) {
       return data;
     }
-    if (checkVersionUpdate) {
+    if (checkVersionUpdate && notNewVersion) {
       if (Settings.JudgmentVersion(data.version, CURRENT_VERSION) && Settings.dun.enableNotice) {
         NotificationUtil.SendNotice(
           '小刻食堂翻新啦！！',
