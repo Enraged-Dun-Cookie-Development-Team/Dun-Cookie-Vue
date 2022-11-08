@@ -26,7 +26,7 @@ const CURRENT_SETTING_VERSION = 3;
 /**
  * 当前插件版本号
  */
-const CURRENT_VERSION = '3.2.5';
+const CURRENT_VERSION = '3.4.3';
 /**
  * 展示用的版本号
  */
