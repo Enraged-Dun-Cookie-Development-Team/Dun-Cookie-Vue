@@ -9,6 +9,7 @@ import { CANTEEN_INTERFACE_LIST, CANTEEN_SERVER_LIST, CURRENT_VERSION } from "..
 import NotificationUtil from "./NotificationUtil";
 import TimeUtil from "./TimeUtil";
 import PromiseUtil from "./PromiseUtil";
+import md5 from "js-md5";
 
 const serveOption = {
     appendTimestamp: false,
@@ -48,7 +49,7 @@ export default class ServerUtil {
       if (Settings.feature.announcementNotice) {
         let filterList = data.filter(
           (x) =>
-            new Date(x.star_time) <= TimeUtil.changeToCCT(new Date()) &&
+            new Date(x.start_time) <= TimeUtil.changeToCCT(new Date()) &&
             new Date(x.over_time) >= TimeUtil.changeToCCT(new Date())
         );
 
@@ -62,9 +63,10 @@ export default class ServerUtil {
                             announcementNoticeStatus = {};
                             announcementNoticeStatus[today] = {};
                         }
-                        if (!announcementNoticeStatus[today][today + "-" + x.notice]) {
-                            announcementNoticeStatus[today][today + "-" + x.notice] = true;
-                            let imgReg = /<img.*?src='(.*?)'/;
+                        let statusKey = md5(x.html.replace(/<div.*?>|<\/div>|<p.*?>|<\/p>|<\/img.*?>/g, ''));
+                        if (!announcementNoticeStatus[today][statusKey]) {
+                            announcementNoticeStatus[today][statusKey] = true;
+                            let imgReg = /<img.*?src=['"](.*?)['"]/;
                             let imgUrl = x.html.match(imgReg)[1];
                             let removeTagReg = /<\/?.+?\/?>/g;
                             let divReg = /<\/div>/g;
