@@ -9,6 +9,7 @@ import NotificationUtil from './NotificationUtil';
 import TimeUtil from './TimeUtil';
 import { Http } from '@enraged-dun-cookie-development-team/common/request';
 import DebugUtil from './DebugUtil';
+import md5 from 'js-md5';
 
 const serverOption = {
   appendTimestamp: false,
@@ -176,7 +177,7 @@ export default class ServerUtil {
       if (Settings.feature.announcementNotice) {
         let filterList = data.filter(
           (x) =>
-            new Date(x.star_time) <= TimeUtil.changeToCCT(new Date()) &&
+            new Date(x.start_time) <= TimeUtil.changeToCCT(new Date()) &&
             new Date(x.over_time) >= TimeUtil.changeToCCT(new Date())
         );
 
@@ -191,9 +192,10 @@ export default class ServerUtil {
               announcementNoticeStatus = {};
               announcementNoticeStatus[today] = {};
             }
-            if (!announcementNoticeStatus[today][today + '-' + x.notice]) {
-              announcementNoticeStatus[today][today + '-' + x.notice] = true;
-              let imgReg = /<img.*?src='(.*?)'/;
+            let statusKey = md5(x.html.replace(/<div.*?>|<\/div>|<p.*?>|<\/p>|<\/img.*?>/g, ''));
+            if (!announcementNoticeStatus[today][statusKey]) {
+              announcementNoticeStatus[today][statusKey] = true;
+              let imgReg = /<img.*?src=['"](.*?)['"]/;
               let imgUrl = x.html.match(imgReg)[1];
               let removeTagReg = /<\/?.+?\/?>/g;
               let divReg = /<\/div>/g;
