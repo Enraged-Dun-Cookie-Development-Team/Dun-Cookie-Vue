@@ -7,6 +7,7 @@ import Settings from '../Settings';
 import { CANTEEN_API_BASE, CURRENT_VERSION } from '../Constants';
 import NotificationUtil from './NotificationUtil';
 import TimeUtil from './TimeUtil';
+import md5 from 'js-md5';
 
 const serverOption = {
   appendTimestamp: false,
@@ -38,14 +39,13 @@ export default class ServerUtil {
       if (Settings.feature.announcementNotice) {
         let filterList = data.filter(
           (x) =>
-            new Date(x.star_time) <= TimeUtil.changeToCCT(new Date()) &&
+            new Date(x.start_time) <= TimeUtil.changeToCCT(new Date()) &&
             new Date(x.over_time) >= TimeUtil.changeToCCT(new Date())
         );
 
         let today = TimeUtil.format(new Date(), 'yyyy-MM-dd');
         let announcementNoticeStatus =
           (await PlatformHelper.Storage.getLocalStorage('announcement-notice-status')) || {};
-
         // 判断当天是否推送过
         filterList.map((x) => {
           if (x.notice) {
@@ -53,9 +53,10 @@ export default class ServerUtil {
               announcementNoticeStatus = {};
               announcementNoticeStatus[today] = {};
             }
-            if (!announcementNoticeStatus[today][today + '-' + x.notice]) {
-              announcementNoticeStatus[today][today + '-' + x.notice] = true;
-              let imgReg = /<img.*?src='(.*?)'/;
+            let statusKey = md5(x.html.replace(/<div.*?>|<\/div>|<p.*?>|<\/p>|<\/img.*?>/g, ''));
+            if (!announcementNoticeStatus[today][statusKey]) {
+              announcementNoticeStatus[today][statusKey] = true;
+              let imgReg = /<img.*?src=['"](.*?)['"]/;
               let imgUrl = x.html.match(imgReg)[1];
               let removeTagReg = /<\/?.+?\/?>/g;
               let divReg = /<\/div>/g;
