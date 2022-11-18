@@ -51,7 +51,11 @@ export default class BrowserPlatform extends AbstractPlatform {
     }
     let image;
     if (imageUrl) {
-      image = await this.__loadImage(imageUrl);
+      try {
+        image = await this.__loadImage(imageUrl);
+      } catch (err) {
+        image = undefined;
+      }
     }
     // 整体宽度以图片宽度为准，无图片680，有图片1080，左右再各加10的边距
     const canvasWidth = Math.max(680, image ? 960 : 0) + 20;
