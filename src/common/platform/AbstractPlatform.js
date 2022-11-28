@@ -13,7 +13,7 @@ const unsupportedTip = '该平台未实现该接口！请联系[小刻食堂]开
  * <p>
  * 需要注意的是：如果是无法实现的接口，也应由子类主动实现一个空方法，如果子类不实现就会抛异常，这种设计的目的是为了避免子类忘记实现接口(所以说js没有抽象方法真的惨)
  */
-export default class AbstractPlatform {
+export class AbstractPlatform {
   static __MESSAGE_WITHOUT_RESPONSE = '__NO_RESPONSE__';
 
   /**
@@ -239,10 +239,9 @@ export default class AbstractPlatform {
    * @param url 目标url
    * @param method 请求方法(GET/POST等)
    * @param timeout 超时(单位：毫秒)，不提供或小于等于0时无限等待直至到达浏览器内置超时
-   * @param failController 回调函数，用于处理响应ok为false
    * @return {Promise} resolve接收一个参数(http响应内容)
    */
-  sendHttpRequest(url, method, timeout, failController) {
+  sendHttpRequest(url, method, timeout) {
     throw new Error(unsupportedTip);
   }
 
@@ -362,5 +361,16 @@ export default class AbstractPlatform {
     }
     DebugUtil.debugLog(7, `response - ${type}`, response);
     return response;
+  }
+}
+
+export class RequestError extends Error {
+  response;
+  cause;
+
+  constructor(message, response = undefined, cause = undefined) {
+    super(message);
+    this.response = response;
+    this.cause = cause;
   }
 }

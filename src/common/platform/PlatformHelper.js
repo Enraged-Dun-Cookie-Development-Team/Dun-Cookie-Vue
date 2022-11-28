@@ -216,10 +216,32 @@ class NotificationHelper {
   async createWithSpecialIcon(id, iconUrl, title, message, imageUrl) {
     let objectUrl;
     if (typeof imageUrl === 'string' && imageUrl.startsWith('http')) {
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
+      try {
+        const response = await fetch(imageUrl);
+        DebugUtil.debugConsoleOutput(
+          0,
+          'debug',
+          '%c 推送图片 ',
+          'color: #eee; background: #e5a335',
+          `推送图片响应：`,
+          response
+        );
+        if (response.status != 200) throw `图片响应状态码为${response.status}`;
+        const blob = await response.blob();
 
-      objectUrl = URL.createObjectURL(blob);
+        objectUrl = URL.createObjectURL(blob);
+      } catch (e) {
+        DebugUtil.debugConsoleOutput(
+          0,
+          'error',
+          '%c 推送图片 ',
+          'color: #eee; background: #e53935',
+          `推送图片报错：`,
+          e
+        );
+        objectUrl = undefined;
+        imageUrl = undefined;
+      }
     }
     return await currentPlatform
       .createNotifications(id, iconUrl, title, message, objectUrl || imageUrl)
@@ -300,7 +322,7 @@ class AlarmHelper {
 class HttpHelper {
   sendGet(url, options = {}) {
     let timeout = options.timeout || 10000;
-    return currentPlatform.sendHttpRequest(url, 'GET', timeout, options.failController);
+    return currentPlatform.sendHttpRequest(url, 'GET', timeout);
   }
 }
 

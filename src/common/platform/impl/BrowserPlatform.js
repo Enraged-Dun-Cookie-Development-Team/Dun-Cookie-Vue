@@ -1,4 +1,4 @@
-import AbstractPlatform from '../AbstractPlatform';
+import { AbstractPlatform, RequestError } from '../AbstractPlatform';
 import $ from 'jquery';
 import { CURRENT_VERSION, TOOL_QR_URL } from '../../Constants';
 import QRCode from 'qrcode';
@@ -51,7 +51,11 @@ export default class BrowserPlatform extends AbstractPlatform {
     }
     let image;
     if (imageUrl) {
-      image = await this.__loadImage(imageUrl);
+      try {
+        image = await this.__loadImage(imageUrl);
+      } catch (err) {
+        image = undefined;
+      }
     }
     // 整体宽度以图片宽度为准，无图片680，有图片1080，左右再各加10的边距
     const canvasWidth = Math.max(680, image ? 960 : 0) + 20;
@@ -228,7 +232,7 @@ width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retwee
     });
   }
 
-  sendHttpRequest(url, method, timeout, failController) {
+  sendHttpRequest(url, method, timeout) {
     if (typeof url === 'string') {
       url = new URL(url);
     }
@@ -250,21 +254,18 @@ width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retwee
     return fetch(url, options)
       .then((response) => {
         if (response.type === 'opaque') {
-          throw '获取响应失败，可能是插件权限中未允许访问目标网站：' + url.origin;
+          throw new RequestError('获取响应失败，可能是插件权限中未允许访问目标网站：' + url.origin, response);
         }
         if (!response.ok) {
-          if (!failController) {
-            throw '获取响应失败，可能是临时网络波动，如果长时间失败请联系开发者';
-          }
-          return failController(response);
+          throw new RequestError('获取响应失败，可能是临时网络波动，如果长时间失败请联系开发者', response);
         }
         return response.text();
       })
       .catch((err) => {
         if (err.name === 'AbortError') {
-          throw new Error(`web request timeout(${timeout}ms)`);
+          throw new RequestError(`web request timeout(${timeout}ms)`);
         }
-        throw err;
+        throw new RequestError(`请求时发生异常：${String(err)}`, undefined, err);
       })
       .finally(() => {
         if (timeoutId > 0) {

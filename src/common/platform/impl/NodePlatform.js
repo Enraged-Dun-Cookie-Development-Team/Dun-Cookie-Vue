@@ -1,4 +1,4 @@
-import AbstractPlatform from '../AbstractPlatform';
+import { AbstractPlatform, RequestError } from '../AbstractPlatform';
 import { DEBUG_LOG, PLATFORM_NODE } from '../../Constants';
 import { deepAssign } from '../../util/CommonFunctions';
 
@@ -214,7 +214,7 @@ export default class NodePlatform extends AbstractPlatform {
     }
   }
 
-  sendHttpRequest(url, method, timeout, failController) {
+  sendHttpRequest(url, method, timeout) {
     return new Promise((resolve, reject) => {
       if (url.indexOf('file') === 0) {
         const filePath = this.url.fileURLToPath(url);
@@ -226,7 +226,7 @@ export default class NodePlatform extends AbstractPlatform {
               if (buffer) {
                 resolve(buffer.toString());
               } else {
-                reject('文件不存在');
+                reject(new RequestError('文件不存在'));
               }
             } finally {
               file.close();
@@ -262,21 +262,15 @@ export default class NodePlatform extends AbstractPlatform {
           res.on('data', (chunk) => {
             rawData += chunk;
           });
-          res.on('end', () => {
-            try {
-              resolve(rawData);
-            } catch (e) {
-              reject(e.message);
-            }
-          });
+          res.on('end', () => resolve(rawData));
         } else {
-          reject(`status: ${res.statusCode}`);
+          reject(new RequestError(`status: ${res.statusCode}`, res));
           res.resume();
         }
       });
 
-      req.on('timeout', () => reject(`web request timeout(${timeout}ms)`));
-      req.on('error', reject);
+      req.on('timeout', () => reject(new RequestError(`web request timeout(${timeout}ms)`)));
+      req.on('error', (err) => reject(new RequestError(`请求时发生异常：${String(err)}`, undefined, err)));
       req.end();
     });
   }

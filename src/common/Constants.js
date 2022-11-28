@@ -22,11 +22,11 @@ const USE_TEST_URL = IS_DEBUG && false;
 /**
  * 当前配置文件版本号
  */
-const CURRENT_SETTING_VERSION = 2;
+const CURRENT_SETTING_VERSION = 3;
 /**
  * 当前插件版本号
  */
-const CURRENT_VERSION = '3.2.5';
+const CURRENT_VERSION = '3.4.3';
 /**
  * 展示用的版本号
  */
@@ -84,8 +84,7 @@ export { PAGE_WELCOME, PAGE_POPUP_WINDOW, PAGE_OPTIONS, PAGE_DONATE, PAGE_UPDATE
 
 // region 杂项
 const TOOL_QR_URL = 'https://arknightscommunity.drblack-system.com/15386.html';
-const CANTEEN_INTERFACE_LIST = ['http://api.ceobecanteen.top/'];
-const CANTEEN_SERVER_LIST = ['https://server.ceobecanteen.top/api/v1/'];
+const CANTEEN_API_BASE = 'https://server.ceobecanteen.top/api/v1/';
 // TODO 直接从common.js里面copy过来的，等待优化重构
 const quickJump = {
   source: [
@@ -143,6 +142,12 @@ const quickJump = {
       url: 'https://weibo.com/u/7461423907',
       name: '鹰角网络微博',
       img: '/assets/image/icon/yjwb.jpg',
+      radius: true,
+    },
+    {
+      url: 'https://ak.hypergryph.com/anime',
+      name: '明日方舟动画官网',
+      img: '/assets/image/icon/anime.png',
       radius: true,
     },
   ],
@@ -305,5 +310,5 @@ const countDown = [
   },
 ];
 
-export { quickJump, dayInfo, countDown, TOOL_QR_URL, CANTEEN_INTERFACE_LIST, CANTEEN_SERVER_LIST };
+export { quickJump, dayInfo, countDown, TOOL_QR_URL, CANTEEN_API_BASE };
 // endregion

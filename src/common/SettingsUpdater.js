@@ -35,14 +35,36 @@ async function updateLegacyToV1(oldSettings) {
   return newSettings;
 }
 
-async function updateV1ToV2(oldSettings) {
+function updateV1ToV2(oldSettings) {
   console.log('从V1配置升级：');
   console.log(oldSettings);
   const newSettings = deepAssign({}, oldSettings);
 
   Reflect.deleteProperty(newSettings, 'currentDataSources');
 
-  console.log('升级完毕，新配置：');
+  console.log('升级V2完毕，新配置：');
+  console.log(newSettings);
+  return newSettings;
+}
+
+function updateV2ToV3(oldSettings) {
+  console.log('从V2配置升级：');
+  console.log(oldSettings);
+  const newSettings = deepAssign({}, oldSettings);
+
+  switch (newSettings.dun?.gamePlatform) {
+    case 'Android':
+      newSettings.dun.gamePlatform = 'official/Android';
+      break;
+    case 'IOS':
+      newSettings.dun.gamePlatform = 'official/IOS';
+      break;
+    default:
+      newSettings.dun.gamePlatform = 'official/Android';
+      break;
+  }
+
+  console.log('升级V3完毕，新配置：');
   console.log(newSettings);
   return newSettings;
 }
@@ -54,17 +76,25 @@ async function updateSettings(oldSettings) {
   }
   // 无版本号的旧配置文件升级
   if (!oldSettings.version) {
-    return await updateLegacyToV1(oldSettings);
+    oldSettings = await updateLegacyToV1(oldSettings);
   }
-  let oldVersion = parseInt(oldSettings.version);
-  while (oldVersion < CURRENT_SETTING_VERSION) {
-    switch (oldVersion) {
+
+  let currentVersion = parseInt(oldSettings.version);
+  let currentSettings = deepAssign({}, oldSettings);
+  Reflect.deleteProperty(currentSettings, 'version');
+  while (currentVersion < CURRENT_SETTING_VERSION) {
+    switch (currentVersion) {
       case 1:
-        oldSettings = updateV1ToV2(oldSettings);
+        currentSettings = updateV1ToV2(currentSettings);
+        break;
+      case 2:
+        currentSettings = updateV2ToV3(currentSettings);
         break;
     }
-    oldVersion++;
+    currentVersion++;
   }
+  currentSettings.version = CURRENT_SETTING_VERSION;
+  return currentSettings;
 }
 
 export { updateSettings };

@@ -21,7 +21,7 @@
         显示/隐藏已关闭关卡
       </div>
     </div>
-    <el-card class="search-area-penguin" :class="penguinShow ? 'show' : ''">
+    <el-card class="search-area-penguin" :class="penguinShow ? 'penguin-show' : ''">
       <el-collapse
         v-for="(item, index) in penguinSearchList"
         :key="item.itemId"
@@ -256,8 +256,8 @@ export default {
     margin-right: 10px;
     width: 45px;
     height: 45px;
-    background-size: 270px 720px;
-    background-image: url('https://penguin-stats.s3.amazonaws.com/sprite/sprite.202109171627.small.png');
+    background-size: 270px;
+    background-image: url('https://penguin.upyun.galvincdn.com/sprite/sprite.202210111514.png');
   }
 
   .search-area-penguin-name {
@@ -292,7 +292,7 @@ export default {
     z-index: 11;
     overflow: scroll;
     width: 90%;
-    max-height: 62vh;
+    max-height: 65vh;
     border: 1px solid @@btnBorder;
     background-color: @@bgColor;
 
@@ -328,8 +328,8 @@ export default {
       }
     }
 
-    &.show {
-      top: 180px;
+    &.penguin-show {
+      top: 155px;
       opacity: 1;
     }
 

@@ -3,21 +3,14 @@
  */
 import HttpUtil from './HttpUtil';
 import PlatformHelper from '../platform/PlatformHelper';
-import InsiderUtil from './InsiderUtil';
 import Settings from '../Settings';
-import { CANTEEN_INTERFACE_LIST, CANTEEN_SERVER_LIST, CURRENT_VERSION } from '../Constants';
+import { CANTEEN_API_BASE, CURRENT_VERSION } from '../Constants';
 import NotificationUtil from './NotificationUtil';
 import TimeUtil from './TimeUtil';
-import PromiseUtil from './PromiseUtil';
+import md5 from 'js-md5';
 
-const serveOption = {
+const serverOption = {
   appendTimestamp: false,
-  // 响应头的ok等于true时调用，处理502与504当作网络问题
-  failController: (response) => {
-    if (response.status === 502 || response.status === 504) {
-      throw '获取响应失败，可能是临时网络波动，如果长时间失败请联系开发者';
-    }
-  },
 };
 
 export default class ServerUtil {
@@ -28,9 +21,7 @@ export default class ServerUtil {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     let data;
     try {
-      data = await PromiseUtil.any(
-        CANTEEN_SERVER_LIST.map((api) => HttpUtil.GET_Json(api + 'canteen/operate/announcement/list', serveOption))
-      );
+      data = await HttpUtil.GET_Json(CANTEEN_API_BASE + 'canteen/operate/announcement/list', serverOption);
     } catch (e) {
       console.log(e);
     }
@@ -48,14 +39,13 @@ export default class ServerUtil {
       if (Settings.feature.announcementNotice) {
         let filterList = data.filter(
           (x) =>
-            new Date(x.star_time) <= TimeUtil.changeToCCT(new Date()) &&
+            new Date(x.start_time) <= TimeUtil.changeToCCT(new Date()) &&
             new Date(x.over_time) >= TimeUtil.changeToCCT(new Date())
         );
 
         let today = TimeUtil.format(new Date(), 'yyyy-MM-dd');
         let announcementNoticeStatus =
           (await PlatformHelper.Storage.getLocalStorage('announcement-notice-status')) || {};
-
         // 判断当天是否推送过
         filterList.map((x) => {
           if (x.notice) {
@@ -63,9 +53,10 @@ export default class ServerUtil {
               announcementNoticeStatus = {};
               announcementNoticeStatus[today] = {};
             }
-            if (!announcementNoticeStatus[today][today + '-' + x.notice]) {
-              announcementNoticeStatus[today][today + '-' + x.notice] = true;
-              let imgReg = /<img.*?src='(.*?)'/;
+            let statusKey = md5(x.html.replace(/<div.*?>|<\/div>|<p.*?>|<\/p>|<\/img.*?>/g, ''));
+            if (!announcementNoticeStatus[today][statusKey]) {
+              announcementNoticeStatus[today][statusKey] = true;
+              let imgReg = /<img.*?src=['"](.*?)['"]/;
               let imgUrl = x.html.match(imgReg)[1];
               let removeTagReg = /<\/?.+?\/?>/g;
               let divReg = /<\/div>/g;
@@ -98,9 +89,7 @@ export default class ServerUtil {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     let data;
     try {
-      data = await PromiseUtil.any(
-        CANTEEN_SERVER_LIST.map((api) => HttpUtil.GET_Json(api + 'canteen/operate/video/list', serveOption))
-      );
+      data = await HttpUtil.GET_Json(CANTEEN_API_BASE + 'canteen/operate/video/list', serverOption);
     } catch (e) {
       console.log(e);
     }
@@ -121,9 +110,7 @@ export default class ServerUtil {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     let data;
     try {
-      data = await PromiseUtil.any(
-        CANTEEN_SERVER_LIST.map((api) => HttpUtil.GET_Json(api + 'canteen/operate/resource/get', serveOption))
-      );
+      data = await HttpUtil.GET_Json(CANTEEN_API_BASE + 'canteen/operate/resource/get', serverOption);
     } catch (e) {
       console.log(e);
     }
@@ -138,46 +125,46 @@ export default class ServerUtil {
   }
 
   /**
-   * @param currentVersion {boolean} 是否获取当前版本信息
-   * @param shouldNotice {boolean}
+   * @param checkVersionUpdate {boolean} 是否检测版本更新并推送
+   * @param targetVersion {string} 要获取的目标版本信息，不提供时获取最新版
    */
-  static async getVersionInfo(currentVersion, shouldNotice) {
+  static async getVersionInfo(checkVersionUpdate = true, targetVersion = undefined) {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     let data;
-    let networkBroken = false;
-    try {
-      if (currentVersion) {
-        data = await PromiseUtil.any(
-          CANTEEN_SERVER_LIST.map((api) =>
-            HttpUtil.GET_Json(api + 'canteen/operate/version/plugin?version=' + CURRENT_VERSION, serveOption)
-          )
-        );
-      } else {
-        data = await PromiseUtil.any(
-          CANTEEN_SERVER_LIST.map((api) => HttpUtil.GET_Json(api + 'canteen/operate/version/plugin', serveOption))
-        );
+    let notNewVersion = true;
+    const failController = (error) => {
+      // 断网导致没有response和服务器响应5xx的情况不检测是否存在版本更新
+      if (!error.response) {
+        notNewVersion = false;
+        return;
       }
-    } catch (e) {
-      // 只有断网返回没有状态会进入catch
-      networkBroken = true;
-      console.log(e);
-    }
+      const response = error.response;
+      if (response.status >= 500 && response.status < 600) {
+        notNewVersion = false;
+      }
+    };
+    const arg = targetVersion ? `?version=${targetVersion}` : '';
+    data = await HttpUtil.GET_Json(
+      `${CANTEEN_API_BASE}canteen/operate/version/plugin${arg}`,
+      serverOption,
+      failController
+    );
     if (!data) {
       const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
       data = await HttpUtil.GET_Json(fallbackUrl);
       data = data.upgrade;
-      // 如果检测到是断网，将版本赋值成当前版本，避免弹出更新提醒
-      if (networkBroken || currentVersion) {
+      if (!notNewVersion) {
         data.version = CURRENT_VERSION;
       }
+      data.is_fallback = true;
     } else {
       data = data.data;
     }
     if (!data) {
       return data;
     }
-    if (shouldNotice) {
-      if (Settings.JudgmentVersion(data.upgrade.v, CURRENT_VERSION) && Settings.dun.enableNotice) {
+    if (checkVersionUpdate && notNewVersion) {
+      if (Settings.JudgmentVersion(data.version, CURRENT_VERSION) && Settings.dun.enableNotice) {
         NotificationUtil.SendNotice(
           '小刻食堂翻新啦！！',
           '快来使用新的小刻食堂噢！一定有很多好玩的新功能啦！！',

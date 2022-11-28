@@ -7,6 +7,7 @@ import { MonsterSirenDataSource } from './def/MonsterSirenDataSource';
 import { ArknightsOfficialWebDataSource } from './def/ArknightsOfficialWebDataSource';
 import { TerraHistoricusDataSource } from './def/TerraHistoricusDataSource';
 import { NeteaseCloudMusicDataSource } from './def/NeteaseCloudMusicDataSource';
+import { ArknightsAnimeDataSource } from './def/ArknightsAnimeDataSource';
 import { USE_TEST_URL } from '../Constants';
 import { DataSourceConfig } from './DataSource';
 
@@ -48,6 +49,7 @@ function setTestUrl(sources) {
   sources['泰拉记事社官网'].dataUrl = PlatformHelper.Extension.getURL('test/tljssJson.json');
   sources['塞壬唱片网易云音乐'].dataUrl = PlatformHelper.Extension.getURL('test/wyyJson.json');
   sources['鹰角网络微博'].dataUrl = PlatformHelper.Extension.getURL('test/yjwbJson.json');
+  sources['动画官网资讯'].dataUrl = PlatformHelper.Extension.getURL('test/anime.json');
 }
 
 const SHARE_DEFAULT_GROUP = 'share';
@@ -155,6 +157,15 @@ const configList = [
   WeiboDataSource.withUid(7745672941, (config) => {
     config.priority(17).groupId(SHARE_DEFAULT_GROUP);
   }),
+  new ArknightsAnimeDataSource(
+    DataSourceConfig.builder()
+      .icon('/assets/image/icon/anime.png')
+      .dataName('动画官网资讯')
+      .title('明日方舟动画')
+      .dataUrl('https://ak.hypergryph.com/anime/api/news')
+      .priority(18)
+      .build()
+  ),
 ];
 
 /**

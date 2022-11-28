@@ -84,7 +84,13 @@
         </el-carousel>
       </div>
     </el-card>
-    <el-tabs v-if="settings.display.showByTag" v-model="currentTag" :stretch="true" @tab-click="selectListByTag">
+    <el-tabs
+      v-if="settings.display.showByTag"
+      v-model="currentTag"
+      :stretch="true"
+      :class="$refs.SearchModel.penguinShow ? 'penguin-show' : ''"
+      @tab-click="selectListByTag"
+    >
       <el-tab-pane
         v-for="item of transformToSortList(cardListByTag)"
         :key="item.dataName"
@@ -304,7 +310,7 @@ export default {
     },
     // 获取在线信息
     getOnlineSpeak() {
-      let version = ServerUtil.getVersionInfo(false, false).then((data) => {
+      let version = ServerUtil.getVersionInfo(false).then((data) => {
         // 是否最新
         this.isNew = Settings.JudgmentVersion(data.version, CURRENT_VERSION);
       });
@@ -633,6 +639,10 @@ img[lazy='error'] {
 
   .color-blue {
     color: #23ade5;
+  }
+
+  .penguin-show {
+    opacity: 0;
   }
 
   .card {
