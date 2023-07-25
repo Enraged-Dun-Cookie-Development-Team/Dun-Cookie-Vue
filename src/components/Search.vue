@@ -108,6 +108,7 @@ export default {
       penguin: {},
       showCloseStage: false,
       sortType: 0,
+      penguinSearchMatrix: [],
     };
   },
   computed: {},
@@ -149,49 +150,54 @@ export default {
         this.penguinSearchList = [];
       }
     },
-    getPenguinDate(index) {
+    async getPenguinDate(index) {
       let item = this.penguinSearchList[index];
       if (item.matrix_per && item.matrix_cost) {
         return;
       }
       item.loading = true;
-      PenguinStatistics.GetItemInfo(item.itemId).then((data) => {
-        let matrix = JSON.parse(data).matrix;
-        matrix.forEach((item) => {
-          let stage = PenguinStatistics.GetStageInfo(item.stageId);
-          let zone = PenguinStatistics.GetZonesInfo(stage.zoneId);
-          item.stage = stage;
-          item.zone = zone;
-          item.per = Math.round((item.quantity / item.times) * 10000) / 100.0;
-          let p = item.quantity / item.times;
-          item.cost = Math.round((stage.apCost / p) * 100) / 100.0;
-          item.time = TimeUtil.secondToDate(stage.minClearTime / 1000 / p);
-          item.isGacha = !stage.minClearTime || (stage.isGacha ? true : false);
-          item.isOpen = zone.existence.CN.hasOwnProperty('closeTime')
-            ? new Date().getTime() >= zone.existence.CN.openTime && new Date().getTime() <= zone.existence.CN.closeTime
-            : true;
-        });
-        let matrix_per = JSON.parse(JSON.stringify(matrix));
-        let matrix_cost = JSON.parse(JSON.stringify(matrix));
-        matrix_per
-          .sort((x, y) => {
-            return y.per - x.per;
-          })
-          .sort((x, y) => {
-            if (y.isGacha && !x.isGacha) return -1;
-          });
-        matrix_cost
-          .sort((x, y) => {
-            return (y.cost != '' && y.cost != null) - (x.cost != '' && x.cost != null) || x.cost - y.cost;
-          })
-          .sort((x, y) => {
-            if (y.isGacha && !x.isGacha) return -1;
-          });
-        this.$set(item, 'matrix_per', matrix_per);
-        this.$set(item, 'matrix_cost', matrix_cost);
-        this.$set(item, 'loading', false);
-        console.log(item);
+      if (this.penguinSearchMatrix.length == 0) {
+        const data = await PenguinStatistics.GetItemsInfo();
+        this.penguinSearchMatrix = JSON.parse(data).matrix;
+      }
+      let matrix = this.penguinSearchMatrix.filter((matrix) => {
+        return matrix.itemId == item.itemId;
       });
+
+      matrix.forEach((item) => {
+        let stage = PenguinStatistics.GetStageInfo(item.stageId);
+        let zone = PenguinStatistics.GetZonesInfo(stage.zoneId);
+        item.stage = stage;
+        item.zone = zone;
+        item.per = Math.round((item.quantity / item.times) * 10000) / 100.0;
+        let p = item.quantity / item.times;
+        item.cost = Math.round((stage.apCost / p) * 100) / 100.0;
+        item.time = TimeUtil.secondToDate(stage.minClearTime / 1000 / p);
+        item.isGacha = !stage.minClearTime || (stage.isGacha ? true : false);
+        item.isOpen = zone.existence.CN.hasOwnProperty('closeTime')
+          ? new Date().getTime() >= zone.existence.CN.openTime && new Date().getTime() <= zone.existence.CN.closeTime
+          : true;
+      });
+      let matrix_per = JSON.parse(JSON.stringify(matrix));
+      let matrix_cost = JSON.parse(JSON.stringify(matrix));
+      matrix_per
+        .sort((x, y) => {
+          return y.per - x.per;
+        })
+        .sort((x, y) => {
+          if (y.isGacha && !x.isGacha) return -1;
+        });
+      matrix_cost
+        .sort((x, y) => {
+          return (y.cost != '' && y.cost != null) - (x.cost != '' && x.cost != null) || x.cost - y.cost;
+        })
+        .sort((x, y) => {
+          if (y.isGacha && !x.isGacha) return -1;
+        });
+      this.$set(item, 'matrix_per', matrix_per);
+      this.$set(item, 'matrix_cost', matrix_cost);
+      this.$set(item, 'loading', false);
+      console.log(item);
     },
     changeSort() {
       if (this.sortType == 0) {

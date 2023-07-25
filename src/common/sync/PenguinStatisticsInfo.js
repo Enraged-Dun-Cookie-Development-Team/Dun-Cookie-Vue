@@ -60,14 +60,14 @@ export default class PenguinStatistics {
       });
   }
 
-  static GetItemInfo(id) {
+  static GetItemsInfo() {
     let options = {
       appendTimestamp: false,
       timeout: 60000,
     };
     return new Promise((resolve) => {
       HttpUtil.GET(
-        `https://penguin-stats.cn/PenguinStats/api/v2/result/matrix?is_personal=false&itemFilter=${id}&server=CN&show_closed_zones=true&category=all`,
+        `https://penguin-stats.cn/PenguinStats/api/v2/result/matrix?server=CN&show_closed_zones=true`,
         options
       ).then((data) => {
         resolve(data);
