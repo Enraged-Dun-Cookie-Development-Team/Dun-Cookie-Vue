@@ -85,8 +85,9 @@ export { PAGE_WELCOME, PAGE_POPUP_WINDOW, PAGE_OPTIONS, PAGE_DONATE, PAGE_UPDATE
 // region 杂项
 const TOOL_QR_URL = 'https://arknightscommunity.drblack-system.com/15386.html';
 
-const CANTEEN_API_BASE = 'https://server.ceobecanteen.top/api/v1/';
-const CANTEEN_CDN_API_BASE = 'https://server-cdn.ceobecanteen.top/api/v1/';
+const CANTEEN_API_BASE = 'http://server.ceobecanteen.top/api/v1/';
+const CANTEEN_CDN_API_BASE = 'http://cdn.ceobecanteen.top/';
+const CANTEEN_CDN_SERVER_API_BASE = 'https://server-cdn.ceobecanteen.top/api/v1/';
 
 // TODO 直接从common.js里面copy过来的，等待优化重构
 const quickJump = {
@@ -313,5 +314,13 @@ const countDown = [
   },
 ];
 
-export { quickJump, dayInfo, countDown, TOOL_QR_URL, CANTEEN_API_BASE, CANTEEN_CDN_API_BASE };
+export {
+  quickJump,
+  dayInfo,
+  countDown,
+  TOOL_QR_URL,
+  CANTEEN_API_BASE,
+  CANTEEN_CDN_API_BASE,
+  CANTEEN_CDN_SERVER_API_BASE,
+};
 // endregion

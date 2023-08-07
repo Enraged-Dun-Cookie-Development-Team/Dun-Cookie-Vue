@@ -50,7 +50,7 @@ export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
     if (Date.now() >= this.nextCheckAvailableTime) {
       try {
         const serverInfo = await ServerUtil.getServerDataSourceInfo(true);
-        await ServerUtil.requestCdnApi(
+        await ServerUtil.requestCdnServerApi(
           'cdn/cookie/mainList/cookieList?datasource_comb_id=' + encodeURIComponent(serverInfo.allComboId)
         );
         this.__setAvailable();
@@ -76,7 +76,7 @@ export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
     try {
       const { cookie_id } = await ServerUtil.requestCdnApi('datasource-comb/' + encodeURIComponent(this.comboId));
       if (cookie_id && this.lastLatestCookieId !== cookie_id) {
-        const result = await ServerUtil.requestCdnApi(
+        const result = await ServerUtil.requestCdnServerApi(
           `cdn/cookie/mainList/cookieList?datasource_comb_id=${encodeURIComponent(
             this.comboId
           )}&cookie_id=${encodeURIComponent(cookie_id)}`

@@ -4,7 +4,7 @@
 import HttpUtil from './HttpUtil';
 import PlatformHelper from '../platform/PlatformHelper';
 import Settings from '../Settings';
-import { CANTEEN_API_BASE, CANTEEN_CDN_API_BASE, CURRENT_VERSION } from '../Constants';
+import { CANTEEN_API_BASE, CANTEEN_CDN_API_BASE, CANTEEN_CDN_SERVER_API_BASE, CURRENT_VERSION } from '../Constants';
 import NotificationUtil from './NotificationUtil';
 import TimeUtil from './TimeUtil';
 import { Http } from '@enraged-dun-cookie-development-team/common/request';
@@ -33,6 +33,21 @@ export default class ServerUtil {
       return result.data;
     } else {
       throw new Error(`小刻食堂cdn api请求失败：${path}，${result.message}`);
+    }
+  }
+
+  static async requestCdnServerApi(path) {
+    if (path.startsWith('/')) path = path.startsWith(1);
+    const result = await Http.get(CANTEEN_CDN_SERVER_API_BASE + path, {
+      headers: {
+        'User-Agent': '',
+      },
+      responseTransformer: async (response) => response.json(),
+    });
+    if (parseInt(result.code) === 0) {
+      return result.data;
+    } else {
+      throw new Error(`小刻食堂server cdn api请求失败：${path}，${result.message}`);
     }
   }
 
