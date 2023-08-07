@@ -51,7 +51,9 @@ export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
       try {
         const serverInfo = await ServerUtil.getServerDataSourceInfo(true);
         await ServerUtil.requestCdnServerApi(
-          'cdn/cookie/mainList/cookieList?datasource_comb_id=' + encodeURIComponent(serverInfo.allComboId)
+          `cdn/cookie/mainList/cookieList?datasource_comb_id=${encodeURIComponent(
+            serverInfo.allComboId
+          )}&cookie_id=${encodeURIComponent(this.lastLatestCookieId)}`
         );
         this.__setAvailable();
         return true;
@@ -74,13 +76,26 @@ export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
   async doCycle() {
     if (!this.runningFlag) return;
     try {
-      const { cookie_id } = await ServerUtil.requestCdn('datasource-comb/' + encodeURIComponent(this.comboId));
+      const { cookie_id, update_cookie_id } = JSON.parse(
+        await ServerUtil.requestCdn('datasource-comb/' + encodeURIComponent(this.comboId), { cache: 'no-cache' })
+      );
       if (cookie_id && this.lastLatestCookieId !== cookie_id) {
-        const result = await ServerUtil.requestCdnServerApi(
-          `cdn/cookie/mainList/cookieList?datasource_comb_id=${encodeURIComponent(
-            this.comboId
-          )}&cookie_id=${encodeURIComponent(cookie_id)}`
-        );
+        this.lastLatestCookieId = cookie_id;
+        await PlatformHelper.Storage.saveLocalStorage('server_latest_cookie_id', cookie_id);
+        let result;
+        try {
+          result = await ServerUtil.requestCdnServerApi(
+            `cdn/cookie/mainList/cookieList?datasource_comb_id=${encodeURIComponent(
+              this.comboId
+            )}&cookie_id=${encodeURIComponent(cookie_id)}&update_cookie_id=${encodeURIComponent(update_cookie_id)}`
+          );
+        } catch (e) {
+          result = await ServerUtil.requestCdnServerApi(
+            `cdn/cookie/mainList/cookieList?datasource_comb_id=${encodeURIComponent(
+              this.comboId
+            )}&cookie_id=${encodeURIComponent(cookie_id)}`
+          );
+        }
         await CookieHandler.handleServer(result);
       }
       this.__setAvailable();

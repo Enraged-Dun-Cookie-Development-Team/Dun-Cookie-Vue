@@ -21,11 +21,9 @@ const serverOption = {
 let serverDataSourceInfo;
 
 export default class ServerUtil {
-  static async requestCdn(path) {
+  static async requestCdn(path, options) {
     if (path.startsWith('/')) path = path.startsWith(1);
-    return await Http.get(CANTEEN_CDN_API_BASE + path, {
-      responseTransformer: async (response) => response.json(),
-    });
+    return await Http.get(CANTEEN_CDN_API_BASE + path, options);
   }
 
   static async requestCdnServerApi(path) {
