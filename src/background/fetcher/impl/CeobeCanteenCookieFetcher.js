@@ -74,7 +74,7 @@ export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
   async doCycle() {
     if (!this.runningFlag) return;
     try {
-      const { cookie_id } = await ServerUtil.requestCdnApi('datasource-comb/' + encodeURIComponent(this.comboId));
+      const { cookie_id } = await ServerUtil.requestCdn('datasource-comb/' + encodeURIComponent(this.comboId));
       if (cookie_id && this.lastLatestCookieId !== cookie_id) {
         const result = await ServerUtil.requestCdnServerApi(
           `cdn/cookie/mainList/cookieList?datasource_comb_id=${encodeURIComponent(

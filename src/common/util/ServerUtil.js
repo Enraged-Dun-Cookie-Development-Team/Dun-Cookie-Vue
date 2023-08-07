@@ -21,27 +21,16 @@ const serverOption = {
 let serverDataSourceInfo;
 
 export default class ServerUtil {
-  static async requestCdnApi(path) {
+  static async requestCdn(path) {
     if (path.startsWith('/')) path = path.startsWith(1);
-    const result = await Http.get(CANTEEN_CDN_API_BASE + path, {
-      headers: {
-        'User-Agent': '',
-      },
+    return await Http.get(CANTEEN_CDN_API_BASE + path, {
       responseTransformer: async (response) => response.json(),
     });
-    if (parseInt(result.code) === 0) {
-      return result.data;
-    } else {
-      throw new Error(`小刻食堂cdn api请求失败：${path}，${result.message}`);
-    }
   }
 
   static async requestCdnServerApi(path) {
     if (path.startsWith('/')) path = path.startsWith(1);
     const result = await Http.get(CANTEEN_CDN_SERVER_API_BASE + path, {
-      headers: {
-        'User-Agent': '',
-      },
       responseTransformer: async (response) => response.json(),
     });
     if (parseInt(result.code) === 0) {
@@ -54,9 +43,6 @@ export default class ServerUtil {
   static async requestApi(method, path, options) {
     if (path.startsWith('/')) path = path.startsWith(1);
     const result = await Http.request(CANTEEN_API_BASE + path, {
-      headers: {
-        'User-Agent': '',
-      },
       method: method,
       responseTransformer: async (response) => response.json(),
       ...options,
