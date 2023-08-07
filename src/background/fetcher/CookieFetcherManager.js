@@ -104,8 +104,12 @@ class FetcherController {
   }
 
   async start() {
-    DebugUtil.debugLog(0, '蹲饼器启动：', this.fetchConfig.fetcherStrategyList[this.currentFetcherIdx].fetcher);
-    await this.fetchers[this.currentFetcherIdx].start(this.fetchConfig);
+    if (this.fetchConfig.enableDataSourceList.length > 0) {
+      DebugUtil.debugLog(0, '蹲饼器启动：', this.fetchConfig.fetcherStrategyList[this.currentFetcherIdx].fetcher);
+      await this.fetchers[this.currentFetcherIdx].start(this.fetchConfig);
+    } else {
+      DebugUtil.debugLog(0, '未启用任何数据源，不启动蹲饼器');
+    }
   }
 
   async stop() {

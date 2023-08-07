@@ -95,10 +95,10 @@
                 <div class="content-card-description">选择勾选来源，最少选择一个</div>
                 <div class="content-card-content">
                   <el-checkbox-group v-model="settings.enableDataSources" class="checkbox-group-area" :min="1">
-                    <el-checkbox v-for="source of defSourcesList" :key="source.dataSource" :label="source.dataName">
+                    <el-checkbox v-for="source of defSourcesList" :key="sourceId(source)" :label="source.name">
                       <span class="checkbox-area">
                         <img class="icon-img" :src="source.icon" />
-                        {{ source.title }}
+                        {{ source.name }}
                       </span>
                     </el-checkbox>
                   </el-checkbox-group>
@@ -318,13 +318,13 @@
                       <el-select v-model="settings.display.defaultTag" placeholder="选择默认标签">
                         <el-option
                           v-for="source in currentDataSource"
-                          :key="source.dataSource"
-                          :label="source.title"
-                          :value="source.dataSource"
+                          :key="sourceId(source)"
+                          :label="source.name"
+                          :value="sourceId(source)"
                         >
                           <div style="display: flex; align-items: center">
                             <img :src="source.icon" style="margin-right: 10px; width: 25px" />
-                            <span>{{ source.title }}</span>
+                            <span>{{ source.name }}</span>
                           </div>
                         </el-option>
                       </el-select>
@@ -408,11 +408,13 @@ import { animateCSS, deepAssign } from '../common/util/CommonFunctions';
 import PlatformHelper from '../common/platform/PlatformHelper';
 import 'animate.css';
 import AvailableDataSourceMeta from '../common/sync/AvailableDataSourceMeta';
+import { DataSourceMeta } from '../common/datasource/DataSourceMeta';
 
 export default {
   name: 'App',
   components: { countTo },
   data() {
+    console.log(DunInfo);
     return {
       logo: '',
       currentVersion: SHOW_VERSION,
@@ -421,7 +423,10 @@ export default {
       settings: Settings,
       // TODO 暂时没有按tag显示，之后看情况补回或彻底删除
       currentDataSource: [],
-      defSourcesList: [...AvailableDataSourceMeta.preset, ...AvailableDataSourceMeta.custom],
+      defSourcesList: [
+        ...Object.values(AvailableDataSourceMeta.preset),
+        ...Object.values(AvailableDataSourceMeta.custom),
+      ],
       marks: {
         8: '20点',
         12: '第二天凌晨',
@@ -446,6 +451,7 @@ export default {
   methods: {
     formatTime: TimeUtil.format,
     openUrl: PlatformHelper.Tabs.create,
+    sourceId: DataSourceMeta.id,
     init() {
       this.settings.doAfterInit((settings) => {
         this.logo = '/assets/image/' + settings.logo;
@@ -454,7 +460,11 @@ export default {
         this.oldDunCount = data.counter;
       });
       AvailableDataSourceMeta.doAfterUpdate(() => {
-        this.defSourcesList = [...AvailableDataSourceMeta.preset, ...AvailableDataSourceMeta.custom];
+        console.log(AvailableDataSourceMeta);
+        this.defSourcesList = [
+          ...Object.values(AvailableDataSourceMeta.preset),
+          ...Object.values(AvailableDataSourceMeta.custom),
+        ];
       });
     },
     initAnimate() {
