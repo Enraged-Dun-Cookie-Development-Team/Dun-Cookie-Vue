@@ -44,17 +44,9 @@ class DataItem {
    */
   coverImage;
   /**
-   * 预览图片列表，在非大图模式下使用预览图减小流量消耗
-   */
-  previewList;
-  /**
    * 图片列表，对于多图的饼可以把图片全部显示出来
    */
   imageList;
-  /**
-   * 图片列表，对于多图的饼可以把图片全部显示出来 http地址
-   */
-  imageHttpList;
   /**
    * 在列表中是否为置顶内容
    */
@@ -72,16 +64,16 @@ class DataItem {
    */
   componentData;
 
-  static builder(dataSourceName) {
+  static builder(dataSourceId) {
     const instance = new DataItem();
-    instance.dataSource = dataSourceName;
+    instance.dataSource = dataSourceId;
     // 其实这里用反射生成应该可读性更强一些，但是只有明确写出来IDE才能识别并自动补全
     const _builder = {
       /**
        * @see DataItem.id
        */
       id: (val) => {
-        instance.id = `${dataSourceName}_${val}`;
+        instance.id = `${dataSourceId}_${val}`;
         return _builder;
       },
       /**
@@ -131,13 +123,6 @@ class DataItem {
        */
       imageList: (val) => {
         instance.imageList = val;
-        return _builder;
-      },
-      /**
-       * @see DataItem.imageHttpList
-       */
-      imageHttpList: (val) => {
-        instance.imageHttpList = val;
         return _builder;
       },
       /**

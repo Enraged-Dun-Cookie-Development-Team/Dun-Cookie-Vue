@@ -95,7 +95,7 @@
                 <div class="content-card-description">选择勾选来源，最少选择一个</div>
                 <div class="content-card-content">
                   <el-checkbox-group v-model="settings.enableDataSources" class="checkbox-group-area" :min="1">
-                    <el-checkbox v-for="source of defSourcesList" :key="source.dataName" :label="source.dataName">
+                    <el-checkbox v-for="source of defSourcesList" :key="source.dataSource" :label="source.dataName">
                       <span class="checkbox-area">
                         <img class="icon-img" :src="source.icon" />
                         {{ source.title }}
@@ -318,9 +318,9 @@
                       <el-select v-model="settings.display.defaultTag" placeholder="选择默认标签">
                         <el-option
                           v-for="source in currentDataSource"
-                          :key="source.dataName"
+                          :key="source.dataSource"
                           :label="source.title"
-                          :value="source.dataName"
+                          :value="source.dataSource"
                         >
                           <div style="display: flex; align-items: center">
                             <img :src="source.icon" style="margin-right: 10px; width: 25px" />
@@ -403,38 +403,31 @@ import countTo from 'vue-count-to';
 import Settings from '../common/Settings';
 import DunInfo from '../common/sync/DunInfo';
 import { SHOW_VERSION } from '../common/Constants';
-import { getDefaultDataSourcesList } from '../common/datasource/DefaultDataSources';
 import TimeUtil from '../common/util/TimeUtil';
-import { customDataSourceTypes, customDataSourceTypesByName } from '../common/datasource/CustomDataSources';
 import { animateCSS, deepAssign } from '../common/util/CommonFunctions';
 import PlatformHelper from '../common/platform/PlatformHelper';
 import 'animate.css';
-import CurrentDataSource from '../common/sync/CurrentDataSource';
+import AvailableDataSourceMeta from '../common/sync/AvailableDataSourceMeta';
 
 export default {
   name: 'App',
   components: { countTo },
   data() {
-    getDefaultDataSourcesList().then((res) => {
-      this.defSourcesList.push(...res);
-    });
     return {
       logo: '',
       currentVersion: SHOW_VERSION,
       oldDunCount: 0,
       dunInfo: DunInfo,
       settings: Settings,
-      currentDataSource: CurrentDataSource.sourceMap,
-      defSourcesList: [],
-      customTypes: customDataSourceTypes,
-      customTypesByName: customDataSourceTypesByName,
+      // TODO 暂时没有按tag显示，之后看情况补回或彻底删除
+      currentDataSource: [],
+      defSourcesList: [...AvailableDataSourceMeta.preset, ...AvailableDataSourceMeta.custom],
       marks: {
         8: '20点',
         12: '第二天凌晨',
         20: '8点',
       },
       activeTab: '0',
-      customData: [],
       bodyIsShow: false,
       activeMenu: -1,
       showBack: false,
@@ -455,26 +448,13 @@ export default {
     openUrl: PlatformHelper.Tabs.create,
     init() {
       this.settings.doAfterInit((settings) => {
-        this.customData = settings.customDataSources
-          .map((item) => {
-            const type = customDataSourceTypesByName[item.type];
-            if (type) {
-              return {
-                type: type.typeName,
-                builder: type,
-                arg: item.arg,
-              };
-            }
-          })
-          .filter((item) => !!item);
-        global.customData = this.customData;
         this.logo = '/assets/image/' + settings.logo;
       });
       DunInfo.doAfterUpdate((data) => {
         this.oldDunCount = data.counter;
       });
-      CurrentDataSource.doAfterUpdate((data) => {
-        this.currentDataSource = data.sourceMap;
+      AvailableDataSourceMeta.doAfterUpdate(() => {
+        this.defSourcesList = [...AvailableDataSourceMeta.preset, ...AvailableDataSourceMeta.custom];
       });
     },
     initAnimate() {
@@ -489,26 +469,11 @@ export default {
         }, 500);
       });
     },
-    addCustomData() {
-      this.customData.push({ type: '' });
-    },
-    handleChangeCustomDataType(index, newType) {
-      this.customData[index].builder = customDataSourceTypesByName[newType];
-    },
-    removeCustomData(index) {
-      this.customData.splice(index, 1);
-    },
     // 保存设置
     saveSetting(formName, data) {
       if (data) {
         deepAssign(this.settings, data);
       }
-      this.settings.customDataSources = this.customData.map((item) => {
-        return {
-          type: item.type,
-          arg: item.arg,
-        };
-      });
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.settings.saveSettings().then(() => {

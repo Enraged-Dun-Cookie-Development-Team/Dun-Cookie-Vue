@@ -84,22 +84,11 @@
         </el-carousel>
       </div>
     </el-card>
-    <el-tabs
-      v-if="settings.display.showByTag"
-      v-model="currentTag"
-      :stretch="true"
-      :class="$refs.SearchModel.penguinShow ? 'penguin-show' : ''"
-      @tab-click="selectListByTag"
-    >
-      <el-tab-pane
-        v-for="item of transformToSortList(cardListByTag)"
-        :key="item.dataName"
-        :label="item.dataName"
-        :name="item.dataName"
-      >
+    <el-tabs v-if="settings.display.showByTag" v-model="currentTag" :stretch="true" @tab-click="selectListByTag">
+      <el-tab-pane v-for="item of cardListAll" :key="item.dataSource" :label="item.dataSource" :name="item.dataSource">
         <span slot="label">
-          <el-tooltip effect="dark" :content="getDataSourceByName(item.dataName).title" placement="top">
-            <img class="title-img" :src="getDataSourceByName(item.dataName).icon" />
+          <el-tooltip effect="dark" :content="getDataSourceById(item.dataSource).name" placement="top">
+            <img class="title-img" :src="getDataSourceById(item.dataSource).icon" />
           </el-tooltip>
         </span>
       </el-tab-pane>
@@ -116,13 +105,13 @@
         :timestamp="item.timeForDisplay"
         placement="top"
         :icon-style="{
-          '--icon': `url('${getDataSourceByName(item.dataSource).icon}')`,
+          '--icon': `url('${getDataSourceById(item.dataSource).icon}')`,
         }"
         :icon="'headImg'"
       >
         <span v-if="item.isTop" class="is-top-info">
           <span class="color-blue"
-            >【当前条目在{{ getDataSourceByName(item.dataSource).title }}的时间线内为置顶状态】</span
+            >【当前条目在{{ getDataSourceById(item.dataSource).name }}的时间线内为置顶状态】</span
           >
         </span>
 
@@ -182,7 +171,6 @@
 import { CURRENT_VERSION, dayInfo, PAGE_UPDATE, quickJump } from '../../common/Constants';
 import MyElTimelineItem from './MyTimeLineItem';
 import DefaultItem from './items/DefaultItem';
-import DataSourceUtil from '../../common/util/DataSourceUtil';
 import Settings from '../../common/Settings';
 import SanInfo from '../../common/sync/SanInfo';
 import TimeUtil from '../../common/util/TimeUtil';
@@ -193,12 +181,12 @@ import InsiderUtil from '../../common/util/InsiderUtil';
 import ServerUtil from '../../common/util/ServerUtil';
 import SelectImageToCopy from '@/components/SelectImageToCopy';
 import UpdateInfoNotice from '../UpdateInfoNotice';
-import CurrentDataSource from '../../common/sync/CurrentDataSource';
+import AvailableDataSourceMeta from '../../common/sync/AvailableDataSourceMeta';
 
 export default {
   name: 'TimeLine',
   components: { MyElTimelineItem, Search, SelectImageToCopy, UpdateInfoNotice },
-  props: { cardListByTag: { type: Object, required: true }, imgShow: Boolean },
+  props: { cardListAll: { type: Array, required: true }, imgShow: Boolean },
   data() {
     Settings.doAfterInit((settings) => (this.currentTag = settings.display.defaultTag));
     Settings.doAfterUpdate((settings, changed) => {
@@ -220,7 +208,6 @@ export default {
       quickJump: quickJump,
       loading: true, // 初始化加载
       cardList: [],
-      cardListAll: {},
       currentTag: Settings.display.defaultTag,
       filterText: '',
       filterCardList: [],
@@ -233,8 +220,7 @@ export default {
     };
   },
   watch: {
-    cardListByTag() {
-      this.cardListAll = DataSourceUtil.mergeAllData(this.cardListByTag);
+    cardListAll() {
       this.selectListByTag(false);
     },
     cardList() {
@@ -258,18 +244,19 @@ export default {
         PlatformHelper.Windows.createPopupWindow(url, w, h);
       }
     },
-    getDataSourceByName: DataSourceUtil.getByName,
-    transformToSortList: DataSourceUtil.transformToSortList,
+    getDataSourceById: (id) => {
+      return AvailableDataSourceMeta.getById(id);
+    },
 
     resolveComponent(item) {
       if (!item.componentData) {
         return DefaultItem;
       }
-      return this.getDataSourceByName(item.dataSource).dataType.typeName;
+      return this.getDataSourceById(item.dataSource).type.replace(':', '__');
     },
     selectListByTag(emitEvent = true) {
       if (this.settings.display.showByTag) {
-        this.cardList = this.cardListByTag[this.currentTag];
+        //this.cardList = this.cardListByTag[this.currentTag];
       } else {
         this.cardList = this.cardListAll;
       }
@@ -310,7 +297,7 @@ export default {
     },
     // 获取在线信息
     getOnlineSpeak() {
-      let version = ServerUtil.getVersionInfo(false).then((data) => {
+      let version = ServerUtil.getVersionInfo(false, false).then((data) => {
         // 是否最新
         this.isNew = Settings.JudgmentVersion(data.version, CURRENT_VERSION);
       });
@@ -337,10 +324,15 @@ export default {
         );
       });
 
-      Promise.all([announcement, version, resource]).then(() => {
-        this.resourcesNotToday();
-        this.loading = false;
-      });
+      Promise.all([announcement, version, resource])
+        .then(() => {
+          this.resourcesNotToday();
+          this.loading = false;
+        })
+        .catch((e) => {
+          this.loading = false;
+          console.log(e);
+        });
     },
 
     calcActivityDiff(endDate) {
@@ -483,7 +475,7 @@ export default {
       PlatformHelper.Img.generateShareImage(
         item,
         '/assets/image/' + Settings.logo,
-        { ...DataSourceUtil.getByName(item.dataSource) },
+        { ...AvailableDataSourceMeta.getById(item.dataSource) },
         imageUrl
       )
         .then((canvas) => {
@@ -639,10 +631,6 @@ img[lazy='error'] {
 
   .color-blue {
     color: #23ade5;
-  }
-
-  .penguin-show {
-    opacity: 0;
   }
 
   .card {

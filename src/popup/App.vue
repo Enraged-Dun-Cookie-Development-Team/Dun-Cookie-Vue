@@ -124,7 +124,7 @@
         </div>
       </div>
       <div id="content">
-        <time-line ref="timeline" :img-show="LazyLoaded" :card-list-by-tag="cardList" @cardListChange="goTop(1, 0)" />
+        <time-line ref="timeline" :img-show="LazyLoaded" :card-list-all="cardList" @cardListChange="goTop(1, 0)" />
       </div>
     </div>
   </div>
@@ -160,13 +160,25 @@ export default {
   name: 'App',
   components: { countTo, TimeLine, MenuIcon },
   data() {
+    CardList.doAfterUpdate((data) => {
+      const oldIds = this.cardList.map((it) => it.id);
+      if (data.list.find((it) => oldIds.indexOf(it.id) === -1)) {
+        this.cardList = data.list;
+        this.$message({
+          offset: 50,
+          center: true,
+          message: '蹲到新饼，请重新打开弹框查看！',
+          type: 'success',
+        });
+      }
+    });
     return {
       san: SanInfo,
       currentSan: SanInfo.currentSan,
       show: false,
       LazyLoaded: false,
       isNew: false,
-      cardList: CardList,
+      cardList: CardList.list,
       currentVersion: SHOW_VERSION,
       onlineSpeakList: [],
       oldDunCount: 0,
@@ -211,9 +223,6 @@ export default {
       // this.menuIconInit();
       DunInfo.doAfterUpdate((data) => {
         this.oldDunCount = data.counter;
-      });
-      CardList.doAfterUpdate((data) => {
-        this.cardList = JSON.parse(JSON.stringify(data));
       });
       setTimeout(() => {
         // 计算高度

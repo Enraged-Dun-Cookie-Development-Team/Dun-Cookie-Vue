@@ -1,12 +1,8 @@
 import { CURRENT_SETTING_VERSION, MESSAGE_SETTINGS_UPDATE, PAGE_POPUP_WINDOW, PLATFORM_UNKNOWN } from './Constants';
 import { deepAssign } from './util/CommonFunctions';
-import { getDefaultDataSources } from './datasource/DefaultDataSources';
-import { customDataSourceTypes } from './datasource/CustomDataSources';
 import { updateSettings } from './SettingsUpdater';
 import PlatformHelper from './platform/PlatformHelper';
 import DebugUtil from './util/DebugUtil';
-import CurrentDataSource from './sync/CurrentDataSource';
-import CardList from './sync/CardList';
 
 // 随便调用一个无影响的东西来导入调试工具类
 DebugUtil.constructor;
@@ -21,65 +17,6 @@ let initPromise;
  */
 const updateListeners = [];
 
-/**
- * 将配置信息转化成可以用于蹲饼的数据源
- */
-async function transformDataSource(settings) {
-  /**
-   * 启用的数据源
-   */
-  const sourceMap = {};
-  const defList = await getDefaultDataSources();
-  for (const dataName of settings.enableDataSources) {
-    if (defList.hasOwnProperty(dataName)) {
-      sourceMap[dataName] = defList[dataName];
-    }
-  }
-  const promiseList = [];
-  for (const info of settings.customDataSources) {
-    // 虽然这里用时间复杂度很离谱的双层for，但由于customDataSourceTypes很少，配置需要更新的情况也很少，所以影响不大
-    for (const type of customDataSourceTypes) {
-      if (info.type === type.name) {
-        promiseList.push(type.builder.build(info.arg));
-        break;
-      }
-    }
-  }
-  return await Promise.allSettled(promiseList).then((results) => {
-    for (const result of results) {
-      if (result.status === 'fulfilled') {
-        if (result.value) {
-          sourceMap[result.value.dataName] = result.value;
-        } else {
-          console.error(result);
-        }
-      } else {
-        console.error(result.reason);
-      }
-    }
-    CurrentDataSource.setSourceMap(sourceMap);
-    // 两个for循环用于同步CardList的key使其与最新的CurrentDataSource的key保持一致
-    for (const key in CardList) {
-      if (CardList.hasOwnProperty(key)) {
-        if (!sourceMap[key]) {
-          delete CardList[key];
-        }
-      }
-    }
-    for (const key in sourceMap) {
-      if (sourceMap.hasOwnProperty(key)) {
-        if (!CardList[key]) {
-          CardList[key] = [];
-        }
-      }
-    }
-    if (PlatformHelper.isBackground) {
-      DebugUtil.debugLog(0, '当前数据源已更新: ', CurrentDataSource.sourceMap);
-    }
-    return true;
-  });
-}
-
 class Settings {
   // 插件初始化的时间
   initTime = new Date().getTime();
@@ -89,7 +26,8 @@ class Settings {
   logo = 'icon.png';
 
   /**
-   * 启用的默认数据源，储存dataName
+   * 启用的数据源
+   * @type {{type: string, dataId: string}[]}
    */
   enableDataSources = [];
   /**
@@ -342,17 +280,9 @@ class Settings {
       deepAssign(this, data, changed);
       DebugUtil.debugLog(0, '配置已更新：', changed);
       this.__updateWindowMode();
-      let promise;
-      if (PlatformHelper.isBackground && (changed.enableDataSources || changed.customDataSources)) {
-        promise = transformDataSource(this);
-      } else {
-        promise = Promise.resolve();
+      for (const listener of updateListeners) {
+        listener(this, changed);
       }
-      promise.finally(() => {
-        for (const listener of updateListeners) {
-          listener(this, changed);
-        }
-      });
     });
     initPromise = (async () => {
       await this.reloadSettings();
@@ -371,15 +301,6 @@ class Settings {
       // 必须在后台执行的只执行一次的内容
       if (PlatformHelper.isBackground) {
         try {
-          // 如果一个启用的都没有说明是新安装或者旧数据被清除，此时将默认数据源全部启用
-          if (this.enableDataSources.length === 0) {
-            const sources = await getDefaultDataSources();
-            this.enableDataSources = Object.keys(sources);
-            DebugUtil.debugLog(0, '未启用任何默认数据源，将自动启用全部默认数据源');
-          }
-
-          await transformDataSource(this);
-
           this.__updateWindowMode();
           // 只需要在后台进行保存，其它页面不需要保存
           await this.saveSettings();

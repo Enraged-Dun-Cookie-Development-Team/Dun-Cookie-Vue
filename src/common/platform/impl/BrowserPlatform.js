@@ -97,7 +97,7 @@ export default class BrowserPlatform extends AbstractPlatform {
    * @param width {number}
    * @param dataItem {DataItem}
    * @param iconUrl {string}
-   * @param dataSource {DataSource}
+   * @param dataSource {DataSourceMeta}
    * @return {Promise<HTMLCanvasElement>}
    * @private
    */
@@ -126,7 +126,7 @@ export default class BrowserPlatform extends AbstractPlatform {
     // 数据源信息
     ctx.fillStyle = '#848488';
     ctx.font = '20px Microsoft Yahei';
-    ctx.fillText(`${dataSource.title}`, 170, 90);
+    ctx.fillText(`${dataSource.name}`, 170, 90);
     ctx.drawImage(sourceIcon, 120, 70, 40, 40);
 
     ctx.fillStyle = '#909399';

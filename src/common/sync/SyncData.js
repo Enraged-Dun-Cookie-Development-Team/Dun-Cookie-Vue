@@ -71,7 +71,7 @@ class DataSynchronizer {
 
   updateHandler;
 
-  constructor(key, target, shouldPersist, updateHandler) {
+  constructor(key, target, shouldPersist, updateHandler, dataInitFn) {
     this.key = key;
     this.target = target;
     this.shouldPersist = shouldPersist;
@@ -80,7 +80,12 @@ class DataSynchronizer {
     } else {
       this.updateHandler = deepAssign;
     }
-    PlatformHelper.Storage.getLocalStorage(keyPersist(key)).then((data) => {
+    const fn = async () => {
+      const data = await PlatformHelper.Storage.getLocalStorage(keyPersist(key));
+      if (typeof dataInitFn === 'function') {
+        const initData = await dataInitFn();
+        this.__handleReloadOrReceiveUpdate(initData, true);
+      }
       // 当且仅当未进行过更新且storage中有数据时才会将storage中的数据设为当前数据
       // 如果已经接收过数据更新则忽略storage中的数据
       if (this.updateCount === 0 && data) {
@@ -88,7 +93,8 @@ class DataSynchronizer {
         this.__handleReloadOrReceiveUpdate(data, true);
       }
       this.__setInited();
-    });
+    };
+    void fn();
   }
 
   __setInited() {
@@ -257,8 +263,8 @@ class DataSynchronizer {
 }
 
 class DataSynchronizerAllWritable extends DataSynchronizer {
-  constructor(key, target, shouldPersist, updateHandler) {
-    super(key, target, shouldPersist, updateHandler);
+  constructor(key, target, shouldPersist, updateHandler, dataInitFn) {
+    super(key, target, shouldPersist, updateHandler, dataInitFn);
     if (PlatformHelper.isBackground) {
       PlatformHelper.Message.registerListener(keyGet(key), keyGet(key), () => this.target);
     } else {
@@ -272,8 +278,8 @@ class DataSynchronizerAllWritable extends DataSynchronizer {
 }
 
 class DataSynchronizerOnlyBackgroundWritable extends DataSynchronizer {
-  constructor(key, target, shouldPersist, updateHandler) {
-    super(key, target, shouldPersist, updateHandler);
+  constructor(key, target, shouldPersist, updateHandler, dataInitFn) {
+    super(key, target, shouldPersist, updateHandler, dataInitFn);
     if (PlatformHelper.isBackground) {
       PlatformHelper.Message.registerListener(keyGet(key), keyGet(key), () => this.target);
       this.proxy = this.createWritableProxy();
@@ -297,19 +303,20 @@ const keyMap = {};
  * @param mode 同步模式
  * @param shouldPersist 是否需要数据持久化
  * @param updateHandler 更新处理器
+ * @param dataInitFn 数据初始化函数，允许异步，要求返回一个初始数据
  * @return {* & CanSync}
  */
-function createSyncData(target, key, mode, shouldPersist = false, updateHandler = undefined) {
+function createSyncData(target, key, mode, shouldPersist = false, updateHandler = undefined, dataInitFn = undefined) {
   if (keyMap[key]) {
     throw new Error('duplicate sync key: ' + key);
   }
   let synchronizer;
   switch (mode) {
     case DataSyncMode.ALL_WRITABLE:
-      synchronizer = new DataSynchronizerAllWritable(key, target, shouldPersist, updateHandler);
+      synchronizer = new DataSynchronizerAllWritable(key, target, shouldPersist, updateHandler, dataInitFn);
       break;
     case DataSyncMode.ONLY_BACKGROUND_WRITABLE:
-      synchronizer = new DataSynchronizerOnlyBackgroundWritable(key, target, shouldPersist, updateHandler);
+      synchronizer = new DataSynchronizerOnlyBackgroundWritable(key, target, shouldPersist, updateHandler, dataInitFn);
       break;
     default:
       throw new Error('unsupported sync mode: ' + mode);
