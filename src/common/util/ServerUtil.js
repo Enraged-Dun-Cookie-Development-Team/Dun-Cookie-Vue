@@ -216,7 +216,7 @@ export default class ServerUtil {
         if (cookie.item.is_retweeted && !Settings.dun.showRetweet) {
           return;
         }
-        const images = cookie.default_cookie.images.map((it) => it.origin_url);
+        const images = cookie.default_cookie.images?.map((it) => it.origin_url);
         const cover = images && images.length > 0 ? images[0] : undefined;
         const builder = DataItem.builder(`${cookie.source.type}:${cookie.source.data}`)
           .id(cookie.item.id)
