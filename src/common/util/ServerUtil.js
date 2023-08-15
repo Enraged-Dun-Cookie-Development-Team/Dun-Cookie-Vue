@@ -10,6 +10,8 @@ import TimeUtil from './TimeUtil';
 import { Http } from '@enraged-dun-cookie-development-team/common/request';
 import DebugUtil from './DebugUtil';
 import md5 from 'js-md5';
+import { DataSourceMeta } from '../datasource/DataSourceMeta';
+import { DataItem, RetweetedInfo } from '../DataItem';
 
 const serverOption = {
   appendTimestamp: false,
@@ -19,6 +21,7 @@ const serverOption = {
  * @type {{allConfig: *, allComboId: string, idMap: Record<string, string>, dataSourceList: DataSourceMeta[], fetchTime: number}}
  */
 let serverDataSourceInfo;
+let comboIdCache = {};
 
 export default class ServerUtil {
   static async requestCdn(path, options) {
@@ -149,6 +152,86 @@ export default class ServerUtil {
     }
     await PlatformHelper.Storage.saveLocalStorage('serverDataSourceInfo', serverDataSourceInfo);
     return serverDataSourceInfo;
+  }
+
+  /**
+   *
+   * @param sourceList {{type: string, dataId: string}[]}
+   * @return {Promise<string>}
+   */
+  static async getComboId(sourceList) {
+    const comboCacheKey = md5(
+      sourceList
+        .map((it) => DataSourceMeta.id(it))
+        .sort()
+        .join(',')
+    );
+    if (comboIdCache[comboCacheKey]) {
+      return comboIdCache[comboCacheKey];
+    }
+    const serverInfo = await ServerUtil.getServerDataSourceInfo(true);
+    if (!serverInfo) {
+      throw new Error('无法获取服务器配置');
+    }
+    const canteenIdList = sourceList.map((it) => serverInfo.idMap[`${it.type}:${it.dataId}`]);
+    const comboId = (
+      await ServerUtil.requestApi('POST', 'canteen/user/getDatasourceComb', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ datasource_push: canteenIdList }),
+      })
+    ).datasource_comb_id;
+    if (typeof comboId !== 'string' || comboId.length === 0) {
+      throw new Error('无法获取组合id');
+    }
+    if (comboId) {
+      comboIdCache[comboCacheKey] = comboId;
+    }
+    return comboIdCache[comboCacheKey];
+  }
+
+  static async getCookieList(comboId, cookieId, updateCookieId) {
+    let result;
+    try {
+      result = await ServerUtil.requestCdnServerApi(
+        'cdn/cookie/mainList/cookieList' +
+          `?datasource_comb_id=${encodeURIComponent(comboId)}` +
+          `&cookie_id=${encodeURIComponent(cookieId)}` +
+          `&update_cookie_id=${encodeURIComponent(updateCookieId)}`
+      );
+    } catch (e) {
+      result = await ServerUtil.requestCdnServerApi(
+        'cdn/cookie/mainList/cookieList' +
+          `?datasource_comb_id=${encodeURIComponent(comboId)}` +
+          `&cookie_id=${encodeURIComponent(cookieId)}`
+      );
+    }
+    return result;
+  }
+
+  static transformCookieListToItemList(cookies) {
+    return cookies
+      .map((cookie) => {
+        if (cookie.item.is_retweeted && !Settings.dun.showRetweet) {
+          return;
+        }
+        const images = cookie.default_cookie.images.map((it) => it.origin_url);
+        const cover = images && images.length > 0 ? images[0] : undefined;
+        const builder = DataItem.builder(`${cookie.source.type}:${cookie.source.data}`)
+          .id(cookie.item.id)
+          .timeForSort(cookie.timestamp.fetcher)
+          .timeForDisplay(TimeUtil.format(cookie.timestamp.fetcher || 0, 'yyyy-MM-dd'))
+          .coverImage(cover)
+          .imageList(images)
+          .content(cookie.default_cookie.text)
+          .jumpUrl(cookie.item.url);
+        if (cookie.item.is_retweeted) {
+          builder.retweeted(new RetweetedInfo(cookie.item.retweeted.author_name, cookie.item.retweeted.text || ''));
+        }
+        return builder.build();
+      })
+      .filter((it) => !!it);
   }
 
   /**

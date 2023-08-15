@@ -152,6 +152,11 @@
           <component :is="resolveComponent(item)" :item="item" :show-image="imgShow" />
         </el-card>
       </MyElTimelineItem>
+      <div
+        id="bottom-checker"
+        ref="bottomChecker"
+        style="margin-top: -500px; width: 100%; height: 500px; pointer-events: none"
+      ></div>
     </el-timeline>
     <div v-else v-loading="loading" style="height: 300px" element-loading-custom-class="page-loading"></div>
     <el-dialog
@@ -194,6 +199,9 @@ export default {
         this.currentTag = settings.display.defaultTag;
       }
     });
+    PlatformHelper.Storage.getLocalStorage('server_latest_cookie_id').then((value) => {
+      this.nextPageOffsetId = value;
+    });
     return {
       announcementAreaScroll: true,
       timelineEnableScroll: true,
@@ -217,10 +225,17 @@ export default {
       imageError: false,
       errorImageUrl: '',
       openResources: false,
+      itemObserver: null,
+      lastNextPageRequestState: false,
+      nextPageOffsetId: null,
+      extraCardList: [],
     };
   },
   watch: {
     cardListAll() {
+      this.selectListByTag(false);
+    },
+    extraCardList() {
       this.selectListByTag(false);
     },
     cardList() {
@@ -234,6 +249,26 @@ export default {
     setTimeout(() => {
       this.LazyLoaded = true;
     }, 233);
+    const fn = () => {
+      if (!this.$refs.elTimelineArea?.$el) {
+        setTimeout(() => fn(), 500);
+        return;
+      }
+      console.log(this.$refs.elTimelineArea.$el);
+      const _this = this;
+      this.$nextTick(() => {
+        this.itemObserver = new IntersectionObserver(
+          async ([entry]) => {
+            if (entry.isIntersecting) {
+              void this.loadNextPage();
+            }
+          },
+          { root: this.$refs.elTimelineArea.$el }
+        );
+        this.itemObserver.observe(this.$refs.bottomChecker);
+      });
+    };
+    fn();
   },
   methods: {
     openWeb: PlatformHelper.Tabs.create,
@@ -247,7 +282,29 @@ export default {
     getDataSourceById: (id) => {
       return AvailableDataSourceMeta.getById(id);
     },
-
+    async loadNextPage() {
+      if (this.lastNextPageRequestState) {
+        return;
+      }
+      this.lastNextPageRequestState = true;
+      try {
+        const comboId = await ServerUtil.getComboId(Settings.enableDataSources);
+        let updateCookieId = await PlatformHelper.Storage.getLocalStorage('server_update_cookie_id');
+        if (!this.nextPageOffsetId) {
+          const { cookie_id, server_update_cookie_id } = JSON.parse(
+            await ServerUtil.requestCdn('datasource-comb/' + encodeURIComponent(this.comboId), { cache: 'no-cache' })
+          );
+          this.nextPageOffsetId = cookie_id;
+          updateCookieId = server_update_cookie_id;
+          await PlatformHelper.Storage.saveLocalStorage('server_update_cookie_id', server_update_cookie_id);
+        }
+        const result = await ServerUtil.getCookieList(comboId, this.nextPageOffsetId, updateCookieId);
+        const items = ServerUtil.transformCookieListToItemList(result.cookies);
+        this.extraCardList.push(...items);
+      } finally {
+        this.lastNextPageRequestState = false;
+      }
+    },
     resolveComponent(item) {
       if (!item.componentData) {
         return DefaultItem;
@@ -258,7 +315,7 @@ export default {
       if (this.settings.display.showByTag) {
         //this.cardList = this.cardListByTag[this.currentTag];
       } else {
-        this.cardList = this.cardListAll;
+        this.cardList = [...this.cardListAll, ...this.extraCardList];
       }
       if (emitEvent) {
         this.$emit('cardListChange');

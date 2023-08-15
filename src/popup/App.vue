@@ -162,8 +162,8 @@ export default {
   data() {
     CardList.doAfterUpdate((data) => {
       const oldIds = this.cardList.map((it) => it.id);
-      if (data.list.find((it) => oldIds.indexOf(it.id) === -1)) {
-        this.cardList = data.list;
+      this.cardList = data.list;
+      if (oldIds.length > 0 && data.list.find((it) => oldIds.indexOf(it.id) === -1)) {
         this.$message({
           offset: 50,
           center: true,

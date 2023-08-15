@@ -21,19 +21,7 @@ export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
 
   async start(fetchConfig) {
     if (this.runningFlag) return;
-    const serverInfo = await ServerUtil.getServerDataSourceInfo(true);
-    if (!serverInfo) {
-      throw new Error('无法获取服务器配置');
-    }
-    const canteenIdList = fetchConfig.enableDataSourceList.map((it) => serverInfo.idMap[`${it.type}:${it.dataId}`]);
-    this.comboId = (
-      await ServerUtil.requestApi('POST', 'canteen/user/getDatasourceComb', {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ datasource_push: canteenIdList }),
-      })
-    ).datasource_comb_id;
+    this.comboId = await ServerUtil.getComboId(fetchConfig.enableDataSourceList);
     this.config = fetchConfig;
     this.runningFlag = true;
     void this.doCycle();
@@ -79,23 +67,11 @@ export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
       const { cookie_id, update_cookie_id } = JSON.parse(
         await ServerUtil.requestCdn('datasource-comb/' + encodeURIComponent(this.comboId), { cache: 'no-cache' })
       );
+      await PlatformHelper.Storage.saveLocalStorage('server_update_cookie_id', update_cookie_id);
       if (cookie_id && this.lastLatestCookieId !== cookie_id) {
         this.lastLatestCookieId = cookie_id;
         await PlatformHelper.Storage.saveLocalStorage('server_latest_cookie_id', cookie_id);
-        let result;
-        try {
-          result = await ServerUtil.requestCdnServerApi(
-            `cdn/cookie/mainList/cookieList?datasource_comb_id=${encodeURIComponent(
-              this.comboId
-            )}&cookie_id=${encodeURIComponent(cookie_id)}&update_cookie_id=${encodeURIComponent(update_cookie_id)}`
-          );
-        } catch (e) {
-          result = await ServerUtil.requestCdnServerApi(
-            `cdn/cookie/mainList/cookieList?datasource_comb_id=${encodeURIComponent(
-              this.comboId
-            )}&cookie_id=${encodeURIComponent(cookie_id)}`
-          );
-        }
+        const result = await ServerUtil.getCookieList(this.comboId, cookie_id, update_cookie_id);
         await CookieHandler.handleServer(result);
       }
       this.__setAvailable();

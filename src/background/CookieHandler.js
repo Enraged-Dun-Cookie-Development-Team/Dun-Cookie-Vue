@@ -12,9 +12,9 @@ import { MonsterSirenDataSource } from './fetcher/impl/local/MonsterSirenDataSou
 import { ArknightsOfficialWebDataSource } from './fetcher/impl/local/ArknightsOfficialWebDataSource';
 import { TerraHistoricusDataSource } from './fetcher/impl/local/TerraHistoricusDataSource';
 import AvailableDataSourceMeta from '../common/sync/AvailableDataSourceMeta';
-import { DataItem, RetweetedInfo } from '../common/DataItem';
+import { DataItem } from '../common/DataItem';
 import CardList from '../common/sync/CardList';
-import TimeUtil from '../common/util/TimeUtil';
+import ServerUtil from '../common/util/ServerUtil';
 
 /**
  * 最新推送的通知，用于避免不同平台的饼重复通知，每一项由[数据源的dataName, 删除空白字符的饼内容]组成
@@ -161,27 +161,7 @@ class CookieHandler {
   };
 
   static async handleServer(data) {
-    const items = data.cookies
-      .map((cookie) => {
-        if (cookie.item.is_retweeted && !Settings.dun.showRetweet) {
-          return;
-        }
-        const images = cookie.default_cookie.images.map((it) => it.origin_url);
-        const cover = images && images.length > 0 ? images[0] : undefined;
-        const builder = DataItem.builder(`${cookie.source.type}:${cookie.source.data}`)
-          .id(cookie.item.id)
-          .timeForSort(cookie.timestamp.fetcher)
-          .timeForDisplay(TimeUtil.format(cookie.timestamp.fetcher || 0, 'yyyy-MM-dd'))
-          .coverImage(cover)
-          .imageList(images)
-          .content(cookie.default_cookie.text)
-          .jumpUrl(cookie.item.url);
-        if (cookie.item.is_retweeted) {
-          builder.retweeted(new RetweetedInfo(cookie.item.retweeted.author_name, cookie.item.retweeted.text || ''));
-        }
-        return builder.build();
-      })
-      .filter((it) => !!it);
+    const items = ServerUtil.transformCookieListToItemList(data.cookies);
 
     if (LastServerList && LastServerList.length > 0) {
       const map = Object.fromEntries(LastServerList.map((it) => [it.id, true]));
