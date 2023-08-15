@@ -41,13 +41,15 @@ function buildMainCookieFetchConfig(enable = true) {
     enable,
     Settings.enableDataSources,
     Settings.dun.intervalTime,
-    Settings.dun.lowFrequencyTime.map((it) => {
-      let realHour;
-      if (it < 12) realHour = it + 12;
-      else realHour = it - 12;
-      return realHour;
-    }),
-    Settings.dun.timeOfLowFrequency,
+    Settings.dun.autoLowFrequency
+      ? Settings.dun.lowFrequencyTime.map((it) => {
+          let realHour;
+          if (it < 12) realHour = it + 12;
+          else realHour = it - 12;
+          return realHour;
+        })
+      : undefined,
+    Settings.dun.autoLowFrequency ? Settings.dun.timeOfLowFrequency : 1,
     [new FetcherStrategy('default', 'server'), new FetcherStrategy('default', 'local')]
   );
 }
@@ -152,9 +154,11 @@ function ExtensionInit() {
     }
   });
 }
+
 function countDownDebugLog(...data) {
   DebugUtil.debugConsoleOutput(0, 'debug', '%c 倒计时 ', 'color: white; background: #DA70D6', ...data);
 }
+
 const countDownThreshold = 5 * 60 * 1000;
 let countDownFlag = false;
 const countDown = {

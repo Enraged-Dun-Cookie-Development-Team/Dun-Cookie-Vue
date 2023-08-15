@@ -96,6 +96,7 @@ class CookieHandler {
 
     /**
      * @param list
+     * @param sourceId
      * @return {Promise<DataItem[]>}
      */
     const transform = (list, sourceId) => {
@@ -119,6 +120,11 @@ class CookieHandler {
                 case 'arknights-website:terra-historicus':
                   return TerraHistoricusDataSource.processData(it.rawContent, sourceId);
               }
+            }
+          })
+          .map((it) => {
+            if (it.imageList && it.imageList.length > 0 && !it.coverImage) {
+              it.coverImage = it.imageList[0];
             }
           })
           .filter((it) => !!it)
@@ -160,11 +166,14 @@ class CookieHandler {
         if (cookie.item.is_retweeted && !Settings.dun.showRetweet) {
           return;
         }
-        const builder = DataItem.builder(cookie.source.type)
+        const images = cookie.default_cookie.images.map((it) => it.origin_url);
+        const cover = images && images.length > 0 ? images[0] : undefined;
+        const builder = DataItem.builder(`${cookie.source.type}:${cookie.source.data}`)
           .id(cookie.item.id)
           .timeForSort(cookie.timestamp.fetcher)
           .timeForDisplay(TimeUtil.format(cookie.timestamp.fetcher || 0, 'yyyy-MM-dd'))
-          .imageList(cookie.default_cookie.images.map((it) => it.origin_url))
+          .coverImage(cover)
+          .imageList(images)
           .content(cookie.default_cookie.text)
           .jumpUrl(cookie.item.url);
         if (cookie.item.is_retweeted) {
