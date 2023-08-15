@@ -228,6 +228,7 @@ export default {
       itemObserver: null,
       lastNextPageRequestState: false,
       nextPageOffsetId: null,
+      isLastPage: false,
       extraCardList: [],
     };
   },
@@ -283,7 +284,7 @@ export default {
       return AvailableDataSourceMeta.getById(id);
     },
     async loadNextPage() {
-      if (this.lastNextPageRequestState) {
+      if (this.lastNextPageRequestState || this.isLastPage) {
         return;
       }
       this.lastNextPageRequestState = true;
@@ -299,6 +300,8 @@ export default {
           await PlatformHelper.Storage.saveLocalStorage('server_update_cookie_id', server_update_cookie_id);
         }
         const result = await ServerUtil.getCookieList(comboId, this.nextPageOffsetId, updateCookieId);
+        this.nextPageOffsetId = result.next_page_id;
+        this.isLastPage = result.next_page_id === null;
         const items = ServerUtil.transformCookieListToItemList(result.cookies);
         this.extraCardList.push(...items);
       } finally {
