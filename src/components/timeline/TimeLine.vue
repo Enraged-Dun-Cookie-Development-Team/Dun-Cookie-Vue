@@ -491,6 +491,7 @@ export default {
             this.nextSearchPageOffsetId = result.next_page_id;
             this.isSearchLastPage = result.next_page_id === null;
             this.serverSearchCardList = ServerUtil.transformCookieListToItemList(result.cookies);
+            this.$emit('cardListChange');
           } catch (e) {
             console.error(e);
             const newFilterList = [];
@@ -505,6 +506,7 @@ export default {
           }
         } else {
           this.filterCardList = this.cardList;
+          this.$emit('cardListChange');
         }
       } finally {
         this.$nextTick(() => {
