@@ -187,7 +187,7 @@ import ServerUtil from '../../common/util/ServerUtil';
 import SelectImageToCopy from '@/components/SelectImageToCopy';
 import UpdateInfoNotice from '../UpdateInfoNotice';
 import AvailableDataSourceMeta from '../../common/sync/AvailableDataSourceMeta';
-import { debounceTime, Observable, Subject, distinctUntilChanged, filter, map } from 'rxjs';
+import { debounceTime, Subject, distinctUntilChanged, map } from 'rxjs';
 
 export default {
   name: 'TimeLine',
@@ -213,7 +213,6 @@ export default {
       .subscribe((data) => {
         this.nextPageOffsetId = null;
         this.isSearchLastPage = false;
-        this.serverSearchCardList = [];
         this.filterText = data;
         this.filterList();
       });
