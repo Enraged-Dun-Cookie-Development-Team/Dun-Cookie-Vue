@@ -177,6 +177,10 @@ class CookieHandler {
     CardList.list = items;
     await PlatformHelper.Storage.saveLocalStorage('server_cookie_list_next_page_id', data.next_page_id || '');
   }
+
+  static resetLastServerList() {
+    LastServerList = [];
+  }
 }
 
 export { CookieHandler };

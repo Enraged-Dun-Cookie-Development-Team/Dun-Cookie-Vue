@@ -24,6 +24,7 @@ export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
     this.comboId = await ServerUtil.getComboId(fetchConfig.enableDataSourceList);
     this.config = fetchConfig;
     this.runningFlag = true;
+    CookieHandler.resetLastServerList();
     void this.doCycle();
   }
 
