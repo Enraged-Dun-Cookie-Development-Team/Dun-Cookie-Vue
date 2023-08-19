@@ -173,7 +173,9 @@ export default class ServerUtil {
     if (!serverInfo) {
       throw new Error('无法获取服务器配置');
     }
-    const canteenIdList = sourceList.map((it) => serverInfo.idMap[`${it.type}:${it.dataId}`]);
+    const canteenIdList = sourceList
+      .map((it) => serverInfo.idMap[`${it.type}:${it.dataId}`])
+      .filter((it) => typeof it === 'string' && it.length > 0);
     const comboId = (
       await ServerUtil.requestApi('POST', 'canteen/user/getDatasourceComb', {
         headers: {
