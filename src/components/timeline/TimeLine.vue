@@ -97,7 +97,11 @@
     <el-timeline
       v-if="LazyLoaded"
       ref="elTimelineArea"
-      :class="[settings.display.windowMode ? 'window' : '', settings.display.showByTag ? 'tag' : '']"
+      :class="[
+        settings.display.windowMode ? 'window' : '',
+        settings.display.showByTag ? 'tag' : '',
+        searchPenguinStatus ? 'hidden-when-search-penguins' : '',
+      ]"
     >
       <MyElTimelineItem
         v-for="(item, index) in filterCardList"
@@ -250,6 +254,8 @@ export default {
       nextSearchPageOffsetId: null,
       confirmFilterText: '',
       serverSearchCardList: [],
+
+      searchPenguinStatus: false,
     };
   },
   watch: {
@@ -469,7 +475,12 @@ export default {
       if (text != null) {
         text = text.trim();
       }
-      this.filterTextSubject.next(text);
+      if (typeof text === 'string' && text.startsWith('@@')) {
+        this.searchPenguinStatus = true;
+      } else {
+        this.searchPenguinStatus = false;
+        this.filterTextSubject.next(text);
+      }
     },
     async filterList() {
       try {
@@ -1128,5 +1139,9 @@ img[lazy='error'] {
   z-index: 11;
   width: 100%;
   height: 120px;
+}
+
+.hidden-when-search-penguins {
+  opacity: 0;
 }
 </style>
