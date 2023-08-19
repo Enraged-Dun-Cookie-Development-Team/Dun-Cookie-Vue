@@ -1,7 +1,7 @@
 import { createSyncData, DataSyncMode } from './SyncData';
 
 /**
- * @type {CanSync}
+ * @type {{list: DataItem[]} & CanSync}
  */
-const instance = createSyncData({}, 'cardList', DataSyncMode.ONLY_BACKGROUND_WRITABLE);
+const instance = createSyncData({ list: [] }, 'cardList', DataSyncMode.ONLY_BACKGROUND_WRITABLE);
 export default instance;

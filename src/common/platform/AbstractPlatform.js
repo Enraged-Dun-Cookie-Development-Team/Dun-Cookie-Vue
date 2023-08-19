@@ -303,7 +303,7 @@ export class AbstractPlatform {
    * 生成某条数据的分享图片
    * @param dataItem {DataItem}
    * @param iconUrl {string}
-   * @param dataSource {DataSource}
+   * @param dataSource {DataSourceMeta}
    * @param imageUrl {string?}
    * @return {Promise}
    */

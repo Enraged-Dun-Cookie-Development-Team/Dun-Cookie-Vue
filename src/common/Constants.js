@@ -3,7 +3,7 @@
  * Debug等级，小于等于0的值为关闭debug
  * @type {number} Debug等级
  */
-const DEBUG_LEVEL = 0;
+const DEBUG_LEVEL = 3;
 /**
  * 是否是测试模式
  */
@@ -22,11 +22,11 @@ const USE_TEST_URL = IS_DEBUG && false;
 /**
  * 当前配置文件版本号
  */
-const CURRENT_SETTING_VERSION = 3;
+const CURRENT_SETTING_VERSION = 4;
 /**
  * 当前插件版本号
  */
-const CURRENT_VERSION = '3.4.3';
+const CURRENT_VERSION = '3.2.5';
 /**
  * 展示用的版本号
  */
@@ -84,7 +84,11 @@ export { PAGE_WELCOME, PAGE_POPUP_WINDOW, PAGE_OPTIONS, PAGE_DONATE, PAGE_UPDATE
 
 // region 杂项
 const TOOL_QR_URL = 'https://arknightscommunity.drblack-system.com/15386.html';
+
 const CANTEEN_API_BASE = 'https://server.ceobecanteen.top/api/v1/';
+const CANTEEN_CDN_API_BASE = 'https://cdn.ceobecanteen.top/';
+const CANTEEN_CDN_SERVER_API_BASE = 'https://server-cdn.ceobecanteen.top/api/v1/';
+
 // TODO 直接从common.js里面copy过来的，等待优化重构
 const quickJump = {
   source: [
@@ -310,5 +314,13 @@ const countDown = [
   },
 ];
 
-export { quickJump, dayInfo, countDown, TOOL_QR_URL, CANTEEN_API_BASE };
+export {
+  quickJump,
+  dayInfo,
+  countDown,
+  TOOL_QR_URL,
+  CANTEEN_API_BASE,
+  CANTEEN_CDN_API_BASE,
+  CANTEEN_CDN_SERVER_API_BASE,
+};
 // endregion

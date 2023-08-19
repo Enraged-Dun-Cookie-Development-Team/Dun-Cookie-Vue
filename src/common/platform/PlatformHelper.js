@@ -1,37 +1,21 @@
 import ChromePlatform from './impl/ChromePlatform';
 import FirefoxPlatform from './impl/FirefoxPlatform';
 import EdgePlatform from './impl/EdgePlatform';
-import NodePlatform from './impl/NodePlatform';
 import UnknownPlatform from './impl/UnknownPlatform';
-
-// 这个环境检测的代码复制于 https://stackoverflow.com/questions/7507638/any-standard-mechanism-for-detecting-if-a-javascript-is-executing-as-a-webworker
-const isNode = 'undefined' !== typeof global && '[object global]' === Object.prototype.toString.call(global);
-const isNodeProcess = isNode && !!process.env.NODE_UNIQUE_ID;
-const isWebWorker =
-  !isNode &&
-  'undefined' !== typeof WorkerGlobalScope &&
-  'function' === typeof importScripts &&
-  navigator instanceof WorkerNavigator;
-const isBrowser = !isNode && !isWebWorker && 'undefined' !== typeof navigator && 'undefined' !== typeof document;
-const isBrowserWindow = isBrowser && !!window.opener;
 
 // TODO 还有一些以注释形式存在于其它文件中的chrome调用，之后记得处理
 /**
  * @type AbstractPlatform
  */
 let currentPlatform;
-if (isBrowser) {
-  let head = navigator.userAgent;
-  if (head.indexOf('Edg') > 1) {
-    // Edge的userAgent即有Chrome又有Edg，因此先判断Edg
-    currentPlatform = new EdgePlatform();
-  } else if (head.indexOf('Chrome') > 1) {
-    currentPlatform = new ChromePlatform();
-  } else if (head.indexOf('Firefox') > 1) {
-    currentPlatform = new FirefoxPlatform();
-  }
-} else if (isNode) {
-  currentPlatform = new NodePlatform();
+let head = navigator.userAgent;
+if (head.indexOf('Edg') > 1) {
+  // Edge的userAgent即有Chrome又有Edg，因此先判断Edg
+  currentPlatform = new EdgePlatform();
+} else if (head.indexOf('Chrome') > 1) {
+  currentPlatform = new ChromePlatform();
+} else if (head.indexOf('Firefox') > 1) {
+  currentPlatform = new FirefoxPlatform();
 }
 if (currentPlatform === undefined) {
   currentPlatform = new UnknownPlatform();

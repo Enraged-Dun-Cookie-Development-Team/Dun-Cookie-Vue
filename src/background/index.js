@@ -11,23 +11,57 @@ import {
   PAGE_WELCOME,
   PLATFORM_FIREFOX,
 } from '../common/Constants';
-import DataSourceUtil from '../common/util/DataSourceUtil';
 import PlatformHelper from '../common/platform/PlatformHelper';
 import ServerUtil from '../common/util/ServerUtil';
 import CountDown from '../common/sync/CountDownInfo';
 import TimeUtil from '../common/util/TimeUtil';
 import PenguinStatistics from '../common/sync/PenguinStatisticsInfo';
 import CardList from '../common/sync/CardList';
-import { restartDunTimer, tryDun } from './DunController';
+import { CookieFetchManager, registerFetcher } from './fetcher/CookieFetcherManager';
+import { FetchConfig, FetcherStrategy } from './fetcher/FetchConfig';
+import { CeobeCanteenCookieFetcher } from './fetcher/impl/CeobeCanteenCookieFetcher';
+import { LocalCookieFetcher } from './fetcher/impl/LocalCookieFetcher';
+import DebugUtil from '../common/util/DebugUtil';
 
 // 开启弹出菜单窗口化时的窗口ID
 let popupWindowId = null;
+
+const cookieFetcherManager = new CookieFetchManager();
+
+registerFetcher('server', CeobeCanteenCookieFetcher);
+registerFetcher('local', LocalCookieFetcher);
+
+/**
+ * TODO 之后这个要改成能够自定义的
+ *
+ * @return {FetchConfig}
+ */
+function buildMainCookieFetchConfig(enable = true) {
+  return new FetchConfig(
+    enable,
+    Settings.enableDataSources,
+    Settings.dun.intervalTime,
+    Settings.dun.autoLowFrequency
+      ? Settings.dun.lowFrequencyTime.map((it) => {
+          let realHour;
+          if (it < 12) realHour = it + 12;
+          else realHour = it - 12;
+          return realHour;
+        })
+      : undefined,
+    Settings.dun.autoLowFrequency ? Settings.dun.timeOfLowFrequency : 1,
+    [new FetcherStrategy('default', 'server'), new FetcherStrategy('default', 'local')]
+  );
+}
+
+const MAIN_FETCH_CONFIG_KEY = 'main';
 
 function ExtensionInit() {
   // PlatformHelper.BrowserAction.setBadge('Beta', [255, 0, 0, 255]);
   // 开始蹲饼！
   Settings.doAfterInit(() => {
-    restartDunTimer();
+    DebugUtil.debugLog(0, '开始蹲饼');
+    cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
     setTimeout(() => {
       ServerUtil.getVersionInfo();
       ServerUtil.getAnnouncementInfo(true);
@@ -39,18 +73,16 @@ function ExtensionInit() {
     if (!changed.enableDataSources && !changed.customDataSources && !changed.dun) {
       return;
     }
-    restartDunTimer();
+    cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
   });
 
   // 监听前台事件
   PlatformHelper.Message.registerListener('background', null, (message) => {
     if (message.type) {
       switch (message.type) {
+        // TODO 不接受强制刷新 后续要清理相关代码
         case MESSAGE_FORCE_REFRESH:
-          return tryDun(true).then(
-            () => true,
-            () => false
-          );
+          return false;
         case MESSAGE_SAN_GET:
           return SanInfo;
         case MESSAGE_CHANGE_COUNTDOWN:
@@ -66,7 +98,7 @@ function ExtensionInit() {
 
   // 监听标签
   PlatformHelper.Notification.addClickListener((id) => {
-    let item = DataSourceUtil.mergeAllData(CardList, false).find((x) => x.id === id);
+    let item = CardList.list.find((x) => x.id === id);
     if (item) {
       PlatformHelper.Tabs.create(item.jumpUrl);
     } else if (id === 'update') {
@@ -122,9 +154,11 @@ function ExtensionInit() {
     }
   });
 }
+
 function countDownDebugLog(...data) {
   DebugUtil.debugConsoleOutput(0, 'debug', '%c 倒计时 ', 'color: white; background: #DA70D6', ...data);
 }
+
 const countDownThreshold = 5 * 60 * 1000;
 let countDownFlag = false;
 const countDown = {

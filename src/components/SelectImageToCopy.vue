@@ -17,7 +17,7 @@
     <div class="image-area" :class="hideNoImage ? 'hideNoImage' : ''">
       <div v-if="item.imageList && item.imageList.length > 1" class="multi-img">
         <div
-          v-for="img in item.imageHttpList"
+          v-for="img in item.imageList"
           :key="img"
           class="multi-img-area"
           :style="{ width: spanNumber + '%', 'max-width': spanNumber + '%' }"

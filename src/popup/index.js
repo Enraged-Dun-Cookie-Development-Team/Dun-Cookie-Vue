@@ -7,8 +7,8 @@ import VueClipboard from 'vue-clipboard2';
 import VueLazyload from 'vue-lazyload';
 import TerraHistoricusItem from '../components/timeline/items/TerraHistoricusItem';
 import NeteaseCloudMusicItem from '../components/timeline/items/NeteaseCloudMusicItem';
-import { TerraHistoricusDataSource } from '../common/datasource/def/TerraHistoricusDataSource';
-import { NeteaseCloudMusicDataSource } from '../common/datasource/def/NeteaseCloudMusicDataSource';
+import { TerraHistoricusDataSource } from '../background/fetcher/impl/local/TerraHistoricusDataSource';
+import { NeteaseCloudMusicDataSource } from '../background/fetcher/impl/local/NeteaseCloudMusicDataSource';
 import Settings from '../common/Settings';
 
 Vue.use(VueLazyload, {
@@ -19,9 +19,10 @@ Vue.use(VueLazyload, {
 Vue.config.productionTip = false;
 Vue.use(ElementUI).use(VueClipboard);
 
+/* eslint-disable vue/component-definition-name-casing */
 // 注意这里不能使用链式调用，否则只有第一个注册的会生效
-Vue.component(TerraHistoricusDataSource.typeInfo.typeName, TerraHistoricusItem);
-Vue.component(NeteaseCloudMusicDataSource.typeInfo.typeName, NeteaseCloudMusicItem);
+Vue.component('arknights-website__terra-historicus', TerraHistoricusItem);
+Vue.component('netease-cloud-music__albums-by-artist', NeteaseCloudMusicItem);
 
 new Vue({
   render: (h) => h(App),
