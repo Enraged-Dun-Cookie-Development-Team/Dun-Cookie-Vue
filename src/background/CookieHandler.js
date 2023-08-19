@@ -93,6 +93,7 @@ class CookieHandler {
    */
   static handleLocal = async (fetchData) => {
     if (!fetchData.success) return;
+    DunInfo.counter++;
 
     /**
      * @param list
@@ -163,6 +164,7 @@ class CookieHandler {
   static async handleServer(data) {
     const items = ServerUtil.transformCookieListToItemList(data.cookies);
 
+    DunInfo.counter++;
     if (LastServerList && LastServerList.length > 0) {
       const map = Object.fromEntries(LastServerList.map((it) => [it.id, true]));
       const newCookies = items.filter((it) => !map[it.id]);
