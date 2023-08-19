@@ -473,42 +473,44 @@ export default {
       this.filterTextSubject.next(text);
     },
     async filterList() {
-      if (typeof this.filterText === 'string' && this.filterText.length > 0 && !this.filterText.startsWith('@@')) {
-        try {
-          this.lastNextPageRequestState = true;
-          const oldFilterText = this.filterText;
-          const comboId = await ServerUtil.getComboId(Settings.enableDataSources);
-          const result = await ServerUtil.requestApi(
-            'GET',
-            'canteen/cookie/search/list' +
-              `?datasource_comb_id=${encodeURIComponent(comboId)}` +
-              `&search_word=${encodeURIComponent(this.filterText)}`
-          );
-          if (this.filterText !== oldFilterText) {
-            return;
-          }
-          this.confirmFilterText = oldFilterText;
-          this.nextSearchPageOffsetId = result.next_page_id;
-          this.isSearchLastPage = result.next_page_id === null;
-          this.serverSearchCardList = ServerUtil.transformCookieListToItemList(result.cookies);
-        } catch (e) {
-          console.error(e);
-          const newFilterList = [];
-          deepAssign([], [...this.cardListAll, ...this.extraCardList]).forEach((item) => {
-            const regex = new RegExp('(' + this.filterText.replaceAll(/([*.?+$^[\](){}|\\/])/g, '\\$1') + ')', 'gi');
-            if (regex.test(item.content.replaceAll(/(<([^>]+)>)/gi, ''))) {
-              item.content = item.content.replaceAll(regex, '<span class="highlight">$1</span>');
-              newFilterList.push(item);
+      try {
+        this.lastNextPageRequestState = true;
+        if (typeof this.filterText === 'string' && this.filterText.length > 0 && !this.filterText.startsWith('@@')) {
+          try {
+            const oldFilterText = this.filterText;
+            const comboId = await ServerUtil.getComboId(Settings.enableDataSources);
+            const result = await ServerUtil.requestApi(
+              'GET',
+              'canteen/cookie/search/list' +
+                `?datasource_comb_id=${encodeURIComponent(comboId)}` +
+                `&search_word=${encodeURIComponent(this.filterText)}`
+            );
+            if (this.filterText !== oldFilterText) {
+              return;
             }
-          });
-          this.filterCardList = newFilterList;
-        } finally {
-          this.$nextTick(() => {
-            this.lastNextPageRequestState = false;
-          });
+            this.confirmFilterText = oldFilterText;
+            this.nextSearchPageOffsetId = result.next_page_id;
+            this.isSearchLastPage = result.next_page_id === null;
+            this.serverSearchCardList = ServerUtil.transformCookieListToItemList(result.cookies);
+          } catch (e) {
+            console.error(e);
+            const newFilterList = [];
+            deepAssign([], [...this.cardListAll, ...this.extraCardList]).forEach((item) => {
+              const regex = new RegExp('(' + this.filterText.replaceAll(/([*.?+$^[\](){}|\\/])/g, '\\$1') + ')', 'gi');
+              if (regex.test(item.content.replaceAll(/(<([^>]+)>)/gi, ''))) {
+                item.content = item.content.replaceAll(regex, '<span class="highlight">$1</span>');
+                newFilterList.push(item);
+              }
+            });
+            this.filterCardList = newFilterList;
+          }
+        } else {
+          this.filterCardList = this.cardList;
         }
-      } else {
-        this.filterCardList = this.cardList;
+      } finally {
+        this.$nextTick(() => {
+          this.lastNextPageRequestState = false;
+        });
       }
     },
     changeInsider() {
