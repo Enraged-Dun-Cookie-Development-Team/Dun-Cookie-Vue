@@ -193,14 +193,22 @@ export default class ServerUtil {
 
   static async getCookieList(comboId, cookieId, updateCookieId) {
     let result;
-    try {
-      result = await ServerUtil.requestCdnServerApi(
-        'cdn/cookie/mainList/cookieList' +
-          `?datasource_comb_id=${encodeURIComponent(comboId)}` +
-          `&cookie_id=${encodeURIComponent(cookieId)}` +
-          `&update_cookie_id=${encodeURIComponent(updateCookieId)}`
-      );
-    } catch (e) {
+    if (updateCookieId) {
+      try {
+        result = await ServerUtil.requestCdnServerApi(
+          'cdn/cookie/mainList/cookieList' +
+            `?datasource_comb_id=${encodeURIComponent(comboId)}` +
+            `&cookie_id=${encodeURIComponent(cookieId)}` +
+            `&update_cookie_id=${encodeURIComponent(updateCookieId)}`
+        );
+      } catch (e) {
+        result = await ServerUtil.requestCdnServerApi(
+          'cdn/cookie/mainList/cookieList' +
+            `?datasource_comb_id=${encodeURIComponent(comboId)}` +
+            `&cookie_id=${encodeURIComponent(cookieId)}`
+        );
+      }
+    } else {
       result = await ServerUtil.requestCdnServerApi(
         'cdn/cookie/mainList/cookieList' +
           `?datasource_comb_id=${encodeURIComponent(comboId)}` +

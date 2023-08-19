@@ -187,6 +187,7 @@ import ServerUtil from '../../common/util/ServerUtil';
 import SelectImageToCopy from '@/components/SelectImageToCopy';
 import UpdateInfoNotice from '../UpdateInfoNotice';
 import AvailableDataSourceMeta from '../../common/sync/AvailableDataSourceMeta';
+import { debounceTime, Observable, Subject, distinctUntilChanged, filter, map } from 'rxjs';
 
 export default {
   name: 'TimeLine',
@@ -202,6 +203,20 @@ export default {
     PlatformHelper.Storage.getLocalStorage('server_latest_cookie_id').then((value) => {
       this.nextPageOffsetId = value;
     });
+    const filterTextSubject = new Subject();
+    filterTextSubject
+      .pipe(
+        map((it) => (typeof it !== 'string' ? '' : it)),
+        debounceTime(800),
+        distinctUntilChanged()
+      )
+      .subscribe((data) => {
+        this.nextPageOffsetId = null;
+        this.isSearchLastPage = false;
+        this.serverSearchCardList = [];
+        this.filterText = data;
+        this.filterList();
+      });
     return {
       announcementAreaScroll: true,
       timelineEnableScroll: true,
@@ -218,6 +233,7 @@ export default {
       cardList: [],
       currentTag: Settings.display.defaultTag,
       filterText: '',
+      filterTextSubject: filterTextSubject,
       filterCardList: [],
       LazyLoaded: false,
       insiderCodeMap: null, // 储存内部密码
@@ -230,6 +246,11 @@ export default {
       nextPageOffsetId: null,
       isLastPage: false,
       extraCardList: [],
+
+      isSearchLastPage: false,
+      nextSearchPageOffsetId: null,
+      confirmFilterText: '',
+      serverSearchCardList: [],
     };
   },
   watch: {
@@ -238,6 +259,9 @@ export default {
     },
     extraCardList() {
       this.selectListByTag(false);
+    },
+    serverSearchCardList() {
+      this.filterCardList = this.serverSearchCardList;
     },
     cardList() {
       this.filterList();
@@ -284,28 +308,58 @@ export default {
       return AvailableDataSourceMeta.getById(id);
     },
     async loadNextPage() {
-      if (this.lastNextPageRequestState || this.isLastPage) {
+      if (this.lastNextPageRequestState) {
         return;
       }
-      this.lastNextPageRequestState = true;
-      try {
-        const comboId = await ServerUtil.getComboId(Settings.enableDataSources);
-        let updateCookieId = await PlatformHelper.Storage.getLocalStorage('server_update_cookie_id');
-        if (!this.nextPageOffsetId) {
-          const { cookie_id, server_update_cookie_id } = JSON.parse(
-            await ServerUtil.requestCdn('datasource-comb/' + encodeURIComponent(this.comboId), { cache: 'no-cache' })
-          );
-          this.nextPageOffsetId = cookie_id;
-          updateCookieId = server_update_cookie_id;
-          await PlatformHelper.Storage.saveLocalStorage('server_update_cookie_id', server_update_cookie_id);
+      if (typeof this.filterText === 'string' && this.filterText.length > 0) {
+        if (this.isSearchLastPage) {
+          return;
         }
-        const result = await ServerUtil.getCookieList(comboId, this.nextPageOffsetId, updateCookieId);
-        this.nextPageOffsetId = result.next_page_id;
-        this.isLastPage = result.next_page_id === null;
-        const items = ServerUtil.transformCookieListToItemList(result.cookies);
-        this.extraCardList.push(...items);
-      } finally {
-        this.lastNextPageRequestState = false;
+        this.lastNextPageRequestState = true;
+        try {
+          const oldFilterText = this.confirmFilterText;
+          const comboId = await ServerUtil.getComboId(Settings.enableDataSources);
+          const result = await ServerUtil.requestApi(
+            'GET',
+            'canteen/cookie/search/list' +
+              `?cookie_id=${encodeURIComponent(this.nextSearchPageOffsetId)}` +
+              `&datasource_comb_id=${encodeURIComponent(comboId)}` +
+              `&search_word=${encodeURIComponent(oldFilterText)}`
+          );
+          if (this.filterText !== oldFilterText) {
+            return;
+          }
+          this.nextSearchPageOffsetId = result.next_page_id;
+          this.isSearchLastPage = result.next_page_id === null;
+          const items = ServerUtil.transformCookieListToItemList(result.cookies);
+          this.serverSearchCardList.push(...items);
+        } finally {
+          this.lastNextPageRequestState = false;
+        }
+      } else {
+        if (this.isLastPage) {
+          return;
+        }
+        this.lastNextPageRequestState = true;
+        try {
+          const comboId = await ServerUtil.getComboId(Settings.enableDataSources);
+          let updateCookieId = await PlatformHelper.Storage.getLocalStorage('server_update_cookie_id');
+          if (!this.nextPageOffsetId) {
+            const { cookie_id, server_update_cookie_id } = JSON.parse(
+              await ServerUtil.requestCdn('datasource-comb/' + encodeURIComponent(comboId), { cache: 'no-cache' })
+            );
+            this.nextPageOffsetId = cookie_id;
+            updateCookieId = server_update_cookie_id;
+            await PlatformHelper.Storage.saveLocalStorage('server_update_cookie_id', server_update_cookie_id);
+          }
+          const result = await ServerUtil.getCookieList(comboId, this.nextPageOffsetId, updateCookieId);
+          this.nextPageOffsetId = result.next_page_id;
+          this.isLastPage = result.next_page_id === null;
+          const items = ServerUtil.transformCookieListToItemList(result.cookies);
+          this.extraCardList.push(...items);
+        } finally {
+          this.lastNextPageRequestState = false;
+        }
       }
     },
     resolveComponent(item) {
@@ -416,20 +470,43 @@ export default {
       if (text != null) {
         text = text.trim();
       }
-      this.filterText = text;
-      this.filterList();
+      this.filterTextSubject.next(text);
     },
-    filterList() {
-      if (this.filterText) {
-        const newFilterList = [];
-        deepAssign([], this.cardList).forEach((item) => {
-          const regex = new RegExp('(' + this.filterText.replaceAll(/([*.?+$^[\](){}|\\/])/g, '\\$1') + ')', 'gi');
-          if (regex.test(item.content.replaceAll(/(<([^>]+)>)/gi, ''))) {
-            item.content = item.content.replaceAll(regex, '<span class="highlight">$1</span>');
-            newFilterList.push(item);
+    async filterList() {
+      if (typeof this.filterText === 'string' && this.filterText.length > 0 && !this.filterText.startsWith('@@')) {
+        try {
+          this.lastNextPageRequestState = true;
+          const oldFilterText = this.filterText;
+          const comboId = await ServerUtil.getComboId(Settings.enableDataSources);
+          const result = await ServerUtil.requestApi(
+            'GET',
+            'canteen/cookie/search/list' +
+              `?datasource_comb_id=${encodeURIComponent(comboId)}` +
+              `&search_word=${encodeURIComponent(this.filterText)}`
+          );
+          if (this.filterText !== oldFilterText) {
+            return;
           }
-        });
-        this.filterCardList = newFilterList;
+          this.confirmFilterText = oldFilterText;
+          this.nextSearchPageOffsetId = result.next_page_id;
+          this.isSearchLastPage = result.next_page_id === null;
+          this.serverSearchCardList = ServerUtil.transformCookieListToItemList(result.cookies);
+        } catch (e) {
+          console.error(e);
+          const newFilterList = [];
+          deepAssign([], [...this.cardListAll, ...this.extraCardList]).forEach((item) => {
+            const regex = new RegExp('(' + this.filterText.replaceAll(/([*.?+$^[\](){}|\\/])/g, '\\$1') + ')', 'gi');
+            if (regex.test(item.content.replaceAll(/(<([^>]+)>)/gi, ''))) {
+              item.content = item.content.replaceAll(regex, '<span class="highlight">$1</span>');
+              newFilterList.push(item);
+            }
+          });
+          this.filterCardList = newFilterList;
+        } finally {
+          this.$nextTick(() => {
+            this.lastNextPageRequestState = false;
+          });
+        }
       } else {
         this.filterCardList = this.cardList;
       }
