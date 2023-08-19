@@ -460,6 +460,9 @@ export default {
 
     // 回顶部
     goTop(step = 10, interval = 10) {
+      if (!this.$refs.timeline) {
+        return;
+      }
       let scrollArea =
         this.$refs.timeline.$el.scrollTop == 0 ? this.$refs.timeline.$refs.elTimelineArea.$el : this.$refs.timeline.$el;
       let top = scrollArea.scrollTop;
