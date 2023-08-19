@@ -175,7 +175,13 @@ export default class ServerUtil {
     }
     const canteenIdList = sourceList
       .map((it) => serverInfo.idMap[`${it.type}:${it.dataId}`])
-      .filter((it) => typeof it === 'string' && it.length > 0);
+      .filter((it) => {
+        if (typeof it !== 'string' || it.length === 0) {
+          DebugUtil.debugLogWarn(0, `服务器未定义的数据源：${it}`);
+          return false;
+        }
+        return true;
+      });
     const comboId = (
       await ServerUtil.requestApi('POST', 'canteen/user/getDatasourceComb', {
         headers: {
