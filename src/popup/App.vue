@@ -117,6 +117,9 @@
             </div>
             <div>【本数据仅会在打开列表时刷新】</div>
           </div>
+          <div class="count-down-area" @click="openWebsite">
+            <div>支持食堂</div>
+          </div>
           <Menu-Icon
             :class="[drawer ? 'menu-btn-open' : 'menu-btn-close', firefox ? 'menu-btn-firefox' : '', 'menu-btn']"
             @handleIconClick="handleIconClick()"
@@ -150,6 +153,7 @@ import {
   PLATFORM_FIREFOX,
   quickJump,
   SHOW_VERSION,
+  PAGE_CEOBECANTEEN_WEB,
 } from '../common/Constants';
 import PlatformHelper from '../common/platform/PlatformHelper';
 import 'animate.css';
@@ -497,6 +501,10 @@ export default {
     openGithub() {
       PlatformHelper.Tabs.create(PAGE_GITHUB_REPO);
     },
+
+    openWebsite() {
+      PlatformHelper.Tabs.create(PAGE_CEOBECANTEEN_WEB);
+    },
   },
 };
 </script>
@@ -579,7 +587,7 @@ export default {
       .count-down-area {
         overflow: hidden;
         margin-right: 10px;
-        padding: 0 10px 0 0;
+        padding: 0 10px;
         height: 40px;
         border-radius: 3px;
         text-align: right;
