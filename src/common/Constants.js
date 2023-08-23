@@ -78,6 +78,7 @@ const PAGE_UPDATE = 'update.html';
 const PAGE_TIME = 'time.html';
 const PAGE_POPUP_WINDOW = 'popup.html';
 const PAGE_GITHUB_REPO = 'https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue';
+const PAGE_GITHUB_TEAM = 'https://github.com/Enraged-Dun-Cookie-Development-Team';
 const PAGE_CEOBECANTEEN_WEB = 'https://www.ceobecanteen.top/#/#sponsor';
 
 export {
@@ -89,6 +90,7 @@ export {
   PAGE_GITHUB_REPO,
   PAGE_TIME,
   PAGE_CEOBECANTEEN_WEB,
+  PAGE_GITHUB_TEAM,
 };
 // endregion
 

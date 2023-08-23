@@ -89,7 +89,10 @@
           </el-button>
           <el-button type="primary" icon="el-icon-upload2" @click="drawer = false"> 收起 </el-button>
         </el-row>
-        <div style="position: absolute; right: 10px; bottom: 10px" class="sign">Powered By 蓝芷怡 & 洛梧藤 & 云闪</div>
+        <div style="position: absolute; right: 10px; bottom: 10px" class="sign">
+          Powered By
+          <p @click="openGithubTeam">小刻食堂</p>
+        </div>
       </el-drawer>
       <!-- 置顶按钮 -->
       <el-button
@@ -154,6 +157,7 @@ import {
   quickJump,
   SHOW_VERSION,
   PAGE_CEOBECANTEEN_WEB,
+  PAGE_GITHUB_TEAM,
 } from '../common/Constants';
 import PlatformHelper from '../common/platform/PlatformHelper';
 import 'animate.css';
@@ -502,6 +506,10 @@ export default {
       PlatformHelper.Tabs.create(PAGE_GITHUB_REPO);
     },
 
+    openGithubTeam() {
+      PlatformHelper.Tabs.create(PAGE_GITHUB_TEAM);
+    },
+
     openWebsite() {
       PlatformHelper.Tabs.create(PAGE_CEOBECANTEEN_WEB);
     },
@@ -792,6 +800,12 @@ export default {
 
     .sign {
       color: @@setLarge;
+      & > p {
+        display: inline;
+        text-decoration: underline;
+        color: @@ceobeColor !important;
+        cursor: pointer;
+      }
     }
 
     .mention,
