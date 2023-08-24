@@ -71,8 +71,8 @@ export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
       await PlatformHelper.Storage.saveLocalStorage('server_update_cookie_id', update_cookie_id);
       if (cookie_id && this.lastLatestCookieId !== cookie_id) {
         this.lastLatestCookieId = cookie_id;
-        await PlatformHelper.Storage.saveLocalStorage('server_latest_cookie_id', cookie_id);
         const result = await ServerUtil.getCookieList(this.comboId, cookie_id, update_cookie_id);
+        await PlatformHelper.Storage.saveLocalStorage('server_secondary_page_cookie_id', result.next_page_id);
         await CookieHandler.handleServer(result);
       }
       this.__setAvailable();
