@@ -284,8 +284,6 @@ export default {
         setTimeout(() => fn(), 500);
         return;
       }
-      console.log(this.$refs.elTimelineArea.$el);
-      const _this = this;
       this.$nextTick(() => {
         this.itemObserver = new IntersectionObserver(
           async ([entry]) => {
