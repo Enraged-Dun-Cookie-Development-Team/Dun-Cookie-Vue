@@ -22,9 +22,8 @@ const instance = createSyncData(
   PlatformHelper.isBackground
     ? async () => {
         const data = new AvailableDataSourceMeta();
-        (await ServerUtil.getServerDataSourceInfo()).dataSourceList.forEach((source) => {
-          data.preset[`${source.type}:${source.dataId}`] = source;
-        });
+        await ServerUtil.checkServerDataSourceInfoCache();
+        data.preset = ServerUtil.getAvailableDataSourcePreset();
         return data;
       }
     : undefined

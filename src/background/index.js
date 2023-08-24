@@ -76,6 +76,11 @@ function ExtensionInit() {
     cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
   });
 
+  // 每隔6小时检查一遍缓存
+  setInterval(() => {
+    void ServerUtil.checkServerDataSourceInfoCache();
+  }, 6 * 60 * 60 * 1000);
+
   // 监听前台事件
   PlatformHelper.Message.registerListener('background', null, (message) => {
     if (message.type) {

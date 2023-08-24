@@ -12,6 +12,7 @@ import DebugUtil from './DebugUtil';
 import md5 from 'js-md5';
 import { DataSourceMeta } from '../datasource/DataSourceMeta';
 import { DataItem, RetweetedInfo } from '../DataItem';
+import AvailableDataSourceMeta from '../sync/AvailableDataSourceMeta';
 
 const serverOption = {
   appendTimestamp: false,
@@ -152,6 +153,23 @@ export default class ServerUtil {
     }
     await PlatformHelper.Storage.saveLocalStorage('serverDataSourceInfo', serverDataSourceInfo);
     return serverDataSourceInfo;
+  }
+
+  static async getAvailableDataSourcePreset() {
+    const preset = {};
+    (await ServerUtil.getServerDataSourceInfo(true)).dataSourceList.forEach((source) => {
+      preset[`${source.type}:${source.dataId}`] = source;
+    });
+    return preset;
+  }
+
+  static async checkServerDataSourceInfoCache() {
+    try {
+      await ServerUtil.getServerDataSourceInfo();
+      AvailableDataSourceMeta.preset = this.getAvailableDataSourcePreset();
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   /**
