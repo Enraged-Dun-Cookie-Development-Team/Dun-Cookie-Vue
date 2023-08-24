@@ -166,7 +166,7 @@ export default class ServerUtil {
   static async checkServerDataSourceInfoCache() {
     try {
       await ServerUtil.getServerDataSourceInfo();
-      AvailableDataSourceMeta.preset = this.getAvailableDataSourcePreset();
+      AvailableDataSourceMeta.preset = await this.getAvailableDataSourcePreset();
     } catch (e) {
       console.log(e);
     }
