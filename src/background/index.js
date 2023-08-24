@@ -76,6 +76,7 @@ function ExtensionInit() {
     cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
   });
 
+  // 启动时的缓存检查在AvailableDataSourceMeta
   // 每隔6小时检查一遍缓存
   setInterval(() => {
     void ServerUtil.checkServerDataSourceInfoCache();

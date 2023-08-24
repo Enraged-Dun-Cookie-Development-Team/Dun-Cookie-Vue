@@ -139,6 +139,7 @@ class CookieHandler {
     if (hasOldCardList && newCookies.length > 0) {
       DunInfo.cookieCount += newCookies.length;
       console.log('new cookies: ', newCookies);
+      await new Promise((r) => AvailableDataSourceMeta.doAfterInit(r));
       tryNotice(AvailableDataSourceMeta.getById(fetchData.source.idStr), newCookies);
     }
     if (allCookies && allCookies.length > 0) {
@@ -170,8 +171,16 @@ class CookieHandler {
       const newCookies = items.filter((it) => !map[it.id]);
       DunInfo.cookieCount += newCookies.length;
       console.log('new cookies: ', newCookies);
-      for (const item of newCookies) {
-        tryNotice(AvailableDataSourceMeta.getById(item.dataSource), newCookies);
+      await new Promise((r) => AvailableDataSourceMeta.doAfterInit(r));
+      const cookiesMap = newCookies.reduce((prev, current) => {
+        if (!prev[current.dataSource]) {
+          prev[current.dataSource] = [];
+        }
+        prev[current.dataSource].push(current);
+        return prev;
+      }, {});
+      for (const entry of Object.entries(cookiesMap)) {
+        tryNotice(AvailableDataSourceMeta.getById(entry[0]), entry[1]);
       }
     }
 
