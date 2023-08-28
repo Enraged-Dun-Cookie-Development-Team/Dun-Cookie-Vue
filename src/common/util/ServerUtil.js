@@ -255,11 +255,19 @@ export default class ServerUtil {
         const builder = DataItem.builder(`${cookie.source.type}:${cookie.source.data}`)
           .id(cookie.item.id)
           .timeForSort(cookie.timestamp.fetcher)
-          .timeForDisplay(TimeUtil.format(cookie.timestamp.fetcher || 0, 'yyyy-MM-dd'))
           .coverImage(cover)
           .imageList(images)
           .content(cookie.default_cookie.text)
           .jumpUrl(cookie.item.url);
+        if (cookie.timestamp.platform) {
+          if (cookie.timestamp.platform_precision !== 'day') {
+            builder.timeForDisplay(TimeUtil.format(cookie.timestamp.platform, 'yyyy-MM-dd'));
+          } else {
+            builder.timeForDisplay(TimeUtil.format(cookie.timestamp.platform, 'yyyy-MM-dd hh:mm:ss'));
+          }
+        } else {
+          builder.timeForDisplay(TimeUtil.format(cookie.timestamp.fetcher || 0, 'yyyy-MM-dd hh:mm:ss'));
+        }
         if (cookie.item.is_retweeted) {
           builder.retweeted(new RetweetedInfo(cookie.item.retweeted.author_name, cookie.item.retweeted.text || ''));
         }
