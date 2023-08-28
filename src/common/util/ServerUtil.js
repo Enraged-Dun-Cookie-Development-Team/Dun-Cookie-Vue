@@ -261,9 +261,9 @@ export default class ServerUtil {
           .jumpUrl(cookie.item.url);
         if (cookie.timestamp.platform) {
           if (cookie.timestamp.platform_precision !== 'day') {
-            builder.timeForDisplay(TimeUtil.format(cookie.timestamp.platform, 'yyyy-MM-dd'));
-          } else {
             builder.timeForDisplay(TimeUtil.format(cookie.timestamp.platform, 'yyyy-MM-dd hh:mm:ss'));
+          } else {
+            builder.timeForDisplay(TimeUtil.format(cookie.timestamp.platform, 'yyyy-MM-dd'));
           }
         } else {
           builder.timeForDisplay(TimeUtil.format(cookie.timestamp.fetcher || 0, 'yyyy-MM-dd hh:mm:ss'));
