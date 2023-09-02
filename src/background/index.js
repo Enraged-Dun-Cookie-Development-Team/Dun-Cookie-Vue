@@ -6,6 +6,7 @@ import {
   MESSAGE_FORCE_REFRESH,
   MESSAGE_GET_COUNTDOWN,
   MESSAGE_SAN_GET,
+  MESSAGE_WEIBO_ADD_REFERER,
   PAGE_POPUP_WINDOW,
   PAGE_UPDATE,
   PAGE_WELCOME,
@@ -22,6 +23,7 @@ import { FetchConfig, FetcherStrategy } from './fetcher/FetchConfig';
 import { CeobeCanteenCookieFetcher } from './fetcher/impl/CeobeCanteenCookieFetcher';
 import { LocalCookieFetcher } from './fetcher/impl/LocalCookieFetcher';
 import DebugUtil from '../common/util/DebugUtil';
+import { interceptBeforeSendHeaders, registerUrlToAddReferer } from './request_interceptor';
 
 // 开启弹出菜单窗口化时的窗口ID
 let popupWindowId = null;
@@ -50,7 +52,7 @@ function buildMainCookieFetchConfig(enable = true) {
         })
       : undefined,
     Settings.dun.autoLowFrequency ? Settings.dun.timeOfLowFrequency : 1,
-    [new FetcherStrategy('default', 'server'), new FetcherStrategy('default', 'local')]
+    [new FetcherStrategy('default', 'local'), new FetcherStrategy('default', 'local')]
   );
 }
 
@@ -85,6 +87,7 @@ function ExtensionInit() {
   // 监听前台事件
   PlatformHelper.Message.registerListener('background', null, (message) => {
     if (message.type) {
+      const data = message.data;
       switch (message.type) {
         // TODO 不接受强制刷新 后续要清理相关代码
         case MESSAGE_FORCE_REFRESH:
@@ -96,6 +99,11 @@ function ExtensionInit() {
           return;
         case MESSAGE_GET_COUNTDOWN:
           return countDown.GetAllCountDown();
+        case MESSAGE_WEIBO_ADD_REFERER:
+          if (data.urls && data.urls.length > 0) {
+            data.urls.forEach((src) => registerUrlToAddReferer(src, 'https://m.weibo.cn/'));
+          }
+          return;
         default:
           return;
       }
@@ -159,6 +167,12 @@ function ExtensionInit() {
       CountDown.removeCountDownByName(countDownName);
     }
   });
+
+  PlatformHelper.Http.onBeforeSendHeaders(
+    interceptBeforeSendHeaders,
+    { urls: ['*://*.sinaimg.cn/*'], types: ['image'] },
+    ['blocking', 'requestHeaders']
+  );
 }
 
 function countDownDebugLog(...data) {

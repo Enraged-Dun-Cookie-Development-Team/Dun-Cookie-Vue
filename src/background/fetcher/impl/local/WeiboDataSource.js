@@ -37,31 +37,23 @@ export class WeiboDataSource {
         case 'search_top': {
           builder
             .coverImage(dynamicInfo.original_pic ? dynamicInfo.original_pic.replace('https', 'http') : null)
-            .previewList(dynamicInfo.pics?.map((x) => x.url))
-            .imageList(dynamicInfo.pics?.map((x) => x.large?.url));
+            .imageList(dynamicInfo.pics?.map((x) => x.url));
           break;
         }
         // 视频动态
         case 'video': {
-          builder
-            .coverImage(dynamicInfo.page_info.page_pic?.url?.replace('https', 'http'))
-            .previewList(null)
-            .imageList(null);
+          builder.coverImage(dynamicInfo.page_info.page_pic?.url?.replace('https', 'http')).imageList(null);
           break;
         }
         // 直播动态
         case 'live': {
-          builder
-            .coverImage(dynamicInfo.page_info.page_pic?.url?.replace('https', 'http'))
-            .previewList(null)
-            .imageList(null);
+          builder.coverImage(dynamicInfo.page_info.page_pic?.url?.replace('https', 'http')).imageList(null);
           break;
         }
         default: {
           builder
             .coverImage(dynamicInfo.original_pic?.replace('https', 'http'))
-            .previewList(dynamicInfo.pics?.map((x) => x.url))
-            .imageList(dynamicInfo.pics?.map((x) => x.large?.url));
+            .imageList(dynamicInfo.pics?.map((x) => x.url));
           break;
         }
       }

@@ -262,6 +262,9 @@ width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retwee
         return response.text();
       })
       .catch((err) => {
+        if (err instanceof RequestError) {
+          throw err;
+        }
         if (err.name === 'AbortError') {
           throw new RequestError(`web request timeout(${timeout}ms)`);
         }

@@ -4,7 +4,13 @@
 import HttpUtil from './HttpUtil';
 import PlatformHelper from '../platform/PlatformHelper';
 import Settings from '../Settings';
-import { CANTEEN_API_BASE, CANTEEN_CDN_API_BASE, CANTEEN_CDN_SERVER_API_BASE, CURRENT_VERSION } from '../Constants';
+import {
+  CANTEEN_API_BASE,
+  CANTEEN_CDN_API_BASE,
+  CANTEEN_CDN_SERVER_API_BASE,
+  CURRENT_VERSION,
+  MESSAGE_WEIBO_ADD_REFERER,
+} from '../Constants';
 import NotificationUtil from './NotificationUtil';
 import TimeUtil from './TimeUtil';
 import { Http } from '@enraged-dun-cookie-development-team/common/request';
@@ -13,6 +19,7 @@ import md5 from 'js-md5';
 import { DataSourceMeta } from '../datasource/DataSourceMeta';
 import { DataItem, RetweetedInfo } from '../DataItem';
 import AvailableDataSourceMeta from '../sync/AvailableDataSourceMeta';
+import { registerUrlToAddReferer } from '../../background/request_interceptor';
 
 const serverOption = {
   appendTimestamp: false,
@@ -240,6 +247,21 @@ export default class ServerUtil {
           `?datasource_comb_id=${encodeURIComponent(comboId)}` +
           `&cookie_id=${encodeURIComponent(cookieId)}`
       );
+    }
+    if (result) {
+      const weiboImgs = [];
+      for (const cookie of result.cookies) {
+        if (!cookie.source.type.startsWith('weibo:')) continue;
+        const images = cookie.default_cookie.images?.map((it) => it.origin_url);
+        if (images && images.length > 0) {
+          weiboImgs.push(...images);
+        }
+      }
+      if (PlatformHelper.isBackground) {
+        weiboImgs.forEach((src) => registerUrlToAddReferer(src, 'https://m.weibo.cn/'));
+      } else {
+        await PlatformHelper.Message.send(MESSAGE_WEIBO_ADD_REFERER, { urls: weiboImgs });
+      }
     }
     return result;
   }
