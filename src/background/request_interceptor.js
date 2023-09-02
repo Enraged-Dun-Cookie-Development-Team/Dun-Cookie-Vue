@@ -14,9 +14,7 @@ export function registerUrlToAddReferer(url, referer) {
  * @param details {{url: string, requestHeaders: HttpHeaders}}
  */
 export function interceptBeforeSendHeaders(details) {
-  let shouldModifyReferer = false;
-  if (refererMap.has(details.url)) shouldModifyReferer = true;
-  if (!shouldModifyReferer) return {};
+  if (!refererMap.has(details.url)) return {};
   for (let i = 0; i < details.requestHeaders.length; i++) {
     const header = details.requestHeaders[i];
     if (header.name.toLowerCase() === 'referer') {

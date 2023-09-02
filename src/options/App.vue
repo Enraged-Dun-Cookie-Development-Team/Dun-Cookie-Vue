@@ -423,10 +423,7 @@ export default {
       selectDataSource: Settings.enableDataSources.map((it) => DataSourceMeta.id(it)),
       // TODO 暂时没有按tag显示，之后看情况补回或彻底删除
       currentDataSource: [],
-      defSourcesList: [
-        ...Object.values(AvailableDataSourceMeta.preset),
-        ...Object.values(AvailableDataSourceMeta.custom),
-      ].map((it) => ({ idStr: DataSourceMeta.id(it), ...it })),
+      defSourcesList: AvailableDataSourceMeta.getAllList(),
       marks: {
         8: '20点',
         12: '第二天凌晨',
@@ -460,11 +457,7 @@ export default {
         this.oldDunCount = data.counter;
       });
       AvailableDataSourceMeta.doAfterUpdate(() => {
-        console.log(AvailableDataSourceMeta);
-        this.defSourcesList = [
-          ...Object.values(AvailableDataSourceMeta.preset),
-          ...Object.values(AvailableDataSourceMeta.custom),
-        ].map((it) => ({ idStr: DataSourceMeta.id(it), ...it }));
+        this.defSourcesList = AvailableDataSourceMeta.getAllList();
       });
     },
     initAnimate() {
