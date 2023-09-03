@@ -49,13 +49,17 @@
         @open="menuIconClick"
       >
         <el-divider content-position="left"> 饼的发源地 </el-divider>
-        <el-row type="flex" class="drawer-btn-area" justify="center">
+        <div
+          ref="drawerBtnArea"
+          class="drawer-btn-area drawer-btn-area-origin"
+          :class="{ 'drawer-btn-area-scroll': isOriginScroll }"
+        >
           <el-tooltip v-for="item in quickJump.source" :key="item.img" :content="item.name" placement="top">
             <el-button size="small" @click="openUrl(item.url)">
               <img class="btn-icon" :class="item.radius ? 'radius' : ''" :src="item.img" />
             </el-button>
           </el-tooltip>
-        </el-row>
+        </div>
         <el-divider content-position="left"> 快捷工具 </el-divider>
         <el-row type="flex" justify="center" class="drawer-btn-area">
           <el-tooltip v-for="item in quickJump.tool" :key="item.img" :content="item.name" placement="top">
@@ -163,6 +167,8 @@ import PlatformHelper from '../common/platform/PlatformHelper';
 import 'animate.css';
 import CardList from '../common/sync/CardList';
 import ServerUtil from '../common/util/ServerUtil';
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import 'swiper/css';
 
 export default {
   name: 'App',
@@ -204,6 +210,7 @@ export default {
       firefox: false,
       countDownList: [],
       // allHeight: 0,
+      isOriginScroll: false,
     };
   },
   computed: {},
@@ -408,15 +415,25 @@ export default {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
       scrollDiv.scrollLeft = scrollDiv.scrollLeft + event.deltaY;
     },
+    drawerBtnAreaScroll() {
+      let drawerBtnArea = this.$refs.drawerBtnArea;
+      drawerBtnArea.scrollLeft = drawerBtnArea.scrollLeft + event.deltaY;
+    },
     bindScrollFun() {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
+      let drawerBtnArea = this.$refs.drawerBtnArea;
       // 添加监听事件（不同浏览器，事件方法不一样，所以可以作判断，也可以如下偷懒）
       // scrollDiv.addEventListener("DOMMouseScroll", handler, false);
       scrollDiv.addEventListener('wheel', this.scrollHandler, false);
+      drawerBtnArea.addEventListener('wheel', this.drawerBtnAreaScroll, false);
+      const bodyWidth = document.querySelector('body').offsetWidth;
+      if (drawerBtnArea.scrollWidth > bodyWidth) this.isOriginScroll = true;
     },
     unbindScrollFun() {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
+      let drawerBtnArea = this.$refs.drawerBtnArea;
       scrollDiv.removeEventListener('wheel', this.scrollHandler);
+      drawerBtnArea.removeEventListener('wheel', this.drawerBtnAreaScroll, false);
     },
     // 获取倒计时数据
     getCountDownList() {
@@ -512,6 +529,10 @@ export default {
 
     openWebsite() {
       PlatformHelper.Tabs.create(PAGE_CEOBECANTEEN_WEB);
+    },
+
+    onSlideChange() {
+      return;
     },
   },
 };
@@ -644,7 +665,15 @@ export default {
       }
     }
   }
-
+  .drawer-btn-area-origin {
+    display: flex;
+    justify-content: center;
+    overflow-x: scroll;
+    margin: 0 10px;
+  }
+  .drawer-btn-area-scroll {
+    justify-content: initial;
+  }
   // 快捷连接
 
   .drawer-btn-area-quickJump {
