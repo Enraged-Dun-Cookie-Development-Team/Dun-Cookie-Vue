@@ -25,10 +25,6 @@ const serverOption = {
   appendTimestamp: false,
 };
 
-/**
- * @type {{allConfig: *, allComboId: string, idMap: Record<string, string>, dataSourceList: DataSourceMeta[], fetchTime: number}}
- */
-let serverDataSourceInfo;
 const comboIdCache = {};
 
 if (!global.ceobe_cache) global.ceobe_cache = {};
@@ -70,9 +66,7 @@ export default class ServerUtil {
    * @return {Promise<{allConfig: *, allComboId: string, idMap: Record<string, string>, dataSourceList: DataSourceMeta[], fetchTime: number} | undefined>}
    */
   static async getServerDataSourceInfo(forceCache = false) {
-    if (!serverDataSourceInfo) {
-      serverDataSourceInfo = await PlatformHelper.Storage.getLocalStorage('serverDataSourceInfo');
-    }
+    let serverDataSourceInfo = await PlatformHelper.Storage.getLocalStorage('serverDataSourceInfo');
     if (serverDataSourceInfo && (forceCache || Date.now() - serverDataSourceInfo.fetchTime < 30 * 60 * 1000)) {
       return serverDataSourceInfo;
     }
