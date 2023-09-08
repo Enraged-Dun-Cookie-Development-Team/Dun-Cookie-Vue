@@ -52,7 +52,7 @@ function buildMainCookieFetchConfig(enable = true) {
         })
       : undefined,
     Settings.dun.autoLowFrequency ? Settings.dun.timeOfLowFrequency : 1,
-    [new FetcherStrategy('default', 'local'), new FetcherStrategy('default', 'local')]
+    [new FetcherStrategy('default', 'server'), new FetcherStrategy('default', 'local')]
   );
 }
 
