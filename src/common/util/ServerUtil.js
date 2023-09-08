@@ -29,7 +29,10 @@ const serverOption = {
  * @type {{allConfig: *, allComboId: string, idMap: Record<string, string>, dataSourceList: DataSourceMeta[], fetchTime: number}}
  */
 let serverDataSourceInfo;
-let comboIdCache = {};
+const comboIdCache = {};
+
+if (!global.ceobe_cache) global.ceobe_cache = {};
+global.ceobe_cache.comboId = comboIdCache;
 
 export default class ServerUtil {
   static async requestCdn(path, options) {
@@ -170,10 +173,12 @@ export default class ServerUtil {
     return preset;
   }
 
-  static async checkServerDataSourceInfoCache() {
+  static async checkServerDataSourceInfoCache(updatePreset = true) {
     try {
       await ServerUtil.getServerDataSourceInfo();
-      AvailableDataSourceMeta.preset = await this.getAvailableDataSourcePreset();
+      if (updatePreset) {
+        AvailableDataSourceMeta.preset = await this.getAvailableDataSourcePreset();
+      }
     } catch (e) {
       console.log(e);
     }
@@ -199,14 +204,16 @@ export default class ServerUtil {
       throw new Error('无法获取服务器配置');
     }
     const canteenIdList = sourceList
-      .map((it) => serverInfo.idMap[`${it.type}:${it.dataId}`])
-      .filter((it) => {
-        if (typeof it !== 'string' || it.length === 0) {
-          DebugUtil.debugLogWarn(0, `服务器未定义的数据源：${it}`);
-          return false;
+      .map((it) => {
+        const key = `${it.type}:${it.dataId}`;
+        const serverId = serverInfo.idMap[key];
+        if (typeof serverId !== 'string' || serverId.length === 0) {
+          DebugUtil.debugLogWarn(0, `服务器未定义的数据源：${key}`);
+          return undefined;
         }
-        return true;
-      });
+        return serverId;
+      })
+      .filter((it) => !!it);
     const comboId = (
       await ServerUtil.requestApi('POST', 'canteen/user/getDatasourceComb', {
         headers: {

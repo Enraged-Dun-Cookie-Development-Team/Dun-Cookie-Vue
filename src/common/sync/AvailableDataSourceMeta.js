@@ -32,7 +32,7 @@ const instance = createSyncData(
   PlatformHelper.isBackground
     ? async () => {
         const data = new AvailableDataSourceMeta();
-        await ServerUtil.checkServerDataSourceInfoCache();
+        await ServerUtil.checkServerDataSourceInfoCache(false);
         data.preset = ServerUtil.getAvailableDataSourcePreset();
         return data;
       }
