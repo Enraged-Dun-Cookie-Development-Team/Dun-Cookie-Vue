@@ -34,9 +34,8 @@ export class LocalCookieFetcher extends AbstractCookieFetcher {
     const serverInfo = await ServerUtil.getServerDataSourceInfo(true);
     let config;
     if (serverInfo) {
-      if (serverInfo?.allConfig?.groups) serverInfo.allConfig.groups = [];
       config = JSON.parse(JSON.stringify(serverInfo.allConfig));
-      defaultInterval = Math.max(defaultInterval, config.default_interval || 0);
+      defaultInterval = Math.max(defaultInterval, config.default_interval || 5000);
       for (const group of config.groups) {
         group.datasource = group.datasource.filter((source) => {
           const key = `${group.type}:${source[dataIdKeyInConfig[group.type]] || '-'}`;
