@@ -62,9 +62,12 @@ function ExtensionInit() {
   // PlatformHelper.BrowserAction.setBadge('Beta', [255, 0, 0, 255]);
   // 开始蹲饼！
   Settings.doAfterInit((initSettings) => {
-    DebugUtil.debugLog(0, '开始蹲饼');
-    if (initSettings.open)
+    if (initSettings.open) {
+      DebugUtil.debugLog(0, '开始蹲饼');
       cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
+    } else {
+      DebugUtil.debugLog(0, '蹲饼开关已关闭');
+    }
     setTimeout(() => {
       ServerUtil.getVersionInfo();
       ServerUtil.getAnnouncementInfo(true);
@@ -72,11 +75,15 @@ function ExtensionInit() {
   });
 
   Settings.doAfterUpdate((settings, changed) => {
-    // 只有更新了数据源/蹲饼频率的时候才刷新，避免无意义的网络请求
-    if (!changed.enableDataSources && !changed.customDataSources && !changed.dun) {
+    // 只有更新了数据源/蹲饼频率/蹲饼开关的时候才刷新，避免无意义的网络请求
+    if (!changed.enableDataSources && !changed.customDataSources && !changed.dun && !changed.open) {
       return;
     }
-    if (settings.open) cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
+    // 关闭蹲饼就只能重载插件才能生效了，好消息是目前没有关闭蹲饼的需求
+    if (settings.open) {
+      DebugUtil.debugLog(0, '开始蹲饼');
+      cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
+    }
   });
 
   // 启动时的缓存检查在AvailableDataSourceMeta
