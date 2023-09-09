@@ -191,8 +191,6 @@ import PlatformHelper from '../common/platform/PlatformHelper';
 import 'animate.css';
 import CardList from '../common/sync/CardList';
 import ServerUtil from '../common/util/ServerUtil';
-import { Swiper, SwiperSlide } from 'swiper/vue';
-import 'swiper/css';
 
 export default {
   name: 'App',
@@ -457,7 +455,7 @@ export default {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
       let drawerBtnArea = this.$refs.drawerBtnArea;
       scrollDiv.removeEventListener('wheel', this.scrollHandler);
-      drawerBtnArea.removeEventListener('wheel', this.drawerBtnAreaScroll, false);
+      drawerBtnArea.removeEventListener('wheel', this.drawerBtnAreaScroll);
     },
     // 获取倒计时数据
     getCountDownList() {
@@ -698,6 +696,7 @@ export default {
     justify-content: center;
     overflow-x: scroll;
     margin: 0 10px;
+    scrollbar-width: none;
   }
   .drawer-btn-area-scroll {
     justify-content: initial;
@@ -1028,6 +1027,7 @@ body {
 
 .el-timeline,
 .drawer-btn-area-quickJump,
+.drawer-btn-area-origin,
 .content-card-episodes {
   scrollbar-width: none;
 }
