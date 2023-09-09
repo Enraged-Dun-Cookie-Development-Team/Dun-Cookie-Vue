@@ -351,10 +351,12 @@ export default {
             const { cookie_id, server_update_cookie_id } = JSON.parse(
               await ServerUtil.requestCdn('datasource-comb/' + encodeURIComponent(comboId), { cache: 'no-cache' })
             );
-            updateCookieId = server_update_cookie_id;
-            const firstResult = await ServerUtil.getCookieList(comboId, cookie_id, updateCookieId);
-            this.nextPageOffsetId = firstResult.next_page_id;
-            await PlatformHelper.Storage.saveLocalStorage('server_update_cookie_id', server_update_cookie_id);
+            if (cookie_id) {
+              updateCookieId = server_update_cookie_id;
+              const firstResult = await ServerUtil.getCookieList(comboId, cookie_id, updateCookieId);
+              this.nextPageOffsetId = firstResult.next_page_id;
+              await PlatformHelper.Storage.saveLocalStorage('server_update_cookie_id', server_update_cookie_id);
+            }
           }
           const result = await ServerUtil.getCookieList(comboId, this.nextPageOffsetId, updateCookieId);
           this.nextPageOffsetId = result.next_page_id;

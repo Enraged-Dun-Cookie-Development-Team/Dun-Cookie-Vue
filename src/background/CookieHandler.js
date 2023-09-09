@@ -174,6 +174,11 @@ class CookieHandler {
       });
   };
 
+  static handleServerNull() {
+    DunInfo.counter++;
+    CardList.list = [];
+  }
+
   static async handleServer(data) {
     const items = ServerUtil.transformCookieListToItemList(data.cookies);
 
