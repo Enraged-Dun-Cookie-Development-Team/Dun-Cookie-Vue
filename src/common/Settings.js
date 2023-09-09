@@ -24,7 +24,8 @@ class Settings {
   version = CURRENT_SETTING_VERSION;
   // Logo
   logo = 'icon.png';
-
+  // 蹲饼总开关
+  open = false;
   /**
    * 启用的数据源
    * @type {{type: string, dataId: string}[]}
@@ -329,6 +330,7 @@ class Settings {
    */
   saveSettings() {
     const promise = PlatformHelper.Storage.saveLocalStorage('settings', this);
+    console.log(this);
     promise.then(() => {
       PlatformHelper.Message.send(MESSAGE_SETTINGS_UPDATE, this);
       DebugUtil.debugLog(0, 'update settings: ', this);

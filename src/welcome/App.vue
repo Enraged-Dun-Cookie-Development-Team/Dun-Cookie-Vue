@@ -15,6 +15,10 @@
         如果有意见或建议或想法请在<a href="https://jq.qq.com/?_wv=1027&k=Vod1uO13">【蹲饼组】</a>反馈 (QQ群：362860473)
       </div>
       <el-divider />
+      <el-radio v-model="protocolVal" :lebel="1" class="protocol" @change="protocol"
+        >阅读并同意<a href="./protocol.html" target="_blank">用户协议</a>才能启动蹲饼哦！</el-radio
+      >
+      <el-divider />
       <div>你可以点击图标查看蹲饼列表</div>
       <el-divider />
       <el-collapse v-model="activeNames">
@@ -69,11 +73,20 @@ export default {
       currentVersion: CURRENT_VERSION,
       settings: Settings,
       activeNames: [1],
+      protocolVal: 0,
     };
   },
   computed: {},
   mounted() {
     this.init();
+    this.$message(
+      {
+        center: true,
+        message: '您还未同意用户协议∩﹏∩',
+        type: 'warning',
+      },
+      2
+    );
   },
   methods: {
     init() {
@@ -90,6 +103,17 @@ export default {
     // lookList() {
     //   chrome.browserAction.getPopup();
     // },
+    protocol() {
+      // 同意协议启动蹲饼
+      this.settings.open = true;
+      this.settings.saveSettings().then(() => {
+        this.$message({
+          center: true,
+          message: "已开启蹲饼('▽'〃)",
+          type: 'success',
+        });
+      });
+    },
   },
 };
 </script>
@@ -148,6 +172,10 @@ export default {
 
   :deep(.el-collapse-item__header) {
     border-bottom: 0;
+  }
+  .protocol :deep(.el-radio__label) {
+    font-size: 20px;
+    color: red;
   }
 }
 </style>

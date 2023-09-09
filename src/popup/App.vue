@@ -88,7 +88,12 @@
         <el-row class="menu-button-area" type="flex" justify="center">
           <el-button type="primary" icon="el-icon-star-off" @click="openGithub"> 点个star </el-button>
           <el-button type="primary" :loading="isReload" icon="el-icon-refresh" @click="reload"> 刷新 </el-button>
-          <el-button v-if="settings.feature.options" type="primary" icon="el-icon-setting" @click="openSetting">
+          <el-button
+            v-if="settings.open && settings.feature.options"
+            type="primary"
+            icon="el-icon-setting"
+            @click="openSetting"
+          >
             设置
           </el-button>
           <el-button type="primary" icon="el-icon-upload2" @click="drawer = false"> 收起 </el-button>
@@ -134,7 +139,21 @@
         </div>
       </div>
       <div id="content">
-        <time-line ref="timeline" :img-show="LazyLoaded" :card-list-all="cardList" @cardListChange="goTop(1, 0)" />
+        <time-line
+          v-if="settings.open"
+          ref="timeline"
+          :img-show="LazyLoaded"
+          :card-list-all="cardList"
+          @cardListChange="goTop(1, 0)"
+        />
+        <div v-else class="protocol-warning">
+          小刻因为偷吃太多零食被关禁闭了{{ '>"<|||' }}，能不能帮帮小刻，请前往<el-button
+            size="mini"
+            @click="openWelcome"
+          >
+            指定页面 </el-button
+          >，同意用户协议，解救小刻！
+        </div>
       </div>
     </div>
   </div>
@@ -162,6 +181,7 @@ import {
   SHOW_VERSION,
   PAGE_CEOBECANTEEN_WEB,
   PAGE_GITHUB_TEAM,
+  PAGE_WELCOME,
 } from '../common/Constants';
 import PlatformHelper from '../common/platform/PlatformHelper';
 import 'animate.css';
@@ -519,6 +539,10 @@ export default {
       PlatformHelper.Tabs.createWithExtensionFile(PAGE_UPDATE);
     },
 
+    openWelcome() {
+      PlatformHelper.Tabs.createWithExtensionFile(PAGE_WELCOME);
+    },
+
     openGithub() {
       PlatformHelper.Tabs.create(PAGE_GITHUB_REPO);
     },
@@ -870,6 +894,18 @@ export default {
 
     .el-input__inner:focus {
       border-color: @@ceobeColor;
+    }
+  }
+  .protocol-warning {
+    text-align: center;
+    line-height: 300px;
+    :deep(.el-button) {
+      &:hover,
+      &:focus {
+        border-color: @@ceobeColor;
+        color: @@ceobeColor;
+        background: @@setLarge;
+      }
     }
   }
 }
