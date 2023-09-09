@@ -49,13 +49,17 @@
         @open="menuIconClick"
       >
         <el-divider content-position="left"> 饼的发源地 </el-divider>
-        <el-row type="flex" class="drawer-btn-area" justify="center">
+        <div
+          ref="drawerBtnArea"
+          class="drawer-btn-area drawer-btn-area-origin"
+          :class="{ 'drawer-btn-area-scroll': isOriginScroll }"
+        >
           <el-tooltip v-for="item in quickJump.source" :key="item.img" :content="item.name" placement="top">
             <el-button size="small" @click="openUrl(item.url)">
               <img class="btn-icon" :class="item.radius ? 'radius' : ''" :src="item.img" />
             </el-button>
           </el-tooltip>
-        </el-row>
+        </div>
         <el-divider content-position="left"> 快捷工具 </el-divider>
         <el-row type="flex" justify="center" class="drawer-btn-area">
           <el-tooltip v-for="item in quickJump.tool" :key="item.img" :content="item.name" placement="top">
@@ -84,12 +88,20 @@
         <el-row class="menu-button-area" type="flex" justify="center">
           <el-button type="primary" icon="el-icon-star-off" @click="openGithub"> 点个star </el-button>
           <el-button type="primary" :loading="isReload" icon="el-icon-refresh" @click="reload"> 刷新 </el-button>
-          <el-button v-if="settings.feature.options" type="primary" icon="el-icon-setting" @click="openSetting">
+          <el-button
+            v-if="settings.open && settings.feature.options"
+            type="primary"
+            icon="el-icon-setting"
+            @click="openSetting"
+          >
             设置
           </el-button>
           <el-button type="primary" icon="el-icon-upload2" @click="drawer = false"> 收起 </el-button>
         </el-row>
-        <div style="position: absolute; right: 10px; bottom: 10px" class="sign">Powered By 蓝芷怡 & 洛梧藤 & 云闪</div>
+        <div style="position: absolute; right: 10px; bottom: 10px" class="sign">
+          Powered By
+          <p @click="openGithubTeam">小刻食堂</p>
+        </div>
       </el-drawer>
       <!-- 置顶按钮 -->
       <el-button
@@ -104,7 +116,9 @@
         <div class="version">
           {{ `小刻食堂 V${currentVersion}` }}
           <span>
-            <span>【已蹲饼 <countTo :start-val="oldDunCount" :end-val="dunInfo.counter" :duration="1000" />次】 </span>
+            <span v-if="settings.open"
+              >【已蹲饼 <countTo :start-val="oldDunCount" :end-val="dunInfo.counter" :duration="1000" />次】
+            </span>
             <span v-if="settings.checkLowFrequency()"> 【低频蹲饼时段】 </span>
           </span>
         </div>
@@ -117,6 +131,9 @@
             </div>
             <div>【本数据仅会在打开列表时刷新】</div>
           </div>
+          <div class="count-down-area" @click="openWebsite">
+            <div>支持食堂</div>
+          </div>
           <Menu-Icon
             :class="[drawer ? 'menu-btn-open' : 'menu-btn-close', firefox ? 'menu-btn-firefox' : '', 'menu-btn']"
             @handleIconClick="handleIconClick()"
@@ -124,7 +141,23 @@
         </div>
       </div>
       <div id="content">
-        <time-line ref="timeline" :img-show="LazyLoaded" :card-list-all="cardList" @cardListChange="goTop(1, 0)" />
+        <time-line
+          v-if="settings.open"
+          ref="timeline"
+          :img-show="LazyLoaded"
+          :card-list-all="cardList"
+          @cardListChange="goTop(1, 0)"
+        />
+        <div class="protocol-warning">
+          <el-divider content-position="left"> 重要事项 </el-divider>
+          <el-row class="protocol-area">
+            <div class="warning-msg">
+              小刻因为偷吃太多零食被关禁闭了{{ '>"<|||' }}，能不能帮帮小刻<br />
+              请同意用户协议，解救小刻！
+            </div>
+            <el-button type="primary" @click="openWelcome">前往用户协议</el-button>
+          </el-row>
+        </div>
       </div>
     </div>
   </div>
@@ -150,6 +183,9 @@ import {
   PLATFORM_FIREFOX,
   quickJump,
   SHOW_VERSION,
+  PAGE_CEOBECANTEEN_WEB,
+  PAGE_GITHUB_TEAM,
+  PAGE_WELCOME,
 } from '../common/Constants';
 import PlatformHelper from '../common/platform/PlatformHelper';
 import 'animate.css';
@@ -196,6 +232,7 @@ export default {
       firefox: false,
       countDownList: [],
       // allHeight: 0,
+      isOriginScroll: false,
     };
   },
   computed: {},
@@ -400,15 +437,25 @@ export default {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
       scrollDiv.scrollLeft = scrollDiv.scrollLeft + event.deltaY;
     },
+    drawerBtnAreaScroll() {
+      let drawerBtnArea = this.$refs.drawerBtnArea;
+      drawerBtnArea.scrollLeft = drawerBtnArea.scrollLeft + event.deltaY;
+    },
     bindScrollFun() {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
+      let drawerBtnArea = this.$refs.drawerBtnArea;
       // 添加监听事件（不同浏览器，事件方法不一样，所以可以作判断，也可以如下偷懒）
       // scrollDiv.addEventListener("DOMMouseScroll", handler, false);
       scrollDiv.addEventListener('wheel', this.scrollHandler, false);
+      drawerBtnArea.addEventListener('wheel', this.drawerBtnAreaScroll, false);
+      const bodyWidth = document.querySelector('body').offsetWidth;
+      if (drawerBtnArea.scrollWidth > bodyWidth) this.isOriginScroll = true;
     },
     unbindScrollFun() {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
+      let drawerBtnArea = this.$refs.drawerBtnArea;
       scrollDiv.removeEventListener('wheel', this.scrollHandler);
+      drawerBtnArea.removeEventListener('wheel', this.drawerBtnAreaScroll);
     },
     // 获取倒计时数据
     getCountDownList() {
@@ -494,8 +541,24 @@ export default {
       PlatformHelper.Tabs.createWithExtensionFile(PAGE_UPDATE);
     },
 
+    openWelcome() {
+      PlatformHelper.Tabs.createWithExtensionFile(PAGE_WELCOME);
+    },
+
     openGithub() {
       PlatformHelper.Tabs.create(PAGE_GITHUB_REPO);
+    },
+
+    openGithubTeam() {
+      PlatformHelper.Tabs.create(PAGE_GITHUB_TEAM);
+    },
+
+    openWebsite() {
+      PlatformHelper.Tabs.create(PAGE_CEOBECANTEEN_WEB);
+    },
+
+    onSlideChange() {
+      return;
     },
   },
 };
@@ -579,7 +642,7 @@ export default {
       .count-down-area {
         overflow: hidden;
         margin-right: 10px;
-        padding: 0 10px 0 0;
+        padding: 0 10px;
         height: 40px;
         border-radius: 3px;
         text-align: right;
@@ -628,7 +691,16 @@ export default {
       }
     }
   }
-
+  .drawer-btn-area-origin {
+    display: flex;
+    justify-content: center;
+    overflow-x: scroll;
+    margin: 0 10px;
+    scrollbar-width: none;
+  }
+  .drawer-btn-area-scroll {
+    justify-content: initial;
+  }
   // 快捷连接
 
   .drawer-btn-area-quickJump {
@@ -763,7 +835,6 @@ export default {
     .el-button {
       border: @@btnBorder 1px solid;
       background-color: @@bgColor;
-
       .radius {
         background-color: #fff;
       }
@@ -784,6 +855,12 @@ export default {
 
     .sign {
       color: @@setLarge;
+      & > p {
+        display: inline;
+        text-decoration: underline;
+        color: @@ceobeColor !important;
+        cursor: pointer;
+      }
     }
 
     .mention,
@@ -819,6 +896,44 @@ export default {
 
     .el-input__inner:focus {
       border-color: @@ceobeColor;
+    }
+  }
+  :deep(.protocol-warning) {
+    .protocol-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .warning-msg {
+      font-size: 18px;
+      text-align: center;
+      color: @@content;
+      line-height: 36px;
+    }
+    .el-divider {
+      background-color: @@btnBorder;
+    }
+    .el-divider__text {
+      color: @@setLarge;
+      background-color: @@bgColor;
+    }
+    .el-button {
+      padding: 0 15px;
+      height: 35px;
+      border: @@btnBorder 1px solid;
+      background-color: @@bgColor;
+      box-sizing: border-box;
+    }
+
+    .el-button--primary {
+      border: @@ceobeColor 1px solid;
+      background-color: @@ceobeColor;
+    }
+
+    .el-button:hover {
+      border-color: @@ceobeLightColor;
+      color: @@ceobeColor;
+      background-color: @@ceobeVeryLightColor;
     }
   }
 }
@@ -912,6 +1027,7 @@ body {
 
 .el-timeline,
 .drawer-btn-area-quickJump,
+.drawer-btn-area-origin,
 .content-card-episodes {
   scrollbar-width: none;
 }
