@@ -450,7 +450,7 @@ export default {
         const result = res.target.result; // 得到字符串
         const importSettings = JSON.parse(result); // 解析成json对象
         // 不知道onload能不能塞异步函数，这里还是定义一个临时函数吧
-        async function fn() {
+        const fn = async () => {
           const newSettings = await updateSettings(importSettings);
           let msg = '解析文件成功，是否覆盖当前设置?';
           if (newSettings.version !== importSettings.version) {
@@ -462,7 +462,8 @@ export default {
             type: 'warning',
           })
             .then(() => {
-              this.saveSetting('form', importSettings);
+              this.selectDataSource = newSettings.enableDataSources.map((it) => DataSourceMeta.id(it));
+              this.saveSetting('form', newSettings);
             })
             .catch((action) => {
               if (action === 'cancel' || action === 'close') {
@@ -471,7 +472,7 @@ export default {
                 console.error(action);
               }
             });
-        }
+        };
         fn()
           .then()
           .catch((e) => console.error(e));
