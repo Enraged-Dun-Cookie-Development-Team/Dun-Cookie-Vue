@@ -308,6 +308,10 @@ class HttpHelper {
     let timeout = options.timeout || 10000;
     return currentPlatform.sendHttpRequest(url, 'GET', timeout);
   }
+
+  onBeforeSendHeaders(listener, filter, extraInfoSpec) {
+    return currentPlatform.onBeforeSendHeaders(listener, filter, extraInfoSpec);
+  }
 }
 
 class ImgHelper {

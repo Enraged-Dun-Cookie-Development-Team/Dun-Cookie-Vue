@@ -204,7 +204,7 @@ export default {
         this.currentTag = settings.display.defaultTag;
       }
     });
-    PlatformHelper.Storage.getLocalStorage('server_latest_cookie_id').then((value) => {
+    PlatformHelper.Storage.getLocalStorage('server_secondary_page_cookie_id').then((value) => {
       this.nextPageOffsetId = value;
     });
     const filterTextSubject = new Subject();
@@ -218,7 +218,7 @@ export default {
         this.nextPageOffsetId = null;
         this.isSearchLastPage = false;
         this.filterText = data;
-        this.filterList();
+        this.filterList(true);
       });
     return {
       announcementAreaScroll: true,
@@ -284,8 +284,6 @@ export default {
         setTimeout(() => fn(), 500);
         return;
       }
-      console.log(this.$refs.elTimelineArea.$el);
-      const _this = this;
       this.$nextTick(() => {
         this.itemObserver = new IntersectionObserver(
           async ([entry]) => {
@@ -353,8 +351,9 @@ export default {
             const { cookie_id, server_update_cookie_id } = JSON.parse(
               await ServerUtil.requestCdn('datasource-comb/' + encodeURIComponent(comboId), { cache: 'no-cache' })
             );
-            this.nextPageOffsetId = cookie_id;
             updateCookieId = server_update_cookie_id;
+            const firstResult = await ServerUtil.getCookieList(comboId, cookie_id, updateCookieId);
+            this.nextPageOffsetId = firstResult.next_page_id;
             await PlatformHelper.Storage.saveLocalStorage('server_update_cookie_id', server_update_cookie_id);
           }
           const result = await ServerUtil.getCookieList(comboId, this.nextPageOffsetId, updateCookieId);
@@ -482,7 +481,7 @@ export default {
         this.filterTextSubject.next(text);
       }
     },
-    async filterList() {
+    async filterList(emitEvent = false) {
       try {
         this.lastNextPageRequestState = true;
         if (typeof this.filterText === 'string' && this.filterText.length > 0 && !this.filterText.startsWith('@@')) {
@@ -502,7 +501,6 @@ export default {
             this.nextSearchPageOffsetId = result.next_page_id;
             this.isSearchLastPage = result.next_page_id === null;
             this.serverSearchCardList = ServerUtil.transformCookieListToItemList(result.cookies);
-            this.$emit('cardListChange');
           } catch (e) {
             console.error(e);
             const newFilterList = [];
@@ -517,9 +515,11 @@ export default {
           }
         } else {
           this.filterCardList = this.cardList;
-          this.$emit('cardListChange');
         }
       } finally {
+        if (emitEvent) {
+          this.$emit('cardListChange');
+        }
         this.$nextTick(() => {
           this.lastNextPageRequestState = false;
         });

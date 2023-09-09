@@ -3,7 +3,7 @@
  */
 class DataItem {
   /**
-   * 【必填】标识这个饼来自哪个数据源，值为数据源的dataName
+   * 【必填】标识这个饼来自哪个数据源，值为数据源的唯一id
    * @type {string}
    */
   dataSource;
@@ -109,13 +109,6 @@ class DataItem {
        */
       coverImage: (val) => {
         instance.coverImage = val;
-        return _builder;
-      },
-      /**
-       * @see DataItem.previewList
-       */
-      previewList: (val) => {
-        instance.previewList = val;
         return _builder;
       },
       /**

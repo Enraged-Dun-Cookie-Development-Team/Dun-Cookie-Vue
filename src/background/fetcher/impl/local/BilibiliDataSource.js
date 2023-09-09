@@ -139,7 +139,7 @@ export class BilibiliDataSource {
     const builder = DataItem.builder(sourceId)
       .id(dynamic.id_str)
       .timeForSort(time.getTime())
-      .timeForDisplay(TimeUtil.format(time, 'yyyy-MM-dd'))
+      .timeForDisplay(TimeUtil.format(time, 'yyyy-MM-dd hh:mm:ss'))
       .imageList(images.map((it) => it.origin_url))
       .content(allText)
       .jumpUrl(dynamicUrl);

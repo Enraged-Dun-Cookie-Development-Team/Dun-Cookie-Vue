@@ -6,6 +6,7 @@ import {
   MESSAGE_FORCE_REFRESH,
   MESSAGE_GET_COUNTDOWN,
   MESSAGE_SAN_GET,
+  MESSAGE_WEIBO_ADD_REFERER,
   PAGE_POPUP_WINDOW,
   PAGE_UPDATE,
   PAGE_WELCOME,
@@ -22,6 +23,7 @@ import { FetchConfig, FetcherStrategy } from './fetcher/FetchConfig';
 import { CeobeCanteenCookieFetcher } from './fetcher/impl/CeobeCanteenCookieFetcher';
 import { LocalCookieFetcher } from './fetcher/impl/LocalCookieFetcher';
 import DebugUtil from '../common/util/DebugUtil';
+import { interceptBeforeSendHeaders, registerUrlToAddReferer } from './request_interceptor';
 
 // 开启弹出菜单窗口化时的窗口ID
 let popupWindowId = null;
@@ -59,9 +61,10 @@ const MAIN_FETCH_CONFIG_KEY = 'main';
 function ExtensionInit() {
   // PlatformHelper.BrowserAction.setBadge('Beta', [255, 0, 0, 255]);
   // 开始蹲饼！
-  Settings.doAfterInit(() => {
+  Settings.doAfterInit((initSettings) => {
     DebugUtil.debugLog(0, '开始蹲饼');
-    if (Settings.open) cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
+    if (initSettings.open)
+      cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
     setTimeout(() => {
       ServerUtil.getVersionInfo();
       ServerUtil.getAnnouncementInfo(true);
@@ -73,12 +76,19 @@ function ExtensionInit() {
     if (!changed.enableDataSources && !changed.customDataSources && !changed.dun) {
       return;
     }
-    if (Settings.open) cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
+    if (settings.open) cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
   });
+
+  // 启动时的缓存检查在AvailableDataSourceMeta
+  // 每隔6小时检查一遍缓存
+  setInterval(() => {
+    void ServerUtil.checkServerDataSourceInfoCache();
+  }, 6 * 60 * 60 * 1000);
 
   // 监听前台事件
   PlatformHelper.Message.registerListener('background', null, (message) => {
     if (message.type) {
+      const data = message.data;
       switch (message.type) {
         // TODO 不接受强制刷新 后续要清理相关代码
         case MESSAGE_FORCE_REFRESH:
@@ -90,6 +100,11 @@ function ExtensionInit() {
           return;
         case MESSAGE_GET_COUNTDOWN:
           return countDown.GetAllCountDown();
+        case MESSAGE_WEIBO_ADD_REFERER:
+          if (data.urls && data.urls.length > 0) {
+            data.urls.forEach((src) => registerUrlToAddReferer(src, 'https://m.weibo.cn/'));
+          }
+          return;
         default:
           return;
       }
@@ -153,6 +168,12 @@ function ExtensionInit() {
       CountDown.removeCountDownByName(countDownName);
     }
   });
+
+  PlatformHelper.Http.onBeforeSendHeaders(
+    interceptBeforeSendHeaders,
+    { urls: ['*://*.sinaimg.cn/*'], types: ['image'] },
+    ['blocking', 'requestHeaders']
+  );
 }
 
 function countDownDebugLog(...data) {

@@ -81,13 +81,14 @@ class DataSynchronizer {
       this.updateHandler = deepAssign;
     }
     const fn = async () => {
-      const data = await PlatformHelper.Storage.getLocalStorage(keyPersist(key));
+      // 如果有初始化函数，则无条件将初始化函数作为初始数据
       if (typeof dataInitFn === 'function') {
         const initData = await dataInitFn();
         this.__handleReloadOrReceiveUpdate(initData, true);
       }
       // 当且仅当未进行过更新且storage中有数据时才会将storage中的数据设为当前数据
       // 如果已经接收过数据更新则忽略storage中的数据
+      const data = await PlatformHelper.Storage.getLocalStorage(keyPersist(key));
       if (this.updateCount === 0 && data) {
         DebugUtil.debugLog(6, `从Storage中读取${this.key}: `, data);
         this.__handleReloadOrReceiveUpdate(data, true);

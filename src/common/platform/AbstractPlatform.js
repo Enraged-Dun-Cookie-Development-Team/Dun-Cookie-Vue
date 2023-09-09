@@ -291,6 +291,17 @@ export class AbstractPlatform {
   }
 
   /**
+   * 增加请求监听器
+   * <p>
+   * @param listener 监听器
+   * @param filter URL匹配列表，指定要监听的请求URL
+   * @param extraInfoSpec 额外参数
+   */
+  onBeforeSendHeaders(listener, filter, extraInfoSpec) {
+    throw new Error(unsupportedTip);
+  }
+
+  /**
    * 返回的对象可以当成jQuery的$来使用
    *
    * @return {jQuery}

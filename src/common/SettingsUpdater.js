@@ -70,6 +70,7 @@ async function updateV3ToV4(oldSettings) {
   console.log(oldSettings);
   const newSettings = deepAssign({}, oldSettings);
 
+  newSettings.open = false;
   newSettings.enableDataSources = oldSettings.enableDataSources
     .map((dataName) => {
       switch (dataName) {

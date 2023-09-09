@@ -15,6 +15,7 @@ import AvailableDataSourceMeta from '../common/sync/AvailableDataSourceMeta';
 import { DataItem } from '../common/DataItem';
 import CardList from '../common/sync/CardList';
 import ServerUtil from '../common/util/ServerUtil';
+import { registerUrlToAddReferer } from './request_interceptor';
 
 /**
  * 最新推送的通知，用于避免不同平台的饼重复通知，每一项由[数据源的dataName, 删除空白字符的饼内容]组成
@@ -120,6 +121,8 @@ class CookieHandler {
                   return ArknightsOfficialWebDataSource.processData(it.rawContent, sourceId);
                 case 'arknights-website:terra-historicus':
                   return TerraHistoricusDataSource.processData(it.rawContent, sourceId);
+                default:
+                  console.warn('未知数据源类型：' + it.dataSourceId.typeId);
               }
             }
           })
@@ -127,6 +130,7 @@ class CookieHandler {
             if (it.imageList && it.imageList.length > 0 && !it.coverImage) {
               it.coverImage = it.imageList[0];
             }
+            return it;
           })
           .filter((it) => !!it)
       );
@@ -134,11 +138,20 @@ class CookieHandler {
 
     const newCookies = await transform(fetchData.result.newCookies, fetchData.source.idStr);
     const allCookies = await transform(fetchData.result.allCookies, fetchData.source.idStr);
+    allCookies
+      .filter((it) => it.dataSource.startsWith('weibo:'))
+      .forEach((it) => {
+        if (it.coverImage) registerUrlToAddReferer(it.coverImage, 'https://m.weibo.cn/');
+        if (it.imageList && it.imageList.length > 0) {
+          it.imageList.forEach((src) => registerUrlToAddReferer(src, 'https://m.weibo.cn/'));
+        }
+      });
 
     const hasOldCardList = LocalCardMap[fetchData.source.idStr] && LocalCardMap[fetchData.source.idStr].length > 0;
     if (hasOldCardList && newCookies.length > 0) {
       DunInfo.cookieCount += newCookies.length;
       console.log('new cookies: ', newCookies);
+      await new Promise((r) => AvailableDataSourceMeta.doAfterInit(r));
       tryNotice(AvailableDataSourceMeta.getById(fetchData.source.idStr), newCookies);
     }
     if (allCookies && allCookies.length > 0) {
@@ -170,8 +183,16 @@ class CookieHandler {
       const newCookies = items.filter((it) => !map[it.id]);
       DunInfo.cookieCount += newCookies.length;
       console.log('new cookies: ', newCookies);
-      for (const item of newCookies) {
-        tryNotice(AvailableDataSourceMeta.getById(item.dataSource), newCookies);
+      await new Promise((r) => AvailableDataSourceMeta.doAfterInit(r));
+      const cookiesMap = newCookies.reduce((prev, current) => {
+        if (!prev[current.dataSource]) {
+          prev[current.dataSource] = [];
+        }
+        prev[current.dataSource].push(current);
+        return prev;
+      }, {});
+      for (const entry of Object.entries(cookiesMap)) {
+        tryNotice(AvailableDataSourceMeta.getById(entry[0]), entry[1]);
       }
     }
 

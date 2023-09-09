@@ -180,4 +180,8 @@ export default class FirefoxPlatform extends BrowserPlatform {
   addAlarmsListener(listener) {
     browser.alarms.onAlarm.addListener(listener);
   }
+
+  onBeforeSendHeaders(listener, filter, extraInfoSpec) {
+    browser.webRequest.onBeforeSendHeaders.addListener(listener, filter, extraInfoSpec);
+  }
 }

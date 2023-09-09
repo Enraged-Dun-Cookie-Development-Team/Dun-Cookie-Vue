@@ -507,7 +507,7 @@ export default {
 
     // 回顶部
     goTop(step = 10, interval = 10) {
-      if (!this.$refs.timeline) {
+      if (!this.$refs.timeline || !this.$refs.timeline.$refs.elTimelineArea) {
         return;
       }
       let scrollArea =

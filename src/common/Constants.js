@@ -26,7 +26,7 @@ const CURRENT_SETTING_VERSION = 4;
 /**
  * 当前插件版本号
  */
-const CURRENT_VERSION = '3.2.5';
+const CURRENT_VERSION = '4.0.0';
 /**
  * 展示用的版本号
  */
@@ -52,12 +52,12 @@ const MESSAGE_SAN_GET = 'san-get';
 const MESSAGE_CHANGE_COUNTDOWN = 'change-countdown';
 
 const MESSAGE_FORCE_REFRESH = 'force-refresh';
-const MESSAGE_WEIBO_DETAIL = 'weibo-detail';
+const MESSAGE_WEIBO_ADD_REFERER = 'weibo-add-referer';
 const MESSAGE_GET_COUNTDOWN = 'countdown-list';
 
 export { MESSAGE_SETTINGS_UPDATE, MESSAGE_SAN_UPDATE };
 export { MESSAGE_SAN_GET, MESSAGE_CHANGE_COUNTDOWN };
-export { MESSAGE_FORCE_REFRESH, MESSAGE_WEIBO_DETAIL, MESSAGE_GET_COUNTDOWN };
+export { MESSAGE_FORCE_REFRESH, MESSAGE_WEIBO_ADD_REFERER, MESSAGE_GET_COUNTDOWN };
 // endregion
 
 // region 平台类型

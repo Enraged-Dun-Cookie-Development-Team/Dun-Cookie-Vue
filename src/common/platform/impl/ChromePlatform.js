@@ -255,4 +255,10 @@ export default class ChromePlatform extends BrowserPlatform {
   addAlarmsListener(listener) {
     chrome.alarms.onAlarm.addListener(listener);
   }
+
+  onBeforeSendHeaders(listener, filter, extraInfoSpec) {
+    if (!extraInfoSpec) extraInfoSpec = [];
+    if (!extraInfoSpec.includes('extraHeaders')) extraInfoSpec.push('extraHeaders');
+    chrome.webRequest.onBeforeSendHeaders.addListener(listener, filter, extraInfoSpec);
+  }
 }

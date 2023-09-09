@@ -4,7 +4,13 @@
 import HttpUtil from './HttpUtil';
 import PlatformHelper from '../platform/PlatformHelper';
 import Settings from '../Settings';
-import { CANTEEN_API_BASE, CANTEEN_CDN_API_BASE, CANTEEN_CDN_SERVER_API_BASE, CURRENT_VERSION } from '../Constants';
+import {
+  CANTEEN_API_BASE,
+  CANTEEN_CDN_API_BASE,
+  CANTEEN_CDN_SERVER_API_BASE,
+  CURRENT_VERSION,
+  MESSAGE_WEIBO_ADD_REFERER,
+} from '../Constants';
 import NotificationUtil from './NotificationUtil';
 import TimeUtil from './TimeUtil';
 import { Http } from '@enraged-dun-cookie-development-team/common/request';
@@ -12,16 +18,17 @@ import DebugUtil from './DebugUtil';
 import md5 from 'js-md5';
 import { DataSourceMeta } from '../datasource/DataSourceMeta';
 import { DataItem, RetweetedInfo } from '../DataItem';
+import AvailableDataSourceMeta from '../sync/AvailableDataSourceMeta';
+import { registerUrlToAddReferer } from '../../background/request_interceptor';
 
 const serverOption = {
   appendTimestamp: false,
 };
 
-/**
- * @type {{allConfig: *, allComboId: string, idMap: Record<string, string>, dataSourceList: DataSourceMeta[], fetchTime: number}}
- */
-let serverDataSourceInfo;
-let comboIdCache = {};
+const comboIdCache = {};
+
+if (!global.ceobe_cache) global.ceobe_cache = {};
+global.ceobe_cache.comboId = comboIdCache;
 
 export default class ServerUtil {
   static async requestCdn(path, options) {
@@ -59,9 +66,7 @@ export default class ServerUtil {
    * @return {Promise<{allConfig: *, allComboId: string, idMap: Record<string, string>, dataSourceList: DataSourceMeta[], fetchTime: number} | undefined>}
    */
   static async getServerDataSourceInfo(forceCache = false) {
-    if (!serverDataSourceInfo) {
-      serverDataSourceInfo = await PlatformHelper.Storage.getLocalStorage('serverDataSourceInfo');
-    }
+    let serverDataSourceInfo = await PlatformHelper.Storage.getLocalStorage('serverDataSourceInfo');
     if (serverDataSourceInfo && (forceCache || Date.now() - serverDataSourceInfo.fetchTime < 30 * 60 * 1000)) {
       return serverDataSourceInfo;
     }
@@ -154,6 +159,25 @@ export default class ServerUtil {
     return serverDataSourceInfo;
   }
 
+  static async getAvailableDataSourcePreset() {
+    const preset = {};
+    (await ServerUtil.getServerDataSourceInfo(true)).dataSourceList.forEach((source) => {
+      preset[`${source.type}:${source.dataId}`] = source;
+    });
+    return preset;
+  }
+
+  static async checkServerDataSourceInfoCache(updatePreset = true) {
+    try {
+      await ServerUtil.getServerDataSourceInfo();
+      if (updatePreset) {
+        AvailableDataSourceMeta.preset = await this.getAvailableDataSourcePreset();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   /**
    *
    * @param sourceList {{type: string, dataId: string}[]}
@@ -174,14 +198,16 @@ export default class ServerUtil {
       throw new Error('无法获取服务器配置');
     }
     const canteenIdList = sourceList
-      .map((it) => serverInfo.idMap[`${it.type}:${it.dataId}`])
-      .filter((it) => {
-        if (typeof it !== 'string' || it.length === 0) {
-          DebugUtil.debugLogWarn(0, `服务器未定义的数据源：${it}`);
-          return false;
+      .map((it) => {
+        const key = `${it.type}:${it.dataId}`;
+        const serverId = serverInfo.idMap[key];
+        if (typeof serverId !== 'string' || serverId.length === 0) {
+          DebugUtil.debugLogWarn(0, `服务器未定义的数据源：${key}`);
+          return undefined;
         }
-        return true;
-      });
+        return serverId;
+      })
+      .filter((it) => !!it);
     const comboId = (
       await ServerUtil.requestApi('POST', 'canteen/user/getDatasourceComb', {
         headers: {
@@ -223,6 +249,21 @@ export default class ServerUtil {
           `&cookie_id=${encodeURIComponent(cookieId)}`
       );
     }
+    if (result) {
+      const weiboImgs = [];
+      for (const cookie of result.cookies) {
+        if (!cookie.source.type.startsWith('weibo:')) continue;
+        const images = cookie.default_cookie.images?.map((it) => it.origin_url);
+        if (images && images.length > 0) {
+          weiboImgs.push(...images);
+        }
+      }
+      if (PlatformHelper.isBackground) {
+        weiboImgs.forEach((src) => registerUrlToAddReferer(src, 'https://m.weibo.cn/'));
+      } else {
+        await PlatformHelper.Message.send(MESSAGE_WEIBO_ADD_REFERER, { urls: weiboImgs });
+      }
+    }
     return result;
   }
 
@@ -237,11 +278,19 @@ export default class ServerUtil {
         const builder = DataItem.builder(`${cookie.source.type}:${cookie.source.data}`)
           .id(cookie.item.id)
           .timeForSort(cookie.timestamp.fetcher)
-          .timeForDisplay(TimeUtil.format(cookie.timestamp.fetcher || 0, 'yyyy-MM-dd'))
           .coverImage(cover)
           .imageList(images)
           .content(cookie.default_cookie.text)
           .jumpUrl(cookie.item.url);
+        if (cookie.timestamp.platform) {
+          if (cookie.timestamp.platform_precision !== 'day') {
+            builder.timeForDisplay(TimeUtil.format(cookie.timestamp.platform, 'yyyy-MM-dd hh:mm:ss'));
+          } else {
+            builder.timeForDisplay(TimeUtil.format(cookie.timestamp.platform, 'yyyy-MM-dd'));
+          }
+        } else {
+          builder.timeForDisplay(TimeUtil.format(cookie.timestamp.fetcher || 0, 'yyyy-MM-dd hh:mm:ss'));
+        }
         if (cookie.item.is_retweeted) {
           builder.retweeted(new RetweetedInfo(cookie.item.retweeted.author_name, cookie.item.retweeted.text || ''));
         }
@@ -396,7 +445,7 @@ export default class ServerUtil {
       return data;
     }
     if (checkVersionUpdate) {
-      if (Settings.JudgmentVersion(data.upgrade.v, CURRENT_VERSION) && Settings.dun.enableNotice) {
+      if (Settings.JudgmentVersion(data.version, CURRENT_VERSION) && Settings.dun.enableNotice) {
         NotificationUtil.SendNotice(
           '小刻食堂翻新啦！！',
           '快来使用新的小刻食堂噢！一定有很多好玩的新功能啦！！',

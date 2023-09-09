@@ -3,6 +3,7 @@ import { deepAssign } from './util/CommonFunctions';
 import { updateSettings } from './SettingsUpdater';
 import PlatformHelper from './platform/PlatformHelper';
 import DebugUtil from './util/DebugUtil';
+import AvailableDataSourceMeta from './sync/AvailableDataSourceMeta';
 
 // 随便调用一个无影响的东西来导入调试工具类
 DebugUtil.constructor;
@@ -302,6 +303,19 @@ class Settings {
       // 必须在后台执行的只执行一次的内容
       if (PlatformHelper.isBackground) {
         try {
+          if (!this.enableDataSources || !(this.enableDataSources.length > 0)) {
+            // 如果设置中未启用任何数据源，则自动启用所有数据源
+            AvailableDataSourceMeta.doAfterInit((available) => {
+              // 因为这个执行时机不确定和初始化的时机的顺序如何，干脆强制等初始化完之后再更新数据源
+              this.doAfterInit(() => {
+                // 异步的时候二次检测是好文明，虽然大概率不需要
+                if (!this.enableDataSources || !(this.enableDataSources.length > 0)) {
+                  this.enableDataSources = available.getAllList().map((it) => ({ type: it.type, dataId: it.dataId }));
+                  void this.saveSettings();
+                }
+              });
+            });
+          }
           this.__updateWindowMode();
           // 只需要在后台进行保存，其它页面不需要保存
           await this.saveSettings();
@@ -330,10 +344,9 @@ class Settings {
    */
   saveSettings() {
     const promise = PlatformHelper.Storage.saveLocalStorage('settings', this);
-    console.log(this);
     promise.then(() => {
       PlatformHelper.Message.send(MESSAGE_SETTINGS_UPDATE, this);
-      DebugUtil.debugLog(0, 'update settings: ', this);
+      DebugUtil.debugLog(0, '已更新插件设置: ', this);
     });
     return promise;
   }
