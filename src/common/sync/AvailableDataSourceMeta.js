@@ -30,11 +30,10 @@ const instance = createSyncData(
   true,
   undefined,
   PlatformHelper.isBackground
-    ? async () => {
-        const data = new AvailableDataSourceMeta();
+    ? async (reloadData) => {
         await ServerUtil.checkServerDataSourceInfoCache(false);
-        data.preset = ServerUtil.getAvailableDataSourcePreset();
-        return data;
+        reloadData.preset = await ServerUtil.getAvailableDataSourcePreset();
+        return reloadData;
       }
     : undefined
 );

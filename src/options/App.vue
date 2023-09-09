@@ -387,6 +387,9 @@ export default {
       DunInfo.doAfterUpdate((data) => {
         this.oldDunCount = data.counter;
       });
+      AvailableDataSourceMeta.doAfterInit(() => {
+        this.defSourcesList = AvailableDataSourceMeta.getAllList();
+      });
       AvailableDataSourceMeta.doAfterUpdate(() => {
         this.defSourcesList = AvailableDataSourceMeta.getAllList();
       });
