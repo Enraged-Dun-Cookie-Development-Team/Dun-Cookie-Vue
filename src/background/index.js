@@ -61,9 +61,10 @@ const MAIN_FETCH_CONFIG_KEY = 'main';
 function ExtensionInit() {
   // PlatformHelper.BrowserAction.setBadge('Beta', [255, 0, 0, 255]);
   // 开始蹲饼！
-  Settings.doAfterInit(() => {
+  Settings.doAfterInit((initSettings) => {
     DebugUtil.debugLog(0, '开始蹲饼');
-    if (Settings.open) cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
+    if (initSettings.open)
+      cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
     setTimeout(() => {
       ServerUtil.getVersionInfo();
       ServerUtil.getAnnouncementInfo(true);
@@ -75,7 +76,7 @@ function ExtensionInit() {
     if (!changed.enableDataSources && !changed.customDataSources && !changed.dun) {
       return;
     }
-    if (Settings.open) cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
+    if (settings.open) cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
   });
 
   // 启动时的缓存检查在AvailableDataSourceMeta
