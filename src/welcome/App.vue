@@ -79,14 +79,14 @@ export default {
   computed: {},
   mounted() {
     this.init();
-    this.$message(
-      {
-        center: true,
-        message: '您还未同意用户协议∩﹏∩',
-        type: 'warning',
-      },
-      2
-    );
+    // this.$message(
+    //   {
+    //     center: true,
+    //     message: '您还未同意用户协议∩﹏∩',
+    //     type: 'warning',
+    //   },
+    //   2
+    // );
   },
   methods: {
     init() {

@@ -112,7 +112,7 @@ function ExtensionInit() {
 
   // 监听安装更新
   PlatformHelper.Lifecycle.addInstalledListener((details) => {
-    if (details.reason === 'install') {
+    if (details.reason === 'install' || !Settings.open) {
       PlatformHelper.Tabs.createWithExtensionFile(PAGE_WELCOME);
     }
     if (details.reason === 'update' || details.reason === 'install') {

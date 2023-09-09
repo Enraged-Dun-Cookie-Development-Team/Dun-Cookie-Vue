@@ -116,7 +116,9 @@
         <div class="version">
           {{ `小刻食堂 V${currentVersion}` }}
           <span>
-            <span>【已蹲饼 <countTo :start-val="oldDunCount" :end-val="dunInfo.counter" :duration="1000" />次】 </span>
+            <span v-if="settings.open"
+              >【已蹲饼 <countTo :start-val="oldDunCount" :end-val="dunInfo.counter" :duration="1000" />次】
+            </span>
             <span v-if="settings.checkLowFrequency()"> 【低频蹲饼时段】 </span>
           </span>
         </div>
@@ -146,13 +148,15 @@
           :card-list-all="cardList"
           @cardListChange="goTop(1, 0)"
         />
-        <div v-else class="protocol-warning">
-          小刻因为偷吃太多零食被关禁闭了{{ '>"<|||' }}，能不能帮帮小刻，请前往<el-button
-            size="mini"
-            @click="openWelcome"
-          >
-            指定页面 </el-button
-          >，同意用户协议，解救小刻！
+        <div class="protocol-warning">
+          <el-divider content-position="left"> 重要事项 </el-divider>
+          <el-row class="protocol-area">
+            <div class="warning-msg">
+              小刻因为偷吃太多零食被关禁闭了{{ '>"<|||' }}，能不能帮帮小刻<br />
+              请同意用户协议，解救小刻！
+            </div>
+            <el-button type="primary" @click="openWelcome">前往用户协议</el-button>
+          </el-row>
         </div>
       </div>
     </div>
@@ -832,7 +836,6 @@ export default {
     .el-button {
       border: @@btnBorder 1px solid;
       background-color: @@bgColor;
-
       .radius {
         background-color: #fff;
       }
@@ -896,16 +899,42 @@ export default {
       border-color: @@ceobeColor;
     }
   }
-  .protocol-warning {
-    text-align: center;
-    line-height: 300px;
-    :deep(.el-button) {
-      &:hover,
-      &:focus {
-        border-color: @@ceobeColor;
-        color: @@ceobeColor;
-        background: @@setLarge;
-      }
+  :deep(.protocol-warning) {
+    .protocol-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .warning-msg {
+      font-size: 18px;
+      text-align: center;
+      color: @@content;
+      line-height: 36px;
+    }
+    .el-divider {
+      background-color: @@btnBorder;
+    }
+    .el-divider__text {
+      color: @@setLarge;
+      background-color: @@bgColor;
+    }
+    .el-button {
+      padding: 0 15px;
+      height: 35px;
+      border: @@btnBorder 1px solid;
+      background-color: @@bgColor;
+      box-sizing: border-box;
+    }
+
+    .el-button--primary {
+      border: @@ceobeColor 1px solid;
+      background-color: @@ceobeColor;
+    }
+
+    .el-button:hover {
+      border-color: @@ceobeLightColor;
+      color: @@ceobeColor;
+      background-color: @@ceobeVeryLightColor;
     }
   }
 }
