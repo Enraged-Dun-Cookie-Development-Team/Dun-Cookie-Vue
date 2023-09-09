@@ -339,6 +339,7 @@ import PlatformHelper from '../common/platform/PlatformHelper';
 import 'animate.css';
 import AvailableDataSourceMeta from '../common/sync/AvailableDataSourceMeta';
 import { DataSourceMeta } from '../common/datasource/DataSourceMeta';
+import { updateSettings } from '../common/SettingsUpdater';
 
 export default {
   name: 'App',
@@ -437,29 +438,51 @@ export default {
     // 导入设置
     settingImport(file) {
       const reader = new FileReader();
+      // 成功回调
       reader.onload = (res) => {
-        const { result } = res.target; // 得到字符串
-        const data = JSON.parse(result); // 解析成json对象
-        this.$confirm('解析文件成功，是否覆盖当前设置?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-        })
-          .then(() => {
-            this.saveSetting('form', data);
+        /**
+         * 读取时用的是readAsText，这里可以确定是string类型
+         * @type {string}
+         */
+        const result = res.target.result; // 得到字符串
+        const importSettings = JSON.parse(result); // 解析成json对象
+        // 不知道onload能不能塞异步函数，这里还是定义一个临时函数吧
+        async function fn() {
+          const newSettings = await updateSettings(importSettings);
+          let msg = '解析文件成功，是否覆盖当前设置?';
+          if (newSettings.version !== importSettings.version) {
+            msg += '(检测到当前导入的是旧版本设置，将自动转换成新版本设置)';
+          }
+          this.$confirm(msg, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
           })
-          .catch(() => {
-            this.$message('你决定了不覆盖当前设置项');
-          });
-      }; // 成功回调
+            .then(() => {
+              this.saveSetting('form', importSettings);
+            })
+            .catch((action) => {
+              if (action === 'cancel' || action === 'close') {
+                this.$message('你决定了不覆盖当前设置项');
+              } else {
+                console.error(action);
+              }
+            });
+        }
+        fn()
+          .then()
+          .catch((e) => console.error(e));
+      };
+      // 失败回调
       reader.onerror = (err) => {
+        console.error(err);
         this.$message.error('没有导入成功，心态崩了啊！');
         this.$notify({
           title: '貌似检测到导出失败',
           message: '可以加QQ群 362860473 后将文件发送给管理员查看检测问题',
           duration: 0,
         });
-      }; // 失败回调
+      };
       reader.readAsText(new Blob([file.raw]), 'utf-8'); // 按照utf-8编码解析
     },
     // 低频时间选择

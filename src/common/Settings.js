@@ -330,10 +330,9 @@ class Settings {
    */
   saveSettings() {
     const promise = PlatformHelper.Storage.saveLocalStorage('settings', this);
-    console.log(this);
     promise.then(() => {
       PlatformHelper.Message.send(MESSAGE_SETTINGS_UPDATE, this);
-      DebugUtil.debugLog(0, 'update settings: ', this);
+      DebugUtil.debugLog(0, '已更新插件设置: ', this);
     });
     return promise;
   }
