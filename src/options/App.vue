@@ -106,24 +106,6 @@
               </div>
               <div class="flex">
                 <div class="body-menu-content-card">
-                  <div class="content-card-title">微博登录</div>
-                  <div class="content-card-description">微博端API有些账户需要登录才能查看最新微博</div>
-                  <div class="content-card-content flex-between">
-                    <div>
-                      点击“查看是否登录成功”按钮，如果能看到微博个人信息，则登录成功<br />
-                      如果是登录注册页面，请点击“进入登录页面”按钮重新登录
-                    </div>
-                    <div>
-                      <el-button size="small" @click="openUrl('https://passport.weibo.cn/signin/login')">
-                        进入登录页面
-                      </el-button>
-                      <el-button size="small" @click="openUrl('https://m.weibo.cn/profile/')">
-                        查看是否登录成功
-                      </el-button>
-                    </div>
-                  </div>
-                </div>
-                <div class="body-menu-content-card">
                   <div class="content-card-title">蹲饼频率</div>
                   <div class="content-card-description">是多少秒刷新一次，不是一秒刷新多少次</div>
                   <div class="content-card-content flex-between">
@@ -140,22 +122,6 @@
                         :min="12"
                         :max="3600"
                       />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="flex">
-                <div class="body-menu-content-card">
-                  <div class="content-card-title">游戏平台</div>
-                  <div class="content-card-description">明日方舟游戏常用平台</div>
-                  <div class="content-card-content flex-between">
-                    <div>分为IOS、安卓、B服</div>
-                    <div>
-                      <el-radio-group v-model="settings.dun.gamePlatform">
-                        <el-radio label="official/IOS"> IOS </el-radio>
-                        <el-radio label="official/Android"> 安卓 </el-radio>
-                        <el-radio label="b/Android"> Bilibili </el-radio>
-                      </el-radio-group>
                     </div>
                   </div>
                 </div>
@@ -236,21 +202,15 @@
                   </div>
                 </div>
               </div>
-              <div class="body-menu-content-card">
-                <div class="content-card-title">排序规则</div>
-                <div class="content-card-description">统一无详细时间的卡片在当天信息流内的位置</div>
+              <!-- <div class="body-menu-content-card">
+                <div class="content-card-title">蹲饼总开关</div>
+                <div class="content-card-description">蹲饼总开关</div>
                 <div class="content-card-content flex-between">
                   <div>
-                    有些数据比如通讯组是只有日期没有时间的，在数据列表内无法排序，在此统一调整。<br />保存的时候可能会因为数据排序改变而发送错误的推送，请忽略。
-                  </div>
-                  <div>
-                    <el-radio-group v-model="settings.dun.sortModeForOnlyDate">
-                      <el-radio :label="1"> 当天内容顶部 </el-radio>
-                      <el-radio :label="2"> 当天内容底部 </el-radio>
-                    </el-radio-group>
+                    <el-switch v-model="settings.open" />
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
             <div ref="view-form" class="view view-form">
               <div class="flex">
@@ -305,36 +265,6 @@
                 </div>
               </div>
               <!-- <div class="flex"> -->
-              <div class="body-menu-content-card">
-                <div class="content-card-title">分类显示</div>
-                <div class="content-card-description">用标签栏分类或者直接全部展示</div>
-                <div class="content-card-content flex-between">
-                  <div>
-                    <div v-if="settings.display.showByTag">
-                      <!--<el-form-item prop="display.defaultTag"-->
-                      <!--              :rules="{required: true, message: '请选择默认标签', trigger: 'blur'}">-->
-                      <!--  -->
-                      <!--</el-form-item>-->
-                      <el-select v-model="settings.display.defaultTag" placeholder="选择默认标签">
-                        <el-option
-                          v-for="source in currentDataSource"
-                          :key="source.idStr"
-                          :label="source.name"
-                          :value="source.idStr"
-                        >
-                          <div style="display: flex; align-items: center">
-                            <img :src="source.icon" style="margin-right: 10px; width: 25px" />
-                            <span>{{ source.name }}</span>
-                          </div>
-                        </el-option>
-                      </el-select>
-                    </div>
-                  </div>
-                  <div style="height: 40px; line-height: 40px">
-                    <el-switch v-model="settings.display.showByTag" />
-                  </div>
-                </div>
-              </div>
               <div class="body-menu-content-card">
                 <div class="content-card-title">窗口化</div>
                 <div class="content-card-content">

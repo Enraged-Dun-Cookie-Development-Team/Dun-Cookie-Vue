@@ -61,7 +61,7 @@ function ExtensionInit() {
   // 开始蹲饼！
   Settings.doAfterInit(() => {
     DebugUtil.debugLog(0, '开始蹲饼');
-    cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
+    if (Settings.open) cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
     setTimeout(() => {
       ServerUtil.getVersionInfo();
       ServerUtil.getAnnouncementInfo(true);
@@ -73,7 +73,7 @@ function ExtensionInit() {
     if (!changed.enableDataSources && !changed.customDataSources && !changed.dun) {
       return;
     }
-    cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
+    if (Settings.open) cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
   });
 
   // 监听前台事件
@@ -112,7 +112,7 @@ function ExtensionInit() {
 
   // 监听安装更新
   PlatformHelper.Lifecycle.addInstalledListener((details) => {
-    if (details.reason === 'install') {
+    if (details.reason === 'install' || !Settings.open) {
       PlatformHelper.Tabs.createWithExtensionFile(PAGE_WELCOME);
     }
     if (details.reason === 'update' || details.reason === 'install') {
