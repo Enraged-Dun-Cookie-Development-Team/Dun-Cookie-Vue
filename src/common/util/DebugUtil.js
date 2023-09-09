@@ -40,6 +40,10 @@ class DebugUtil {
     this.debugConsoleOutput(level, 'error', ...data);
   }
 
+  debugLogTrace(level, ...data) {
+    this.debugConsoleOutput(level, 'trace', ...data);
+  }
+
   debugConsoleOutput(level, type, info, ...data) {
     if (DEBUG_LEVEL >= level || level === 0) {
       // 为避免启用调试模式时控制台输出信息太多导致卡死，输出的调试信息超过限制时清除之前输出的调试信息

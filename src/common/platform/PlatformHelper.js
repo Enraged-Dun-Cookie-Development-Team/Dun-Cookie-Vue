@@ -2,6 +2,7 @@ import ChromePlatform from './impl/ChromePlatform';
 import FirefoxPlatform from './impl/FirefoxPlatform';
 import EdgePlatform from './impl/EdgePlatform';
 import UnknownPlatform from './impl/UnknownPlatform';
+import { DEBUG_LEVEL } from '../Constants';
 
 // TODO 还有一些以注释形式存在于其它文件中的chrome调用，之后记得处理
 /**
@@ -123,7 +124,13 @@ export default class PlatformHelper {
 
 class MessageHelper {
   send(type, data) {
-    return currentPlatform.sendMessage(type, data);
+    const promise = currentPlatform.sendMessage(type, data);
+    if (DEBUG_LEVEL >= 7) {
+      promise.then((result) => {
+        DebugUtil.debugLog(7, 'sendMessage response：', result);
+      });
+    }
+    return promise;
   }
 
   registerListener(id, type, listener) {

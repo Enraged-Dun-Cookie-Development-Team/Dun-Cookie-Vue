@@ -1,5 +1,6 @@
 import { PLATFORM_FIREFOX } from '../../Constants';
 import BrowserPlatform from './BrowserPlatform';
+import DebugUtil from '../../util/DebugUtil';
 
 // 火狐无法储存被vue监视的对象，故在内部做json编解码
 const _InternalJsonCompatible = '__INTERNAL_JSON__';
@@ -64,6 +65,7 @@ export default class FirefoxPlatform extends BrowserPlatform {
       })
       .catch((err) => {
         if (this.__shouldIgnoreMessageError(err.message)) {
+          DebugUtil.debugLog(8, `response - ${type} - ignore error: ${err.message}`);
           return;
         }
         return Promise.reject(err);

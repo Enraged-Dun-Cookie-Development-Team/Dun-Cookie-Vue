@@ -106,6 +106,7 @@ class DataSynchronizer {
     for (const listener of this.initListeners) {
       listener(this.proxy);
     }
+    DebugUtil.debugLog(6, `同步对象${this.key}初始化完成`, this.target);
   }
 
   __handleFirstUpdateListener(changed) {
@@ -323,6 +324,7 @@ function createSyncData(target, key, mode, shouldPersist = false, updateHandler 
       throw new Error('unsupported sync mode: ' + mode);
   }
   keyMap[key] = true;
+  // noinspection JSUnresolvedReference
   global.SyncData[key] = synchronizer.proxy;
   console.log(`已启用同步数据：${key}`, synchronizer.proxy);
   return synchronizer.proxy;
