@@ -7,7 +7,7 @@
       更新可以去github上查看<a href="https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue"
         >Dun-Cookie-Vue</a
       ><br />
-      也可以去Chrome，Firefox和Edge应用商店查看更新，但是因为审核机制，更新速度不确定<br />
+      也可以去Chrome，Firefox和Edge应用商店查看更新<br />
     </span>
   </div>
 </template>
