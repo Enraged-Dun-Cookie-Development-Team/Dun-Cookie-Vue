@@ -120,6 +120,12 @@ const quickJump = {
       radius: true,
     },
     {
+      url: 'https://ass.m-j.bond/story',
+      name: '剧情播放器',
+      img: '/assets/image/link/ass.m-j.bond.png',
+      radius: true,
+    },
+    {
       url: 'https://penguin-stats.cn/',
       name: '企鹅物流',
       img: '/assets/image/link/penguin_stats_logo.webp',
@@ -129,12 +135,6 @@ const quickJump = {
       url: 'https://arkn.lolicon.app/#/',
       name: '明日方舟工具箱',
       img: '/assets/image/link/arktools.png',
-      radius: true,
-    },
-    {
-      url: 'https://kokodayo.fun/',
-      name: 'Kokodayo',
-      img: '/assets/image/link/kkdy.png',
       radius: true,
     },
     {
