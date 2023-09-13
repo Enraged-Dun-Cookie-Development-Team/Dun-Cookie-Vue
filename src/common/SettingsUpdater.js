@@ -117,6 +117,20 @@ async function updateV3ToV4(oldSettings) {
       }
     })
     .filter((it) => !!it);
+  if (oldSettings.dun.gamePlatform) {
+    const platform = oldSettings.dun.gamePlatform;
+    if (platform.toLowerCase().indexOf('android') >= 0) {
+      newSettings.enableDataSources.push({ type: 'arknights-game:bulletin-list', dataId: 'Android' });
+      newSettings.enableDataSources.push({ type: 'arknights-game:version', dataId: 'Android' });
+    } else if (platform.toLowerCase().indexOf('ios') >= 0) {
+      newSettings.enableDataSources.push({ type: 'arknights-game:bulletin-list', dataId: 'IOS' });
+      newSettings.enableDataSources.push({ type: 'arknights-game:version', dataId: 'IOS' });
+    } else if (platform.toLowerCase().indexOf('bilibili') >= 0) {
+      newSettings.enableDataSources.push({ type: 'arknights-game:bulletin-list', dataId: 'Bilibili' });
+      newSettings.enableDataSources.push({ type: 'arknights-game:version', dataId: 'Bilibili' });
+    }
+  }
+  delete newSettings.dun.gamePlatform;
 
   await new Promise((resolve) => {
     AvailableDataSourceMeta.doAfterInit(() => {

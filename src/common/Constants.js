@@ -80,7 +80,8 @@ const PAGE_POPUP_WINDOW = 'popup.html';
 const PAGE_PROTOCOL = 'protocol.html';
 const PAGE_GITHUB_REPO = 'https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue';
 const PAGE_GITHUB_TEAM = 'https://github.com/Enraged-Dun-Cookie-Development-Team';
-const PAGE_CEOBECANTEEN_WEB = 'https://www.ceobecanteen.top/#/#sponsor';
+const PAGE_CEOBECANTEEN_WEB_ABOUT_US = 'https://www.ceobecanteen.top/#/#about-us';
+const PAGE_CEOBECANTEEN_WEB_SPONSOR = 'https://www.ceobecanteen.top/#/#sponsor';
 
 export {
   PAGE_WELCOME,
@@ -90,7 +91,8 @@ export {
   PAGE_UPDATE,
   PAGE_GITHUB_REPO,
   PAGE_TIME,
-  PAGE_CEOBECANTEEN_WEB,
+  PAGE_CEOBECANTEEN_WEB_ABOUT_US,
+  PAGE_CEOBECANTEEN_WEB_SPONSOR,
   PAGE_GITHUB_TEAM,
   PAGE_PROTOCOL,
 };
@@ -105,70 +107,6 @@ const CANTEEN_CDN_SERVER_API_BASE = 'https://server-cdn.ceobecanteen.top/api/v1/
 
 // TODO 直接从common.js里面copy过来的，等待优化重构
 const quickJump = {
-  source: [
-    {
-      url: 'https://ak.hypergryph.com/#information',
-      name: '官方网站',
-      img: '/assets/image/icon/mrfz.ico',
-    },
-    {
-      url: 'https://space.bilibili.com/161775300/dynamic',
-      name: '官方哔哩哔哩',
-      img: '/assets/image/icon/bili.ico',
-    },
-    {
-      url: 'https://weibo.com/arknights',
-      name: '官方微博',
-      img: '/assets/image/icon/weibo.ico',
-    },
-    {
-      url: 'https://space.bilibili.com/1265652806/dynamic',
-      name: '明日方舟终末地',
-      img: '/assets/image/icon/arkzmd.jpg',
-    },
-    {
-      url: 'https://weibo.com/u/6441489862',
-      name: '朝陇山微博',
-      img: '/assets/image/icon/cho3Weibo.jpg',
-      radius: true,
-    },
-    {
-      url: 'https://weibo.com/u/7506039414',
-      name: '一拾山微博',
-      img: '/assets/image/icon/ys3Weibo.jpg',
-      radius: true,
-    },
-    {
-      url: 'https://monster-siren.hypergryph.com/',
-      name: '塞壬官网',
-      img: '/assets/image/icon/sr.ico',
-      radius: true,
-    },
-    {
-      url: 'https://weibo.com/u/7499841383',
-      name: '泰拉记事社微博',
-      img: '/assets/image/icon/tlWeibo.jpg',
-      radius: true,
-    },
-    {
-      url: 'https://terra-historicus.hypergryph.com/',
-      name: '泰拉记事社官网',
-      img: '/assets/image/icon/tl.jpg',
-      radius: true,
-    },
-    {
-      url: 'https://weibo.com/u/7461423907',
-      name: '鹰角网络微博',
-      img: '/assets/image/icon/yjwb.jpg',
-      radius: true,
-    },
-    {
-      url: 'https://ak.hypergryph.com/anime',
-      name: '明日方舟动画官网',
-      img: '/assets/image/icon/anime.png',
-      radius: true,
-    },
-  ],
   tool: [
     {
       url: 'http://prts.wiki/',
@@ -183,6 +121,12 @@ const quickJump = {
       radius: true,
     },
     {
+      url: 'https://ass.m-j.bond/',
+      name: '剧情播放器',
+      img: '/assets/image/link/ass.m-j.bond.png',
+      radius: true,
+    },
+    {
       url: 'https://penguin-stats.cn/',
       name: '企鹅物流',
       img: '/assets/image/link/penguin_stats_logo.webp',
@@ -192,12 +136,6 @@ const quickJump = {
       url: 'https://arkn.lolicon.app/#/',
       name: '明日方舟工具箱',
       img: '/assets/image/link/arktools.png',
-      radius: true,
-    },
-    {
-      url: 'https://kokodayo.fun/',
-      name: 'Kokodayo',
-      img: '/assets/image/link/kkdy.png',
       radius: true,
     },
     {

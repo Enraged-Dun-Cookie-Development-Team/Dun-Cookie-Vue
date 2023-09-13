@@ -54,9 +54,9 @@
           class="drawer-btn-area drawer-btn-area-origin"
           :class="{ 'drawer-btn-area-scroll': isOriginScroll }"
         >
-          <el-tooltip v-for="item in quickJump.source" :key="item.img" :content="item.name" placement="top">
-            <el-button size="small" @click="openUrl(item.url)">
-              <img class="btn-icon" :class="item.radius ? 'radius' : ''" :src="item.img" />
+          <el-tooltip v-for="item in quickJump.source" :key="item.avatar" :content="item.nickname" placement="top">
+            <el-button size="small" @click="openUrl(item.jump_url)">
+              <img class="btn-icon" :class="'radius'" :src="item.avatar" />
             </el-button>
           </el-tooltip>
         </div>
@@ -100,7 +100,7 @@
         </el-row>
         <div style="position: absolute; right: 10px; bottom: 10px" class="sign">
           Powered By
-          <p @click="openGithubTeam">小刻食堂</p>
+          <p @click="openAboutUs">小刻食堂</p>
         </div>
       </el-drawer>
       <!-- 置顶按钮 -->
@@ -131,7 +131,7 @@
             </div>
             <div>【本数据仅会在打开列表时刷新】</div>
           </div>
-          <div class="count-down-area" @click="openWebsite">
+          <div class="count-down-area" @click="openSponsor">
             <div>支持食堂</div>
           </div>
           <Menu-Icon
@@ -183,9 +183,10 @@ import {
   PLATFORM_FIREFOX,
   quickJump,
   SHOW_VERSION,
-  PAGE_CEOBECANTEEN_WEB,
   PAGE_GITHUB_TEAM,
   PAGE_WELCOME,
+  PAGE_CEOBECANTEEN_WEB_ABOUT_US,
+  PAGE_CEOBECANTEEN_WEB_SPONSOR,
 } from '../common/Constants';
 import PlatformHelper from '../common/platform/PlatformHelper';
 import 'animate.css';
@@ -208,6 +209,8 @@ export default {
         });
       }
     });
+    const _quickJump = quickJump;
+    _quickJump.source = [];
     return {
       san: SanInfo,
       currentSan: SanInfo.currentSan,
@@ -224,7 +227,7 @@ export default {
       drawerFirst: false, // 这次打开窗口是否打开过二级菜单
       toolDrawer: false, // 理智计算器菜单
       isReload: false, // 是否正在刷新
-      quickJump: quickJump,
+      quickJump: _quickJump,
       dayInfo: dayInfo,
       loading: true, // 初始化加载
       onlineDayInfo: {},
@@ -257,6 +260,9 @@ export default {
   methods: {
     openUrl: PlatformHelper.Tabs.create,
     init() {
+      ServerUtil.getServerDataSourceInfo(true).then((data) => {
+        this.quickJump.source = data.serverDataSourceList.filter((it) => !!it.jump_url);
+      });
       // this.menuIconInit();
       DunInfo.doAfterUpdate((data) => {
         this.oldDunCount = data.counter;
@@ -553,8 +559,12 @@ export default {
       PlatformHelper.Tabs.create(PAGE_GITHUB_TEAM);
     },
 
-    openWebsite() {
-      PlatformHelper.Tabs.create(PAGE_CEOBECANTEEN_WEB);
+    openAboutUs() {
+      PlatformHelper.Tabs.create(PAGE_CEOBECANTEEN_WEB_ABOUT_US);
+    },
+
+    openSponsor() {
+      PlatformHelper.Tabs.create(PAGE_CEOBECANTEEN_WEB_SPONSOR);
     },
 
     onSlideChange() {
