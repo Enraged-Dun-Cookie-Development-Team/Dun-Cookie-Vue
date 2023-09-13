@@ -177,7 +177,7 @@
 </template>
 
 <script>
-import { CURRENT_VERSION, dayInfo, PAGE_UPDATE, quickJump } from '../../common/Constants';
+import { CURRENT_VERSION, dayInfo, PAGE_UPDATE } from '../../common/Constants';
 import MyElTimelineItem from './MyTimeLineItem';
 import DefaultItem from './items/DefaultItem';
 import Settings from '../../common/Settings';
@@ -231,7 +231,6 @@ export default {
       onlineSpeakList: [],
       isNew: false,
       dayInfo: dayInfo,
-      quickJump: quickJump,
       loading: true, // 初始化加载
       cardList: [],
       currentTag: Settings.display.defaultTag,

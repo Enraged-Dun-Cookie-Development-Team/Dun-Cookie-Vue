@@ -63,7 +63,7 @@ export default class ServerUtil {
   }
 
   /**
-   * @return {Promise<{allConfig: *, allComboId: string, idMap: Record<string, string>, dataSourceList: DataSourceMeta[], fetchTime: number} | undefined>}
+   * @return {Promise<{allConfig: *, allComboId: string, idMap: Record<string, string>, dataSourceList: DataSourceMeta[], serverDataSourceList: {nickname: string, avatar: string, jump_url: string | null}[], fetchTime: number} | undefined>}
    */
   static async getServerDataSourceInfo(forceCache = false) {
     let serverDataSourceInfo = await PlatformHelper.Storage.getLocalStorage('serverDataSourceInfo');
@@ -74,11 +74,7 @@ export default class ServerUtil {
       /**
        * @type {{nickname: string, avatar: string, unique_id: string, jump_url: string, platform: string, db_unique_key: string, datasource: string}[]}
        */
-      const rawDataSourceList = await ServerUtil.requestApi('GET', 'canteen/config/datasource/list');
-      // for (const source of rawDataSourceList) {
-      //   source.type = ...;
-      //   source.dataId = ...;
-      // }
+      const serverDataSourceList = await ServerUtil.requestApi('GET', 'canteen/config/datasource/list');
       /**
        * @type {Record<string, string>}
        */
@@ -86,7 +82,7 @@ export default class ServerUtil {
       /**
        * @type {DataSourceMeta[]}
        */
-      const dataSourceList = rawDataSourceList.map((source) => {
+      const dataSourceList = serverDataSourceList.map((source) => {
         const type = source.datasource;
         const dataId = source.db_unique_key;
         idMap[`${type}:${dataId}`] = source.unique_id;
@@ -105,7 +101,7 @@ export default class ServerUtil {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ datasource_push: rawDataSourceList.map((it) => it.unique_id) }),
+          body: JSON.stringify({ datasource_push: serverDataSourceList.map((it) => it.unique_id) }),
         })
       ).datasource_comb_id;
 
@@ -145,6 +141,7 @@ export default class ServerUtil {
 
       serverDataSourceInfo = {
         dataSourceList: dataSourceList,
+        serverDataSourceList: serverDataSourceList,
         idMap: idMap,
         allComboId: allComboId,
         allConfig: allConfig,
