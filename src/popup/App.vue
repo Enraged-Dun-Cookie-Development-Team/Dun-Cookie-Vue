@@ -100,7 +100,7 @@
         </el-row>
         <div style="position: absolute; right: 10px; bottom: 10px" class="sign">
           Powered By
-          <p @click="openGithubTeam">小刻食堂</p>
+          <p @click="openAboutUs">小刻食堂</p>
         </div>
       </el-drawer>
       <!-- 置顶按钮 -->
@@ -131,7 +131,7 @@
             </div>
             <div>【本数据仅会在打开列表时刷新】</div>
           </div>
-          <div class="count-down-area" @click="openWebsite">
+          <div class="count-down-area" @click="openSponsor">
             <div>支持食堂</div>
           </div>
           <Menu-Icon
@@ -183,9 +183,10 @@ import {
   PLATFORM_FIREFOX,
   quickJump,
   SHOW_VERSION,
-  PAGE_CEOBECANTEEN_WEB,
   PAGE_GITHUB_TEAM,
   PAGE_WELCOME,
+  PAGE_CEOBECANTEEN_WEB_ABOUT_US,
+  PAGE_CEOBECANTEEN_WEB_SPONSOR,
 } from '../common/Constants';
 import PlatformHelper from '../common/platform/PlatformHelper';
 import 'animate.css';
@@ -558,8 +559,12 @@ export default {
       PlatformHelper.Tabs.create(PAGE_GITHUB_TEAM);
     },
 
-    openWebsite() {
-      PlatformHelper.Tabs.create(PAGE_CEOBECANTEEN_WEB);
+    openAboutUs() {
+      PlatformHelper.Tabs.create(PAGE_CEOBECANTEEN_WEB_ABOUT_US);
+    },
+
+    openSponsor() {
+      PlatformHelper.Tabs.create(PAGE_CEOBECANTEEN_WEB_SPONSOR);
     },
 
     onSlideChange() {

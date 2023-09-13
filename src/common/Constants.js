@@ -80,8 +80,8 @@ const PAGE_POPUP_WINDOW = 'popup.html';
 const PAGE_PROTOCOL = 'protocol.html';
 const PAGE_GITHUB_REPO = 'https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue';
 const PAGE_GITHUB_TEAM = 'https://github.com/Enraged-Dun-Cookie-Development-Team';
-// const PAGE_CEOBECANTEEN_WEB = 'https://www.ceobecanteen.top/#/#sponsor';
-const PAGE_CEOBECANTEEN_WEB = 'http://localhost:8082/#/#mo-install';
+const PAGE_CEOBECANTEEN_WEB_ABOUT_US = 'https://www.ceobecanteen.top/#/#about-us';
+const PAGE_CEOBECANTEEN_WEB_SPONSOR = 'https://www.ceobecanteen.top/#/#sponsor';
 
 export {
   PAGE_WELCOME,
@@ -91,7 +91,8 @@ export {
   PAGE_UPDATE,
   PAGE_GITHUB_REPO,
   PAGE_TIME,
-  PAGE_CEOBECANTEEN_WEB,
+  PAGE_CEOBECANTEEN_WEB_ABOUT_US,
+  PAGE_CEOBECANTEEN_WEB_SPONSOR,
   PAGE_GITHUB_TEAM,
   PAGE_PROTOCOL,
 };
