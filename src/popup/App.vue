@@ -55,7 +55,7 @@
           :class="{ 'drawer-btn-area-scroll': isOriginScroll }"
         >
           <el-tooltip v-for="item in quickJump.source" :key="item.avatar" :content="item.nickname" placement="top">
-            <el-button size="small" @click="item.jump_url && openUrl(item.jump_url)">
+            <el-button size="small" @click="openUrl(item.jump_url)">
               <img class="btn-icon" :class="'radius'" :src="item.avatar" />
             </el-button>
           </el-tooltip>
@@ -261,7 +261,7 @@ export default {
     openUrl: PlatformHelper.Tabs.create,
     init() {
       ServerUtil.getServerDataSourceInfo(true).then((data) => {
-        this.quickJump.source = data.serverDataSourceList;
+        this.quickJump.source = data.serverDataSourceList.filter((it) => !!it.jump_url);
       });
       // this.menuIconInit();
       DunInfo.doAfterUpdate((data) => {
