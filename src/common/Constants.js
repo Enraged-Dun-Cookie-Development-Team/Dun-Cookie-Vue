@@ -120,7 +120,7 @@ const quickJump = {
       radius: true,
     },
     {
-      url: 'https://ass.m-j.bond/story',
+      url: 'https://ass.m-j.bond/',
       name: '剧情播放器',
       img: '/assets/image/link/ass.m-j.bond.png',
       radius: true,
