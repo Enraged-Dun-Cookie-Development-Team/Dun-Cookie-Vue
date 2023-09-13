@@ -76,6 +76,8 @@ export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
         await CookieHandler.handleServer(result);
       } else if (cookie_id === null) {
         CookieHandler.handleServerNull();
+      } else {
+        CookieHandler.handleServerNotChange();
       }
       this.__setAvailable();
     } catch (e) {

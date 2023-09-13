@@ -95,6 +95,7 @@ class CookieHandler {
   static handleLocal = async (fetchData) => {
     if (!fetchData.success) return;
     DunInfo.counter++;
+    DunInfo.lastDunTime = Date.now();
 
     /**
      * @param list
@@ -174,8 +175,14 @@ class CookieHandler {
       });
   };
 
+  static handleServerNotChange() {
+    DunInfo.counter++;
+    DunInfo.lastDunTime = Date.now();
+  }
+
   static handleServerNull() {
     DunInfo.counter++;
+    DunInfo.lastDunTime = Date.now();
     CardList.list = [];
   }
 
@@ -183,6 +190,7 @@ class CookieHandler {
     const items = ServerUtil.transformCookieListToItemList(data.cookies);
 
     DunInfo.counter++;
+    DunInfo.lastDunTime = Date.now();
     if (LastServerList && LastServerList.length > 0) {
       const map = Object.fromEntries(LastServerList.map((it) => [it.id, true]));
       const newCookies = items.filter((it) => !map[it.id]);
