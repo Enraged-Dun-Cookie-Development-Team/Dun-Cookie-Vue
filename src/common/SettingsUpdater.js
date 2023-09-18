@@ -131,6 +131,8 @@ async function updateV3ToV4(oldSettings) {
     }
   }
   delete newSettings.dun.gamePlatform;
+  delete newSettings.display.showByTag;
+  delete newSettings.display.defaultTag;
 
   await new Promise((resolve) => {
     AvailableDataSourceMeta.doAfterInit(() => {
