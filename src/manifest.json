@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
   "name": "小刻食堂 - 明日方舟蹲饼器 - Arknights-Ceobe-Canteen",
-  "version": "3.4.3",
+  "version": "4.0.0",
   "description": "自由的兔兔把烙好的饼到处藏，就由小刻把它们都找出来吧！",
-  "author": "KazeLiu & LuoWuTeng & YunShan",
+  "author": "Ceobe Canteen",
   "icons": {
     "48": "assets/image/icon.png",
     "128": "assets/image/icon.png"
