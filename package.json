@@ -1,6 +1,6 @@
 {
   "name": "dun-cookies-vue",
-  "version": "0.1.0",
+  "version": "4.0.1",
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve",
