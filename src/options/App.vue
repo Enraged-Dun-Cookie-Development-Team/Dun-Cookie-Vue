@@ -352,7 +352,6 @@ export default {
       dunInfo: DunInfo,
       settings: Settings,
       selectDataSource: Settings.enableDataSources.map((it) => DataSourceMeta.id(it)),
-      // TODO 暂时没有按tag显示，之后看情况补回或彻底删除
       currentDataSource: [],
       defSourcesList: AvailableDataSourceMeta.getAllList(),
       marks: {

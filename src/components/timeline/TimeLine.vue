@@ -84,24 +84,11 @@
         </el-carousel>
       </div>
     </el-card>
-    <el-tabs v-if="settings.display.showByTag" v-model="currentTag" :stretch="true" @tab-click="selectListByTag">
-      <el-tab-pane v-for="item of cardListAll" :key="item.dataSource" :label="item.dataSource" :name="item.dataSource">
-        <span slot="label">
-          <el-tooltip effect="dark" :content="getDataSourceById(item.dataSource).name" placement="top">
-            <img class="title-img" :src="getDataSourceById(item.dataSource).icon" />
-          </el-tooltip>
-        </span>
-      </el-tab-pane>
-    </el-tabs>
     <div class="content-timeline-shadow"></div>
     <el-timeline
       v-if="LazyLoaded"
       ref="elTimelineArea"
-      :class="[
-        settings.display.windowMode ? 'window' : '',
-        settings.display.showByTag ? 'tag' : '',
-        searchPenguinStatus ? 'hidden-when-search-penguins' : '',
-      ]"
+      :class="[settings.display.windowMode ? 'window' : '', searchPenguinStatus ? 'hidden-when-search-penguins' : '']"
     >
       <MyElTimelineItem
         v-for="(item, index) in filterCardList"
@@ -198,12 +185,6 @@ export default {
   components: { MyElTimelineItem, Search, SelectImageToCopy, UpdateInfoNotice },
   props: { cardListAll: { type: Array, required: true }, imgShow: Boolean },
   data() {
-    Settings.doAfterInit((settings) => (this.currentTag = settings.display.defaultTag));
-    Settings.doAfterUpdate((settings, changed) => {
-      if (changed.display && changed.display.defaultTag) {
-        this.currentTag = settings.display.defaultTag;
-      }
-    });
     PlatformHelper.Storage.getLocalStorage('server_secondary_page_cookie_id').then((value) => {
       this.nextPageOffsetId = value;
     });
@@ -233,7 +214,6 @@ export default {
       dayInfo: dayInfo,
       loading: true, // 初始化加载
       cardList: [],
-      currentTag: Settings.display.defaultTag,
       filterText: '',
       filterTextSubject: filterTextSubject,
       filterCardList: [],
@@ -259,10 +239,10 @@ export default {
   },
   watch: {
     cardListAll() {
-      this.selectListByTag(false);
+      this.handleListChange(false);
     },
     extraCardList() {
-      this.selectListByTag(false);
+      this.handleListChange(false);
     },
     serverSearchCardList() {
       this.filterCardList = this.serverSearchCardList;
@@ -373,12 +353,8 @@ export default {
       }
       return this.getDataSourceById(item.dataSource).type.replace(':', '__');
     },
-    selectListByTag(emitEvent = true) {
-      if (this.settings.display.showByTag) {
-        //this.cardList = this.cardListByTag[this.currentTag];
-      } else {
-        this.cardList = [...this.cardListAll, ...this.extraCardList];
-      }
+    handleListChange(emitEvent = true) {
+      this.cardList = [...this.cardListAll, ...this.extraCardList];
       if (emitEvent) {
         this.$emit('cardListChange');
       }
@@ -1010,16 +986,8 @@ img[lazy='error'] {
       transform: scale(1.1);
     }
 
-    &.tag {
-      height: 368px;
-    }
-
     &.window {
       height: calc(100vh - 184px);
-
-      &.tag {
-        height: calc(100vh - 230px);
-      }
     }
 
     .is-top-info {
