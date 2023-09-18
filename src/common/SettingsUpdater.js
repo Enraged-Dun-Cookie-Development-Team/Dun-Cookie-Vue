@@ -131,6 +131,7 @@ async function updateV3ToV4(oldSettings) {
     }
   }
   delete newSettings.dun.gamePlatform;
+  // TODO 由于之前漏删，存在少数用户这里有无效配置，下次配置版本号升级的时候再次删除这两个字段(并且把这段话复制过去)
   delete newSettings.display.showByTag;
   delete newSettings.display.defaultTag;
 
