@@ -67,7 +67,8 @@ export default class ServerUtil {
    */
   static async getServerDataSourceInfo(forceCache = false) {
     let serverDataSourceInfo = await PlatformHelper.Storage.getLocalStorage('serverDataSourceInfo');
-    if (serverDataSourceInfo && (forceCache || Date.now() - serverDataSourceInfo.fetchTime < 30 * 60 * 1000)) {
+    const cacheExpireTime = 48 * 60 * 60 * 1000;
+    if (serverDataSourceInfo && (forceCache || Date.now() < serverDataSourceInfo.fetchTime + cacheExpireTime)) {
       return serverDataSourceInfo;
     }
     try {
