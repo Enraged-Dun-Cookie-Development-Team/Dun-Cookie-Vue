@@ -87,6 +87,7 @@
         <el-divider content-position="left"> 调整蹲饼器 </el-divider>
         <el-row class="menu-button-area" type="flex" justify="center">
           <el-button type="primary" icon="el-icon-star-off" @click="openGithub"> 点个star </el-button>
+          <el-button type="primary" icon="el-icon-refresh" @click="openUpdate"> 检查插件更新 </el-button>
           <el-button type="primary" :loading="isReload" icon="el-icon-refresh" @click="reload"> 刷新 </el-button>
           <el-button
             v-if="settings.open && settings.feature.options"

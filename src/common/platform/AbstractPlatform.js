@@ -48,6 +48,14 @@ export class AbstractPlatform {
     throw new Error(unsupportedTip);
   }
 
+  /**
+   * 获取扩展信息
+   * @return {Promise<any>}
+   */
+  getExtensionInfo() {
+    throw new Error(unsupportedTip);
+  }
+
   // TODO 关于数据同步
   //  如果使用浏览器自带的同步功能：
   //  Chrome可以简单地将storage.local改为storage.sync，Firefox需要在改为storage.sync后参考以下链接进行相应设置(Edge不清楚，按理说应该是和Chrome一样的)

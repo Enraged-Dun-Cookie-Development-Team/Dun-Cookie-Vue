@@ -19,6 +19,10 @@ export default class FirefoxPlatform extends BrowserPlatform {
     return browser.runtime.getPlatformInfo();
   }
 
+  getExtensionInfo() {
+    return browser.management.getSelf();
+  }
+
   getAllWindow() {
     return browser.windows.getAll();
   }

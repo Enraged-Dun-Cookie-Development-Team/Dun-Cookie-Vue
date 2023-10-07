@@ -68,9 +68,13 @@ function ExtensionInit() {
     } else {
       DebugUtil.debugLog(0, '蹲饼开关已关闭');
     }
-    setTimeout(() => {
-      ServerUtil.getVersionInfo();
-      ServerUtil.getAnnouncementInfo(true);
+    setTimeout(async () => {
+      const extensionInfo = await PlatformHelper.Extension.getExtensionInfo();
+      // 商店安装的不检查更新
+      if (extensionInfo.installType !== 'normal') {
+        void ServerUtil.getVersionInfo();
+      }
+      void ServerUtil.getAnnouncementInfo(true);
     }, 600000);
   });
 
