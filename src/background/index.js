@@ -2,6 +2,7 @@ import Settings from '../common/Settings';
 import NotificationUtil from '../common/util/NotificationUtil';
 import SanInfo from '../common/sync/SanInfo';
 import {
+  ENABLE_FEATURES,
   MESSAGE_CHANGE_COUNTDOWN,
   MESSAGE_GET_COUNTDOWN,
   MESSAGE_SAN_GET,
@@ -58,6 +59,9 @@ function buildMainCookieFetchConfig(enable = true) {
 const MAIN_FETCH_CONFIG_KEY = 'main';
 
 function ExtensionInit() {
+  if (ENABLE_FEATURES.length > 0) {
+    DebugUtil.debugLog(0, '已启用特性：', ENABLE_FEATURES);
+  }
   // PlatformHelper.BrowserAction.setBadge('Beta', [255, 0, 0, 255]);
   // 开始蹲饼！
   Settings.doAfterInit((initSettings) => {

@@ -14,10 +14,6 @@ const IS_DEBUG = DEBUG_LEVEL > 0;
  * 需要注意的是如果输出日志太多会导致打卡开发者控制台(F12)会非常卡，所以不要动前面的<code>IS_DEBUG &&</code>以避免忘记修改导致生产版本出问题
  */
 const DEBUG_LOG = IS_DEBUG && true;
-/**
- * 是否使用测试用的数据源URL
- */
-const USE_TEST_URL = IS_DEBUG && false;
 
 /**
  * 当前配置文件版本号
@@ -32,7 +28,13 @@ const CURRENT_VERSION = process.env.VUE_APP_PROJECT_VERSION;
  */
 const SHOW_VERSION = CURRENT_VERSION + (IS_DEBUG ? '【调试模式】' : '');
 
-export { IS_DEBUG, DEBUG_LEVEL, DEBUG_LOG, USE_TEST_URL, CURRENT_SETTING_VERSION, CURRENT_VERSION, SHOW_VERSION };
+/**
+ * 启用的增强特性
+ * @type {string[]}
+ */
+const ENABLE_FEATURES = (process.env.VUE_APP_ENABLE_FEATURES || '').split(',').filter((v) => v.length > 0);
+
+export { IS_DEBUG, DEBUG_LEVEL, DEBUG_LOG, CURRENT_SETTING_VERSION, CURRENT_VERSION, SHOW_VERSION, ENABLE_FEATURES };
 // endregion
 
 // region 各种参数，主要用于测试模式
