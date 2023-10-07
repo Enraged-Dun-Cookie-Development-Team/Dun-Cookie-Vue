@@ -131,7 +131,6 @@ async function updateV3ToV4(oldSettings) {
     }
   }
   delete newSettings.dun.gamePlatform;
-  // TODO 由于之前漏删，存在少数用户这里有无效配置，下次配置版本号升级的时候再次删除这两个字段(并且把这段话复制过去)
   delete newSettings.display.showByTag;
   delete newSettings.display.defaultTag;
 
@@ -145,6 +144,24 @@ async function updateV3ToV4(oldSettings) {
       resolve();
     });
   });
+
+  console.log('升级V4完毕，新配置：');
+  console.log(newSettings);
+  return newSettings;
+}
+
+function updateV4ToV5(oldSettings) {
+  console.log('从V4配置升级：');
+  console.log(oldSettings);
+  const newSettings = deepAssign({}, oldSettings);
+
+  // 由于上个版本更新后再次进行了修改，上个版本部分用户漏删了这两个字段，这个版本再次执行删除
+  delete newSettings.display.showByTag;
+  delete newSettings.display.defaultTag;
+
+  if (newSettings.open) {
+    newSettings.agreeLicense = 'v1';
+  }
 
   console.log('升级V4完毕，新配置：');
   console.log(newSettings);
@@ -174,6 +191,9 @@ async function updateSettings(oldSettings) {
         break;
       case 3:
         currentSettings = await updateV3ToV4(currentSettings);
+        break;
+      case 4:
+        currentSettings = updateV4ToV5(currentSettings);
         break;
     }
     currentVersion++;

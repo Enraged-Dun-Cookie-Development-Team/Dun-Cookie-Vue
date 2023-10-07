@@ -134,12 +134,14 @@ function ExtensionInit() {
 
   // 监听安装更新
   PlatformHelper.Lifecycle.addInstalledListener((details) => {
-    if (details.reason === 'install' || !Settings.open) {
-      PlatformHelper.Tabs.createWithExtensionFile(PAGE_WELCOME);
-    }
-    if (details.reason === 'update' || details.reason === 'install') {
-      PlatformHelper.Storage.saveLocalStorage('version-notice', false);
-    }
+    Settings.doAfterInit(() => {
+      if (details.reason === 'install' || !Settings.agreeLicense) {
+        PlatformHelper.Tabs.createWithExtensionFile(PAGE_WELCOME);
+      }
+      if (details.reason === 'update' || details.reason === 'install') {
+        PlatformHelper.Storage.saveLocalStorage('version-notice', false);
+      }
+    });
   });
 
   // 监听扩展图标被点击，用于打开窗口化的弹出页面

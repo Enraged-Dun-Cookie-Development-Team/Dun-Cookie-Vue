@@ -70,13 +70,6 @@ const config = {
       title: '倒计时模块',
       chunks: ['chunk-vendors', 'chunk-common', 'time'],
     },
-    protocol: {
-      entry: 'src/welcome/protocol.js',
-      template: 'public/index.html',
-      filename: 'protocol.html',
-      title: '用户协议',
-      chunks: ['chunk-vendors', 'chunk-common', 'protocol'],
-    },
   },
   css: {
     extract: true,

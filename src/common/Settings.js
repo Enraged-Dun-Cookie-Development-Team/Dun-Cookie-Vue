@@ -27,6 +27,8 @@ class Settings {
   logo = 'icon.png';
   // 蹲饼总开关
   open = false;
+  // 同意协议版本
+  agreeLicense = '';
   /**
    * 启用的数据源
    * @type {{type: string, dataId: string}[]}
@@ -277,6 +279,11 @@ class Settings {
     initPromise = (async () => {
       await this.reloadSettings();
       // 这部分主要是初始化一些固定的配置信息，只需要初始化的时候执行一次
+
+      // 如果未同意协议则强制关闭蹲饼
+      if (!this.agreeLicense) {
+        this.open = false;
+      }
 
       // 未知平台或移动端强制禁用窗口化
       if (PlatformHelper.PlatformType === PLATFORM_UNKNOWN || PlatformHelper.isMobile) {

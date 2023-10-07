@@ -22,7 +22,7 @@ const USE_TEST_URL = IS_DEBUG && false;
 /**
  * 当前配置文件版本号
  */
-const CURRENT_SETTING_VERSION = 4;
+const CURRENT_SETTING_VERSION = 5;
 /**
  * 当前插件版本号
  */
@@ -77,7 +77,6 @@ const PAGE_DONATE = 'donate.html';
 const PAGE_UPDATE = 'update.html';
 const PAGE_TIME = 'time.html';
 const PAGE_POPUP_WINDOW = 'popup.html';
-const PAGE_PROTOCOL = 'protocol.html';
 const PAGE_GITHUB_REPO = 'https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue';
 const PAGE_GITHUB_TEAM = 'https://github.com/Enraged-Dun-Cookie-Development-Team';
 const PAGE_CEOBECANTEEN_WEB_ABOUT_US = 'https://www.ceobecanteen.top/#about-us';
@@ -94,7 +93,6 @@ export {
   PAGE_CEOBECANTEEN_WEB_ABOUT_US,
   PAGE_CEOBECANTEEN_WEB_SPONSOR,
   PAGE_GITHUB_TEAM,
-  PAGE_PROTOCOL,
 };
 // endregion
 
