@@ -173,7 +173,6 @@ import TimeUtil from '../../common/util/TimeUtil';
 import Search from '../Search';
 import { deepAssign } from '../../common/util/CommonFunctions';
 import PlatformHelper from '../../common/platform/PlatformHelper';
-import InsiderUtil from '../../common/util/InsiderUtil';
 import ServerUtil from '../../common/util/ServerUtil';
 import SelectImageToCopy from '@/components/SelectImageToCopy';
 import UpdateInfoNotice from '../UpdateInfoNotice';
@@ -506,26 +505,12 @@ export default {
         });
       }
     },
-    changeInsider() {
-      const [newLevel, validCode] = InsiderUtil.calcInsiderLevel(this.filterText, this.insiderCodeMap);
-      if (validCode) {
-        this.settings.insider.code = this.filterText;
-        this.settings.insider.level = newLevel;
-        this.settings.saveSettings();
-        this.$message({
-          center: true,
-          message: '成功启用高级功能',
-          type: 'success',
-        });
-      }
-    },
     // 监听键盘
     listenKeyBord() {
       document.addEventListener('keyup', (e) => {
         if (e.key === 'Enter') {
           this.searchShow = !this.searchShow;
           if (!this.searchShow) {
-            this.changeInsider();
             this.$refs.SearchModel.clearText();
             this.filterText = null;
             this.$emit('cardListChange');
