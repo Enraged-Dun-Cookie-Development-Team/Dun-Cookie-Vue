@@ -79,10 +79,11 @@ function ExtensionInit() {
     if (!changed.enableDataSources && !changed.customDataSources && !changed.dun && !changed.open) {
       return;
     }
-    // 关闭蹲饼就只能重载插件才能生效了，好消息是目前没有关闭蹲饼的需求
     if (settings.open) {
       DebugUtil.debugLog(0, '开始蹲饼');
       cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
+    } else {
+      cookieFetcherManager.removeFetchConfig(MAIN_FETCH_CONFIG_KEY);
     }
   });
 
