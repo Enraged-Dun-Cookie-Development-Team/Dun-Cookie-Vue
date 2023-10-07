@@ -79,7 +79,7 @@ function ExtensionInit() {
 
   Settings.doAfterUpdate((settings, changed) => {
     // 只有更新了数据源/蹲饼频率/蹲饼开关的时候才刷新，避免无意义的网络请求
-    if (!changed.enableDataSources && !changed.customDataSources && !changed.dun && !changed.open) {
+    if (!changed.enableDataSources && !changed.dun && !changed.open) {
       return;
     }
     if (settings.open) {

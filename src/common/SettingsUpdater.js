@@ -158,6 +158,8 @@ function updateV4ToV5(oldSettings) {
   // 由于上个版本更新后再次进行了修改，上个版本部分用户漏删了这两个字段，这个版本再次执行删除
   delete newSettings.display.showByTag;
   delete newSettings.display.defaultTag;
+  // 这个是上版本完全忘记删的
+  delete newSettings.customDataSources;
 
   if (newSettings.open) {
     newSettings.agreeLicense = 'v1';

@@ -34,10 +34,6 @@ class Settings {
    * @type {{type: string, dataId: string}[]}
    */
   enableDataSources = [];
-  /**
-   * 自定义数据源
-   */
-  customDataSources = [];
 
   /**
    * 蹲饼相关配置
