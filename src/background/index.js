@@ -3,7 +3,6 @@ import NotificationUtil from '../common/util/NotificationUtil';
 import SanInfo from '../common/sync/SanInfo';
 import {
   MESSAGE_CHANGE_COUNTDOWN,
-  MESSAGE_FORCE_REFRESH,
   MESSAGE_GET_COUNTDOWN,
   MESSAGE_SAN_GET,
   MESSAGE_WEIBO_ADD_REFERER,
@@ -102,9 +101,6 @@ function ExtensionInit() {
     if (message.type) {
       const data = message.data;
       switch (message.type) {
-        // TODO 不接受强制刷新 后续要清理相关代码
-        case MESSAGE_FORCE_REFRESH:
-          return false;
         case MESSAGE_SAN_GET:
           return SanInfo;
         case MESSAGE_CHANGE_COUNTDOWN:

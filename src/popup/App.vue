@@ -88,7 +88,6 @@
         <el-row class="menu-button-area" type="flex" justify="center">
           <el-button type="primary" icon="el-icon-star-off" @click="openGithub"> 点个star </el-button>
           <el-button type="primary" icon="el-icon-refresh" @click="openUpdate"> 检查插件更新 </el-button>
-          <el-button type="primary" :loading="isReload" icon="el-icon-refresh" @click="reload"> 刷新 </el-button>
           <el-button
             v-if="settings.open && settings.feature.options"
             type="primary"
@@ -174,7 +173,6 @@ import DunInfo from '../common/sync/DunInfo';
 import MenuIcon from '@/popup/MenuIcon';
 import {
   dayInfo,
-  MESSAGE_FORCE_REFRESH,
   MESSAGE_GET_COUNTDOWN,
   PAGE_DONATE,
   PAGE_GITHUB_REPO,
@@ -483,28 +481,6 @@ export default {
         type: 'success',
       });
     },
-
-    // 更改高度，适应手机端
-    // calcHeight() {
-    //   this.allHeight =
-    //     innerWidth >= 700 ? 599 : (innerHeight / innerWidth) * 700;
-    // },
-
-    // 强刷
-    reload() {
-      this.isReload = true;
-      this.$message({
-        offset: 50,
-        center: true,
-        message: '正在找饼，请保持网络畅通',
-        type: 'warning',
-      });
-      PlatformHelper.Message.send(MESSAGE_FORCE_REFRESH).then(() => {
-        this.drawer = false;
-        this.isReload = false;
-      });
-    },
-
     // 检测滚动条高度，大于600出现回顶部按钮
     handleScroll() {
       let scrollArea =
