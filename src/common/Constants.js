@@ -26,7 +26,7 @@ const CURRENT_SETTING_VERSION = 5;
 /**
  * 当前插件版本号
  */
-const CURRENT_VERSION = '4.0.2';
+const CURRENT_VERSION = process.env.VUE_APP_PROJECT_VERSION;
 /**
  * 展示用的版本号
  */
