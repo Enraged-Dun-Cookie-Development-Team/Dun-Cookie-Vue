@@ -27,7 +27,6 @@ const chainWebpack = (config) => {
             },
           },
           { from: 'src/Dun-Cookies-Info.json', to: '[name][ext]' },
-          { from: 'src/test', to: 'test' },
           { from: 'node_modules/element-ui/lib/theme-chalk/fonts/', to: 'css/fonts/[name][ext]' },
         ],
       },
