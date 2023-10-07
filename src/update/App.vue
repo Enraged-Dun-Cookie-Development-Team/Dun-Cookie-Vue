@@ -86,7 +86,7 @@ export default {
     // 检查一次更新
     getUpdateInfo() {
       ServerUtil.getVersionInfo(false).then((data) => {
-        this.isLatestVersion = Settings.JudgmentVersion(data.version, CURRENT_VERSION);
+        this.isLatestVersion = !Settings.JudgmentVersion(data.version, CURRENT_VERSION);
         this.updateInfo = data;
       });
     },
