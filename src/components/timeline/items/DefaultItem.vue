@@ -36,7 +36,7 @@
 <script>
 import Settings from '../../../common/Settings';
 import PlatformHelper from '../../../common/platform/PlatformHelper';
-import { DataItem } from '../../../common/DataItem';
+import { CookieItem } from '../../../common/CookieItem';
 
 export const elementVisibleInPercent = (element) => {
   return new Promise((resolve, reject) => {
@@ -58,7 +58,7 @@ export const elementVisibleInPercent = (element) => {
 
 export default {
   name: 'DefaultItem',
-  props: { item: { type: DataItem, required: true }, showImage: Boolean },
+  props: { item: { type: CookieItem, required: true }, showImage: Boolean },
   data() {
     return {
       settings: Settings,

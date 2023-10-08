@@ -100,7 +100,7 @@ export class LocalCookieFetcher extends AbstractCookieFetcher {
       config,
       (fetchData) => {
         if (fetchData.success) {
-          void CookieHandler.handleLocal(fetchData);
+          void CookieHandler.handleLocal(fetchConfig.id, fetchData);
         } else {
           console.log(fetchData.error);
         }

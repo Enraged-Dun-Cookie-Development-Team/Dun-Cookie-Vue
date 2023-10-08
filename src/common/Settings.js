@@ -1,5 +1,5 @@
 import { CURRENT_SETTING_VERSION, MESSAGE_SETTINGS_UPDATE, PAGE_POPUP_WINDOW, PLATFORM_UNKNOWN } from './Constants';
-import { deepAssign } from './util/CommonFunctions';
+import { deepAssign, deepDiff } from './util/CommonFunctions';
 import { updateSettings } from './SettingsUpdater';
 import PlatformHelper from './platform/PlatformHelper';
 import DebugUtil from './util/DebugUtil';
@@ -268,8 +268,14 @@ class Settings {
 
   constructor() {
     PlatformHelper.Message.registerListener('settings', MESSAGE_SETTINGS_UPDATE, (data) => {
-      const changed = {};
-      deepAssign(this, data, changed);
+      const changed = deepDiff(this, data);
+      const deleteKeys = Object.keys(this).filter((it) => !data.hasOwnProperty(it));
+      deleteKeys.forEach((key) => delete this[key]);
+      for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+          this[key] = data[key];
+        }
+      }
       DebugUtil.debugLog(0, '配置已更新：', changed);
       this.__updateWindowMode();
       for (const listener of updateListeners) {
@@ -305,7 +311,9 @@ class Settings {
               this.doAfterInit(() => {
                 // 异步的时候二次检测是好文明，虽然大概率不需要
                 if (!this.enableDataSources || !(this.enableDataSources.length > 0)) {
-                  this.enableDataSources = available.getAllList().map((it) => ({ type: it.type, dataId: it.dataId }));
+                  this.enableDataSources = available
+                    .getPresetList()
+                    .map((it) => ({ type: it.type, dataId: it.dataId }));
                   void this.saveSettings();
                 }
               });

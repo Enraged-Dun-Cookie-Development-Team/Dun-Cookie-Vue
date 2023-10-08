@@ -34,14 +34,13 @@ registerFetcher('server', CeobeCanteenCookieFetcher);
 registerFetcher('local', LocalCookieFetcher);
 
 /**
- * TODO 之后这个要改成能够自定义的
- *
  * @return {FetchConfig}
  */
 function buildMainCookieFetchConfig(enable = true) {
   return new FetchConfig(
+    MAIN_FETCH_CONFIG_KEY,
     enable,
-    Settings.enableDataSources,
+    Settings.enableDataSources.filter((it) => !it.custom),
     Settings.dun.intervalTime,
     Settings.dun.autoLowFrequency
       ? Settings.dun.lowFrequencyTime.map((it) => {
@@ -56,7 +55,42 @@ function buildMainCookieFetchConfig(enable = true) {
   );
 }
 
+/**
+ * @return {FetchConfig}
+ */
+function buildCustomCookieFetchConfig(enable = true) {
+  return new FetchConfig(
+    CUSTOM_FETCH_CONFIG_KEY,
+    enable,
+    Settings.enableDataSources.filter((it) => it.custom),
+    Settings.dun.intervalTime,
+    Settings.dun.autoLowFrequency
+      ? Settings.dun.lowFrequencyTime.map((it) => {
+          let realHour;
+          if (it < 12) realHour = it + 12;
+          else realHour = it - 12;
+          return realHour;
+        })
+      : undefined,
+    Settings.dun.autoLowFrequency ? Settings.dun.timeOfLowFrequency : 1,
+    [new FetcherStrategy('default', 'local')]
+  );
+}
+
 const MAIN_FETCH_CONFIG_KEY = 'main';
+const CUSTOM_FETCH_CONFIG_KEY = 'custom';
+
+function updateFetch() {
+  // 主配置在配置页面保证了不可能为空，自定义配置可能为空
+  cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
+  /* IFTRUE_feature__custom_datasource */
+  if (Settings.enableDataSources.filter((it) => it.custom).length > 0) {
+    cookieFetcherManager.updateFetchConfig(CUSTOM_FETCH_CONFIG_KEY, buildCustomCookieFetchConfig(true));
+  } else {
+    cookieFetcherManager.removeFetchConfig(CUSTOM_FETCH_CONFIG_KEY);
+  }
+  /* FITRUE_feature__custom_datasource */
+}
 
 function ExtensionInit() {
   if (ENABLE_FEATURES.length > 0) {
@@ -67,7 +101,7 @@ function ExtensionInit() {
   Settings.doAfterInit((initSettings) => {
     if (initSettings.open) {
       DebugUtil.debugLog(0, '开始蹲饼');
-      cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
+      updateFetch();
     } else {
       DebugUtil.debugLog(0, '蹲饼开关已关闭');
     }
@@ -88,9 +122,10 @@ function ExtensionInit() {
     }
     if (settings.open) {
       DebugUtil.debugLog(0, '开始蹲饼');
-      cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
+      updateFetch();
     } else {
       cookieFetcherManager.removeFetchConfig(MAIN_FETCH_CONFIG_KEY);
+      cookieFetcherManager.removeFetchConfig(CUSTOM_FETCH_CONFIG_KEY);
     }
   });
 
@@ -125,7 +160,7 @@ function ExtensionInit() {
 
   // 监听标签
   PlatformHelper.Notification.addClickListener((id) => {
-    let item = CardList.list.find((x) => x.id === id);
+    let item = CardList.getFirstPageList().find((x) => x.id === id);
     if (item) {
       PlatformHelper.Tabs.create(item.jumpUrl);
     } else if (id === 'update') {

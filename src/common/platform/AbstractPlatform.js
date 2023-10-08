@@ -320,7 +320,7 @@ export class AbstractPlatform {
 
   /**
    * 生成某条数据的分享图片
-   * @param dataItem {DataItem}
+   * @param dataItem {CookieItem}
    * @param iconUrl {string}
    * @param dataSource {DataSourceMeta}
    * @param imageUrl {string?}

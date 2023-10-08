@@ -1,6 +1,6 @@
 import { DataSource, DataSourceTypeInfo } from '../DataSource';
 import TimeUtil from '../../util/TimeUtil';
-import { DataItem } from '../../DataItem';
+import { CookieItem } from '../../CookieItem';
 import Settings from '../../Settings';
 
 const typeInfo = new DataSourceTypeInfo('ak.hypergryph.com/anime', 500 * 1000);
@@ -31,7 +31,7 @@ export class ArknightsAnimeDataSource extends DataSource {
       data.data.list.forEach((x) => {
         const time = new Date(`${x.displayDate} ${Settings.getTimeBySortMode()}`);
         list.push(
-          DataItem.builder(this.dataName)
+          CookieItem.builder(this.dataName)
             .id(x.cid)
             .timeForSort(time.getTime())
             .timeForDisplay(TimeUtil.format(time, 'yyyy-MM-dd'))

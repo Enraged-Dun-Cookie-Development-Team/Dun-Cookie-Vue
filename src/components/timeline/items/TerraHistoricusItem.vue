@@ -35,11 +35,11 @@
 // 用于TerraHistoricusDataSource的特殊组件
 import PlatformHelper from '../../../common/platform/PlatformHelper';
 import Settings from '../../../common/Settings';
-import { DataItem } from '../../../common/DataItem';
+import { CookieItem } from '../../../common/CookieItem';
 
 export default {
   name: 'TerraHistoricusItem',
-  props: { item: { type: DataItem, required: true }, showImage: Boolean },
+  props: { item: { type: CookieItem, required: true }, showImage: Boolean },
   data() {
     return {
       settings: Settings,

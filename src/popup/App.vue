@@ -198,8 +198,8 @@ export default {
   data() {
     CardList.doAfterUpdate((data) => {
       const oldIds = this.cardList.map((it) => it.id);
-      this.cardList = data.list;
-      if (oldIds.length > 0 && data.list.find((it) => oldIds.indexOf(it.id) === -1)) {
+      this.cardList = data.getFirstPageList();
+      if (oldIds.length > 0 && data.getFirstPageList().find((it) => oldIds.indexOf(it.id) === -1)) {
         this.$message({
           offset: 50,
           center: true,
@@ -216,7 +216,7 @@ export default {
       show: false,
       LazyLoaded: false,
       isNew: false,
-      cardList: CardList.list,
+      cardList: CardList.getFirstPageList(),
       currentVersion: SHOW_VERSION,
       onlineSpeakList: [],
       oldDunCount: 0,
@@ -303,83 +303,7 @@ export default {
         }
       });
     },
-    // 初始化菜单图标
-    menuIconInit() {
-      // this.janvas = new janvas.Canvas({
-      //   container: "#menu-btn", // #容器 id 或者是容器引用
-      //   props: {
-      //     color: "#23ade5", // 颜色采用 HEX 格式，起始颜色，也即最开始展示的颜色
-      //     backgroundColor: "#ffffff" // 中止颜色，也即背景颜色
-      //   },
-      //   methods: {
-      //     init: function () { // 控件第一次初始化时调用，仅调用一次
-      //       var ctx = this.$ctx, // 绘图上下文 ctx
-      //           w = this.$width, h = this.$height, // 控件的宽与高
-      //           ox = w / 2, oy = h / 2; // 控件 origin 中心点
-      //       var center = new janvas.Point(ox, oy), // 持有中心点的 Point 对象
-      //           start = new janvas.Point(ox, 0), // 为了计算矩形起始坐标的 Point 对象
-      //           end = new janvas.Point(w, oy); // 为了计算矩形宽度的 Point 对象
-      //       end.inline(start, 0.5 + 0.191 / 2); // 计算矩形处于终点处的右上角坐标
-      //       var size = Math.floor(end.distance(start)); // 矩形大小，即宽高
-      //       start.subtract(center).rotate(-Math.PI / 4).add(center); // 计算矩形起始点
-      //       var rect = this.rect = new janvas.Rect(ctx, // 初始化矩形对象
-      //           Math.ceil(start.x), Math.ceil(start.y), size, size, ox, oy);
-      //       rect.getStyle().setFillStyle(this.color); // 设置颜色
-      //       size = w - rect.getStartX() * 2; // 此为计算边界矩形大小
-      //       var border = this.border = new janvas.Rect(ctx, // 边界矩形大小，为了避免多余像素
-      //           rect.getStartX() + 1, rect.getStartY() + 1, size - 2, size - 2, ox, oy);
-      //       border.getStyle().setFillStyle(this.backgroundColor);
-      //       var sRgbStart = new janvas.Rgb().fromHexString(this.color).sRgbInverseCompanding(),
-      //           sRgbEnd = new janvas.Rgb().fromHexString(this.backgroundColor).sRgbInverseCompanding(),
-      //           rgb = new janvas.Rgb();
-      //       this.rotate = new janvas.Animation(this.$raf, 500, 0, // 动画精灵对象
-      //           function () {
-      //             if (this.status) {
-      //               this.angle = this.angleRange, this.angleRange = -Math.PI / 4;
-      //               this.sRgbStart = sRgbEnd, this.sRgbEnd = sRgbStart;
-      //             } else {
-      //               this.angle = 0, this.angleRange = Math.PI / 4;
-      //               this.sRgbStart = sRgbStart, this.sRgbEnd = sRgbEnd;
-      //             }
-      //           },
-      //           function (ratio) {
-      //             ratio = janvas.Utils.ease.out.cubic(ratio);
-      //             rect.getMatrix().setAngle(this.angle + this.angleRange * ratio);
-      //             border.getMatrix().setAngle(this.angle + this.angleRange * ratio);
-      //             janvas.Rgb.sRgbMixing(this.sRgbStart, this.sRgbEnd, ratio, rgb);
-      //             rect.getStyle().setFillStyle(rgb.sRgbCompanding().toRgbString());
-      //             janvas.Rgb.sRgbMixing(this.sRgbStart, this.sRgbEnd, 1 - ratio, rgb);
-      //             border.getStyle().setFillStyle(rgb.sRgbCompanding().toRgbString());
-      //           },
-      //           function (forward) {
-      //             if (forward) this.status = !this.status;
-      //           }
-      //       );
-      //     },
-      //     update: function (timestamp, interval) { // 动画回调
-      //       this.rotate.update(interval);
-      //     },
-      //     draw: function () { // 绘制逻辑部分
-      //       this.$clear();
-      //       this.border.fill(); // 背景矩形绘制
-      //       var rect = this.rect;
-      //       for (var i = 0; i < 4; i++) {
-      //         rect.fill(); // 小矩形绘制，并依中心点旋转 90 度，从而绘制四个矩形
-      //         rect.getMatrix().setAngle(rect.getMatrix().getAngle() + Math.PI / 2);
-      //       }
-      //     }
-      //   },
-      //   callbacks: {
-      //     start: function () {
-      //       if (this.rotate.isRunning()) this.rotate.reverse();
-      //       else this.rotate.start();
-      //     }
-      //   }
-      // });
-    },
-    menuIconClick() {
-      // this.janvas.start();
-    },
+    menuIconClick() {},
     async firefoxWarning() {
       const flagKey = 'firefox-collapse-warning-flag';
       const flagDisableValue = 'disabled';

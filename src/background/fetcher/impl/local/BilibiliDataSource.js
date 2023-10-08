@@ -1,5 +1,5 @@
 import TimeUtil from '../../../../common/util/TimeUtil';
-import { DataItem, RetweetedInfo } from '../../../../common/DataItem';
+import { CookieItem, RetweetedInfo } from '../../../../common/CookieItem';
 import Settings from '../../../../common/Settings';
 
 function normalizeWhitespaceCharacter(text, foldBlankChar = false) {
@@ -136,7 +136,7 @@ export class BilibiliDataSource {
       default:
         return;
     }
-    const builder = DataItem.builder(sourceId)
+    const builder = CookieItem.builder(sourceId)
       .id(dynamic.id_str)
       .timeForSort(time.getTime())
       .timeForDisplay(TimeUtil.format(time, 'yyyy-MM-dd hh:mm:ss'))

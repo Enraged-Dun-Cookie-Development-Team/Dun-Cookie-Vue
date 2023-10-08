@@ -1,9 +1,13 @@
-import { enable } from 'core-js/internals/internal-metadata';
-
 /**
  * 蹲饼配置
  */
 export class FetchConfig {
+  /**
+   * 蹲饼配置的ID
+   * @type {string}
+   */
+  id;
+
   /**
    * 是否启用该蹲饼配置
    * @type {boolean}
@@ -47,6 +51,7 @@ export class FetchConfig {
   fetcherStrategyList;
 
   constructor(
+    id,
     enable,
     enableDataSourceList,
     globalInterval,
@@ -54,6 +59,7 @@ export class FetchConfig {
     lowFrequencyMultiple,
     fetcherStrategyList
   ) {
+    this.id = id;
     this.enable = enable;
     this.enableDataSourceList = enableDataSourceList;
     this.globalInterval = globalInterval;

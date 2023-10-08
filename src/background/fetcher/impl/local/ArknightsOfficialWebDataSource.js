@@ -1,6 +1,6 @@
 import Settings from '../../../../common/Settings';
 import TimeUtil from '../../../../common/util/TimeUtil';
-import { DataItem } from '../../../../common/DataItem';
+import { CookieItem } from '../../../../common/CookieItem';
 import PlatformHelper from '../../../../common/platform/PlatformHelper';
 
 /**
@@ -16,7 +16,7 @@ export class ArknightsOfficialWebDataSource {
     let url = $('.articleItemLink', $item).attr('href');
     let time = new Date(`${date} ${Settings.getTimeBySortMode()}`);
     let judgment = url.match(/\d+/g);
-    return DataItem.builder(sourceId)
+    return CookieItem.builder(sourceId)
       .id(parseInt(judgment[0]))
       .timeForSort(time.getTime())
       .timeForDisplay(TimeUtil.format(time, 'yyyy-MM-dd'))

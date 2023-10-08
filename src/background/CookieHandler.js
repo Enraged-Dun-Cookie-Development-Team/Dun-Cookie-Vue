@@ -2,7 +2,7 @@ import { distance } from 'fastest-levenshtein';
 import Settings from '../common/Settings';
 import NotificationUtil from '../common/util/NotificationUtil';
 import DunInfo from '../common/sync/DunInfo';
-import { FetchDataHandler } from '@enraged-dun-cookie-development-team/cookie-fetcher';
+import { FetchData } from '@enraged-dun-cookie-development-team/cookie-fetcher';
 import { DataSourceMeta } from '../common/datasource/DataSourceMeta';
 import { BilibiliDataSource } from './fetcher/impl/local/BilibiliDataSource';
 import { WeiboDataSource } from './fetcher/impl/local/WeiboDataSource';
@@ -12,7 +12,7 @@ import { MonsterSirenDataSource } from './fetcher/impl/local/MonsterSirenDataSou
 import { ArknightsOfficialWebDataSource } from './fetcher/impl/local/ArknightsOfficialWebDataSource';
 import { TerraHistoricusDataSource } from './fetcher/impl/local/TerraHistoricusDataSource';
 import AvailableDataSourceMeta from '../common/sync/AvailableDataSourceMeta';
-import { DataItem } from '../common/DataItem';
+import { CookieItem } from '../common/CookieItem';
 import CardList from '../common/sync/CardList';
 import ServerUtil from '../common/util/ServerUtil';
 import { registerUrlToAddReferer } from './request_interceptor';
@@ -56,7 +56,7 @@ function isDuplicateCookie(sourceName, cookieContent) {
 /**
  * 新饼推送通知
  * @param source {DataSourceMeta}
- * @param newCookieList {DataItem[]}
+ * @param newCookieList {CookieItem[]}
  * @private
  */
 function tryNotice(source, newCookieList) {
@@ -89,10 +89,9 @@ let LastServerList = [];
  */
 class CookieHandler {
   /**
-   *
-   * @type {FetchDataHandler}
+   * @type {(configId: string, fetchData: FetchData) => Promise<void>}
    */
-  static handleLocal = async (fetchData) => {
+  static handleLocal = async (configId, fetchData) => {
     if (!fetchData.success) return;
     DunInfo.counter++;
     DunInfo.lastDunTime = Date.now();
@@ -100,7 +99,7 @@ class CookieHandler {
     /**
      * @param list
      * @param sourceId
-     * @return {Promise<DataItem[]>}
+     * @return {Promise<CookieItem[]>}
      */
     const transform = (list, sourceId) => {
       return Promise.all(
@@ -158,7 +157,7 @@ class CookieHandler {
     if (allCookies && allCookies.length > 0) {
       LocalCardMap[fetchData.source.idStr] = allCookies;
     }
-    CardList.list = Object.values(LocalCardMap)
+    CardList.firstPageCookieList[configId] = Object.values(LocalCardMap)
       .reduce((acc, cur) => [...acc, ...cur], [])
       .sort((x, y) => {
         // 时间戳大的优先
@@ -173,6 +172,7 @@ class CookieHandler {
         }
         return ret;
       });
+    CardList.sendUpdateAtNextTick();
   };
 
   static handleServerNotChange() {
@@ -180,13 +180,14 @@ class CookieHandler {
     DunInfo.lastDunTime = Date.now();
   }
 
-  static handleServerNull() {
+  static handleServerNull(configId) {
     DunInfo.counter++;
     DunInfo.lastDunTime = Date.now();
-    CardList.list = [];
+    CardList.firstPageCookieList[configId] = [];
+    CardList.sendUpdateAtNextTick();
   }
 
-  static async handleServer(data) {
+  static async handleServer(configId, data) {
     const items = ServerUtil.transformCookieListToItemList(data.cookies);
 
     DunInfo.counter++;
@@ -210,7 +211,8 @@ class CookieHandler {
     }
 
     LastServerList = items;
-    CardList.list = items;
+    CardList.firstPageCookieList[configId] = items;
+    CardList.sendUpdateAtNextTick();
     await PlatformHelper.Storage.saveLocalStorage('server_cookie_list_next_page_id', data.next_page_id || '');
   }
 

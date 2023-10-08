@@ -1,6 +1,6 @@
 import Settings from '../../../../common/Settings';
 import TimeUtil from '../../../../common/util/TimeUtil';
-import { DataItem, RetweetedInfo } from '../../../../common/DataItem';
+import { CookieItem, RetweetedInfo } from '../../../../common/CookieItem';
 
 /**
  * 微博数据源。
@@ -17,7 +17,7 @@ export class WeiboDataSource {
       let dynamicInfo = data.mblog;
       let weiboId = data.mblog.bid;
       let time = new Date(dynamicInfo.created_at);
-      const builder = DataItem.builder(sourceId)
+      const builder = CookieItem.builder(sourceId)
         .id(weiboId)
         .timeForSort(time.getTime())
         .timeForDisplay(TimeUtil.format(new Date(time), 'yyyy-MM-dd hh:mm:ss'))
