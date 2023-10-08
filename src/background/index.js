@@ -40,7 +40,7 @@ function buildMainCookieFetchConfig(enable = true) {
   return new FetchConfig(
     MAIN_FETCH_CONFIG_KEY,
     enable,
-    Settings.enableDataSources.filter((it) => !it.custom),
+    Settings.enableDataSources,
     Settings.dun.intervalTime,
     Settings.dun.autoLowFrequency
       ? Settings.dun.lowFrequencyTime.map((it) => {
@@ -63,7 +63,7 @@ function buildCustomCookieFetchConfig(enable = true) {
   return new FetchConfig(
     CUSTOM_FETCH_CONFIG_KEY,
     enable,
-    Settings.enableDataSources.filter((it) => it.custom),
+    Settings.extraFeature.enableCustomDataSources,
     Settings.dun.intervalTime,
     Settings.dun.autoLowFrequency
       ? Settings.dun.lowFrequencyTime.map((it) => {
@@ -86,7 +86,7 @@ function updateFetch() {
   // 主配置在配置页面保证了不可能为空，自定义配置可能为空
   cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
   /* IFTRUE_feature__custom_datasource */
-  if (Settings.enableDataSources.filter((it) => it.custom).length > 0) {
+  if (Settings.extraFeature.enableCustomDataSources?.length > 0) {
     cookieFetcherManager.updateFetchConfig(CUSTOM_FETCH_CONFIG_KEY, buildCustomCookieFetchConfig(true));
   } else {
     cookieFetcherManager.removeFetchConfig(CUSTOM_FETCH_CONFIG_KEY);
@@ -98,7 +98,6 @@ function ExtensionInit() {
   if (ENABLE_FEATURES.length > 0) {
     DebugUtil.debugLog(0, '已启用特性：', ENABLE_FEATURES);
   }
-  // PlatformHelper.BrowserAction.setBadge('Beta', [255, 0, 0, 255]);
   // 开始蹲饼！
   Settings.doAfterInit((initSettings) => {
     if (initSettings.open) {
@@ -119,7 +118,14 @@ function ExtensionInit() {
 
   Settings.doAfterUpdate((settings, changed) => {
     // 只有更新了数据源/蹲饼频率/蹲饼开关的时候才刷新，避免无意义的网络请求
-    if (!changed.enableDataSources && !changed.customDataSources && !changed.dun && !changed.open) {
+    if (
+      !changed.enableDataSources &&
+      !changed.dun &&
+      !changed.open &&
+      /* IFTRUE_feature__custom_datasource */
+      !changed.extraFeature?.enableCustomDataSources
+      /* FITRUE_feature__custom_datasource */
+    ) {
       return;
     }
     if (settings.open) {

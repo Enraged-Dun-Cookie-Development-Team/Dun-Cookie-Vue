@@ -1,6 +1,5 @@
 <template>
   <div :class="settings.getColorTheme()">
-    <!-- <div id="app" :style="'height:' + allHeight + 'px'"> -->
     <div id="app">
       <!-- 理智计算 -->
       <el-drawer :visible.sync="toolDrawer" :show-close="false" direction="ttb" size="180px">
@@ -45,8 +44,6 @@
         :show-close="false"
         :direction="settings.display.windowMode ? 'rtl' : 'ttb'"
         size="520px"
-        @close="menuIconClick"
-        @open="menuIconClick"
       >
         <el-divider content-position="left"> 饼的发源地 </el-divider>
         <div
@@ -119,14 +116,12 @@
             <span v-if="settings.open"
               >【已蹲饼 <countTo :start-val="oldDunCount" :end-val="dunInfo.counter" :duration="1000" />次】
             </span>
-            <template v-if="enableCustom">
-              <span> 【自定义构建】 </span>
+            <template v-if="isCustomBuild">
+              <span>【自定义构建 By: {{ BUILD_BY() }}】</span>
             </template>
-            <span v-if="settings.checkLowFrequency()"> 【低频蹲饼时段】 </span>
+            <span v-if="settings.checkLowFrequency()">【低频蹲饼中】</span>
           </span>
         </div>
-        <!--        <span @click.stop="drawer = !drawer;"-->
-        <!--              :class="[drawer?'menu-btn-open':'menu-btn-close', firefox ? 'menu-btn-firefox' : '','menu-btn','el-icon-menu']"></span>-->
         <div class="countdown-and-btn">
           <div v-show="countDownList.length > 0" class="count-down-area" @click="openCountDown()">
             <div v-for="(item, index) in countDownList" :key="index" :title="'到点时间：' + item.stopTime">
@@ -175,6 +170,7 @@ import SanInfo from '../common/sync/SanInfo';
 import DunInfo from '../common/sync/DunInfo';
 import MenuIcon from '@/popup/MenuIcon';
 import {
+  BUILD_BY,
   dayInfo,
   ENABLE_FEATURES,
   MESSAGE_GET_COUNTDOWN,
@@ -239,7 +235,7 @@ export default {
       countDownList: [],
       // allHeight: 0,
       isOriginScroll: false,
-      enableCustom: false,
+      isCustomBuild: false,
     };
   },
   computed: {},
@@ -262,24 +258,19 @@ export default {
   },
   beforeDestroy() {},
   methods: {
-    ENABLE_FEATURES() {
-      return ENABLE_FEATURES;
+    BUILD_BY() {
+      return BUILD_BY;
     },
     openUrl: PlatformHelper.Tabs.create,
     init() {
-      /* IFTRUE_feature__custom_datasource */
-      this.enableCustom = true;
-      /* FITRUE_feature__custom_datasource */
+      this.isCustomBuild = ENABLE_FEATURES.length > 0;
       ServerUtil.getServerDataSourceInfo(true).then((data) => {
         this.quickJump.source = data.serverDataSourceList.filter((it) => !!it.jump_url);
       });
-      // this.menuIconInit();
       DunInfo.doAfterUpdate((data) => {
         this.oldDunCount = data.counter;
       });
       setTimeout(() => {
-        // 计算高度
-        // this.calcHeight();
         let head = navigator.userAgent;
         if (head.indexOf('Firefox') > 1) {
           let div = document.getElementById('app');
@@ -314,7 +305,6 @@ export default {
         }
       });
     },
-    menuIconClick() {},
     async firefoxWarning() {
       const flagKey = 'firefox-collapse-warning-flag';
       const flagDisableValue = 'disabled';

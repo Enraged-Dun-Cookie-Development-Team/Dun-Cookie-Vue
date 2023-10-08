@@ -744,19 +744,26 @@ export default {
           ...this.$refs.dataSourceTree2.getCheckedNodes(),
           ...this.$refs.dataSourceTree3.getCheckedNodes(),
         ]
-          .filter((it) => !!it.idStr)
+          .filter((it) => it.idStr && !it.custom)
           .map((it) => {
             const result = { type: it.type, dataId: it.dataId };
             if (ids.has(DataSourceMeta.id(result))) {
               return;
             }
             ids.add(DataSourceMeta.id(result));
-            if (it.custom) {
-              result.custom = it.custom;
-            }
             return result;
           })
           .filter((it) => !!it);
+        /* IFTRUE_feature__custom_datasource */
+        const enableCustomList = this.$refs.dataSourceTree3
+          .getCheckedNodes()
+          .filter((it) => it.idStr && it.custom)
+          .map((it) => ({ type: it.type, dataId: it.dataId }));
+        if (enableCustomList.length > 0) {
+          this.settings.extraFeature.enableCustomDataSources = enableCustomList;
+        }
+        /* FITRUE_feature__custom_datasource */
+
         if (selectDataSource.length > 0) {
           this.settings.enableDataSources = selectDataSource;
           this.settings.saveSettings().then(() => {

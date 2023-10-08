@@ -182,7 +182,6 @@ export default class ServerUtil {
    * @return {Promise<string>}
    */
   static async getComboId(sourceList) {
-    sourceList = sourceList.filter((it) => !it.custom);
     const comboCacheKey = md5(
       sourceList
         .map((it) => DataSourceMeta.id(it))

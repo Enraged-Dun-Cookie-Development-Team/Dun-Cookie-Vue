@@ -8,6 +8,7 @@ const PROJECT_VERSION = JSON.parse(file.readFileSync('./package.json').toString(
 process.env.VUE_APP_PROJECT_VERSION = PROJECT_VERSION;
 const enableFeatures = (process.env.VUE_APP_ENABLE_FEATURES || '').split(',').filter((v) => v.length > 0);
 console.log('已启用特性', enableFeatures);
+process.env.VUE_APP_BUILD_BY = process.env.BUILD_BY || '本地构建';
 
 // 由于vue默认增加loader是加到最后一个，这里提供插入到最前面的功能
 function insertLoaderToFirst(config, ruleName, loaderName, loaderOptions) {

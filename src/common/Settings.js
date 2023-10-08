@@ -40,6 +40,12 @@ class Settings {
   customDataSources = [];
 
   /**
+   * 自定义构建使用的额外功能保存地
+   * @type {Record<string, unknown>}
+   */
+  extraFeature = {};
+
+  /**
    * 蹲饼相关配置
    */
   dun = {

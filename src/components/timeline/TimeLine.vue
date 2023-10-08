@@ -342,7 +342,7 @@ export default {
           this.isLastPage = result.next_page_id === null;
           const items = ServerUtil.transformCookieListToItemList(result.cookies);
           /* IFTRUE_feature__custom_datasource */
-          if (this.extraCardList.length === 0 && Settings.enableDataSources.find((it) => it.custom)) {
+          if (this.extraCardList.length === 0 && Settings.extraFeature.enableCustomDataSources?.length > 0) {
             this.extraCardList.push(
               CookieItem.builder('page_tip_for_custom')
                 .id('0')

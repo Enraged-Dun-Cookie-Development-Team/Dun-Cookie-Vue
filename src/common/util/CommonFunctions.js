@@ -148,4 +148,8 @@ function animateCSS(element, animation, callback) {
   });
 }
 
+global.deepDiff = deepDiff;
+global.deepAssign = deepAssign;
+global.deepEquals = deepEquals;
+
 export { deepDiff, deepAssign, deepEquals, animateCSS };

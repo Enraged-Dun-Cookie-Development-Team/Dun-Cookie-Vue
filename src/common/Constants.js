@@ -33,8 +33,21 @@ const SHOW_VERSION = CURRENT_VERSION + (IS_DEBUG ? '【调试模式】' : '');
  * @type {string[]}
  */
 const ENABLE_FEATURES = (process.env.VUE_APP_ENABLE_FEATURES || '').split(',').filter((v) => v.length > 0);
+/**
+ * 构建者
+ */
+const BUILD_BY = process.env.VUE_APP_BUILD_BY;
 
-export { IS_DEBUG, DEBUG_LEVEL, DEBUG_LOG, CURRENT_SETTING_VERSION, CURRENT_VERSION, SHOW_VERSION, ENABLE_FEATURES };
+export {
+  IS_DEBUG,
+  DEBUG_LEVEL,
+  DEBUG_LOG,
+  CURRENT_SETTING_VERSION,
+  CURRENT_VERSION,
+  SHOW_VERSION,
+  ENABLE_FEATURES,
+  BUILD_BY,
+};
 // endregion
 
 // region 各种参数，主要用于测试模式
