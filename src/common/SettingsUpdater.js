@@ -165,7 +165,7 @@ function updateV4ToV5(oldSettings) {
     newSettings.agreeLicense = 'v1';
   }
 
-  console.log('升级V4完毕，新配置：');
+  console.log('升级V5完毕，新配置：');
   console.log(newSettings);
   return newSettings;
 }
