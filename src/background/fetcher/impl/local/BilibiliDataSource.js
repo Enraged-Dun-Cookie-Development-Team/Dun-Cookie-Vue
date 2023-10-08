@@ -101,7 +101,9 @@ export class BilibiliDataSource {
       }
       case 'DYNAMIC_TYPE_LIVE_RCMD': {
         const live_rcmd = JSON.parse(dynamic.modules.module_dynamic.major.live_rcmd.content);
-        allText = normalizeWhitespaceCharacter(live_rcmd.live_play_info.title);
+        allText = `在【${live_rcmd.live_play_info.area_name}】分区直播：${normalizeWhitespaceCharacter(
+          live_rcmd.live_play_info.title
+        )}`;
         images = [{ origin_url: live_rcmd.live_play_info.cover }];
         urlObj = new URL(normalizeURL(live_rcmd.live_play_info.link, dynamicUrl));
         urlObj.hash = '';
@@ -140,6 +142,7 @@ export class BilibiliDataSource {
       .id(dynamic.id_str)
       .timeForSort(time.getTime())
       .timeForDisplay(TimeUtil.format(time, 'yyyy-MM-dd hh:mm:ss'))
+      .coverImage(images && images.length > 0 ? images[0].origin_url : undefined)
       .imageList(images.map((it) => it.origin_url))
       .content(allText)
       .jumpUrl(dynamicUrl);
