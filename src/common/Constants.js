@@ -65,21 +65,18 @@ export { MESSAGE_WEIBO_ADD_REFERER, MESSAGE_GET_COUNTDOWN };
 const PLATFORM_CHROME = 'Chrome';
 const PLATFORM_FIREFOX = 'Firefox';
 const PLATFORM_EDGE = 'Edge';
-const PLATFORM_NODE = 'Node';
 const PLATFORM_UNKNOWN = 'Unknown';
 
-export { PLATFORM_CHROME, PLATFORM_FIREFOX, PLATFORM_EDGE, PLATFORM_NODE, PLATFORM_UNKNOWN };
+export { PLATFORM_CHROME, PLATFORM_FIREFOX, PLATFORM_EDGE, PLATFORM_UNKNOWN };
 // endregion
 
 // region 扩展内置页面
 const PAGE_WELCOME = 'welcome.html';
 const PAGE_OPTIONS = 'options.html';
-const PAGE_DONATE = 'donate.html';
 const PAGE_UPDATE = 'update.html';
 const PAGE_TIME = 'time.html';
 const PAGE_POPUP_WINDOW = 'popup.html';
 const PAGE_GITHUB_REPO = 'https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue';
-const PAGE_GITHUB_TEAM = 'https://github.com/Enraged-Dun-Cookie-Development-Team';
 const PAGE_CEOBECANTEEN_WEB_ABOUT_US = 'https://www.ceobecanteen.top/#about-us';
 const PAGE_CEOBECANTEEN_WEB_SPONSOR = 'https://www.ceobecanteen.top/#sponsor';
 
@@ -87,13 +84,11 @@ export {
   PAGE_WELCOME,
   PAGE_POPUP_WINDOW,
   PAGE_OPTIONS,
-  PAGE_DONATE,
   PAGE_UPDATE,
   PAGE_GITHUB_REPO,
   PAGE_TIME,
   PAGE_CEOBECANTEEN_WEB_ABOUT_US,
   PAGE_CEOBECANTEEN_WEB_SPONSOR,
-  PAGE_GITHUB_TEAM,
 };
 // endregion
 

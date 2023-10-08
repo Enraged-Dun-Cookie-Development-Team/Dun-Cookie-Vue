@@ -55,6 +55,7 @@ function buildMainCookieFetchConfig(enable = true) {
   );
 }
 
+/* IFTRUE_feature__custom_datasource */
 /**
  * @return {FetchConfig}
  */
@@ -76,6 +77,7 @@ function buildCustomCookieFetchConfig(enable = true) {
     [new FetcherStrategy('default', 'local')]
   );
 }
+/* FITRUE_feature__custom_datasource */
 
 const MAIN_FETCH_CONFIG_KEY = 'main';
 const CUSTOM_FETCH_CONFIG_KEY = 'custom';

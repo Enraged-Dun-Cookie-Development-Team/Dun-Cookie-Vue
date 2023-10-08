@@ -119,6 +119,9 @@
             <span v-if="settings.open"
               >【已蹲饼 <countTo :start-val="oldDunCount" :end-val="dunInfo.counter" :duration="1000" />次】
             </span>
+            <template v-if="enableCustom">
+              <span> 【自定义构建】 </span>
+            </template>
             <span v-if="settings.checkLowFrequency()"> 【低频蹲饼时段】 </span>
           </span>
         </div>
@@ -173,19 +176,18 @@ import DunInfo from '../common/sync/DunInfo';
 import MenuIcon from '@/popup/MenuIcon';
 import {
   dayInfo,
+  ENABLE_FEATURES,
   MESSAGE_GET_COUNTDOWN,
-  PAGE_DONATE,
+  PAGE_CEOBECANTEEN_WEB_ABOUT_US,
+  PAGE_CEOBECANTEEN_WEB_SPONSOR,
   PAGE_GITHUB_REPO,
   PAGE_OPTIONS,
   PAGE_TIME,
   PAGE_UPDATE,
+  PAGE_WELCOME,
   PLATFORM_FIREFOX,
   quickJump,
   SHOW_VERSION,
-  PAGE_GITHUB_TEAM,
-  PAGE_WELCOME,
-  PAGE_CEOBECANTEEN_WEB_ABOUT_US,
-  PAGE_CEOBECANTEEN_WEB_SPONSOR,
 } from '../common/Constants';
 import PlatformHelper from '../common/platform/PlatformHelper';
 import 'animate.css';
@@ -237,6 +239,7 @@ export default {
       countDownList: [],
       // allHeight: 0,
       isOriginScroll: false,
+      enableCustom: false,
     };
   },
   computed: {},
@@ -259,8 +262,14 @@ export default {
   },
   beforeDestroy() {},
   methods: {
+    ENABLE_FEATURES() {
+      return ENABLE_FEATURES;
+    },
     openUrl: PlatformHelper.Tabs.create,
     init() {
+      /* IFTRUE_feature__custom_datasource */
+      this.enableCustom = true;
+      /* FITRUE_feature__custom_datasource */
       ServerUtil.getServerDataSourceInfo(true).then((data) => {
         this.quickJump.source = data.serverDataSourceList.filter((it) => !!it.jump_url);
       });
