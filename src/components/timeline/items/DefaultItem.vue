@@ -76,7 +76,12 @@ export default {
           elementVisibleInPercent(this.$refs.item)
             .then((percent) => {
               if (percent < 30) {
-                this.$refs.item.scrollIntoView(false);
+                this.$refs.item.scrollIntoView(true);
+                let node = this.$refs.item;
+                while (node && !node.classList.contains('el-timeline')) {
+                  node = node.parentElement;
+                }
+                node.scrollBy(0, -100);
               }
             })
             .catch(() => {});

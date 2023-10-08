@@ -196,11 +196,11 @@ export default {
   name: 'App',
   components: { countTo, TimeLine, MenuIcon },
   data() {
-    CardList.doAfterFirstUpdate((data) => {
-      this.cardList = data.getFirstPageList();
-    });
     CardList.doAfterUpdate((data) => {
       const oldIds = this.cardList.map((it) => it.id);
+      if (this.cardList.length === 0) {
+        this.cardList = data.getFirstPageList();
+      }
       if (oldIds.length > 0 && data.getFirstPageList().find((it) => oldIds.indexOf(it.id) === -1)) {
         this.$message({
           offset: 50,
