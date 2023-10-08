@@ -196,9 +196,11 @@ export default {
   name: 'App',
   components: { countTo, TimeLine, MenuIcon },
   data() {
+    CardList.doAfterFirstUpdate((data) => {
+      this.cardList = data.getFirstPageList();
+    });
     CardList.doAfterUpdate((data) => {
       const oldIds = this.cardList.map((it) => it.id);
-      this.cardList = data.getFirstPageList();
       if (oldIds.length > 0 && data.getFirstPageList().find((it) => oldIds.indexOf(it.id) === -1)) {
         this.$message({
           offset: 50,
@@ -373,8 +375,7 @@ export default {
     bindScrollFun() {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
       let drawerBtnArea = this.$refs.drawerBtnArea;
-      // 添加监听事件（不同浏览器，事件方法不一样，所以可以作判断，也可以如下偷懒）
-      // scrollDiv.addEventListener("DOMMouseScroll", handler, false);
+      // 添加监听事件
       scrollDiv.addEventListener('wheel', this.scrollHandler, false);
       drawerBtnArea.addEventListener('wheel', this.drawerBtnAreaScroll, false);
       const bodyWidth = document.querySelector('body').offsetWidth;
@@ -440,10 +441,6 @@ export default {
       PlatformHelper.Tabs.createWithExtensionFile(PAGE_TIME);
     },
 
-    openDonate() {
-      PlatformHelper.Tabs.createWithExtensionFile(PAGE_DONATE);
-    },
-
     openUpdate() {
       PlatformHelper.Tabs.createWithExtensionFile(PAGE_UPDATE);
     },
@@ -456,20 +453,12 @@ export default {
       PlatformHelper.Tabs.create(PAGE_GITHUB_REPO);
     },
 
-    openGithubTeam() {
-      PlatformHelper.Tabs.create(PAGE_GITHUB_TEAM);
-    },
-
     openAboutUs() {
       PlatformHelper.Tabs.create(PAGE_CEOBECANTEEN_WEB_ABOUT_US);
     },
 
     openSponsor() {
       PlatformHelper.Tabs.create(PAGE_CEOBECANTEEN_WEB_SPONSOR);
-    },
-
-    onSlideChange() {
-      return;
     },
   },
 };
@@ -629,10 +618,6 @@ export default {
       border-radius: 5px;
       flex-shrink: 0;
 
-      // display: flex;
-      // flex-wrap: wrap;
-      // align-items: center;
-
       &:hover {
         img {
           filter: blur(30px) brightness(0.1);
@@ -666,24 +651,6 @@ export default {
         }
       }
     }
-
-    // 展示注释
-    // &::after {
-    //   content: " ";
-    //   position: fixed;
-    //   height: 100px;
-    //   right: 0;
-    //   width: 20px;
-    //   background: linear-gradient(90deg, transparent, @@bgColor 50%);
-    // }
-    // &::before {
-    //   content: " ";
-    //   position: fixed;
-    //   height: 100px;
-    //   left: 0;
-    //   width: 20px;
-    //   background: linear-gradient(90deg, @@bgColor 50%, transparent);
-    // }
   }
 
   // 标签栏

@@ -461,8 +461,10 @@ import 'animate.css';
 import AvailableDataSourceMeta from '../common/sync/AvailableDataSourceMeta';
 import { DataSourceMeta } from '../common/datasource/DataSourceMeta';
 import { updateSettings } from '../common/SettingsUpdater';
+/* IFTRUE_feature__custom_datasource */
 import { DefaultLogger } from '@enraged-dun-cookie-development-team/common/logger';
 import { DefaultDataSources } from '@enraged-dun-cookie-development-team/cookie-fetcher';
+/* FITRUE_feature__custom_datasource */
 
 export default {
   name: 'App',
