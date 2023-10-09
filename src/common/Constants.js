@@ -22,11 +22,11 @@ const USE_TEST_URL = IS_DEBUG && false;
 /**
  * 当前配置文件版本号
  */
-const CURRENT_SETTING_VERSION = 4;
+const CURRENT_SETTING_VERSION = 5;
 /**
  * 当前插件版本号
  */
-const CURRENT_VERSION = '4.0.2';
+const CURRENT_VERSION = process.env.VUE_APP_PROJECT_VERSION;
 /**
  * 展示用的版本号
  */
@@ -51,13 +51,12 @@ const MESSAGE_SAN_UPDATE = 'san-update';
 const MESSAGE_SAN_GET = 'san-get';
 const MESSAGE_CHANGE_COUNTDOWN = 'change-countdown';
 
-const MESSAGE_FORCE_REFRESH = 'force-refresh';
 const MESSAGE_WEIBO_ADD_REFERER = 'weibo-add-referer';
 const MESSAGE_GET_COUNTDOWN = 'countdown-list';
 
 export { MESSAGE_SETTINGS_UPDATE, MESSAGE_SAN_UPDATE };
 export { MESSAGE_SAN_GET, MESSAGE_CHANGE_COUNTDOWN };
-export { MESSAGE_FORCE_REFRESH, MESSAGE_WEIBO_ADD_REFERER, MESSAGE_GET_COUNTDOWN };
+export { MESSAGE_WEIBO_ADD_REFERER, MESSAGE_GET_COUNTDOWN };
 // endregion
 
 // region 平台类型
@@ -77,7 +76,6 @@ const PAGE_DONATE = 'donate.html';
 const PAGE_UPDATE = 'update.html';
 const PAGE_TIME = 'time.html';
 const PAGE_POPUP_WINDOW = 'popup.html';
-const PAGE_PROTOCOL = 'protocol.html';
 const PAGE_GITHUB_REPO = 'https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue';
 const PAGE_GITHUB_TEAM = 'https://github.com/Enraged-Dun-Cookie-Development-Team';
 const PAGE_CEOBECANTEEN_WEB_ABOUT_US = 'https://www.ceobecanteen.top/#about-us';
@@ -94,7 +92,6 @@ export {
   PAGE_CEOBECANTEEN_WEB_ABOUT_US,
   PAGE_CEOBECANTEEN_WEB_SPONSOR,
   PAGE_GITHUB_TEAM,
-  PAGE_PROTOCOL,
 };
 // endregion
 

@@ -2,13 +2,27 @@
   <div id="app">
     <el-card class="box-card">
       <el-row type="flex" align="middle" justify="space-around">
-        <el-image class="img" :src="logo" />
-        <div class="version">欢迎使用小刻食堂 V{{ currentVersion }}</div>
+        <div style="display: flex; align-items: center">
+          <el-image class="img" :src="logo" />
+          <span class="version">欢迎使用小刻食堂 V{{ currentVersion }}</span>
+        </div>
       </el-row>
       <el-divider />
       <div class="info">
-        <div class="info-title">版本已经更新</div>
-        <div class="info-title">让我们更新后和小刻一起继续等待自由的兔兔发饼吧！</div>
+        <template v-if="isLatestVersion">
+          <el-result
+            icon="success"
+            title="已经是最新版啦！"
+            sub-title="让我们和小刻一起继续等待自由的兔兔发饼吧！"
+          ></el-result>
+        </template>
+        <template v-else>
+          <el-result
+            icon="warning"
+            title="有新版本可以更新啦！"
+            sub-title="让我们更新后和小刻一起继续等待自由的兔兔发饼吧！"
+          ></el-result>
+        </template>
       </div>
       <el-divider />
       <el-card class="box-card description">
@@ -54,6 +68,7 @@ export default {
       logo: '',
       currentVersion: CURRENT_VERSION,
       updateInfo: {},
+      isLatestVersion: false,
     };
   },
   computed: {},
@@ -70,8 +85,9 @@ export default {
     openUrl: PlatformHelper.Tabs.create,
     // 检查一次更新
     getUpdateInfo() {
-      ServerUtil.getVersionInfo(false).then((responseText) => {
-        this.updateInfo = responseText;
+      ServerUtil.getVersionInfo(false).then((data) => {
+        this.isLatestVersion = !Settings.JudgmentVersion(data.version, CURRENT_VERSION);
+        this.updateInfo = data;
       });
     },
   },
@@ -97,17 +113,8 @@ export default {
   }
 
   .info {
+    font-size: 1.3rem;
     text-align: center;
-
-    .info-title {
-      font-size: 1.3rem;
-    }
-
-    .info-time {
-      margin: 10px 0;
-      font-size: 0.8rem;
-      color: #aaa;
-    }
   }
 
   .description {

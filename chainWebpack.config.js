@@ -1,14 +1,14 @@
 const path = require('path');
+const file = require('fs');
 const ExtensionReloader = require('webpack-ext-reloader');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const isDevMode = process.env.NODE_ENV === 'development';
-const backgroundMode = process.env.BACKGROUND_MODE;
+const PROJECT_VERSION = JSON.parse(file.readFileSync('./package.json').toString()).version;
+process.env.VUE_APP_PROJECT_VERSION = PROJECT_VERSION;
 
 const chainWebpack = (config) => {
-  if (backgroundMode === 'js') {
-    config.entry('background').add(path.resolve(__dirname, './src/background/index.js'));
-  }
+  config.entry('background').add(path.resolve(__dirname, './src/background/index.js'));
   config.entry('contentScripts').add(path.resolve(__dirname, './src/contentScripts/index.js'));
   config.output.filename('[name].js');
 
@@ -17,7 +17,15 @@ const chainWebpack = (config) => {
       {
         patterns: [
           { from: 'src/assets', to: 'assets' },
-          { from: 'src/manifest.json', to: '[name][ext]' },
+          {
+            from: 'src/manifest.json',
+            to: '[name][ext]',
+            transform(content) {
+              const manifest = JSON.parse(content.toString());
+              manifest.version = PROJECT_VERSION;
+              return JSON.stringify(manifest, undefined, 2);
+            },
+          },
           { from: 'src/Dun-Cookies-Info.json', to: '[name][ext]' },
           { from: 'src/test', to: 'test' },
           { from: 'node_modules/element-ui/lib/theme-chalk/fonts/', to: 'css/fonts/[name][ext]' },

@@ -392,9 +392,13 @@ export default {
     },
     // 获取在线信息
     getOnlineSpeak() {
-      let version = ServerUtil.getVersionInfo(false, false).then((data) => {
-        // 是否最新
-        this.isNew = Settings.JudgmentVersion(data.version, CURRENT_VERSION);
+      let version = PlatformHelper.Extension.getExtensionInfo().then((info) => {
+        // 商店安装的不检查更新
+        if (info.installType !== 'normal') {
+          return ServerUtil.getVersionInfo().then(
+            (data) => (this.isNew = Settings.JudgmentVersion(data.version, CURRENT_VERSION))
+          );
+        }
       });
 
       let announcement = ServerUtil.getAnnouncementInfo(false).then((data) => {

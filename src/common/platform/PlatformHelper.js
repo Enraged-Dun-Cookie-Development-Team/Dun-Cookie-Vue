@@ -178,6 +178,10 @@ class ExtensionHelper {
   getURL(file) {
     return currentPlatform.getURLForExtensionFile(file);
   }
+
+  getExtensionInfo() {
+    return currentPlatform.getExtensionInfo();
+  }
 }
 
 class TabsHelper {

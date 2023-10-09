@@ -93,15 +93,93 @@
               <div class="body-menu-content-card">
                 <div class="content-card-title">饼来源</div>
                 <div class="content-card-description">选择勾选来源，最少选择一个</div>
-                <div class="content-card-content">
-                  <el-checkbox-group v-model="selectDataSource" class="checkbox-group-area" :min="1">
-                    <el-checkbox v-for="source of defSourcesList" :key="source.idStr" :label="source.idStr">
+                <div class="content-card-content datasource-select">
+                  <!-- 分三列好看点，这里简单粗暴复制粘贴成三个tree -->
+                  <el-tree
+                    ref="dataSourceTree1"
+                    :data="dataSourceTreeData1"
+                    show-checkbox
+                    check-on-click-node
+                    default-expand-all
+                    node-key="idStr"
+                    :props="{ children: 'children', label: 'label' }"
+                  >
+                    <!--suppress VueUnrecognizedSlot -->
+                    <template #default="{ node, data }">
                       <span class="checkbox-area">
-                        <img class="icon-img" :src="source.icon" />
-                        {{ source.name }}
+                        <img class="icon-img" :src="data.icon" />
+                        <span>{{ node.label }}</span>
                       </span>
-                    </el-checkbox>
-                  </el-checkbox-group>
+                    </template>
+                  </el-tree>
+                  <el-tree
+                    ref="dataSourceTree2"
+                    :data="dataSourceTreeData2"
+                    show-checkbox
+                    check-on-click-node
+                    default-expand-all
+                    node-key="idStr"
+                    :props="{ children: 'children', label: 'label' }"
+                  >
+                    <!--suppress VueUnrecognizedSlot -->
+                    <template #default="{ node, data }">
+                      <span class="checkbox-area">
+                        <img class="icon-img" :src="data.icon" />
+                        <span>{{ node.label }}</span>
+                      </span>
+                    </template>
+                  </el-tree>
+                  <el-tree
+                    ref="dataSourceTree3"
+                    :data="dataSourceTreeData3"
+                    show-checkbox
+                    check-on-click-node
+                    default-expand-all
+                    node-key="idStr"
+                    :props="{ children: 'children', label: 'label' }"
+                  >
+                    <!--suppress VueUnrecognizedSlot -->
+                    <template #default="{ node, data }">
+                      <span class="checkbox-area">
+                        <img class="icon-img" :src="data.icon" />
+                        <span>{{ node.label }}</span>
+                      </span>
+                    </template>
+                  </el-tree>
+                  <div style="flex-basis: 100%; margin-top: 16px">
+                    <el-button
+                      ref="btnDataSourceSelectAll"
+                      round
+                      tabindex="-1"
+                      @click="dataSourceSelectAll(), $refs.btnDataSourceSelectAll.$el.blur()"
+                      >启用所有数据源</el-button
+                    >
+                    <el-button
+                      ref="btnDataSourceUnselectAll"
+                      round
+                      tabindex="-1"
+                      @click="dataSourceUnselectAll(), $refs.btnDataSourceUnselectAll.$el.blur()"
+                      >禁用所有数据源</el-button
+                    >
+                    <el-tooltip class="item" effect="dark" content="不会影响已选择的数据源" placement="top">
+                      <el-button
+                        ref="btnDataSourceSelectAllBilibili"
+                        round
+                        tabindex="-1"
+                        @click="dataSourceSelectAllBilibili(), $refs.btnDataSourceSelectAllBilibili.$el.blur()"
+                        >启用所有B站数据源</el-button
+                      >
+                    </el-tooltip>
+                    <el-tooltip class="item" effect="dark" content="不会影响已选择的数据源" placement="top">
+                      <el-button
+                        ref="btnDataSourceSelectAllWeibo"
+                        round
+                        tabindex="-1"
+                        @click="dataSourceSelectAllWeibo(), $refs.btnDataSourceSelectAllWeibo.$el.blur()"
+                        >启用所有微博数据源</el-button
+                      >
+                    </el-tooltip>
+                  </div>
                 </div>
               </div>
               <div class="flex">
@@ -351,7 +429,6 @@ export default {
       oldDunCount: 0,
       dunInfo: DunInfo,
       settings: Settings,
-      selectDataSource: Settings.enableDataSources.map((it) => DataSourceMeta.id(it)),
       currentDataSource: [],
       defSourcesList: AvailableDataSourceMeta.getAllList(),
       marks: {
@@ -365,6 +442,12 @@ export default {
       showBack: false,
       menuList: ['body-menu-big-left', 'body-menu-big-right'],
       contentList: ['system-form', 'view-form'],
+      dataSourceTreeData1: [],
+      dataSourceTreeData2: [],
+      dataSourceTreeData3: [],
+      allDataSourceKeys: [],
+      allBilibiliDataSourceKeys: [],
+      allWeiboDataSourceKeys: [],
     };
   },
   computed: {},
@@ -380,17 +463,55 @@ export default {
     openUrl: PlatformHelper.Tabs.create,
     init() {
       this.settings.doAfterInit((settings) => {
-        this.selectDataSource = settings.enableDataSources.map((it) => DataSourceMeta.id(it));
         this.logo = '/assets/image/' + settings.logo;
-      });
-      DunInfo.doAfterUpdate((data) => {
-        this.oldDunCount = data.counter;
-      });
-      AvailableDataSourceMeta.doAfterInit(() => {
-        this.defSourcesList = AvailableDataSourceMeta.getAllList();
-      });
-      AvailableDataSourceMeta.doAfterUpdate(() => {
-        this.defSourcesList = AvailableDataSourceMeta.getAllList();
+        AvailableDataSourceMeta.doAfterInit(() => {
+          // noinspection JSNonASCIINames
+          const categoryMap = {
+            开拓芯COREBLAZER: '开拓芯',
+            CubesCollective: 'Cubes Collective',
+            来自星尘ExAstris: '来自星尘',
+          };
+          const treeData = {};
+          for (const item of AvailableDataSourceMeta.getAllList()) {
+            let category = item.name.substring(0, item.name.lastIndexOf('-'));
+            category = categoryMap[category] || category;
+            if (!treeData[category]) {
+              treeData[category] = {
+                label: category,
+                icon: item.icon,
+                children: [],
+              };
+            }
+            treeData[category].children.push({
+              label: item.name,
+              icon: item.icon,
+              idStr: item.idStr,
+              type: item.type,
+              dataId: item.dataId,
+            });
+            this.allDataSourceKeys.push(item.idStr);
+            if (item.type.startsWith('bilibili:')) {
+              this.allBilibiliDataSourceKeys.push(item.idStr);
+            } else if (item.type.startsWith('weibo:')) {
+              this.allWeiboDataSourceKeys.push(item.idStr);
+            }
+          }
+          const list = Object.values(treeData).sort((a, b) => a.label.localeCompare(b.label));
+          const count = Math.floor(list.length / 3);
+          this.dataSourceTreeData1 = list.slice(0, count);
+          this.dataSourceTreeData2 = list.slice(count, count * 2);
+          this.dataSourceTreeData3 = list.slice(count * 2);
+          this.updateSelectDataSource(settings.enableDataSources);
+        });
+        DunInfo.doAfterUpdate((data) => {
+          this.oldDunCount = data.counter;
+        });
+        AvailableDataSourceMeta.doAfterInit(() => {
+          this.defSourcesList = AvailableDataSourceMeta.getAllList();
+        });
+        AvailableDataSourceMeta.doAfterUpdate(() => {
+          this.defSourcesList = AvailableDataSourceMeta.getAllList();
+        });
       });
     },
     initAnimate() {
@@ -405,17 +526,68 @@ export default {
         }, 500);
       });
     },
+    updateSelectDataSource(enableDataSources) {
+      const selectDataSource = enableDataSources.map((it) => DataSourceMeta.id(it));
+      this.$refs.dataSourceTree1.setCheckedKeys(selectDataSource);
+      this.$refs.dataSourceTree2.setCheckedKeys(selectDataSource);
+      this.$refs.dataSourceTree3.setCheckedKeys(selectDataSource);
+    },
+    dataSourceSelectAll() {
+      this.$refs.dataSourceTree1.setCheckedKeys(this.allDataSourceKeys);
+      this.$refs.dataSourceTree2.setCheckedKeys(this.allDataSourceKeys);
+      this.$refs.dataSourceTree3.setCheckedKeys(this.allDataSourceKeys);
+    },
+    dataSourceUnselectAll() {
+      this.$refs.dataSourceTree1.setCheckedKeys([]);
+      this.$refs.dataSourceTree2.setCheckedKeys([]);
+      this.$refs.dataSourceTree3.setCheckedKeys([]);
+    },
+    dataSourceSelectAllBilibili() {
+      this.$refs.dataSourceTree1.setCheckedKeys([
+        ...this.allBilibiliDataSourceKeys,
+        ...this.$refs.dataSourceTree1.getCheckedKeys(),
+      ]);
+      this.$refs.dataSourceTree2.setCheckedKeys([
+        ...this.allBilibiliDataSourceKeys,
+        ...this.$refs.dataSourceTree2.getCheckedKeys(),
+      ]);
+      this.$refs.dataSourceTree3.setCheckedKeys([
+        ...this.allBilibiliDataSourceKeys,
+        ...this.$refs.dataSourceTree3.getCheckedKeys(),
+      ]);
+    },
+    dataSourceSelectAllWeibo() {
+      this.$refs.dataSourceTree1.setCheckedKeys([
+        ...this.allWeiboDataSourceKeys,
+        ...this.$refs.dataSourceTree1.getCheckedKeys(),
+      ]);
+      this.$refs.dataSourceTree2.setCheckedKeys([
+        ...this.allWeiboDataSourceKeys,
+        ...this.$refs.dataSourceTree2.getCheckedKeys(),
+      ]);
+      this.$refs.dataSourceTree3.setCheckedKeys([
+        ...this.allWeiboDataSourceKeys,
+        ...this.$refs.dataSourceTree3.getCheckedKeys(),
+      ]);
+    },
     // 保存设置
     saveSetting(formName, data) {
       if (data) {
         deepAssign(this.settings, data);
       }
       this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.settings.enableDataSources = this.selectDataSource.map((it) => {
-            const idx = it.lastIndexOf(':');
-            return { type: it.substring(0, idx), dataId: it.substring(idx + 1) };
-          });
+        if (!valid) {
+          return;
+        }
+        const selectDataSource = [
+          ...this.$refs.dataSourceTree1.getCheckedNodes(),
+          ...this.$refs.dataSourceTree2.getCheckedNodes(),
+          ...this.$refs.dataSourceTree3.getCheckedNodes(),
+        ]
+          .filter((it) => !!it.idStr)
+          .map((it) => ({ type: it.type, dataId: it.dataId }));
+        if (selectDataSource.length > 0) {
+          this.settings.enableDataSources = selectDataSource;
           this.settings.saveSettings().then(() => {
             this.$message({
               center: true,
@@ -424,7 +596,13 @@ export default {
             });
           });
         } else {
-          return false;
+          this.settings.saveSettings().then(() => {
+            this.$message({
+              center: true,
+              message: '至少选择一个数据源！',
+              type: 'error',
+            });
+          });
         }
       });
     },
@@ -461,7 +639,7 @@ export default {
             type: 'warning',
           })
             .then(() => {
-              this.selectDataSource = newSettings.enableDataSources.map((it) => DataSourceMeta.id(it));
+              this.updateSelectDataSource(newSettings.enableDataSources);
               this.saveSetting('form', newSettings);
             })
             .catch((action) => {
@@ -1015,15 +1193,25 @@ export default {
         display: flex;
         align-items: center;
         margin-top: 5px;
+      }
+    }
 
-        .checkbox-area {
-          display: flex;
-          align-items: center;
+    .datasource-select {
+      display: flex;
+      flex-wrap: wrap;
 
-          .icon-img {
-            margin-right: 5px;
-            width: 16px;
-          }
+      .el-tree {
+        flex-grow: 1;
+      }
+
+      .checkbox-area {
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+
+        .icon-img {
+          margin-right: 5px;
+          width: 16px;
         }
       }
     }

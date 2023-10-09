@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" :data-id="item.id">
+  <div ref="item" class="wrapper" :data-id="item.id">
     <el-row>
       <div class="wrapper-content">
         <span v-html="item.content"></span>
@@ -13,11 +13,7 @@
       </div>
     </el-row>
     <el-row v-if="showImage && settings.display.showImage && item.coverImage" class="margintb">
-      <div
-        :class="{ 'show-all': showAllImage.includes(item.coverImage) }"
-        class="img-area"
-        @click="changeShowAllImage(item.coverImage)"
-      >
+      <div :class="{ 'show-all': expandImageArea }" class="img-area" @click="changeExpandImageArea()">
         <div v-if="item.imageList && item.imageList.length > 1" class="multi-img">
           <div v-for="(img, index) in item.imageList" :key="img" class="multi-img-area">
             <img :ref="item.id + '_' + index" v-lazy="img" class="img" />
@@ -42,27 +38,49 @@ import Settings from '../../../common/Settings';
 import PlatformHelper from '../../../common/platform/PlatformHelper';
 import { DataItem } from '../../../common/DataItem';
 
+export const elementVisibleInPercent = (element) => {
+  return new Promise((resolve, reject) => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        resolve(Math.floor(entry.intersectionRatio * 100));
+        clearTimeout(timeout);
+        observer.disconnect();
+      });
+    });
+
+    observer.observe(element);
+    // Probably not needed, but in case something goes wrong.
+    const timeout = setTimeout(() => {
+      reject();
+    }, 500);
+  });
+};
+
 export default {
   name: 'DefaultItem',
   props: { item: { type: DataItem, required: true }, showImage: Boolean },
   data() {
     return {
       settings: Settings,
-      showAllImage: [],
+      expandImageArea: false,
       windowTabId: null,
     };
   },
   methods: {
     openUrl: PlatformHelper.Tabs.create,
     // 图片收起展示
-    changeShowAllImage(img) {
-      if (this.showAllImage.includes(img)) {
-        this.showAllImage.splice(
-          this.showAllImage.findIndex((x) => x == img),
-          1
-        );
-      } else {
-        this.showAllImage.push(img);
+    changeExpandImageArea() {
+      this.expandImageArea = !this.expandImageArea;
+      if (!this.expandImageArea) {
+        this.$nextTick(() => {
+          elementVisibleInPercent(this.$refs.item)
+            .then((percent) => {
+              if (percent < 30) {
+                this.$refs.item.scrollIntoView(false);
+              }
+            })
+            .catch(() => {});
+        });
       }
     },
     ViewImg(item, img, refName) {

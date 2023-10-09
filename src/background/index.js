@@ -3,7 +3,6 @@ import NotificationUtil from '../common/util/NotificationUtil';
 import SanInfo from '../common/sync/SanInfo';
 import {
   MESSAGE_CHANGE_COUNTDOWN,
-  MESSAGE_FORCE_REFRESH,
   MESSAGE_GET_COUNTDOWN,
   MESSAGE_SAN_GET,
   MESSAGE_WEIBO_ADD_REFERER,
@@ -68,21 +67,26 @@ function ExtensionInit() {
     } else {
       DebugUtil.debugLog(0, '蹲饼开关已关闭');
     }
-    setTimeout(() => {
-      ServerUtil.getVersionInfo();
-      ServerUtil.getAnnouncementInfo(true);
+    setTimeout(async () => {
+      const extensionInfo = await PlatformHelper.Extension.getExtensionInfo();
+      // 商店安装的不检查更新
+      if (extensionInfo.installType !== 'normal') {
+        void ServerUtil.getVersionInfo();
+      }
+      void ServerUtil.getAnnouncementInfo(true);
     }, 600000);
   });
 
   Settings.doAfterUpdate((settings, changed) => {
     // 只有更新了数据源/蹲饼频率/蹲饼开关的时候才刷新，避免无意义的网络请求
-    if (!changed.enableDataSources && !changed.customDataSources && !changed.dun && !changed.open) {
+    if (!changed.enableDataSources && !changed.dun && !changed.open) {
       return;
     }
-    // 关闭蹲饼就只能重载插件才能生效了，好消息是目前没有关闭蹲饼的需求
     if (settings.open) {
       DebugUtil.debugLog(0, '开始蹲饼');
       cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
+    } else {
+      cookieFetcherManager.removeFetchConfig(MAIN_FETCH_CONFIG_KEY);
     }
   });
 
@@ -97,9 +101,6 @@ function ExtensionInit() {
     if (message.type) {
       const data = message.data;
       switch (message.type) {
-        // TODO 不接受强制刷新 后续要清理相关代码
-        case MESSAGE_FORCE_REFRESH:
-          return false;
         case MESSAGE_SAN_GET:
           return SanInfo;
         case MESSAGE_CHANGE_COUNTDOWN:
@@ -134,12 +135,14 @@ function ExtensionInit() {
 
   // 监听安装更新
   PlatformHelper.Lifecycle.addInstalledListener((details) => {
-    if (details.reason === 'install' || !Settings.open) {
-      PlatformHelper.Tabs.createWithExtensionFile(PAGE_WELCOME);
-    }
-    if (details.reason === 'update' || details.reason === 'install') {
-      PlatformHelper.Storage.saveLocalStorage('version-notice', false);
-    }
+    Settings.doAfterInit(() => {
+      if (details.reason === 'install' || !Settings.agreeLicense) {
+        PlatformHelper.Tabs.createWithExtensionFile(PAGE_WELCOME);
+      }
+      if (details.reason === 'update' || details.reason === 'install') {
+        PlatformHelper.Storage.saveLocalStorage('version-notice', false);
+      }
+    });
   });
 
   // 监听扩展图标被点击，用于打开窗口化的弹出页面

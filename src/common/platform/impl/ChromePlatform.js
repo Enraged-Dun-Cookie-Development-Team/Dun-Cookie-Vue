@@ -18,6 +18,12 @@ export default class ChromePlatform extends BrowserPlatform {
     });
   }
 
+  getExtensionInfo() {
+    return new Promise((resolve) => {
+      chrome.management.getSelf((result) => resolve(result));
+    });
+  }
+
   getAllWindow() {
     return new Promise((resolve) => {
       chrome.windows.getAll({}, function (data) {

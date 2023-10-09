@@ -1,6 +1,6 @@
 {
-  "name": "dun-cookies-vue",
-  "version": "4.0.2",
+  "name": "ceobe-canteen-browser-extension",
+  "version": "4.0.3",
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve",
@@ -12,7 +12,7 @@
     "fix:stylelint": "stylelint src/**/*.{vue,scss,css,sass,less} --fix"
   },
   "dependencies": {
-    "@enraged-dun-cookie-development-team/common": "^0.0.1-alpha.21",
+    "@enraged-dun-cookie-development-team/common": "^0.0.1-alpha.22",
     "@enraged-dun-cookie-development-team/cookie-fetcher": "^0.0.1-alpha.64",
     "animate.css": "^4.1.1",
     "core-js": "^3.25.1",
