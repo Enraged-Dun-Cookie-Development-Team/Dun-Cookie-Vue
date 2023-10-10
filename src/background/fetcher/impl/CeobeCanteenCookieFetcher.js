@@ -96,7 +96,7 @@ export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
       console.log(e);
     }
     setTimeout(() => {
-      void this.doCycle();
+      this.doCycle();
     }, this.config.getCurrentInterval() * 1000);
   }
 }
