@@ -1,6 +1,7 @@
 import { AbstractCookieFetcher } from '../AbstractCookieFetcher';
 import ServerUtil from '../../../common/util/ServerUtil';
 import { CookieHandler } from '../../CookieHandler';
+import DebugUtil from '../../../common/util/DebugUtil';
 
 export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
   /**
@@ -43,16 +44,14 @@ export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
     }
     if (Date.now() >= this.nextCheckAvailableTime) {
       try {
-        const serverInfo = await ServerUtil.getServerDataSourceInfo(true);
-        let testCookieList = `cdn/cookie/mainList/cookieList?datasource_comb_id=${encodeURIComponent(
-          serverInfo.allComboId
-        )}`;
-        if (this.lastLatestCookieId) {
-          testCookieList += `&cookie_id=${encodeURIComponent(this.lastLatestCookieId)}`;
-        }
-        await ServerUtil.requestCdnServerApi(testCookieList);
         if (!this.comboId) {
           this.comboId = await ServerUtil.getComboId(this.config.enableDataSourceList);
+        }
+        const { cookie_id, update_cookie_id } = JSON.parse(
+          await ServerUtil.requestCdn('datasource-comb/' + encodeURIComponent(this.comboId), { cache: 'no-cache' })
+        );
+        if (cookie_id) {
+          await ServerUtil.getCookieList(this.comboId, cookie_id, update_cookie_id);
         }
         this.__setAvailable();
         return true;
@@ -93,6 +92,7 @@ export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
       this.__setAvailable();
     } catch (e) {
       this.failCount++;
+      DebugUtil.debugLog(0, e.message);
       console.log(e);
     }
     setTimeout(() => {
