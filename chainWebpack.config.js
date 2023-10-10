@@ -41,6 +41,9 @@ const chainWebpack = (config) => {
             transform(content) {
               const manifest = JSON.parse(content.toString());
               manifest.version = PROJECT_VERSION;
+              if (enableFeatures.length > 0) {
+                manifest.description = `【自定义构建 By：${process.env.VUE_APP_BUILD_BY}】` + manifest.description;
+              }
               return JSON.stringify(manifest, undefined, 2);
             },
           },
