@@ -21,7 +21,12 @@ export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
 
   async start(fetchConfig) {
     if (this.runningFlag) return;
-    this.comboId = await ServerUtil.getComboId(fetchConfig.enableDataSourceList);
+    try {
+      this.comboId = await ServerUtil.getComboId(fetchConfig.enableDataSourceList);
+    } catch (e) {
+      this.failCount++;
+      throw e;
+    }
     this.config = fetchConfig;
     this.runningFlag = true;
     CookieHandler.resetLastServerList();
@@ -39,11 +44,14 @@ export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
     if (Date.now() >= this.nextCheckAvailableTime) {
       try {
         const serverInfo = await ServerUtil.getServerDataSourceInfo(true);
-        await ServerUtil.requestCdnServerApi(
-          `cdn/cookie/mainList/cookieList?datasource_comb_id=${encodeURIComponent(
-            serverInfo.allComboId
-          )}&cookie_id=${encodeURIComponent(this.lastLatestCookieId)}`
-        );
+        let testCookieList = `cdn/cookie/mainList/cookieList?datasource_comb_id=${encodeURIComponent(
+          serverInfo.allComboId
+        )}`;
+        if (this.lastLatestCookieId) {
+          testCookieList += `&cookie_id=${encodeURIComponent(this.lastLatestCookieId)}`;
+        }
+        await ServerUtil.requestCdnServerApi(testCookieList);
+        await ServerUtil.getComboId(this.config.enableDataSourceList);
         this.__setAvailable();
         return true;
       } catch (e) {

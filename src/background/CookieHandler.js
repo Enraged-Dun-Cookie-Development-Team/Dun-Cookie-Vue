@@ -2,7 +2,7 @@ import { distance } from 'fastest-levenshtein';
 import Settings from '../common/Settings';
 import NotificationUtil from '../common/util/NotificationUtil';
 import DunInfo from '../common/sync/DunInfo';
-import { FetchData } from '@enraged-dun-cookie-development-team/cookie-fetcher';
+import { FetchData } from '@enraged-dun-cookie-development-team/cookie-fetcher-core';
 import { DataSourceMeta } from '../common/datasource/DataSourceMeta';
 import { BilibiliDataSource } from './fetcher/impl/local/BilibiliDataSource';
 import { WeiboDataSource } from './fetcher/impl/local/WeiboDataSource';
