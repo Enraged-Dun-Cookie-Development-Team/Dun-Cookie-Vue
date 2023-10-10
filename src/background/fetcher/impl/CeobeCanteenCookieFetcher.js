@@ -51,12 +51,15 @@ export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
           testCookieList += `&cookie_id=${encodeURIComponent(this.lastLatestCookieId)}`;
         }
         await ServerUtil.requestCdnServerApi(testCookieList);
-        await ServerUtil.getComboId(this.config.enableDataSourceList);
+        if (!this.comboId) {
+          this.comboId = await ServerUtil.getComboId(this.config.enableDataSourceList);
+        }
         this.__setAvailable();
         return true;
       } catch (e) {
         this.nextCheckAvailableTime = Date.now() + this.nextCheckAvailableTimeFactory * 10 * 1000;
-        this.nextCheckAvailableTimeFactory *= 2;
+        // 限制最大重试间隔为半小时
+        this.nextCheckAvailableTimeFactory = Math.min(180, this.nextCheckAvailableTimeFactory * 2);
         return false;
       }
     } else {
