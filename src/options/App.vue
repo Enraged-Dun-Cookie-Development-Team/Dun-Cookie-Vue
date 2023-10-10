@@ -755,13 +755,10 @@ export default {
           })
           .filter((it) => !!it);
         /* IFTRUE_feature__custom_datasource */
-        const enableCustomList = this.$refs.dataSourceTree3
+        this.settings.extraFeature.enableCustomDataSources = this.$refs.dataSourceTree3
           .getCheckedNodes()
           .filter((it) => it.idStr && it.custom)
           .map((it) => ({ type: it.type, dataId: it.dataId }));
-        if (enableCustomList.length > 0) {
-          this.settings.extraFeature.enableCustomDataSources = enableCustomList;
-        }
         /* FITRUE_feature__custom_datasource */
 
         if (selectDataSource.length > 0) {
