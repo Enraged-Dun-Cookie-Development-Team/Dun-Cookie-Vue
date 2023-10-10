@@ -55,7 +55,6 @@ const chainWebpack = (config) => {
   });
 
   if (isDevMode) {
-    // development-mode
     config.plugin('ExtensionReloader').use(ExtensionReloader, [
       {
         contentScript: 'contentScripts',
@@ -73,6 +72,7 @@ const chainWebpack = (config) => {
       },
     ]);
   }
+
   config.performance.maxEntrypointSize(2_000_000).maxAssetSize(2_000_000);
 
   insertLoaderToFirst(
