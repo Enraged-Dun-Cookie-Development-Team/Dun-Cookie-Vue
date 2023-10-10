@@ -34,10 +34,6 @@ class Settings {
    * @type {{type: string, dataId: string}[]}
    */
   enableDataSources = [];
-  /**
-   * 自定义数据源
-   */
-  customDataSources = [];
 
   /**
    * 自定义构建使用的额外功能保存地

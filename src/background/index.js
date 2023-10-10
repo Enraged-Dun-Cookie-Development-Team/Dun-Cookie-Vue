@@ -34,6 +34,8 @@ registerFetcher('server', CeobeCanteenCookieFetcher);
 registerFetcher('local', LocalCookieFetcher);
 
 /**
+ * TODO 之后这个要改成能够自定义的
+ *
  * @return {FetchConfig}
  */
 function buildMainCookieFetchConfig(enable = true) {
