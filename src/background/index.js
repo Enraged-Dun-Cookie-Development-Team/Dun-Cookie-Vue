@@ -2,6 +2,7 @@ import Settings from '../common/Settings';
 import NotificationUtil from '../common/util/NotificationUtil';
 import SanInfo from '../common/sync/SanInfo';
 import {
+  ENABLE_FEATURES,
   MESSAGE_CHANGE_COUNTDOWN,
   MESSAGE_GET_COUNTDOWN,
   MESSAGE_SAN_GET,
@@ -39,6 +40,7 @@ registerFetcher('local', LocalCookieFetcher);
  */
 function buildMainCookieFetchConfig(enable = true) {
   return new FetchConfig(
+    MAIN_FETCH_CONFIG_KEY,
     enable,
     Settings.enableDataSources,
     Settings.dun.intervalTime,
@@ -55,15 +57,54 @@ function buildMainCookieFetchConfig(enable = true) {
   );
 }
 
+/* IFTRUE_feature__custom_datasource */
+/**
+ * @return {FetchConfig}
+ */
+function buildCustomCookieFetchConfig(enable = true) {
+  return new FetchConfig(
+    CUSTOM_FETCH_CONFIG_KEY,
+    enable,
+    Settings.extraFeature.enableCustomDataSources,
+    Settings.dun.intervalTime,
+    Settings.dun.autoLowFrequency
+      ? Settings.dun.lowFrequencyTime.map((it) => {
+          let realHour;
+          if (it < 12) realHour = it + 12;
+          else realHour = it - 12;
+          return realHour;
+        })
+      : undefined,
+    Settings.dun.autoLowFrequency ? Settings.dun.timeOfLowFrequency : 1,
+    [new FetcherStrategy('default', 'local')]
+  );
+}
+/* FITRUE_feature__custom_datasource */
+
 const MAIN_FETCH_CONFIG_KEY = 'main';
+const CUSTOM_FETCH_CONFIG_KEY = 'custom';
+
+function updateFetch() {
+  // 主配置在配置页面保证了不可能为空，自定义配置可能为空
+  cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
+  /* IFTRUE_feature__custom_datasource */
+  if (Settings.extraFeature.enableCustomDataSources?.length > 0) {
+    cookieFetcherManager.updateFetchConfig(CUSTOM_FETCH_CONFIG_KEY, buildCustomCookieFetchConfig(true));
+  } else {
+    cookieFetcherManager.removeFetchConfig(CUSTOM_FETCH_CONFIG_KEY);
+  }
+  /* FITRUE_feature__custom_datasource */
+}
 
 function ExtensionInit() {
-  // PlatformHelper.BrowserAction.setBadge('Beta', [255, 0, 0, 255]);
+  if (ENABLE_FEATURES.length > 0) {
+    DebugUtil.debugLog(0, '已启用特性：', ENABLE_FEATURES);
+  }
   // 开始蹲饼！
   Settings.doAfterInit((initSettings) => {
     if (initSettings.open) {
       DebugUtil.debugLog(0, '开始蹲饼');
-      cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
+      updateFetch();
     } else {
       DebugUtil.debugLog(0, '蹲饼开关已关闭');
     }
@@ -79,14 +120,22 @@ function ExtensionInit() {
 
   Settings.doAfterUpdate((settings, changed) => {
     // 只有更新了数据源/蹲饼频率/蹲饼开关的时候才刷新，避免无意义的网络请求
-    if (!changed.enableDataSources && !changed.dun && !changed.open) {
+    if (
+      !changed.enableDataSources &&
+      !changed.dun &&
+      !changed.open &&
+      /* IFTRUE_feature__custom_datasource */
+      !changed.extraFeature?.enableCustomDataSources
+      /* FITRUE_feature__custom_datasource */
+    ) {
       return;
     }
     if (settings.open) {
       DebugUtil.debugLog(0, '开始蹲饼');
-      cookieFetcherManager.updateFetchConfig(MAIN_FETCH_CONFIG_KEY, buildMainCookieFetchConfig(true));
+      updateFetch();
     } else {
       cookieFetcherManager.removeFetchConfig(MAIN_FETCH_CONFIG_KEY);
+      cookieFetcherManager.removeFetchConfig(CUSTOM_FETCH_CONFIG_KEY);
     }
   });
 
@@ -121,7 +170,7 @@ function ExtensionInit() {
 
   // 监听标签
   PlatformHelper.Notification.addClickListener((id) => {
-    let item = CardList.list.find((x) => x.id === id);
+    let item = CardList.getFirstPageList().find((x) => x.id === id);
     if (item) {
       PlatformHelper.Tabs.create(item.jumpUrl);
     } else if (id === 'update') {

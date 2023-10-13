@@ -1,6 +1,7 @@
 import { AbstractCookieFetcher } from '../AbstractCookieFetcher';
 import ServerUtil from '../../../common/util/ServerUtil';
 import { CookieHandler } from '../../CookieHandler';
+import DebugUtil from '../../../common/util/DebugUtil';
 
 export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
   /**
@@ -21,7 +22,12 @@ export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
 
   async start(fetchConfig) {
     if (this.runningFlag) return;
-    this.comboId = await ServerUtil.getComboId(fetchConfig.enableDataSourceList);
+    try {
+      this.comboId = await ServerUtil.getComboId(fetchConfig.enableDataSourceList);
+    } catch (e) {
+      this.failCount++;
+      throw e;
+    }
     this.config = fetchConfig;
     this.runningFlag = true;
     CookieHandler.resetLastServerList();
@@ -38,17 +44,21 @@ export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
     }
     if (Date.now() >= this.nextCheckAvailableTime) {
       try {
-        const serverInfo = await ServerUtil.getServerDataSourceInfo(true);
-        await ServerUtil.requestCdnServerApi(
-          `cdn/cookie/mainList/cookieList?datasource_comb_id=${encodeURIComponent(
-            serverInfo.allComboId
-          )}&cookie_id=${encodeURIComponent(this.lastLatestCookieId)}`
+        if (!this.comboId) {
+          this.comboId = await ServerUtil.getComboId(this.config.enableDataSourceList);
+        }
+        const { cookie_id, update_cookie_id } = JSON.parse(
+          await ServerUtil.requestCdn('datasource-comb/' + encodeURIComponent(this.comboId), { cache: 'no-cache' })
         );
+        if (cookie_id) {
+          await ServerUtil.getCookieList(this.comboId, cookie_id, update_cookie_id);
+        }
         this.__setAvailable();
         return true;
       } catch (e) {
         this.nextCheckAvailableTime = Date.now() + this.nextCheckAvailableTimeFactory * 10 * 1000;
-        this.nextCheckAvailableTimeFactory *= 2;
+        // 限制最大重试间隔为半小时
+        this.nextCheckAvailableTimeFactory = Math.min(180, this.nextCheckAvailableTimeFactory * 2);
         return false;
       }
     } else {
@@ -73,19 +83,20 @@ export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
         this.lastLatestCookieId = cookie_id;
         const result = await ServerUtil.getCookieList(this.comboId, cookie_id, update_cookie_id);
         await PlatformHelper.Storage.saveLocalStorage('server_secondary_page_cookie_id', result.next_page_id);
-        await CookieHandler.handleServer(result);
+        await CookieHandler.handleServer(this.config.id, result);
       } else if (cookie_id === null) {
-        CookieHandler.handleServerNull();
+        CookieHandler.handleServerNull(this.config.id);
       } else {
         CookieHandler.handleServerNotChange();
       }
       this.__setAvailable();
     } catch (e) {
       this.failCount++;
+      DebugUtil.debugLog(0, e.message);
       console.log(e);
     }
     setTimeout(() => {
-      void this.doCycle();
+      this.doCycle();
     }, this.config.getCurrentInterval() * 1000);
   }
 }

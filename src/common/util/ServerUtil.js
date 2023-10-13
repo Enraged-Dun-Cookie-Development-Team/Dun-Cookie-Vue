@@ -17,7 +17,7 @@ import { Http } from '@enraged-dun-cookie-development-team/common/request';
 import DebugUtil from './DebugUtil';
 import md5 from 'js-md5';
 import { DataSourceMeta } from '../datasource/DataSourceMeta';
-import { DataItem, RetweetedInfo } from '../DataItem';
+import { CookieItem, RetweetedInfo } from '../CookieItem';
 import AvailableDataSourceMeta from '../sync/AvailableDataSourceMeta';
 import { registerUrlToAddReferer } from '../../background/request_interceptor';
 
@@ -178,7 +178,7 @@ export default class ServerUtil {
 
   /**
    *
-   * @param sourceList {{type: string, dataId: string}[]}
+   * @param sourceList {{type: string, dataId: string, custom?: boolean}[]}
    * @return {Promise<string>}
    */
   static async getComboId(sourceList) {
@@ -273,7 +273,7 @@ export default class ServerUtil {
         }
         const images = cookie.default_cookie.images?.map((it) => it.origin_url);
         const cover = images && images.length > 0 ? images[0] : undefined;
-        const builder = DataItem.builder(`${cookie.source.type}:${cookie.source.data}`)
+        const builder = CookieItem.builder(`${cookie.source.type}:${cookie.source.data}`)
           .id(cookie.item.id)
           .timeForSort(cookie.timestamp.fetcher)
           .coverImage(cover)

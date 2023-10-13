@@ -95,7 +95,7 @@ export default class BrowserPlatform extends AbstractPlatform {
    * 生成分享图片的头部，不考虑边距
    *
    * @param width {number}
-   * @param dataItem {DataItem}
+   * @param dataItem {CookieItem}
    * @param iconUrl {string}
    * @param dataSource {DataSourceMeta}
    * @return {Promise<HTMLCanvasElement>}
@@ -152,7 +152,7 @@ export default class BrowserPlatform extends AbstractPlatform {
    * 生成分享图片的文字内容，不考虑边距
    *
    * @param width {number}
-   * @param dataItem {DataItem}
+   * @param dataItem {CookieItem}
    * @return {Promise<HTMLCanvasElement|null>}
    * @private
    */

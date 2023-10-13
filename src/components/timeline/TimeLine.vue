@@ -96,7 +96,7 @@
         :timestamp="item.timeForDisplay"
         placement="top"
         :icon-style="{
-          '--icon': `url('${getDataSourceById(item.dataSource).icon}')`,
+          '--icon': `url('${getDataSourceById(item.dataSource)?.icon || '/assets/image/' + settings.logo}')`,
         }"
         :icon="'headImg'"
       >
@@ -173,12 +173,12 @@ import TimeUtil from '../../common/util/TimeUtil';
 import Search from '../Search';
 import { deepAssign } from '../../common/util/CommonFunctions';
 import PlatformHelper from '../../common/platform/PlatformHelper';
-import InsiderUtil from '../../common/util/InsiderUtil';
 import ServerUtil from '../../common/util/ServerUtil';
 import SelectImageToCopy from '@/components/SelectImageToCopy';
 import UpdateInfoNotice from '../UpdateInfoNotice';
 import AvailableDataSourceMeta from '../../common/sync/AvailableDataSourceMeta';
 import { debounceTime, Subject, distinctUntilChanged, map } from 'rxjs';
+import { CookieItem } from '../../common/CookieItem';
 
 export default {
   name: 'TimeLine',
@@ -341,6 +341,24 @@ export default {
           this.nextPageOffsetId = result.next_page_id;
           this.isLastPage = result.next_page_id === null;
           const items = ServerUtil.transformCookieListToItemList(result.cookies);
+          /* IFTRUE_feature__custom_datasource */
+          if (this.extraCardList.length === 0 && Settings.extraFeature.enableCustomDataSources?.length > 0) {
+            this.extraCardList.push(
+              CookieItem.builder('page_tip_for_custom')
+                .id('0')
+                .timeForSort(items[0].timeForSort + 1)
+                .timeForDisplay('自动翻页提示')
+                .content(
+                  '\n\n\n' +
+                    '-----------------------------------------------\n' +
+                    '从这里开始后面都是从服务器获取的自动翻页(该提示仅在启用了自定义数据源时出现)\n' +
+                    '-----------------------------------------------\n' +
+                    '\n\n\n'
+                )
+                .build()
+            );
+          }
+          /* FITRUE_feature__custom_datasource */
           this.extraCardList.push(...items);
         } finally {
           this.lastNextPageRequestState = false;
@@ -506,26 +524,12 @@ export default {
         });
       }
     },
-    changeInsider() {
-      const [newLevel, validCode] = InsiderUtil.calcInsiderLevel(this.filterText, this.insiderCodeMap);
-      if (validCode) {
-        this.settings.insider.code = this.filterText;
-        this.settings.insider.level = newLevel;
-        this.settings.saveSettings();
-        this.$message({
-          center: true,
-          message: '成功启用高级功能',
-          type: 'success',
-        });
-      }
-    },
     // 监听键盘
     listenKeyBord() {
       document.addEventListener('keyup', (e) => {
         if (e.key === 'Enter') {
           this.searchShow = !this.searchShow;
           if (!this.searchShow) {
-            this.changeInsider();
             this.$refs.SearchModel.clearText();
             this.filterText = null;
             this.$emit('cardListChange');

@@ -1,6 +1,5 @@
 <template>
   <div :class="settings.getColorTheme()">
-    <!-- <div id="app" :style="'height:' + allHeight + 'px'"> -->
     <div id="app">
       <!-- 理智计算 -->
       <el-drawer :visible.sync="toolDrawer" :show-close="false" direction="ttb" size="180px">
@@ -45,8 +44,6 @@
         :show-close="false"
         :direction="settings.display.windowMode ? 'rtl' : 'ttb'"
         size="520px"
-        @close="menuIconClick"
-        @open="menuIconClick"
       >
         <el-divider content-position="left"> 饼的发源地 </el-divider>
         <div
@@ -119,11 +116,12 @@
             <span v-if="settings.open"
               >【已蹲饼 <countTo :start-val="oldDunCount" :end-val="dunInfo.counter" :duration="1000" />次】
             </span>
-            <span v-if="settings.checkLowFrequency()"> 【低频蹲饼时段】 </span>
+            <template v-if="isCustomBuild">
+              <span>【自定义构建 By: {{ BUILD_BY() }}】</span>
+            </template>
+            <span v-if="settings.checkLowFrequency()">【低频蹲饼中】</span>
           </span>
         </div>
-        <!--        <span @click.stop="drawer = !drawer;"-->
-        <!--              :class="[drawer?'menu-btn-open':'menu-btn-close', firefox ? 'menu-btn-firefox' : '','menu-btn','el-icon-menu']"></span>-->
         <div class="countdown-and-btn">
           <div v-show="countDownList.length > 0" class="count-down-area" @click="openCountDown()">
             <div v-for="(item, index) in countDownList" :key="index" :title="'到点时间：' + item.stopTime">
@@ -172,20 +170,20 @@ import SanInfo from '../common/sync/SanInfo';
 import DunInfo from '../common/sync/DunInfo';
 import MenuIcon from '@/popup/MenuIcon';
 import {
+  BUILD_BY,
   dayInfo,
+  ENABLE_FEATURES,
   MESSAGE_GET_COUNTDOWN,
-  PAGE_DONATE,
+  PAGE_CEOBECANTEEN_WEB_ABOUT_US,
+  PAGE_CEOBECANTEEN_WEB_SPONSOR,
   PAGE_GITHUB_REPO,
   PAGE_OPTIONS,
   PAGE_TIME,
   PAGE_UPDATE,
+  PAGE_WELCOME,
   PLATFORM_FIREFOX,
   quickJump,
   SHOW_VERSION,
-  PAGE_GITHUB_TEAM,
-  PAGE_WELCOME,
-  PAGE_CEOBECANTEEN_WEB_ABOUT_US,
-  PAGE_CEOBECANTEEN_WEB_SPONSOR,
 } from '../common/Constants';
 import PlatformHelper from '../common/platform/PlatformHelper';
 import 'animate.css';
@@ -198,8 +196,10 @@ export default {
   data() {
     CardList.doAfterUpdate((data) => {
       const oldIds = this.cardList.map((it) => it.id);
-      this.cardList = data.list;
-      if (oldIds.length > 0 && data.list.find((it) => oldIds.indexOf(it.id) === -1)) {
+      if (this.cardList.length === 0) {
+        this.cardList = data.getFirstPageList();
+      }
+      if (oldIds.length > 0 && data.getFirstPageList().find((it) => oldIds.indexOf(it.id) === -1)) {
         this.$message({
           offset: 50,
           center: true,
@@ -216,7 +216,7 @@ export default {
       show: false,
       LazyLoaded: false,
       isNew: false,
-      cardList: CardList.list,
+      cardList: CardList.getFirstPageList(),
       currentVersion: SHOW_VERSION,
       onlineSpeakList: [],
       oldDunCount: 0,
@@ -235,6 +235,7 @@ export default {
       countDownList: [],
       // allHeight: 0,
       isOriginScroll: false,
+      isCustomBuild: false,
     };
   },
   computed: {},
@@ -257,18 +258,19 @@ export default {
   },
   beforeDestroy() {},
   methods: {
+    BUILD_BY() {
+      return BUILD_BY;
+    },
     openUrl: PlatformHelper.Tabs.create,
     init() {
+      this.isCustomBuild = ENABLE_FEATURES.length > 0;
       ServerUtil.getServerDataSourceInfo(true).then((data) => {
         this.quickJump.source = data.serverDataSourceList.filter((it) => !!it.jump_url);
       });
-      // this.menuIconInit();
       DunInfo.doAfterUpdate((data) => {
         this.oldDunCount = data.counter;
       });
       setTimeout(() => {
-        // 计算高度
-        // this.calcHeight();
         let head = navigator.userAgent;
         if (head.indexOf('Firefox') > 1) {
           let div = document.getElementById('app');
@@ -302,83 +304,6 @@ export default {
           this.quickJump.url.push(...btnList);
         }
       });
-    },
-    // 初始化菜单图标
-    menuIconInit() {
-      // this.janvas = new janvas.Canvas({
-      //   container: "#menu-btn", // #容器 id 或者是容器引用
-      //   props: {
-      //     color: "#23ade5", // 颜色采用 HEX 格式，起始颜色，也即最开始展示的颜色
-      //     backgroundColor: "#ffffff" // 中止颜色，也即背景颜色
-      //   },
-      //   methods: {
-      //     init: function () { // 控件第一次初始化时调用，仅调用一次
-      //       var ctx = this.$ctx, // 绘图上下文 ctx
-      //           w = this.$width, h = this.$height, // 控件的宽与高
-      //           ox = w / 2, oy = h / 2; // 控件 origin 中心点
-      //       var center = new janvas.Point(ox, oy), // 持有中心点的 Point 对象
-      //           start = new janvas.Point(ox, 0), // 为了计算矩形起始坐标的 Point 对象
-      //           end = new janvas.Point(w, oy); // 为了计算矩形宽度的 Point 对象
-      //       end.inline(start, 0.5 + 0.191 / 2); // 计算矩形处于终点处的右上角坐标
-      //       var size = Math.floor(end.distance(start)); // 矩形大小，即宽高
-      //       start.subtract(center).rotate(-Math.PI / 4).add(center); // 计算矩形起始点
-      //       var rect = this.rect = new janvas.Rect(ctx, // 初始化矩形对象
-      //           Math.ceil(start.x), Math.ceil(start.y), size, size, ox, oy);
-      //       rect.getStyle().setFillStyle(this.color); // 设置颜色
-      //       size = w - rect.getStartX() * 2; // 此为计算边界矩形大小
-      //       var border = this.border = new janvas.Rect(ctx, // 边界矩形大小，为了避免多余像素
-      //           rect.getStartX() + 1, rect.getStartY() + 1, size - 2, size - 2, ox, oy);
-      //       border.getStyle().setFillStyle(this.backgroundColor);
-      //       var sRgbStart = new janvas.Rgb().fromHexString(this.color).sRgbInverseCompanding(),
-      //           sRgbEnd = new janvas.Rgb().fromHexString(this.backgroundColor).sRgbInverseCompanding(),
-      //           rgb = new janvas.Rgb();
-      //       this.rotate = new janvas.Animation(this.$raf, 500, 0, // 动画精灵对象
-      //           function () {
-      //             if (this.status) {
-      //               this.angle = this.angleRange, this.angleRange = -Math.PI / 4;
-      //               this.sRgbStart = sRgbEnd, this.sRgbEnd = sRgbStart;
-      //             } else {
-      //               this.angle = 0, this.angleRange = Math.PI / 4;
-      //               this.sRgbStart = sRgbStart, this.sRgbEnd = sRgbEnd;
-      //             }
-      //           },
-      //           function (ratio) {
-      //             ratio = janvas.Utils.ease.out.cubic(ratio);
-      //             rect.getMatrix().setAngle(this.angle + this.angleRange * ratio);
-      //             border.getMatrix().setAngle(this.angle + this.angleRange * ratio);
-      //             janvas.Rgb.sRgbMixing(this.sRgbStart, this.sRgbEnd, ratio, rgb);
-      //             rect.getStyle().setFillStyle(rgb.sRgbCompanding().toRgbString());
-      //             janvas.Rgb.sRgbMixing(this.sRgbStart, this.sRgbEnd, 1 - ratio, rgb);
-      //             border.getStyle().setFillStyle(rgb.sRgbCompanding().toRgbString());
-      //           },
-      //           function (forward) {
-      //             if (forward) this.status = !this.status;
-      //           }
-      //       );
-      //     },
-      //     update: function (timestamp, interval) { // 动画回调
-      //       this.rotate.update(interval);
-      //     },
-      //     draw: function () { // 绘制逻辑部分
-      //       this.$clear();
-      //       this.border.fill(); // 背景矩形绘制
-      //       var rect = this.rect;
-      //       for (var i = 0; i < 4; i++) {
-      //         rect.fill(); // 小矩形绘制，并依中心点旋转 90 度，从而绘制四个矩形
-      //         rect.getMatrix().setAngle(rect.getMatrix().getAngle() + Math.PI / 2);
-      //       }
-      //     }
-      //   },
-      //   callbacks: {
-      //     start: function () {
-      //       if (this.rotate.isRunning()) this.rotate.reverse();
-      //       else this.rotate.start();
-      //     }
-      //   }
-      // });
-    },
-    menuIconClick() {
-      // this.janvas.start();
     },
     async firefoxWarning() {
       const flagKey = 'firefox-collapse-warning-flag';
@@ -449,8 +374,7 @@ export default {
     bindScrollFun() {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
       let drawerBtnArea = this.$refs.drawerBtnArea;
-      // 添加监听事件（不同浏览器，事件方法不一样，所以可以作判断，也可以如下偷懒）
-      // scrollDiv.addEventListener("DOMMouseScroll", handler, false);
+      // 添加监听事件
       scrollDiv.addEventListener('wheel', this.scrollHandler, false);
       drawerBtnArea.addEventListener('wheel', this.drawerBtnAreaScroll, false);
       const bodyWidth = document.querySelector('body').offsetWidth;
@@ -516,10 +440,6 @@ export default {
       PlatformHelper.Tabs.createWithExtensionFile(PAGE_TIME);
     },
 
-    openDonate() {
-      PlatformHelper.Tabs.createWithExtensionFile(PAGE_DONATE);
-    },
-
     openUpdate() {
       PlatformHelper.Tabs.createWithExtensionFile(PAGE_UPDATE);
     },
@@ -532,20 +452,12 @@ export default {
       PlatformHelper.Tabs.create(PAGE_GITHUB_REPO);
     },
 
-    openGithubTeam() {
-      PlatformHelper.Tabs.create(PAGE_GITHUB_TEAM);
-    },
-
     openAboutUs() {
       PlatformHelper.Tabs.create(PAGE_CEOBECANTEEN_WEB_ABOUT_US);
     },
 
     openSponsor() {
       PlatformHelper.Tabs.create(PAGE_CEOBECANTEEN_WEB_SPONSOR);
-    },
-
-    onSlideChange() {
-      return;
     },
   },
 };
@@ -705,10 +617,6 @@ export default {
       border-radius: 5px;
       flex-shrink: 0;
 
-      // display: flex;
-      // flex-wrap: wrap;
-      // align-items: center;
-
       &:hover {
         img {
           filter: blur(30px) brightness(0.1);
@@ -742,24 +650,6 @@ export default {
         }
       }
     }
-
-    // 展示注释
-    // &::after {
-    //   content: " ";
-    //   position: fixed;
-    //   height: 100px;
-    //   right: 0;
-    //   width: 20px;
-    //   background: linear-gradient(90deg, transparent, @@bgColor 50%);
-    // }
-    // &::before {
-    //   content: " ";
-    //   position: fixed;
-    //   height: 100px;
-    //   left: 0;
-    //   width: 20px;
-    //   background: linear-gradient(90deg, @@bgColor 50%, transparent);
-    // }
   }
 
   // 标签栏

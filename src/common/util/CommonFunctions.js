@@ -3,6 +3,44 @@
  */
 
 /**
+ * 递归比较对象
+ *
+ * @param oldObj 旧对象
+ * @param newObj 新对象
+ */
+function deepDiff(oldObj, newObj) {
+  if (!oldObj || !newObj || typeof oldObj !== 'object' || typeof newObj !== 'object')
+    throw new Error('deepDiff比较的新旧值必须都是object');
+  const changed = {};
+  for (const key in newObj) {
+    if (newObj.hasOwnProperty(key)) {
+      //判断obj子元素是否为对象，如果是则递归比较，否则简单比较
+      const val = newObj[key];
+      if (val && typeof val === 'object' && !Array.isArray(val)) {
+        if (oldObj.hasOwnProperty(key)) {
+          const subChanged = deepDiff(oldObj[key], newObj[key]);
+          if (Object.keys(subChanged).length > 0) {
+            changed[key] = subChanged;
+          }
+        } else {
+          changed[key] = 'add';
+        }
+      } else {
+        if (!deepEquals(oldObj[key], val)) {
+          changed[key] = Array.isArray(val) ? 'changed-array' : 'changed';
+        }
+      }
+    }
+  }
+  for (const key in oldObj) {
+    if (oldObj.hasOwnProperty(key) && !newObj.hasOwnProperty(key)) {
+      changed[key] = 'delete';
+    }
+  }
+  return changed;
+}
+
+/**
  * 递归合并对象
  * <p>
  * <strong>注意：子元素是数组的会直接复制而不会递归合并</strong>
@@ -110,4 +148,8 @@ function animateCSS(element, animation, callback) {
   });
 }
 
-export { deepAssign, deepEquals, animateCSS };
+global.deepDiff = deepDiff;
+global.deepAssign = deepAssign;
+global.deepEquals = deepEquals;
+
+export { deepDiff, deepAssign, deepEquals, animateCSS };

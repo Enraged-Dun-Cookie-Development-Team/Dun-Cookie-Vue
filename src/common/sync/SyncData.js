@@ -1,5 +1,5 @@
 import PlatformHelper from '../platform/PlatformHelper';
-import { deepAssign, deepEquals } from '../util/CommonFunctions';
+import { deepAssign, deepDiff, deepEquals } from '../util/CommonFunctions';
 import DebugUtil from '../util/DebugUtil';
 
 // 该类仅用于IDE友好提示
@@ -14,6 +14,10 @@ class CanSync {
   }
 
   doAfterFirstUpdate(listener) {
+    throw new Error('仅用于IDE的友好提示，不应当被调用');
+  }
+
+  sendUpdateAtNextTick() {
     throw new Error('仅用于IDE的友好提示，不应当被调用');
   }
 }
@@ -78,7 +82,17 @@ class DataSynchronizer {
     if (typeof updateHandler === 'function') {
       this.updateHandler = updateHandler;
     } else {
-      this.updateHandler = deepAssign;
+      this.updateHandler = (target, obj) => {
+        const changed = deepDiff(target, obj);
+        const deleteKeys = Object.keys(target).filter((it) => !obj.hasOwnProperty(it));
+        deleteKeys.forEach((key) => delete target[key]);
+        for (const key in obj) {
+          if (obj.hasOwnProperty(key)) {
+            target[key] = obj[key];
+          }
+        }
+        return changed;
+      };
     }
     const fn = async () => {
       // 当且仅当未进行过更新且storage中有数据时才会将storage中的数据设为当前数据
@@ -135,8 +149,7 @@ class DataSynchronizer {
   }
 
   __handleReloadOrReceiveUpdate(data, isReload = false) {
-    const changed = {};
-    this.updateHandler(this.target, data, changed);
+    const changed = this.updateHandler(this.target, data);
     if (isReload) {
       DebugUtil.debugLog(6, `从storage中读取${this.key}: `, data, 'changed: ', changed);
     } else {

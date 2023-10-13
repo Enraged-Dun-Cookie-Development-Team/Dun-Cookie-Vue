@@ -1,9 +1,8 @@
 {
   "name": "ceobe-canteen-browser-extension",
-  "version": "4.0.3",
+  "version": "4.0.4",
   "private": true,
   "scripts": {
-    "dev": "vue-cli-service serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint:eslint": "eslint --ext .js,.vue src",
@@ -12,8 +11,9 @@
     "fix:stylelint": "stylelint src/**/*.{vue,scss,css,sass,less} --fix"
   },
   "dependencies": {
-    "@enraged-dun-cookie-development-team/common": "^0.0.1-alpha.22",
-    "@enraged-dun-cookie-development-team/cookie-fetcher": "^0.0.1-alpha.64",
+    "@enraged-dun-cookie-development-team/common": "^0.0.1-alpha.28",
+    "@enraged-dun-cookie-development-team/cookie-fetcher": "^0.0.1-alpha.70",
+    "@enraged-dun-cookie-development-team/cookie-fetcher-core": "^0.0.1-alpha.10",
     "animate.css": "^4.1.1",
     "core-js": "^3.25.1",
     "crypto-js": "^4.1.1",
@@ -21,6 +21,7 @@
     "fastest-levenshtein": "^1.0.16",
     "html2canvas": "^1.4.1",
     "jquery": "^3.6.1",
+    "js-conditional-compile-loader": "^1.0.16",
     "js-md5": "^0.7.3",
     "jsdom": "^20.0.0",
     "nodejs-websocket": "^1.7.2",

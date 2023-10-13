@@ -1,5 +1,5 @@
 import TimeUtil from '../../../../common/util/TimeUtil';
-import { DataItem } from '../../../../common/DataItem';
+import { CookieItem } from '../../../../common/CookieItem';
 import Settings from '../../../../common/Settings';
 
 /**
@@ -12,7 +12,7 @@ export class NeteaseCloudMusicDataSource {
     let data = JSON.parse(rawDataText);
     const date = TimeUtil.format(new Date(data.publishTime), 'yyyy-MM-dd');
     const time = new Date(`${date} ${Settings.getTimeBySortMode()}`);
-    return DataItem.builder(sourceId)
+    return CookieItem.builder(sourceId)
       .id(data.id)
       .timeForSort(time.getTime())
       .timeForDisplay(date)

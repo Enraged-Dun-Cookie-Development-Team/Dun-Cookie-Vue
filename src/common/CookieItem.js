@@ -1,17 +1,16 @@
 /**
  * 代表一块饼！
  */
-class DataItem {
+class CookieItem {
   /**
    * 【必填】标识这个饼来自哪个数据源，值为数据源的唯一id
    * @type {string}
    */
   dataSource;
   /**
-   * 【必填】唯一id，格式为 数据源类型名 + _ + 该数据源内部的唯一id
+   * 【必填】唯一id，格式为 数据源id + _ + 该数据源内部的唯一id
    * <p>
-   * 加数据源类型名是为了避免不同数据源内部的id重复。
-   * 对于没有内部id的数据源，应使用时间戳作为id。
+   * 加数据源id是为了避免不同数据源内部的id重复。
    * <strong>注意：使用builder方法会自动加上数据源类型名，子类无需操心</strong>
    * @type {string}
    */
@@ -65,75 +64,75 @@ class DataItem {
   componentData;
 
   static builder(dataSourceId) {
-    const instance = new DataItem();
+    const instance = new CookieItem();
     instance.dataSource = dataSourceId;
     // 其实这里用反射生成应该可读性更强一些，但是只有明确写出来IDE才能识别并自动补全
     const _builder = {
       /**
-       * @see DataItem.id
+       * @see CookieItem.id
        */
       id: (val) => {
         instance.id = `${dataSourceId}_${val}`;
         return _builder;
       },
       /**
-       * @see DataItem.timeForSort
+       * @see CookieItem.timeForSort
        */
       timeForSort: (val) => {
         instance.timeForSort = val;
         return _builder;
       },
       /**
-       * @see DataItem.timeForDisplay
+       * @see CookieItem.timeForDisplay
        */
       timeForDisplay: (val) => {
         instance.timeForDisplay = val;
         return _builder;
       },
       /**
-       * @see DataItem.content
+       * @see CookieItem.content
        */
       content: (val) => {
         instance.content = val;
         return _builder;
       },
       /**
-       * @see DataItem.jumpUrl
+       * @see CookieItem.jumpUrl
        */
       jumpUrl: (val) => {
         instance.jumpUrl = val;
         return _builder;
       },
       /**
-       * @see DataItem.coverImage
+       * @see CookieItem.coverImage
        */
       coverImage: (val) => {
         instance.coverImage = val;
         return _builder;
       },
       /**
-       * @see DataItem.imageList
+       * @see CookieItem.imageList
        */
       imageList: (val) => {
         instance.imageList = val;
         return _builder;
       },
       /**
-       * @see DataItem.isTop
+       * @see CookieItem.isTop
        */
       setTop: () => {
         instance.isTop = true;
         return _builder;
       },
       /**
-       * @see DataItem.retweeted
+       * @see CookieItem.retweeted
        */
       retweeted: (val) => {
         instance.retweeted = val;
         return _builder;
       },
       /**
-       * @see DataItem.componentData
+       * @see CookieItem.componentData
        */
       componentData: (val) => {
         instance.componentData = val;
@@ -161,4 +160,4 @@ class RetweetedInfo {
   }
 }
 
-export { DataItem, RetweetedInfo };
+export { CookieItem, RetweetedInfo };

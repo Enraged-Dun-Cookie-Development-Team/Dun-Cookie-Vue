@@ -1,4 +1,5 @@
 import DebugUtil from '../../common/util/DebugUtil';
+import CardList from '../../common/sync/CardList';
 
 /**
  * @type {Record<string, {id: string, ctor: () => AbstractCookieFetcher}>}
@@ -91,30 +92,44 @@ class FetcherController {
           await this.stop();
         }
         this.currentFetcherIdx = newFetcherIdx;
-        DebugUtil.debugLog(0, '蹲饼器切换为：', this.fetchConfig.fetcherStrategyList[this.currentFetcherIdx].fetcher);
+        DebugUtil.debugLog(
+          0,
+          `[${this.fetchConfig.id}]蹲饼器切换为：`,
+          this.fetchConfig.fetcherStrategyList[this.currentFetcherIdx].fetcher
+        );
         if (this.fetchConfig.enable) {
           await this.start();
         }
       } catch (e) {
         this.currentFetcherIdx = oldFetcherIdx;
         console.log(e);
-        DebugUtil.debugLog(0, '蹲饼器切换失败！');
+        DebugUtil.debugLog(0, `[${this.fetchConfig.id}]蹲饼器切换失败！`);
       }
     }
   }
 
   async start() {
     if (this.fetchConfig.enableDataSourceList.length > 0) {
-      DebugUtil.debugLog(0, '蹲饼器启动：', this.fetchConfig.fetcherStrategyList[this.currentFetcherIdx].fetcher);
+      DebugUtil.debugLog(
+        0,
+        `[${this.fetchConfig.id}]蹲饼器启动：`,
+        this.fetchConfig.fetcherStrategyList[this.currentFetcherIdx].fetcher
+      );
       await this.fetchers[this.currentFetcherIdx].start(this.fetchConfig);
     } else {
-      DebugUtil.debugLog(0, '未启用任何数据源，不启动蹲饼器');
+      DebugUtil.debugLog(0, `[${this.fetchConfig.id}]未启用任何数据源，不启动蹲饼器`);
     }
   }
 
   async stop() {
-    DebugUtil.debugLog(0, '蹲饼器停止：', this.fetchConfig.fetcherStrategyList[this.currentFetcherIdx].fetcher);
+    DebugUtil.debugLog(
+      0,
+      `[${this.fetchConfig.id}]蹲饼器停止：`,
+      this.fetchConfig.fetcherStrategyList[this.currentFetcherIdx].fetcher
+    );
     await this.fetchers[this.currentFetcherIdx].stop();
+    delete CardList.firstPageCookieList[this.fetchConfig.id];
+    CardList.sendUpdateAtNextTick();
   }
 }
 

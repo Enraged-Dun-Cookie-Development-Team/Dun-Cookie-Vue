@@ -36,7 +36,7 @@
 <script>
 import Settings from '../../../common/Settings';
 import PlatformHelper from '../../../common/platform/PlatformHelper';
-import { DataItem } from '../../../common/DataItem';
+import { CookieItem } from '../../../common/CookieItem';
 
 export const elementVisibleInPercent = (element) => {
   return new Promise((resolve, reject) => {
@@ -58,7 +58,7 @@ export const elementVisibleInPercent = (element) => {
 
 export default {
   name: 'DefaultItem',
-  props: { item: { type: DataItem, required: true }, showImage: Boolean },
+  props: { item: { type: CookieItem, required: true }, showImage: Boolean },
   data() {
     return {
       settings: Settings,
@@ -76,7 +76,12 @@ export default {
           elementVisibleInPercent(this.$refs.item)
             .then((percent) => {
               if (percent < 30) {
-                this.$refs.item.scrollIntoView(false);
+                this.$refs.item.scrollIntoView(true);
+                let node = this.$refs.item;
+                while (node && !node.classList.contains('el-timeline')) {
+                  node = node.parentElement;
+                }
+                node.scrollBy(0, -100);
               }
             })
             .catch(() => {});

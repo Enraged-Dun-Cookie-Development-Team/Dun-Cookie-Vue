@@ -1,5 +1,5 @@
 import TimeUtil from '../../../../common/util/TimeUtil';
-import { DataItem } from '../../../../common/DataItem';
+import { CookieItem } from '../../../../common/CookieItem';
 import Settings from '../../../../common/Settings';
 
 /**
@@ -12,7 +12,7 @@ export class TerraHistoricusDataSource {
     const time = new Date(
       TimeUtil.format(new Date(data.updateTime * 1000), 'yyyy-MM-dd') + ' ' + Settings.getTimeBySortMode()
     );
-    return DataItem.builder(sourceId)
+    return CookieItem.builder(sourceId)
       .id(data.cid)
       .timeForSort(time.getTime())
       .timeForDisplay(TimeUtil.format(time, 'yyyy-MM-dd'))

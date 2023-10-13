@@ -1,6 +1,7 @@
 import { AbstractCookieFetcher } from '../AbstractCookieFetcher';
 import ServerUtil from '../../../common/util/ServerUtil';
-import { FetchController, registerDefaultDataSourceTypes } from '@enraged-dun-cookie-development-team/cookie-fetcher';
+import { FetchController } from '@enraged-dun-cookie-development-team/cookie-fetcher-core';
+import { registerDefaultDataSourceTypes } from '@enraged-dun-cookie-development-team/cookie-fetcher';
 import { DefaultLogger } from '@enraged-dun-cookie-development-team/common/logger';
 import PlatformHelper from '../../../common/platform/PlatformHelper';
 import { CookieHandler } from '../../CookieHandler';
@@ -100,7 +101,7 @@ export class LocalCookieFetcher extends AbstractCookieFetcher {
       config,
       (fetchData) => {
         if (fetchData.success) {
-          void CookieHandler.handleLocal(fetchData);
+          void CookieHandler.handleLocal(fetchConfig.id, fetchData);
         } else {
           console.log(fetchData.error);
         }

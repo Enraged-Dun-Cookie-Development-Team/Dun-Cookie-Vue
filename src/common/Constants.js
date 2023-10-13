@@ -14,10 +14,6 @@ const IS_DEBUG = DEBUG_LEVEL > 0;
  * 需要注意的是如果输出日志太多会导致打卡开发者控制台(F12)会非常卡，所以不要动前面的<code>IS_DEBUG &&</code>以避免忘记修改导致生产版本出问题
  */
 const DEBUG_LOG = IS_DEBUG && true;
-/**
- * 是否使用测试用的数据源URL
- */
-const USE_TEST_URL = IS_DEBUG && false;
 
 /**
  * 当前配置文件版本号
@@ -32,7 +28,26 @@ const CURRENT_VERSION = process.env.VUE_APP_PROJECT_VERSION;
  */
 const SHOW_VERSION = CURRENT_VERSION + (IS_DEBUG ? '【调试模式】' : '');
 
-export { IS_DEBUG, DEBUG_LEVEL, DEBUG_LOG, USE_TEST_URL, CURRENT_SETTING_VERSION, CURRENT_VERSION, SHOW_VERSION };
+/**
+ * 启用的增强特性
+ * @type {string[]}
+ */
+const ENABLE_FEATURES = (process.env.VUE_APP_ENABLE_FEATURES || '').split(',').filter((v) => v.length > 0);
+/**
+ * 构建者
+ */
+const BUILD_BY = process.env.VUE_APP_BUILD_BY;
+
+export {
+  IS_DEBUG,
+  DEBUG_LEVEL,
+  DEBUG_LOG,
+  CURRENT_SETTING_VERSION,
+  CURRENT_VERSION,
+  SHOW_VERSION,
+  ENABLE_FEATURES,
+  BUILD_BY,
+};
 // endregion
 
 // region 各种参数，主要用于测试模式
@@ -63,21 +78,18 @@ export { MESSAGE_WEIBO_ADD_REFERER, MESSAGE_GET_COUNTDOWN };
 const PLATFORM_CHROME = 'Chrome';
 const PLATFORM_FIREFOX = 'Firefox';
 const PLATFORM_EDGE = 'Edge';
-const PLATFORM_NODE = 'Node';
 const PLATFORM_UNKNOWN = 'Unknown';
 
-export { PLATFORM_CHROME, PLATFORM_FIREFOX, PLATFORM_EDGE, PLATFORM_NODE, PLATFORM_UNKNOWN };
+export { PLATFORM_CHROME, PLATFORM_FIREFOX, PLATFORM_EDGE, PLATFORM_UNKNOWN };
 // endregion
 
 // region 扩展内置页面
 const PAGE_WELCOME = 'welcome.html';
 const PAGE_OPTIONS = 'options.html';
-const PAGE_DONATE = 'donate.html';
 const PAGE_UPDATE = 'update.html';
 const PAGE_TIME = 'time.html';
 const PAGE_POPUP_WINDOW = 'popup.html';
 const PAGE_GITHUB_REPO = 'https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue';
-const PAGE_GITHUB_TEAM = 'https://github.com/Enraged-Dun-Cookie-Development-Team';
 const PAGE_CEOBECANTEEN_WEB_ABOUT_US = 'https://www.ceobecanteen.top/#about-us';
 const PAGE_CEOBECANTEEN_WEB_SPONSOR = 'https://www.ceobecanteen.top/#sponsor';
 
@@ -85,13 +97,11 @@ export {
   PAGE_WELCOME,
   PAGE_POPUP_WINDOW,
   PAGE_OPTIONS,
-  PAGE_DONATE,
   PAGE_UPDATE,
   PAGE_GITHUB_REPO,
   PAGE_TIME,
   PAGE_CEOBECANTEEN_WEB_ABOUT_US,
   PAGE_CEOBECANTEEN_WEB_SPONSOR,
-  PAGE_GITHUB_TEAM,
 };
 // endregion
 

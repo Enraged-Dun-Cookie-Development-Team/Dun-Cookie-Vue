@@ -2,8 +2,6 @@ import { FetchConfig } from './FetchConfig';
 
 /**
  * 蹲饼器接口
- *
- * TODO 实现自定义数据源
  */
 export class AbstractCookieFetcher {
   /**
@@ -13,7 +11,7 @@ export class AbstractCookieFetcher {
    * @return {Promise<void>}
    */
   async start(fetchConfig) {
-    throw new Error(`蹲饼器${this.id}未实现方法start`);
+    throw new Error(`蹲饼器${this.constructor.name}未实现方法start`);
   }
 
   /**
@@ -23,7 +21,7 @@ export class AbstractCookieFetcher {
    * @return {Promise<void>}
    */
   async stop() {
-    throw new Error(`蹲饼器${this.id}未实现方法stop`);
+    throw new Error(`蹲饼器${this.constructor.name}未实现方法stop`);
   }
 
   /**
@@ -31,6 +29,6 @@ export class AbstractCookieFetcher {
    * @return {Promise<boolean>}
    */
   async checkAvailable() {
-    throw new Error(`蹲饼器${this.id}未实现方法checkAvailable`);
+    throw new Error(`蹲饼器${this.constructor.name}未实现方法checkAvailable`);
   }
 }
