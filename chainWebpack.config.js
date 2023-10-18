@@ -7,8 +7,7 @@ const isDevMode = process.env.NODE_ENV === 'development';
 const PROJECT_VERSION = JSON.parse(file.readFileSync('./package.json').toString()).version;
 process.env.VUE_APP_PROJECT_VERSION = PROJECT_VERSION;
 const enableFeatures = (process.env.VUE_APP_ENABLE_FEATURES || '').split(',').filter((v) => v.length > 0);
-const showCustomBuildTip =
-  enableFeatures.length > 1 || (enableFeatures.length === 1 && !['local_fetch'].includes(enableFeatures[0]));
+const showCustomBuildTip = enableFeatures.filter((it) => !['local_fetch'].includes(it)).length > 0;
 process.env.VUE_APP_BUILD_BY = process.env.BUILD_BY || '本地构建';
 
 // 由于vue默认增加loader是加到最后一个，这里提供插入到最前面的功能

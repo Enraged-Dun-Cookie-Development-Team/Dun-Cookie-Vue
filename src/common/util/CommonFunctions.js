@@ -148,8 +148,10 @@ function animateCSS(element, animation, callback) {
   });
 }
 
+/* IFDEBUG */
 global.deepDiff = deepDiff;
 global.deepAssign = deepAssign;
 global.deepEquals = deepEquals;
+/* FIDEBUG */
 
 export { deepDiff, deepAssign, deepEquals, animateCSS };

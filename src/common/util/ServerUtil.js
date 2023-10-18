@@ -27,8 +27,9 @@ const serverOption = {
 
 const comboIdCache = {};
 
-if (!global.ceobe_cache) global.ceobe_cache = {};
-global.ceobe_cache.comboId = comboIdCache;
+/* IFDEBUG */
+global.__ceobe_cache__combo_id__ = comboIdCache;
+/* FIDEBUG */
 
 function addHeaders(options) {
   const headers = options.headers ? new Headers(options.headers) : new Headers();
