@@ -28,15 +28,15 @@ function insertLoaderToFirst(config, ruleName, loaderName, loaderOptions) {
 const chainWebpack = (config) => {
   if (enableFeatures.length > 0) {
     console.log('\n已启用特性', enableFeatures, '\n');
-    if (enableFeatures.includes('custom_datasource')) {
+    if (enableFeatures.includes('local_fetch')) {
       try {
         require('@enraged-dun-cookie-development-team/cookie-fetcher');
       } catch (e) {
-        throw new Error('未安装@enraged-dun-cookie-development-team/cookie-fetcher包，无法启用custom_datasource特性');
+        throw new Error('未安装@enraged-dun-cookie-development-team/cookie-fetcher包，无法启用local_fetch特性');
       }
-      if (!enableFeatures.includes('local_fetch')) {
-        throw new Error('若要启用custom_datasource特性，必须同时启用local_fetch特性');
-      }
+    }
+    if (enableFeatures.includes('custom_datasource') && !enableFeatures.includes('local_fetch')) {
+      throw new Error('若要启用custom_datasource特性，必须同时启用local_fetch特性');
     }
   }
   config.entry('background').add(path.resolve(__dirname, './src/background/index.js'));

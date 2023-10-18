@@ -5,10 +5,10 @@ import { DefaultLogger } from '@enraged-dun-cookie-development-team/common/logge
 import PlatformHelper from '../../../common/platform/PlatformHelper';
 import { CookieHandler } from '../../CookieHandler';
 import DebugUtil from '../../../common/util/DebugUtil';
-/* IFTRUE_feature__custom_datasource */
+/* IFTRUE_feature__local_fetch */
 import { registerDefaultDataSourceTypes } from '@enraged-dun-cookie-development-team/cookie-fetcher';
 registerDefaultDataSourceTypes();
-/* FITRUE_feature__custom_datasource */
+/* FITRUE_feature__local_fetch */
 
 const dataIdKeyInConfig = {
   'bilibili:dynamic-by-uid': 'uid',
