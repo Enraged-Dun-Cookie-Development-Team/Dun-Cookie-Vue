@@ -125,12 +125,13 @@ function ExtensionInit() {
 
   Settings.doAfterUpdate((settings, changed) => {
     // 只有更新了数据源/蹲饼频率/蹲饼开关的时候才刷新，避免无意义的网络请求
+    // prettier-ignore
     if (
-      !changed.enableDataSources &&
-      !changed.dun &&
-      !changed.open &&
+      !changed.enableDataSources
+      && !changed.dun
+      && !changed.open
       /* IFTRUE_feature__custom_datasource */
-      !changed.extraFeature?.enableCustomDataSources
+      && !changed.extraFeature?.enableCustomDataSources
       /* FITRUE_feature__custom_datasource */
     ) {
       return;
