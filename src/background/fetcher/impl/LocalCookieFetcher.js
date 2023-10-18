@@ -1,13 +1,14 @@
 import { AbstractCookieFetcher } from '../AbstractCookieFetcher';
 import ServerUtil from '../../../common/util/ServerUtil';
 import { FetchController } from '@enraged-dun-cookie-development-team/cookie-fetcher-core';
-import { registerDefaultDataSourceTypes } from '@enraged-dun-cookie-development-team/cookie-fetcher';
 import { DefaultLogger } from '@enraged-dun-cookie-development-team/common/logger';
 import PlatformHelper from '../../../common/platform/PlatformHelper';
 import { CookieHandler } from '../../CookieHandler';
 import DebugUtil from '../../../common/util/DebugUtil';
-
+/* IFTRUE_feature__custom_datasource */
+import { registerDefaultDataSourceTypes } from '@enraged-dun-cookie-development-team/cookie-fetcher';
 registerDefaultDataSourceTypes();
+/* FITRUE_feature__custom_datasource */
 
 const dataIdKeyInConfig = {
   'bilibili:dynamic-by-uid': 'uid',

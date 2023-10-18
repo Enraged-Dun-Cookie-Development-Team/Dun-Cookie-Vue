@@ -32,7 +32,9 @@ const SHOW_VERSION = CURRENT_VERSION + (IS_DEBUG ? '【调试模式】' : '');
  * 启用的增强特性
  * @type {string[]}
  */
-const ENABLE_FEATURES = (process.env.VUE_APP_ENABLE_FEATURES || '').split(',').filter((v) => v.length > 0);
+const ENABLE_FEATURES = (process.env.VUE_APP_ENABLE_FEATURES || '')
+  .split(',')
+  .filter((v) => v.length > 0 && !['local_fetch'].includes(v));
 /**
  * 构建者
  */

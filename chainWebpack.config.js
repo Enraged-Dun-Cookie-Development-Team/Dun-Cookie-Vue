@@ -7,7 +7,8 @@ const isDevMode = process.env.NODE_ENV === 'development';
 const PROJECT_VERSION = JSON.parse(file.readFileSync('./package.json').toString()).version;
 process.env.VUE_APP_PROJECT_VERSION = PROJECT_VERSION;
 const enableFeatures = (process.env.VUE_APP_ENABLE_FEATURES || '').split(',').filter((v) => v.length > 0);
-console.log('已启用特性', enableFeatures);
+const showCustomBuildTip =
+  enableFeatures.length > 1 || (enableFeatures.length === 1 && !['local_fetch'].includes(enableFeatures[0]));
 process.env.VUE_APP_BUILD_BY = process.env.BUILD_BY || '本地构建';
 
 // 由于vue默认增加loader是加到最后一个，这里提供插入到最前面的功能
@@ -26,6 +27,19 @@ function insertLoaderToFirst(config, ruleName, loaderName, loaderOptions) {
 }
 
 const chainWebpack = (config) => {
+  if (enableFeatures.length > 0) {
+    console.log('\n已启用特性', enableFeatures, '\n');
+    if (enableFeatures.includes('custom_datasource')) {
+      try {
+        require('@enraged-dun-cookie-development-team/cookie-fetcher');
+      } catch (e) {
+        throw new Error('未安装@enraged-dun-cookie-development-team/cookie-fetcher包，无法启用custom_datasource特性');
+      }
+      if (!enableFeatures.includes('local_fetch')) {
+        throw new Error('若要启用custom_datasource特性，必须同时启用local_fetch特性');
+      }
+    }
+  }
   config.entry('background').add(path.resolve(__dirname, './src/background/index.js'));
   config.entry('contentScripts').add(path.resolve(__dirname, './src/contentScripts/index.js'));
   config.output.filename('[name].js');
@@ -41,7 +55,7 @@ const chainWebpack = (config) => {
             transform(content) {
               const manifest = JSON.parse(content.toString());
               manifest.version = PROJECT_VERSION;
-              if (enableFeatures.length > 0) {
+              if (showCustomBuildTip) {
                 manifest.description = `【自定义构建 By：${process.env.VUE_APP_BUILD_BY}】` + manifest.description;
               }
               return JSON.stringify(manifest, undefined, 2);
