@@ -30,17 +30,29 @@ const comboIdCache = {};
 if (!global.ceobe_cache) global.ceobe_cache = {};
 global.ceobe_cache.comboId = comboIdCache;
 
+function addHeaders(options) {
+  const headers = options.headers ? new Headers(options.headers) : new Headers();
+  headers.set('x-ceobe-client-type', 'browser-extension');
+  headers.set('x-ceobe-client-platform', PlatformHelper.PlatformType.toLowerCase());
+  headers.set('x-ceobe-client-version', CURRENT_VERSION);
+  options.headers = headers;
+  return options;
+}
+
 export default class ServerUtil {
   static async requestCdn(path, options) {
     if (path.startsWith('/')) path = path.startsWith(1);
-    return await Http.get(CANTEEN_CDN_API_BASE + path, options);
+    return await Http.get(CANTEEN_CDN_API_BASE + path, addHeaders(options));
   }
 
   static async requestCdnServerApi(path) {
     if (path.startsWith('/')) path = path.startsWith(1);
-    const result = await Http.get(CANTEEN_CDN_SERVER_API_BASE + path, {
-      responseTransformer: async (response) => response.json(),
-    });
+    const result = await Http.get(
+      CANTEEN_CDN_SERVER_API_BASE + path,
+      addHeaders({
+        responseTransformer: async (response) => response.json(),
+      })
+    );
     if (parseInt(result.code) === 0) {
       return result.data;
     } else {
@@ -50,11 +62,14 @@ export default class ServerUtil {
 
   static async requestApi(method, path, options) {
     if (path.startsWith('/')) path = path.startsWith(1);
-    const result = await Http.request(CANTEEN_API_BASE + path, {
-      method: method,
-      responseTransformer: async (response) => response.json(),
-      ...options,
-    });
+    const result = await Http.request(
+      CANTEEN_API_BASE + path,
+      addHeaders({
+        method: method,
+        responseTransformer: async (response) => response.json(),
+        ...options,
+      })
+    );
     if (parseInt(result.code) === 0) {
       return result.data;
     } else {
