@@ -1,18 +1,18 @@
-<!--suppress CheckImageSize -->
-<div style="display: flex;justify-content: center;align-items: center;flex-direction: column;font-weight: bold;width: 100%">
-    <img alt="logo" src="docs/images/logo.png" width="150">
-    <span style="font-size: 2em;">小刻食堂</span>
-    <hr style="width: 100%;">
-    <span style="font-size: 1.25em;">用于实时抓取兔兔发的动态</span><br/>
-    <span style="font-size: 1.25em;">跟着小刻一起来找饼吧</span><br/>
-    <span style="font-size: 1em;">自由的兔兔把烙好的饼到处藏，就由小刻把它们都找出来吧！</span><br/><br/>
-    <span style="font-size: 1.25em;">欢迎Star</span><br/>
+<!--suppress CheckImageSize, HtmlDeprecatedAttribute -->
+<div align="center"><img alt="logo" src="docs/images/logo.png" width="150"></div>
+<h1 align="center">小刻食堂</h1>
+<hr>
+<div align="center">
+    <h3>用于实时抓取兔兔发的动态</h3>
+    <h3>跟着小刻一起来找饼吧</h3>
+    <h4>自由的兔兔把烙好的饼到处藏，就由小刻把它们都找出来吧！</h4><br/>
+    <h3>欢迎Star</h3>
     <img alt="gif" src="/docs/images/readme_1.gif" height="200" />
-<div style="width: 100%; text-align: center">
+</div>
+<div align="center">
 
     兔兔你的饼还没发完，现在还不能休息哦
 
-</div>
 </div>
 
 
