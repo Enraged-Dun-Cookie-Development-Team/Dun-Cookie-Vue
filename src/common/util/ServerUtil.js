@@ -174,9 +174,12 @@ export default class ServerUtil {
 
   static async getAvailableDataSourcePreset() {
     const preset = {};
-    (await ServerUtil.getServerDataSourceInfo(true)).dataSourceList.forEach((source) => {
-      preset[`${source.type}:${source.dataId}`] = source;
-    });
+    const serverInfo = await ServerUtil.getServerDataSourceInfo(true);
+    if (serverInfo) {
+      serverInfo.dataSourceList.forEach((source) => {
+        preset[`${source.type}:${source.dataId}`] = source;
+      });
+    }
     return preset;
   }
 
