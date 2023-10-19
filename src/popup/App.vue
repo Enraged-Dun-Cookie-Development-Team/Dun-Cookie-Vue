@@ -268,8 +268,7 @@ export default {
         this.oldDunCount = data.counter;
       });
       setTimeout(() => {
-        let head = navigator.userAgent;
-        if (head.indexOf('Firefox') > 1) {
+        if (PlatformHelper.PlatformType === PLATFORM_FIREFOX) {
           let div = document.getElementById('app');
           div.style.fontFamily = 'Microsoft yahei';
           this.firefox = true;
@@ -299,15 +298,13 @@ export default {
             new Date(x.over_time) >= TimeUtil.changeToCCT(new Date())
         );
         if (btnList.length > 0) {
-          this.quickJump.url.push(...btnList);
+          this.quickJump.url = btnList;
         }
       });
     },
     getToolJump() {
       ServerUtil.getThirdPartyToolsInfo().then((data) => {
-        this.quickJump.tool.push(
-          ...data.toolList.map((it) => ({ name: it.nickname, img: it.avatar, url: it.jump_url }))
-        );
+        this.quickJump.tool = data.toolList.map((it) => ({ name: it.nickname, img: it.avatar, url: it.jump_url }));
       });
     },
     async firefoxWarning() {
