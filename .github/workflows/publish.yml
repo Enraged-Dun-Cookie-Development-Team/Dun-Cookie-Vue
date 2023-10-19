@@ -1,0 +1,81 @@
+name: 发布 Release
+on:
+  push:
+    tags: ['*']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          registry-url: https://npm.pkg.github.com/
+          scope: '@enraged-dun-cookie-development-team'
+      - run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: build
+        run: npm run build
+        env:
+          BUILD_BY: ${{ github.triggering_actor }}
+          VUE_APP_ENABLE_FEATURES: 'local_fetch'
+          DISABLE_SOURCE_MAP: 'true'
+      - name: zip
+        uses: thedoctor0/zip-release@0.7.1
+        with:
+          type: zip
+          filename: '../extension.zip'
+          directory: dist
+      - name: build with sourcemap
+        run: |
+          rm -rf dist
+          npm run build
+        env:
+          BUILD_BY: ${{ github.triggering_actor }}
+          VUE_APP_ENABLE_FEATURES: 'local_fetch'
+      - name: zip with sourcemap
+        uses: thedoctor0/zip-release@0.7.1
+        with:
+          type: zip
+          filename: '../extension-with-sourcemap.zip'
+          directory: dist
+      - name: Create Release
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs')
+            const version = '${{ github.ref_name }}';
+            const { data } = await github.rest.repos.createRelease({
+              tag_name: version,
+              name: version,
+              body: `小刻食堂插件端 ${version} 发布了`,
+              prerelease: false,
+              draft: true, owner: context.repo.owner, repo: context.repo.repo,
+            });
+            try {
+              await github.rest.repos.uploadReleaseAsset({
+                name: `CeobeCanteenBrowserExtension-${version}.zip`,
+                data: fs.readFileSync('./extension.zip'),
+                release_id: data.id,
+                owner: context.repo.owner, repo: context.repo.repo,
+              });
+              await github.rest.repos.uploadReleaseAsset({
+                name: `CeobeCanteenBrowserExtension-${version}-sourcemap.zip`,
+                data: fs.readFileSync('./extension-with-sourcemap.zip'),
+                release_id: data.id,
+                owner: context.repo.owner, repo: context.repo.repo,
+              });
+            } catch (e) {
+              await github.rest.repos.deleteRelease({
+                release_id: data.id,
+                owner: context.repo.owner, repo: context.repo.repo,
+              });
+              throw e;
+            }
+            await github.rest.repos.updateRelease({
+              release_id: data.id,
+              draft: false,
+              owner: context.repo.owner, repo: context.repo.repo,
+            });
