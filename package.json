@@ -59,7 +59,7 @@
   },
   "optionalDependencies": {
     "@enraged-dun-cookie-development-team/cookie-fetcher": "^0.0.1-alpha.74",
-    "@enraged-dun-cookie-development-team/private-data": "0.0.1-alpha.3"
+    "@enraged-dun-cookie-development-team/private-data": "^0.0.1-alpha.3"
   },
   "browserslist": [
     "> 1%",

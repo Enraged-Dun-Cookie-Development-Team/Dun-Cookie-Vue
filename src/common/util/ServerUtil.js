@@ -269,7 +269,7 @@ export default class ServerUtil {
       const weiboImgs = [];
       for (const cookie of result.cookies) {
         if (!cookie.source.type.startsWith('weibo:')) continue;
-        const images = cookie.default_cookie.images?.map((it) => it.origin_url);
+        const images = cookie.default_cookie.images?.flatMap((it) => [it.origin_url, it.compress_url]);
         if (images && images.length > 0) {
           weiboImgs.push(...images);
         }
