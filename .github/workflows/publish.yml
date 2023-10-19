@@ -45,7 +45,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const fs = require('fs')
+            const fs = require('fs');
             const version = '${{ github.ref_name }}';
             const { data } = await github.rest.repos.createRelease({
               tag_name: version,

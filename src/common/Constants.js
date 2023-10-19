@@ -110,9 +110,9 @@ export {
 // region 杂项
 const TOOL_QR_URL = 'https://arknightscommunity.drblack-system.com/15386.html';
 
-const CANTEEN_API_BASE = 'https://server.ceobecanteen.top/api/v1/';
-const CANTEEN_CDN_API_BASE = 'https://cdn.ceobecanteen.top/';
-const CANTEEN_CDN_SERVER_API_BASE = 'https://server-cdn.ceobecanteen.top/api/v1/';
+const CANTEEN_API_BASE = process.env.VUE_APP_API_SERVER_BASE;
+const CANTEEN_CDN_API_BASE = process.env.VUE_APP_API_CDN_BASE;
+const CANTEEN_CDN_SERVER_API_BASE = process.env.VUE_APP_API_SERVER_CDN_BASE;
 
 const dayInfo = [
   {
