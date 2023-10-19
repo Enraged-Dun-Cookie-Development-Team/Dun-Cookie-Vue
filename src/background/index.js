@@ -244,11 +244,10 @@ function ExtensionInit() {
     }
   });
 
-  PlatformHelper.Http.onBeforeSendHeaders(
-    interceptBeforeSendHeaders,
-    { urls: ['*://*.sinaimg.cn/*'], types: ['image'] },
-    ['blocking', 'requestHeaders']
-  );
+  PlatformHelper.Http.onBeforeSendHeaders(interceptBeforeSendHeaders, { urls: ['*://*.sinaimg.cn/*'] }, [
+    'blocking',
+    'requestHeaders',
+  ]);
 }
 
 function countDownDebugLog(...data) {

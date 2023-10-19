@@ -44,23 +44,23 @@ async function addHeaders(options) {
 
 export default class ServerUtil {
   static async requestCdn(path, _options) {
-    if (path.startsWith('/')) path = path.startsWith(1);
+    if (path.startsWith('/')) path = path.substring(1);
     const options = await addHeaders(_options);
     return await Http.get(CANTEEN_CDN_API_BASE + path, options);
   }
 
   static async requestCdnServerApi(path) {
-    if (path.startsWith('/')) path = path.startsWith(1);
+    if (path.startsWith('/')) path = path.substring(1);
     // noinspection JSUnusedGlobalSymbols
     let options = {
-      responseTransformer: async (response) => response.json(),
+      responseTransformer: (response) => response.json(),
     };
     options = await addHeaders(options);
     const result = await Http.get(CANTEEN_CDN_SERVER_API_BASE + path, options);
     if (parseInt(result.code) === 0) {
       return result.data;
     } else {
-      throw new Error(`小刻食堂server cdn api请求失败：${path}，${result.message}`);
+      throw new Error(`小刻食堂server cdn api请求失败(${path})：${JSON.stringify(result)}`);
     }
   }
 
@@ -69,7 +69,7 @@ export default class ServerUtil {
     // noinspection JSUnusedGlobalSymbols
     let options = {
       method: method,
-      responseTransformer: async (response) => response.json(),
+      responseTransformer: (response) => response.json(),
       ..._options,
     };
     options = await addHeaders(options);
@@ -77,7 +77,7 @@ export default class ServerUtil {
     if (parseInt(result.code) === 0) {
       return result.data;
     } else {
-      throw new Error(`小刻食堂api请求失败：${path}，${result.message}`);
+      throw new Error(`小刻食堂api请求失败(${path})：${JSON.stringify(result)}`);
     }
   }
 
