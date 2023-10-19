@@ -20,6 +20,7 @@ import { DataSourceMeta } from '../datasource/DataSourceMeta';
 import { CookieItem, RetweetedInfo } from '../CookieItem';
 import AvailableDataSourceMeta from '../sync/AvailableDataSourceMeta';
 import { registerUrlToAddReferer } from '../../background/request_interceptor';
+import { UserUtil } from './UserUtil';
 
 const serverOption = {
   appendTimestamp: false,
@@ -31,8 +32,9 @@ const comboIdCache = {};
 global.__ceobe_cache__combo_id__ = comboIdCache;
 /* FIDEBUG */
 
-function addHeaders(options) {
+async function addHeaders(options) {
   const headers = options.headers ? new Headers(options.headers) : new Headers();
+  headers.set('x-ceobe-client-id', await UserUtil.getClientId());
   headers.set('x-ceobe-client-type', 'browser-extension');
   headers.set('x-ceobe-client-platform', PlatformHelper.PlatformType.toLowerCase());
   headers.set('x-ceobe-client-version', CURRENT_VERSION);
@@ -41,19 +43,20 @@ function addHeaders(options) {
 }
 
 export default class ServerUtil {
-  static async requestCdn(path, options) {
+  static async requestCdn(path, _options) {
     if (path.startsWith('/')) path = path.startsWith(1);
-    return await Http.get(CANTEEN_CDN_API_BASE + path, addHeaders(options));
+    const options = await addHeaders(_options);
+    return await Http.get(CANTEEN_CDN_API_BASE + path, options);
   }
 
   static async requestCdnServerApi(path) {
     if (path.startsWith('/')) path = path.startsWith(1);
-    const result = await Http.get(
-      CANTEEN_CDN_SERVER_API_BASE + path,
-      addHeaders({
-        responseTransformer: async (response) => response.json(),
-      })
-    );
+    // noinspection JSUnusedGlobalSymbols
+    let options = {
+      responseTransformer: async (response) => response.json(),
+    };
+    options = await addHeaders(options);
+    const result = await Http.get(CANTEEN_CDN_SERVER_API_BASE + path, options);
     if (parseInt(result.code) === 0) {
       return result.data;
     } else {
@@ -63,12 +66,13 @@ export default class ServerUtil {
 
   static async requestApi(method, path, _options) {
     if (path.startsWith('/')) path = path.substring(1);
+    // noinspection JSUnusedGlobalSymbols
     let options = {
       method: method,
       responseTransformer: async (response) => response.json(),
       ..._options,
     };
-    options = addHeaders(options);
+    options = await addHeaders(options);
     const result = await Http.request(CANTEEN_API_BASE + path, options);
     if (parseInt(result.code) === 0) {
       return result.data;

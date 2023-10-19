@@ -25,6 +25,10 @@ import { CustomLocalCookieFetcher } from './fetcher/impl/CustomLocalCookieFetche
 import DebugUtil from '../common/util/DebugUtil';
 import { interceptBeforeSendHeaders, registerUrlToAddReferer } from './request_interceptor';
 import { FallbackLocalCookieFetcher } from './fetcher/impl/FallbackLocalCookieFetcher';
+import { UserUtil } from '../common/util/UserUtil';
+
+// 第一时间调用以生成uuid
+void UserUtil.getClientId();
 
 // 开启弹出菜单窗口化时的窗口ID
 let popupWindowId = null;
