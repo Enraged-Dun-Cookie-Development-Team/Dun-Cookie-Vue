@@ -61,7 +61,7 @@
         <el-row type="flex" justify="center" class="drawer-btn-area">
           <el-tooltip v-for="item in quickJump.tool" :key="item.img" :content="item.name" placement="top">
             <el-button size="small" @click="openUrl(item.url)">
-              <img class="btn-icon" :class="item.radius ? 'radius' : ''" :src="item.img" />
+              <img class="btn-icon radius" :src="item.img" />
             </el-button>
           </el-tooltip>
         </el-row>
@@ -182,7 +182,6 @@ import {
   PAGE_UPDATE,
   PAGE_WELCOME,
   PLATFORM_FIREFOX,
-  quickJump,
   SHOW_VERSION,
 } from '../common/Constants';
 import PlatformHelper from '../common/platform/PlatformHelper';
@@ -208,8 +207,6 @@ export default {
         });
       }
     });
-    const _quickJump = quickJump;
-    _quickJump.source = [];
     return {
       san: SanInfo,
       currentSan: SanInfo.currentSan,
@@ -226,7 +223,7 @@ export default {
       drawerFirst: false, // 这次打开窗口是否打开过二级菜单
       toolDrawer: false, // 理智计算器菜单
       isReload: false, // 是否正在刷新
-      quickJump: _quickJump,
+      quickJump: { source: [], tool: [], url: [] },
       dayInfo: dayInfo,
       loading: true, // 初始化加载
       onlineDayInfo: {},
@@ -286,6 +283,7 @@ export default {
     handleIconClick() {
       if (!this.drawer && !this.drawerFirst) {
         this.getVideoJump();
+        this.getToolJump();
         this.drawerFirst = true;
       }
 
@@ -303,6 +301,13 @@ export default {
         if (btnList.length > 0) {
           this.quickJump.url.push(...btnList);
         }
+      });
+    },
+    getToolJump() {
+      ServerUtil.getThirdPartyToolsInfo().then((data) => {
+        this.quickJump.tool.push(
+          ...data.toolList.map((it) => ({ name: it.nickname, img: it.avatar, url: it.jump_url }))
+        );
       });
     },
     async firefoxWarning() {

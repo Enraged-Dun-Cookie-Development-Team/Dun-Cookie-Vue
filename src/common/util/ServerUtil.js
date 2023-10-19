@@ -61,16 +61,15 @@ export default class ServerUtil {
     }
   }
 
-  static async requestApi(method, path, options) {
-    if (path.startsWith('/')) path = path.startsWith(1);
-    const result = await Http.request(
-      CANTEEN_API_BASE + path,
-      addHeaders({
-        method: method,
-        responseTransformer: async (response) => response.json(),
-        ...options,
-      })
-    );
+  static async requestApi(method, path, _options) {
+    if (path.startsWith('/')) path = path.substring(1);
+    let options = {
+      method: method,
+      responseTransformer: async (response) => response.json(),
+      ..._options,
+    };
+    options = addHeaders(options);
+    const result = await Http.request(CANTEEN_API_BASE + path, options);
     if (parseInt(result.code) === 0) {
       return result.data;
     } else {
@@ -422,6 +421,17 @@ export default class ServerUtil {
       data = data.data;
     }
     return data;
+  }
+
+  /**
+   * 获取第三方工具链接
+   * @return {Promise<{toolList: {nickname: string, avatar: string, jump_url: string}[]}>}
+   */
+  static async getThirdPartyToolsInfo() {
+    const toolList = await this.requestApi('GET', '/canteen/operate/toolLink/list');
+    return {
+      toolList: toolList,
+    };
   }
 
   /**
