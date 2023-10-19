@@ -107,8 +107,14 @@
                     <!--suppress VueUnrecognizedSlot -->
                     <template #default="{ node, data }">
                       <span class="checkbox-area">
-                        <img class="icon-img" :src="data.icon" />
-                        <span>{{ node.label }}</span>
+                        <img
+                          class="icon-img"
+                          :style="{ width: data.children?.length ? '22px' : undefined }"
+                          :src="data.icon"
+                        />
+                        <span :style="{ 'font-size': data.children?.length ? '1.125em' : undefined }">{{
+                          node.label
+                        }}</span>
                       </span>
                     </template>
                   </el-tree>
@@ -124,8 +130,14 @@
                     <!--suppress VueUnrecognizedSlot -->
                     <template #default="{ node, data }">
                       <span class="checkbox-area">
-                        <img class="icon-img" :src="data.icon" />
-                        <span>{{ node.label }}</span>
+                        <img
+                          class="icon-img"
+                          :style="{ width: data.children?.length ? '22px' : undefined }"
+                          :src="data.icon"
+                        />
+                        <span :style="{ 'font-size': data.children?.length ? '1.125em' : undefined }">{{
+                          node.label
+                        }}</span>
                       </span>
                     </template>
                   </el-tree>
@@ -141,8 +153,14 @@
                     <!--suppress VueUnrecognizedSlot -->
                     <template #default="{ node, data }">
                       <span class="checkbox-area">
-                        <img class="icon-img" :src="data.icon" />
-                        <span>{{ node.label }}</span>
+                        <img
+                          class="icon-img"
+                          :style="{ width: data.children?.length ? '22px' : undefined }"
+                          :src="data.icon"
+                        />
+                        <span :style="{ 'font-size': data.children?.length ? '1.125em' : undefined }">{{
+                          node.label
+                        }}</span>
                         <el-button
                           v-if="data.custom"
                           type="text"
