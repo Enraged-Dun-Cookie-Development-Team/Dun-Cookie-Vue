@@ -39,6 +39,10 @@ const ENABLE_FEATURES = (process.env.VUE_APP_ENABLE_FEATURES || '')
  * 构建者
  */
 const BUILD_BY = process.env.VUE_APP_BUILD_BY;
+/**
+ * 构建签名
+ */
+const BUILD_SIGN = process.env.VUE_APP_BUILD_SIGN;
 
 export {
   IS_DEBUG,
@@ -49,6 +53,7 @@ export {
   SHOW_VERSION,
   ENABLE_FEATURES,
   BUILD_BY,
+  BUILD_SIGN,
 };
 // endregion
 

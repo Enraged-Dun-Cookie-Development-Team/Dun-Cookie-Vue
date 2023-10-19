@@ -9,12 +9,12 @@ process.env.VUE_APP_PROJECT_VERSION = PROJECT_VERSION;
 const enableFeatures = (process.env.VUE_APP_ENABLE_FEATURES || '').split(',').filter((v) => v.length > 0);
 const showCustomBuildTip = enableFeatures.filter((it) => !['local_fetch'].includes(it)).length > 0;
 process.env.VUE_APP_BUILD_BY = process.env.BUILD_BY || '本地构建';
-if (enableFeatures.includes('dev-api')) {
+if (enableFeatures.includes('dev_api')) {
   let data;
   try {
     data = require('@enraged-dun-cookie-development-team/private-data/data.json');
   } catch (e) {
-    throw new Error('未安装@enraged-dun-cookie-development-team/private-data包，无法启用dev-api特性');
+    throw new Error('未安装@enraged-dun-cookie-development-team/private-data包，无法启用dev_api特性');
   }
   process.env.VUE_APP_API_SERVER_BASE = data.api.dev.server;
   process.env.VUE_APP_API_CDN_BASE = data.api.dev.cdn;

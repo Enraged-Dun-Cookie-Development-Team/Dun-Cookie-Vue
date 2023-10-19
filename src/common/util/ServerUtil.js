@@ -5,6 +5,7 @@ import HttpUtil from './HttpUtil';
 import PlatformHelper from '../platform/PlatformHelper';
 import Settings from '../Settings';
 import {
+  BUILD_SIGN,
   CANTEEN_API_BASE,
   CANTEEN_CDN_API_BASE,
   CANTEEN_CDN_SERVER_API_BASE,
@@ -38,14 +39,16 @@ async function addHeaders(options) {
   headers.set('x-ceobe-client-type', 'browser-extension');
   headers.set('x-ceobe-client-platform', PlatformHelper.PlatformType.toLowerCase());
   headers.set('x-ceobe-client-version', CURRENT_VERSION);
+  if (BUILD_SIGN) {
+    headers.set('x-ceobe-client-sign', BUILD_SIGN);
+  }
   options.headers = headers;
   return options;
 }
 
 export default class ServerUtil {
-  static async requestCdn(path, _options) {
+  static async requestCdn(path, options) {
     if (path.startsWith('/')) path = path.substring(1);
-    const options = await addHeaders(_options);
     return await Http.get(CANTEEN_CDN_API_BASE + path, options);
   }
 
