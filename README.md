@@ -48,7 +48,7 @@
 
 记得给个三连，转发支持一下，让更多人看到呀
 
-[![Watch the video](https://i0.hdslb.com/bfs/archive/3d3e150f7e838de5222cdce023bd77d4afc6154f.jpg@600w.webp)](https://www.bilibili.com/video/BV1ru4y1x7cZ)
+[![Watch the video](https://i0.hdslb.com/bfs/archive/3d3e150f7e838de5222cdce023bd77d4afc6154f.jpg@400w.webp)](https://www.bilibili.com/video/BV1ru4y1x7cZ)
 
 # 注意事项
 
