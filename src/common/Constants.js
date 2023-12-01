@@ -32,11 +32,17 @@ const SHOW_VERSION = CURRENT_VERSION + (IS_DEBUG ? '【调试模式】' : '');
  * 启用的增强特性
  * @type {string[]}
  */
-const ENABLE_FEATURES = (process.env.VUE_APP_ENABLE_FEATURES || '').split(',').filter((v) => v.length > 0);
+const ENABLE_FEATURES = (process.env.VUE_APP_ENABLE_FEATURES || '')
+  .split(',')
+  .filter((v) => v.length > 0 && !['local_fetch'].includes(v));
 /**
  * 构建者
  */
 const BUILD_BY = process.env.VUE_APP_BUILD_BY;
+/**
+ * 构建签名
+ */
+const BUILD_SIGN = process.env.VUE_APP_BUILD_SIGN;
 
 export {
   IS_DEBUG,
@@ -47,6 +53,7 @@ export {
   SHOW_VERSION,
   ENABLE_FEATURES,
   BUILD_BY,
+  BUILD_SIGN,
 };
 // endregion
 
@@ -108,70 +115,9 @@ export {
 // region 杂项
 const TOOL_QR_URL = 'https://arknightscommunity.drblack-system.com/15386.html';
 
-const CANTEEN_API_BASE = 'https://server.ceobecanteen.top/api/v1/';
-const CANTEEN_CDN_API_BASE = 'https://cdn.ceobecanteen.top/';
-const CANTEEN_CDN_SERVER_API_BASE = 'https://server-cdn.ceobecanteen.top/api/v1/';
-
-// TODO 直接从common.js里面copy过来的，等待优化重构
-const quickJump = {
-  tool: [
-    {
-      url: 'http://prts.wiki/',
-      name: 'PRTS.Wiki',
-      img: '/assets/image/link/akwiki.png',
-      radius: true,
-    },
-    {
-      url: 'https://mapcn.ark-nights.com',
-      name: 'PRTS.Map',
-      img: '/assets/image/link/akmap.ico',
-      radius: true,
-    },
-    {
-      url: 'https://ass.m-j.bond/',
-      name: '剧情播放器',
-      img: '/assets/image/link/ass.m-j.bond.png',
-      radius: true,
-    },
-    {
-      url: 'https://penguin-stats.cn/',
-      name: '企鹅物流',
-      img: '/assets/image/link/penguin_stats_logo.webp',
-      radius: true,
-    },
-    {
-      url: 'https://arkn.lolicon.app/#/',
-      name: '明日方舟工具箱',
-      img: '/assets/image/link/arktools.png',
-      radius: true,
-    },
-    {
-      url: 'https://aog.wiki/',
-      name: '刷素材一图流',
-      img: '/assets/image/link/akgraph.ico',
-      radius: true,
-    },
-    {
-      url: 'https://viktorlab.cn/akdata/',
-      name: 'Arknight DPS',
-      img: '/assets/image/link/dps.ico',
-      radius: true,
-    },
-    {
-      url: 'https://terrach.net/',
-      name: '泰拉通讯枢纽',
-      img: '/assets/image/link/tltxsn.png',
-      radius: false,
-    },
-    {
-      url: '../time.html',
-      name: '小刻食堂计时器',
-      img: '/assets/image/icon.png',
-      radius: false,
-    },
-  ],
-  url: [],
-};
+const CANTEEN_API_BASE = process.env.VUE_APP_API_SERVER_BASE;
+const CANTEEN_CDN_API_BASE = process.env.VUE_APP_API_CDN_BASE;
+const CANTEEN_CDN_SERVER_API_BASE = process.env.VUE_APP_API_SERVER_CDN_BASE;
 
 const dayInfo = [
   {
@@ -273,13 +219,5 @@ const countDown = [
   },
 ];
 
-export {
-  quickJump,
-  dayInfo,
-  countDown,
-  TOOL_QR_URL,
-  CANTEEN_API_BASE,
-  CANTEEN_CDN_API_BASE,
-  CANTEEN_CDN_SERVER_API_BASE,
-};
+export { dayInfo, countDown, TOOL_QR_URL, CANTEEN_API_BASE, CANTEEN_CDN_API_BASE, CANTEEN_CDN_SERVER_API_BASE };
 // endregion

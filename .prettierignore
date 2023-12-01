@@ -5,4 +5,7 @@ dist
 node_modules
 
 package-lock.json
+README.md
+CONTRIBUTING.md
+docs/CHANGELOG.md
 

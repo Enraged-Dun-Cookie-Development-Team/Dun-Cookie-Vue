@@ -107,16 +107,17 @@
         </span>
 
         <span class="card-btn-area">
-          <el-button
-            class="to-copy-share"
-            :class="{ 'special-source': item.componentData }"
-            size="small"
-            title="左键生成图片分享，右键九宫格分享"
-            @click="copyData(item)"
-            @contextmenu.prevent.native="rightCopyData(item)"
-          >
-            <i class="el-icon-share"></i>
-          </el-button>
+          <el-tooltip class="item" effect="dark" content="左键生成图片分享，右键九宫格分享" placement="top">
+            <el-button
+              class="to-copy-share"
+              :class="{ 'special-source': item.componentData }"
+              size="small"
+              @click="copyData(item)"
+              @contextmenu.prevent.native="rightCopyData(item)"
+            >
+              <i class="el-icon-share"></i>
+            </el-button>
+          </el-tooltip>
           <el-button
             class="to-copy-btn"
             :class="{ 'special-source': item.componentData }"
@@ -663,7 +664,7 @@ export default {
 
     // 高级复制
     rightCopyData(item) {
-      if (item.imageList.length > 0) {
+      if (item.imageList.length > 1) {
         let selectImageToCopy = this.$refs.SelectImageToCopy;
         selectImageToCopy.item = item;
         selectImageToCopy.copyImageToImage = true;

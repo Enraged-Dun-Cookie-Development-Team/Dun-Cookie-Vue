@@ -21,9 +21,14 @@ import CardList from '../common/sync/CardList';
 import { CookieFetchManager, registerFetcher } from './fetcher/CookieFetcherManager';
 import { FetchConfig, FetcherStrategy } from './fetcher/FetchConfig';
 import { CeobeCanteenCookieFetcher } from './fetcher/impl/CeobeCanteenCookieFetcher';
-import { LocalCookieFetcher } from './fetcher/impl/LocalCookieFetcher';
+import { CustomLocalCookieFetcher } from './fetcher/impl/CustomLocalCookieFetcher';
 import DebugUtil from '../common/util/DebugUtil';
 import { interceptBeforeSendHeaders, registerUrlToAddReferer } from './request_interceptor';
+import { FallbackLocalCookieFetcher } from './fetcher/impl/FallbackLocalCookieFetcher';
+import { UserUtil } from '../common/util/UserUtil';
+
+// 第一时间调用以生成uuid
+void UserUtil.getClientId();
 
 // 开启弹出菜单窗口化时的窗口ID
 let popupWindowId = null;
@@ -31,7 +36,12 @@ let popupWindowId = null;
 const cookieFetcherManager = new CookieFetchManager();
 
 registerFetcher('server', CeobeCanteenCookieFetcher);
-registerFetcher('local', LocalCookieFetcher);
+/* IFTRUE_feature__local_fetch */
+registerFetcher('local-fallback', FallbackLocalCookieFetcher);
+/* FITRUE_feature__local_fetch */
+/* IFTRUE_feature__custom_datasource */
+registerFetcher('local-custom', CustomLocalCookieFetcher);
+/* FITRUE_feature__custom_datasource */
 
 /**
  * TODO 之后这个要改成能够自定义的
@@ -53,7 +63,12 @@ function buildMainCookieFetchConfig(enable = true) {
         })
       : undefined,
     Settings.dun.autoLowFrequency ? Settings.dun.timeOfLowFrequency : 1,
-    [new FetcherStrategy('default', 'server'), new FetcherStrategy('default', 'local')]
+    [
+      new FetcherStrategy('default', 'server'),
+      /* IFTRUE_feature__local_fetch */
+      new FetcherStrategy('default', 'local-fallback'),
+      /* FITRUE_feature__local_fetch */
+    ]
   );
 }
 
@@ -76,7 +91,7 @@ function buildCustomCookieFetchConfig(enable = true) {
         })
       : undefined,
     Settings.dun.autoLowFrequency ? Settings.dun.timeOfLowFrequency : 1,
-    [new FetcherStrategy('default', 'local')]
+    [new FetcherStrategy('default', 'local-custom')]
   );
 }
 /* FITRUE_feature__custom_datasource */
@@ -120,12 +135,13 @@ function ExtensionInit() {
 
   Settings.doAfterUpdate((settings, changed) => {
     // 只有更新了数据源/蹲饼频率/蹲饼开关的时候才刷新，避免无意义的网络请求
+    // prettier-ignore
     if (
-      !changed.enableDataSources &&
-      !changed.dun &&
-      !changed.open &&
+      !changed.enableDataSources
+      && !changed.dun
+      && !changed.open
       /* IFTRUE_feature__custom_datasource */
-      !changed.extraFeature?.enableCustomDataSources
+      && !changed.extraFeature?.enableCustomDataSources
       /* FITRUE_feature__custom_datasource */
     ) {
       return;
@@ -228,11 +244,10 @@ function ExtensionInit() {
     }
   });
 
-  PlatformHelper.Http.onBeforeSendHeaders(
-    interceptBeforeSendHeaders,
-    { urls: ['*://*.sinaimg.cn/*'], types: ['image'] },
-    ['blocking', 'requestHeaders']
-  );
+  PlatformHelper.Http.onBeforeSendHeaders(interceptBeforeSendHeaders, { urls: ['*://*.sinaimg.cn/*'] }, [
+    'blocking',
+    'requestHeaders',
+  ]);
 }
 
 function countDownDebugLog(...data) {

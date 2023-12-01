@@ -82,7 +82,6 @@ class FetcherController {
           break;
         }
       }
-      if (newFetcherIdx < 0) newFetcherIdx = 0;
     }
 
     const oldFetcherIdx = this.currentFetcherIdx;
@@ -91,14 +90,18 @@ class FetcherController {
         if (this.currentFetcherIdx >= 0) {
           await this.stop();
         }
-        this.currentFetcherIdx = newFetcherIdx;
-        DebugUtil.debugLog(
-          0,
-          `[${this.fetchConfig.id}]蹲饼器切换为：`,
-          this.fetchConfig.fetcherStrategyList[this.currentFetcherIdx].fetcher
-        );
-        if (this.fetchConfig.enable) {
-          await this.start();
+        if (newFetcherIdx >= 0) {
+          this.currentFetcherIdx = newFetcherIdx;
+          DebugUtil.debugLog(
+            0,
+            `[${this.fetchConfig.id}]蹲饼器切换为：`,
+            this.fetchConfig.fetcherStrategyList[this.currentFetcherIdx].fetcher
+          );
+          if (this.fetchConfig.enable) {
+            await this.start();
+          }
+        } else {
+          DebugUtil.debugLog(0, `[${this.fetchConfig.id}]蹲饼器切换失败！所有蹲饼器都暂时不可用！`);
         }
       } catch (e) {
         this.currentFetcherIdx = oldFetcherIdx;

@@ -3,6 +3,7 @@ import FirefoxPlatform from './impl/FirefoxPlatform';
 import EdgePlatform from './impl/EdgePlatform';
 import UnknownPlatform from './impl/UnknownPlatform';
 import { DEBUG_LEVEL } from '../Constants';
+import { Http } from '@enraged-dun-cookie-development-team/common/request';
 
 // TODO 还有一些以注释形式存在于其它文件中的chrome调用，之后记得处理
 /**
@@ -210,28 +211,36 @@ class NotificationHelper {
    */
   async createWithSpecialIcon(id, iconUrl, title, message, imageUrl) {
     let objectUrl;
+    let canvas;
     if (typeof imageUrl === 'string' && imageUrl.startsWith('http')) {
       try {
-        const response = await fetch(imageUrl);
+        const blob = await Http.get(imageUrl, { responseTransformer: (r) => r.blob() });
+        canvas = document.createElement('canvas');
+        canvas.height = 200;
+        canvas.width = 400;
+        const ctx = canvas.getContext('2d');
+        const bitmap = await createImageBitmap(blob, { resizeWidth: canvas.width });
+        ctx.drawImage(bitmap, 0, 0);
+        bitmap.close();
+        /**
+         * @type {unknown}
+         */
+        const newBlob = await new Promise((r) => canvas.toBlob(r));
+        objectUrl = URL.createObjectURL(newBlob);
         DebugUtil.debugConsoleOutput(
           0,
           'debug',
           '%c 推送图片 ',
           'color: #eee; background: #e5a335',
-          `推送图片响应：`,
-          response
+          `成功创建推送图片`
         );
-        if (response.status != 200) throw `图片响应状态码为${response.status}`;
-        const blob = await response.blob();
-
-        objectUrl = URL.createObjectURL(blob);
       } catch (e) {
         DebugUtil.debugConsoleOutput(
           0,
           'error',
           '%c 推送图片 ',
           'color: #eee; background: #e53935',
-          `推送图片报错：`,
+          `创建推送图片报错：`,
           e
         );
         objectUrl = undefined;
@@ -243,6 +252,9 @@ class NotificationHelper {
       .finally((_) => {
         if (objectUrl) {
           URL.revokeObjectURL(objectUrl);
+        }
+        if (canvas) {
+          canvas.remove();
         }
       });
   }

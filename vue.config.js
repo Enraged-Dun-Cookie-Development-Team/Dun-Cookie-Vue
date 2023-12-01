@@ -1,7 +1,7 @@
 const chainWebpack = require('./chainWebpack.config.js');
 
-const isDevMode = process.env.NODE_ENV === 'development';
-const shouldDisableSourceMap = !isDevMode && process.env.DISABLE_SOURCE_MAP === 'true';
+const devModeConfig = process.env.NODE_ENV === 'development' ? 'eval' : false;
+const shouldDisableSourceMap = process.env.NODE_ENV !== 'development' && process.env.DISABLE_SOURCE_MAP === 'true';
 
 const config = {
   devServer: {
@@ -15,7 +15,7 @@ const config = {
   lintOnSave: false, //关闭eslint检查
   productionSourceMap: shouldDisableSourceMap,
   configureWebpack: {
-    devtool: isDevMode,
+    devtool: devModeConfig,
   },
   pages: {
     options: {

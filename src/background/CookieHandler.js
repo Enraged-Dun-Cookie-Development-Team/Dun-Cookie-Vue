@@ -206,7 +206,11 @@ class CookieHandler {
         return prev;
       }, {});
       for (const entry of Object.entries(cookiesMap)) {
-        tryNotice(AvailableDataSourceMeta.getById(entry[0]), entry[1]);
+        try {
+          tryNotice(AvailableDataSourceMeta.getById(entry[0]), entry[1]);
+        } catch (e) {
+          console.log(e);
+        }
       }
     }
 

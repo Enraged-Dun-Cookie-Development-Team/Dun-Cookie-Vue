@@ -5,6 +5,7 @@ import HttpUtil from './HttpUtil';
 import PlatformHelper from '../platform/PlatformHelper';
 import Settings from '../Settings';
 import {
+  BUILD_SIGN,
   CANTEEN_API_BASE,
   CANTEEN_CDN_API_BASE,
   CANTEEN_CDN_SERVER_API_BASE,
@@ -20,6 +21,7 @@ import { DataSourceMeta } from '../datasource/DataSourceMeta';
 import { CookieItem, RetweetedInfo } from '../CookieItem';
 import AvailableDataSourceMeta from '../sync/AvailableDataSourceMeta';
 import { registerUrlToAddReferer } from '../../background/request_interceptor';
+import { UserUtil } from './UserUtil';
 
 const serverOption = {
   appendTimestamp: false,
@@ -27,38 +29,58 @@ const serverOption = {
 
 const comboIdCache = {};
 
-if (!global.ceobe_cache) global.ceobe_cache = {};
-global.ceobe_cache.comboId = comboIdCache;
+/* IFDEBUG */
+global.__ceobe_cache__combo_id__ = comboIdCache;
+/* FIDEBUG */
+
+async function addHeaders(options) {
+  const headers = options.headers ? new Headers(options.headers) : new Headers();
+  headers.set('x-ceobe-client-id', await UserUtil.getClientId());
+  headers.set('x-ceobe-client-type', 'browser-extension');
+  headers.set('x-ceobe-client-platform', PlatformHelper.PlatformType.toLowerCase());
+  headers.set('x-ceobe-client-version', CURRENT_VERSION);
+  if (BUILD_SIGN) {
+    headers.set('x-ceobe-client-sign', BUILD_SIGN);
+  }
+  options.headers = headers;
+  return options;
+}
 
 export default class ServerUtil {
   static async requestCdn(path, options) {
-    if (path.startsWith('/')) path = path.startsWith(1);
+    if (path.startsWith('/')) path = path.substring(1);
     return await Http.get(CANTEEN_CDN_API_BASE + path, options);
   }
 
   static async requestCdnServerApi(path) {
-    if (path.startsWith('/')) path = path.startsWith(1);
-    const result = await Http.get(CANTEEN_CDN_SERVER_API_BASE + path, {
-      responseTransformer: async (response) => response.json(),
-    });
+    if (path.startsWith('/')) path = path.substring(1);
+    // noinspection JSUnusedGlobalSymbols
+    let options = {
+      responseTransformer: (response) => response.json(),
+    };
+    options = await addHeaders(options);
+    const result = await Http.get(CANTEEN_CDN_SERVER_API_BASE + path, options);
     if (parseInt(result.code) === 0) {
       return result.data;
     } else {
-      throw new Error(`小刻食堂server cdn api请求失败：${path}，${result.message}`);
+      throw new Error(`小刻食堂server cdn api请求失败(${path})：${JSON.stringify(result)}`);
     }
   }
 
-  static async requestApi(method, path, options) {
-    if (path.startsWith('/')) path = path.startsWith(1);
-    const result = await Http.request(CANTEEN_API_BASE + path, {
+  static async requestApi(method, path, _options) {
+    if (path.startsWith('/')) path = path.substring(1);
+    // noinspection JSUnusedGlobalSymbols
+    let options = {
       method: method,
-      responseTransformer: async (response) => response.json(),
-      ...options,
-    });
+      responseTransformer: (response) => response.json(),
+      ..._options,
+    };
+    options = await addHeaders(options);
+    const result = await Http.request(CANTEEN_API_BASE + path, options);
     if (parseInt(result.code) === 0) {
       return result.data;
     } else {
-      throw new Error(`小刻食堂api请求失败：${path}，${result.message}`);
+      throw new Error(`小刻食堂api请求失败(${path})：${JSON.stringify(result)}`);
     }
   }
 
@@ -159,9 +181,12 @@ export default class ServerUtil {
 
   static async getAvailableDataSourcePreset() {
     const preset = {};
-    (await ServerUtil.getServerDataSourceInfo(true)).dataSourceList.forEach((source) => {
-      preset[`${source.type}:${source.dataId}`] = source;
-    });
+    const serverInfo = await ServerUtil.getServerDataSourceInfo(true);
+    if (serverInfo) {
+      serverInfo.dataSourceList.forEach((source) => {
+        preset[`${source.type}:${source.dataId}`] = source;
+      });
+    }
     return preset;
   }
 
@@ -251,7 +276,7 @@ export default class ServerUtil {
       const weiboImgs = [];
       for (const cookie of result.cookies) {
         if (!cookie.source.type.startsWith('weibo:')) continue;
-        const images = cookie.default_cookie.images?.map((it) => it.origin_url);
+        const images = cookie.default_cookie.images?.flatMap((it) => [it.origin_url, it.compress_url]);
         if (images && images.length > 0) {
           weiboImgs.push(...images);
         }
@@ -409,6 +434,17 @@ export default class ServerUtil {
   }
 
   /**
+   * 获取第三方工具链接
+   * @return {Promise<{toolList: {nickname: string, avatar: string, jump_url: string}[]}>}
+   */
+  static async getThirdPartyToolsInfo() {
+    const toolList = await this.requestApi('GET', '/canteen/operate/toolLink/list');
+    return {
+      toolList: toolList,
+    };
+  }
+
+  /**
    * @param checkVersionUpdate {boolean} 是否检测版本更新并推送
    * @param targetVersion {string} 要获取的目标版本信息，不提供时获取最新版
    */
@@ -419,28 +455,42 @@ export default class ServerUtil {
       // 断网导致没有response和服务器响应5xx的情况不检测是否存在版本更新
       if (!error.response) {
         checkVersionUpdate = false;
+        return;
       }
       const response = error.response;
       if (response.status >= 500 && response.status < 600) {
         checkVersionUpdate = false;
+        return;
       }
+      if (response.status >= 400 && response.status < 500) {
+        checkVersionUpdate = false;
+        return response.text();
+      }
+      console.log(error);
     };
     const arg = targetVersion ? `?version=${targetVersion}` : '';
     data = await HttpUtil.GET_Json(
       `${CANTEEN_API_BASE}canteen/operate/version/plugin${arg}`,
       serverOption,
-      failController
+      failController,
+      false
     );
+    if (data) {
+      if (parseInt(data.code) === 0) {
+        data = data.data;
+      } else {
+        console.warn(data.message || `获取在线版本信息响应失败：${JSON.stringify(data)}`);
+        data = null;
+      }
+    }
     if (!data) {
       const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
       data = await HttpUtil.GET_Json(fallbackUrl);
       data = data.upgrade;
       data.is_fallback = true;
-    } else {
-      data = data.data;
     }
     if (!data) {
-      return data;
+      throw new Error('获取在线版本信息失败，获取备用版本信息失败。');
     }
     if (checkVersionUpdate) {
       if (Settings.JudgmentVersion(data.version, CURRENT_VERSION) && Settings.dun.enableNotice) {

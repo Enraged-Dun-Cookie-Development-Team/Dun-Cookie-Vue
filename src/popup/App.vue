@@ -61,7 +61,7 @@
         <el-row type="flex" justify="center" class="drawer-btn-area">
           <el-tooltip v-for="item in quickJump.tool" :key="item.img" :content="item.name" placement="top">
             <el-button size="small" @click="openUrl(item.url)">
-              <img class="btn-icon" :class="item.radius ? 'radius' : ''" :src="item.img" />
+              <img class="btn-icon radius" :src="item.img" />
             </el-button>
           </el-tooltip>
         </el-row>
@@ -96,8 +96,7 @@
           <el-button type="primary" icon="el-icon-upload2" @click="drawer = false"> 收起 </el-button>
         </el-row>
         <div style="position: absolute; right: 10px; bottom: 10px" class="sign">
-          Powered By
-          <p @click="openAboutUs">小刻食堂</p>
+          Powered By <span @click="openAboutUs">小刻食堂</span>
         </div>
       </el-drawer>
       <!-- 置顶按钮 -->
@@ -182,7 +181,6 @@ import {
   PAGE_UPDATE,
   PAGE_WELCOME,
   PLATFORM_FIREFOX,
-  quickJump,
   SHOW_VERSION,
 } from '../common/Constants';
 import PlatformHelper from '../common/platform/PlatformHelper';
@@ -208,8 +206,6 @@ export default {
         });
       }
     });
-    const _quickJump = quickJump;
-    _quickJump.source = [];
     return {
       san: SanInfo,
       currentSan: SanInfo.currentSan,
@@ -226,7 +222,66 @@ export default {
       drawerFirst: false, // 这次打开窗口是否打开过二级菜单
       toolDrawer: false, // 理智计算器菜单
       isReload: false, // 是否正在刷新
-      quickJump: _quickJump,
+      quickJump: {
+        source: [],
+        tool: [
+          {
+            url: 'http://prts.wiki/',
+            name: 'PRTS.Wiki',
+            img: '/assets/image/link/akwiki.png',
+            radius: true,
+          },
+          {
+            url: 'https://mapcn.ark-nights.com',
+            name: 'PRTS.Map',
+            img: '/assets/image/link/akmap.ico',
+            radius: true,
+          },
+          {
+            url: 'https://ass.m-j.bond/',
+            name: '剧情播放器',
+            img: '/assets/image/link/ass.m-j.bond.png',
+            radius: true,
+          },
+          {
+            url: 'https://penguin-stats.cn/',
+            name: '企鹅物流',
+            img: '/assets/image/link/penguin_stats_logo.webp',
+            radius: true,
+          },
+          {
+            url: 'https://arkn.lolicon.app/#/',
+            name: '明日方舟工具箱',
+            img: '/assets/image/link/arktools.png',
+            radius: true,
+          },
+          {
+            url: 'https://aog.wiki/',
+            name: '刷素材一图流',
+            img: '/assets/image/link/akgraph.ico',
+            radius: true,
+          },
+          {
+            url: 'https://viktorlab.cn/akdata/',
+            name: 'Arknight DPS',
+            img: '/assets/image/link/dps.ico',
+            radius: true,
+          },
+          {
+            url: 'https://terrach.net/',
+            name: '泰拉通讯枢纽',
+            img: '/assets/image/link/tltxsn.png',
+            radius: false,
+          },
+          {
+            url: '../time.html',
+            name: '小刻食堂计时器',
+            img: '/assets/image/icon.png',
+            radius: false,
+          },
+        ],
+        url: [],
+      },
       dayInfo: dayInfo,
       loading: true, // 初始化加载
       onlineDayInfo: {},
@@ -271,8 +326,7 @@ export default {
         this.oldDunCount = data.counter;
       });
       setTimeout(() => {
-        let head = navigator.userAgent;
-        if (head.indexOf('Firefox') > 1) {
+        if (PlatformHelper.PlatformType === PLATFORM_FIREFOX) {
           let div = document.getElementById('app');
           div.style.fontFamily = 'Microsoft yahei';
           this.firefox = true;
@@ -286,6 +340,7 @@ export default {
     handleIconClick() {
       if (!this.drawer && !this.drawerFirst) {
         this.getVideoJump();
+        this.getToolJump();
         this.drawerFirst = true;
       }
 
@@ -301,8 +356,13 @@ export default {
             new Date(x.over_time) >= TimeUtil.changeToCCT(new Date())
         );
         if (btnList.length > 0) {
-          this.quickJump.url.push(...btnList);
+          this.quickJump.url = btnList;
         }
+      });
+    },
+    getToolJump() {
+      ServerUtil.getThirdPartyToolsInfo().then((data) => {
+        this.quickJump.tool = data.toolList.map((it) => ({ name: it.nickname, img: it.avatar, url: it.jump_url }));
       });
     },
     async firefoxWarning() {
@@ -697,7 +757,7 @@ export default {
 
   // 隐藏二级菜单
 
-  :deep(.ttb) {
+  :deep {
     background-color: @@bgColor;
 
     .el-divider {
@@ -732,8 +792,7 @@ export default {
 
     .sign {
       color: @@setLarge;
-      & > p {
-        display: inline;
+      & > span {
         text-decoration: underline;
         color: @@ceobeColor !important;
         cursor: pointer;
