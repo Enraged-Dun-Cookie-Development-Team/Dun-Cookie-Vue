@@ -415,9 +415,11 @@ export default {
             ) {
               // 425和348两个魔法值来源于：https://discourse.mozilla.org/t/can-add-ons-webextensions-popups-determinate-whether-they-are-shown-in-the-overflow-menu-or-not/27937/6
               this.firefoxWarning();
-            } else {
-              alert('窗口太小,可能显示出现问题');
             }
+            // 部分浏览器这个功能会出问题，直接关掉提示吧，反正一般也用不到
+            // else {
+            //   alert('窗口太小,可能显示出现问题');
+            // }
           }
           fromLarge = window.innerWidth > 699;
         };
