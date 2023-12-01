@@ -455,28 +455,42 @@ export default class ServerUtil {
       // 断网导致没有response和服务器响应5xx的情况不检测是否存在版本更新
       if (!error.response) {
         checkVersionUpdate = false;
+        return;
       }
       const response = error.response;
       if (response.status >= 500 && response.status < 600) {
         checkVersionUpdate = false;
+        return;
       }
+      if (response.status >= 400 && response.status < 500) {
+        checkVersionUpdate = false;
+        return response.text();
+      }
+      console.log(error);
     };
     const arg = targetVersion ? `?version=${targetVersion}` : '';
     data = await HttpUtil.GET_Json(
       `${CANTEEN_API_BASE}canteen/operate/version/plugin${arg}`,
       serverOption,
-      failController
+      failController,
+      false
     );
+    if (data) {
+      if (parseInt(data.code) === 0) {
+        data = data.data;
+      } else {
+        console.warn(data.message || `获取在线版本信息响应失败：${JSON.stringify(data)}`);
+        data = null;
+      }
+    }
     if (!data) {
       const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
       data = await HttpUtil.GET_Json(fallbackUrl);
       data = data.upgrade;
       data.is_fallback = true;
-    } else {
-      data = data.data;
     }
     if (!data) {
-      return data;
+      throw new Error('获取在线版本信息失败，获取备用版本信息失败。');
     }
     if (checkVersionUpdate) {
       if (Settings.JudgmentVersion(data.version, CURRENT_VERSION) && Settings.dun.enableNotice) {
