@@ -267,6 +267,7 @@ export default {
   }
 
   .search-area-penguin-name {
+    z-index: 10;
     position: absolute;
     bottom: 10px;
     display: flex;
