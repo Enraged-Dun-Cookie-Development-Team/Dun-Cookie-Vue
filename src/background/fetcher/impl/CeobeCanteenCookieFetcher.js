@@ -22,13 +22,13 @@ export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
 
   async start(fetchConfig) {
     if (this.runningFlag) return;
+    this.config = fetchConfig;
     try {
       this.comboId = await ServerUtil.getComboId(fetchConfig.enableDataSourceList);
     } catch (e) {
       this.failCount++;
       throw e;
     }
-    this.config = fetchConfig;
     this.runningFlag = true;
     CookieHandler.resetLastServerList();
     void this.doCycle();
