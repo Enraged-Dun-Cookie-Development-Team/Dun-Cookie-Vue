@@ -43,24 +43,89 @@
         :visible.sync="drawer"
         :show-close="false"
         :direction="settings.display.windowMode ? 'rtl' : 'ttb'"
-        size="520px"
+        size="570px"
       >
+        <div class="edit-layout">
+          <span>打开编辑模式</span>
+          <el-switch v-model="isEdit"></el-switch>
+        </div>
+
         <el-divider content-position="left"> 饼的发源地 </el-divider>
         <div
           ref="drawerBtnArea"
           class="drawer-btn-area drawer-btn-area-origin"
           :class="{ 'drawer-btn-area-scroll': isOriginScroll }"
         >
-          <el-tooltip v-for="item in quickJump.source" :key="item.avatar" :content="item.nickname" placement="top">
-            <el-button size="small" @click="openUrl(item.jump_url)">
-              <img class="btn-icon" :class="'radius'" :src="item.avatar" />
+          <el-tooltip
+            v-for="(item, index) in quickJump.source"
+            :key="index"
+            ref="dragEntitySourceEl"
+            :content="item.nickname"
+            placement="top"
+            class="drag-entity"
+          >
+            <el-button v-if="isEdit && item.isActivated" size="small">
+              <img
+                class="btn-icon radius"
+                :src="item.avatar"
+                draggable="false"
+                @mousedown="move($event, item, index, 'source')"
+              />
+              <div class="edit-icon" @click="deleteSource(item)">
+                <i class="el-icon-error"></i>
+              </div>
+            </el-button>
+            <!-- <div class="not-activated" v-else-if="isEdit && !item.isActivated">
+              <img class="btn-icon radius" :src="item.avatar"/>
+              <div class="edit-icon" @click="addSource(item)">
+                <i class="el-icon-circle-plus"></i>
+              </div>
+            </div> -->
+            <el-button v-else-if="isEdit && !item.isActivated" size="small" class="not-activated">
+              <img class="btn-icon radius" :src="item.avatar" />
+              <div class="edit-icon" @click="addSource(item)">
+                <i class="el-icon-circle-plus"></i>
+              </div>
+            </el-button>
+            <el-button v-else-if="item.isActivated" size="small" @click="openUrl(item.jump_url)">
+              <img class="btn-icon radius" :src="item.avatar" />
             </el-button>
           </el-tooltip>
         </div>
         <el-divider content-position="left"> 快捷工具 </el-divider>
-        <el-row type="flex" justify="center" class="drawer-btn-area">
-          <el-tooltip v-for="item in quickJump.tool" :key="item.img" :content="item.name" placement="top">
-            <el-button size="small" @click="openUrl(item.url)">
+        <el-row ref="toolPlatformEl" type="flex" justify="center" class="drawer-btn-area">
+          <el-tooltip
+            v-for="(item, index) in quickJump.tool"
+            :key="index"
+            ref="dragEntityToolEl"
+            :content="item.name"
+            placement="top"
+            class="drag-entity"
+          >
+            <el-button v-if="isEdit && item.isActivated" size="small">
+              <img
+                class="btn-icon radius"
+                :src="item.img"
+                draggable="false"
+                @mousedown="move($event, item, index, 'tool')"
+              />
+              <div class="edit-icon" @click="deleteSource(item)">
+                <i class="el-icon-error"></i>
+              </div>
+            </el-button>
+            <!-- <div class="not-activated" v-else-if="isEdit && !item.isActivated">
+              <img class="btn-icon radius" :src="item.img"/>
+              <div class="edit-icon" @click="addSource(item)">
+                <i class="el-icon-circle-plus"></i>
+              </div>
+            </div> -->
+            <el-button v-else-if="isEdit && !item.isActivated" size="small" class="not-activated">
+              <img class="btn-icon radius" :src="item.img" />
+              <div class="edit-icon" @click="addSource(item)">
+                <i class="el-icon-circle-plus"></i>
+              </div>
+            </el-button>
+            <el-button v-else-if="item.isActivated" size="small" @click="openUrl(item.url)">
               <img class="btn-icon radius" :src="item.img" />
             </el-button>
           </el-tooltip>
@@ -291,6 +356,7 @@ export default {
       // allHeight: 0,
       isOriginScroll: false,
       isCustomBuild: false,
+      isEdit: false,
     };
   },
   computed: {},
@@ -319,9 +385,10 @@ export default {
     openUrl: PlatformHelper.Tabs.create,
     init() {
       this.isCustomBuild = ENABLE_FEATURES.length > 0;
-      ServerUtil.getServerDataSourceInfo(true).then((data) => {
-        this.quickJump.source = data.serverDataSourceList.filter((it) => !!it.jump_url);
-      });
+      this.initSourceJump();
+      // ServerUtil.getServerDataSourceInfo(true).then((data) => {
+      //   this.quickJump.source = data.serverDataSourceList.filter((it) => !!it.jump_url);
+      // });
       DunInfo.doAfterUpdate((data) => {
         this.oldDunCount = data.counter;
       });
@@ -339,8 +406,10 @@ export default {
     },
     handleIconClick() {
       if (!this.drawer && !this.drawerFirst) {
+        // this.initSourceJump()
+        this.initToolJump();
         this.getVideoJump();
-        this.getToolJump();
+        // this.getToolJump();
         this.drawerFirst = true;
       }
 
@@ -360,11 +429,13 @@ export default {
         }
       });
     },
-    getToolJump() {
-      ServerUtil.getThirdPartyToolsInfo().then((data) => {
-        this.quickJump.tool = data.toolList.map((it) => ({ name: it.nickname, img: it.avatar, url: it.jump_url }));
-      });
-    },
+    // getToolJump() {
+    //   ServerUtil.getThirdPartyToolsInfo().then((data) => {
+    //     this.quickJump.tool = data.toolList.map((it) => ({ name: it.nickname, img: it.avatar, url: it.jump_url }));
+    //     this.saveQuickJump()
+    //     console.log(this.quickJump.tool)
+    //   });
+    // },
     async firefoxWarning() {
       const flagKey = 'firefox-collapse-warning-flag';
       const flagDisableValue = 'disabled';
@@ -494,6 +565,154 @@ export default {
       }, interval);
     },
 
+    // 节点拖拽
+    move(inite, value, index, flag) {
+      let entities = null;
+      let plItem = null;
+      switch (flag) {
+        case 'source':
+          entities = this.$refs.dragEntitySourceEl;
+          plItem = this.$refs.drawerBtnArea;
+          break;
+        case 'tool':
+          entities = this.$refs.dragEntityToolEl;
+          plItem = this.$refs.toolPlatformEl.$el;
+          break;
+        default:
+          break;
+      }
+      const dragEntity = entities[index].$el;
+
+      let initLeft = dragEntity.offsetLeft;
+      let initTop = dragEntity.offsetTop;
+      dragEntity.style.left = initLeft + 'px';
+      dragEntity.style.top = initTop + 'px';
+
+      dragEntity.style.position = 'absolute';
+      dragEntity.style.zIndex = 100;
+
+      let disX = inite.clientX;
+      let disY = inite.clientY;
+      document.onmousemove = (e) => {
+        let left = e.clientX - disX;
+        let top = e.clientY - disY;
+
+        dragEntity.style.left = left + initLeft + 'px';
+        dragEntity.style.top = top + initTop + 'px';
+      };
+      document.onmouseup = (b) => {
+        let moveX = dragEntity.offsetLeft;
+        let moveY = dragEntity.offsetTop;
+        // 拖拽实体的宽度
+        let entityWidth = dragEntity.offsetWidth;
+        dragEntity.style.left = 'initial';
+        dragEntity.style.top = 'initial';
+        // 判断拖拽组件下落的位置
+        if (
+          moveX >= plItem.offsetLeft &&
+          moveX <= plItem.offsetLeft + plItem.offsetWidth &&
+          moveY >= plItem.offsetTop &&
+          moveY <= plItem.offsetTop + plItem.offsetHeight
+        ) {
+          // 获取排序下标
+          let entityIndex = (moveX - entities[0].$el.offsetLeft) / entityWidth;
+          entityIndex = entityIndex < 0 ? 0 : entityIndex > entities.length ? entities.length : Math.trunc(entityIndex);
+          console.log(entityIndex);
+          this.sortQuickJump(value, entityIndex, index, this.quickJump[flag]);
+        }
+        dragEntity.style.position = 'relative';
+        dragEntity.style.zIndex = 1;
+        document.onmousemove = null;
+        document.onmouseup = null;
+      };
+    },
+
+    async initSourceJump() {
+      const sourceJump = await PlatformHelper.Storage.getLocalStorage('quickJump');
+      // setTimeout(() => {
+      console.log('获取缓存');
+      console.log(sourceJump.source);
+      // }, 2000);
+
+      ServerUtil.getServerDataSourceInfo().then((data) => {
+        // if (sourceJump?.source && sourceJump.source?.length) {
+        //   for (const item of sourceJump.source) {
+        //   item.isActivated = true
+        //   if (sourceJump?.source && sourceJump.source?.length) {
+        //     const storageItem = sourceJump.source.find(p => item.nickname === p.nickname)
+        //     if (storageItem)
+        //       item.isActivated = storageItem.isActivated
+        //   }
+        // }
+        // }
+        // let list = sourceJump?.source && sourceJump.source?.length ? sourceJump.source : data.serverDataSourceList
+        for (const item of data.serverDataSourceList) {
+          item.isActivated = true;
+          if (sourceJump?.source && sourceJump.source?.length) {
+            const storageItem = sourceJump.source.find((p) => item.nickname === p.nickname);
+            if (storageItem) item.isActivated = storageItem.isActivated;
+          }
+        }
+        this.quickJump.source = data.serverDataSourceList.filter((it) => !!it.jump_url);
+        // 更新缓存
+        this.saveQuickJump();
+      });
+    },
+
+    async initToolJump() {
+      const toolJump = await PlatformHelper.Storage.getLocalStorage('quickJump').tool;
+      ServerUtil.getThirdPartyToolsInfo().then((data) => {
+        let tools = [];
+        for (const item of data.toolList) {
+          let toolItem = {
+            name: item.nickname,
+            img: item.avatar,
+            url: item.jump_url,
+            isActivated: true,
+          };
+          if (toolJump && toolJump?.length) {
+            const storageItem = toolJump.find((p) => item.nickname === p.name);
+            if (storageItem) toolItem.isActivated = storageItem.isActivated;
+          }
+          // tools.push(toolItem)
+          this.quickJump.tool.push(toolItem);
+        }
+        // this.quickJump.tool = tools
+        // 更新缓存
+        this.saveQuickJump();
+      });
+    },
+
+    /**
+     * 跳转链接拖拽时排序
+     * @param value {any} 元素
+     * @param index {number} 元素要排序的新下标
+     * @param oldIndex {number} 元素原来下标
+     * @param array {Array} 用于排序的数组
+     */
+    async sortQuickJump(value, index, oldIndex, array) {
+      array.splice(oldIndex, 1);
+      array.splice(index, 0, value);
+      this.saveQuickJump();
+      const testList = await PlatformHelper.Storage.getLocalStorage('quickJump');
+    },
+
+    deleteSource(data) {
+      data.isActivated = false;
+      this.saveQuickJump();
+    },
+
+    addSource(data) {
+      console.log(data);
+      data.isActivated = true;
+      this.saveQuickJump();
+    },
+
+    saveQuickJump() {
+      PlatformHelper.Storage.saveLocalStorage('quickJump', this.quickJump).then();
+      console.log(this.quickJump);
+    },
+
     openSetting() {
       PlatformHelper.Tabs.createWithExtensionFile(PAGE_OPTIONS);
     },
@@ -550,11 +769,11 @@ export default {
     :deep(a) {
       color: @@content !important;
     }
+    position: relative;
     overflow: auto;
     width: 700px;
     height: 599px;
     font-size: 14px;
-
     background-color: @@bgColor;
   }
 
@@ -640,6 +859,10 @@ export default {
   }
 
   .drawer-btn-area {
+    position: initial;
+    display: flex;
+    align-items: center;
+    height: 58px;
     .el-button {
       padding: 5px;
     }
@@ -649,6 +872,51 @@ export default {
 
       &.radius {
         border-radius: 10px;
+      }
+    }
+
+    .drag-entity {
+      position: relative;
+      transform: none;
+      transition: none;
+      .edit-icon {
+        position: absolute;
+        top: -9px;
+        right: -9px;
+        cursor: pointer;
+        & > i {
+          font-size: 18px;
+          color: #747474;
+          transition: 0.2s;
+          &:hover {
+            color: @@ceobeColor;
+          }
+        }
+        .el-icon-error {
+          &:hover {
+            color: #f06464;
+          }
+        }
+      }
+    }
+    .not-activated {
+      // display: inline-block;
+      // line-height: 1;
+      // white-space: nowrap;
+      // background: #FFF;
+      // border: 1px solid #DCDFE6;
+      // color: #606266;
+      // -webkit-appearance: none;
+      // text-align: center;
+      // box-sizing: border-box;
+      // font-weight: 500;
+      // font-size: 12px;
+      // border-radius: 3px;
+      // margin-left: 10px;
+      .btn-icon {
+        opacity: 0.2;
+        cursor: not-allowed;
+        box-sizing: border-box;
       }
     }
   }
@@ -711,6 +979,16 @@ export default {
           opacity: 0;
         }
       }
+    }
+  }
+  .edit-layout {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    padding: 0 20px;
+    width: 100%;
+    & > span {
+      margin-right: 15px;
     }
   }
 
@@ -834,6 +1112,10 @@ export default {
 
     .el-input__inner:focus {
       border-color: @@ceobeColor;
+    }
+    .el-switch.is-checked .el-switch__core {
+      border: @@ceobeColor 1px solid;
+      background-color: @@ceobeColor;
     }
   }
   :deep(.protocol-warning) {
