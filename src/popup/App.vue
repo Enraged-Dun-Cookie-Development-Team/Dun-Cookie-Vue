@@ -71,7 +71,7 @@
                 draggable="false"
                 @mousedown="move($event, item, index, 'source')"
               />
-              <div class="edit-icon" @click="deleteSource(item)">
+              <div class="edit-icon" @click="deleteSource(item, index, quickJump.source)">
                 <i class="el-icon-error"></i>
               </div>
             </el-button>
@@ -103,7 +103,7 @@
                 draggable="false"
                 @mousedown="move($event, item, index, 'tool')"
               />
-              <div class="edit-icon" @click="deleteSource(item)">
+              <div class="edit-icon" @click="deleteSource(item, index, quickJump.tool)">
                 <i class="el-icon-error"></i>
               </div>
             </el-button>
@@ -346,6 +346,8 @@ export default {
       if (!this.drawer && !this.drawerFirst) {
         this.getVideoJump();
         this.drawerFirst = true;
+      } else if (this.drawer) {
+        this.isEdit = false;
       }
 
       this.drawer = !this.drawer;
@@ -628,9 +630,9 @@ export default {
       this.saveQuickJump();
     },
 
-    deleteSource(data) {
+    deleteSource(data, index, array) {
       data.isActivated = false;
-      this.saveQuickJump();
+      this.sortQuickJump(data, array.length, index, array);
     },
 
     addSource(data) {
