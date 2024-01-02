@@ -75,12 +75,6 @@
                 <i class="el-icon-error"></i>
               </div>
             </el-button>
-            <!-- <div class="not-activated" v-else-if="isEdit && !item.isActivated">
-              <img class="btn-icon radius" :src="item.avatar"/>
-              <div class="edit-icon" @click="addSource(item)">
-                <i class="el-icon-circle-plus"></i>
-              </div>
-            </div> -->
             <el-button v-else-if="isEdit && !item.isActivated" size="small" class="not-activated">
               <img class="btn-icon radius" :src="item.avatar" />
               <div class="edit-icon" @click="addSource(item)">
@@ -98,14 +92,14 @@
             v-for="(item, index) in quickJump.tool"
             :key="index"
             ref="dragEntityToolEl"
-            :content="item.name"
+            :content="item.nickname"
             placement="top"
             class="drag-entity"
           >
             <el-button v-if="isEdit && item.isActivated" size="small">
               <img
                 class="btn-icon radius"
-                :src="item.img"
+                :src="item.avatar"
                 draggable="false"
                 @mousedown="move($event, item, index, 'tool')"
               />
@@ -113,20 +107,14 @@
                 <i class="el-icon-error"></i>
               </div>
             </el-button>
-            <!-- <div class="not-activated" v-else-if="isEdit && !item.isActivated">
-              <img class="btn-icon radius" :src="item.img"/>
-              <div class="edit-icon" @click="addSource(item)">
-                <i class="el-icon-circle-plus"></i>
-              </div>
-            </div> -->
             <el-button v-else-if="isEdit && !item.isActivated" size="small" class="not-activated">
-              <img class="btn-icon radius" :src="item.img" />
+              <img class="btn-icon radius" :src="item.avatar" />
               <div class="edit-icon" @click="addSource(item)">
                 <i class="el-icon-circle-plus"></i>
               </div>
             </el-button>
-            <el-button v-else-if="item.isActivated" size="small" @click="openUrl(item.url)">
-              <img class="btn-icon radius" :src="item.img" />
+            <el-button v-else-if="item.isActivated" size="small" @click="openUrl(item.jump_url)">
+              <img class="btn-icon radius" :src="item.avatar" />
             </el-button>
           </el-tooltip>
         </el-row>
@@ -290,60 +278,12 @@ export default {
       quickJump: {
         source: [],
         tool: [
-          {
-            url: 'http://prts.wiki/',
-            name: 'PRTS.Wiki',
-            img: '/assets/image/link/akwiki.png',
-            radius: true,
-          },
-          {
-            url: 'https://mapcn.ark-nights.com',
-            name: 'PRTS.Map',
-            img: '/assets/image/link/akmap.ico',
-            radius: true,
-          },
-          {
-            url: 'https://ass.m-j.bond/',
-            name: '剧情播放器',
-            img: '/assets/image/link/ass.m-j.bond.png',
-            radius: true,
-          },
-          {
-            url: 'https://penguin-stats.cn/',
-            name: '企鹅物流',
-            img: '/assets/image/link/penguin_stats_logo.webp',
-            radius: true,
-          },
-          {
-            url: 'https://arkn.lolicon.app/#/',
-            name: '明日方舟工具箱',
-            img: '/assets/image/link/arktools.png',
-            radius: true,
-          },
-          {
-            url: 'https://aog.wiki/',
-            name: '刷素材一图流',
-            img: '/assets/image/link/akgraph.ico',
-            radius: true,
-          },
-          {
-            url: 'https://viktorlab.cn/akdata/',
-            name: 'Arknight DPS',
-            img: '/assets/image/link/dps.ico',
-            radius: true,
-          },
-          {
-            url: 'https://terrach.net/',
-            name: '泰拉通讯枢纽',
-            img: '/assets/image/link/tltxsn.png',
-            radius: false,
-          },
-          {
-            url: '../time.html',
-            name: '小刻食堂计时器',
-            img: '/assets/image/icon.png',
-            radius: false,
-          },
+          // {
+          //   jump_url: 'http://prts.wiki/',
+          //   nickname: 'PRTS.Wiki',
+          //   avatar: '/assets/image/link/akwiki.png',
+          //   radius: true,
+          // },
         ],
         url: [],
       },
@@ -386,9 +326,7 @@ export default {
     init() {
       this.isCustomBuild = ENABLE_FEATURES.length > 0;
       this.initSourceJump();
-      // ServerUtil.getServerDataSourceInfo(true).then((data) => {
-      //   this.quickJump.source = data.serverDataSourceList.filter((it) => !!it.jump_url);
-      // });
+      this.initToolJump();
       DunInfo.doAfterUpdate((data) => {
         this.oldDunCount = data.counter;
       });
@@ -406,10 +344,7 @@ export default {
     },
     handleIconClick() {
       if (!this.drawer && !this.drawerFirst) {
-        // this.initSourceJump()
-        this.initToolJump();
         this.getVideoJump();
-        // this.getToolJump();
         this.drawerFirst = true;
       }
 
@@ -429,13 +364,6 @@ export default {
         }
       });
     },
-    // getToolJump() {
-    //   ServerUtil.getThirdPartyToolsInfo().then((data) => {
-    //     this.quickJump.tool = data.toolList.map((it) => ({ name: it.nickname, img: it.avatar, url: it.jump_url }));
-    //     this.saveQuickJump()
-    //     console.log(this.quickJump.tool)
-    //   });
-    // },
     async firefoxWarning() {
       const flagKey = 'firefox-collapse-warning-flag';
       const flagDisableValue = 'disabled';
@@ -629,55 +557,59 @@ export default {
 
     async initSourceJump() {
       const sourceJump = await PlatformHelper.Storage.getLocalStorage('quickJump');
-      // setTimeout(() => {
-      console.log('获取缓存');
-      console.log(sourceJump.source);
-      // }, 2000);
-
       ServerUtil.getServerDataSourceInfo().then((data) => {
-        // if (sourceJump?.source && sourceJump.source?.length) {
-        //   for (const item of sourceJump.source) {
-        //   item.isActivated = true
-        //   if (sourceJump?.source && sourceJump.source?.length) {
-        //     const storageItem = sourceJump.source.find(p => item.nickname === p.nickname)
-        //     if (storageItem)
-        //       item.isActivated = storageItem.isActivated
-        //   }
-        // }
-        // }
-        // let list = sourceJump?.source && sourceJump.source?.length ? sourceJump.source : data.serverDataSourceList
-        for (const item of data.serverDataSourceList) {
-          item.isActivated = true;
-          if (sourceJump?.source && sourceJump.source?.length) {
-            const storageItem = sourceJump.source.find((p) => item.nickname === p.nickname);
-            if (storageItem) item.isActivated = storageItem.isActivated;
+        let list = [];
+        let newList = [];
+        if (sourceJump?.source && sourceJump.source?.length) {
+          for (const item of sourceJump.source) {
+            if (data.serverDataSourceList.find((p) => item.nickname === p.nickname)) list.push(item);
           }
+          list = list.concat(data.serverDataSourceList);
+          newList = list.reduce((pre, cur) => {
+            let isRepeat = pre.findIndex((p) => p.nickname === cur.nickname);
+            if (isRepeat < 0) {
+              cur.isActivated = typeof cur.isActivated === 'boolean' ? cur.isActivated : true;
+              pre.push(cur);
+            }
+            return pre;
+          }, []);
+        } else {
+          for (const item of data.serverDataSourceList) {
+            item.isActivated = true;
+          }
+          newList = data.serverDataSourceList;
         }
-        this.quickJump.source = data.serverDataSourceList.filter((it) => !!it.jump_url);
+        this.quickJump.source = newList.filter((it) => !!it.jump_url);
         // 更新缓存
         this.saveQuickJump();
       });
     },
 
     async initToolJump() {
-      const toolJump = await PlatformHelper.Storage.getLocalStorage('quickJump').tool;
+      const toolJump = await PlatformHelper.Storage.getLocalStorage('quickJump');
       ServerUtil.getThirdPartyToolsInfo().then((data) => {
-        let tools = [];
-        for (const item of data.toolList) {
-          let toolItem = {
-            name: item.nickname,
-            img: item.avatar,
-            url: item.jump_url,
-            isActivated: true,
-          };
-          if (toolJump && toolJump?.length) {
-            const storageItem = toolJump.find((p) => item.nickname === p.name);
-            if (storageItem) toolItem.isActivated = storageItem.isActivated;
+        let list = [];
+        let newList = [];
+        if (toolJump?.tool && toolJump.tool?.length) {
+          for (const item of toolJump.tool) {
+            if (data.toolList.find((p) => item.nickname === p.nickname)) list.push(item);
           }
-          // tools.push(toolItem)
-          this.quickJump.tool.push(toolItem);
+          list = list.concat(data.toolList);
+          newList = list.reduce((pre, cur) => {
+            let isRepeat = pre.findIndex((p) => p.nickname === cur.nickname);
+            if (isRepeat < 0) {
+              cur.isActivated = typeof cur.isActivated === 'boolean' ? cur.isActivated : true;
+              pre.push(cur);
+            }
+            return pre;
+          }, []);
+        } else {
+          for (const item of data.toolList) {
+            item.isActivated = true;
+          }
+          newList = data.toolList;
         }
-        // this.quickJump.tool = tools
+        this.quickJump.tool = newList;
         // 更新缓存
         this.saveQuickJump();
       });
@@ -694,7 +626,6 @@ export default {
       array.splice(oldIndex, 1);
       array.splice(index, 0, value);
       this.saveQuickJump();
-      const testList = await PlatformHelper.Storage.getLocalStorage('quickJump');
     },
 
     deleteSource(data) {
@@ -703,14 +634,12 @@ export default {
     },
 
     addSource(data) {
-      console.log(data);
       data.isActivated = true;
       this.saveQuickJump();
     },
 
     saveQuickJump() {
       PlatformHelper.Storage.saveLocalStorage('quickJump', this.quickJump).then();
-      console.log(this.quickJump);
     },
 
     openSetting() {
