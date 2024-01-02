@@ -831,19 +831,6 @@ export default {
       }
     }
     .not-activated {
-      // display: inline-block;
-      // line-height: 1;
-      // white-space: nowrap;
-      // background: #FFF;
-      // border: 1px solid #DCDFE6;
-      // color: #606266;
-      // -webkit-appearance: none;
-      // text-align: center;
-      // box-sizing: border-box;
-      // font-weight: 500;
-      // font-size: 12px;
-      // border-radius: 3px;
-      // margin-left: 10px;
       .btn-icon {
         opacity: 0.2;
         cursor: not-allowed;
@@ -913,13 +900,20 @@ export default {
     }
   }
   .edit-layout {
-    display: flex;
+    // width: 100%;
+    position: absolute;
+    top: 66px;
+    right: 0;
+    z-index: 9;
+    display: inline-flex;
     justify-content: right;
     align-items: center;
+    margin-right: 20px;
     padding: 0 20px;
-    width: 100%;
+    background: #fff;
     & > span {
       margin-right: 15px;
+      line-height: 20px;
     }
   }
 
