@@ -612,7 +612,7 @@ export default {
           }
           newList = data.toolList;
         }
-        newList.sort((a, b) => a.isActivated - b.isActivated);
+        newList.sort((a, b) => b.isActivated - a.isActivated);
         this.quickJump.tool = newList;
         // 更新缓存
         this.saveQuickJump();
