@@ -43,7 +43,7 @@
         :visible.sync="drawer"
         :show-close="false"
         :direction="settings.display.windowMode ? 'rtl' : 'ttb'"
-        size="570px"
+        size="520px"
       >
         <div class="edit-layout">
           <span>打开编辑模式</span>
@@ -581,6 +581,7 @@ export default {
           }
           newList = data.serverDataSourceList;
         }
+        newList.sort((a, b) => b.isActivated - a.isActivated);
         this.quickJump.source = newList.filter((it) => !!it.jump_url);
         // 更新缓存
         this.saveQuickJump();
@@ -611,6 +612,7 @@ export default {
           }
           newList = data.toolList;
         }
+        newList.sort((a, b) => a.isActivated - b.isActivated);
         this.quickJump.tool = newList;
         // 更新缓存
         this.saveQuickJump();
@@ -796,6 +798,8 @@ export default {
     height: 58px;
     .el-button {
       padding: 5px;
+      width: 42px;
+      height: 44px;
     }
 
     .btn-icon {
@@ -900,7 +904,6 @@ export default {
     }
   }
   .edit-layout {
-    // width: 100%;
     position: absolute;
     top: 66px;
     right: 0;
@@ -1041,6 +1044,9 @@ export default {
     .el-switch.is-checked .el-switch__core {
       border: @@ceobeColor 1px solid;
       background-color: @@ceobeColor;
+    }
+    .el-divider--horizontal {
+      margin: 20px 0 !important;
     }
   }
   :deep(.protocol-warning) {
