@@ -513,7 +513,7 @@ export default {
       }
       const dragEntity = entities[index].$el;
 
-      let initLeft = dragEntity.offsetLeft;
+      let initLeft = dragEntity.offsetLeft - 10 - plItem.scrollLeft;
       let initTop = dragEntity.offsetTop;
       dragEntity.style.left = initLeft + 'px';
       dragEntity.style.top = initTop + 'px';
@@ -534,7 +534,7 @@ export default {
         let moveX = dragEntity.offsetLeft;
         let moveY = dragEntity.offsetTop;
         // 拖拽实体的宽度
-        let entityWidth = dragEntity.offsetWidth;
+        let entityWidth = dragEntity.offsetWidth + 10;
         dragEntity.style.left = 'initial';
         dragEntity.style.top = 'initial';
         // 判断拖拽组件下落的位置
@@ -545,7 +545,7 @@ export default {
           moveY <= plItem.offsetTop + plItem.offsetHeight
         ) {
           // 获取排序下标
-          let entityIndex = (moveX - entities[0].$el.offsetLeft) / entityWidth;
+          let entityIndex = (moveX - entities[0].$el.offsetLeft + plItem.scrollLeft + 10) / entityWidth;
           entityIndex = entityIndex < 0 ? 0 : entityIndex > entities.length ? entities.length : Math.trunc(entityIndex);
           console.log(entityIndex);
           this.sortQuickJump(value, entityIndex, index, this.quickJump[flag]);
