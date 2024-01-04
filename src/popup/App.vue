@@ -87,7 +87,7 @@
           </el-tooltip>
         </div>
         <el-divider content-position="left"> 快捷工具 </el-divider>
-        <el-row ref="toolPlatformEl" type="flex" justify="center" class="drawer-btn-area">
+        <div ref="toolPlatformEl" class="drawer-btn-area drawer-btn-area-origin">
           <el-tooltip
             v-for="(item, index) in quickJump.tool"
             :key="index"
@@ -117,7 +117,7 @@
               <img class="btn-icon radius" :src="item.avatar" />
             </el-button>
           </el-tooltip>
-        </el-row>
+        </div>
         <el-divider v-if="quickJump.url" content-position="left"> 快捷链接 </el-divider>
         <div ref="drawerBtnAreaQuickJump" class="drawer-btn-area-quickJump">
           <el-tooltip v-for="(item, index) in quickJump.url" :key="index" :content="item.title" placement="top">
@@ -426,28 +426,45 @@ export default {
         };
       }
     },
-    scrollHandler() {
-      let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
-      scrollDiv.scrollLeft = scrollDiv.scrollLeft + event.deltaY;
-    },
-    drawerBtnAreaScroll() {
-      let drawerBtnArea = this.$refs.drawerBtnArea;
-      drawerBtnArea.scrollLeft = drawerBtnArea.scrollLeft + event.deltaY;
+    scrollHandlerTest(el) {
+      el.scrollLeft = el.scrollLeft + event.deltaY;
     },
     bindScrollFun() {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
       let drawerBtnArea = this.$refs.drawerBtnArea;
+      let toolPlatformEl = this.$refs.toolPlatformEl;
       // 添加监听事件
-      scrollDiv.addEventListener('wheel', this.scrollHandler, false);
-      drawerBtnArea.addEventListener('wheel', this.drawerBtnAreaScroll, false);
+      scrollDiv.addEventListener(
+        'wheel',
+        () => {
+          this.scrollHandlerTest(scrollDiv);
+        },
+        false
+      );
+      drawerBtnArea.addEventListener(
+        'wheel',
+        () => {
+          this.scrollHandlerTest(drawerBtnArea);
+        },
+        false
+      );
+      toolPlatformEl.addEventListener(
+        'wheel',
+        () => {
+          this.scrollHandlerTest(toolPlatformEl);
+        },
+        false
+      );
       const bodyWidth = document.querySelector('body').offsetWidth;
       if (drawerBtnArea.scrollWidth > bodyWidth) this.isOriginScroll = true;
     },
     unbindScrollFun() {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
       let drawerBtnArea = this.$refs.drawerBtnArea;
+      let toolPlatformEl = this.$refs.toolPlatformEl;
       scrollDiv.removeEventListener('wheel', this.scrollHandler);
       drawerBtnArea.removeEventListener('wheel', this.drawerBtnAreaScroll);
+      toolPlatformEl.removeEventListener('wheel', this.scrollHandlerTest);
     },
     // 获取倒计时数据
     getCountDownList() {
@@ -506,7 +523,7 @@ export default {
           break;
         case 'tool':
           entities = this.$refs.dragEntityToolEl;
-          plItem = this.$refs.toolPlatformEl.$el;
+          plItem = this.$refs.toolPlatformEl;
           break;
         default:
           break;
@@ -645,7 +662,7 @@ export default {
 
     addSource(data, index, array) {
       data.isActivated = true;
-      const newIndex = array.filter((p) => p.isActivated).length - array.length;
+      const newIndex = array.length - array.filter((p) => !p.isActivated).length - 1;
       this.sortQuickJump(data, newIndex, index, array);
     },
 
