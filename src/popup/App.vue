@@ -77,7 +77,7 @@
             </el-button>
             <el-button v-else-if="isEdit && !item.isActivated" size="small" class="not-activated">
               <img class="btn-icon radius" :src="item.avatar" />
-              <div class="edit-icon" @click="addSource(item)">
+              <div class="edit-icon" @click="addSource(item, index, quickJump.source)">
                 <i class="el-icon-circle-plus"></i>
               </div>
             </el-button>
@@ -109,7 +109,7 @@
             </el-button>
             <el-button v-else-if="isEdit && !item.isActivated" size="small" class="not-activated">
               <img class="btn-icon radius" :src="item.avatar" />
-              <div class="edit-icon" @click="addSource(item)">
+              <div class="edit-icon" @click="addSource(item, index, quickJump.tool)">
                 <i class="el-icon-circle-plus"></i>
               </div>
             </el-button>
@@ -526,7 +526,12 @@ export default {
       document.onmousemove = (e) => {
         let left = e.clientX - disX;
         let top = e.clientY - disY;
-
+        // 拖动到边缘时开启自动滚动
+        if (left + initLeft < 50) {
+          this.autoScroll(plItem, 'left');
+        } else if (left + initLeft > plItem.offsetWidth - 80) {
+          this.autoScroll(plItem, 'right');
+        }
         dragEntity.style.left = left + initLeft + 'px';
         dragEntity.style.top = top + initTop + 'px';
       };
@@ -545,9 +550,10 @@ export default {
           moveY <= plItem.offsetTop + plItem.offsetHeight
         ) {
           // 获取排序下标
+          const activatedLength = this.quickJump[flag].filter((p) => p.isActivated).length;
           let entityIndex = (moveX - entities[0].$el.offsetLeft + plItem.scrollLeft + 10) / entityWidth;
-          entityIndex = entityIndex < 0 ? 0 : entityIndex > entities.length ? entities.length : Math.trunc(entityIndex);
-          console.log(entityIndex);
+          entityIndex =
+            entityIndex < 0 ? 0 : entityIndex > activatedLength ? activatedLength - 1 : Math.trunc(entityIndex);
           this.sortQuickJump(value, entityIndex, index, this.quickJump[flag]);
         }
         dragEntity.style.position = 'relative';
@@ -637,9 +643,17 @@ export default {
       this.sortQuickJump(data, array.length, index, array);
     },
 
-    addSource(data) {
+    addSource(data, index, array) {
       data.isActivated = true;
-      this.saveQuickJump();
+      const newIndex = array.filter((p) => p.isActivated).length - array.length;
+      this.sortQuickJump(data, newIndex, index, array);
+    },
+
+    autoScroll(el, direction) {
+      el.scrollTo({
+        left: direction === 'left' ? el.scrollLeft - 100 : el.scrollLeft + 100,
+        behavior: 'smooth', // instant，瞬间滑动
+      });
     },
 
     saveQuickJump() {
@@ -905,7 +919,7 @@ export default {
   }
   .edit-layout {
     position: absolute;
-    top: 66px;
+    top: 62px;
     right: 0;
     z-index: 9;
     display: inline-flex;
