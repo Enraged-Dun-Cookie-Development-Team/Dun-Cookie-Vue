@@ -47,7 +47,7 @@
       >
         <div class="edit-layout">
           <span>打开编辑模式</span>
-          <el-switch v-model="isEdit"></el-switch>
+          <el-switch v-model="isEdit" @change="editChange"></el-switch>
         </div>
 
         <el-divider content-position="left"> 饼的发源地 </el-divider>
@@ -661,6 +661,20 @@ export default {
         left: direction === 'left' ? el.scrollLeft - 100 : el.scrollLeft + 100,
         behavior: 'smooth', // instant，瞬间滑动
       });
+    },
+
+    editChange() {
+      setTimeout(() => {
+        const toolPlatformEl = this.$refs.toolPlatformEl;
+        const drawerBtnArea = this.$refs.drawerBtnArea;
+        const bodyWidth = document.querySelector('body').offsetWidth;
+
+        if (drawerBtnArea.scrollWidth > bodyWidth) this.isOriginScroll = true;
+        else this.isOriginScroll = false;
+        if (toolPlatformEl.scrollWidth > bodyWidth) this.isToolScroll = true;
+        else this.isToolScroll = false;
+        console.log(toolPlatformEl.scrollWidth);
+      }, 50);
     },
 
     saveQuickJump() {
