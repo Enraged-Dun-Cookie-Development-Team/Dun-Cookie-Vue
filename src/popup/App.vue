@@ -668,12 +668,10 @@ export default {
         const toolPlatformEl = this.$refs.toolPlatformEl;
         const drawerBtnArea = this.$refs.drawerBtnArea;
         const bodyWidth = document.querySelector('body').offsetWidth;
-
         if (drawerBtnArea.scrollWidth > bodyWidth) this.isOriginScroll = true;
         else this.isOriginScroll = false;
         if (toolPlatformEl.scrollWidth > bodyWidth) this.isToolScroll = true;
         else this.isToolScroll = false;
-        console.log(toolPlatformEl.scrollWidth);
       }, 50);
     },
 
