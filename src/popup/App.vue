@@ -45,26 +45,83 @@
         :direction="settings.display.windowMode ? 'rtl' : 'ttb'"
         size="520px"
       >
+        <div class="edit-layout">
+          <span>打开编辑模式</span>
+          <el-switch v-model="isEdit" @change="editChange"></el-switch>
+        </div>
+
         <el-divider content-position="left"> 饼的发源地 </el-divider>
         <div
           ref="drawerBtnArea"
           class="drawer-btn-area drawer-btn-area-origin"
           :class="{ 'drawer-btn-area-scroll': isOriginScroll }"
         >
-          <el-tooltip v-for="item in quickJump.source" :key="item.avatar" :content="item.nickname" placement="top">
-            <el-button size="small" @click="openUrl(item.jump_url)">
-              <img class="btn-icon" :class="'radius'" :src="item.avatar" />
+          <el-tooltip
+            v-for="(item, index) in quickJump.source"
+            :key="index"
+            ref="dragEntitySourceEl"
+            :content="item.nickname"
+            placement="top"
+            class="drag-entity"
+          >
+            <el-button v-if="isEdit && item.isActivated" size="small">
+              <img
+                class="btn-icon radius"
+                :src="item.avatar"
+                draggable="false"
+                @mousedown="move($event, item, index, 'source')"
+              />
+              <div class="edit-icon" @click="deleteSource(item, index, quickJump.source)">
+                <i class="el-icon-error"></i>
+              </div>
+            </el-button>
+            <el-button v-else-if="isEdit && !item.isActivated" size="small" class="not-activated">
+              <img class="btn-icon radius" :src="item.avatar" />
+              <div class="edit-icon" @click="addSource(item, index, quickJump.source)">
+                <i class="el-icon-circle-plus"></i>
+              </div>
+            </el-button>
+            <el-button v-else-if="item.isActivated" size="small" @click="openUrl(item.jump_url)">
+              <img class="btn-icon radius" :src="item.avatar" />
             </el-button>
           </el-tooltip>
         </div>
         <el-divider content-position="left"> 快捷工具 </el-divider>
-        <el-row type="flex" justify="center" class="drawer-btn-area">
-          <el-tooltip v-for="item in quickJump.tool" :key="item.img" :content="item.name" placement="top">
-            <el-button size="small" @click="openUrl(item.url)">
-              <img class="btn-icon radius" :src="item.img" />
+        <div
+          ref="toolPlatformEl"
+          class="drawer-btn-area drawer-btn-area-origin"
+          :class="{ 'drawer-btn-area-scroll': isToolScroll }"
+        >
+          <el-tooltip
+            v-for="(item, index) in quickJump.tool"
+            :key="index"
+            ref="dragEntityToolEl"
+            :content="item.nickname"
+            placement="top"
+            class="drag-entity"
+          >
+            <el-button v-if="isEdit && item.isActivated" size="small">
+              <img
+                class="btn-icon radius"
+                :src="item.avatar"
+                draggable="false"
+                @mousedown="move($event, item, index, 'tool')"
+              />
+              <div class="edit-icon" @click="deleteSource(item, index, quickJump.tool)">
+                <i class="el-icon-error"></i>
+              </div>
+            </el-button>
+            <el-button v-else-if="isEdit && !item.isActivated" size="small" class="not-activated">
+              <img class="btn-icon radius" :src="item.avatar" />
+              <div class="edit-icon" @click="addSource(item, index, quickJump.tool)">
+                <i class="el-icon-circle-plus"></i>
+              </div>
+            </el-button>
+            <el-button v-else-if="item.isActivated" size="small" @click="openUrl(item.jump_url)">
+              <img class="btn-icon radius" :src="item.avatar" />
             </el-button>
           </el-tooltip>
-        </el-row>
+        </div>
         <el-divider v-if="quickJump.url" content-position="left"> 快捷链接 </el-divider>
         <div ref="drawerBtnAreaQuickJump" class="drawer-btn-area-quickJump">
           <el-tooltip v-for="(item, index) in quickJump.url" :key="index" :content="item.title" placement="top">
@@ -226,57 +283,9 @@ export default {
         source: [],
         tool: [
           {
-            url: 'http://prts.wiki/',
-            name: 'PRTS.Wiki',
-            img: '/assets/image/link/akwiki.png',
-            radius: true,
-          },
-          {
-            url: 'https://mapcn.ark-nights.com',
-            name: 'PRTS.Map',
-            img: '/assets/image/link/akmap.ico',
-            radius: true,
-          },
-          {
-            url: 'https://ass.m-j.bond/',
-            name: '剧情播放器',
-            img: '/assets/image/link/ass.m-j.bond.png',
-            radius: true,
-          },
-          {
-            url: 'https://penguin-stats.cn/',
-            name: '企鹅物流',
-            img: '/assets/image/link/penguin_stats_logo.webp',
-            radius: true,
-          },
-          {
-            url: 'https://arkn.lolicon.app/#/',
-            name: '明日方舟工具箱',
-            img: '/assets/image/link/arktools.png',
-            radius: true,
-          },
-          {
-            url: 'https://aog.wiki/',
-            name: '刷素材一图流',
-            img: '/assets/image/link/akgraph.ico',
-            radius: true,
-          },
-          {
-            url: 'https://viktorlab.cn/akdata/',
-            name: 'Arknight DPS',
-            img: '/assets/image/link/dps.ico',
-            radius: true,
-          },
-          {
-            url: 'https://terrach.net/',
-            name: '泰拉通讯枢纽',
-            img: '/assets/image/link/tltxsn.png',
-            radius: false,
-          },
-          {
-            url: '../time.html',
-            name: '小刻食堂计时器',
-            img: '/assets/image/icon.png',
+            jump_url: '../time.html',
+            nickname: '小刻食堂计时器',
+            avatar: '/assets/image/icon.png',
             radius: false,
           },
         ],
@@ -290,7 +299,9 @@ export default {
       countDownList: [],
       // allHeight: 0,
       isOriginScroll: false,
+      isToolScroll: false,
       isCustomBuild: false,
+      isEdit: false,
     };
   },
   computed: {},
@@ -319,9 +330,8 @@ export default {
     openUrl: PlatformHelper.Tabs.create,
     init() {
       this.isCustomBuild = ENABLE_FEATURES.length > 0;
-      ServerUtil.getServerDataSourceInfo(true).then((data) => {
-        this.quickJump.source = data.serverDataSourceList.filter((it) => !!it.jump_url);
-      });
+      this.initSourceJump();
+      this.initToolJump();
       DunInfo.doAfterUpdate((data) => {
         this.oldDunCount = data.counter;
       });
@@ -340,8 +350,9 @@ export default {
     handleIconClick() {
       if (!this.drawer && !this.drawerFirst) {
         this.getVideoJump();
-        this.getToolJump();
         this.drawerFirst = true;
+      } else if (this.drawer) {
+        this.isEdit = false;
       }
 
       this.drawer = !this.drawer;
@@ -358,11 +369,6 @@ export default {
         if (btnList.length > 0) {
           this.quickJump.url = btnList;
         }
-      });
-    },
-    getToolJump() {
-      ServerUtil.getThirdPartyToolsInfo().then((data) => {
-        this.quickJump.tool = data.toolList.map((it) => ({ name: it.nickname, img: it.avatar, url: it.jump_url }));
       });
     },
     async firefoxWarning() {
@@ -425,28 +431,35 @@ export default {
         };
       }
     },
-    scrollHandler() {
+    scrollHandlerUrl() {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
       scrollDiv.scrollLeft = scrollDiv.scrollLeft + event.deltaY;
     },
-    drawerBtnAreaScroll() {
+    scrollHandlerSource() {
       let drawerBtnArea = this.$refs.drawerBtnArea;
       drawerBtnArea.scrollLeft = drawerBtnArea.scrollLeft + event.deltaY;
+    },
+    scrollHandlerTool() {
+      let toolPlatformEl = this.$refs.toolPlatformEl;
+      toolPlatformEl.scrollLeft = toolPlatformEl.scrollLeft + event.deltaY;
     },
     bindScrollFun() {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
       let drawerBtnArea = this.$refs.drawerBtnArea;
+      let toolPlatformEl = this.$refs.toolPlatformEl;
       // 添加监听事件
-      scrollDiv.addEventListener('wheel', this.scrollHandler, false);
-      drawerBtnArea.addEventListener('wheel', this.drawerBtnAreaScroll, false);
-      const bodyWidth = document.querySelector('body').offsetWidth;
-      if (drawerBtnArea.scrollWidth > bodyWidth) this.isOriginScroll = true;
+      scrollDiv.addEventListener('wheel', this.scrollHandlerUrl, false);
+      drawerBtnArea.addEventListener('wheel', this.scrollHandlerSource, false);
+      toolPlatformEl.addEventListener('wheel', this.scrollHandlerTool, false);
+      this.editChange();
     },
     unbindScrollFun() {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
       let drawerBtnArea = this.$refs.drawerBtnArea;
-      scrollDiv.removeEventListener('wheel', this.scrollHandler);
-      drawerBtnArea.removeEventListener('wheel', this.drawerBtnAreaScroll);
+      let toolPlatformEl = this.$refs.toolPlatformEl;
+      scrollDiv.removeEventListener('wheel', this.scrollHandlerUrl);
+      drawerBtnArea.removeEventListener('wheel', this.scrollHandlerSource);
+      toolPlatformEl.removeEventListener('wheel', this.scrollHandlerTool);
     },
     // 获取倒计时数据
     getCountDownList() {
@@ -492,6 +505,187 @@ export default {
           clearInterval(timeTop);
         }
       }, interval);
+    },
+
+    // 节点拖拽
+    move(inite, value, index, flag) {
+      let entities = null;
+      let plItem = null;
+      switch (flag) {
+        case 'source':
+          entities = this.$refs.dragEntitySourceEl;
+          plItem = this.$refs.drawerBtnArea;
+          break;
+        case 'tool':
+          entities = this.$refs.dragEntityToolEl;
+          plItem = this.$refs.toolPlatformEl;
+          break;
+        default:
+          break;
+      }
+      const dragEntity = entities[index].$el;
+
+      let initLeft = dragEntity.offsetLeft - 10 - plItem.scrollLeft;
+      let initTop = dragEntity.offsetTop;
+      dragEntity.style.left = initLeft + 'px';
+      dragEntity.style.top = initTop + 'px';
+
+      dragEntity.style.position = 'absolute';
+      dragEntity.style.zIndex = 100;
+
+      let disX = inite.clientX;
+      let disY = inite.clientY;
+      document.onmousemove = (e) => {
+        let left = e.clientX - disX;
+        let top = e.clientY - disY;
+        // 拖动到边缘时开启自动滚动
+        if (left + initLeft < 50) {
+          this.autoScroll(plItem, 'left');
+        } else if (left + initLeft > plItem.offsetWidth - 80) {
+          this.autoScroll(plItem, 'right');
+        }
+        dragEntity.style.left = left + initLeft + 'px';
+        dragEntity.style.top = top + initTop + 'px';
+      };
+      document.onmouseup = (b) => {
+        let moveX = dragEntity.offsetLeft;
+        let moveY = dragEntity.offsetTop;
+        // 拖拽实体的宽度
+        let entityWidth = dragEntity.offsetWidth + 10;
+        dragEntity.style.left = 'initial';
+        dragEntity.style.top = 'initial';
+        // 判断拖拽组件下落的位置
+        if (
+          moveX >= plItem.offsetLeft &&
+          moveX <= plItem.offsetLeft + plItem.offsetWidth &&
+          moveY >= plItem.offsetTop &&
+          moveY <= plItem.offsetTop + plItem.offsetHeight
+        ) {
+          // 获取排序下标
+          const activatedLength = this.quickJump[flag].filter((p) => p.isActivated).length;
+          let entityIndex = (moveX - entities[0].$el.offsetLeft + plItem.scrollLeft + 10) / entityWidth;
+          entityIndex =
+            entityIndex < 0 ? 0 : entityIndex > activatedLength ? activatedLength - 1 : Math.trunc(entityIndex);
+          this.sortQuickJump(value, entityIndex, index, this.quickJump[flag]);
+        }
+        dragEntity.style.position = 'relative';
+        dragEntity.style.zIndex = 1;
+        document.onmousemove = null;
+        document.onmouseup = null;
+      };
+    },
+
+    async initSourceJump() {
+      const sourceJump = await PlatformHelper.Storage.getLocalStorage('quickJump');
+      ServerUtil.getServerDataSourceInfo().then((data) => {
+        let list = [];
+        let newList = [];
+        if (sourceJump?.source && sourceJump.source?.length) {
+          for (const item of sourceJump.source) {
+            if (data.serverDataSourceList.find((p) => item.nickname === p.nickname)) list.push(item);
+          }
+          list = list.concat(data.serverDataSourceList);
+          newList = list.reduce((pre, cur) => {
+            let isRepeat = pre.findIndex((p) => p.nickname === cur.nickname);
+            if (isRepeat < 0) {
+              cur.isActivated = typeof cur.isActivated === 'boolean' ? cur.isActivated : true;
+              pre.push(cur);
+            }
+            return pre;
+          }, []);
+        } else {
+          for (const item of data.serverDataSourceList) {
+            item.isActivated = true;
+          }
+          newList = data.serverDataSourceList;
+        }
+        newList.sort((a, b) => b.isActivated - a.isActivated);
+        this.quickJump.source = newList.filter((it) => !!it.jump_url);
+        // 更新缓存
+        this.saveQuickJump();
+      });
+    },
+
+    async initToolJump() {
+      const toolJump = await PlatformHelper.Storage.getLocalStorage('quickJump');
+      ServerUtil.getThirdPartyToolsInfo().then((data) => {
+        let list = [];
+        let newList = [];
+        if (toolJump?.tool && toolJump.tool?.length) {
+          for (const item of toolJump.tool) {
+            if (
+              data.toolList.find((p) => item.nickname === p.nickname) ||
+              this.quickJump.tool.find((p) => item.nickname === p.nickname)
+            )
+              list.push(item);
+          }
+          list = list.concat(data.toolList, this.quickJump.tool);
+          newList = list.reduce((pre, cur) => {
+            let isRepeat = pre.findIndex((p) => p.nickname === cur.nickname);
+            if (isRepeat < 0) {
+              cur.isActivated = typeof cur.isActivated === 'boolean' ? cur.isActivated : true;
+              pre.push(cur);
+            }
+            return pre;
+          }, []);
+        } else {
+          for (const item of data.toolList) {
+            item.isActivated = true;
+          }
+          newList = data.toolList;
+        }
+        newList.sort((a, b) => b.isActivated - a.isActivated);
+        this.quickJump.tool = newList;
+        // 更新缓存
+        this.saveQuickJump();
+      });
+    },
+
+    /**
+     * 跳转链接拖拽时排序
+     * @param value {any} 元素
+     * @param index {number} 元素要排序的新下标
+     * @param oldIndex {number} 元素原来下标
+     * @param array {Array} 用于排序的数组
+     */
+    async sortQuickJump(value, index, oldIndex, array) {
+      array.splice(oldIndex, 1);
+      array.splice(index, 0, value);
+      this.saveQuickJump();
+    },
+
+    deleteSource(data, index, array) {
+      data.isActivated = false;
+      this.sortQuickJump(data, array.length, index, array);
+    },
+
+    addSource(data, index, array) {
+      data.isActivated = true;
+      const newIndex = array.length - array.filter((p) => !p.isActivated).length - 1;
+      this.sortQuickJump(data, newIndex, index, array);
+    },
+
+    autoScroll(el, direction) {
+      el.scrollTo({
+        left: direction === 'left' ? el.scrollLeft - 100 : el.scrollLeft + 100,
+        behavior: 'smooth', // instant，瞬间滑动
+      });
+    },
+
+    editChange() {
+      setTimeout(() => {
+        const toolPlatformEl = this.$refs.toolPlatformEl;
+        const drawerBtnArea = this.$refs.drawerBtnArea;
+        const bodyWidth = document.querySelector('body').offsetWidth;
+        if (drawerBtnArea.scrollWidth > bodyWidth - 20) this.isOriginScroll = true;
+        else this.isOriginScroll = false;
+        if (toolPlatformEl.scrollWidth > bodyWidth - 20) this.isToolScroll = true;
+        else this.isToolScroll = false;
+      }, 50);
+    },
+
+    saveQuickJump() {
+      PlatformHelper.Storage.saveLocalStorage('quickJump', this.quickJump).then();
     },
 
     openSetting() {
@@ -550,11 +744,11 @@ export default {
     :deep(a) {
       color: @@content !important;
     }
+    position: relative;
     overflow: auto;
     width: 700px;
     height: 599px;
     font-size: 14px;
-
     background-color: @@bgColor;
   }
 
@@ -640,8 +834,14 @@ export default {
   }
 
   .drawer-btn-area {
+    position: initial;
+    display: flex;
+    align-items: center;
+    height: 58px;
     .el-button {
       padding: 5px;
+      width: 42px;
+      height: 44px;
     }
 
     .btn-icon {
@@ -649,6 +849,45 @@ export default {
 
       &.radius {
         border-radius: 10px;
+      }
+    }
+
+    .drag-entity {
+      position: relative;
+      transform: none;
+      transition: none;
+      .edit-icon {
+        position: absolute;
+        top: -9px;
+        right: -9px;
+        cursor: pointer;
+        & > i {
+          font-size: 18px;
+          border-radius: 50%;
+          color: #747474;
+          background: #fff;
+          transition: 0.2s;
+          &:hover {
+            color: @@ceobeColor;
+          }
+        }
+        .el-icon-error {
+          &:hover {
+            color: #f06464;
+          }
+        }
+      }
+    }
+    .not-activated {
+      border-color: fade(@@bgColor, 20%);
+      background: fade(@@bgColor, 20%);
+      cursor: not-allowed;
+      &:hover {
+        background: fade(@@hover, 20%);
+      }
+      .btn-icon {
+        opacity: 0.2;
+        box-sizing: border-box;
       }
     }
   }
@@ -711,6 +950,22 @@ export default {
           opacity: 0;
         }
       }
+    }
+  }
+  .edit-layout {
+    position: absolute;
+    top: 62px;
+    right: 0;
+    z-index: 9;
+    display: inline-flex;
+    justify-content: right;
+    align-items: center;
+    margin-right: 20px;
+    padding: 0 20px;
+    background: #fff;
+    & > span {
+      margin-right: 15px;
+      line-height: 20px;
     }
   }
 
@@ -834,6 +1089,13 @@ export default {
 
     .el-input__inner:focus {
       border-color: @@ceobeColor;
+    }
+    .el-switch.is-checked .el-switch__core {
+      border: @@ceobeColor 1px solid;
+      background-color: @@ceobeColor;
+    }
+    .el-divider--horizontal {
+      margin: 20px 0 !important;
     }
   }
   :deep(.protocol-warning) {
