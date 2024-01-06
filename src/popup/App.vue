@@ -281,7 +281,14 @@ export default {
       isReload: false, // 是否正在刷新
       quickJump: {
         source: [],
-        tool: [],
+        tool: [
+          {
+            jump_url: '../time.html',
+            nickname: '小刻食堂计时器',
+            avatar: '/assets/image/icon.png',
+            radius: false,
+          },
+        ],
         url: [],
       },
       dayInfo: dayInfo,
@@ -428,11 +435,11 @@ export default {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
       scrollDiv.scrollLeft = scrollDiv.scrollLeft + event.deltaY;
     },
-    scrollHandlerSource(e) {
+    scrollHandlerSource() {
       let drawerBtnArea = this.$refs.drawerBtnArea;
       drawerBtnArea.scrollLeft = drawerBtnArea.scrollLeft + event.deltaY;
     },
-    scrollHandlerTool(e) {
+    scrollHandlerTool() {
       let toolPlatformEl = this.$refs.toolPlatformEl;
       toolPlatformEl.scrollLeft = toolPlatformEl.scrollLeft + event.deltaY;
     },
@@ -444,9 +451,7 @@ export default {
       scrollDiv.addEventListener('wheel', this.scrollHandlerUrl, false);
       drawerBtnArea.addEventListener('wheel', this.scrollHandlerSource, false);
       toolPlatformEl.addEventListener('wheel', this.scrollHandlerTool, false);
-      const bodyWidth = document.querySelector('body').offsetWidth;
-      if (drawerBtnArea.scrollWidth > bodyWidth) this.isOriginScroll = true;
-      if (toolPlatformEl.scrollWidth > bodyWidth) this.isToolScroll = true;
+      this.editChange();
     },
     unbindScrollFun() {
       let scrollDiv = this.$refs.drawerBtnAreaQuickJump;
@@ -608,9 +613,13 @@ export default {
         let newList = [];
         if (toolJump?.tool && toolJump.tool?.length) {
           for (const item of toolJump.tool) {
-            if (data.toolList.find((p) => item.nickname === p.nickname)) list.push(item);
+            if (
+              data.toolList.find((p) => item.nickname === p.nickname) ||
+              this.quickJump.tool.find((p) => item.nickname === p.nickname)
+            )
+              list.push(item);
           }
-          list = list.concat(data.toolList);
+          list = list.concat(data.toolList, this.quickJump.tool);
           newList = list.reduce((pre, cur) => {
             let isRepeat = pre.findIndex((p) => p.nickname === cur.nickname);
             if (isRepeat < 0) {
@@ -668,9 +677,9 @@ export default {
         const toolPlatformEl = this.$refs.toolPlatformEl;
         const drawerBtnArea = this.$refs.drawerBtnArea;
         const bodyWidth = document.querySelector('body').offsetWidth;
-        if (drawerBtnArea.scrollWidth > bodyWidth) this.isOriginScroll = true;
+        if (drawerBtnArea.scrollWidth > bodyWidth - 20) this.isOriginScroll = true;
         else this.isOriginScroll = false;
-        if (toolPlatformEl.scrollWidth > bodyWidth) this.isToolScroll = true;
+        if (toolPlatformEl.scrollWidth > bodyWidth - 20) this.isToolScroll = true;
         else this.isToolScroll = false;
       }, 50);
     },
