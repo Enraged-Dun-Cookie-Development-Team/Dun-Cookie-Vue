@@ -863,7 +863,9 @@ export default {
         cursor: pointer;
         & > i {
           font-size: 18px;
+          border-radius: 50%;
           color: #747474;
+          background: #fff;
           transition: 0.2s;
           &:hover {
             color: @@ceobeColor;
@@ -877,9 +879,14 @@ export default {
       }
     }
     .not-activated {
+      border-color: fade(@@bgColor, 20%);
+      background: fade(@@bgColor, 20%);
+      cursor: not-allowed;
+      &:hover {
+        background: fade(@@hover, 20%);
+      }
       .btn-icon {
         opacity: 0.2;
-        cursor: not-allowed;
         box-sizing: border-box;
       }
     }
