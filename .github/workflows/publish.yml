@@ -19,6 +19,7 @@ jobs:
       - name: build
         run: npm run build
         env:
+          BUILD_TYPE: 'gh'
           BUILD_BY: ${{ github.triggering_actor }}
           VUE_APP_ENABLE_FEATURES: 'local_fetch'
           DISABLE_SOURCE_MAP: 'true'
@@ -33,6 +34,7 @@ jobs:
           rm -rf dist
           npm run build
         env:
+          BUILD_TYPE: 'gh'
           BUILD_BY: ${{ github.triggering_actor }}
           VUE_APP_ENABLE_FEATURES: 'local_fetch'
       - name: zip with sourcemap
@@ -47,6 +49,15 @@ jobs:
           script: |
             const fs = require('fs');
             const version = '${{ github.ref_name }}';
+            try {
+              await github.rest.repos.getReleaseByTag({
+                tag: version,
+                owner: context.repo.owner, repo: context.repo.repo,
+              });
+              throw new Error(`tag ${version} 所属的Release已存在`);
+            } catch (e) {
+              // ignored
+            }
             const { data } = await github.rest.repos.createRelease({
               tag_name: version,
               name: version,
@@ -56,13 +67,13 @@ jobs:
             });
             try {
               await github.rest.repos.uploadReleaseAsset({
-                name: `CeobeCanteenBrowserExtension-${version}.zip`,
+                name: `Ceobe-Canteen-${version}.zip`,
                 data: fs.readFileSync('./extension.zip'),
                 release_id: data.id,
                 owner: context.repo.owner, repo: context.repo.repo,
               });
               await github.rest.repos.uploadReleaseAsset({
-                name: `CeobeCanteenBrowserExtension-${version}-sourcemap.zip`,
+                name: `Ceobe-Canteen-${version}-sourcemap.zip`,
                 data: fs.readFileSync('./extension-with-sourcemap.zip'),
                 release_id: data.id,
                 owner: context.repo.owner, repo: context.repo.repo,

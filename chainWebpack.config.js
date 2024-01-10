@@ -2,13 +2,19 @@ const path = require('path');
 const file = require('fs');
 const ExtensionReloader = require('webpack-ext-reloader');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { execSync } = require('child_process');
 
 const isDevMode = process.env.NODE_ENV === 'development';
 const PROJECT_VERSION = JSON.parse(file.readFileSync('./package.json').toString()).version;
 process.env.VUE_APP_PROJECT_VERSION = PROJECT_VERSION;
 const enableFeatures = (process.env.VUE_APP_ENABLE_FEATURES || '').split(',').filter((v) => v.length > 0);
+// 注意改这里的话要同时改Constants.js中的内容
 const showCustomBuildTip = enableFeatures.filter((it) => !['local_fetch'].includes(it)).length > 0;
 process.env.VUE_APP_BUILD_BY = process.env.BUILD_BY || '本地构建';
+let hash = execSync('git rev-parse --short HEAD').toString().trim();
+let buildType = process.env.BUILD_TYPE || 'local#' + Math.floor(Math.random() * 1000);
+process.env.VUE_APP_BUILD_SIGN = buildType + '_' + hash;
+
 if (enableFeatures.includes('dev_api')) {
   let data;
   try {
