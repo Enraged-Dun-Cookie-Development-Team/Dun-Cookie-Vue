@@ -112,6 +112,7 @@ function updateFetch() {
 }
 
 function ExtensionInit() {
+  DebugUtil.debugLog(0, '插件启动...');
   if (ENABLE_FEATURES.length > 0) {
     DebugUtil.debugLog(0, '已启用特性：', ENABLE_FEATURES);
   }

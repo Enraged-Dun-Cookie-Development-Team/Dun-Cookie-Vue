@@ -4,6 +4,7 @@ import EdgePlatform from './impl/EdgePlatform';
 import UnknownPlatform from './impl/UnknownPlatform';
 import { DEBUG_LEVEL } from '../Constants';
 import { Http } from '@enraged-dun-cookie-development-team/common/request';
+import DebugUtil from '../util/DebugUtil';
 
 // TODO 还有一些以注释形式存在于其它文件中的chrome调用，之后记得处理
 /**
@@ -12,14 +13,18 @@ import { Http } from '@enraged-dun-cookie-development-team/common/request';
 let currentPlatform;
 let head = navigator.userAgent;
 if (head.indexOf('Edg') > 1) {
+  DebugUtil.debugLog(0, '当前平台：Edge');
   // Edge的userAgent即有Chrome又有Edg，因此先判断Edg
   currentPlatform = new EdgePlatform();
 } else if (head.indexOf('Chrome') > 1) {
+  DebugUtil.debugLog(0, '当前平台：Chrome');
   currentPlatform = new ChromePlatform();
 } else if (head.indexOf('Firefox') > 1) {
+  DebugUtil.debugLog(0, '当前平台：Firefox');
   currentPlatform = new FirefoxPlatform();
 }
 if (currentPlatform === undefined) {
+  DebugUtil.debugLog(0, '当前平台：Unknown');
   currentPlatform = new UnknownPlatform();
 }
 
