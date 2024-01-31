@@ -90,8 +90,8 @@ class FetcherController {
         if (this.currentFetcherIdx >= 0) {
           await this.stop();
         }
+        this.currentFetcherIdx = newFetcherIdx;
         if (newFetcherIdx >= 0) {
-          this.currentFetcherIdx = newFetcherIdx;
           DebugUtil.debugLog(
             0,
             `[${this.fetchConfig.id}]蹲饼器切换为：`,
@@ -158,7 +158,7 @@ export class CookieFetchManager {
       }
       setTimeout(() => {
         cycle();
-      }, 5 * 1000);
+      }, 10_000);
     };
     void cycle();
   }

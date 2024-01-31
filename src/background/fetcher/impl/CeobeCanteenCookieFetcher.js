@@ -56,9 +56,10 @@ export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
         this.__setAvailable();
         return true;
       } catch (e) {
-        this.nextCheckAvailableTime = Date.now() + this.nextCheckAvailableTimeFactory * 10 * 1000;
-        // 限制最大重试间隔为半小时
-        this.nextCheckAvailableTimeFactory = Math.min(180, this.nextCheckAvailableTimeFactory * 2);
+        this.nextCheckAvailableTime = Math.floor(Date.now() + this.nextCheckAvailableTimeFactory * 10 * 1000);
+        // 限制最大重试间隔为10分钟(60 * 10秒)
+        this.nextCheckAvailableTimeFactory = Math.min(60, this.nextCheckAvailableTimeFactory * 1.5);
+        DebugUtil.debugLog(0, '无法访问服务器，下次重试：' + this.nextCheckAvailableTime);
         return false;
       }
     } else {
@@ -92,7 +93,7 @@ export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
       this.__setAvailable();
     } catch (e) {
       this.failCount++;
-      DebugUtil.debugLog(0, e.message);
+      DebugUtil.debugLog(0, '蹲饼时出现异常(server)：' + e.message);
       console.log(e);
     }
     setTimeout(() => {
