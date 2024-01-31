@@ -29,20 +29,6 @@ jobs:
           type: zip
           filename: '../extension.zip'
           directory: dist
-      - name: build with sourcemap
-        run: |
-          rm -rf dist
-          npm run build
-        env:
-          BUILD_TYPE: 'gh'
-          BUILD_BY: ${{ github.triggering_actor }}
-          VUE_APP_ENABLE_FEATURES: 'local_fetch'
-      - name: zip with sourcemap
-        uses: thedoctor0/zip-release@0.7.1
-        with:
-          type: zip
-          filename: '../extension-with-sourcemap.zip'
-          directory: dist
       - name: Create Release
         uses: actions/github-script@v6
         with:
@@ -69,12 +55,6 @@ jobs:
               await github.rest.repos.uploadReleaseAsset({
                 name: `Ceobe-Canteen-${version}.zip`,
                 data: fs.readFileSync('./extension.zip'),
-                release_id: data.id,
-                owner: context.repo.owner, repo: context.repo.repo,
-              });
-              await github.rest.repos.uploadReleaseAsset({
-                name: `Ceobe-Canteen-${version}-sourcemap.zip`,
-                data: fs.readFileSync('./extension-with-sourcemap.zip'),
                 release_id: data.id,
                 owner: context.repo.owner, repo: context.repo.repo,
               });

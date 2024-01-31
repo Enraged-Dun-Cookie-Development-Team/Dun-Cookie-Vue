@@ -1,7 +1,6 @@
 const chainWebpack = require('./chainWebpack.config.js');
 
-const devModeConfig = process.env.NODE_ENV === 'development' ? 'eval' : false;
-const shouldDisableSourceMap = process.env.NODE_ENV !== 'development' && process.env.DISABLE_SOURCE_MAP === 'true';
+const shouldEnableSourceMap = !!(process.env.NODE_ENV === 'development' || process.env.ENABLE_SOURCE_MAP);
 
 const config = {
   devServer: {
@@ -13,9 +12,8 @@ const config = {
   },
   filenameHashing: false,
   lintOnSave: false, //关闭eslint检查
-  productionSourceMap: shouldDisableSourceMap,
   configureWebpack: {
-    devtool: devModeConfig,
+    devtool: shouldEnableSourceMap ? 'eval-source-map' : false,
   },
   pages: {
     options: {
