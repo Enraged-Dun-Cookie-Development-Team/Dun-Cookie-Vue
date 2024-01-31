@@ -113,15 +113,12 @@ export class CustomLocalCookieFetcher extends AbstractCookieFetcher {
   }
 
   async checkAvailable() {
-    if (!this.runningFlag || !this.controllerConfig) {
-      return true;
-    }
     try {
       // 尝试访问b站确认网络连接正常
-      await fetch('https://space.bilibili.com/1');
-      FetchController.validateConfig(this.controllerConfig);
+      await fetch('https://www.baidu.com/', { mode: 'no-cors' });
       return true;
     } catch (e) {
+      DebugUtil.debugLog(0, '无法访问网络，持续重试');
       return false;
     }
   }
