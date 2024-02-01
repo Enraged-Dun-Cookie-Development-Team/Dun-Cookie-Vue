@@ -48,7 +48,7 @@ jobs:
               tag_name: version,
               name: version,
               body: `小刻食堂插件端 ${version} 发布了`,
-              prerelease: false,
+              prerelease: true,
               draft: true, owner: context.repo.owner, repo: context.repo.repo,
             });
             try {
