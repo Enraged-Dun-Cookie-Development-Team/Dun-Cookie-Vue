@@ -24,7 +24,7 @@ if (enableFeatures.includes('dev_api')) {
   }
   process.env.VUE_APP_API_SERVER_BASE = data.api.dev.server;
   process.env.VUE_APP_API_CDN_BASE = data.api.dev.cdn;
-  process.env.VUE_APP_API_SERVER_CDN_BASE = data.api.dev.server;
+  process.env.VUE_APP_API_SERVER_CDN_BASE = data.api.dev.server_cdn;
 } else {
   process.env.VUE_APP_API_SERVER_BASE = 'https://server.ceobecanteen.top/api/v1/';
   process.env.VUE_APP_API_CDN_BASE = 'https://cdn.ceobecanteen.top/';
