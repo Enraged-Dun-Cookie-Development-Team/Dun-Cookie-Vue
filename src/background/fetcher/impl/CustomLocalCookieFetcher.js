@@ -29,6 +29,12 @@ export class CustomLocalCookieFetcher extends AbstractCookieFetcher {
   controllerConfig;
   runningFlag = false;
 
+  constructor() {
+    super();
+    this.nextCheckAvailableTimeFactory = 1.2;
+    this.maxNextCheckAvailableTime = 30;
+  }
+
   updateGroupIntervalByTimeRange(defaultInterval, fetchConfig, group) {
     const lowInterval = defaultInterval * fetchConfig.lowFrequencyMultiple;
     if (!group.interval_by_time_range || group.interval_by_time_range.length === 0) {
