@@ -64,6 +64,7 @@ export class CustomLocalCookieFetcher extends AbstractCookieFetcher {
         if (fetchData.success) {
           void CookieHandler.handleLocal(fetchConfig.id, fetchData);
         } else {
+          this.failCount++;
           console.log(fetchData.error);
         }
       },
@@ -112,14 +113,9 @@ export class CustomLocalCookieFetcher extends AbstractCookieFetcher {
     this.runningFlag = false;
   }
 
-  async checkAvailable() {
-    try {
-      // 尝试访问b站确认网络连接正常
-      await fetch('https://www.baidu.com/', { mode: 'no-cors' });
-      return true;
-    } catch (e) {
-      DebugUtil.debugLog(0, '无法访问网络，持续重试');
-      return false;
-    }
+  async _checkAvailable() {
+    // 尝试访问百度确认网络连接正常
+    await fetch('https://www.baidu.com/', { mode: 'no-cors' });
+    return true;
   }
 }

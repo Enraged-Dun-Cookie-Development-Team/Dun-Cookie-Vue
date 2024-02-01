@@ -62,11 +62,11 @@ export class FallbackLocalCookieFetcher extends CustomLocalCookieFetcher {
     this.runningFlag = false;
   }
 
-  async checkAvailable() {
+  async _checkAvailable() {
     const serverInfo = await ServerUtil.getServerDataSourceInfo(true);
     if (!serverInfo) {
       return false;
     }
-    return super.checkAvailable();
+    return super._checkAvailable();
   }
 }
