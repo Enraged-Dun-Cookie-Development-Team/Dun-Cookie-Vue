@@ -35,15 +35,16 @@ export class AbstractCookieFetcher {
 
   /**
    * 检查当前蹲饼器是否可用
+   * @param fetchConfig {FetchConfig}
    * @return {Promise<boolean>}
    */
-  async checkAvailable() {
+  async checkAvailable(fetchConfig) {
     if (this.failCount < 3) {
       return true;
     }
     if (Date.now() >= this.nextCheckAvailableTime) {
       try {
-        if (await this._checkAvailable()) {
+        if (await this._checkAvailable(fetchConfig)) {
           this.__setAvailable();
           return true;
         }
@@ -62,9 +63,13 @@ export class AbstractCookieFetcher {
 
   /**
    * 实际检查当前蹲饼器是否可用
+   *
+   * NOTE: 各蹲饼器具体实现时可以抛异常表示当前不可用，异常信息会被忽略
+   *
+   * @param fetchConfig {FetchConfig}
    * @return {Promise<boolean>}
    */
-  async _checkAvailable() {
+  async _checkAvailable(fetchConfig) {
     throw new Error(`蹲饼器${this.constructor.name}未实现方法_checkAvailable`);
   }
 

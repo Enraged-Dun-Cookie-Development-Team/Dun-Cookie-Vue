@@ -34,9 +34,9 @@ export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
     this.runningFlag = false;
   }
 
-  async _checkAvailable() {
+  async _checkAvailable(fetchConfig) {
     if (!this.comboId) {
-      this.comboId = await ServerUtil.getComboId(this.config.enableDataSourceList);
+      this.comboId = await ServerUtil.getComboId(fetchConfig.enableDataSourceList);
     }
     const { cookie_id, update_cookie_id } = JSON.parse(
       await ServerUtil.requestCdn('datasource-comb/' + encodeURIComponent(this.comboId), { cache: 'no-cache' })

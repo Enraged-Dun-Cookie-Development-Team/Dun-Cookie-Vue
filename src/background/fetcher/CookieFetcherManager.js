@@ -77,7 +77,7 @@ class FetcherController {
     }
     if (newFetcherIdx < 0) {
       for (const fetcherIdx of defaultStrategyIdxList) {
-        if (await this.fetchers[fetcherIdx].checkAvailable()) {
+        if (await this.fetchers[fetcherIdx].checkAvailable(this.fetchConfig)) {
           newFetcherIdx = fetcherIdx;
           break;
         }

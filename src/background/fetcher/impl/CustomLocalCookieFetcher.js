@@ -1,5 +1,5 @@
 import { AbstractCookieFetcher } from '../AbstractCookieFetcher';
-import { FetchController } from '@enraged-dun-cookie-development-team/cookie-fetcher-core';
+import { FetchController, FetchControllerConfig } from '@enraged-dun-cookie-development-team/cookie-fetcher-core';
 import { DefaultLogger } from '@enraged-dun-cookie-development-team/common/logger';
 import PlatformHelper from '../../../common/platform/PlatformHelper';
 import { CookieHandler } from '../../CookieHandler';
@@ -11,6 +11,33 @@ registerDefaultDataSourceTypes();
 /* FITRUE_feature__local_fetch */
 
 const pad = (num) => (num > 9 ? `${num}` : `0${num}`);
+
+/**
+ *
+ * @param fetchConfig {FetchConfig}
+ * @return {FetchControllerConfig}
+ */
+function _buildConfig(fetchConfig) {
+  const config = {
+    default_interval: fetchConfig.globalInterval * 1000,
+    groups: [],
+  };
+  const customGroups = {};
+  const commonGroupConfig = {};
+  if (fetchConfig.lowFrequencyTimeRange && fetchConfig.lowFrequencyMultiple > 1) {
+    this.updateGroupIntervalByTimeRange(config.default_interval, fetchConfig, commonGroupConfig);
+  }
+  for (const { type, dataId } of fetchConfig.enableDataSourceList) {
+    if (!customGroups[type]) customGroups[type] = { type: type, datasource: [], ...commonGroupConfig };
+    const source = {};
+    if (this.dataIdKeyInConfig[type]) {
+      source[this.dataIdKeyInConfig[type]] = dataId;
+    }
+    customGroups[type].datasource.push(source);
+  }
+  config.groups.push(...Object.values(customGroups).filter((group) => group.datasource.length > 0));
+  return config;
+}
 
 export class CustomLocalCookieFetcher extends AbstractCookieFetcher {
   dataIdKeyInConfig = {
@@ -92,24 +119,7 @@ export class CustomLocalCookieFetcher extends AbstractCookieFetcher {
 
   async start(fetchConfig) {
     if (this.runningFlag) return;
-    const config = {
-      default_interval: fetchConfig.globalInterval * 1000,
-      groups: [],
-    };
-    const customGroups = {};
-    const commonGroupConfig = {};
-    if (fetchConfig.lowFrequencyTimeRange && fetchConfig.lowFrequencyMultiple > 1) {
-      this.updateGroupIntervalByTimeRange(config.default_interval, fetchConfig, commonGroupConfig);
-    }
-    for (const { type, dataId } of fetchConfig.enableDataSourceList) {
-      if (!customGroups[type]) customGroups[type] = { type: type, datasource: [], ...commonGroupConfig };
-      const source = {};
-      if (this.dataIdKeyInConfig[type]) {
-        source[this.dataIdKeyInConfig[type]] = dataId;
-      }
-      customGroups[type].datasource.push(source);
-    }
-    config.groups.push(...Object.values(customGroups).filter((group) => group.datasource.length > 0));
+    const config = _buildConfig(fetchConfig);
     this.startWithFetcherControllerConfig(config, fetchConfig);
   }
 
@@ -119,7 +129,16 @@ export class CustomLocalCookieFetcher extends AbstractCookieFetcher {
     this.runningFlag = false;
   }
 
-  async _checkAvailable() {
+  async _checkAvailable(fetchConfig) {
+    if (fetchConfig) {
+      const config = _buildConfig(fetchConfig);
+      try {
+        FetchController.validateConfig(config);
+      } catch (e) {
+        console.log(e);
+        return false;
+      }
+    }
     // 尝试访问百度确认网络连接正常
     await fetch('https://www.baidu.com/', { mode: 'no-cors' });
     return true;
