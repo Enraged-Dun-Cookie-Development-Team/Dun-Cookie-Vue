@@ -90,6 +90,11 @@ class FetcherController {
         if (this.currentFetcherIdx >= 0) {
           await this.stop();
         }
+      } catch (e) {
+        console.log(e);
+        DebugUtil.debugLog(0, `[${this.fetchConfig.id}]蹲饼器停止失败！`);
+      }
+      try {
         this.currentFetcherIdx = newFetcherIdx;
         if (newFetcherIdx >= 0) {
           DebugUtil.debugLog(
@@ -104,7 +109,9 @@ class FetcherController {
           DebugUtil.debugLog(0, `[${this.fetchConfig.id}]蹲饼器切换失败！所有蹲饼器都暂时不可用！`);
         }
       } catch (e) {
-        this.currentFetcherIdx = oldFetcherIdx;
+        // 蹲饼器切换失败后等同于现在没有蹲饼器了
+        // 不能设回旧值，第一因为旧的已经stop了，第二因为就是因为旧的不该继续了才会触发切换逻辑
+        this.currentFetcherIdx = -1;
         console.log(e);
         DebugUtil.debugLog(0, `[${this.fetchConfig.id}]蹲饼器切换失败！`);
       }
