@@ -160,7 +160,8 @@ export default class ServerUtil {
         }
         unknownGroupsMap[item.type].datasource.push(source);
       }
-      allConfig.groups = [...allConfig.groups, ...Object.values(unknownGroupsMap)];
+      // TODO 暂时不插入未知数据源，这边先记个todo，之后再看怎么处理
+      // allConfig.groups = [...allConfig.groups, ...Object.values(unknownGroupsMap)];
 
       serverDataSourceInfo = {
         dataSourceList: dataSourceList,
