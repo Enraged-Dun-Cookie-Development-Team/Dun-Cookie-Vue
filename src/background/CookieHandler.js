@@ -92,7 +92,7 @@ function tryNotice(source, newCookieList) {
 }
 
 const LocalCardMap = {};
-let LastServerList = [];
+const ServerCookieIdCache = new Set();
 
 /**
  * 蹲饼处理器
@@ -200,9 +200,8 @@ class CookieHandler {
 
     DunInfo.counter++;
     DunInfo.lastDunTime = Date.now();
-    if (LastServerList && LastServerList.length > 0) {
-      const map = Object.fromEntries(LastServerList.map((it) => [it.id, true]));
-      const newCookies = items.filter((it) => !map[it.id]);
+    if (ServerCookieIdCache.size > 0) {
+      const newCookies = items.filter((it) => !ServerCookieIdCache.has(it.id));
       DunInfo.cookieCount += newCookies.length;
       console.log('new cookies: ', newCookies);
       await new Promise((r) => AvailableDataSourceMeta.doAfterInit(r));
@@ -222,14 +221,15 @@ class CookieHandler {
       }
     }
 
-    LastServerList = items;
+    items.forEach((it) => ServerCookieIdCache.add(it.id));
+
     CardList.firstPageCookieList[configId] = items;
     CardList.sendUpdateAtNextTick();
     await PlatformHelper.Storage.saveLocalStorage('server_cookie_list_next_page_id', data.next_page_id || '');
   }
 
   static resetLastServerList() {
-    LastServerList = [];
+    ServerCookieIdCache.clear();
   }
 }
 
