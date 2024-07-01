@@ -30,7 +30,7 @@ export class WeiboDataSource {
               )
               .replace(/<br \/>/g, '\n')
         )
-        .jumpUrl(`https://weibo.com/${weiboId}`);
+        .jumpUrl(`https://weibo.com/${data.mblog.user.id}/${weiboId}`);
 
       switch (dynamicInfo.page_info?.type) {
         // 普通动态

@@ -81,6 +81,15 @@ export class AbstractPlatform {
   }
 
   /**
+   * 从本地移除一项数据
+   * @param {string|string[]} keys
+   * @return {Promise<void>}
+   */
+  removeLocalStorage(keys) {
+    throw new Error(unsupportedTip);
+  }
+
+  /**
    * 向其它页面发送消息
    * @param type 消息类型，只有监听指定类型的监听器才能接收到消息
    * @param data 消息内容
@@ -272,17 +281,35 @@ export class AbstractPlatform {
   }
 
   /**
-   * 创建定时警报
+   * 创建定时闹钟
    * @param name {string | undefined}
    * @param alarmInfo {{when?: number, delayInMinutes?: number, periodInMinutes?: number} | undefined}
-   * @return {void}
+   * @return {Promise<void>}
    */
   createAlarm(name, alarmInfo) {
     throw new Error(unsupportedTip);
   }
 
   /**
-   * 清除全部警报
+   * 获取定时闹钟
+   * @param name {string}
+   * @return {Promise<{name: string, scheduledTime: number, periodInMinutes?: number} | undefined>}
+   */
+  getAlarm(name) {
+    throw new Error(unsupportedTip);
+  }
+
+  /**
+   * 清除指定闹钟
+   * @param name {string}
+   * @return {Promise<boolean>}
+   */
+  clearAlarm(name) {
+    throw new Error(unsupportedTip);
+  }
+
+  /**
+   * 清除全部闹钟
    * @return {Promise<boolean>}
    */
   clearAllAlarms() {
@@ -299,13 +326,33 @@ export class AbstractPlatform {
   }
 
   /**
-   * 增加请求监听器
+   * 定义请求过滤操作的动态会话规则
    * <p>
-   * @param listener 监听器
-   * @param filter URL匹配列表，指定要监听的请求URL
-   * @param extraInfoSpec 额外参数
+   * @param options {{addRules: any[]}} 规则参数
+   * @return {Promise<void>}
    */
-  onBeforeSendHeaders(listener, filter, extraInfoSpec) {
+  declarativeNetRequestUpdateSessionRules(options) {
+    throw new Error(unsupportedTip);
+  }
+
+  /**
+   * 创建屏幕外文档
+   * <br>
+   * NOTE: 注意！同时只能存在一个屏幕外文档，所以创建完只能临时用，必须马上关闭。如果要长期用需要专门做一套逻辑。
+   * <p>
+   * @param parameters {{url: string, reasons: string[], justification: string}} 创建参数
+   * @return {Promise<void>}
+   */
+  offscreenCreateDocument(parameters) {
+    throw new Error(unsupportedTip);
+  }
+
+  /**
+   * 关闭屏幕外文档
+   * <p>
+   * @return {Promise<void>}
+   */
+  offscreenCloseDocument() {
     throw new Error(unsupportedTip);
   }
 

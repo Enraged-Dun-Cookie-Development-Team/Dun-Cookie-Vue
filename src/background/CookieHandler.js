@@ -9,7 +9,6 @@ import { WeiboDataSource } from './fetcher/impl/local/WeiboDataSource';
 import { NeteaseCloudMusicDataSource } from './fetcher/impl/local/NeteaseCloudMusicDataSource';
 import { GameBulletinListDataSource } from './fetcher/impl/local/GameBulletinListDataSource';
 import { MonsterSirenDataSource } from './fetcher/impl/local/MonsterSirenDataSource';
-import { ArknightsOfficialWebDataSource } from './fetcher/impl/local/ArknightsOfficialWebDataSource';
 import { TerraHistoricusDataSource } from './fetcher/impl/local/TerraHistoricusDataSource';
 import AvailableDataSourceMeta from '../common/sync/AvailableDataSourceMeta';
 import { CookieItem } from '../common/CookieItem';
@@ -22,6 +21,16 @@ import { registerUrlToAddReferer } from './request_interceptor';
  * @type {[string, string][]}
  */
 const lastCookiesCache = [];
+const lastCookiesCacheStorageKey = 'cache:lastCookies';
+PlatformHelper.Storage.getLocalStorage(lastCookiesCacheStorageKey).then((data) => {
+  if (typeof data === 'string' && data.length > 0) {
+    const cache = JSON.parse(data);
+    if (Array.isArray(cache) && cache.length > 0) {
+      lastCookiesCache.push(...cache);
+    }
+  }
+});
+
 /**
  * 只缓存指定数量的饼用于检测重复
  * @type {number}
@@ -79,10 +88,11 @@ function tryNotice(source, newCookieList) {
       lastCookiesCache.shift();
     }
   }
+  void PlatformHelper.Storage.saveLocalStorage(lastCookiesCacheStorageKey, JSON.stringify(lastCookiesCache));
 }
 
 const LocalCardMap = {};
-let LastServerList = [];
+const ServerCookieIdCache = new Set();
 
 /**
  * 蹲饼处理器
@@ -117,12 +127,10 @@ class CookieHandler {
                   return GameBulletinListDataSource.processData(it.rawContent, sourceId);
                 case 'arknights-website:monster-siren':
                   return MonsterSirenDataSource.processData(it.rawContent, sourceId);
-                case 'arknights-website:official-website':
-                  return ArknightsOfficialWebDataSource.processData(it.rawContent, sourceId);
                 case 'arknights-website:terra-historicus':
                   return TerraHistoricusDataSource.processData(it.rawContent, sourceId);
                 default:
-                  console.warn('未知数据源类型：' + it.dataSourceId.typeId);
+                  console.warn('不支持的数据源类型：' + it.dataSourceId.typeId);
               }
             }
           })
@@ -192,9 +200,8 @@ class CookieHandler {
 
     DunInfo.counter++;
     DunInfo.lastDunTime = Date.now();
-    if (LastServerList && LastServerList.length > 0) {
-      const map = Object.fromEntries(LastServerList.map((it) => [it.id, true]));
-      const newCookies = items.filter((it) => !map[it.id]);
+    if (ServerCookieIdCache.size > 0) {
+      const newCookies = items.filter((it) => !ServerCookieIdCache.has(it.id));
       DunInfo.cookieCount += newCookies.length;
       console.log('new cookies: ', newCookies);
       await new Promise((r) => AvailableDataSourceMeta.doAfterInit(r));
@@ -214,14 +221,15 @@ class CookieHandler {
       }
     }
 
-    LastServerList = items;
+    items.forEach((it) => ServerCookieIdCache.add(it.id));
+
     CardList.firstPageCookieList[configId] = items;
     CardList.sendUpdateAtNextTick();
     await PlatformHelper.Storage.saveLocalStorage('server_cookie_list_next_page_id', data.next_page_id || '');
   }
 
   static resetLastServerList() {
-    LastServerList = [];
+    ServerCookieIdCache.clear();
   }
 }
 

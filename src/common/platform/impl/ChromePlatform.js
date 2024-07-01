@@ -1,6 +1,7 @@
 import { PLATFORM_CHROME } from '../../Constants';
 import BrowserPlatform from './BrowserPlatform';
 import DebugUtil from '../../util/DebugUtil';
+import { name } from 'jsdom/lib/jsdom/living/helpers/validate-names';
 
 // noinspection JSUnresolvedVariable
 export default class ChromePlatform extends BrowserPlatform {
@@ -32,34 +33,23 @@ export default class ChromePlatform extends BrowserPlatform {
     });
   }
 
-  getLocalStorage(name) {
-    return new Promise((resolve, reject) => {
-      chrome.storage.local.get(name, (result) => {
-        if (chrome.runtime.lastError) {
-          reject(chrome.runtime.lastError);
-          return;
-        }
-        if (typeof name === 'string') {
-          resolve(result[name]);
-        } else {
-          resolve(result);
-        }
-      });
-    });
+  async getLocalStorage(name) {
+    const result = await chrome.storage.local.get(name);
+    if (typeof name === 'string') {
+      return result[name];
+    } else {
+      return result;
+    }
   }
 
   saveLocalStorage(name, data) {
     const val = {};
     val[name] = data;
-    return new Promise((resolve, reject) => {
-      chrome.storage.local.set(val, () => {
-        if (chrome.runtime.lastError) {
-          reject(chrome.runtime.lastError);
-          return;
-        }
-        resolve();
-      });
-    });
+    return chrome.storage.local.set(val);
+  }
+
+  removeLocalStorage(keys) {
+    return chrome.storage.local.remove(keys);
   }
 
   sendMessage(type, data) {
@@ -85,11 +75,13 @@ export default class ChromePlatform extends BrowserPlatform {
     return chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       const value = this.__handleReceiverMessage(id, type, message, listener);
       if (value !== undefined) {
-        // Chromium内核中必须用return true的方式进行异步返回，不支持直接返回Promise
-        // 参考兼容性表格：https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onMessage
-        sendResponse(value);
         if (value.constructor === Promise) {
+          // Chromium内核中必须用return true的方式进行异步返回，不支持直接返回Promise
+          // 参考兼容性表格：https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onMessage
+          value.then((result) => sendResponse(result)).catch((reason) => sendResponse(reason));
           return true;
+        } else {
+          sendResponse(value);
         }
       }
     });
@@ -97,7 +89,7 @@ export default class ChromePlatform extends BrowserPlatform {
 
   setPopup(url) {
     return new Promise((resolve, reject) => {
-      chrome.browserAction.setPopup({ popup: url }, () => {
+      chrome.action.setPopup({ popup: url }, () => {
         if (chrome.runtime.lastError) {
           reject(chrome.runtime.lastError);
           return;
@@ -138,7 +130,7 @@ export default class ChromePlatform extends BrowserPlatform {
   }
 
   addIconClickListener(listener) {
-    return chrome.browserAction.onClicked.addListener(listener);
+    return chrome.action.onClicked.addListener(listener);
   }
 
   createTab(url) {
@@ -220,7 +212,7 @@ export default class ChromePlatform extends BrowserPlatform {
 
   setBadgeText(text) {
     return new Promise((resolve, reject) => {
-      chrome.browserAction.setBadgeText({ text: text }, () => {
+      chrome.action.setBadgeText({ text: text }, () => {
         if (chrome.runtime.lastError) {
           reject(chrome.runtime.lastError);
           return;
@@ -232,7 +224,7 @@ export default class ChromePlatform extends BrowserPlatform {
 
   setBadgeBackgroundColor(color) {
     return new Promise((resolve, reject) => {
-      chrome.browserAction.setBadgeBackgroundColor({ color: color }, () => {
+      chrome.action.setBadgeBackgroundColor({ color: color }, () => {
         if (chrome.runtime.lastError) {
           reject(chrome.runtime.lastError);
           return;
@@ -243,28 +235,34 @@ export default class ChromePlatform extends BrowserPlatform {
   }
 
   createAlarm(name, alarmInfo) {
-    chrome.alarms.create(name, alarmInfo);
+    return chrome.alarms.create(name, alarmInfo);
+  }
+
+  getAlarm(name) {
+    return chrome.alarms.get(name);
+  }
+
+  clearAlarm(name) {
+    return chrome.alarms.clear(name);
   }
 
   clearAllAlarms() {
-    return new Promise((resolve, reject) => {
-      chrome.alarms.clearAll((result) => {
-        if (chrome.runtime.lastError) {
-          reject(chrome.runtime.lastError);
-          return;
-        }
-        resolve(result);
-      });
-    });
+    return chrome.alarms.clearAll();
   }
 
   addAlarmsListener(listener) {
     chrome.alarms.onAlarm.addListener(listener);
   }
 
-  onBeforeSendHeaders(listener, filter, extraInfoSpec) {
-    if (!extraInfoSpec) extraInfoSpec = [];
-    if (!extraInfoSpec.includes('extraHeaders')) extraInfoSpec.push('extraHeaders');
-    chrome.webRequest.onBeforeSendHeaders.addListener(listener, filter, extraInfoSpec);
+  declarativeNetRequestUpdateSessionRules(options) {
+    return chrome.declarativeNetRequest.updateSessionRules(options);
+  }
+
+  offscreenCreateDocument(parameters) {
+    return chrome.offscreen.createDocument(parameters);
+  }
+
+  offscreenCloseDocument() {
+    return chrome.offscreen.closeDocument();
   }
 }

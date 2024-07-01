@@ -7,14 +7,15 @@ import html2canvas from 'html2canvas';
 const IGNORE_MESSAGE_ERROR_1 = 'Could not establish connection. Receiving end does not exist.';
 const IGNORE_MESSAGE_ERROR_2 = 'The message port closed before a response was received.';
 
-let _isBackground;
 let _isMobile;
+const _isBackground = typeof globalThis == 'object' && typeof globalThis.serviceWorker == 'object';
+console.log(`Current isBackground: ${_isBackground}`);
 
 const imageCache = {};
 const qrcodeCache = {};
 
 const CORS_AVAILABLE_DOMAINS = { 'penguin-stats.io': true, 'penguin-stats.cn': true };
-// 正常浏览器在给权限后跨域视为basic请求 无视cors相关设定，脑子有毛病的QQ浏览器在mode: no-cors跨域时直接用CORB策略拒绝读取响应(正常浏览器好像只会在contentScript里有这种设定)
+// 正常浏览器在给权限后跨域视为basic请求 无视cors相关设定，脑子有毛病的QQ浏览器在mode: no-cors跨域时直接用CORS策略拒绝读取响应(正常浏览器好像只会在contentScript里有这种设定)
 // 事实上正常浏览器和QQ浏览器在加权限后mode: no-cors跨域的Response.type都是basic，但是QQ浏览器就是不让你读取 诶就是玩
 const ALWAYS_ENABLE_CORS = typeof navigator != 'undefined' && navigator.userAgent.includes('QQBrowser');
 
@@ -24,10 +25,6 @@ const ALWAYS_ENABLE_CORS = typeof navigator != 'undefined' && navigator.userAgen
 export default class BrowserPlatform extends AbstractPlatform {
   constructor() {
     super();
-    // 这部分放在类里面的原因是放在外面会被意外执行导致报错
-    // 判断当前url中是否包含background(已知的其它方法都是Promise，都不能保证在isBackground被使用之前完成判断)
-    _isBackground = window.document.URL.indexOf('background') !== -1;
-    console.log(`Current isBackground: ${_isBackground}`);
 
     const head = navigator.userAgent;
     _isMobile = head.indexOf('Android') > 1 || head.indexOf('iPhone') > 1;

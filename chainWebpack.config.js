@@ -62,6 +62,7 @@ const chainWebpack = (config) => {
   }
   config.entry('background').add(path.resolve(__dirname, './src/background/index.js'));
   config.entry('contentScripts').add(path.resolve(__dirname, './src/contentScripts/index.js'));
+  config.entry('offscreen/img2blob').add(path.resolve(__dirname, './src/offscreen/js/img2blob.js'));
   config.output.filename('[name].js');
 
   config.plugin('copy').tap((_args) => {
@@ -83,6 +84,7 @@ const chainWebpack = (config) => {
           },
           { from: 'src/Dun-Cookies-Info.json', to: '[name][ext]' },
           { from: 'node_modules/element-ui/lib/theme-chalk/fonts/', to: 'css/fonts/[name][ext]' },
+          { from: 'src/offscreen/html', to: 'offscreen' },
         ],
       },
     ];

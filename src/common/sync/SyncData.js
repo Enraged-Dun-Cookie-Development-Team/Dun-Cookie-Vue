@@ -113,6 +113,9 @@ class DataSynchronizer {
         if (!data || typeof dataInitFn === 'function') {
           await PlatformHelper.Storage.saveLocalStorage(keyPersist(this.key), this.target);
         }
+      } else if (data) {
+        // 这种情况属于之前持久化了后来代码改成不需要持久化，就删除旧数据
+        await PlatformHelper.Storage.removeLocalStorage(keyPersist(this.key));
       }
       this.__setInited();
     };
@@ -318,6 +321,9 @@ class DataSynchronizerOnlyBackgroundWritable extends DataSynchronizer {
 // 用于储存已注册的key，避免重复注册相同的key
 const keyMap = {};
 
+// TODO 由于不清楚具体会被什么时候强行停止插件，暂时全量持久化，之后看看有什么不需要持久化的再说
+const FORCE_PERSIST_ALL_DATA = true;
+
 /**
  * 创建同步数据
  * @param target 目标源对象
@@ -332,6 +338,7 @@ function createSyncData(target, key, mode, shouldPersist = false, updateHandler 
   if (keyMap[key]) {
     throw new Error('duplicate sync key: ' + key);
   }
+  if (FORCE_PERSIST_ALL_DATA) shouldPersist = true;
   let synchronizer;
   switch (mode) {
     case DataSyncMode.ALL_WRITABLE:

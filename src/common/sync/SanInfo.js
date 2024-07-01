@@ -12,8 +12,8 @@ import NotificationUtil from '../util/NotificationUtil';
 import PlatformHelper from '../platform/PlatformHelper';
 
 // region 理智计算(自动提醒)
+const alarmKeySanRecovery = 'tools:san-recovery';
 
-let sanTimerId = null;
 // 理智计算流程：
 // 在弹出页面点击"开始计算"会启动理智计算，当理智满了之后才会停止
 // 在设置页面重新设置理智最大值后，会停止理智计算
@@ -22,7 +22,7 @@ let sanTimerId = null;
 
 function sanRecovery(san) {
   const timeElapsed = new Date().getTime() - san.updateTime;
-  // 时间超长时可能是休眠导致setTimeout延时了，用经过时间除以6分钟来判断理智恢复数量以避免出问题
+  // 时间超长时可能是休眠导致延时了，用经过时间除以6分钟来判断理智恢复数量以避免出问题
   if (timeElapsed > SAN_RECOVERY_SPEED) {
     const recovery = Math.floor(timeElapsed / SAN_RECOVERY_SPEED);
     san.currentSan += recovery;
@@ -35,8 +35,7 @@ function sanRecovery(san) {
   if (san.currentSan >= Settings.san.maxValue) {
     san.currentSan = Settings.san.maxValue;
     noticeSan(`理智已满`, `理智已经满了！！请博士赶快上线清理智，不要浪费啦！`);
-    clearTimeout(sanTimerId);
-    sanTimerId = null;
+    void PlatformHelper.Alarms.clear(alarmKeySanRecovery);
   }
   san.saveUpdate();
   if (DEBUG_LOG) {
@@ -61,28 +60,23 @@ function startSanRecovery(san, delay) {
     }
   }
   if (remainTimeIntervalId === 0) san.startReloadTime();
-  sanTimerId = setTimeout(() => {
-    // 将实际恢复逻辑放进setTimeout中，如果放在外面就会出现第一次会立刻恢复1理智(而没有等待恢复时间)的问题
-    sanRecovery(san);
-    if (san.currentSan < Settings.san.maxValue) {
-      startSanRecovery(san);
-    }
-  }, delay);
+  // 将实际恢复逻辑放进alarm中，如果放在外面就会出现第一次会立刻恢复1理智(而没有等待恢复时间)的问题
+  void PlatformHelper.Alarms.create(alarmKeySanRecovery, {
+    delayInMinutes: delay / (60 * 1000),
+  });
 }
 
 function handleSanUpdate(san, settings) {
   // 先停止旧的计时器再判断是否需要启动新计时器
-  if (sanTimerId) {
-    clearTimeout(sanTimerId);
-    sanTimerId = null;
-  }
-  if (san.currentSan < settings.san.maxValue) {
-    if (settings.feature.san) {
-      startSanRecovery(san);
+  PlatformHelper.Alarms.clear(alarmKeySanRecovery).finally(() => {
+    if (san.currentSan < settings.san.maxValue) {
+      if (settings.feature.san) {
+        startSanRecovery(san);
+      }
+    } else {
+      noticeSan(`哼哼！理智已满！`, `理智已经满了，请博士不要再逗我玩了`);
     }
-  } else {
-    noticeSan(`哼哼！理智已满！`, `理智已经满了，请博士不要再逗我玩了`);
-  }
+  });
 }
 
 // 由于现在Settings的更新message不能识别更新了哪些内容，故此处加一个变量来识别
@@ -92,10 +86,7 @@ function handleSettingsUpdate(san, settings) {
   // 如果功能被禁用或者理智最大值有更新，则停止计时器并将当前理智设置为最大值
   if (!settings.feature.san || oldMaxSan !== settings.san.maxValue) {
     oldMaxSan = settings.san.maxValue;
-    if (sanTimerId) {
-      clearTimeout(sanTimerId);
-      sanTimerId = null;
-    }
+    void PlatformHelper.Alarms.clear(alarmKeySanRecovery);
     san.currentSan = settings.san.maxValue;
     san.saveUpdate();
   }
@@ -237,4 +228,12 @@ class SanInfo {
 }
 
 const instance = new SanInfo();
+PlatformHelper.Alarms.addListener((alarm) => {
+  if (alarm.name !== alarmKeySanRecovery) return;
+  sanRecovery(instance);
+  if (instance.currentSan < Settings.san.maxValue) {
+    startSanRecovery(instance);
+  }
+});
+
 export default instance;

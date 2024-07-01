@@ -117,6 +117,10 @@ export default class PlatformHelper {
     return httpHelper;
   }
 
+  static get Offscreen() {
+    return offscreenHelper;
+  }
+
   static get HtmlParser() {
     return currentPlatform.getHtmlParser();
   }
@@ -151,6 +155,10 @@ class StorageHelper {
 
   saveLocalStorage(name, data) {
     return currentPlatform.saveLocalStorage(name, data);
+  }
+
+  removeLocalStorage(keys) {
+    return currentPlatform.removeLocalStorage(keys);
   }
 }
 
@@ -216,22 +224,15 @@ class NotificationHelper {
    */
   async createWithSpecialIcon(id, iconUrl, title, message, imageUrl) {
     let objectUrl;
-    let canvas;
-    if (typeof imageUrl === 'string' && imageUrl.startsWith('http')) {
+    const img2blobFlag = typeof imageUrl === 'string' && imageUrl.startsWith('http');
+    if (img2blobFlag) {
       try {
-        const blob = await Http.get(imageUrl, { responseTransformer: (r) => r.blob() });
-        canvas = document.createElement('canvas');
-        canvas.height = 200;
-        canvas.width = 400;
-        const ctx = canvas.getContext('2d');
-        const bitmap = await createImageBitmap(blob, { resizeWidth: canvas.width });
-        ctx.drawImage(bitmap, 0, 0);
-        bitmap.close();
-        /**
-         * @type {unknown}
-         */
-        const newBlob = await new Promise((r) => canvas.toBlob(r));
-        objectUrl = URL.createObjectURL(newBlob);
+        await currentPlatform.offscreenCreateDocument({
+          url: '/offscreen/img2blob.html',
+          reasons: ['BLOBS'],
+          justification: 'for notification image',
+        });
+        objectUrl = await PlatformHelper.Message.send('offscreen:img2blob', { imageUrl: imageUrl });
         DebugUtil.debugConsoleOutput(
           0,
           'debug',
@@ -252,16 +253,11 @@ class NotificationHelper {
         imageUrl = undefined;
       }
     }
-    return await currentPlatform
-      .createNotifications(id, iconUrl, title, message, objectUrl || imageUrl)
-      .finally((_) => {
-        if (objectUrl) {
-          URL.revokeObjectURL(objectUrl);
-        }
-        if (canvas) {
-          canvas.remove();
-        }
-      });
+    return await currentPlatform.createNotifications(id, iconUrl, title, message, objectUrl || imageUrl).finally(() => {
+      if (img2blobFlag) {
+        currentPlatform.offscreenCloseDocument();
+      }
+    });
   }
 
   addClickListener(listener) {
@@ -322,6 +318,21 @@ class AlarmHelper {
     return currentPlatform.createAlarm(name, alarmInfo);
   }
 
+  async createIfNotExists(name, alarmInfo) {
+    const alarm = await currentPlatform.getAlarm(name);
+    if (!alarm) {
+      return currentPlatform.createAlarm(name, alarmInfo);
+    }
+  }
+
+  get(name) {
+    return currentPlatform.getAlarm(name);
+  }
+
+  clear(name) {
+    return currentPlatform.clearAlarm(name);
+  }
+
   clearAll() {
     return currentPlatform.clearAllAlarms();
   }
@@ -337,8 +348,18 @@ class HttpHelper {
     return currentPlatform.sendHttpRequest(url, 'GET', timeout);
   }
 
-  onBeforeSendHeaders(listener, filter, extraInfoSpec) {
-    return currentPlatform.onBeforeSendHeaders(listener, filter, extraInfoSpec);
+  updateSessionRules(options) {
+    return currentPlatform.declarativeNetRequestUpdateSessionRules(options);
+  }
+}
+
+class OffscreenHelper {
+  create(parameters) {
+    return currentPlatform.offscreenCreateDocument(parameters);
+  }
+
+  close() {
+    return currentPlatform.offscreenCloseDocument();
   }
 }
 
@@ -359,5 +380,6 @@ const downloadsHelper = new DownloadsHelper();
 const lifecycleHelper = new LifecycleHelper();
 const alarmHelper = new AlarmHelper();
 const httpHelper = new HttpHelper();
+const offscreenHelper = new OffscreenHelper();
 const imgHelper = new ImgHelper();
 globalThis.PlatformHelper = PlatformHelper;
