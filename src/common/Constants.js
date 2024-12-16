@@ -113,7 +113,7 @@ export {
 // endregion
 
 // region 杂项
-const TOOL_QR_URL = 'https://arknightscommunity.drblack-system.com/15386.html';
+const TOOL_QR_URL = 'https://www.bilibili.com/video/BV1ru4y1x7cZ/';
 
 const CANTEEN_API_BASE = process.env.VUE_APP_API_SERVER_BASE;
 const CANTEEN_CDN_API_BASE = process.env.VUE_APP_API_CDN_BASE;
