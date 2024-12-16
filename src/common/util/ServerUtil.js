@@ -327,7 +327,7 @@ export default class ServerUtil {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     let data;
     try {
-      data = await ServerUtil.requestCdnServerApi('GET', 'cdn/operate/announcement/list');
+      data = await ServerUtil.requestCdnServerApi('cdn/operate/announcement/list');
     } catch (e) {
       console.log(e);
     }
@@ -396,7 +396,7 @@ export default class ServerUtil {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     let data;
     try {
-      data = await ServerUtil.requestCdnServerApi('GET', 'cdn/operate/video/list');
+      data = await ServerUtil.requestCdnServerApi('cdn/operate/video/list');
     } catch (e) {
       console.log(e);
     }
@@ -417,7 +417,7 @@ export default class ServerUtil {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     let data;
     try {
-      data = await ServerUtil.requestCdnServerApi('GET', 'cdn/operate/resource/get');
+      data = await ServerUtil.requestCdnServerApi('cdn/operate/resource/get');
     } catch (e) {
       console.log(e);
     }
@@ -436,7 +436,7 @@ export default class ServerUtil {
    * @return {Promise<{toolList: {nickname: string, avatar: string, jump_url: string}[]}>}
    */
   static async getThirdPartyToolsInfo() {
-    const toolList = await this.requestCdnServerApi('GET', '/canteen/operate/toolLink/list');
+    const toolList = await this.requestCdnServerApi('/cdn/operate/toolLink/list');
     return {
       toolList: toolList,
     };

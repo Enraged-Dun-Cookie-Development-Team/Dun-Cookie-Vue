@@ -96,14 +96,14 @@
             v-for="(item, index) in quickJump.tool"
             :key="index"
             ref="dragEntityToolEl"
-            :content="item.nickname"
+            :content="item.localized_name.zh_CN"
             placement="top"
             class="drag-entity"
           >
             <el-button v-if="isEdit && item.isActivated" size="small">
               <img
                 class="btn-icon radius"
-                :src="item.avatar"
+                :src="item.icon_url"
                 draggable="false"
                 @mousedown="move($event, item, index, 'tool')"
               />
@@ -112,13 +112,23 @@
               </div>
             </el-button>
             <el-button v-else-if="isEdit && !item.isActivated" size="small" class="not-activated">
-              <img class="btn-icon radius" :src="item.avatar" />
+              <img class="btn-icon radius" :src="item.icon_url" />
               <div class="edit-icon" @click="addSource(item, index, quickJump.tool)">
                 <i class="el-icon-circle-plus"></i>
               </div>
             </el-button>
-            <el-button v-else-if="item.isActivated" size="small" @click="openUrl(item.jump_url)">
-              <img class="btn-icon radius" :src="item.avatar" />
+            <el-button
+              v-else-if="item.isActivated"
+              size="small"
+              @click="
+                openUrl(
+                  item.links.filter((i) => {
+                    i.primary == true;
+                  }).url
+                )
+              "
+            >
+              <img class="btn-icon radius" :src="item.icon_url" />
             </el-button>
           </el-tooltip>
         </div>
@@ -281,14 +291,7 @@ export default {
       isReload: false, // 是否正在刷新
       quickJump: {
         source: [],
-        tool: [
-          {
-            jump_url: '../time.html',
-            nickname: '小刻食堂计时器',
-            avatar: '/assets/image/icon.png',
-            radius: false,
-          },
-        ],
+        tool: [],
         url: [],
       },
       dayInfo: dayInfo,
@@ -576,17 +579,17 @@ export default {
     },
 
     async initSourceJump() {
-      const sourceJump = await PlatformHelper.Storage.getLocalStorage('quickJump');
       ServerUtil.getServerDataSourceInfo().then((data) => {
         let list = [];
         let newList = [];
-        if (sourceJump?.source && sourceJump.source?.length) {
-          for (const item of sourceJump.source) {
-            if (data.serverDataSourceList.find((p) => item.nickname === p.nickname)) list.push(item);
+        if (Settings.quickJump?.source && Settings.quickJump.source?.length) {
+          for (const item of Settings.quickJump.source) {
+            let info = data.serverDataSourceList.find((p) => item.unique_id === p.unique_id);
+            if (info) list.push({ ...info, isActivated: item.isActivated });
           }
           list = list.concat(data.serverDataSourceList);
           newList = list.reduce((pre, cur) => {
-            let isRepeat = pre.findIndex((p) => p.nickname === cur.nickname);
+            let isRepeat = pre.findIndex((p) => p.unique_id === cur.unique_id);
             if (isRepeat < 0) {
               cur.isActivated = typeof cur.isActivated === 'boolean' ? cur.isActivated : true;
               pre.push(cur);
@@ -607,21 +610,17 @@ export default {
     },
 
     async initToolJump() {
-      const toolJump = await PlatformHelper.Storage.getLocalStorage('quickJump');
       ServerUtil.getThirdPartyToolsInfo().then((data) => {
         let list = [];
         let newList = [];
-        if (toolJump?.tool && toolJump.tool?.length) {
-          for (const item of toolJump.tool) {
-            if (
-              data.toolList.find((p) => item.nickname === p.nickname) ||
-              this.quickJump.tool.find((p) => item.nickname === p.nickname)
-            )
-              list.push(item);
+        if (Settings.quickJump?.tool && Settings.quickJump.tool?.length) {
+          for (const item of Settings.quickJump.tool) {
+            let info = data.toolList.find((p) => item.id === p.id);
+            if (info) list.push({ ...info, isActivated: item.isActivated });
           }
-          list = list.concat(data.toolList, this.quickJump.tool);
+          list = list.concat(data.toolList, Settings.quickJump.tool);
           newList = list.reduce((pre, cur) => {
-            let isRepeat = pre.findIndex((p) => p.nickname === cur.nickname);
+            let isRepeat = pre.findIndex((p) => p.id === cur.id);
             if (isRepeat < 0) {
               cur.isActivated = typeof cur.isActivated === 'boolean' ? cur.isActivated : true;
               pre.push(cur);
@@ -685,7 +684,10 @@ export default {
     },
 
     saveQuickJump() {
-      PlatformHelper.Storage.saveLocalStorage('quickJump', this.quickJump).then();
+      console.log(this.quickJump);
+      Settings.quickJump.tool = this.quickJump.tool;
+      Settings.quickJump.source = this.quickJump.source;
+      Settings.saveSettings().then();
     },
 
     openSetting() {

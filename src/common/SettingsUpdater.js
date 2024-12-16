@@ -170,6 +170,55 @@ function updateV4ToV5(oldSettings) {
   return newSettings;
 }
 
+function updateV5ToV6(oldSettings) {
+  console.log('从V5配置升级：');
+  console.log(oldSettings);
+  const newSettings = deepAssign({}, oldSettings);
+
+  newSettings.quickJump = {
+    source: [],
+    tool: [
+      [
+        {
+          id: 'local_ceobe_canteen_timer',
+          localized_name: {
+            zh_CN: '小刻食堂计时器',
+            en_US: 'Ceobe Canteen Timer',
+          },
+          localized_description: {
+            zh_CN: '',
+            en_US: '',
+          },
+          localized_slogen: {
+            zh_CN: '',
+            en_US: '',
+          },
+          localized_tags: {
+            zh_CN: [],
+            en_US: [],
+          },
+          icon_url: '/assets/image/icon.png',
+          links: [
+            {
+              primary: true,
+              regionality: 'CHINA_MAINLAND',
+              localized_name: {
+                zh_CN: '小刻食堂计时器',
+                en_US: 'Ceobe Canteen Timer',
+              },
+              url: '../time.html',
+            },
+          ],
+        },
+      ],
+    ],
+  };
+
+  console.log('升级V6完毕，新配置：');
+  console.log(newSettings);
+  return newSettings;
+}
+
 async function updateSettings(oldSettings) {
   // 版本号一致直接返回
   if (parseInt(oldSettings.version) === CURRENT_SETTING_VERSION) {
@@ -196,6 +245,9 @@ async function updateSettings(oldSettings) {
         break;
       case 4:
         currentSettings = updateV4ToV5(currentSettings);
+        break;
+      case 5:
+        currentSettings = updateV5ToV6(currentSettings);
         break;
     }
     currentVersion++;
