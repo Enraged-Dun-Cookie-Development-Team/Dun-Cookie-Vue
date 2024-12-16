@@ -456,7 +456,7 @@ export default {
             type: 'warning',
           })
             .then(() => {
-              this.updateSelectDataSource(newSettings.enableDataSources);
+              // this.updateSelectDataSource(newSettings.enableDataSources);
               this.saveSetting('form', newSettings);
             })
             .catch((action) => {

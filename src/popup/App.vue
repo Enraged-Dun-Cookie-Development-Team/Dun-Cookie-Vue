@@ -580,63 +580,69 @@ export default {
 
     async initSourceJump() {
       ServerUtil.getServerDataSourceInfo().then((data) => {
-        let list = [];
-        let newList = [];
-        if (Settings.quickJump?.source && Settings.quickJump.source?.length) {
-          for (const item of Settings.quickJump.source) {
-            let info = data.serverDataSourceList.find((p) => item.unique_id === p.unique_id);
-            if (info) list.push({ ...info, isActivated: item.isActivated });
-          }
-          list = list.concat(data.serverDataSourceList);
-          newList = list.reduce((pre, cur) => {
-            let isRepeat = pre.findIndex((p) => p.unique_id === cur.unique_id);
-            if (isRepeat < 0) {
-              cur.isActivated = typeof cur.isActivated === 'boolean' ? cur.isActivated : true;
-              pre.push(cur);
+        this.settings.doAfterInit((settings) => {
+          let list = [];
+          let newList = [];
+          if (settings.quickJump?.source && settings.quickJump.source?.length) {
+            for (const item of settings.quickJump.source) {
+              let info = data.serverDataSourceList.find((p) => item.unique_id === p.unique_id);
+              if (info) list.push({ ...info, isActivated: item.isActivated });
             }
-            return pre;
-          }, []);
-        } else {
-          for (const item of data.serverDataSourceList) {
-            item.isActivated = true;
+            list = list.concat(data.serverDataSourceList);
+            newList = list.reduce((pre, cur) => {
+              let isRepeat = pre.findIndex((p) => p.unique_id === cur.unique_id);
+              if (isRepeat < 0) {
+                cur.isActivated = typeof cur.isActivated === 'boolean' ? cur.isActivated : true;
+                pre.push(cur);
+              }
+              return pre;
+            }, []);
+          } else {
+            for (const item of data.serverDataSourceList) {
+              item.isActivated = true;
+            }
+            newList = data.serverDataSourceList;
           }
-          newList = data.serverDataSourceList;
-        }
-        newList.sort((a, b) => b.isActivated - a.isActivated);
-        this.quickJump.source = newList.filter((it) => !!it.jump_url);
-        // 更新缓存
-        this.saveQuickJump();
+          newList.sort((a, b) => b.isActivated - a.isActivated);
+          this.quickJump.source = newList.filter((it) => !!it.jump_url);
+          // 更新缓存
+          settings.quickJump.source = this.quickJump.source;
+          settings.saveSettings().then();
+        });
       });
     },
 
     async initToolJump() {
       ServerUtil.getThirdPartyToolsInfo().then((data) => {
-        let list = [];
-        let newList = [];
-        if (Settings.quickJump?.tool && Settings.quickJump.tool?.length) {
-          for (const item of Settings.quickJump.tool) {
-            let info = data.toolList.find((p) => item.id === p.id);
-            if (info) list.push({ ...info, isActivated: item.isActivated });
-          }
-          list = list.concat(data.toolList, Settings.quickJump.tool);
-          newList = list.reduce((pre, cur) => {
-            let isRepeat = pre.findIndex((p) => p.id === cur.id);
-            if (isRepeat < 0) {
-              cur.isActivated = typeof cur.isActivated === 'boolean' ? cur.isActivated : true;
-              pre.push(cur);
+        this.settings.doAfterInit((settings) => {
+          let list = [];
+          let newList = [];
+          if (settings.quickJump?.tool && settings.quickJump.tool?.length) {
+            for (const item of settings.quickJump.tool) {
+              let info = data.toolList.find((p) => item.id === p.id);
+              if (info) list.push({ ...info, isActivated: item.isActivated });
             }
-            return pre;
-          }, []);
-        } else {
-          for (const item of data.toolList) {
-            item.isActivated = true;
+            list = list.concat(data.toolList, settings.quickJump.tool);
+            newList = list.reduce((pre, cur) => {
+              let isRepeat = pre.findIndex((p) => p.id === cur.id);
+              if (isRepeat < 0) {
+                cur.isActivated = typeof cur.isActivated === 'boolean' ? cur.isActivated : true;
+                pre.push(cur);
+              }
+              return pre;
+            }, []);
+          } else {
+            for (const item of data.toolList) {
+              item.isActivated = true;
+            }
+            newList = data.toolList;
           }
-          newList = data.toolList;
-        }
-        newList.sort((a, b) => b.isActivated - a.isActivated);
-        this.quickJump.tool = newList;
-        // 更新缓存
-        this.saveQuickJump();
+          newList.sort((a, b) => b.isActivated - a.isActivated);
+          this.quickJump.tool = newList;
+          // 更新缓存
+          settings.quickJump.tool = this.quickJump.tool;
+          settings.saveSettings().then();
+        });
       });
     },
 

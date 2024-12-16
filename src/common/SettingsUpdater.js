@@ -175,6 +175,9 @@ function updateV5ToV6(oldSettings) {
   console.log(oldSettings);
   const newSettings = deepAssign({}, oldSettings);
 
+  // 删除上个版本单独存放的quickJump
+  PlatformHelper.Storage.removeLocalStorage('quickJump');
+
   newSettings.quickJump = {
     source: [],
     tool: [
