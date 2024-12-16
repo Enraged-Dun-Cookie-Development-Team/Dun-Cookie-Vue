@@ -684,7 +684,6 @@ export default {
     },
 
     saveQuickJump() {
-      console.log(this.quickJump);
       Settings.quickJump.tool = this.quickJump.tool;
       Settings.quickJump.source = this.quickJump.source;
       Settings.saveSettings().then();

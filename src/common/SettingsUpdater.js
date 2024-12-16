@@ -209,6 +209,7 @@ function updateV5ToV6(oldSettings) {
               url: '../time.html',
             },
           ],
+          isActivated: true,
         },
       ],
     ],
