@@ -181,40 +181,23 @@ function updateV5ToV6(oldSettings) {
   newSettings.quickJump = {
     source: [],
     tool: [
-      [
-        {
-          id: 'local_ceobe_canteen_timer',
-          localized_name: {
-            zh_CN: '小刻食堂计时器',
-            en_US: 'Ceobe Canteen Timer',
+      {
+        id: 'local_ceobe_canteen_timer',
+        localized_name: { zh_CN: '小刻食堂计时器', en_US: 'Ceobe Canteen Timer' },
+        localized_description: { zh_CN: '', en_US: '' },
+        localized_slogen: { zh_CN: '', en_US: '' },
+        localized_tags: { zh_CN: [], en_US: [] },
+        icon_url: '/assets/image/icon.png',
+        links: [
+          {
+            primary: true,
+            regionality: 'CHINA_MAINLAND',
+            localized_name: { zh_CN: '小刻食堂计时器', en_US: 'Ceobe Canteen Timer' },
+            url: '../time.html',
           },
-          localized_description: {
-            zh_CN: '',
-            en_US: '',
-          },
-          localized_slogen: {
-            zh_CN: '',
-            en_US: '',
-          },
-          localized_tags: {
-            zh_CN: [],
-            en_US: [],
-          },
-          icon_url: '/assets/image/icon.png',
-          links: [
-            {
-              primary: true,
-              regionality: 'CHINA_MAINLAND',
-              localized_name: {
-                zh_CN: '小刻食堂计时器',
-                en_US: 'Ceobe Canteen Timer',
-              },
-              url: '../time.html',
-            },
-          ],
-          isActivated: true,
-        },
-      ],
+        ],
+        isActivated: true,
+      },
     ],
   };
 
