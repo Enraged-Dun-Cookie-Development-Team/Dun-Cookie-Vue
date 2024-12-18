@@ -123,8 +123,8 @@
               @click="
                 openUrl(
                   item.links.filter((i) => {
-                    i.primary == true;
-                  }).url
+                    return i.primary == true;
+                  })[0].url
                 )
               "
             >
