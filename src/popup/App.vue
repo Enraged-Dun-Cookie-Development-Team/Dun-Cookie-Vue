@@ -232,6 +232,7 @@ import MenuIcon from '@/popup/MenuIcon';
 import {
   BUILD_BY,
   dayInfo,
+  toolDefaults,
   ENABLE_FEATURES,
   MESSAGE_GET_COUNTDOWN,
   PAGE_CEOBECANTEEN_WEB_ABOUT_US,
@@ -573,62 +574,30 @@ export default {
     // 非特殊情况与initToolJump同步改
     async initSourceJump() {
       const data = await ServerUtil.getServerDataSourceInfo();
+      let list = [...data.serverDataSourceList];
       this.settings.doAfterInit((settings) => {
-        let list = [];
-        let newList = [];
-        if (settings.quickJump?.source && settings.quickJump.source?.length) {
-          for (const item of settings.quickJump.source) {
-            let info = data.serverDataSourceList.find((p) => item.unique_id === p.unique_id);
-            if (info) list.push({ ...info, isActivated: item.isActivated });
-          }
-          list = list.concat(data.serverDataSourceList);
-          newList = list.reduce((pre, cur) => {
-            if (!pre.some((p) => p.unique_id === cur.unique_id)) {
-              cur.isActivated = typeof cur.isActivated === 'boolean' ? cur.isActivated : true;
-              pre.push(cur);
-            }
-            return pre;
-          }, []);
-        } else {
-          for (const item of data.serverDataSourceList) {
-            item.isActivated = true;
-          }
-          newList = data.serverDataSourceList;
+        for (const item of list) {
+          let info = settings.quickJump?.source.find((p) => item.unique_id === p.unique_id);
+          item.isActivated = info ? info.isActivated : true;
         }
-        newList.sort((a, b) => b.isActivated - a.isActivated);
-        this.quickJump.source = newList.filter((it) => !!it.jump_url);
+        list.sort((a, b) => b.isActivated - a.isActivated);
+        this.quickJump.source = list;
         // 更新缓存
         settings.quickJump.source = this.quickJump.source;
         settings.saveSettings().then();
       });
     },
-    // 非特殊情况与initToolJump同步改
+    // 非特殊情况与initSourceJump同步改
     async initToolJump() {
-      const data = await ServerUtil.getServerDataSourceInfo();
+      const data = await ServerUtil.getThirdPartyToolsInfo();
+      let list = [...data.toolList, ...toolDefaults];
       this.settings.doAfterInit((settings) => {
-        let list = [];
-        let newList = [];
-        if (settings.quickJump?.tool && settings.quickJump.tool?.length) {
-          for (const item of settings.quickJump.tool) {
-            let info = data.toolList.find((p) => item.id === p.id);
-            if (info) list.push({ ...info, isActivated: item.isActivated });
-          }
-          list = list.concat(data.toolList, settings.quickJump.tool);
-          newList = list.reduce((pre, cur) => {
-            if (!pre.some((p) => p.id === cur.id)) {
-              cur.isActivated = typeof cur.isActivated === 'boolean' ? cur.isActivated : true;
-              pre.push(cur);
-            }
-            return pre;
-          }, []);
-        } else {
-          for (const item of data.toolList) {
-            item.isActivated = true;
-          }
-          newList = data.toolList;
+        for (const item of list) {
+          let info = settings.quickJump?.tool.find((p) => item.id === p.id);
+          item.isActivated = info ? info.isActivated : true;
         }
-        newList.sort((a, b) => b.isActivated - a.isActivated);
-        this.quickJump.tool = newList;
+        list.sort((a, b) => b.isActivated - a.isActivated);
+        this.quickJump.tool = list;
         // 更新缓存
         settings.quickJump.tool = this.quickJump.tool;
         settings.saveSettings().then();
