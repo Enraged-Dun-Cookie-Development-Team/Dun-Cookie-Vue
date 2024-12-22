@@ -120,13 +120,7 @@
             <el-button
               v-else-if="item.isActivated"
               size="small"
-              @click="
-                openUrl(
-                  item.links.filter((i) => {
-                    return i.primary == true;
-                  })[0].url
-                )
-              "
+              @click="openUrl(item.links.find((i) => i.primary == true).url)"
             >
               <img class="btn-icon radius" :src="item.icon_url" />
             </el-button>
@@ -576,72 +570,68 @@ export default {
         document.onmouseup = null;
       };
     },
-
+    // 非特殊情况与initToolJump同步改
     async initSourceJump() {
-      ServerUtil.getServerDataSourceInfo().then((data) => {
-        this.settings.doAfterInit((settings) => {
-          let list = [];
-          let newList = [];
-          if (settings.quickJump?.source && settings.quickJump.source?.length) {
-            for (const item of settings.quickJump.source) {
-              let info = data.serverDataSourceList.find((p) => item.unique_id === p.unique_id);
-              if (info) list.push({ ...info, isActivated: item.isActivated });
-            }
-            list = list.concat(data.serverDataSourceList);
-            newList = list.reduce((pre, cur) => {
-              let isRepeat = pre.findIndex((p) => p.unique_id === cur.unique_id);
-              if (isRepeat < 0) {
-                cur.isActivated = typeof cur.isActivated === 'boolean' ? cur.isActivated : true;
-                pre.push(cur);
-              }
-              return pre;
-            }, []);
-          } else {
-            for (const item of data.serverDataSourceList) {
-              item.isActivated = true;
-            }
-            newList = data.serverDataSourceList;
+      const data = await ServerUtil.getServerDataSourceInfo();
+      this.settings.doAfterInit((settings) => {
+        let list = [];
+        let newList = [];
+        if (settings.quickJump?.source && settings.quickJump.source?.length) {
+          for (const item of settings.quickJump.source) {
+            let info = data.serverDataSourceList.find((p) => item.unique_id === p.unique_id);
+            if (info) list.push({ ...info, isActivated: item.isActivated });
           }
-          newList.sort((a, b) => b.isActivated - a.isActivated);
-          this.quickJump.source = newList.filter((it) => !!it.jump_url);
-          // 更新缓存
-          settings.quickJump.source = this.quickJump.source;
-          settings.saveSettings().then();
-        });
+          list = list.concat(data.serverDataSourceList);
+          newList = list.reduce((pre, cur) => {
+            if (!pre.some((p) => p.unique_id === cur.unique_id)) {
+              cur.isActivated = typeof cur.isActivated === 'boolean' ? cur.isActivated : true;
+              pre.push(cur);
+            }
+            return pre;
+          }, []);
+        } else {
+          for (const item of data.serverDataSourceList) {
+            item.isActivated = true;
+          }
+          newList = data.serverDataSourceList;
+        }
+        newList.sort((a, b) => b.isActivated - a.isActivated);
+        this.quickJump.source = newList.filter((it) => !!it.jump_url);
+        // 更新缓存
+        settings.quickJump.source = this.quickJump.source;
+        settings.saveSettings().then();
       });
     },
-
+    // 非特殊情况与initToolJump同步改
     async initToolJump() {
-      ServerUtil.getThirdPartyToolsInfo().then((data) => {
-        this.settings.doAfterInit((settings) => {
-          let list = [];
-          let newList = [];
-          if (settings.quickJump?.tool && settings.quickJump.tool?.length) {
-            for (const item of settings.quickJump.tool) {
-              let info = data.toolList.find((p) => item.id === p.id);
-              if (info) list.push({ ...info, isActivated: item.isActivated });
-            }
-            list = list.concat(data.toolList, settings.quickJump.tool);
-            newList = list.reduce((pre, cur) => {
-              let isRepeat = pre.findIndex((p) => p.id === cur.id);
-              if (isRepeat < 0) {
-                cur.isActivated = typeof cur.isActivated === 'boolean' ? cur.isActivated : true;
-                pre.push(cur);
-              }
-              return pre;
-            }, []);
-          } else {
-            for (const item of data.toolList) {
-              item.isActivated = true;
-            }
-            newList = data.toolList;
+      const data = await ServerUtil.getServerDataSourceInfo();
+      this.settings.doAfterInit((settings) => {
+        let list = [];
+        let newList = [];
+        if (settings.quickJump?.tool && settings.quickJump.tool?.length) {
+          for (const item of settings.quickJump.tool) {
+            let info = data.toolList.find((p) => item.id === p.id);
+            if (info) list.push({ ...info, isActivated: item.isActivated });
           }
-          newList.sort((a, b) => b.isActivated - a.isActivated);
-          this.quickJump.tool = newList;
-          // 更新缓存
-          settings.quickJump.tool = this.quickJump.tool;
-          settings.saveSettings().then();
-        });
+          list = list.concat(data.toolList, settings.quickJump.tool);
+          newList = list.reduce((pre, cur) => {
+            if (!pre.some((p) => p.id === cur.id)) {
+              cur.isActivated = typeof cur.isActivated === 'boolean' ? cur.isActivated : true;
+              pre.push(cur);
+            }
+            return pre;
+          }, []);
+        } else {
+          for (const item of data.toolList) {
+            item.isActivated = true;
+          }
+          newList = data.toolList;
+        }
+        newList.sort((a, b) => b.isActivated - a.isActivated);
+        this.quickJump.tool = newList;
+        // 更新缓存
+        settings.quickJump.tool = this.quickJump.tool;
+        settings.saveSettings().then();
       });
     },
 
