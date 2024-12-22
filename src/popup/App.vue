@@ -574,7 +574,7 @@ export default {
     // 非特殊情况与initToolJump同步改
     async initSourceJump() {
       const data = await ServerUtil.getServerDataSourceInfo();
-      let list = [...data.serverDataSourceList];
+      let list = structuredClone([...data.serverDataSourceList]);
       this.settings.doAfterInit((settings) => {
         for (const item of list) {
           let info = settings.quickJump?.source.find((p) => item.unique_id === p.unique_id);
@@ -590,7 +590,7 @@ export default {
     // 非特殊情况与initSourceJump同步改
     async initToolJump() {
       const data = await ServerUtil.getThirdPartyToolsInfo();
-      let list = [...data.toolList, ...toolDefaults];
+      let list = structuredClone([...data.toolList, ...toolDefaults]);
       this.settings.doAfterInit((settings) => {
         for (const item of list) {
           let info = settings.quickJump?.tool.find((p) => item.id === p.id);
