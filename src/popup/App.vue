@@ -328,8 +328,7 @@ export default {
     openUrl: PlatformHelper.Tabs.create,
     init() {
       this.isCustomBuild = ENABLE_FEATURES.length > 0;
-      this.initSourceJump();
-      this.initToolJump();
+      this.initQuickJump();
       DunInfo.doAfterUpdate((data) => {
         this.oldDunCount = data.counter;
       });
@@ -571,36 +570,38 @@ export default {
         document.onmouseup = null;
       };
     },
-    // 非特殊情况与initToolJump同步改
-    async initSourceJump() {
-      const data = await ServerUtil.getServerDataSourceInfo();
-      let list = structuredClone([...data.serverDataSourceList]);
+    async initQuickJump() {
+      const mergeFn = (newList, oldList, idField) => {
+        // 用旧的顺序和启用状态修正新列表
+        const oldMap = Object.fromEntries(oldList.map((it, order) => [it[idField], { ...it, order }]));
+        const newMap = Object.fromEntries(newList.map((it, order) => [it[idField], { ...it, order }]));
+        return newList
+          .map((it) => {
+            // 优先使用旧的启用状态，没有旧状态则设为true
+            it.isActivated = oldMap[it[idField]]?.isActivated ?? true;
+            return it;
+          })
+          .sort((a, b) => {
+            // 启用的在前未启用在后，启用状态相同的按原始列表的顺序排序，旧顺序优先
+            if (a.isActivated !== b.isActivated) {
+              return b.isActivated - a.isActivated;
+            }
+            const orderA = oldMap[a[idField]]?.order ?? 1000 + newMap[a[idField]].order;
+            const orderB = oldMap[b[idField]]?.order ?? 1000 + newMap[b[idField]].order;
+            return orderA - orderB;
+          });
+      };
+      const newToolList = (await ServerUtil.getThirdPartyToolsInfo()).toolList;
+      const newSourceList = (await ServerUtil.getServerDataSourceInfo()).serverDataSourceList;
       this.settings.doAfterInit((settings) => {
-        for (const item of list) {
-          let info = settings.quickJump?.source.find((p) => item.unique_id === p.unique_id);
-          item.isActivated = info ? info.isActivated : true;
-        }
-        list.sort((a, b) => b.isActivated - a.isActivated);
-        this.quickJump.source = list;
-        // 更新缓存
-        settings.quickJump.source = this.quickJump.source;
-        settings.saveSettings().then();
-      });
-    },
-    // 非特殊情况与initSourceJump同步改
-    async initToolJump() {
-      const data = await ServerUtil.getThirdPartyToolsInfo();
-      let list = structuredClone([...data.toolList, ...toolDefaults]);
-      this.settings.doAfterInit((settings) => {
-        for (const item of list) {
-          let info = settings.quickJump?.tool.find((p) => item.id === p.id);
-          item.isActivated = info ? info.isActivated : true;
-        }
-        list.sort((a, b) => b.isActivated - a.isActivated);
-        this.quickJump.tool = list;
-        // 更新缓存
-        settings.quickJump.tool = this.quickJump.tool;
-        settings.saveSettings().then();
+        // 这里向新列表追加默认工具
+        const toolList = mergeFn([...newToolList, ...structuredClone(toolDefaults)], settings.quickJump.tool, 'id');
+        const sourceList = mergeFn(newSourceList, settings.quickJump.source, 'unique_id');
+        // 更新当前状态和设置
+        this.quickJump.tool = toolList;
+        this.quickJump.source = sourceList;
+        settings.quickJump = { tool: toolList, source: sourceList };
+        void settings.saveSettings();
       });
     },
 
