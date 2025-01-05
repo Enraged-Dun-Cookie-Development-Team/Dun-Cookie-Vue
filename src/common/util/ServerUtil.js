@@ -327,7 +327,7 @@ export default class ServerUtil {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     let data;
     try {
-      data = await ServerUtil.requestApi('GET', 'canteen/operate/announcement/list');
+      data = await ServerUtil.requestCdnServerApi('cdn/operate/announcement/list');
     } catch (e) {
       console.log(e);
     }
@@ -335,10 +335,6 @@ export default class ServerUtil {
       const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
       data = await HttpUtil.GET_Json(fallbackUrl);
       data = data.list;
-    } else {
-      data = data.data;
-    }
-    if (!data) {
       return data;
     }
     if (shouldNotice) {
@@ -396,7 +392,7 @@ export default class ServerUtil {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     let data;
     try {
-      data = await ServerUtil.requestApi('GET', 'canteen/operate/video/list');
+      data = await ServerUtil.requestCdnServerApi('cdn/operate/video/list');
     } catch (e) {
       console.log(e);
     }
@@ -404,8 +400,6 @@ export default class ServerUtil {
       const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
       data = await HttpUtil.GET_Json(fallbackUrl);
       data = data.btnList;
-    } else {
-      data = data.data;
     }
     return data;
   }
@@ -417,7 +411,7 @@ export default class ServerUtil {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     let data;
     try {
-      data = await ServerUtil.requestApi('GET', 'canteen/operate/resource/get');
+      data = await ServerUtil.requestCdnServerApi('cdn/operate/resource/get');
     } catch (e) {
       console.log(e);
     }
@@ -425,8 +419,6 @@ export default class ServerUtil {
       const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
       data = await HttpUtil.GET_Json(fallbackUrl);
       data = data.dayInfo;
-    } else {
-      data = data.data;
     }
     return data;
   }
@@ -436,7 +428,7 @@ export default class ServerUtil {
    * @return {Promise<{toolList: {nickname: string, avatar: string, jump_url: string}[]}>}
    */
   static async getThirdPartyToolsInfo() {
-    const toolList = await this.requestApi('GET', '/canteen/operate/toolLink/list');
+    const toolList = await this.requestCdnServerApi('/cdn/operate/toolLink/list');
     return {
       toolList: toolList,
     };
@@ -467,14 +459,6 @@ export default class ServerUtil {
       }
       console.log(error);
     });
-    if (data) {
-      if (parseInt(data.code) === 0) {
-        data = data.data;
-      } else {
-        console.warn(data.message || `获取在线版本信息响应失败：${JSON.stringify(data)}`);
-        data = null;
-      }
-    }
     if (!data) {
       const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
       data = await HttpUtil.GET_Json(fallbackUrl);

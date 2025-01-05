@@ -170,6 +170,24 @@ function updateV4ToV5(oldSettings) {
   return newSettings;
 }
 
+function updateV5ToV6(oldSettings) {
+  console.log('从V5配置升级：');
+  console.log(oldSettings);
+  const newSettings = deepAssign({}, oldSettings);
+
+  // 删除上个版本单独存放的quickJump
+  PlatformHelper.Storage.removeLocalStorage('quickJump');
+
+  newSettings.quickJump = {
+    source: [],
+    tool: [],
+  };
+
+  console.log('升级V6完毕，新配置：');
+  console.log(newSettings);
+  return newSettings;
+}
+
 async function updateSettings(oldSettings) {
   // 版本号一致直接返回
   if (parseInt(oldSettings.version) === CURRENT_SETTING_VERSION) {
@@ -196,6 +214,9 @@ async function updateSettings(oldSettings) {
         break;
       case 4:
         currentSettings = updateV4ToV5(currentSettings);
+        break;
+      case 5:
+        currentSettings = updateV5ToV6(currentSettings);
         break;
     }
     currentVersion++;
