@@ -208,8 +208,8 @@
 
 # 开发人员
 
-> - [蓝芷怡](https://github.com/LiuZiYang1)
-> - [洛梧藤](https://github.com/lwt-414)
+> - [蓝芷怡](https://github.com/KazeLiu)
+> - [洛梧藤](https://github.com/phidialam)
 > - [云闪](https://github.com/Yun-Shan)
 > - [别喵了](https://github.com/ablupi)
 
