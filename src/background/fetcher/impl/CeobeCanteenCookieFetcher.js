@@ -2,6 +2,7 @@ import { AbstractCookieFetcher } from '../AbstractCookieFetcher';
 import ServerUtil from '../../../common/util/ServerUtil';
 import { CookieHandler } from '../../CookieHandler';
 import DebugUtil from '../../../common/util/DebugUtil';
+import PlatformHelper from '../../../common/platform/PlatformHelper';
 
 export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
   /**

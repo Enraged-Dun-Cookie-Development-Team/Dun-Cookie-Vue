@@ -23,14 +23,11 @@ import AvailableDataSourceMeta from '../sync/AvailableDataSourceMeta';
 import { registerUrlToAddReferer } from '../../background/request_interceptor';
 import { UserUtil } from './UserUtil';
 
-const serverOption = {
-  appendTimestamp: false,
-};
-
 const comboIdCache = {};
 
 /* IFDEBUG */
 global.__ceobe_cache__combo_id__ = comboIdCache;
+
 /* FIDEBUG */
 
 async function addHeaders(options) {
@@ -330,7 +327,7 @@ export default class ServerUtil {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     let data;
     try {
-      data = await HttpUtil.GET_Json(CANTEEN_API_BASE + 'canteen/operate/announcement/list', serverOption);
+      data = await ServerUtil.requestCdnServerApi('cdn/operate/announcement/list');
     } catch (e) {
       console.log(e);
     }
@@ -338,10 +335,6 @@ export default class ServerUtil {
       const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
       data = await HttpUtil.GET_Json(fallbackUrl);
       data = data.list;
-    } else {
-      data = data.data;
-    }
-    if (!data) {
       return data;
     }
     if (shouldNotice) {
@@ -399,7 +392,7 @@ export default class ServerUtil {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     let data;
     try {
-      data = await HttpUtil.GET_Json(CANTEEN_API_BASE + 'canteen/operate/video/list', serverOption);
+      data = await ServerUtil.requestCdnServerApi('cdn/operate/video/list');
     } catch (e) {
       console.log(e);
     }
@@ -407,8 +400,6 @@ export default class ServerUtil {
       const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
       data = await HttpUtil.GET_Json(fallbackUrl);
       data = data.btnList;
-    } else {
-      data = data.data;
     }
     return data;
   }
@@ -420,7 +411,7 @@ export default class ServerUtil {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     let data;
     try {
-      data = await HttpUtil.GET_Json(CANTEEN_API_BASE + 'canteen/operate/resource/get', serverOption);
+      data = await ServerUtil.requestCdnServerApi('cdn/operate/resource/get');
     } catch (e) {
       console.log(e);
     }
@@ -428,8 +419,6 @@ export default class ServerUtil {
       const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
       data = await HttpUtil.GET_Json(fallbackUrl);
       data = data.dayInfo;
-    } else {
-      data = data.data;
     }
     return data;
   }
@@ -439,7 +428,7 @@ export default class ServerUtil {
    * @return {Promise<{toolList: {nickname: string, avatar: string, jump_url: string}[]}>}
    */
   static async getThirdPartyToolsInfo() {
-    const toolList = await this.requestApi('GET', '/canteen/operate/toolLink/list');
+    const toolList = await this.requestCdnServerApi('/cdn/operate/toolLink/list');
     return {
       toolList: toolList,
     };
@@ -452,7 +441,8 @@ export default class ServerUtil {
   static async getVersionInfo(checkVersionUpdate = true, targetVersion = undefined) {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     let data;
-    const failController = (error) => {
+    const arg = targetVersion ? `?version=${targetVersion}` : '';
+    data = await ServerUtil.requestApi('GET', 'canteen/operate/version/plugin' + arg).catch((error) => {
       // 断网导致没有response和服务器响应5xx的情况不检测是否存在版本更新
       if (!error.response) {
         checkVersionUpdate = false;
@@ -468,22 +458,7 @@ export default class ServerUtil {
         return response.text();
       }
       console.log(error);
-    };
-    const arg = targetVersion ? `?version=${targetVersion}` : '';
-    data = await HttpUtil.GET_Json(
-      `${CANTEEN_API_BASE}canteen/operate/version/plugin${arg}`,
-      serverOption,
-      failController,
-      false
-    );
-    if (data) {
-      if (parseInt(data.code) === 0) {
-        data = data.data;
-      } else {
-        console.warn(data.message || `获取在线版本信息响应失败：${JSON.stringify(data)}`);
-        data = null;
-      }
-    }
+    });
     if (!data) {
       const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
       data = await HttpUtil.GET_Json(fallbackUrl);

@@ -1,8 +1,6 @@
-import { DataSourceMeta, DataSourceTypeInfo } from '../../../../common/datasource/DataSourceMeta';
 import Settings from '../../../../common/Settings';
 import TimeUtil from '../../../../common/util/TimeUtil';
 import { CookieItem } from '../../../../common/CookieItem';
-import PlatformHelper from '../../../../common/platform/PlatformHelper';
 
 /**
  * 游戏公告数据源。
@@ -17,7 +15,7 @@ export class GameBulletinListDataSource {
       .timeForSort(time.getTime())
       .timeForDisplay(TimeUtil.format(time, 'yyyy-MM-dd'))
       .content(data.title.replace('\\n', '\n'))
-      .jumpUrl(`https://terra-historicus.hypergryph.com/comic/${data.comicCid}/episode/${data.episodeCid}`)
+      .jumpUrl(`https://ak-webview.hypergryph.com/api/game/bulletin/${data.cid}`)
       .build();
   }
 }

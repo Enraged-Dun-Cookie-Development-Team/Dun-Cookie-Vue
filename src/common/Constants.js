@@ -18,7 +18,7 @@ const DEBUG_LOG = IS_DEBUG && true;
 /**
  * 当前配置文件版本号
  */
-const CURRENT_SETTING_VERSION = 5;
+const CURRENT_SETTING_VERSION = 6;
 /**
  * 当前插件版本号
  */
@@ -113,7 +113,7 @@ export {
 // endregion
 
 // region 杂项
-const TOOL_QR_URL = 'https://arknightscommunity.drblack-system.com/15386.html';
+const TOOL_QR_URL = 'https://www.bilibili.com/video/BV1ru4y1x7cZ/';
 
 const CANTEEN_API_BASE = process.env.VUE_APP_API_SERVER_BASE;
 const CANTEEN_CDN_API_BASE = process.env.VUE_APP_API_CDN_BASE;
@@ -219,5 +219,33 @@ const countDown = [
   },
 ];
 
-export { dayInfo, countDown, TOOL_QR_URL, CANTEEN_API_BASE, CANTEEN_CDN_API_BASE, CANTEEN_CDN_SERVER_API_BASE };
+const toolDefaults = [
+  {
+    id: 'local_ceobe_canteen_timer',
+    localized_name: { zh_CN: '小刻食堂计时器', en_US: 'Ceobe Canteen Timer' },
+    localized_description: { zh_CN: '', en_US: '' },
+    localized_slogen: { zh_CN: '', en_US: '' },
+    localized_tags: { zh_CN: [], en_US: [] },
+    icon_url: '/assets/image/icon.png',
+    links: [
+      {
+        primary: true,
+        regionality: 'CHINA_MAINLAND',
+        localized_name: { zh_CN: '小刻食堂计时器', en_US: 'Ceobe Canteen Timer' },
+        url: '../time.html',
+      },
+    ],
+    isActivated: true,
+  },
+];
+
+export {
+  toolDefaults,
+  dayInfo,
+  countDown,
+  TOOL_QR_URL,
+  CANTEEN_API_BASE,
+  CANTEEN_CDN_API_BASE,
+  CANTEEN_CDN_SERVER_API_BASE,
+};
 // endregion

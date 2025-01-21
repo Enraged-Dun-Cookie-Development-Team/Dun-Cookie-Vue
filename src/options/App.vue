@@ -195,7 +195,7 @@
                   </div>
                 </div>
               </div>
-              <!-- <div class="body-menu-content-card">
+              <div class="body-menu-content-card">
                 <div class="content-card-title">蹲饼总开关</div>
                 <div class="content-card-description">蹲饼总开关</div>
                 <div class="content-card-content flex-between">
@@ -203,7 +203,7 @@
                     <el-switch v-model="settings.open" />
                   </div>
                 </div>
-              </div> -->
+              </div>
             </div>
             <div ref="view-form" class="view view-form">
               <div class="flex">
@@ -456,7 +456,7 @@ export default {
             type: 'warning',
           })
             .then(() => {
-              this.updateSelectDataSource(newSettings.enableDataSources);
+              this.$refs.dataSourceSelect.updateSelectDataSource(newSettings.enableDataSources);
               this.saveSetting('form', newSettings);
             })
             .catch((action) => {

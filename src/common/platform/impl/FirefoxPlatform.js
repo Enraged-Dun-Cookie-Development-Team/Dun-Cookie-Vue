@@ -59,6 +59,10 @@ export default class FirefoxPlatform extends BrowserPlatform {
     return browser.storage.local.set(val);
   }
 
+  removeLocalStorage(keys) {
+    return browser.storage.local.remove(keys);
+  }
+
   sendMessage(type, data) {
     const message = this.__buildMessageToSend(type, data);
 
@@ -94,7 +98,7 @@ export default class FirefoxPlatform extends BrowserPlatform {
   setPopup(url) {
     return new Promise((resolve, reject) => {
       // 虽然不知道为啥Firefox这个不返回Promise，但是Firefox文档里这个确实没写返回值
-      browser.browserAction.setPopup({ popup: url });
+      browser.action.setPopup({ popup: url });
       resolve();
     });
   }
@@ -119,7 +123,7 @@ export default class FirefoxPlatform extends BrowserPlatform {
   }
 
   addIconClickListener(listener) {
-    return browser.browserAction.onClicked.addListener((tab, OnClickData) => {
+    return browser.action.onClicked.addListener((tab, OnClickData) => {
       // 忽略OnClickData是为了和Chrome的行为一致(准确来讲应该是和AbstractPlatform中注释规定的行为一致)
       return listener(tab);
     });
@@ -168,15 +172,23 @@ export default class FirefoxPlatform extends BrowserPlatform {
   }
 
   setBadgeText(text) {
-    return browser.browserAction.setBadgeText({ text: text });
+    return browser.action.setBadgeText({ text: text });
   }
 
   setBadgeBackgroundColor(color) {
-    return browser.browserAction.setBadgeBackgroundColor({ color: color });
+    return browser.action.setBadgeBackgroundColor({ color: color });
   }
 
   createAlarm(name, alarmInfo) {
     browser.alarms.create(name, alarmInfo);
+  }
+
+  getAlarm(name) {
+    return browser.alarms.get(name);
+  }
+
+  clearAlarm(name) {
+    return browser.alarms.clear(name);
   }
 
   clearAllAlarms() {
@@ -187,7 +199,15 @@ export default class FirefoxPlatform extends BrowserPlatform {
     browser.alarms.onAlarm.addListener(listener);
   }
 
-  onBeforeSendHeaders(listener, filter, extraInfoSpec) {
-    browser.webRequest.onBeforeSendHeaders.addListener(listener, filter, extraInfoSpec);
+  declarativeNetRequestUpdateSessionRules(options) {
+    return browser.declarativeNetRequest.updateSessionRules(options);
+  }
+
+  offscreenCreateDocument(parameters) {
+    return browser.offscreen.createDocument(parameters);
+  }
+
+  offscreenCloseDocument() {
+    return browser.offscreen.closeDocument();
   }
 }

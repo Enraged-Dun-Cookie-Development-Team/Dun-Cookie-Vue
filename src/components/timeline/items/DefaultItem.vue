@@ -151,19 +151,18 @@ export default {
     cursor: pointer;
 
     .multi-img {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
+      display: grid;
       margin: auto;
       width: 100%;
       max-width: 700px;
-      flex-wrap: wrap;
-      flex-direction: row;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
 
       .multi-img-area {
         position: relative;
-        width: 33%;
-        max-width: 33%;
+        aspect-ratio: 1 / 1;
+        overflow: hidden;
+        border-radius: 10px;
       }
     }
 
@@ -190,7 +189,9 @@ export default {
 
     .img {
       width: 100%;
-      border-radius: 4px;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
     }
 
     // 图片操作按钮
