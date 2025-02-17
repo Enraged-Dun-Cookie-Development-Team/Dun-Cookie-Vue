@@ -32,19 +32,42 @@
         <div v-html="updateInfo.description"></div>
       </el-card>
       <el-divider />
-      <div style="margin-bottom: 10px; text-align: center">
-        <el-button size="mini" type="success" @click="openUrl(updateInfo.down.chrome)"> Chrome应用商店 </el-button>
-        <el-button size="mini" type="success" @click="openUrl(updateInfo.down.edge)"> Edge应用商店 </el-button>
-        <el-button size="mini" type="success" @click="openUrl(updateInfo.down.firefox)"> Firefox应用商店 </el-button>
-      </div>
-      <div style="text-align: center">
-        <el-button type="success" size="mini" @click="openUrl(updateInfo.down.crx)"> 下载Crx </el-button>
-        <el-button type="success" size="mini" @click="openUrl(updateInfo.down.zip)"> 下载Zip </el-button>
 
-        <el-button v-if="updateInfo.down" size="mini" @click="openUrl(updateInfo.down.spare[0])">
-          {{ updateInfo.down.spare[1] }}
-        </el-button>
+      <!-- 遍历按钮 -->
+      <div class="button-container">
+        <!-- 下载按钮 -->
+        <div v-for="(item, index) in updateInfo.download_source" :key="index" class="button-wrapper">
+          <el-button size="mini" type="success" @click="showDetails(item)">
+            {{ getButtonText(item) }}
+          </el-button>
+        </div>
+        <!-- 弹窗 -->
+        <el-dialog title="下载地址" :visible.sync="dialogVisible" width="30%" center>
+          <br />
+
+          <!-- 主下载地址 -->
+          <div v-if="selectedItem" center>
+            <div class="button-wrapper">
+              <el-button type="primary" @click="openUrl(selectedItem.primary_url.url)">主下载地址</el-button>
+            </div>
+
+            <!-- 遍历备用地址 -->
+
+            <div v-if="selectedItem.spare_urls">
+              <div v-for="(spare, spareIndex) in selectedItem.spare_urls" :key="spareIndex" class="button-wrapper">
+                <el-button type="primary" @click="openUrl(selectedItem.spare_urls[spareIndex].url)"
+                  >备用下载地址{{ spareIndex + 1 }}</el-button
+                >
+              </div>
+            </div>
+          </div>
+
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">关闭</el-button>
+          </span>
+        </el-dialog>
       </div>
+
       <el-divider />
       <Feedback />
     </el-card>
@@ -64,11 +87,16 @@ export default {
 
   data() {
     return {
+      dialogVisible: false, // 控制弹窗显示
+      selectedUrl: '', // 存储选中的 primary_url
       settings: Settings,
       logo: '',
       currentVersion: CURRENT_VERSION,
       updateInfo: {},
       isLatestVersion: false,
+      isDialogVisible: false, // 控制弹窗的显示与隐藏
+      spare_urls: [],
+      selectedItem: null,
     };
   },
   computed: {},
@@ -88,7 +116,30 @@ export default {
       ServerUtil.getVersionInfo(false).then((data) => {
         this.isLatestVersion = !Settings.JudgmentVersion(data.version, CURRENT_VERSION);
         this.updateInfo = data;
+        this.spare_urls = data.spare_urls;
       });
+    },
+    openDialog() {
+      this.isDialogVisible = true;
+    },
+    handleConfirm() {
+      // 弹窗确认操作逻辑
+      this.isDialogVisible = false;
+      console.log('确认按钮被点击');
+    },
+    showDetails(item) {
+      this.selectedItem = item;
+      this.selectedUrl = item.primary_url; // 存储当前选中的 primary_url
+      this.dialogVisible = true; // 打开弹窗
+    },
+    getButtonText(item) {
+      if (['Chrome', 'Edge', 'FireFox'].includes(item.name)) {
+        return item.name + '应用商店';
+      } else if (item.name === 'CRX') {
+        return 'CRX下载';
+      } else {
+        return item.name;
+      }
     },
   },
 };
@@ -134,6 +185,25 @@ export default {
       margin-right: 5px;
       width: 16px;
     }
+  }
+
+  .button-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 每行最多 3 列 */
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .button-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .button-wrapper .el-button {
+    width: 100%;
+    max-width: 180px;
   }
 
   :deep(.el-collapse) {

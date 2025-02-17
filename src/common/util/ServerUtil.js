@@ -442,7 +442,8 @@ export default class ServerUtil {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     let data;
     const arg = targetVersion ? `?version=${targetVersion}` : '';
-    data = await ServerUtil.requestApi('GET', 'canteen/operate/version/plugin' + arg).catch((error) => {
+    // canteen/operate/version/plugin' + arg)
+    data = await ServerUtil.requestCdnServerApi('/cdn/operate/version/fetch' + '?platform=plugin').catch((error) => {
       // 断网导致没有response和服务器响应5xx的情况不检测是否存在版本更新
       if (!error.response) {
         checkVersionUpdate = false;
@@ -468,6 +469,42 @@ export default class ServerUtil {
     if (!data) {
       throw new Error('获取在线版本信息失败，获取备用版本信息失败。');
     }
+    if (checkVersionUpdate) {
+      if (Settings.JudgmentVersion(data.version, CURRENT_VERSION) && Settings.dun.enableNotice) {
+        NotificationUtil.SendNotice(
+          '小刻食堂翻新啦！！',
+          '快来使用新的小刻食堂噢！一定有很多好玩的新功能啦！！',
+          null,
+          'update'
+        );
+      }
+    }
+    return data;
+  }
+
+  /**
+   * 还没写完！！！！！！！！！！！！！！！！
+   * @param checkVersionUpdate
+   */
+  static async getVersionHistory(checkVersionUpdate = true) {
+    await new Promise((resolve) => Settings.doAfterInit(() => resolve));
+    let data = await ServerUtil.requestCdnServerApi('/cdn/operate/version/all' + '?platform=plugin').catch((error) => {
+      // 不考虑checkVersionUpdate
+      if (!error.response) {
+        checkVersionUpdate = false;
+        return;
+      }
+      const response = error.response;
+      if (response.status >= 500 && response.status < 600) {
+        checkVersionUpdate = false;
+        return;
+      }
+      if (response.status >= 400 && response.status < 500) {
+        checkVersionUpdate = false;
+        return response.text();
+      }
+      console.log(error);
+    });
     if (checkVersionUpdate) {
       if (Settings.JudgmentVersion(data.version, CURRENT_VERSION) && Settings.dun.enableNotice) {
         NotificationUtil.SendNotice(
