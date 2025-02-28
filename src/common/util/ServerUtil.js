@@ -485,11 +485,12 @@ export default class ServerUtil {
   /**
    * 还没写完！！！！！！！！！！！！！！！！
    * @param checkVersionUpdate
+   * @param targetVersion {string} 要获取的目标版本信息，不提供时获取最新版
    */
-  static async getVersionHistory(checkVersionUpdate = true) {
-    await new Promise((resolve) => Settings.doAfterInit(() => resolve));
+  static async getVersionHistory(checkVersionUpdate = true, targetVersion = undefined) {
+    await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     let data = await ServerUtil.requestCdnServerApi('/cdn/operate/version/all' + '?platform=plugin').catch((error) => {
-      // 不考虑checkVersionUpdate
+      // 目前不考虑checkVersionUpdate=>待更改
       if (!error.response) {
         checkVersionUpdate = false;
         return;
