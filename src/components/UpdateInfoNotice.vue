@@ -1,12 +1,12 @@
 <template>
   <el-dialog
+    v-if="updateInfo.list.length > 0"
     :title="'小刻食堂 V' + updateInfo.list[0].version + ' 翻新了什么？'"
     :modal-append-to-body="false"
     :visible.sync="showUpdateInfo"
-    width="80%"
     class="update-info-dialog"
   >
-    <div class="update-info-area">
+    <div ref="observeContainer" class="update-info-area">
       {{ updateInfo.list[0].description }}
 
       <h3>{{ '历史版本翻新:' }}</h3>
@@ -14,6 +14,11 @@
         <h4>{{ 'V' + info.version }}</h4>
         <p>{{ info.description }}</p>
       </div>
+      <div
+        id="bottom-checker"
+        ref="bottomChecker"
+        style="margin-top: -50px; width: 100%; height: 50px; pointer-events: none"
+      ></div>
     </div>
   </el-dialog>
 </template>
@@ -27,23 +32,71 @@ export default {
   name: 'UpdateInfoNotice',
   data() {
     return {
-      updateInfo: {},
+      updateInfo: { list: [] },
       showUpdateInfo: false,
+      loading: false,
+      lastpage: false,
+      nextPageId: undefined,
     };
   },
   mounted() {
-    this.init();
+    this.init().then(() => {
+      if (this.showUpdateInfo) {
+        this.$nextTick(() => {
+          this.setupIntersectionObserver();
+        });
+      }
+    });
   },
   methods: {
     async init() {
       let versionUpdate = await PlatformHelper.Storage.getLocalStorage('version-update');
-      // if (!versionUpdate || CURRENT_VERSION !== versionUpdate) {
-      let data = await ServerUtil.getVersionHistory(false, CURRENT_VERSION);
-      data.version = CURRENT_VERSION;
-      this.updateInfo = data;
-      this.showUpdateInfo = true;
-      PlatformHelper.Storage.saveLocalStorage('version-update', CURRENT_VERSION);
-      // }
+      if (!versionUpdate || CURRENT_VERSION !== versionUpdate) {
+        let data = await ServerUtil.getVersionHistory(false, CURRENT_VERSION);
+        data.version = CURRENT_VERSION;
+        this.updateInfo = data;
+        this.nextPageId = data.next_id;
+        this.showUpdateInfo = true;
+        PlatformHelper.Storage.saveLocalStorage('version-update', CURRENT_VERSION);
+      }
+    },
+    //懒加载请求数据
+    loadData() {
+      ServerUtil.getVersionHistory(false, CURRENT_VERSION, this.nextPageId).then((res) => {
+        //将懒加载数据加进updateInfoList
+        if (Array.isArray(res.list)) {
+          this.updateInfo.list = [...this.updateInfo.list, ...res.list];
+        } else {
+          console.error('data.list 不是数组', res.list);
+        }
+        //检测是否最后一页
+        if (res.next_id) {
+          this.nextPageId = res.next_id;
+        } else {
+          this.lastpage = true;
+        }
+      });
+    },
+
+    // 设置 IntersectionObserver 监听滚动到达底部加载下一页数据
+    setupIntersectionObserver() {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting && !this.loading && !this.lastpage) {
+            console.log('触发懒加载');
+            this.loadData(); // 滚动到底部时加载更多数据
+          }
+        },
+        { root: this.$refs.observeContainer, threshold: 0 }
+      );
+
+      // 观察底部元素
+      const bottomChecker = this.$refs.bottomChecker;
+      if (bottomChecker) {
+        observer.observe(bottomChecker);
+      } else {
+        console.error('未找到底部元素');
+      }
     },
   },
 };
@@ -58,6 +111,8 @@ export default {
 }
 .update-info-dialog ::v-deep .el-dialog {
   display: flex;
+  margin: 10vh auto auto;
+  width: '80%';
   flex-direction: column;
 }
 
