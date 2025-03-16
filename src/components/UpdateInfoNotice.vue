@@ -7,18 +7,15 @@
     class="update-info-dialog"
   >
     <div ref="observeContainer" class="update-info-area">
-      {{ updateInfo.list[0].description }}
+      <div class="heading">{{ '新版本V' + updateInfo.list[0].version }}</div>
+      <div class="currDescription">{{ updateInfo.list[0].description }}</div>
 
-      <h3>{{ '历史版本翻新:' }}</h3>
+      <div class="heading">{{ '历史版本' }}</div>
       <div v-for="(info, index) in updateInfo.list.slice(1)" :key="index">
-        <h4>{{ 'V' + info.version }}</h4>
-        <p>{{ info.description }}</p>
+        <div class="historyVersionH">{{ 'V' + info.version }}</div>
+        <div class="hisDescription">{{ info.description }}</div>
       </div>
-      <div
-        id="bottom-checker"
-        ref="bottomChecker"
-        style="margin-top: -50px; width: 100%; height: 50px; pointer-events: none"
-      ></div>
+      <div ref="bottomChecker" class="bottomChecker"></div>
     </div>
   </el-dialog>
 </template>
@@ -51,14 +48,14 @@ export default {
   methods: {
     async init() {
       let versionUpdate = await PlatformHelper.Storage.getLocalStorage('version-update');
-      if (!versionUpdate || CURRENT_VERSION !== versionUpdate) {
-        let data = await ServerUtil.getVersionHistory(false, CURRENT_VERSION);
-        data.version = CURRENT_VERSION;
-        this.updateInfo = data;
-        this.nextPageId = data.next_id;
-        this.showUpdateInfo = true;
-        PlatformHelper.Storage.saveLocalStorage('version-update', CURRENT_VERSION);
-      }
+      // if (!versionUpdate || CURRENT_VERSION !== versionUpdate) {
+      let data = await ServerUtil.getVersionHistory(false, CURRENT_VERSION);
+      data.version = CURRENT_VERSION;
+      this.updateInfo = data;
+      this.nextPageId = data.next_id;
+      this.showUpdateInfo = true;
+      PlatformHelper.Storage.saveLocalStorage('version-update', CURRENT_VERSION);
+      // }
     },
     //懒加载请求数据
     loadData() {
@@ -70,11 +67,8 @@ export default {
           console.error('data.list 不是数组', res.list);
         }
         //检测是否最后一页
-        if (res.next_id) {
-          this.nextPageId = res.next_id;
-        } else {
-          this.lastpage = true;
-        }
+
+        this.nextPageId = res.next_id;
       });
     },
 
@@ -82,7 +76,7 @@ export default {
     setupIntersectionObserver() {
       const observer = new IntersectionObserver(
         ([entry]) => {
-          if (entry.isIntersecting && !this.loading && !this.lastpage) {
+          if (entry.isIntersecting && !this.loading && this.nextPageId != null) {
             console.log('触发懒加载');
             this.loadData(); // 滚动到底部时加载更多数据
           }
@@ -106,6 +100,8 @@ export default {
 .update-info-area {
   overflow-y: auto;
   padding: 15px;
+  font-size: 14px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   white-space: pre-wrap;
   flex: 1;
 }
@@ -131,5 +127,27 @@ export default {
   padding: 15px;
   max-height: calc(80vh - 60px); /* 计算除去 header 和 footer 的高度 */
   flex: 1;
+}
+.bottomCheck {
+  margin-top: -50px;
+  width: 100%;
+  height: 50px;
+  pointer-events: none;
+}
+
+.heading {
+  margin-bottom: 8px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #007bff;
+}
+
+.historyVersionH {
+  margin: 10px 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+.currDescription {
+  margin-bottom: 20px;
 }
 </style>

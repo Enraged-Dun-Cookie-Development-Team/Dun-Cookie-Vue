@@ -22,6 +22,7 @@ import { CookieItem, RetweetedInfo } from '../CookieItem';
 import AvailableDataSourceMeta from '../sync/AvailableDataSourceMeta';
 import { registerUrlToAddReferer } from '../../background/request_interceptor';
 import { UserUtil } from './UserUtil';
+import { plugin } from 'postcss';
 
 const comboIdCache = {};
 
@@ -437,14 +438,14 @@ export default class ServerUtil {
   /**
    * @param checkVersionUpdate {boolean} 是否检测版本更新并推送
    * @param targetVersion {string} 要获取的目标版本信息，不提供时获取最新版
+   * @param platform {string} 要获取的端平台 `desktop`、`pocket`、`plugin`
    */
-  static async getVersionInfo(checkVersionUpdate = true, targetVersion = undefined) {
+  static async getVersionInfo(checkVersionUpdate = true, targetVersion = undefined, platform = 'plugin') {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
-    let data;
 
-    const arg = targetVersion ? `?version=${targetVersion}` : '';
+    const arg = targetVersion ? `${platform}&version=${targetVersion}` : platform;
 
-    data = await ServerUtil.requestCdnServerApi('/cdn/operate/version/fetch' + '?platform=plugin').catch((error) => {
+    let data = await ServerUtil.requestCdnServerApi(`/cdn/operate/version/fetch?platform=${arg}`).catch((error) => {
       // 断网导致没有response和服务器响应5xx的情况不检测是否存在版本更新
       if (!error.response) {
         checkVersionUpdate = false;
@@ -490,8 +491,8 @@ export default class ServerUtil {
    */
   static async getVersionHistory(checkVersionUpdate = true, targetVersion = undefined, pageId = undefined) {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
-    pageId = pageId === undefined ? '' : '&first_id=' + pageId;
-    let data = await ServerUtil.requestCdnServerApi('/cdn/operate/version/all' + '?platform=plugin' + pageId).catch(
+    const pageIdParam = pageId === undefined ? '' : '&first_id=' + pageId;
+    let data = await ServerUtil.requestCdnServerApi('/cdn/operate/version/all?platform=plugin' + pageIdParam).catch(
       (error) => {
         if (!error.response) {
           checkVersionUpdate = false;
