@@ -55,16 +55,10 @@
 
             <div v-if="selectedItem.spare_urls">
               <div v-for="(spare, spareIndex) in selectedItem.spare_urls" :key="spareIndex" class="button-wrapper">
-                <el-button type="primary" @click="openUrl(selectedItem.spare_urls[spareIndex].url)"
-                  >备用下载地址{{ spareIndex + 1 }}</el-button
-                >
+                <el-button type="primary" @click="openUrl(spare.url)">备用下载地址{{ spareIndex + 1 }}</el-button>
               </div>
             </div>
           </div>
-
-          <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible = false">关闭</el-button>
-          </span>
         </el-dialog>
       </div>
 
@@ -88,13 +82,11 @@ export default {
   data() {
     return {
       dialogVisible: false, // 控制弹窗显示
-      selectedUrl: '', // 存储选中的 primary_url
       settings: Settings,
       logo: '',
       currentVersion: CURRENT_VERSION,
       updateInfo: {},
       isLatestVersion: false,
-      isDialogVisible: false, // 控制弹窗的显示与隐藏
       spare_urls: [],
       selectedItem: null,
     };
@@ -119,17 +111,12 @@ export default {
         this.spare_urls = data.spare_urls;
       });
     },
-    openDialog() {
-      this.isDialogVisible = true;
-    },
     handleConfirm() {
       // 弹窗确认操作逻辑
       this.isDialogVisible = false;
-      console.log('确认按钮被点击');
     },
     showDetails(item) {
       this.selectedItem = item;
-      this.selectedUrl = item.primary_url; // 存储当前选中的 primary_url
       this.dialogVisible = true; // 打开弹窗
     },
     getButtonText(item) {

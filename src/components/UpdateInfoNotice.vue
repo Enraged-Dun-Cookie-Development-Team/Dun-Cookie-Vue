@@ -67,7 +67,6 @@ export default {
           console.error('data.list 不是数组', res.list);
         }
         //检测是否最后一页
-
         this.nextPageId = res.next_id;
       });
     },
