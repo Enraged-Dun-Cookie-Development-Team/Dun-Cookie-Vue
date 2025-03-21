@@ -49,8 +49,8 @@ export default {
     async init() {
       let versionUpdate = await PlatformHelper.Storage.getLocalStorage('version-update');
       // if (!versionUpdate || CURRENT_VERSION !== versionUpdate) {
-      let data = await ServerUtil.getVersionHistory(false, CURRENT_VERSION);
-      data.version = CURRENT_VERSION;
+
+      let data = await ServerUtil.getVersionHistory();
       this.updateInfo = data;
       this.nextPageId = data.next_id;
       this.showUpdateInfo = true;
@@ -58,17 +58,22 @@ export default {
       // }
     },
     //懒加载请求数据
-    loadData() {
-      ServerUtil.getVersionHistory(false, CURRENT_VERSION, this.nextPageId).then((res) => {
+    async loadData(nextPageId) {
+      let data;
+      if (nextPageId == undefined) {
+        data = await ServerUtil.getVersionHistory();
+      } else {
+        data = await ServerUtil.getVersionHistory('plugin', nextPageId);
+      }
+      if (data) {
         //将懒加载数据加进updateInfoList
-        if (Array.isArray(res.list)) {
-          this.updateInfo.list = [...this.updateInfo.list, ...res.list];
+        if (Array.isArray(data.list)) {
+          this.updateInfo.list = [...this.updateInfo.list, ...data.list];
         } else {
-          console.error('data.list 不是数组', res.list);
+          console.error('data.list 不是数组', data.list);
         }
-        //检测是否最后一页
-        this.nextPageId = res.next_id;
-      });
+        this.nextPageId = data.next_id;
+      }
     },
 
     // 设置 IntersectionObserver 监听滚动到达底部加载下一页数据
@@ -76,8 +81,7 @@ export default {
       const observer = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting && !this.loading && this.nextPageId != null) {
-            console.log('触发懒加载');
-            this.loadData(); // 滚动到底部时加载更多数据
+            this.loadData(this.nextPageId); // 滚动到底部时加载更多数据
           }
         },
         { root: this.$refs.observeContainer, threshold: 0 }

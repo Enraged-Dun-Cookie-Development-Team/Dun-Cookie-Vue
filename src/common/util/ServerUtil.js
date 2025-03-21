@@ -22,7 +22,6 @@ import { CookieItem, RetweetedInfo } from '../CookieItem';
 import AvailableDataSourceMeta from '../sync/AvailableDataSourceMeta';
 import { registerUrlToAddReferer } from '../../background/request_interceptor';
 import { UserUtil } from './UserUtil';
-import { plugin } from 'postcss';
 
 const comboIdCache = {};
 
@@ -473,6 +472,7 @@ export default class ServerUtil {
     }
     if (checkVersionUpdate) {
       if (Settings.JudgmentVersion(data.version, CURRENT_VERSION) && Settings.dun.enableNotice) {
+        //页面右下角弹窗
         NotificationUtil.SendNotice(
           '小刻食堂翻新啦！！',
           '快来使用新的小刻食堂噢！一定有很多好玩的新功能啦！！',
@@ -485,50 +485,15 @@ export default class ServerUtil {
   }
 
   /**
-   * @param checkVersionUpdate {boolean} 是否检测版本更新并推送
-   * @param targetVersion {string} 要获取的目标版本信息，不提供时获取最新版
+   * @param platform {string} 要获取的端平台 `desktop`、`pocket`、`plugin` 无指定则插件端
    * @param pageId {string} 要获取的页面id，首页没有
    */
-  static async getVersionHistory(checkVersionUpdate = true, targetVersion = undefined, pageId = undefined) {
+  static async getVersionHistory(platform = 'plugin', pageId = undefined) {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
-    const pageIdParam = pageId === undefined ? '' : '&first_id=' + pageId;
-    let data = await ServerUtil.requestCdnServerApi('/cdn/operate/version/all?platform=plugin' + pageIdParam).catch(
-      (error) => {
-        if (!error.response) {
-          checkVersionUpdate = false;
-          return;
-        }
-        const response = error.response;
-        if (response.status >= 500 && response.status < 600) {
-          checkVersionUpdate = false;
-          return;
-        }
-        if (response.status >= 400 && response.status < 500) {
-          checkVersionUpdate = false;
-          return response.text();
-        }
-        console.log(error);
-      }
-    );
-    if (!data) {
-      const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
-      data = await HttpUtil.GET_Json(fallbackUrl);
-      data = data.upgrade;
-      data.is_fallback = true;
-    }
-    if (!data) {
-      throw new Error('获取在线版本信息失败，获取备用版本信息失败。');
-    }
-    if (checkVersionUpdate) {
-      if (Settings.JudgmentVersion(data.version, CURRENT_VERSION) && Settings.dun.enableNotice) {
-        NotificationUtil.SendNotice(
-          '小刻食堂翻新啦！！',
-          '快来使用新的小刻食堂噢！一定有很多好玩的新功能啦！！',
-          null,
-          'update'
-        );
-      }
-    }
+    const param = pageId === undefined ? `?platform=${platform}` : `?platform=${platform}&first_id=${pageId}`;
+    let data = await ServerUtil.requestCdnServerApi('/cdn/operate/version/all' + param).catch((error) => {
+      console.log('获取在线版本信息失败 : \n' + error);
+    });
     return data;
   }
 }
