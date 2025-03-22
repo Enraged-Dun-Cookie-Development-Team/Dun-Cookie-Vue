@@ -50,21 +50,14 @@ export default {
       let versionUpdate = await PlatformHelper.Storage.getLocalStorage('version-update');
       // if (!versionUpdate || CURRENT_VERSION !== versionUpdate) {
 
-      let data = await ServerUtil.getVersionHistory();
-      this.updateInfo = data;
-      this.nextPageId = data.next_id;
+      this.loadData();
       this.showUpdateInfo = true;
       PlatformHelper.Storage.saveLocalStorage('version-update', CURRENT_VERSION);
       // }
     },
     //懒加载请求数据
-    async loadData(nextPageId) {
-      let data;
-      if (nextPageId == undefined) {
-        data = await ServerUtil.getVersionHistory();
-      } else {
-        data = await ServerUtil.getVersionHistory('plugin', nextPageId);
-      }
+    async loadData() {
+      const data = await ServerUtil.getVersionHistory('plugin', this.nextPageId);
       if (data) {
         //将懒加载数据加进updateInfoList
         if (Array.isArray(data.list)) {
@@ -78,22 +71,20 @@ export default {
 
     // 设置 IntersectionObserver 监听滚动到达底部加载下一页数据
     setupIntersectionObserver() {
+      if (!this.$refs.observeContainer) {
+        setTimeout(() => this.setupIntersectionObserver(), 500);
+        return;
+      }
       const observer = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting && !this.loading && this.nextPageId != null) {
-            this.loadData(this.nextPageId); // 滚动到底部时加载更多数据
+            this.loadData(); // 滚动到底部时加载更多数据
           }
         },
-        { root: this.$refs.observeContainer, threshold: 0 }
+        { root: this.$refs.observeContainer }
       );
-
       // 观察底部元素
-      const bottomChecker = this.$refs.bottomChecker;
-      if (bottomChecker) {
-        observer.observe(bottomChecker);
-      } else {
-        console.error('未找到底部元素');
-      }
+      observer.observe(this.$refs.bottomChecker);
     },
   },
 };
