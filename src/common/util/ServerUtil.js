@@ -169,8 +169,8 @@ export default class ServerUtil {
         fetchTime: Date.now(),
       };
     } catch (e) {
-      console.error(e);
-      console.error('请求服务器数据失败');
+      DebugUtil.debugLogError(e);
+      DebugUtil.debugLogError('请求服务器数据失败');
       return;
     }
     await PlatformHelper.Storage.saveLocalStorage('serverDataSourceInfo', serverDataSourceInfo);
@@ -195,7 +195,7 @@ export default class ServerUtil {
         AvailableDataSourceMeta.preset = await this.getAvailableDataSourcePreset();
       }
     } catch (e) {
-      console.log(e);
+      DebugUtil.debugLogError(e);
     }
   }
 
@@ -329,7 +329,7 @@ export default class ServerUtil {
     try {
       data = await ServerUtil.requestCdnServerApi('cdn/operate/announcement/list');
     } catch (e) {
-      console.log(e);
+      DebugUtil.debugLogError(e);
     }
     if (!data) {
       const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
@@ -394,7 +394,7 @@ export default class ServerUtil {
     try {
       data = await ServerUtil.requestCdnServerApi('cdn/operate/video/list');
     } catch (e) {
-      console.log(e);
+      DebugUtil.debugLogError(e);
     }
     if (!data) {
       const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
@@ -413,7 +413,7 @@ export default class ServerUtil {
     try {
       data = await ServerUtil.requestCdnServerApi('cdn/operate/resource/get');
     } catch (e) {
-      console.log(e);
+      DebugUtil.debugLogError(e);
     }
     if (!data) {
       const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
@@ -459,7 +459,7 @@ export default class ServerUtil {
         checkVersionUpdate = false;
         return response.text();
       }
-      console.log(error);
+      DebugUtil.debugLogError(error);
     });
     if (!data) {
       const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
@@ -492,7 +492,7 @@ export default class ServerUtil {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     const param = pageId === undefined ? `?platform=${platform}` : `?platform=${platform}&first_id=${pageId}`;
     let data = await ServerUtil.requestCdnServerApi('/cdn/operate/version/all' + param).catch((error) => {
-      console.log('获取在线版本信息失败 : \n' + error);
+      DebugUtil.debugLogError('获取在线版本信息失败 : \n' + error);
     });
     return data;
   }

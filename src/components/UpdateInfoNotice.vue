@@ -50,12 +50,11 @@ export default {
   methods: {
     async init() {
       let versionUpdate = await PlatformHelper.Storage.getLocalStorage('version-update');
-      // if (!versionUpdate || CURRENT_VERSION !== versionUpdate) {
-
-      this.loadData();
-      this.showUpdateInfo = true;
-      PlatformHelper.Storage.saveLocalStorage('version-update', CURRENT_VERSION);
-      // }
+      if (!versionUpdate || CURRENT_VERSION !== versionUpdate) {
+        this.loadData();
+        this.showUpdateInfo = true;
+        PlatformHelper.Storage.saveLocalStorage('version-update', CURRENT_VERSION);
+      }
     },
     //懒加载请求数据
     async loadData() {
@@ -66,7 +65,7 @@ export default {
         if (Array.isArray(data.list)) {
           this.updateInfo.list = [...this.updateInfo.list, ...data.list];
         } else {
-          console.error('data.list 不是数组', data.list);
+          DebugUtil.debugLogError('json结构出错,list不是数组: ' + data.list);
         }
         this.nextPageId = data.next_id;
       }
