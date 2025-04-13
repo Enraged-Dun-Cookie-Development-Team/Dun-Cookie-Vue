@@ -27,7 +27,7 @@
       <el-divider />
       <el-card class="box-card description">
         <div slot="header" class="clearfix">
-          <span>{{ updateInfo.title }}</span>
+          <span>小刻食堂翻新啦-{{ currentVersion }}</span>
         </div>
         <div v-html="updateInfo.description"></div>
       </el-card>
