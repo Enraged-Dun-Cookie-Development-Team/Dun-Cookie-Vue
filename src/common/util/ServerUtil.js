@@ -488,7 +488,7 @@ export default class ServerUtil {
    * @param platform {string} 要获取的端平台 `desktop`、`pocket`、`plugin` 无指定则插件端
    * @param pageId {string} 要获取的页面id，首页没有
    */
-  static async getVersionHistory(platform = 'plugin', pageId = undefined) {
+  static async getVersionHistory(pageId = undefined, platform = 'plugin') {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     const param = pageId === undefined ? `?platform=${platform}` : `?platform=${platform}&first_id=${pageId}`;
     let data = await ServerUtil.requestCdnServerApi('/cdn/operate/version/all' + param).catch((error) => {
