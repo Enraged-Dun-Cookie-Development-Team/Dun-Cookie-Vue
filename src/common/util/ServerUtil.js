@@ -439,7 +439,7 @@ export default class ServerUtil {
    * @param targetVersion {string} 要获取的目标版本信息，不提供时获取最新版
    * @param platform {string} 要获取的端平台 `desktop`、`pocket`、`plugin`
    */
-  static async getVersionInfo(checkVersionUpdate = true, targetVersion = undefined, platform = 'plugin') {
+  static async getVersionInfo(checkVersionUpdate = true, platform = 'plugin', targetVersion) {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
 
     const arg = targetVersion ? `${platform}&version=${targetVersion}` : platform;
@@ -488,7 +488,7 @@ export default class ServerUtil {
    * @param platform {string} 要获取的端平台 `desktop`、`pocket`、`plugin` 无指定则插件端
    * @param pageId {string} 要获取的页面id，首页没有
    */
-  static async getVersionHistory(pageId = undefined, platform = 'plugin') {
+  static async getVersionHistory(platform = 'plugin', pageId) {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
     const param = pageId === undefined ? `?platform=${platform}` : `?platform=${platform}&first_id=${pageId}`;
     let data = await ServerUtil.requestCdnServerApi('/cdn/operate/version/all' + param).catch((error) => {
