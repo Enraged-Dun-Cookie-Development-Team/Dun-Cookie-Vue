@@ -59,7 +59,7 @@ export default {
     //懒加载请求数据
     async loadData() {
       this.loading = true;
-      const data = await ServerUtil.getVersionHistory('plugin', this.nextPageId);
+      const data = await ServerUtil.getVersionHistory(this.nextPageId);
       if (data) {
         //将懒加载数据加进updateInfoList
         if (Array.isArray(data.list)) {
