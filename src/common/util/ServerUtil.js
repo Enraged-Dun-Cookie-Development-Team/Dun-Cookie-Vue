@@ -169,8 +169,8 @@ export default class ServerUtil {
         fetchTime: Date.now(),
       };
     } catch (e) {
-      console.error(e);
-      console.error('请求服务器数据失败');
+      DebugUtil.debugLogError(e);
+      DebugUtil.debugLogError('请求服务器数据失败');
       return;
     }
     await PlatformHelper.Storage.saveLocalStorage('serverDataSourceInfo', serverDataSourceInfo);
@@ -195,7 +195,7 @@ export default class ServerUtil {
         AvailableDataSourceMeta.preset = await this.getAvailableDataSourcePreset();
       }
     } catch (e) {
-      console.log(e);
+      DebugUtil.debugLogError(e);
     }
   }
 
@@ -329,7 +329,7 @@ export default class ServerUtil {
     try {
       data = await ServerUtil.requestCdnServerApi('cdn/operate/announcement/list');
     } catch (e) {
-      console.log(e);
+      DebugUtil.debugLogError(e);
     }
     if (!data) {
       const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
@@ -394,7 +394,7 @@ export default class ServerUtil {
     try {
       data = await ServerUtil.requestCdnServerApi('cdn/operate/video/list');
     } catch (e) {
-      console.log(e);
+      DebugUtil.debugLogError(e);
     }
     if (!data) {
       const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
@@ -413,7 +413,7 @@ export default class ServerUtil {
     try {
       data = await ServerUtil.requestCdnServerApi('cdn/operate/resource/get');
     } catch (e) {
-      console.log(e);
+      DebugUtil.debugLogError(e);
     }
     if (!data) {
       const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
@@ -437,12 +437,14 @@ export default class ServerUtil {
   /**
    * @param checkVersionUpdate {boolean} 是否检测版本更新并推送
    * @param targetVersion {string} 要获取的目标版本信息，不提供时获取最新版
+   * @param platform {string} 要获取的端平台 `desktop`、`pocket`、`plugin`
    */
-  static async getVersionInfo(checkVersionUpdate = true, targetVersion = undefined) {
+  static async getVersionInfo(checkVersionUpdate = true, targetVersion, platform = 'plugin') {
     await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
-    let data;
-    const arg = targetVersion ? `?version=${targetVersion}` : '';
-    data = await ServerUtil.requestApi('GET', 'canteen/operate/version/plugin' + arg).catch((error) => {
+
+    const arg = targetVersion ? `${platform}&version=${targetVersion}` : platform;
+
+    let data = await ServerUtil.requestCdnServerApi(`/cdn/operate/version/fetch?platform=${arg}`).catch((error) => {
       // 断网导致没有response和服务器响应5xx的情况不检测是否存在版本更新
       if (!error.response) {
         checkVersionUpdate = false;
@@ -457,7 +459,7 @@ export default class ServerUtil {
         checkVersionUpdate = false;
         return response.text();
       }
-      console.log(error);
+      DebugUtil.debugLogError(error);
     });
     if (!data) {
       const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
@@ -470,6 +472,7 @@ export default class ServerUtil {
     }
     if (checkVersionUpdate) {
       if (Settings.JudgmentVersion(data.version, CURRENT_VERSION) && Settings.dun.enableNotice) {
+        //页面右下角弹窗
         NotificationUtil.SendNotice(
           '小刻食堂翻新啦！！',
           '快来使用新的小刻食堂噢！一定有很多好玩的新功能啦！！',
@@ -478,6 +481,19 @@ export default class ServerUtil {
         );
       }
     }
+    return data;
+  }
+
+  /**
+   * @param platform {string} 要获取的端平台 `desktop`、`pocket`、`plugin` 无指定则插件端
+   * @param pageId {string} 要获取的页面id，首页没有
+   */
+  static async getVersionHistory(pageId, platform = 'plugin') {
+    await new Promise((resolve) => Settings.doAfterInit(() => resolve()));
+    const param = pageId === undefined ? `?platform=${platform}` : `?platform=${platform}&first_id=${pageId}`;
+    let data = await ServerUtil.requestCdnServerApi('/cdn/operate/version/all' + param).catch((error) => {
+      DebugUtil.debugLogError('获取在线版本信息失败 : \n' + error);
+    });
     return data;
   }
 }
