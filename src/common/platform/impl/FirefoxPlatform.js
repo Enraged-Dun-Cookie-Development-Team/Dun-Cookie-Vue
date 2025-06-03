@@ -46,6 +46,21 @@ export default class FirefoxPlatform extends ChromeFirefoxCommonPlatform {
     return browser.storage.local.set(val);
   }
 
+  addMessageListener(id, type, listener) {
+    return browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+      const value = this.__handleReceiverMessage(id, type, message, listener);
+      if (value !== undefined) {
+        // 根据W3C规范，异步回复消息允许直接返回Promise
+        // 参考文档：https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onMessage
+        if (value.constructor === Promise) {
+          return value;
+        } else {
+          sendResponse(value);
+        }
+      }
+    });
+  }
+
   download(url, filename, saveAs) {
     const options = {
       url: url,

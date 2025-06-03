@@ -21,33 +21,33 @@ export const LOG_LEVEL = {
 /**
  * 当前日志等级
  */
-export const CURRENT_LOG_LEVEL = LOG_LEVEL.INFO;
+export let CURRENT_LOG_LEVEL = LOG_LEVEL.INFO;
 
 export class Logger {
   // region 控制台输出，方法后缀对应DevTools的日志级别，其中无后缀和Trace对应的都是Info级别，Error和Trace都会打印调用栈
 
   static log(...data) {
-    Logger.debugConsoleOutput(LOG_LEVEL.INFO, 'log', ...data);
+    Logger.consoleOutput(LOG_LEVEL.INFO, 'log', ...data);
   }
 
   static logLevel(level, ...data) {
-    Logger.debugConsoleOutput(level, 'log', ...data);
+    Logger.consoleOutput(level, 'log', ...data);
   }
 
   static logVerbose(level, ...data) {
-    Logger.debugConsoleOutput(level, 'debug', ...data);
+    Logger.consoleOutput(level, 'debug', ...data);
   }
 
   static logWarn(...data) {
-    Logger.debugConsoleOutput(LOG_LEVEL.WARN, 'warn', ...data);
+    Logger.consoleOutput(LOG_LEVEL.WARN, 'warn', ...data);
   }
 
   static logError(...data) {
-    Logger.debugConsoleOutput(LOG_LEVEL.ERROR, 'error', ...data);
+    Logger.consoleOutput(LOG_LEVEL.ERROR, 'error', ...data);
   }
 
   static logTrace(level, ...data) {
-    Logger.debugConsoleOutput(level, 'trace', ...data);
+    Logger.consoleOutput(level, 'trace', ...data);
   }
 
   // endregion
@@ -60,7 +60,7 @@ export class Logger {
    * @param info {string | any}
    * @param data {any}
    */
-  static debugConsoleOutput(level, type, info, ...data) {
+  static consoleOutput(level, type, info, ...data) {
     if (CURRENT_LOG_LEVEL >= level || level === 0) {
       // 为避免启用调试模式时控制台输出信息太多导致卡死，输出的调试信息超过限制时清除之前输出的调试信息
       if (debugLogCounter >= debugLogClearThreshold) {
@@ -76,10 +76,14 @@ export class Logger {
     }
   }
 
-  static setDebugLogClearThreshold(newThreshold) {
+  static setLogClearThreshold(newThreshold) {
     if (newThreshold > 10) {
       debugLogClearThreshold = newThreshold;
     }
+  }
+
+  static setLogLevel(newLevel) {
+    CURRENT_LOG_LEVEL = newLevel;
   }
 }
 

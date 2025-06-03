@@ -67,21 +67,6 @@ export default class ChromeFirefoxCommonPlatform extends BrowserPlatform {
       });
   }
 
-  addMessageListener(id, type, listener) {
-    return browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-      const value = this.__handleReceiverMessage(id, type, message, listener);
-      if (value !== undefined) {
-        // 根据W3C规范，异步回复消息应该直接返回Promise
-        // 参考文档：https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onMessage
-        if (value.constructor === Promise) {
-          return value;
-        } else {
-          sendResponse(value);
-        }
-      }
-    });
-  }
-
   async setPopup(url) {
     // 这个方法在firefox中应该是一个返回undefined的同步方法，好在await undefined是合法的所以这样写可以通用
     return await browser.action.setPopup({ popup: url });

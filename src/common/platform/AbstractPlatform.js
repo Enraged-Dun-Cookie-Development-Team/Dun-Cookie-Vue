@@ -398,10 +398,10 @@ export class AbstractPlatform {
    */
   __transformResponseMessage(type, response) {
     if (response === AbstractPlatform.__MESSAGE_WITHOUT_RESPONSE) {
-      Logger.logLevel(LOG_LEVEL.TRACE_HIGH, `response - ${type} - empty`);
+      Logger.logLevel(LOG_LEVEL.TRACE_HIGH, `sendMessage response - ${type} - empty`);
       return;
     }
-    Logger.logLevel(LOG_LEVEL.TRACE_MEDIUM, `response - ${type}`, response);
+    Logger.logLevel(LOG_LEVEL.TRACE_MEDIUM, `sendMessage response - ${type}`, response);
     return response;
   }
 }

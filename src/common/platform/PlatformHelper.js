@@ -133,9 +133,7 @@ export default class PlatformHelper {
 
 class MessageHelper {
   send(type, data) {
-    return currentPlatform.sendMessage(type, data).then((result) => {
-      Logger.logLevel(LOG_LEVEL.TRACE_MEDIUM, 'sendMessage response：', result);
-    });
+    return currentPlatform.sendMessage(type, data);
   }
 
   registerListener(id, type, listener) {
