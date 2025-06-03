@@ -140,7 +140,7 @@ export default class ServerUtil {
       }
       const unknownGroupsMap = {};
       for (const item of Object.values(unknownSourceMap)) {
-        Logger.logLevel(LOG_LEVEL.WARN, '服务器数据源缺少配置：', item);
+        Logger.logVerbose(LOG_LEVEL.WARN, '服务器数据源缺少配置：', item);
         if (!unknownGroupsMap[item.type]) {
           unknownGroupsMap[item.type] = {
             type: item.type,
