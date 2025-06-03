@@ -2,6 +2,8 @@
  * 这里放不方便分类的公共方法
  */
 
+import { Logger } from './Logger';
+
 /**
  * 递归比较对象
  *
@@ -117,14 +119,14 @@ function deepEquals(a, b) {
   } else if (typeof a === 'function') {
     return a === b;
   } else {
-    console.log('不支持的deepEquals类型：' + typeof a);
+    Logger.logWarn('不支持的deepEquals类型：' + typeof a);
     return false;
   }
 }
 
 function animateCSS(element, animation, callback) {
   let prefix = 'animate__';
-  new Promise((resolve, reject) => {
+  new Promise((resolve) => {
     const animationName = `${prefix}${animation}`;
     const node = document.querySelector(element);
     if (!node) {

@@ -2,30 +2,33 @@ import ChromePlatform from './impl/ChromePlatform';
 import FirefoxPlatform from './impl/FirefoxPlatform';
 import EdgePlatform from './impl/EdgePlatform';
 import UnknownPlatform from './impl/UnknownPlatform';
-import { DEBUG_LEVEL } from '../Constants';
+import { PLATFORM_CHROME, PLATFORM_EDGE, PLATFORM_FIREFOX, PLATFORM_UNKNOWN } from '../Constants';
 import { Http } from '@enraged-dun-cookie-development-team/common/request';
-import DebugUtil from '../util/DebugUtil';
+import { LOG_LEVEL, Logger } from '../util/Logger';
+import { PlatformType } from './PlatformType';
+import { Base64 } from 'js-base64';
 
-// TODO 还有一些以注释形式存在于其它文件中的chrome调用，之后记得处理
 /**
  * @type AbstractPlatform
  */
 let currentPlatform;
-let head = navigator.userAgent;
-if (head.indexOf('Edg') > 1) {
-  DebugUtil.debugLog(0, '当前平台：Edge');
-  // Edge的userAgent即有Chrome又有Edg，因此先判断Edg
-  currentPlatform = new EdgePlatform();
-} else if (head.indexOf('Chrome') > 1) {
-  DebugUtil.debugLog(0, '当前平台：Chrome');
-  currentPlatform = new ChromePlatform();
-} else if (head.indexOf('Firefox') > 1) {
-  DebugUtil.debugLog(0, '当前平台：Firefox');
-  currentPlatform = new FirefoxPlatform();
-}
-if (currentPlatform === undefined) {
-  DebugUtil.debugLog(0, '当前平台：Unknown');
-  currentPlatform = new UnknownPlatform();
+switch (PlatformType) {
+  case PLATFORM_EDGE: {
+    currentPlatform = new EdgePlatform();
+    break;
+  }
+  case PLATFORM_CHROME: {
+    currentPlatform = new ChromePlatform();
+    break;
+  }
+  case PLATFORM_FIREFOX: {
+    currentPlatform = new FirefoxPlatform();
+    break;
+  }
+  case PLATFORM_UNKNOWN: {
+    currentPlatform = new UnknownPlatform();
+    break;
+  }
 }
 
 /**
@@ -130,13 +133,7 @@ export default class PlatformHelper {
 
 class MessageHelper {
   send(type, data) {
-    const promise = currentPlatform.sendMessage(type, data);
-    if (DEBUG_LEVEL >= 7) {
-      promise.then((result) => {
-        DebugUtil.debugLog(7, 'sendMessage response：', result);
-      });
-    }
-    return promise;
+    return currentPlatform.sendMessage(type, data);
   }
 
   registerListener(id, type, listener) {
@@ -151,6 +148,14 @@ class StorageHelper {
 
   saveLocalStorage(name, data) {
     return currentPlatform.saveLocalStorage(name, data);
+  }
+
+  removeLocalStorage(keys) {
+    return currentPlatform.removeLocalStorage(keys);
+  }
+
+  clearLocalStorage() {
+    return currentPlatform.clearLocalStorage();
   }
 }
 
@@ -215,53 +220,27 @@ class NotificationHelper {
    * 一般使用create即可，只有需要显示特殊图标的时候才用这个方法
    */
   async createWithSpecialIcon(id, iconUrl, title, message, imageUrl) {
-    let objectUrl;
-    let canvas;
-    if (typeof imageUrl === 'string' && imageUrl.startsWith('http')) {
+    const transformImageUrl = typeof imageUrl === 'string' && imageUrl.startsWith('http');
+    if (transformImageUrl) {
       try {
         const blob = await Http.get(imageUrl, { responseTransformer: (r) => r.blob() });
-        canvas = document.createElement('canvas');
-        canvas.height = 200;
-        canvas.width = 400;
+        const canvas = new OffscreenCanvas(400, 200);
         const ctx = canvas.getContext('2d');
         const bitmap = await createImageBitmap(blob, { resizeWidth: canvas.width });
         ctx.drawImage(bitmap, 0, 0);
         bitmap.close();
-        /**
-         * @type {unknown}
-         */
-        const newBlob = await new Promise((r) => canvas.toBlob(r));
-        objectUrl = URL.createObjectURL(newBlob);
-        DebugUtil.debugConsoleOutput(
-          0,
-          'debug',
-          '%c 推送图片 ',
-          'color: #eee; background: #e5a335',
-          `成功创建推送图片`
-        );
+        const newBlob = await canvas.convertToBlob({
+          type: 'image/png',
+          quality: 0.5,
+        });
+        imageUrl = 'data:image/png;base64,' + Base64.fromUint8Array(new Uint8Array(await newBlob.arrayBuffer()));
+        Logger.logVerbose(LOG_LEVEL.INFO, '%c 推送图片 ', 'color: #eee; background: #e5a335', `成功创建推送图片`);
       } catch (e) {
-        DebugUtil.debugConsoleOutput(
-          0,
-          'error',
-          '%c 推送图片 ',
-          'color: #eee; background: #e53935',
-          `创建推送图片报错：`,
-          e
-        );
-        objectUrl = undefined;
+        Logger.logError('%c 推送图片 ', 'color: #eee; background: #e53935', `创建推送图片报错：`, e);
         imageUrl = undefined;
       }
     }
-    return await currentPlatform
-      .createNotifications(id, iconUrl, title, message, objectUrl || imageUrl)
-      .finally((_) => {
-        if (objectUrl) {
-          URL.revokeObjectURL(objectUrl);
-        }
-        if (canvas) {
-          canvas.remove();
-        }
-      });
+    return await currentPlatform.createNotifications(id, iconUrl, title, message, imageUrl);
   }
 
   addClickListener(listener) {
@@ -279,8 +258,8 @@ class NotificationHelper {
 class WindowsHelper {
   create(url, type, width, height, state) {
     return currentPlatform.createWindow(url, type, width, height, state).catch((err) => {
-      console.warn('创建窗口失败！');
-      console.error(err);
+      Logger.logWarn('创建窗口失败！');
+      Logger.logError(err);
     });
   }
 
@@ -313,13 +292,28 @@ class DownloadsHelper {
 
 class LifecycleHelper {
   addInstalledListener(listener) {
-    return currentPlatform.addInstallListener(listener);
+    return currentPlatform.addInstalledListener(listener);
   }
 }
 
 class AlarmHelper {
   create(name, alarmInfo) {
     return currentPlatform.createAlarm(name, alarmInfo);
+  }
+
+  async createIfNotExists(name, alarmInfo) {
+    const alarm = await currentPlatform.getAlarm(name);
+    if (!alarm) {
+      return currentPlatform.createAlarm(name, alarmInfo);
+    }
+  }
+
+  get(name) {
+    return currentPlatform.getAlarm(name);
+  }
+
+  clear(name) {
+    return currentPlatform.clearAlarm(name);
   }
 
   clearAll() {
@@ -332,13 +326,8 @@ class AlarmHelper {
 }
 
 class HttpHelper {
-  sendGet(url, options = {}) {
-    let timeout = options.timeout || 10000;
-    return currentPlatform.sendHttpRequest(url, 'GET', timeout);
-  }
-
-  onBeforeSendHeaders(listener, filter, extraInfoSpec) {
-    return currentPlatform.onBeforeSendHeaders(listener, filter, extraInfoSpec);
+  updateSessionRules(options) {
+    return currentPlatform.declarativeNetRequestUpdateSessionRules(options);
   }
 }
 

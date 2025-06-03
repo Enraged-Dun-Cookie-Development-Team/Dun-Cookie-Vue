@@ -1,5 +1,5 @@
 import { FetchConfig } from './FetchConfig';
-import DebugUtil from '../../common/util/DebugUtil';
+import { Logger } from '../../common/util/Logger';
 
 /**
  * 蹲饼器接口
@@ -56,7 +56,7 @@ export class AbstractCookieFetcher {
         this.maxNextCheckAvailableTime,
         this.nextCheckAvailableTimeInterval * this.nextCheckAvailableTimeFactory
       );
-      DebugUtil.debugLog(0, `[${this.constructor.name}]暂时不可用，下次重试：` + this.nextCheckAvailableTime);
+      Logger.log(`[${this.constructor.name}]暂时不可用，下次重试：` + this.nextCheckAvailableTime);
     }
     return false;
   }

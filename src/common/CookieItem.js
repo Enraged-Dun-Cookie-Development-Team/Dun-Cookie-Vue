@@ -44,6 +44,7 @@ class CookieItem {
   coverImage;
   /**
    * 图片列表，对于多图的饼可以把图片全部显示出来
+   * @type {string[]}
    */
   imageList;
   /**
@@ -52,6 +53,7 @@ class CookieItem {
   isTop;
   /**
    * 转发的内容
+   * @type {RetweetedInfo}
    */
   retweeted;
   /**
@@ -153,10 +155,22 @@ class RetweetedInfo {
    * 被转发的内容
    */
   content;
+  /**
+   * 封面图，用于在页面/通知上显示的饼的图片
+   * @type {string}
+   */
+  coverImage;
+  /**
+   * 图片列表，对于多图的饼可以把图片全部显示出来
+   * @type {string[]}
+   */
+  imageList;
 
-  constructor(name, content) {
+  constructor(name, content, imageList = undefined) {
     this.name = name;
     this.content = content;
+    this.imageList = imageList && Array.isArray(imageList) && imageList.length > 0 ? imageList : undefined;
+    this.coverImage = this.imageList ? this.imageList[0] : undefined;
   }
 }
 

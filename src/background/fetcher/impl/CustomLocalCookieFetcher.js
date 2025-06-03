@@ -3,7 +3,8 @@ import { FetchController, FetchControllerConfig } from '@enraged-dun-cookie-deve
 import { DefaultLogger } from '@enraged-dun-cookie-development-team/common/logger';
 import PlatformHelper from '../../../common/platform/PlatformHelper';
 import { CookieHandler } from '../../CookieHandler';
-import DebugUtil from '../../../common/util/DebugUtil';
+import { Logger } from '../../../common/util/Logger';
+
 /* IFTRUE_feature__local_fetch */
 import { registerDefaultDataSourceTypes } from '@enraged-dun-cookie-development-team/cookie-fetcher';
 
@@ -11,33 +12,6 @@ registerDefaultDataSourceTypes();
 /* FITRUE_feature__local_fetch */
 
 const pad = (num) => (num > 9 ? `${num}` : `0${num}`);
-
-/**
- *
- * @param fetchConfig {FetchConfig}
- * @return {FetchControllerConfig}
- */
-function _buildConfig(fetchConfig) {
-  const config = {
-    default_interval: fetchConfig.globalInterval * 1000,
-    groups: [],
-  };
-  const customGroups = {};
-  const commonGroupConfig = {};
-  if (fetchConfig.lowFrequencyTimeRange && fetchConfig.lowFrequencyMultiple > 1) {
-    this.updateGroupIntervalByTimeRange(config.default_interval, fetchConfig, commonGroupConfig);
-  }
-  for (const { type, dataId } of fetchConfig.enableDataSourceList) {
-    if (!customGroups[type]) customGroups[type] = { type: type, datasource: [], ...commonGroupConfig };
-    const source = {};
-    if (this.dataIdKeyInConfig[type]) {
-      source[this.dataIdKeyInConfig[type]] = dataId;
-    }
-    customGroups[type].datasource.push(source);
-  }
-  config.groups.push(...Object.values(customGroups).filter((group) => group.datasource.length > 0));
-  return config;
-}
 
 export class CustomLocalCookieFetcher extends AbstractCookieFetcher {
   dataIdKeyInConfig = {
@@ -90,7 +64,7 @@ export class CustomLocalCookieFetcher extends AbstractCookieFetcher {
 
   startWithFetcherControllerConfig(fetcherControllerConfig, fetchConfig) {
     FetchController.validateConfig(fetcherControllerConfig);
-    DebugUtil.debugLog(0, '使用本地蹲饼配置：', fetcherControllerConfig);
+    Logger.log('使用本地蹲饼配置：', fetcherControllerConfig);
     this.fetchController = FetchController.create(
       fetcherControllerConfig,
       (fetchData) => {
@@ -98,7 +72,7 @@ export class CustomLocalCookieFetcher extends AbstractCookieFetcher {
           void CookieHandler.handleLocal(fetchConfig.id, fetchData);
         } else {
           this.failCount++;
-          console.log(fetchData.error);
+          Logger.logError(fetchData.error);
         }
       },
       DefaultLogger,
@@ -119,7 +93,7 @@ export class CustomLocalCookieFetcher extends AbstractCookieFetcher {
 
   async start(fetchConfig) {
     if (this.runningFlag) return;
-    const config = _buildConfig(fetchConfig);
+    const config = this._buildConfig(fetchConfig);
     this.startWithFetcherControllerConfig(config, fetchConfig);
   }
 
@@ -131,16 +105,45 @@ export class CustomLocalCookieFetcher extends AbstractCookieFetcher {
 
   async _checkAvailable(fetchConfig) {
     if (fetchConfig) {
-      const config = _buildConfig(fetchConfig);
+      const config = this._buildConfig(fetchConfig);
       try {
         FetchController.validateConfig(config);
       } catch (e) {
-        console.log(e);
+        Logger.logError(e);
         return false;
       }
     }
     // 尝试访问百度确认网络连接正常
+    // TODO 也许这里应该换一个专门测试的地址，不过百度也挺好用的就先用着
     await fetch('https://www.baidu.com/', { mode: 'no-cors' });
     return true;
+  }
+
+  /**
+   *
+   * @param fetchConfig {FetchConfig}
+   * @param baseConfig {FetchConfig}
+   * @return {FetchControllerConfig}
+   */
+  _buildConfig(fetchConfig, baseConfig) {
+    const config = baseConfig ?? {
+      default_interval: fetchConfig.globalInterval * 1000,
+      groups: [],
+    };
+    const customGroups = {};
+    const commonGroupConfig = {};
+    if (fetchConfig.lowFrequencyTimeRange && fetchConfig.lowFrequencyMultiple > 1) {
+      this.updateGroupIntervalByTimeRange(config.default_interval, fetchConfig, commonGroupConfig);
+    }
+    for (const { type, dataId } of fetchConfig.enableDataSourceList) {
+      if (!customGroups[type]) customGroups[type] = { type: type, datasource: [], ...commonGroupConfig };
+      const source = {};
+      if (this.dataIdKeyInConfig[type]) {
+        source[this.dataIdKeyInConfig[type]] = dataId;
+      }
+      customGroups[type].datasource.push(source);
+    }
+    config.groups.push(...Object.values(customGroups).filter((group) => group.datasource.length > 0));
+    return config;
   }
 }

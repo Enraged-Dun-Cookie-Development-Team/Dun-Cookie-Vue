@@ -1,7 +1,8 @@
 import { CustomLocalCookieFetcher } from './CustomLocalCookieFetcher';
 import ServerUtil from '../../../common/util/ServerUtil';
 import { FetchController, FetchControllerConfig } from '@enraged-dun-cookie-development-team/cookie-fetcher-core';
-import DebugUtil from '../../../common/util/DebugUtil';
+import { LOG_LEVEL, Logger } from '../../../common/util/Logger';
+
 /* IFTRUE_feature__local_fetch */
 import { registerDefaultDataSourceTypes } from '@enraged-dun-cookie-development-team/cookie-fetcher';
 
@@ -40,7 +41,7 @@ async function _buildConfig(fetchConfig, serverInfo) {
     });
   }
   if (Object.keys(enableDataSourceList).length > 0) {
-    DebugUtil.debugLog(0, '未知数据源：', Object.keys(enableDataSourceList));
+    Logger.log('未知数据源：', Object.keys(enableDataSourceList));
   }
 
   config.default_interval = defaultInterval;
@@ -62,8 +63,12 @@ export class FallbackLocalCookieFetcher extends CustomLocalCookieFetcher {
     if (!serverInfo) {
       throw new Error('服务器信息不可用');
     }
-    const config = this._buildConfig(fetchConfig, serverInfo);
-    DebugUtil.debugLog(1, '本地蹲饼配置参考服务器配置：', serverInfo?.allConfig);
+    let serverConfig = serverInfo.allConfig;
+    if (serverConfig) {
+      serverConfig = JSON.parse(JSON.stringify(serverConfig));
+    }
+    const config = this._buildConfig(fetchConfig, serverConfig);
+    Logger.logLevel(LOG_LEVEL.WARN, '本地蹲饼配置参考服务器配置：', serverConfig);
     this.startWithFetcherControllerConfig(config, fetchConfig);
   }
 
@@ -82,7 +87,7 @@ export class FallbackLocalCookieFetcher extends CustomLocalCookieFetcher {
     try {
       FetchController.validateConfig(config);
     } catch (e) {
-      console.log(e);
+      Logger.logError(e);
       return false;
     }
     return super._checkAvailable(null);

@@ -1,33 +1,49 @@
-import { AbstractPlatform, RequestError } from '../AbstractPlatform';
+import { AbstractPlatform } from '../AbstractPlatform';
 import $ from 'jquery';
 import { CURRENT_VERSION, TOOL_QR_URL } from '../../Constants';
 import QRCode from 'qrcode';
 import html2canvas from 'html2canvas';
+import { Logger } from '../../util/Logger';
 
 const IGNORE_MESSAGE_ERROR_1 = 'Could not establish connection. Receiving end does not exist.';
 const IGNORE_MESSAGE_ERROR_2 = 'The message port closed before a response was received.';
 
-let _isBackground;
 let _isMobile;
+let _isBackground;
+
+const browserTarget = process.env.VUE_APP_BROWSER_TARGET;
+switch (browserTarget) {
+  case 'chrome': {
+    _isBackground = typeof globalThis === 'object' && typeof globalThis.serviceWorker === 'object';
+    break;
+  }
+  case 'firefox': {
+    _isBackground =
+      typeof globalThis === 'object' &&
+      typeof globalThis.window === 'object' &&
+      window.document?.URL?.includes('background');
+    break;
+  }
+  default: {
+    const errMsg = `无效的浏览器目标：${browserTarget}，这很可能是编译脚本有问题！插件已停止运行！`;
+    for (let i = 0; i < 5; i++) {
+      Logger.logError(errMsg);
+    }
+    throw new Error(errMsg);
+  }
+}
+
+Logger.log(`Current isBackground: ${_isBackground}`);
 
 const imageCache = {};
 const qrcodeCache = {};
 
-const CORS_AVAILABLE_DOMAINS = { 'penguin-stats.io': true, 'penguin-stats.cn': true };
-// 正常浏览器在给权限后跨域视为basic请求 无视cors相关设定，脑子有毛病的QQ浏览器在mode: no-cors跨域时直接用CORB策略拒绝读取响应(正常浏览器好像只会在contentScript里有这种设定)
-// 事实上正常浏览器和QQ浏览器在加权限后mode: no-cors跨域的Response.type都是basic，但是QQ浏览器就是不让你读取 诶就是玩
-const ALWAYS_ENABLE_CORS = typeof navigator != 'undefined' && navigator.userAgent.includes('QQBrowser');
-
 /**
- * 浏览器平台，放置与具体浏览器无关的通用逻辑
+ * 浏览器平台，放置与具体浏览器无关的通用逻辑，该文件不应当调用任何扩展API
  */
 export default class BrowserPlatform extends AbstractPlatform {
   constructor() {
     super();
-    // 这部分放在类里面的原因是放在外面会被意外执行导致报错
-    // 判断当前url中是否包含background(已知的其它方法都是Promise，都不能保证在isBackground被使用之前完成判断)
-    _isBackground = window.document.URL.indexOf('background') !== -1;
-    console.log(`Current isBackground: ${_isBackground}`);
 
     const head = navigator.userAgent;
     _isMobile = head.indexOf('Android') > 1 || head.indexOf('iPhone') > 1;
@@ -230,51 +246,6 @@ width: auto;">转发自 @${dataItem.retweeted.name}:<br/><span>${dataItem.retwee
       qrcodeCache[text] = canvas;
       return canvas;
     });
-  }
-
-  sendHttpRequest(url, method, timeout) {
-    if (typeof url === 'string') {
-      url = new URL(url);
-    }
-    /**
-     * @type {RequestInit}
-     */
-    const options = {
-      method: method,
-      mode: ALWAYS_ENABLE_CORS || CORS_AVAILABLE_DOMAINS[url.host] ? 'cors' : 'no-cors',
-    };
-    let timeoutId = 0;
-    if (timeout && timeout > 0) {
-      const controller = new AbortController();
-      options.signal = controller.signal;
-      timeoutId = setTimeout(() => {
-        controller.abort();
-      }, timeout);
-    }
-    return fetch(url, options)
-      .then((response) => {
-        if (response.type === 'opaque') {
-          throw new RequestError('获取响应失败，可能是插件权限中未允许访问目标网站：' + url.origin, response);
-        }
-        if (!response.ok) {
-          throw new RequestError('获取响应失败，可能是临时网络波动，如果长时间失败请联系开发者', response);
-        }
-        return response.text();
-      })
-      .catch((err) => {
-        if (err instanceof RequestError) {
-          throw err;
-        }
-        if (err.name === 'AbortError') {
-          throw new RequestError(`web request timeout(${timeout}ms)`);
-        }
-        throw new RequestError(`请求时发生异常：${String(err)}`, undefined, err);
-      })
-      .finally(() => {
-        if (timeoutId > 0) {
-          clearTimeout(timeoutId);
-        }
-      });
   }
 
   getHtmlParser() {

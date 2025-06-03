@@ -9,19 +9,28 @@ import { WeiboDataSource } from './fetcher/impl/local/WeiboDataSource';
 import { NeteaseCloudMusicDataSource } from './fetcher/impl/local/NeteaseCloudMusicDataSource';
 import { GameBulletinListDataSource } from './fetcher/impl/local/GameBulletinListDataSource';
 import { MonsterSirenDataSource } from './fetcher/impl/local/MonsterSirenDataSource';
-import { ArknightsOfficialWebDataSource } from './fetcher/impl/local/ArknightsOfficialWebDataSource';
 import { TerraHistoricusDataSource } from './fetcher/impl/local/TerraHistoricusDataSource';
 import AvailableDataSourceMeta from '../common/sync/AvailableDataSourceMeta';
 import { CookieItem } from '../common/CookieItem';
 import CardList from '../common/sync/CardList';
 import ServerUtil from '../common/util/ServerUtil';
-import { registerUrlToAddReferer } from './request_interceptor';
+import { Logger } from '../common/util/Logger';
 
 /**
  * 最新推送的通知，用于避免不同平台的饼重复通知，每一项由[数据源的dataName, 删除空白字符的饼内容]组成
  * @type {[string, string][]}
  */
 const lastCookiesCache = [];
+const lastCookiesCacheStorageKey = 'cache:lastCookies';
+PlatformHelper.Storage.getLocalStorage(lastCookiesCacheStorageKey).then((data) => {
+  if (typeof data === 'string' && data.length > 0) {
+    const cache = JSON.parse(data);
+    if (Array.isArray(cache) && cache.length > 0) {
+      lastCookiesCache.push(...cache);
+    }
+  }
+});
+
 /**
  * 只缓存指定数量的饼用于检测重复
  * @type {number}
@@ -79,10 +88,11 @@ function tryNotice(source, newCookieList) {
       lastCookiesCache.shift();
     }
   }
+  void PlatformHelper.Storage.saveLocalStorage(lastCookiesCacheStorageKey, JSON.stringify(lastCookiesCache));
 }
 
 const LocalCardMap = {};
-let LastServerList = [];
+const ServerCookieIdCache = new Set();
 
 /**
  * 蹲饼处理器
@@ -117,12 +127,10 @@ class CookieHandler {
                   return GameBulletinListDataSource.processData(it.rawContent, sourceId);
                 case 'arknights-website:monster-siren':
                   return MonsterSirenDataSource.processData(it.rawContent, sourceId);
-                case 'arknights-website:official-website':
-                  return ArknightsOfficialWebDataSource.processData(it.rawContent, sourceId);
                 case 'arknights-website:terra-historicus':
                   return TerraHistoricusDataSource.processData(it.rawContent, sourceId);
                 default:
-                  console.warn('未知数据源类型：' + it.dataSourceId.typeId);
+                  Logger.logWarn('不支持的数据源类型：' + it.dataSourceId.typeId);
               }
             }
           })
@@ -138,19 +146,11 @@ class CookieHandler {
 
     const newCookies = await transform(fetchData.result.newCookies, fetchData.source.idStr);
     const allCookies = await transform(fetchData.result.allCookies, fetchData.source.idStr);
-    allCookies
-      .filter((it) => it.dataSource.startsWith('weibo:'))
-      .forEach((it) => {
-        if (it.coverImage) registerUrlToAddReferer(it.coverImage, 'https://m.weibo.cn/');
-        if (it.imageList && it.imageList.length > 0) {
-          it.imageList.forEach((src) => registerUrlToAddReferer(src, 'https://m.weibo.cn/'));
-        }
-      });
 
     const hasOldCardList = LocalCardMap[fetchData.source.idStr] && LocalCardMap[fetchData.source.idStr].length > 0;
     if (hasOldCardList && newCookies.length > 0) {
       DunInfo.cookieCount += newCookies.length;
-      console.log('new cookies: ', newCookies);
+      Logger.log('new cookies: ', newCookies);
       await new Promise((r) => AvailableDataSourceMeta.doAfterInit(r));
       tryNotice(AvailableDataSourceMeta.getById(fetchData.source.idStr), newCookies);
     }
@@ -192,11 +192,10 @@ class CookieHandler {
 
     DunInfo.counter++;
     DunInfo.lastDunTime = Date.now();
-    if (LastServerList && LastServerList.length > 0) {
-      const map = Object.fromEntries(LastServerList.map((it) => [it.id, true]));
-      const newCookies = items.filter((it) => !map[it.id]);
+    if (ServerCookieIdCache.size > 0) {
+      const newCookies = items.filter((it) => !ServerCookieIdCache.has(it.id));
       DunInfo.cookieCount += newCookies.length;
-      console.log('new cookies: ', newCookies);
+      Logger.log('new cookies: ', newCookies);
       await new Promise((r) => AvailableDataSourceMeta.doAfterInit(r));
       const cookiesMap = newCookies.reduce((prev, current) => {
         if (!prev[current.dataSource]) {
@@ -209,19 +208,20 @@ class CookieHandler {
         try {
           tryNotice(AvailableDataSourceMeta.getById(entry[0]), entry[1]);
         } catch (e) {
-          console.log(e);
+          Logger.logError(e);
         }
       }
     }
 
-    LastServerList = items;
+    items.forEach((it) => ServerCookieIdCache.add(it.id));
+
     CardList.firstPageCookieList[configId] = items;
     CardList.sendUpdateAtNextTick();
     await PlatformHelper.Storage.saveLocalStorage('server_cookie_list_next_page_id', data.next_page_id || '');
   }
 
   static resetLastServerList() {
-    LastServerList = [];
+    ServerCookieIdCache.clear();
   }
 }
 

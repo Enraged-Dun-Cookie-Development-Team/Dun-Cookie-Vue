@@ -92,6 +92,7 @@
 import PenguinStatistics from '@/common/sync/PenguinStatisticsInfo';
 import PlatformHelper from '@/common/platform/PlatformHelper';
 import TimeUtil from '@/common/util/TimeUtil';
+import { LOG_LEVEL, Logger } from '../common/util/Logger';
 
 export default {
   name: 'Search',
@@ -197,7 +198,7 @@ export default {
       this.$set(item, 'matrix_per', matrix_per);
       this.$set(item, 'matrix_cost', matrix_cost);
       this.$set(item, 'loading', false);
-      console.log(item);
+      Logger.logVerbose(LOG_LEVEL.DEBUG, item);
     },
     changeSort() {
       if (this.sortType == 0) {
@@ -267,9 +268,9 @@ export default {
   }
 
   .search-area-penguin-name {
-    z-index: 10;
     position: absolute;
     bottom: 10px;
+    z-index: 10;
     display: flex;
     justify-content: space-around;
     width: 100%;

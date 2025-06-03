@@ -96,14 +96,14 @@
             v-for="(item, index) in quickJump.tool"
             :key="index"
             ref="dragEntityToolEl"
-            :content="item.nickname"
+            :content="item.localized_name.zh_CN"
             placement="top"
             class="drag-entity"
           >
             <el-button v-if="isEdit && item.isActivated" size="small">
               <img
                 class="btn-icon radius"
-                :src="item.avatar"
+                :src="item.icon_url"
                 draggable="false"
                 @mousedown="move($event, item, index, 'tool')"
               />
@@ -112,13 +112,17 @@
               </div>
             </el-button>
             <el-button v-else-if="isEdit && !item.isActivated" size="small" class="not-activated">
-              <img class="btn-icon radius" :src="item.avatar" />
+              <img class="btn-icon radius" :src="item.icon_url" />
               <div class="edit-icon" @click="addSource(item, index, quickJump.tool)">
                 <i class="el-icon-circle-plus"></i>
               </div>
             </el-button>
-            <el-button v-else-if="item.isActivated" size="small" @click="openUrl(item.jump_url)">
-              <img class="btn-icon radius" :src="item.avatar" />
+            <el-button
+              v-else-if="item.isActivated"
+              size="small"
+              @click="openUrl(item.links.find((i) => i.primary == true).url)"
+            >
+              <img class="btn-icon radius" :src="item.icon_url" />
             </el-button>
           </el-tooltip>
         </div>
@@ -228,6 +232,7 @@ import MenuIcon from '@/popup/MenuIcon';
 import {
   BUILD_BY,
   dayInfo,
+  toolDefaults,
   ENABLE_FEATURES,
   MESSAGE_GET_COUNTDOWN,
   PAGE_CEOBECANTEEN_WEB_ABOUT_US,
@@ -281,14 +286,7 @@ export default {
       isReload: false, // 是否正在刷新
       quickJump: {
         source: [],
-        tool: [
-          {
-            jump_url: '../time.html',
-            nickname: '小刻食堂计时器',
-            avatar: '/assets/image/icon.png',
-            radius: false,
-          },
-        ],
+        tool: [],
         url: [],
       },
       dayInfo: dayInfo,
@@ -330,8 +328,7 @@ export default {
     openUrl: PlatformHelper.Tabs.create,
     init() {
       this.isCustomBuild = ENABLE_FEATURES.length > 0;
-      this.initSourceJump();
-      this.initToolJump();
+      this.initQuickJump();
       DunInfo.doAfterUpdate((data) => {
         this.oldDunCount = data.counter;
       });
@@ -465,7 +462,6 @@ export default {
     getCountDownList() {
       PlatformHelper.Message.send(MESSAGE_GET_COUNTDOWN).then((data) => {
         this.countDownList = data.sort((x, y) => (new Date(x.stopTime) > new Date(y.stopTime) ? 1 : -1));
-        console.log(this.countDownList);
       });
     },
     // 设置数据
@@ -574,70 +570,38 @@ export default {
         document.onmouseup = null;
       };
     },
-
-    async initSourceJump() {
-      const sourceJump = await PlatformHelper.Storage.getLocalStorage('quickJump');
-      ServerUtil.getServerDataSourceInfo().then((data) => {
-        let list = [];
-        let newList = [];
-        if (sourceJump?.source && sourceJump.source?.length) {
-          for (const item of sourceJump.source) {
-            if (data.serverDataSourceList.find((p) => item.nickname === p.nickname)) list.push(item);
-          }
-          list = list.concat(data.serverDataSourceList);
-          newList = list.reduce((pre, cur) => {
-            let isRepeat = pre.findIndex((p) => p.nickname === cur.nickname);
-            if (isRepeat < 0) {
-              cur.isActivated = typeof cur.isActivated === 'boolean' ? cur.isActivated : true;
-              pre.push(cur);
+    async initQuickJump() {
+      const mergeFn = (newList, oldList, idField) => {
+        // 用旧的顺序和启用状态修正新列表
+        const oldMap = Object.fromEntries(oldList.map((it, order) => [it[idField], { ...it, order }]));
+        const newMap = Object.fromEntries(newList.map((it, order) => [it[idField], { ...it, order }]));
+        return newList
+          .map((it) => {
+            // 优先使用旧的启用状态，没有旧状态则设为true
+            it.isActivated = oldMap[it[idField]]?.isActivated ?? true;
+            return it;
+          })
+          .sort((a, b) => {
+            // 启用的在前未启用在后，启用状态相同的按原始列表的顺序排序，旧顺序优先
+            if (a.isActivated !== b.isActivated) {
+              return b.isActivated - a.isActivated;
             }
-            return pre;
-          }, []);
-        } else {
-          for (const item of data.serverDataSourceList) {
-            item.isActivated = true;
-          }
-          newList = data.serverDataSourceList;
-        }
-        newList.sort((a, b) => b.isActivated - a.isActivated);
-        this.quickJump.source = newList.filter((it) => !!it.jump_url);
-        // 更新缓存
-        this.saveQuickJump();
-      });
-    },
-
-    async initToolJump() {
-      const toolJump = await PlatformHelper.Storage.getLocalStorage('quickJump');
-      ServerUtil.getThirdPartyToolsInfo().then((data) => {
-        let list = [];
-        let newList = [];
-        if (toolJump?.tool && toolJump.tool?.length) {
-          for (const item of toolJump.tool) {
-            if (
-              data.toolList.find((p) => item.nickname === p.nickname) ||
-              this.quickJump.tool.find((p) => item.nickname === p.nickname)
-            )
-              list.push(item);
-          }
-          list = list.concat(data.toolList, this.quickJump.tool);
-          newList = list.reduce((pre, cur) => {
-            let isRepeat = pre.findIndex((p) => p.nickname === cur.nickname);
-            if (isRepeat < 0) {
-              cur.isActivated = typeof cur.isActivated === 'boolean' ? cur.isActivated : true;
-              pre.push(cur);
-            }
-            return pre;
-          }, []);
-        } else {
-          for (const item of data.toolList) {
-            item.isActivated = true;
-          }
-          newList = data.toolList;
-        }
-        newList.sort((a, b) => b.isActivated - a.isActivated);
-        this.quickJump.tool = newList;
-        // 更新缓存
-        this.saveQuickJump();
+            const orderA = oldMap[a[idField]]?.order ?? 1000 + newMap[a[idField]].order;
+            const orderB = oldMap[b[idField]]?.order ?? 1000 + newMap[b[idField]].order;
+            return orderA - orderB;
+          });
+      };
+      const newToolList = (await ServerUtil.getThirdPartyToolsInfo()).toolList;
+      const newSourceList = (await ServerUtil.getServerDataSourceInfo()).serverDataSourceList;
+      this.settings.doAfterInit((settings) => {
+        // 这里向新列表追加默认工具
+        const toolList = mergeFn([...newToolList, ...structuredClone(toolDefaults)], settings.quickJump.tool, 'id');
+        const sourceList = mergeFn(newSourceList, settings.quickJump.source, 'unique_id');
+        // 更新当前状态和设置
+        this.quickJump.tool = toolList;
+        this.quickJump.source = sourceList;
+        settings.quickJump = { tool: toolList, source: sourceList };
+        void settings.saveSettings();
       });
     },
 
@@ -685,7 +649,9 @@ export default {
     },
 
     saveQuickJump() {
-      PlatformHelper.Storage.saveLocalStorage('quickJump', this.quickJump).then();
+      Settings.quickJump.tool = this.quickJump.tool;
+      Settings.quickJump.source = this.quickJump.source;
+      Settings.saveSettings().then();
     },
 
     openSetting() {

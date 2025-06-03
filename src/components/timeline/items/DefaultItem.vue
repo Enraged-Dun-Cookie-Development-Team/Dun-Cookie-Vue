@@ -9,6 +9,24 @@
           转发自 @{{ item.retweeted.name }}:
           <br />
           <span v-html="item.retweeted.content"></span>
+          <el-row v-if="showImage && settings.display.showImage && item.retweeted.coverImage" class="margintb">
+            <div :class="{ 'show-all': expandImageArea }" class="img-area" @click="changeExpandImageArea()">
+              <div v-if="item.retweeted.imageList && item.retweeted.imageList.length > 1" class="multi-img">
+                <div v-for="(img, index) in item.retweeted.imageList" :key="img" class="multi-img-area">
+                  <img :ref="item.id + '_retweeted_' + index" v-lazy="img" class="img" />
+                  <span class="img-btn img-look-btn" @click.stop="ViewImg(item, img, item.id + '_' + index)">
+                    <i class="el-icon-view"></i>
+                  </span>
+                </div>
+              </div>
+              <div v-else class="one-img">
+                <img :ref="item.id + '_retweeted'" v-lazy="item.retweeted.coverImage" class="img" />
+                <span class="img-btn img-look-btn" @click.stop="ViewImg(item, item.retweeted.coverImage, item.id)">
+                  <i class="el-icon-view"></i>
+                </span>
+              </div>
+            </div>
+          </el-row>
         </div>
       </div>
     </el-row>
@@ -151,19 +169,18 @@ export default {
     cursor: pointer;
 
     .multi-img {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
+      display: grid;
       margin: auto;
       width: 100%;
       max-width: 700px;
-      flex-wrap: wrap;
-      flex-direction: row;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
 
       .multi-img-area {
         position: relative;
-        width: 33%;
-        max-width: 33%;
+        aspect-ratio: 1 / 1;
+        overflow: hidden;
+        border-radius: 10px;
       }
     }
 
@@ -190,7 +207,9 @@ export default {
 
     .img {
       width: 100%;
-      border-radius: 4px;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
     }
 
     // 图片操作按钮

@@ -30,30 +30,28 @@ export class WeiboDataSource {
               )
               .replace(/<br \/>/g, '\n')
         )
-        .jumpUrl(`https://weibo.com/${weiboId}`);
+        .jumpUrl(`https://weibo.com/${data.mblog.user.id}/${weiboId}`);
 
       switch (dynamicInfo.page_info?.type) {
         // 普通动态
         case 'search_top': {
           builder
-            .coverImage(dynamicInfo.original_pic ? dynamicInfo.original_pic.replace('https', 'http') : null)
+            .coverImage(dynamicInfo.original_pic ? dynamicInfo.original_pic : null)
             .imageList(dynamicInfo.pics?.map((x) => x.url));
           break;
         }
         // 视频动态
         case 'video': {
-          builder.coverImage(dynamicInfo.page_info.page_pic?.url?.replace('https', 'http')).imageList(null);
+          builder.coverImage(dynamicInfo.page_info.page_pic?.url).imageList(null);
           break;
         }
         // 直播动态
         case 'live': {
-          builder.coverImage(dynamicInfo.page_info.page_pic?.url?.replace('https', 'http')).imageList(null);
+          builder.coverImage(dynamicInfo.page_info.page_pic?.url).imageList(null);
           break;
         }
         default: {
-          builder
-            .coverImage(dynamicInfo.original_pic?.replace('https', 'http'))
-            .imageList(dynamicInfo.pics?.map((x) => x.url));
+          builder.coverImage(dynamicInfo.original_pic).imageList(dynamicInfo.pics?.map((x) => x.url));
           break;
         }
       }
@@ -75,7 +73,8 @@ export class WeiboDataSource {
                     /<a.*?>|<\/a>|<\/span>|<\span.*>|<span class="surl-text">|<span class='url-icon'>|<span class="url-icon">|<\/img.*?>|全文|网页链接/g,
                     ''
                   )
-                  .replace(/<br \/>/g, '\n')
+                  .replace(/<br \/>/g, '\n'),
+              data.mblog.retweeted_status.page_info.page_pic?.url
             )
           );
         }

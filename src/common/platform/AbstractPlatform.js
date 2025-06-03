@@ -1,4 +1,4 @@
-import DebugUtil from '../util/DebugUtil';
+import { LOG_LEVEL, Logger } from '../util/Logger';
 
 // 其实这玩意不是很有必要提取成常量，但是提取了也没坏处(至少修改起来比较方便)
 const unsupportedTip = '该平台未实现该接口！请联系[小刻食堂]开发者解决该问题';
@@ -77,6 +77,23 @@ export class AbstractPlatform {
    * @return {Promise} 储存成功则resolve(无任何参数)，储存失败则reject
    */
   saveLocalStorage(name, data) {
+    throw new Error(unsupportedTip);
+  }
+
+  /**
+   * 从本地移除一项数据
+   * @param {string|string[]} keys
+   * @return {Promise<void>}
+   */
+  removeLocalStorage(keys) {
+    throw new Error(unsupportedTip);
+  }
+
+  /**
+   * 清除本地数据
+   * @return {Promise<void>}
+   */
+  clearLocalStorage() {
     throw new Error(unsupportedTip);
   }
 
@@ -238,18 +255,7 @@ export class AbstractPlatform {
    * <p>
    * @param listener 监听器，接收一个参数(details{id,previousVersion,reason})
    */
-  addInstallListener(listener) {
-    throw new Error(unsupportedTip);
-  }
-
-  /**
-   * 发送HTTP请求
-   * @param url 目标url
-   * @param method 请求方法(GET/POST等)
-   * @param timeout 超时(单位：毫秒)，不提供或小于等于0时无限等待直至到达浏览器内置超时
-   * @return {Promise} resolve接收一个参数(http响应内容)
-   */
-  sendHttpRequest(url, method, timeout) {
+  addInstalledListener(listener) {
     throw new Error(unsupportedTip);
   }
 
@@ -272,17 +278,35 @@ export class AbstractPlatform {
   }
 
   /**
-   * 创建定时警报
+   * 创建定时闹钟
    * @param name {string | undefined}
    * @param alarmInfo {{when?: number, delayInMinutes?: number, periodInMinutes?: number} | undefined}
-   * @return {void}
+   * @return {Promise<void>}
    */
   createAlarm(name, alarmInfo) {
     throw new Error(unsupportedTip);
   }
 
   /**
-   * 清除全部警报
+   * 获取定时闹钟
+   * @param name {string}
+   * @return {Promise<{name: string, scheduledTime: number, periodInMinutes?: number} | undefined>}
+   */
+  getAlarm(name) {
+    throw new Error(unsupportedTip);
+  }
+
+  /**
+   * 清除指定闹钟
+   * @param name {string}
+   * @return {Promise<boolean>}
+   */
+  clearAlarm(name) {
+    throw new Error(unsupportedTip);
+  }
+
+  /**
+   * 清除全部闹钟
    * @return {Promise<boolean>}
    */
   clearAllAlarms() {
@@ -299,13 +323,12 @@ export class AbstractPlatform {
   }
 
   /**
-   * 增加请求监听器
+   * 定义请求过滤操作的动态会话规则
    * <p>
-   * @param listener 监听器
-   * @param filter URL匹配列表，指定要监听的请求URL
-   * @param extraInfoSpec 额外参数
+   * @param options {{addRules: any[]}} 规则参数
+   * @return {Promise<void>}
    */
-  onBeforeSendHeaders(listener, filter, extraInfoSpec) {
+  declarativeNetRequestUpdateSessionRules(options) {
     throw new Error(unsupportedTip);
   }
 
@@ -338,7 +361,7 @@ export class AbstractPlatform {
     let value;
 
     if (!type || message.type === type) {
-      DebugUtil.debugLog(7, `${id} - ${type}|${message.type} - receiverMessage`, message);
+      Logger.logLevel(LOG_LEVEL.TRACE_MEDIUM, `${id} - ${type}|${message.type} - receiverMessage`, message);
       if (!type) {
         value = listener(message);
       } else {
@@ -346,10 +369,10 @@ export class AbstractPlatform {
       }
 
       if (value !== null && value !== undefined) {
-        DebugUtil.debugLog(7, `${id} - ${type}|${message.type} - receiverMessage - response`, value);
+        Logger.logLevel(LOG_LEVEL.TRACE_MEDIUM, `${id} - ${type}|${message.type} - receiverMessage - response`, value);
         return value;
       } else {
-        DebugUtil.debugLog(8, `${id} - ${type}|${message.type} - receiverMessage - responseEmpty`);
+        Logger.logLevel(LOG_LEVEL.TRACE_HIGH, `${id} - ${type}|${message.type} - receiverMessage - responseEmpty`);
         // 必须要返回点什么东西来避免报错
         return AbstractPlatform.__MESSAGE_WITHOUT_RESPONSE;
       }
@@ -361,7 +384,7 @@ export class AbstractPlatform {
    * @protected
    */
   __buildMessageToSend(type, data) {
-    DebugUtil.debugLog(7, `sendMessage - ${type}`, data || 'no-data');
+    Logger.logLevel(LOG_LEVEL.TRACE_MEDIUM, `sendMessage - ${type}`, data || 'no-data');
     const message = { type: type };
     if (data) {
       message.data = data;
@@ -375,10 +398,10 @@ export class AbstractPlatform {
    */
   __transformResponseMessage(type, response) {
     if (response === AbstractPlatform.__MESSAGE_WITHOUT_RESPONSE) {
-      DebugUtil.debugLog(8, `response - ${type} - empty`);
+      Logger.logLevel(LOG_LEVEL.TRACE_HIGH, `sendMessage response - ${type} - empty`);
       return;
     }
-    DebugUtil.debugLog(7, `response - ${type}`, response);
+    Logger.logLevel(LOG_LEVEL.TRACE_MEDIUM, `sendMessage response - ${type}`, response);
     return response;
   }
 }

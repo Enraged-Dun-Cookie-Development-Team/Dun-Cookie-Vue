@@ -1,10 +1,11 @@
 import { CURRENT_SETTING_VERSION } from './Constants';
 import { deepAssign } from './util/CommonFunctions';
 import AvailableDataSourceMeta from './sync/AvailableDataSourceMeta';
+import { Logger } from './util/Logger';
 
 async function updateLegacyToV1(oldSettings) {
-  console.log('从旧配置升级：');
-  console.log(oldSettings);
+  Logger.log('从旧配置升级：');
+  Logger.log(oldSettings);
   const newSettings = {
     dun: {},
     display: {},
@@ -26,26 +27,26 @@ async function updateLegacyToV1(oldSettings) {
   if (oldSettings.hasOwnProperty('saneMax')) newSettings.san.maxValue = oldSettings.saneMax;
   if (oldSettings.hasOwnProperty('isWindow')) newSettings.display.windowMode = oldSettings.isWindow;
 
-  console.log('升级完毕，新配置：');
-  console.log(newSettings);
+  Logger.log('升级完毕，新配置：');
+  Logger.log(newSettings);
   return newSettings;
 }
 
 function updateV1ToV2(oldSettings) {
-  console.log('从V1配置升级：');
-  console.log(oldSettings);
+  Logger.log('从V1配置升级：');
+  Logger.log(oldSettings);
   const newSettings = deepAssign({}, oldSettings);
 
   Reflect.deleteProperty(newSettings, 'currentDataSources');
 
-  console.log('升级V2完毕，新配置：');
-  console.log(newSettings);
+  Logger.log('升级V2完毕，新配置：');
+  Logger.log(newSettings);
   return newSettings;
 }
 
 function updateV2ToV3(oldSettings) {
-  console.log('从V2配置升级：');
-  console.log(oldSettings);
+  Logger.log('从V2配置升级：');
+  Logger.log(oldSettings);
   const newSettings = deepAssign({}, oldSettings);
 
   switch (newSettings.dun?.gamePlatform) {
@@ -60,14 +61,14 @@ function updateV2ToV3(oldSettings) {
       break;
   }
 
-  console.log('升级V3完毕，新配置：');
-  console.log(newSettings);
+  Logger.log('升级V3完毕，新配置：');
+  Logger.log(newSettings);
   return newSettings;
 }
 
 async function updateV3ToV4(oldSettings) {
-  console.log('从V3配置升级：');
-  console.log(oldSettings);
+  Logger.log('从V3配置升级：');
+  Logger.log(oldSettings);
   const newSettings = deepAssign({}, oldSettings);
 
   newSettings.open = false;
@@ -145,14 +146,14 @@ async function updateV3ToV4(oldSettings) {
     });
   });
 
-  console.log('升级V4完毕，新配置：');
-  console.log(newSettings);
+  Logger.log('升级V4完毕，新配置：');
+  Logger.log(newSettings);
   return newSettings;
 }
 
 function updateV4ToV5(oldSettings) {
-  console.log('从V4配置升级：');
-  console.log(oldSettings);
+  Logger.log('从V4配置升级：');
+  Logger.log(oldSettings);
   const newSettings = deepAssign({}, oldSettings);
 
   // 由于上个版本更新后再次进行了修改，上个版本部分用户漏删了这两个字段，这个版本再次执行删除
@@ -165,8 +166,26 @@ function updateV4ToV5(oldSettings) {
     newSettings.agreeLicense = 'v1';
   }
 
-  console.log('升级V5完毕，新配置：');
-  console.log(newSettings);
+  Logger.log('升级V5完毕，新配置：');
+  Logger.log(newSettings);
+  return newSettings;
+}
+
+async function updateV5ToV6(oldSettings) {
+  Logger.log('从V5配置升级：');
+  Logger.log(oldSettings);
+  const newSettings = deepAssign({}, oldSettings);
+
+  // 删除上个版本单独存放的quickJump
+  await PlatformHelper.Storage.removeLocalStorage('quickJump');
+
+  newSettings.quickJump = {
+    source: [],
+    tool: [],
+  };
+
+  Logger.log('升级V6完毕，新配置：');
+  Logger.log(newSettings);
   return newSettings;
 }
 
@@ -196,6 +215,9 @@ async function updateSettings(oldSettings) {
         break;
       case 4:
         currentSettings = updateV4ToV5(currentSettings);
+        break;
+      case 5:
+        currentSettings = await updateV5ToV6(currentSettings);
         break;
     }
     currentVersion++;

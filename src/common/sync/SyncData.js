@@ -1,6 +1,6 @@
 import PlatformHelper from '../platform/PlatformHelper';
-import { deepAssign, deepDiff, deepEquals } from '../util/CommonFunctions';
-import DebugUtil from '../util/DebugUtil';
+import { deepDiff, deepEquals } from '../util/CommonFunctions';
+import { LOG_LEVEL, Logger } from '../util/Logger';
 
 // 该类仅用于IDE友好提示
 // noinspection JSUnusedLocalSymbols,JSUnusedGlobalSymbols
@@ -99,7 +99,7 @@ class DataSynchronizer {
       // 如果已经接收过数据更新则忽略storage中的数据
       const data = await PlatformHelper.Storage.getLocalStorage(keyPersist(this.key));
       if (this.updateCount === 0 && data) {
-        DebugUtil.debugLog(6, `从Storage中读取${this.key}: `, data);
+        Logger.logLevel(LOG_LEVEL.TRACE_LOW, `从Storage中读取${this.key}: `, data);
         this.__handleReloadOrReceiveUpdate(data, true);
       }
       // 如果有初始化函数，则无条件执行初始化函数并更新结果，这视为一次reload
@@ -113,6 +113,9 @@ class DataSynchronizer {
         if (!data || typeof dataInitFn === 'function') {
           await PlatformHelper.Storage.saveLocalStorage(keyPersist(this.key), this.target);
         }
+      } else if (data) {
+        // 这种情况属于之前持久化了后来代码改成不需要持久化，就删除旧数据
+        await PlatformHelper.Storage.removeLocalStorage(keyPersist(this.key));
       }
       this.__setInited();
     };
@@ -127,7 +130,7 @@ class DataSynchronizer {
     for (const listener of this.initListeners) {
       listener(this.proxy);
     }
-    DebugUtil.debugLog(6, `同步对象${this.key}初始化完成`, this.target);
+    Logger.logLevel(LOG_LEVEL.TRACE_LOW, `同步对象${this.key}初始化完成`, this.target);
   }
 
   __handleFirstUpdateListener(changed) {
@@ -151,10 +154,10 @@ class DataSynchronizer {
   __handleReloadOrReceiveUpdate(data, isReload = false) {
     const changed = this.updateHandler(this.target, data);
     if (isReload) {
-      DebugUtil.debugLog(6, `从storage中读取${this.key}: `, data, 'changed: ', changed);
+      Logger.logLevel(LOG_LEVEL.TRACE_LOW, `从storage中读取${this.key}: `, data, 'changed: ', changed);
     } else {
       this.updateCount++;
-      DebugUtil.debugLog(6, `接收更新${this.key}: `, data, 'changed: ', changed);
+      Logger.logLevel(LOG_LEVEL.TRACE_LOW, `接收更新${this.key}: `, data, 'changed: ', changed);
       this.__handleFirstUpdateListener(changed);
       this.__handleUpdateListener(changed);
     }
@@ -193,7 +196,7 @@ class DataSynchronizer {
         if (this.shouldPersist) {
           await PlatformHelper.Storage.saveLocalStorage(keyPersist(this.key), this.target);
         }
-        DebugUtil.debugLog(6, `发送更新${this.key}: `, this.target);
+        Logger.logLevel(LOG_LEVEL.TRACE_LOW, `发送更新${this.key}: `, this.target);
         PlatformHelper.Message.send(keyUpdate(this.key), this.target).then();
       });
       this.updateFlag = true;
@@ -206,14 +209,14 @@ class DataSynchronizer {
     handler.set = function (target, prop, value, receiver) {
       if (!deepEquals(target[prop], value)) {
         _this.sendUpdateAtNextTick();
-        DebugUtil.debugLog(7, `更新${_this.key}: ${String(prop)}: `, value);
+        Logger.logLevel(LOG_LEVEL.TRACE_MEDIUM, `更新${_this.key}: ${String(prop)}: `, value);
       }
       return Reflect.set(...arguments);
     };
     handler.deleteProperty = function (target, prop) {
       if (target.hasOwnProperty(prop)) {
         _this.sendUpdateAtNextTick();
-        DebugUtil.debugLog(7, `删除属性${_this.key}: ${String(prop)}`);
+        Logger.logLevel(LOG_LEVEL.TRACE_MEDIUM, `删除属性${_this.key}: ${String(prop)}`);
       }
       return Reflect.deleteProperty(...arguments);
     };
@@ -222,10 +225,10 @@ class DataSynchronizer {
         if (Object.keys(descriptor).length === 1 && descriptor.hasOwnProperty('value')) {
           // ignore 这种情况一般也会触发set的handler，故忽略
         } else {
-          DebugUtil.debugLog(7, `修改属性${_this.key}: ${String(prop)}`, descriptor);
+          Logger.logLevel(LOG_LEVEL.TRACE_MEDIUM, `修改属性${_this.key}: ${String(prop)}`, descriptor);
         }
       } else {
-        DebugUtil.debugLog(7, `添加属性${_this.key}: ${String(prop)}`, descriptor);
+        Logger.logLevel(LOG_LEVEL.TRACE_MEDIUM, `添加属性${_this.key}: ${String(prop)}`, descriptor);
       }
       if (descriptor && descriptor.hasOwnProperty('value') && !deepEquals(target[prop], descriptor.value)) {
         _this.sendUpdateAtNextTick();
@@ -245,7 +248,7 @@ class DataSynchronizer {
     // noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
     let handler = {
       set(target, prop, value, receiver) {
-        DebugUtil.debugLog(7, `禁止更新${_this.key}: ${String(prop)}: `, value);
+        Logger.logLevel(LOG_LEVEL.TRACE_MEDIUM, `禁止更新${_this.key}: ${String(prop)}: `, value);
         return false;
       },
       get(target, prop, receiver) {
@@ -255,11 +258,11 @@ class DataSynchronizer {
           if (typeof value === 'function') {
             value = value.bind(_this);
           }
-          DebugUtil.debugLog(7, `获取内部属性${_this.key}: ${String(prop)}: `, value);
+          Logger.logLevel(LOG_LEVEL.TRACE_MEDIUM, `获取内部属性${_this.key}: ${String(prop)}: `, value);
           return value;
         }
         const value = Reflect.get(...arguments);
-        DebugUtil.debugLog(9, `获取${_this.key}: ${String(prop)}: `, value);
+        Logger.logLevel(LOG_LEVEL.TRACE_ALL, `获取${_this.key}: ${String(prop)}: `, value);
         return value;
       },
     };
@@ -268,11 +271,11 @@ class DataSynchronizer {
     let denyPropertyUpdate = false;
     if (denyPropertyUpdate) {
       handler.deleteProperty = function (target, prop) {
-        DebugUtil.debugLog(7, `禁止删除属性${_this.key}: ${String(prop)}`);
+        Logger.logLevel(LOG_LEVEL.TRACE_MEDIUM, `禁止删除属性${_this.key}: ${String(prop)}`);
         return false;
       };
       handler.defineProperty = function (target, prop, descriptor) {
-        DebugUtil.debugLog(7, `禁止添加属性${_this.key}: ${String(prop)}`, descriptor);
+        Logger.logLevel(LOG_LEVEL.TRACE_MEDIUM, `禁止添加属性${_this.key}: ${String(prop)}`, descriptor);
         return false;
       };
     }
@@ -318,6 +321,9 @@ class DataSynchronizerOnlyBackgroundWritable extends DataSynchronizer {
 // 用于储存已注册的key，避免重复注册相同的key
 const keyMap = {};
 
+// TODO 由于不清楚具体会被什么时候强行停止插件，暂时全量持久化，之后看看有什么不需要持久化的再说
+const FORCE_PERSIST_ALL_DATA = true;
+
 /**
  * 创建同步数据
  * @param target 目标源对象
@@ -332,6 +338,7 @@ function createSyncData(target, key, mode, shouldPersist = false, updateHandler 
   if (keyMap[key]) {
     throw new Error('duplicate sync key: ' + key);
   }
+  if (FORCE_PERSIST_ALL_DATA) shouldPersist = true;
   let synchronizer;
   switch (mode) {
     case DataSyncMode.ALL_WRITABLE:
@@ -346,7 +353,7 @@ function createSyncData(target, key, mode, shouldPersist = false, updateHandler 
   keyMap[key] = true;
   // noinspection JSUnresolvedReference
   global.SyncData[key] = synchronizer.proxy;
-  console.log(`已启用同步数据：${key}`, synchronizer.proxy);
+  Logger.log(`已启用同步数据：${key}`, synchronizer.proxy);
   return synchronizer.proxy;
 }
 

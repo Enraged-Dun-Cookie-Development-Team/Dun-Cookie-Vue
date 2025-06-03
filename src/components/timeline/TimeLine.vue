@@ -178,8 +178,9 @@ import ServerUtil from '../../common/util/ServerUtil';
 import SelectImageToCopy from '@/components/SelectImageToCopy';
 import UpdateInfoNotice from '../UpdateInfoNotice';
 import AvailableDataSourceMeta from '../../common/sync/AvailableDataSourceMeta';
-import { debounceTime, Subject, distinctUntilChanged, map } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, Subject } from 'rxjs';
 import { CookieItem } from '../../common/CookieItem';
+import { Logger } from '../../common/util/Logger';
 
 export default {
   name: 'TimeLine',
@@ -219,7 +220,6 @@ export default {
       filterTextSubject: filterTextSubject,
       filterCardList: [],
       LazyLoaded: false,
-      insiderCodeMap: null, // 储存内部密码
       janvas: null, //菜单模块icon
       imageError: false,
       errorImageUrl: '',
@@ -449,7 +449,7 @@ export default {
         })
         .catch((e) => {
           this.loading = false;
-          console.log(e);
+          Logger.logError(e);
         });
     },
 
@@ -502,7 +502,7 @@ export default {
             this.isSearchLastPage = result.next_page_id === null;
             this.serverSearchCardList = ServerUtil.transformCookieListToItemList(result.cookies);
           } catch (e) {
-            console.error(e);
+            Logger.logError(e);
             const newFilterList = [];
             deepAssign([], [...this.cardListAll, ...this.extraCardList]).forEach((item) => {
               const regex = new RegExp('(' + this.filterText.replaceAll(/([*.?+$^[\](){}|\\/])/g, '\\$1') + ')', 'gi');
@@ -639,20 +639,20 @@ export default {
                     });
                   })
                   .catch((e) => {
-                    console.log(e);
+                    Logger.logError(e);
                     this.errorImageUrl = canvas.toDataURL('image/jpeg');
                     this.imageError = true;
                   });
               }
             } catch (e) {
-              console.log(e);
+              Logger.logError(e);
               this.errorImageUrl = canvas.toDataURL('image/jpeg');
               this.imageError = true;
             }
           });
         })
         .catch((e) => {
-          console.log(e);
+          Logger.logError(e);
           this.$message({
             offset: 50,
             center: true,

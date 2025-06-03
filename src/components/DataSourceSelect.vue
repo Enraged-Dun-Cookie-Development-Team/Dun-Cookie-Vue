@@ -126,8 +126,8 @@ import { DefaultDataSources } from '@enraged-dun-cookie-development-team/cookie-
 import AvailableDataSourceMeta from '../common/sync/AvailableDataSourceMeta';
 import Settings from '../common/Settings';
 import { DataSourceMeta } from '../common/datasource/DataSourceMeta';
-import PlatformHelper from '../common/platform/PlatformHelper';
-import { MESSAGE_WEIBO_ADD_REFERER } from '../common/Constants';
+import { JsonValidator } from '@enraged-dun-cookie-development-team/common/json';
+import { Logger } from '../common/util/Logger';
 
 export default {
   name: 'DataSourceSelect',
@@ -152,6 +152,8 @@ export default {
   mounted() {
     /* IFTRUE_feature__custom_datasource */
     this.enableCustom = true;
+    // TODO 因为ajv用到了eval，所以只能全局禁止验证
+    JsonValidator.validate = () => true;
     /* FITRUE_feature__custom_datasource */
     Settings.doAfterInit(() => {
       AvailableDataSourceMeta.doAfterInit(() => this.buildDataSourceTree());
@@ -293,17 +295,15 @@ export default {
         /**
          * @type {DataSourceMeta}
          */
-        let sourceMeta = {
+        const sourceMeta = {
           type: this.addCustomDataSourceDialogFormData.type,
           dataId: this.addCustomDataSourceDialogFormData.dataId,
         };
         try {
-          let source;
-          let info;
           let success = false;
-          switch (this.addCustomDataSourceDialogFormData.type) {
-            case 'bilibili:dynamic-by-uid':
-              if (!/^[0-9]{1,16}$/.test(this.addCustomDataSourceDialogFormData.dataId)) {
+          switch (sourceMeta.type) {
+            case 'bilibili:dynamic-by-uid': {
+              if (!/^[0-9]{1,16}$/.test(sourceMeta.dataId)) {
                 this.$message({
                   center: true,
                   message: '数据源ID不合法！',
@@ -311,17 +311,18 @@ export default {
                 });
                 break;
               }
-              source = new DefaultDataSources.BilibiliDataSource({
-                uid: this.addCustomDataSourceDialogFormData.dataId,
+              const source = new DefaultDataSources.BilibiliDataSource({
+                uid: sourceMeta.dataId,
                 logger: DefaultLogger,
               });
-              info = await source.createDisplayInfo();
+              const info = await source.createDisplayInfo();
               sourceMeta.icon = info.icon;
               sourceMeta.name = '自定义-' + info.name + '-B站';
               success = true;
               break;
-            case 'weibo:dynamic-by-uid':
-              if (!/^[0-9]{1,16}$/.test(this.addCustomDataSourceDialogFormData.dataId)) {
+            }
+            case 'weibo:dynamic-by-uid': {
+              if (!/^[0-9]{1,16}$/.test(sourceMeta.dataId)) {
                 this.$message({
                   center: true,
                   message: '数据源ID不合法！',
@@ -329,20 +330,20 @@ export default {
                 });
                 break;
               }
-              source = new DefaultDataSources.WeiboDataSource({
-                uid: this.addCustomDataSourceDialogFormData.dataId,
+              const source = new DefaultDataSources.WeiboDataSource({
+                uid: sourceMeta.dataId,
                 logger: DefaultLogger,
               });
-              info = await source.createDisplayInfo();
+              const info = await source.createDisplayInfo();
               sourceMeta.icon = info.icon;
               sourceMeta.name = '自定义-' + info.name + '-微博';
-              PlatformHelper.Message.send(MESSAGE_WEIBO_ADD_REFERER, { urls: [info.icon] });
               success = true;
               break;
+            }
             default:
               this.$message({
                 center: true,
-                message: `未知的数据源类型：${this.addCustomDataSourceDialogFormData.type}！`,
+                message: `未知的数据源类型：${sourceMeta.type}！`,
                 type: 'error',
               });
               break;
@@ -355,7 +356,7 @@ export default {
             this.$nextTick(() => this.$refs.customDataSourceDialogForm.resetFields());
           }
         } catch (e) {
-          console.log(e);
+          Logger.logError(e);
           this.$message({
             center: true,
             message: `创建自定义数据源失败：${e.message}！`,
