@@ -1,9 +1,8 @@
-import DebugUtil from '../common/util/DebugUtil';
+import { Logger } from '../common/util/Logger';
 import {
   ENABLE_FEATURES,
   MESSAGE_GET_COUNTDOWN,
   MESSAGE_SAN_GET,
-  MESSAGE_WEIBO_ADD_REFERER,
   PAGE_POPUP_WINDOW,
   PAGE_UPDATE,
   PAGE_WELCOME,
@@ -48,7 +47,7 @@ function alarmHandler(alarm) {
     case alarmKeyAliveCheck: {
       // 3秒内视为这次闹钟触发的时候已经死了
       if (Math.abs(new Date().getTime() - startTime) < 3000) {
-        DebugUtil.debugLog(0, '恢复蹲饼');
+        Logger.log('恢复蹲饼');
         updateFetch();
       }
       break;
@@ -94,18 +93,13 @@ PlatformHelper.Message.registerListener('background', null, (message) => {
       case MESSAGE_GET_COUNTDOWN:
         return [];
       //   return countDown.GetAllCountDown();
-      case MESSAGE_WEIBO_ADD_REFERER:
-        if (data.urls && data.urls.length > 0) {
-          data.urls.forEach((src) => registerUrlToAddReferer(src, 'https://m.weibo.cn/'));
-        }
-        return;
       default:
         return;
     }
   }
 });
 
-// 监听标签
+// 监听通知
 PlatformHelper.Notification.addClickListener((id) => {
   let item = CardList.getFirstPageList().find((x) => x.id === id);
   if (item) {
@@ -154,19 +148,28 @@ PlatformHelper.BrowserAction.addIconClickListener(async () => {
   }
 });
 
+// 每半分钟进行一次保活检查
+void PlatformHelper.Alarms.create(alarmKeyAliveCheck, {
+  delayInMinutes: 0.5,
+  periodInMinutes: 0.5,
+});
+
+void registerUrlToAddReferer(1, '*://*.sinaimg.cn/*', 'https://m.weibo.cn/');
+void registerUrlToAddReferer(2, '*://*.hdslb.com/*', 'https://t.bilibili.com/');
+
 function ExtensionInit() {
-  DebugUtil.debugLog(0, '插件启动...');
+  Logger.log('插件启动...');
   if (ENABLE_FEATURES.length > 0) {
-    DebugUtil.debugLog(0, '已启用特性：', ENABLE_FEATURES);
+    Logger.log('已启用特性：', ENABLE_FEATURES);
   }
 
   // 开始蹲饼！
   Settings.doAfterInit((initSettings) => {
     if (initSettings.open) {
-      DebugUtil.debugLog(0, '开始蹲饼');
+      Logger.log('开始蹲饼');
       updateFetch();
     } else {
-      DebugUtil.debugLog(0, '蹲饼开关已关闭');
+      Logger.log('蹲饼开关已关闭');
     }
   });
 
@@ -191,7 +194,7 @@ function ExtensionInit() {
       return;
     }
     if (settings.open) {
-      DebugUtil.debugLog(0, '开始蹲饼');
+      Logger.log('开始蹲饼');
       updateFetch();
     } else {
       stopFetch();
@@ -212,9 +215,3 @@ function ExtensionInit() {
 }
 
 ExtensionInit();
-
-// 每半分钟进行一次保活检查
-void PlatformHelper.Alarms.create(alarmKeyAliveCheck, {
-  delayInMinutes: 0.5,
-  periodInMinutes: 0.5,
-});

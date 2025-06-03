@@ -1,7 +1,7 @@
 import { AbstractCookieFetcher } from '../AbstractCookieFetcher';
 import ServerUtil from '../../../common/util/ServerUtil';
 import { CookieHandler } from '../../CookieHandler';
-import DebugUtil from '../../../common/util/DebugUtil';
+import { Logger } from '../../../common/util/Logger';
 import PlatformHelper from '../../../common/platform/PlatformHelper';
 
 export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
@@ -68,8 +68,8 @@ export class CeobeCanteenCookieFetcher extends AbstractCookieFetcher {
       this.__setAvailable();
     } catch (e) {
       this.failCount++;
-      DebugUtil.debugLog(0, '蹲饼时出现异常(server)：' + e.message);
-      console.log(e);
+      Logger.log('蹲饼时出现异常(server)：' + e.message);
+      Logger.logError(e);
     }
     setTimeout(() => {
       this.doCycle();

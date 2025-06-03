@@ -16,9 +16,10 @@ jobs:
       - run: npm ci
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: build
+      - name: build-chrome
         run: npm run build
         env:
+          BROWSER_TARGET: 'chrome'
           BUILD_TYPE: 'gh'
           BUILD_BY: ${{ github.triggering_actor }}
           VUE_APP_ENABLE_FEATURES: 'local_fetch'
@@ -27,7 +28,21 @@ jobs:
         uses: thedoctor0/zip-release@0.7.1
         with:
           type: zip
-          filename: '../extension.zip'
+          filename: '../extension-chrome.zip'
+          directory: dist
+      - name: build-firefox
+        run: npm run build
+        env:
+          BROWSER_TARGET: 'firefox'
+          BUILD_TYPE: 'gh'
+          BUILD_BY: ${{ github.triggering_actor }}
+          VUE_APP_ENABLE_FEATURES: 'local_fetch'
+          DISABLE_SOURCE_MAP: 'true'
+      - name: zip
+        uses: thedoctor0/zip-release@0.7.1
+        with:
+          type: zip
+          filename: '../extension-firefox.zip'
           directory: dist
       - name: Create Release
         uses: actions/github-script@v6
@@ -53,8 +68,14 @@ jobs:
             });
             try {
               await github.rest.repos.uploadReleaseAsset({
-                name: `Ceobe-Canteen-${version}.zip`,
-                data: fs.readFileSync('./extension.zip'),
+                name: `Ceobe-Canteen-${version}-chrome.zip`,
+                data: fs.readFileSync('./extension-chrome.zip'),
+                release_id: data.id,
+                owner: context.repo.owner, repo: context.repo.repo,
+              });
+              await github.rest.repos.uploadReleaseAsset({
+                name: `Ceobe-Canteen-${version}-firefox.zip`,
+                data: fs.readFileSync('./extension-firefox.zip'),
                 release_id: data.id,
                 owner: context.repo.owner, repo: context.repo.repo,
               });

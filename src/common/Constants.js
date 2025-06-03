@@ -1,60 +1,37 @@
-// region 版本号、测试模式等常量
+// region 版本号、调试模式等常量
 /**
- * Debug等级，小于等于0的值为关闭debug
- * @type {number} Debug等级
+ * 是否是调试模式
  */
-const DEBUG_LEVEL = 0;
-/**
- * 是否是测试模式
- */
-const IS_DEBUG = DEBUG_LEVEL > 0;
-/**
- * 是否输出调试日志
- * <p>
- * 需要注意的是如果输出日志太多会导致打卡开发者控制台(F12)会非常卡，所以不要动前面的<code>IS_DEBUG &&</code>以避免忘记修改导致生产版本出问题
- */
-const DEBUG_LOG = IS_DEBUG && true;
-
+export const IS_DEBUG = false;
 /**
  * 当前配置文件版本号
  */
-const CURRENT_SETTING_VERSION = 6;
+export const CURRENT_SETTING_VERSION = 6;
 /**
  * 当前插件版本号
  */
-const CURRENT_VERSION = process.env.VUE_APP_PROJECT_VERSION;
+export const CURRENT_VERSION = process.env.VUE_APP_PROJECT_VERSION;
 /**
  * 展示用的版本号
  */
-const SHOW_VERSION = CURRENT_VERSION + (IS_DEBUG ? '【调试模式】' : '');
+export const SHOW_VERSION = CURRENT_VERSION + (IS_DEBUG ? '【调试模式】' : '');
 
 /**
  * 启用的增强特性
  * @type {string[]}
  */
-const ENABLE_FEATURES = (process.env.VUE_APP_ENABLE_FEATURES || '')
+export const ENABLE_FEATURES = (process.env.VUE_APP_ENABLE_FEATURES || '')
   .split(',')
-  .filter((v) => v.length > 0 && !['local_fetch'].includes(v));
+  // 这里是将local_fetch视为隐藏启用的功能，不打印到日志
+  .filter((v) => v.length > 0 && v !== 'local_fetch');
 /**
  * 构建者
  */
-const BUILD_BY = process.env.VUE_APP_BUILD_BY;
+export const BUILD_BY = process.env.VUE_APP_BUILD_BY;
 /**
  * 构建签名
  */
-const BUILD_SIGN = process.env.VUE_APP_BUILD_SIGN;
-
-export {
-  IS_DEBUG,
-  DEBUG_LEVEL,
-  DEBUG_LOG,
-  CURRENT_SETTING_VERSION,
-  CURRENT_VERSION,
-  SHOW_VERSION,
-  ENABLE_FEATURES,
-  BUILD_BY,
-  BUILD_SIGN,
-};
+export const BUILD_SIGN = process.env.VUE_APP_BUILD_SIGN;
 // endregion
 
 // region 各种参数，主要用于测试模式
@@ -67,59 +44,41 @@ export { SAN_RECOVERY_SPEED };
 // endregion
 
 // region message通信相关常量
-const MESSAGE_SETTINGS_UPDATE = 'settings-update';
-const MESSAGE_SAN_UPDATE = 'san-update';
+export const MESSAGE_SETTINGS_UPDATE = 'settings-update';
+export const MESSAGE_SAN_UPDATE = 'san-update';
 
-const MESSAGE_SAN_GET = 'san-get';
-const MESSAGE_CHANGE_COUNTDOWN = 'change-countdown';
+export const MESSAGE_SAN_GET = 'san-get';
 
-const MESSAGE_WEIBO_ADD_REFERER = 'weibo-add-referer';
-const MESSAGE_GET_COUNTDOWN = 'countdown-list';
-
-export { MESSAGE_SETTINGS_UPDATE, MESSAGE_SAN_UPDATE };
-export { MESSAGE_SAN_GET, MESSAGE_CHANGE_COUNTDOWN };
-export { MESSAGE_WEIBO_ADD_REFERER, MESSAGE_GET_COUNTDOWN };
+export const MESSAGE_CHANGE_COUNTDOWN = 'change-countdown';
+export const MESSAGE_GET_COUNTDOWN = 'countdown-list';
 // endregion
 
 // region 平台类型
-const PLATFORM_CHROME = 'Chrome';
-const PLATFORM_FIREFOX = 'Firefox';
-const PLATFORM_EDGE = 'Edge';
-const PLATFORM_UNKNOWN = 'Unknown';
-
-export { PLATFORM_CHROME, PLATFORM_FIREFOX, PLATFORM_EDGE, PLATFORM_UNKNOWN };
+export const PLATFORM_CHROME = 'Chrome';
+export const PLATFORM_FIREFOX = 'Firefox';
+export const PLATFORM_EDGE = 'Edge';
+export const PLATFORM_UNKNOWN = 'Unknown';
 // endregion
 
 // region 扩展内置页面
-const PAGE_WELCOME = 'welcome.html';
-const PAGE_OPTIONS = 'options.html';
-const PAGE_UPDATE = 'update.html';
-const PAGE_TIME = 'time.html';
-const PAGE_POPUP_WINDOW = 'popup.html';
-const PAGE_GITHUB_REPO = 'https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue';
-const PAGE_CEOBECANTEEN_WEB_ABOUT_US = 'https://www.ceobecanteen.top/#about-us';
-const PAGE_CEOBECANTEEN_WEB_SPONSOR = 'https://www.ceobecanteen.top/#sponsor';
-
-export {
-  PAGE_WELCOME,
-  PAGE_POPUP_WINDOW,
-  PAGE_OPTIONS,
-  PAGE_UPDATE,
-  PAGE_GITHUB_REPO,
-  PAGE_TIME,
-  PAGE_CEOBECANTEEN_WEB_ABOUT_US,
-  PAGE_CEOBECANTEEN_WEB_SPONSOR,
-};
+export const PAGE_WELCOME = 'welcome.html';
+export const PAGE_OPTIONS = 'options.html';
+export const PAGE_UPDATE = 'update.html';
+export const PAGE_TIME = 'time.html';
+export const PAGE_POPUP_WINDOW = 'popup.html';
+export const PAGE_GITHUB_REPO = 'https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue';
+export const PAGE_CEOBECANTEEN_WEB_ABOUT_US = 'https://www.ceobecanteen.top/#about-us';
+export const PAGE_CEOBECANTEEN_WEB_SPONSOR = 'https://www.ceobecanteen.top/#sponsor';
 // endregion
 
 // region 杂项
-const TOOL_QR_URL = 'https://www.bilibili.com/video/BV1ru4y1x7cZ/';
+export const TOOL_QR_URL = 'https://www.bilibili.com/video/BV1ru4y1x7cZ/';
 
-const CANTEEN_API_BASE = process.env.VUE_APP_API_SERVER_BASE;
-const CANTEEN_CDN_API_BASE = process.env.VUE_APP_API_CDN_BASE;
-const CANTEEN_CDN_SERVER_API_BASE = process.env.VUE_APP_API_SERVER_CDN_BASE;
+export const CANTEEN_API_BASE = process.env.VUE_APP_API_SERVER_BASE;
+export const CANTEEN_CDN_API_BASE = process.env.VUE_APP_API_CDN_BASE;
+export const CANTEEN_CDN_SERVER_API_BASE = process.env.VUE_APP_API_SERVER_CDN_BASE;
 
-const dayInfo = [
+export const dayInfo = [
   {
     type: 1,
     name: '高级作战记录',
@@ -176,7 +135,7 @@ const dayInfo = [
   },
 ];
 
-const countDown = [
+export const countDown = [
   {
     index: 1,
     name: '公招倒计时1',
@@ -219,7 +178,7 @@ const countDown = [
   },
 ];
 
-const toolDefaults = [
+export const toolDefaults = [
   {
     id: 'local_ceobe_canteen_timer',
     localized_name: { zh_CN: '小刻食堂计时器', en_US: 'Ceobe Canteen Timer' },
@@ -238,14 +197,4 @@ const toolDefaults = [
     isActivated: true,
   },
 ];
-
-export {
-  toolDefaults,
-  dayInfo,
-  countDown,
-  TOOL_QR_URL,
-  CANTEEN_API_BASE,
-  CANTEEN_CDN_API_BASE,
-  CANTEEN_CDN_SERVER_API_BASE,
-};
 // endregion

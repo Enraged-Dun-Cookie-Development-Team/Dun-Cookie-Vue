@@ -126,9 +126,8 @@ import { DefaultDataSources } from '@enraged-dun-cookie-development-team/cookie-
 import AvailableDataSourceMeta from '../common/sync/AvailableDataSourceMeta';
 import Settings from '../common/Settings';
 import { DataSourceMeta } from '../common/datasource/DataSourceMeta';
-import PlatformHelper from '../common/platform/PlatformHelper';
-import { MESSAGE_WEIBO_ADD_REFERER } from '../common/Constants';
 import { JsonValidator } from '@enraged-dun-cookie-development-team/common/json';
+import { Logger } from '../common/util/Logger';
 
 export default {
   name: 'DataSourceSelect',
@@ -338,7 +337,6 @@ export default {
               const info = await source.createDisplayInfo();
               sourceMeta.icon = info.icon;
               sourceMeta.name = '自定义-' + info.name + '-微博';
-              PlatformHelper.Message.send(MESSAGE_WEIBO_ADD_REFERER, { urls: [info.icon] });
               success = true;
               break;
             }
@@ -358,7 +356,7 @@ export default {
             this.$nextTick(() => this.$refs.customDataSourceDialogForm.resetFields());
           }
         } catch (e) {
-          console.log(e);
+          Logger.logError(e);
           this.$message({
             center: true,
             message: `创建自定义数据源失败：${e.message}！`,

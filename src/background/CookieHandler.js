@@ -14,7 +14,7 @@ import AvailableDataSourceMeta from '../common/sync/AvailableDataSourceMeta';
 import { CookieItem } from '../common/CookieItem';
 import CardList from '../common/sync/CardList';
 import ServerUtil from '../common/util/ServerUtil';
-import { registerUrlToAddReferer } from './request_interceptor';
+import { Logger } from '../common/util/Logger';
 
 /**
  * 最新推送的通知，用于避免不同平台的饼重复通知，每一项由[数据源的dataName, 删除空白字符的饼内容]组成
@@ -130,7 +130,7 @@ class CookieHandler {
                 case 'arknights-website:terra-historicus':
                   return TerraHistoricusDataSource.processData(it.rawContent, sourceId);
                 default:
-                  console.warn('不支持的数据源类型：' + it.dataSourceId.typeId);
+                  Logger.logWarn('不支持的数据源类型：' + it.dataSourceId.typeId);
               }
             }
           })
@@ -146,19 +146,11 @@ class CookieHandler {
 
     const newCookies = await transform(fetchData.result.newCookies, fetchData.source.idStr);
     const allCookies = await transform(fetchData.result.allCookies, fetchData.source.idStr);
-    allCookies
-      .filter((it) => it.dataSource.startsWith('weibo:'))
-      .forEach((it) => {
-        if (it.coverImage) registerUrlToAddReferer(it.coverImage, 'https://m.weibo.cn/');
-        if (it.imageList && it.imageList.length > 0) {
-          it.imageList.forEach((src) => registerUrlToAddReferer(src, 'https://m.weibo.cn/'));
-        }
-      });
 
     const hasOldCardList = LocalCardMap[fetchData.source.idStr] && LocalCardMap[fetchData.source.idStr].length > 0;
     if (hasOldCardList && newCookies.length > 0) {
       DunInfo.cookieCount += newCookies.length;
-      console.log('new cookies: ', newCookies);
+      Logger.log('new cookies: ', newCookies);
       await new Promise((r) => AvailableDataSourceMeta.doAfterInit(r));
       tryNotice(AvailableDataSourceMeta.getById(fetchData.source.idStr), newCookies);
     }
@@ -203,7 +195,7 @@ class CookieHandler {
     if (ServerCookieIdCache.size > 0) {
       const newCookies = items.filter((it) => !ServerCookieIdCache.has(it.id));
       DunInfo.cookieCount += newCookies.length;
-      console.log('new cookies: ', newCookies);
+      Logger.log('new cookies: ', newCookies);
       await new Promise((r) => AvailableDataSourceMeta.doAfterInit(r));
       const cookiesMap = newCookies.reduce((prev, current) => {
         if (!prev[current.dataSource]) {
@@ -216,7 +208,7 @@ class CookieHandler {
         try {
           tryNotice(AvailableDataSourceMeta.getById(entry[0]), entry[1]);
         } catch (e) {
-          console.log(e);
+          Logger.logError(e);
         }
       }
     }

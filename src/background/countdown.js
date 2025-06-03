@@ -1,11 +1,11 @@
-import DebugUtil from '../common/util/DebugUtil';
+import { LOG_LEVEL, Logger } from '../common/util/Logger';
 import CountDown from '../common/sync/CountDownInfo';
 import PlatformHelper from '../common/platform/PlatformHelper';
 import NotificationUtil from '../common/util/NotificationUtil';
 import TimeUtil from '../common/util/TimeUtil';
 
 function countDownDebugLog(...data) {
-  DebugUtil.debugConsoleOutput(0, 'debug', '%c 倒计时 ', 'color: white; background: #DA70D6', ...data);
+  Logger.logVerbose(LOG_LEVEL.INFO, '%c 倒计时 ', 'color: white; background: #DA70D6', ...data);
 }
 
 const countDownThreshold = 5 * 60 * 1000;

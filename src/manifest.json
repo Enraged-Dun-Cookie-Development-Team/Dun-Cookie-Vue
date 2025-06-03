@@ -14,19 +14,26 @@
     },
     "default_title": "小刻食堂"
   },
-  "background": {
-    "service_worker": "background.js"
+  "$platform": {
+    "chrome": {
+      "background": {
+        "service_worker": "background.js"
+      }
+    },
+    "firefox": {
+      "background": {
+        "scripts": ["background.js"]
+      }
+    }
   },
   "permissions": [
     "clipboardWrite",
-    "background",
     "storage",
     "unlimitedStorage",
     "notifications",
     "downloads",
     "alarms",
-    "declarativeNetRequest",
-    "offscreen"
+    "declarativeNetRequest"
   ],
   "host_permissions": [
     "https://*.bilibili.com/*",

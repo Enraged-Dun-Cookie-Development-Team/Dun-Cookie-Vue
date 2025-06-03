@@ -1,5 +1,6 @@
 import PlatformHelper from '../platform/PlatformHelper';
-import HttpUtil from '../util/HttpUtil';
+import { Http } from '@enraged-dun-cookie-development-team/common/request';
+import { Logger } from '../util/Logger';
 
 export default class PenguinStatistics {
   constructor() {
@@ -19,29 +20,13 @@ export default class PenguinStatistics {
 
   static GetNewItems() {
     let promiseList = [];
-    let options = {
+    const options = {
       appendTimestamp: false,
     };
     promiseList.push(
-      new Promise((resolve) => {
-        HttpUtil.GET('https://penguin-stats.cn/PenguinStats/api/v2/items?i18n=false', options).then((data) => {
-          resolve(data);
-        });
-      })
-    );
-    promiseList.push(
-      new Promise((resolve) => {
-        HttpUtil.GET('https://penguin-stats.cn/PenguinStats/api/v2/stages', options).then((data) => {
-          resolve(data);
-        });
-      })
-    );
-    promiseList.push(
-      new Promise((resolve) => {
-        HttpUtil.GET('https://penguin-stats.cn/PenguinStats/api/v2/zones', options).then((data) => {
-          resolve(data);
-        });
-      })
+      Http.get('https://penguin-stats.cn/PenguinStats/api/v2/items?i18n=false', options),
+      Http.get('https://penguin-stats.cn/PenguinStats/api/v2/stages', options),
+      Http.get('https://penguin-stats.cn/PenguinStats/api/v2/zones', options)
     );
     Promise.all(promiseList)
       .then((data) => {
@@ -56,22 +41,14 @@ export default class PenguinStatistics {
         );
       })
       .catch((e) => {
-        console.log(e);
+        Logger.logError(e);
       });
   }
 
   static GetItemsInfo() {
-    let options = {
+    return Http.get(`https://penguin-stats.cn/PenguinStats/api/v2/result/matrix?server=CN&show_closed_zones=true`, {
       appendTimestamp: false,
       timeout: 60000,
-    };
-    return new Promise((resolve) => {
-      HttpUtil.GET(
-        `https://penguin-stats.cn/PenguinStats/api/v2/result/matrix?server=CN&show_closed_zones=true`,
-        options
-      ).then((data) => {
-        resolve(data);
-      });
     });
   }
 

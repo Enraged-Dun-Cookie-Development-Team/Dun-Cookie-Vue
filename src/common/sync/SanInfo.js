@@ -1,15 +1,10 @@
 import TimeUtil from '../util/TimeUtil';
 import Settings from '../Settings';
-import {
-  DEBUG_LOG,
-  MESSAGE_SAN_GET,
-  MESSAGE_SAN_UPDATE,
-  MESSAGE_SETTINGS_UPDATE,
-  SAN_RECOVERY_SPEED,
-} from '../Constants';
+import { MESSAGE_SAN_GET, MESSAGE_SAN_UPDATE, MESSAGE_SETTINGS_UPDATE, SAN_RECOVERY_SPEED } from '../Constants';
 import { deepAssign } from '../util/CommonFunctions';
 import NotificationUtil from '../util/NotificationUtil';
 import PlatformHelper from '../platform/PlatformHelper';
+import { LOG_LEVEL, Logger } from '../util/Logger';
 
 // region 理智计算(自动提醒)
 const alarmKeySanRecovery = 'tools:san-recovery';
@@ -37,10 +32,8 @@ function sanRecovery(san) {
     noticeSan(`理智已满`, `理智已经满了！！请博士赶快上线清理智，不要浪费啦！`);
     void PlatformHelper.Alarms.clear(alarmKeySanRecovery);
   }
-  san.saveUpdate();
-  if (DEBUG_LOG) {
-    console.log(`当前理智：${san.currentSan}`);
-  }
+  void san.saveUpdate();
+  Logger.logVerbose(LOG_LEVEL.DEBUG_LOW, `当前理智：${san.currentSan}`);
 }
 
 let remainTimeIntervalId = 0;

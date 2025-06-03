@@ -3,7 +3,8 @@ import { FetchController, FetchControllerConfig } from '@enraged-dun-cookie-deve
 import { DefaultLogger } from '@enraged-dun-cookie-development-team/common/logger';
 import PlatformHelper from '../../../common/platform/PlatformHelper';
 import { CookieHandler } from '../../CookieHandler';
-import DebugUtil from '../../../common/util/DebugUtil';
+import { Logger } from '../../../common/util/Logger';
+
 /* IFTRUE_feature__local_fetch */
 import { registerDefaultDataSourceTypes } from '@enraged-dun-cookie-development-team/cookie-fetcher';
 
@@ -63,7 +64,7 @@ export class CustomLocalCookieFetcher extends AbstractCookieFetcher {
 
   startWithFetcherControllerConfig(fetcherControllerConfig, fetchConfig) {
     FetchController.validateConfig(fetcherControllerConfig);
-    DebugUtil.debugLog(0, '使用本地蹲饼配置：', fetcherControllerConfig);
+    Logger.log('使用本地蹲饼配置：', fetcherControllerConfig);
     this.fetchController = FetchController.create(
       fetcherControllerConfig,
       (fetchData) => {
@@ -71,7 +72,7 @@ export class CustomLocalCookieFetcher extends AbstractCookieFetcher {
           void CookieHandler.handleLocal(fetchConfig.id, fetchData);
         } else {
           this.failCount++;
-          console.log(fetchData.error);
+          Logger.logError(fetchData.error);
         }
       },
       DefaultLogger,
@@ -108,11 +109,12 @@ export class CustomLocalCookieFetcher extends AbstractCookieFetcher {
       try {
         FetchController.validateConfig(config);
       } catch (e) {
-        console.log(e);
+        Logger.logError(e);
         return false;
       }
     }
     // 尝试访问百度确认网络连接正常
+    // TODO 也许这里应该换一个专门测试的地址，不过百度也挺好用的就先用着
     await fetch('https://www.baidu.com/', { mode: 'no-cors' });
     return true;
   }
@@ -120,10 +122,11 @@ export class CustomLocalCookieFetcher extends AbstractCookieFetcher {
   /**
    *
    * @param fetchConfig {FetchConfig}
+   * @param baseConfig {FetchConfig}
    * @return {FetchControllerConfig}
    */
-  _buildConfig(fetchConfig) {
-    const config = {
+  _buildConfig(fetchConfig, baseConfig) {
+    const config = baseConfig ?? {
       default_interval: fetchConfig.globalInterval * 1000,
       groups: [],
     };

@@ -2,11 +2,11 @@ import { CURRENT_SETTING_VERSION, MESSAGE_SETTINGS_UPDATE, PAGE_POPUP_WINDOW, PL
 import { deepAssign, deepDiff } from './util/CommonFunctions';
 import { updateSettings } from './SettingsUpdater';
 import PlatformHelper from './platform/PlatformHelper';
-import DebugUtil from './util/DebugUtil';
+import { Logger } from './util/Logger';
 import AvailableDataSourceMeta from './sync/AvailableDataSourceMeta';
 
 // 随便调用一个无影响的东西来导入调试工具类
-DebugUtil.constructor;
+Logger.constructor;
 
 /**
  * 这个可以确保代码在settings初始化完毕之后再执行
@@ -166,20 +166,6 @@ class Settings {
   };
 
   /**
-   * 内部权限等级
-   */
-  insider = {
-    /**
-     * 用户输入的权限代码
-     */
-    code: null,
-    /**
-     * 当前权限等级，每次联网时更新
-     */
-    level: 0,
-  };
-
-  /**
    * 快捷跳转链接激活设置
    */
   quickJump = {
@@ -292,7 +278,7 @@ class Settings {
           this[key] = data[key];
         }
       }
-      DebugUtil.debugLog(0, '配置已更新：', changed);
+      Logger.log('配置已更新：', changed);
       this.__updateWindowMode();
       for (const listener of updateListeners) {
         listener(this, changed);
@@ -339,7 +325,7 @@ class Settings {
           // 只需要在后台进行保存，其它页面不需要保存
           await this.saveSettings();
         } catch (e) {
-          DebugUtil.debugLog(0, e);
+          Logger.log(e);
         }
       }
       return this;
@@ -348,9 +334,9 @@ class Settings {
 
   __updateWindowMode() {
     if (this.feature.window && this.display.windowMode) {
-      PlatformHelper.BrowserAction.removePopup();
+      void PlatformHelper.BrowserAction.removePopup();
     } else {
-      PlatformHelper.BrowserAction.setPopupURL(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW));
+      void PlatformHelper.BrowserAction.setPopupURL(PlatformHelper.Extension.getURL(PAGE_POPUP_WINDOW));
     }
   }
 
@@ -364,8 +350,8 @@ class Settings {
   saveSettings() {
     const promise = PlatformHelper.Storage.saveLocalStorage('settings', this);
     promise.then(() => {
-      PlatformHelper.Message.send(MESSAGE_SETTINGS_UPDATE, this);
-      DebugUtil.debugLog(0, '已更新插件设置: ', this);
+      void PlatformHelper.Message.send(MESSAGE_SETTINGS_UPDATE, this);
+      Logger.log('已更新插件设置: ', this);
     });
     return promise;
   }
@@ -381,7 +367,7 @@ class Settings {
   async reloadSettings() {
     const value = await PlatformHelper.Storage.getLocalStorage('settings');
     if (value != null) {
-      DebugUtil.debugLog(0, '从储存中读取配置：', value);
+      Logger.log('从储存中读取配置：', value);
       deepAssign(this, await updateSettings(value));
     }
     return this;

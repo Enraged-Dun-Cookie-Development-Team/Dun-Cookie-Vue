@@ -1,10 +1,12 @@
 {
   "name": "ceobe-canteen-browser-extension",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build-chrome": "npx cross-env BROWSER_TARGET=chrome vue-cli-service build",
+    "build-firefox": "npx cross-env BROWSER_TARGET=firefox vue-cli-service build",
     "lint:eslint": "eslint --ext .js,.vue src",
     "fix:eslint": "eslint --ext .js,.vue src --fix",
     "lint:stylelint": "stylelint src/**/*.{vue,scss,css,sass,less}",
@@ -20,6 +22,7 @@
     "fastest-levenshtein": "^1.0.16",
     "html2canvas": "^1.4.1",
     "jquery": "^3.6.1",
+    "js-base64": "^3.7.7",
     "js-conditional-compile-loader": "^1.0.16",
     "js-md5": "^0.7.3",
     "jsdom": "^20.0.0",

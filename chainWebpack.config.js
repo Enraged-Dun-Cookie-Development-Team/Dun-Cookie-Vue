@@ -5,11 +5,17 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { execSync } = require('child_process');
 
 const isDevMode = process.env.NODE_ENV === 'development';
+const browserTarget = process.env.BROWSER_TARGET?.toLowerCase() ?? 'chrome';
+if (browserTarget !== 'chrome' && browserTarget !== 'firefox') {
+  throw new Error(`BROWSER_TARGET只能是以下值之一：chrome、firefox，当前值：${browserTarget}`);
+}
+process.env.VUE_APP_BROWSER_TARGET = browserTarget;
 const PROJECT_VERSION = JSON.parse(file.readFileSync('./package.json').toString()).version;
 process.env.VUE_APP_PROJECT_VERSION = PROJECT_VERSION;
 const enableFeatures = (process.env.VUE_APP_ENABLE_FEATURES || '').split(',').filter((v) => v.length > 0);
-// 注意改这里的话要同时改Constants.js中的内容
-const showCustomBuildTip = enableFeatures.filter((it) => !['local_fetch'].includes(it)).length > 0;
+// 注意改这里的话要同时考虑更改Constants.js中的ENABLE_FEATURES部分
+// 这段的本意是将启用且仅启用local_fetch的情况作为默认功能列表，不满足这种情况的都是自定义构建
+const showCustomBuildTip = JSON.stringify(['local_fetch'].sort()) !== JSON.stringify(enableFeatures.sort());
 process.env.VUE_APP_BUILD_BY = process.env.BUILD_BY || '本地构建';
 let hash = execSync('git rev-parse --short HEAD').toString().trim();
 let buildType = process.env.BUILD_TYPE || 'local#' + Math.floor(Math.random() * 1000);
@@ -62,7 +68,6 @@ const chainWebpack = (config) => {
   }
   config.entry('background').add(path.resolve(__dirname, './src/background/index.js'));
   config.entry('contentScripts').add(path.resolve(__dirname, './src/contentScripts/index.js'));
-  config.entry('offscreen/img2blob').add(path.resolve(__dirname, './src/offscreen/js/img2blob.js'));
   config.output.filename('[name].js');
 
   config.plugin('copy').tap((_args) => {
@@ -79,12 +84,13 @@ const chainWebpack = (config) => {
               if (showCustomBuildTip) {
                 manifest.description = `【自定义构建 By：${process.env.VUE_APP_BUILD_BY}】` + manifest.description;
               }
-              return JSON.stringify(manifest, undefined, 2);
+              const platformData = manifest['$platform'];
+              delete manifest['$platform'];
+              return JSON.stringify({ ...manifest, ...platformData[browserTarget] }, undefined, 2);
             },
           },
           { from: 'src/Dun-Cookies-Info.json', to: '[name][ext]' },
           { from: 'node_modules/element-ui/lib/theme-chalk/fonts/', to: 'css/fonts/[name][ext]' },
-          { from: 'src/offscreen/html', to: 'offscreen' },
         ],
       },
     ];
@@ -111,11 +117,14 @@ const chainWebpack = (config) => {
 
   config.performance.maxEntrypointSize(2_000_000).maxAssetSize(2_000_000);
 
+  if (!config.experiments) config.experiments = {};
+  config.experiments.topLevelAwait = true;
+
   insertLoaderToFirst(
     config,
     'js',
     'js-conditional-compile-loader',
-    Object.fromEntries(enableFeatures.map((v) => [`feature__${v}`, true]))
+    Object.fromEntries([...enableFeatures.map((v) => [`feature__${v}`, true])])
   );
 
   config.optimization.clear();

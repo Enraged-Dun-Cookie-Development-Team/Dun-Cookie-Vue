@@ -1,4 +1,4 @@
-import DebugUtil from '../../common/util/DebugUtil';
+import { Logger } from '../../common/util/Logger';
 import CardList from '../../common/sync/CardList';
 
 /**
@@ -91,14 +91,13 @@ class FetcherController {
           await this.stop();
         }
       } catch (e) {
-        console.log(e);
-        DebugUtil.debugLog(0, `[${this.fetchConfig.id}]蹲饼器停止失败！`);
+        Logger.logError(e);
+        Logger.log(`[${this.fetchConfig.id}]蹲饼器停止失败！`);
       }
       try {
         this.currentFetcherIdx = newFetcherIdx;
         if (newFetcherIdx >= 0) {
-          DebugUtil.debugLog(
-            0,
+          Logger.log(
             `[${this.fetchConfig.id}]蹲饼器切换为：`,
             this.fetchConfig.fetcherStrategyList[this.currentFetcherIdx].fetcher
           );
@@ -106,34 +105,32 @@ class FetcherController {
             await this.start();
           }
         } else {
-          DebugUtil.debugLog(0, `[${this.fetchConfig.id}]蹲饼器切换失败！所有蹲饼器都暂时不可用！`);
+          Logger.log(`[${this.fetchConfig.id}]蹲饼器切换失败！所有蹲饼器都暂时不可用！`);
         }
       } catch (e) {
         // 蹲饼器切换失败后等同于现在没有蹲饼器了
         // 不能设回旧值，第一因为旧的已经stop了，第二因为就是因为旧的不该继续了才会触发切换逻辑
         this.currentFetcherIdx = -1;
-        console.log(e);
-        DebugUtil.debugLog(0, `[${this.fetchConfig.id}]蹲饼器切换失败！`);
+        Logger.logError(e);
+        Logger.log(`[${this.fetchConfig.id}]蹲饼器切换失败！`);
       }
     }
   }
 
   async start() {
     if (this.fetchConfig.enableDataSourceList.length > 0) {
-      DebugUtil.debugLog(
-        0,
+      Logger.log(
         `[${this.fetchConfig.id}]蹲饼器启动：`,
         this.fetchConfig.fetcherStrategyList[this.currentFetcherIdx].fetcher
       );
       await this.fetchers[this.currentFetcherIdx].start(this.fetchConfig);
     } else {
-      DebugUtil.debugLog(0, `[${this.fetchConfig.id}]未启用任何数据源，不启动蹲饼器`);
+      Logger.log(`[${this.fetchConfig.id}]未启用任何数据源，不启动蹲饼器`);
     }
   }
 
   async stop() {
-    DebugUtil.debugLog(
-      0,
+    Logger.log(
       `[${this.fetchConfig.id}]蹲饼器停止：`,
       this.fetchConfig.fetcherStrategyList[this.currentFetcherIdx].fetcher
     );
@@ -163,6 +160,9 @@ export class CookieFetchManager {
       for (const controller of Object.values(this.fetchControllerMap)) {
         await controller.updateFetcher();
       }
+      // TODO 在蹲饼期间，由于在一系列代码中存在调用扩展API的行为(读storage.local)，这个10秒的循环在事实上起到了保活的作用
+      //  但这种保活可能因为代码修改而失效(虽然在实际上不太可能)，这里标记一下如果以后保活失效了能靠这个想起来原因
+      //  专门做一个保活也不是不行，不过chrome保留禁止专门包含的扩展的权利，就暂时不明着干了
       setTimeout(() => {
         cycle();
       }, 10_000);

@@ -1,7 +1,6 @@
 /**
  * 与小刻食堂服务器通信相关工具
  */
-import HttpUtil from './HttpUtil';
 import PlatformHelper from '../platform/PlatformHelper';
 import Settings from '../Settings';
 import {
@@ -10,17 +9,15 @@ import {
   CANTEEN_CDN_API_BASE,
   CANTEEN_CDN_SERVER_API_BASE,
   CURRENT_VERSION,
-  MESSAGE_WEIBO_ADD_REFERER,
 } from '../Constants';
 import NotificationUtil from './NotificationUtil';
 import TimeUtil from './TimeUtil';
 import { Http } from '@enraged-dun-cookie-development-team/common/request';
-import DebugUtil from './DebugUtil';
+import { LOG_LEVEL, Logger } from './Logger';
 import md5 from 'js-md5';
 import { DataSourceMeta } from '../datasource/DataSourceMeta';
 import { CookieItem, RetweetedInfo } from '../CookieItem';
 import AvailableDataSourceMeta from '../sync/AvailableDataSourceMeta';
-import { registerUrlToAddReferer } from '../../background/request_interceptor';
 import { UserUtil } from './UserUtil';
 
 const comboIdCache = {};
@@ -143,7 +140,7 @@ export default class ServerUtil {
       }
       const unknownGroupsMap = {};
       for (const item of Object.values(unknownSourceMap)) {
-        DebugUtil.debugLog(1, '服务器数据源缺少配置：', item);
+        Logger.logLevel(LOG_LEVEL.WARN, '服务器数据源缺少配置：', item);
         if (!unknownGroupsMap[item.type]) {
           unknownGroupsMap[item.type] = {
             type: item.type,
@@ -169,8 +166,7 @@ export default class ServerUtil {
         fetchTime: Date.now(),
       };
     } catch (e) {
-      DebugUtil.debugLogError(e);
-      DebugUtil.debugLogError('请求服务器数据失败');
+      Logger.logError('请求服务器数据失败', e);
       return;
     }
     await PlatformHelper.Storage.saveLocalStorage('serverDataSourceInfo', serverDataSourceInfo);
@@ -195,7 +191,7 @@ export default class ServerUtil {
         AvailableDataSourceMeta.preset = await this.getAvailableDataSourcePreset();
       }
     } catch (e) {
-      DebugUtil.debugLogError(e);
+      Logger.logError(e);
     }
   }
 
@@ -223,7 +219,7 @@ export default class ServerUtil {
         const key = `${it.type}:${it.dataId}`;
         const serverId = serverInfo.idMap[key];
         if (typeof serverId !== 'string' || serverId.length === 0) {
-          DebugUtil.debugLogWarn(0, `服务器未定义的数据源：${key}`);
+          Logger.logWarn(`服务器未定义的数据源：${key}`);
           return undefined;
         }
         return serverId;
@@ -270,21 +266,6 @@ export default class ServerUtil {
           `&cookie_id=${encodeURIComponent(cookieId)}`
       );
     }
-    if (result) {
-      const weiboImgs = [];
-      for (const cookie of result.cookies) {
-        if (!cookie.source.type.startsWith('weibo:')) continue;
-        const images = cookie.default_cookie.images?.flatMap((it) => [it.origin_url, it.compress_url]);
-        if (images && images.length > 0) {
-          weiboImgs.push(...images);
-        }
-      }
-      if (PlatformHelper.isBackground) {
-        weiboImgs.forEach((src) => registerUrlToAddReferer(src, 'https://m.weibo.cn/'));
-      } else {
-        await PlatformHelper.Message.send(MESSAGE_WEIBO_ADD_REFERER, { urls: weiboImgs });
-      }
-    }
     return result;
   }
 
@@ -329,11 +310,10 @@ export default class ServerUtil {
     try {
       data = await ServerUtil.requestCdnServerApi('cdn/operate/announcement/list');
     } catch (e) {
-      DebugUtil.debugLogError(e);
+      Logger.logError(e);
     }
     if (!data) {
-      const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
-      data = await HttpUtil.GET_Json(fallbackUrl);
+      data = await ServerUtil.getFallbackInfo();
       data = data.list;
       return data;
     }
@@ -394,11 +374,10 @@ export default class ServerUtil {
     try {
       data = await ServerUtil.requestCdnServerApi('cdn/operate/video/list');
     } catch (e) {
-      DebugUtil.debugLogError(e);
+      Logger.logError(e);
     }
     if (!data) {
-      const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
-      data = await HttpUtil.GET_Json(fallbackUrl);
+      data = await ServerUtil.getFallbackInfo();
       data = data.btnList;
     }
     return data;
@@ -413,11 +392,10 @@ export default class ServerUtil {
     try {
       data = await ServerUtil.requestCdnServerApi('cdn/operate/resource/get');
     } catch (e) {
-      DebugUtil.debugLogError(e);
+      Logger.logError(e);
     }
     if (!data) {
-      const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
-      data = await HttpUtil.GET_Json(fallbackUrl);
+      data = await ServerUtil.getFallbackInfo();
       data = data.dayInfo;
     }
     return data;
@@ -459,11 +437,10 @@ export default class ServerUtil {
         checkVersionUpdate = false;
         return response.text();
       }
-      DebugUtil.debugLogError(error);
+      Logger.logError(error);
     });
     if (!data) {
-      const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
-      data = await HttpUtil.GET_Json(fallbackUrl);
+      data = await ServerUtil.getFallbackInfo();
       data = data.upgrade;
       data.is_fallback = true;
     }
@@ -495,5 +472,10 @@ export default class ServerUtil {
       DebugUtil.debugLogError('获取在线版本信息失败 : \n' + error);
     });
     return data;
+  }
+
+  static async getFallbackInfo() {
+    const fallbackUrl = PlatformHelper.Extension.getURL('Dun-Cookies-Info.json');
+    return Http.get(fallbackUrl, { responseTransformer: (r) => r.json() });
   }
 }

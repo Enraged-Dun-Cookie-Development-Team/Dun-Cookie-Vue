@@ -16,13 +16,19 @@ function hashCode(str) {
   return hash;
 }
 
+const extDomain = PlatformHelper.Extension.getExtensionInfo().then((it) => {
+  return new URL(it.optionsUrl).hostname;
+});
+
 /**
+ * 对指定的url设置referer
  *
+ * @param id {number}
  * @param url {string}
  * @param referer {string}
  */
-export function registerUrlToAddReferer(url, referer) {
-  const id = Math.abs(hashCode(url));
+export async function registerUrlToAddReferer(id, url, referer) {
+  id = id > 0 ? id : Math.abs(hashCode(url));
   void PlatformHelper.Http.updateSessionRules({
     removeRuleIds: [id],
     addRules: [
@@ -39,7 +45,7 @@ export function registerUrlToAddReferer(url, referer) {
           ],
         },
         condition: {
-          domainType: 'thirdParty',
+          initiatorDomains: [await extDomain],
           urlFilter: url,
         },
       },

@@ -332,6 +332,7 @@ import 'animate.css';
 import AvailableDataSourceMeta from '../common/sync/AvailableDataSourceMeta';
 import { updateSettings } from '../common/SettingsUpdater';
 import DataSourceSelect from '../components/DataSourceSelect.vue';
+import { Logger } from '../common/util/Logger';
 
 export default {
   name: 'App',
@@ -429,7 +430,7 @@ export default {
         type: 'application/json',
       });
       PlatformHelper.Downloads.downloadURL(URL.createObjectURL(blob), undefined, true).then((data) => {
-        console.log(data);
+        Logger.log(data);
       });
     },
     // 导入设置
@@ -463,17 +464,17 @@ export default {
               if (action === 'cancel' || action === 'close') {
                 this.$message('你决定了不覆盖当前设置项');
               } else {
-                console.error(action);
+                Logger.logError(action);
               }
             });
         };
         fn()
           .then()
-          .catch((e) => console.error(e));
+          .catch((e) => Logger.logError(e));
       };
       // 失败回调
       reader.onerror = (err) => {
-        console.error(err);
+        Logger.logError(err);
         this.$message.error('没有导入成功，心态崩了啊！');
         this.$notify({
           title: '貌似检测到导出失败',
