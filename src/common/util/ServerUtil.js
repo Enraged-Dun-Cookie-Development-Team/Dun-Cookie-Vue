@@ -294,7 +294,13 @@ export default class ServerUtil {
           builder.timeForDisplay(TimeUtil.format(cookie.timestamp.fetcher || 0, 'yyyy-MM-dd hh:mm:ss'));
         }
         if (cookie.item.is_retweeted) {
-          builder.retweeted(new RetweetedInfo(cookie.item.retweeted.author_name, cookie.item.retweeted.text || ''));
+          builder.retweeted(
+            new RetweetedInfo(
+              cookie.item.retweeted.author_name,
+              cookie.item.retweeted.text || '',
+              cookie.item.retweeted.images?.map((it) => it.origin_url)
+            )
+          );
         }
         return builder.build();
       })

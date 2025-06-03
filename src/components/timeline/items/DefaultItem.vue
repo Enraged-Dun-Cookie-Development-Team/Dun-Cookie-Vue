@@ -9,6 +9,24 @@
           转发自 @{{ item.retweeted.name }}:
           <br />
           <span v-html="item.retweeted.content"></span>
+          <el-row v-if="showImage && settings.display.showImage && item.retweeted.coverImage" class="margintb">
+            <div :class="{ 'show-all': expandImageArea }" class="img-area" @click="changeExpandImageArea()">
+              <div v-if="item.retweeted.imageList && item.retweeted.imageList.length > 1" class="multi-img">
+                <div v-for="(img, index) in item.retweeted.imageList" :key="img" class="multi-img-area">
+                  <img :ref="item.id + '_retweeted_' + index" v-lazy="img" class="img" />
+                  <span class="img-btn img-look-btn" @click.stop="ViewImg(item, img, item.id + '_' + index)">
+                    <i class="el-icon-view"></i>
+                  </span>
+                </div>
+              </div>
+              <div v-else class="one-img">
+                <img :ref="item.id + '_retweeted'" v-lazy="item.retweeted.coverImage" class="img" />
+                <span class="img-btn img-look-btn" @click.stop="ViewImg(item, item.retweeted.coverImage, item.id)">
+                  <i class="el-icon-view"></i>
+                </span>
+              </div>
+            </div>
+          </el-row>
         </div>
       </div>
     </el-row>

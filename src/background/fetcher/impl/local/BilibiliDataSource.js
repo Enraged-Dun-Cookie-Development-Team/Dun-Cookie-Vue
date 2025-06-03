@@ -147,7 +147,7 @@ export class BilibiliDataSource {
       .content(allText)
       .jumpUrl(dynamicUrl);
     if (retweeted) {
-      builder.retweeted(new RetweetedInfo(retweeted.author_name, retweeted.text));
+      builder.retweeted(new RetweetedInfo(retweeted.author_name, retweeted.text, retweeted.images));
     }
     return builder.build();
   }
